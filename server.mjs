@@ -2,8 +2,8 @@ import http from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 const root = new URL('./', import.meta.url);
-const files = { '/favicon.svg':'favicon.svg', '/':'index.html', '/index.html':'index.html', '/styles.css':'styles.css', '/app.js':'app.js', '/courses.js':'courses.js' };
-const types = { svg:'image/svg+xml', html:'text/html',css:'text/css',js:'text/javascript' };
+const files = { '/speak-boldly-logo.png':'speak-boldly-logo.png', '/favicon.svg':'favicon.svg', '/':'index.html', '/index.html':'index.html', '/styles.css':'styles.css', '/app.js':'app.js', '/courses.js':'courses.js' };
+const types = { png:'image/png', svg:'image/svg+xml', html:'text/html',css:'text/css',js:'text/javascript' };
 http.createServer(async (req,res) => {
   const name = files[new URL(req.url,'http://localhost').pathname];
   if (!name) { res.writeHead(404); return res.end('Not found'); }
