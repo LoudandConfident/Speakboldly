@@ -40,3 +40,9 @@ Sign in to the GitHub account with write access to `LoudandConfident/Speakboldly
 The readable annual schedule is `student-code-calendar.csv`; all daily codes are strings, including codes starting with zero. The calendar and codes are public like the client-side gate. After changing codes in `portal-config.js`, regenerate the CSV to keep it synchronized.
 
 Portal resources use View links without download attributes or buttons. Viewable public files remain saveable through the browser; there is no guaranteed download prevention.
+
+## Admin dashboard
+
+Admin portal has a fixed convenience code `1962`, independent of the Student Code calendar. It includes total hours taught, client count, and add/edit client records for name, CEFR level, payment status, email and hours taught. Records are saved in the current browser’s localStorage only, never committed or sent to the public website. Reloading preserves them on the same browser; clearing storage loses them. There are no delete or export controls. Leaving the portal or switching to Student portal locks the admin view.
+
+The fixed code is visible in public source and is not secure authentication. This is a local dashboard prototype, not private cloud client management. A backend with real authentication and private storage is required before synchronizing confidential client records across devices.
