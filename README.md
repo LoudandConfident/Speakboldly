@@ -27,19 +27,13 @@ The unused Google Sheets collector remains in `google-sheets/` as an optional al
 
 The HTML file `googlef6de591683171555.html` is the Google Search Console verification file and must remain at the published site root.
 
-## Students Portal
+## Student portal and owner uploads
 
-Exercises, exams, progress reports, and material links are grouped behind a shared Student Code. Codes change automatically at midnight in Cairo. Edit a date’s 4-digit value in `DAILY_STUDENT_CODES` in `portal-config.js` and publish to choose or replace it. The calendar covers all 366 month-days, including February 29, and repeats yearly. Open portals lock when the daily code changes (checked every 30 seconds, on returning to the page, and on submission). Add resource entries to the corresponding arrays in that file when content is supplied. No learning material is uploaded yet. Public uploads in `student-files/exercises`, `student-files/exams`, `student-files/reports`, and `student-files/material` are discovered through the public GitHub API when the portal opens. Use Refresh materials to reload after an upload. If GitHub is unavailable or rate-limited, the portal displays an error and allows retry. Uploads must finish GitHub Pages publishing before their links work. Unlocking lasts only for the current visit; reloading requires the code again.
+Exercises, exams, progress reports, and Material are offered inside the page, with inline image and PDF viewing. Upload links are in Admin portal and use the owner's GitHub sign-in. Material lists load automatically on opening Student portal. The Refresh materials button has been removed. Browser save capabilities cannot be fully disabled.
 
-This is a client-side convenience gate, not secure authentication. Public GitHub Pages files and code can be inspected or accessed directly. Do not upload confidential individual progress reports here; use private authenticated storage for those.
+The daily-code calendar has been retired. The temporary Student Code remains 1962 until private per-client authentication and permissions are connected. Client-specific folder/file restrictions are not implemented by this static gate. Existing uploads on GitHub Pages are public; confidential reports must move to private authenticated storage.
 
-### Owner uploads
-
-Sign in to the GitHub account with write access to `LoudandConfident/Speakboldly`. Open the appropriate repository folder, choose Add file → Upload files, and commit to main. No GitHub token is put into the public website. GitHub authenticates the owner upload; the website itself does not implement owner accounts or file uploads. Only public, non-confidential materials belong in these folders. The Portal offers Student portal and Admin portal. Student portal contains the daily code gate and viewing sections; Admin portal contains owner upload links to GitHub. GitHub authenticates actual upload permission; selecting Admin portal is not a website login. There are no delete controls in the portal; repository owners still have GitHub deletion permissions.
-
-The readable annual schedule is `student-code-calendar.csv`; all daily codes are strings, including codes starting with zero. The calendar and codes are public like the client-side gate. After changing codes in `portal-config.js`, regenerate the CSV to keep it synchronized.
-
-Portal resources use View links without download attributes or buttons. Viewable public files remain saveable through the browser; there is no guaranteed download prevention.
+The next requested system needs shared backend storage so admin client records, individual client codes, uploaded files, and access grants work across devices. Provider selection is pending; do not claim these permissions are enforced before the backend is connected and verified.
 
 ## Admin dashboard
 
