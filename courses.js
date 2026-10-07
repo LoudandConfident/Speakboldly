@@ -2,7 +2,7 @@ export const courses = [
   {
     "id": "general",
     "title": "General English",
-    "level": "All levels",
+    "level": "Beginner, Intermediate, Advanced",
     "duration": "8 sessions per level",
     "category": "General English",
     "description": "Build confidence in everyday conversations through private coaching tailored to your level. Develop speaking, listening, vocabulary and grammar with practical activities and personalized feedback.",
