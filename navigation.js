@@ -3,7 +3,7 @@ export function initializeNavigation(doc,win){
  const reducedMotion=win.matchMedia?.('(prefers-reduced-motion: reduce)');
  let active=null,transition=null,request=0;
  function showView(){
-  const requested=win.location.hash.slice(1)||'home';
+  const requested=win.location.hash.slice(1).split('/')[0]||'home';
   const next=views.find(v=>v.id===requested)||views.find(v=>v.id==='home');
   if(!next||next===active)return;
   const ticket=++request,animate=active&&!reducedMotion?.matches;

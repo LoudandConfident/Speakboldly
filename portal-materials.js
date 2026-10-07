@@ -2,7 +2,7 @@ export const MATERIAL_FOLDERS = {
  exercises:'student-files/exercises',
  exams:'student-files/exams',
  reports:'student-files/reports',
- material:'student-files/material'
+ material:'student-files/material',final:'student-files/final',listening:'student-files/listening'
 };
 // GitHub provides an authenticated owner upload interface; visitors need no token to list public materials.
 export async function loadPortalMaterials(section,fetcher=fetch){
