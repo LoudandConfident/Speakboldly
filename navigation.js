@@ -1,5 +1,11 @@
 export function initializeNavigation(doc,win){
  const views=[...doc.querySelectorAll('[data-view]')];
+ const menu=doc.querySelector('.mobile-menu-toggle'),nav=doc.querySelector('#main-navigation');
+ function closeMenu(){menu?.setAttribute('aria-expanded','false');nav?.classList.remove('mobile-open');}
+ menu?.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));nav?.classList.toggle('mobile-open',open);});
+ doc.addEventListener('keydown',event=>{if(event.key==='Escape'&&menu?.getAttribute('aria-expanded')==='true'){closeMenu();menu.focus();}});
+ doc.addEventListener('click',event=>{if(menu?.getAttribute('aria-expanded')==='true'&&!event.target.closest('header'))closeMenu();});
+ win.addEventListener('hashchange',closeMenu);
  const reducedMotion=win.matchMedia?.('(prefers-reduced-motion: reduce)');
  let active=null,transition=null,request=0;
  function showView(){
@@ -19,7 +25,7 @@ export function initializeNavigation(doc,win){
    current.finished.catch(()=>{}).finally(()=>{if(transition===current)transition=null;});
   }else{update();if(animate)next.classList.add('view-enter');}
  }
- doc.querySelectorAll('[data-open-view]').forEach(b=>b.addEventListener('click',()=>{win.location.hash=b.dataset.openView;}));
+ doc.querySelectorAll('[data-open-view]').forEach(b=>b.addEventListener('click',()=>{win.location.hash=b.dataset.openView;closeMenu();}));
  win.addEventListener('hashchange',showView);showView();
  return showView;
 }
