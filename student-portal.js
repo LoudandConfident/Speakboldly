@@ -1,5 +1,6 @@
 import {getStudentCode,portalResources} from './portal-config.js';
-export function initializeStudentPortal(doc,code,resources){
+import {loadPortalMaterials} from './portal-materials.js';
+export function initializeStudentPortal(doc,code,resources,loader=loadPortalMaterials){
  const root=doc.querySelector('#students-portal');if(!root)return;
  const form=root.querySelector('#student-code-form'),gate=root.querySelector('#portal-gate'),content=root.querySelector('#portal-content'),error=root.querySelector('#student-code-error'),input=form.querySelector('input');
  const tabs=[...root.querySelectorAll('[data-portal-tab]')],panels=[...root.querySelectorAll('[data-portal-panel]')];let unlocked=false;
@@ -9,8 +10,9 @@ export function initializeStudentPortal(doc,code,resources){
   tabs.forEach(tab=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;if(active&&focus)tab.focus();});
   panels.forEach(panel=>panel.hidden=panel.dataset.portalPanel!==id);
  }
- for(const panel of panels){
-  const list=panel.querySelector('ul'),items=resources[panel.dataset.portalPanel]||[];list.replaceChildren();
+ let materialsLoaded=false,loading=false;
+ function renderResources(panel,items){
+  const list=panel.querySelector('ul');list.replaceChildren();
   for(const item of items){
    if(!item||typeof item.title!=='string'||typeof item.url!=='string')continue;
    let url;try{url=new URL(item.url,doc.baseURI);}catch{continue;}
@@ -19,12 +21,22 @@ export function initializeStudentPortal(doc,code,resources){
   }
   panel.querySelector('.portal-empty').hidden=list.children.length>0;
  }
+ panels.forEach(panel=>renderResources(panel,resources[panel.dataset.portalPanel]||[]));
+ async function refreshMaterials(){
+  if(!unlocked||loading)return;loading=true;const refresh=root.querySelector('#refresh-portal-materials');refresh.disabled=true;let failed=false;
+  await Promise.all(panels.map(async panel=>{
+   let status=panel.querySelector('.portal-load-status');if(!status){status=doc.createElement('p');status.className='portal-load-status demo-note';status.setAttribute('role','status');panel.append(status);}status.textContent='Loading materials…';
+   try{const items=await loader(panel.dataset.portalPanel);renderResources(panel,[...(resources[panel.dataset.portalPanel]||[]),...items]);status.textContent='';}
+   catch{failed=true;status.textContent='Materials could not load. Please try Refresh materials.';}
+  }));
+  materialsLoaded=!failed;loading=false;refresh.disabled=false;
+ }
  function lock(focus=true){
   unlocked=false;gate.hidden=false;content.hidden=true;panels.forEach(panel=>panel.hidden=true);form.reset();error.textContent='';input.removeAttribute('aria-invalid');if(focus)input.focus();
  }
  form.addEventListener('submit',event=>{
   event.preventDefault();refreshCode();if(!currentCode.trim()||input.value.trim()!==currentCode){error.textContent='That Student Code is incorrect. Please try again.';input.setAttribute('aria-invalid','true');input.focus();return;}
-  unlocked=true;error.textContent='';input.removeAttribute('aria-invalid');input.value='';gate.hidden=true;content.hidden=false;select('exercises',true);
+  unlocked=true;error.textContent='';input.removeAttribute('aria-invalid');input.value='';gate.hidden=true;content.hidden=false;select('exercises',true);if(!materialsLoaded)refreshMaterials();
  });
  tabs.forEach((tab,i)=>{
   tab.addEventListener('click',()=>select(tab.dataset.portalTab));
@@ -33,6 +45,7 @@ export function initializeStudentPortal(doc,code,resources){
  function refreshCode(){const next=readCode();if(next!==currentCode){currentCode=next;lock(false);error.textContent='The daily Student Code has changed. Please enter today’s code.';}}
  doc.defaultView.setInterval(refreshCode,30000);
  doc.addEventListener('visibilitychange',refreshCode);
+ root.querySelector('#refresh-portal-materials').addEventListener('click',refreshMaterials);
  root.querySelector('#lock-student-portal').addEventListener('click',()=>lock());
  lock(false);
 }
