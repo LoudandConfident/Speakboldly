@@ -48,7 +48,7 @@ export const courses = [
     "id": "interview",
     "title": "Interview preparation workshop",
     "level": "Intermediate and advanced",
-    "duration": "4 lessons",
+    "duration": "2 sessions",
     "category": "Workshops",
     "description": "Prepare to express your experience, strengths and goals clearly in English. Develop focused answers to common interview questions and build confidence through realistic practice and feedback.",
     "topics": [
@@ -58,6 +58,21 @@ export const courses = [
       "Mock interviews and personalized feedback"
     ],
     "art": "interview"
+  },
+  {
+    "id": "ielts",
+    "title": "IELTS preparation",
+    "level": "Advanced level",
+    "duration": "8 sessions",
+    "category": "IELTS",
+    "description": "Prepare for IELTS with focused practice across listening, reading, writing and speaking. Build familiarity with task types, improve your answer structure and time management, and receive personalized feedback on your performance.",
+    "topics": [
+      "Listening and reading strategies",
+      "Writing structure and clear arguments",
+      "Speaking practice and personalized feedback",
+      "Timed practice and exam preparation"
+    ],
+    "art": "ielts"
   }
 ];
 export function matches(c,category,query){return(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
