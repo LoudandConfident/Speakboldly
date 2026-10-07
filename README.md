@@ -26,3 +26,9 @@ Failed requests can be retried; each email includes an attempt ID to identify du
 The unused Google Sheets collector remains in `google-sheets/` as an optional alternative; it is not connected to the current site.
 
 The HTML file `googlef6de591683171555.html` is the Google Search Console verification file and must remain at the published site root.
+
+## Students Portal
+
+Exercises, exams, and progress report links are grouped behind a shared Student Code. Edit `STUDENT_CODE` in `portal-config.js` and publish to change the code for all visitors. Add resource entries to the corresponding arrays in that file when content is supplied. No material is uploaded yet. Unlocking lasts only for the current visit; reloading requires the code again.
+
+This is a client-side convenience gate, not secure authentication. Public GitHub Pages files and code can be inspected or accessed directly. Do not upload confidential individual progress reports here; use private authenticated storage for those.
