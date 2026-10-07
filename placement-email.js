@@ -2,7 +2,7 @@ import {scoreAnswers} from './placement-scoring.js';
 export function buildResultEmail(record) {
  const result=scoreAnswers(record.answers);
  return {
-  _subject:'Speak Boldly placement result — '+result.level,
+  _subject:'Someone scored '+result.level+' — Speak Boldly',
   _template:'table',
   _captcha:'false',
   _url:'https://loudandconfident.github.io/Speakboldly/',
