@@ -1,2 +1,2 @@
-// Paste the deployed Google Apps Script web app /exec URL here. This is a public endpoint, not a secret.
-export const RESULTS_ENDPOINT = '';
+// Anonymous results are sent through FormSubmit. The recipient must activate email delivery once.
+export const EMAIL_ENDPOINT = 'https://formsubmit.co/ajax/mira.nasser.louis.saleh@gmail.com';

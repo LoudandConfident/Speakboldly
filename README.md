@@ -13,12 +13,16 @@ npm test
 
 The local server uses port 3000; `PORT` overrides it. GitHub Pages serves the static site from `main`, repository root.
 
-## Placement and anonymous analysis
+## Placement and anonymous email results
 
-The test uses 60 selected dialogues and their keyed answers from the uploaded Language Hub test. The student PDF contains the same 60 questions without the key. Submission immediately shows marks out of 60 and a provisional estimated range (Below A1, A1–A2, A2–B1, B1–B2, B2–C1). These ranges are not publisher-validated CEFR cutoffs for the shortened test. Speaking/listening and teacher assessment are needed to confirm placement.
+The test uses 60 selected dialogues and their keyed answers from the uploaded Language Hub test. The student PDF contains the same 60 questions without the key. Submission immediately shows marks out of 60 and a provisional estimated range (Below A1, A1–A2, A2–B1, B1–B2, B2–C1). These are not publisher-validated cutoffs for the shortened test.
 
-The anonymous Google Sheets collector and setup steps are in [google-sheets/SETUP.md](google-sheets/SETUP.md). **Central collection is inactive until the owner deploys the Apps Script and sets `RESULTS_ENDPOINT` in `placement-config.js`.** There are no names or emails in the placement form or collected results. The backend recalculates scores, stores only anonymous result fields, deduplicates retries, and maintains private analysis tabs and a chart. Collection success is displayed only after the endpoint confirms it. Unconnected or failed saves are labeled clearly, and participants can download or email their own results.
+After consenting and submitting, participants' anonymous scores, estimated levels, answered counts, timestamps, and attempt identifiers are emailed to Mira through FormSubmit. No participant name, email, or answer choices are sent. The recipient address is configured in `placement-config.js`.
 
-Browser storage retains the current attempt to prevent accidental edits and support retrying failed saves. It is not an identity system or exam security mechanism. Participants see results on screen; automatic email delivery is not configured.
+**Activation and a live delivery check are required.** The first request may cause FormSubmit to send an activation email to the recipient. The recipient must click the activation link. Then submit a fresh sample test and confirm the actual result email arrives. A service response confirms request acceptance, not inbox delivery. Local checks cover payloads, response handling, errors and retry; this cloud environment's network policy blocked live access to FormSubmit.
 
-The HTML file `googlef6de591683171555.html` is the Google Search Console verification file and must remain at the published site root. Keep it after verification.
+Failed requests can be retried; each email includes an attempt ID to identify duplicates. This service does not guarantee deduplication if an email is accepted but the response is lost. Results are retained in the participant's browser for recovery and in the recipient's inbox after delivery. There is no centralized database or automatic dashboard; inbox results can be used for analysis. Old attempts are not automatically sent under the new email-delivery setting.
+
+The unused Google Sheets collector remains in `google-sheets/` as an optional alternative; it is not connected to the current site.
+
+The HTML file `googlef6de591683171555.html` is the Google Search Console verification file and must remain at the published site root.
