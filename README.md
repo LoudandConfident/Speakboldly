@@ -35,7 +35,7 @@ This is a client-side convenience gate, not secure authentication. Public GitHub
 
 ### Owner uploads
 
-Sign in to the GitHub account with write access to `LoudandConfident/Speakboldly`. Open the appropriate repository folder, choose Add file → Upload files, and commit to main. No GitHub token is put into the public website. GitHub authenticates the owner upload; the website itself does not implement owner accounts or file uploads. Only public, non-confidential materials belong in these folders. Each unlocked portal section includes an owner upload link to the corresponding GitHub folder. There are no delete controls in the portal; repository owners still have GitHub deletion permissions.
+Sign in to the GitHub account with write access to `LoudandConfident/Speakboldly`. Open the appropriate repository folder, choose Add file → Upload files, and commit to main. No GitHub token is put into the public website. GitHub authenticates the owner upload; the website itself does not implement owner accounts or file uploads. Only public, non-confidential materials belong in these folders. The Portal offers Client portal and Admin portal. Client portal contains the daily code gate and viewing sections; Admin portal contains owner upload links to GitHub. GitHub authenticates actual upload permission; selecting Admin portal is not a website login. There are no delete controls in the portal; repository owners still have GitHub deletion permissions.
 
 The readable annual schedule is `student-code-calendar.csv`; all daily codes are strings, including codes starting with zero. The calendar and codes are public like the client-side gate. After changing codes in `portal-config.js`, regenerate the CSV to keep it synchronized.
 

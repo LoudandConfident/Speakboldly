@@ -2,6 +2,13 @@ import {getStudentCode,portalResources} from './portal-config.js';
 import {loadPortalMaterials} from './portal-materials.js';
 export function initializeStudentPortal(doc,code,resources,loader=loadPortalMaterials){
  const root=doc.querySelector('#students-portal');if(!root)return;
+ const areaButtons=[...root.querySelectorAll('[data-portal-area]')];
+ areaButtons.forEach(button=>button.addEventListener('click',()=>{
+  const area=button.dataset.portalArea;
+  areaButtons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+  root.querySelector('#client-portal').hidden=area!=='client';
+  root.querySelector('#admin-portal').hidden=area!=='admin';
+ }));
  const form=root.querySelector('#student-code-form'),gate=root.querySelector('#portal-gate'),content=root.querySelector('#portal-content'),error=root.querySelector('#student-code-error'),input=form.querySelector('input');
  const tabs=[...root.querySelectorAll('[data-portal-tab]')],panels=[...root.querySelectorAll('[data-portal-panel]')];let unlocked=false;
  const readCode=()=>String(typeof code==='function'?code():code);let currentCode=readCode();
