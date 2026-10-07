@@ -380,5 +380,6 @@ export function getStudentCode(date = new Date()) {
 export const portalResources = {
  exercises: [],
  exams: [],
- reports: []
+ reports: [],
+ material: []
 };

@@ -17,7 +17,7 @@ export function initializeStudentPortal(doc,code,resources,loader=loadPortalMate
    if(!item||typeof item.title!=='string'||typeof item.url!=='string')continue;
    let url;try{url=new URL(item.url,doc.baseURI);}catch{continue;}
    if(!['http:','https:'].includes(url.protocol))continue;
-   const li=doc.createElement('li'),link=doc.createElement('a');link.textContent=item.title;link.href=url.href;link.className='portal-resource';link.target='_blank';link.rel='noopener noreferrer';if(panel.dataset.portalPanel==='reports')link.download='';li.append(link);list.append(li);
+   const li=doc.createElement('li'),link=doc.createElement('a');link.textContent='View '+item.title;link.href=url.href;link.className='portal-resource';link.target='_blank';link.rel='noopener noreferrer';li.append(link);list.append(li);
   }
   panel.querySelector('.portal-empty').hidden=list.children.length>0;
  }
