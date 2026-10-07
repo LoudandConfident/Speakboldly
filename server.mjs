@@ -1,0 +1,12 @@
+import http from 'node:http';
+import { readFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const root = new URL('./', import.meta.url);
+const files = { '/':'index.html', '/index.html':'index.html', '/styles.css':'styles.css', '/app.js':'app.js', '/courses.js':'courses.js' };
+const types = { html:'text/html',css:'text/css',js:'text/javascript' };
+http.createServer(async (req,res) => {
+  const name = files[new URL(req.url,'http://localhost').pathname];
+  if (!name) { res.writeHead(404); return res.end('Not found'); }
+  try { const body = await readFile(fileURLToPath(new URL(name,root))); res.writeHead(200,{'Content-Type':types[name.split('.').pop()]+'; charset=utf-8'}); res.end(body); }
+  catch { res.writeHead(500); res.end('Unable to load page'); }
+}).listen(Number(process.env.PORT || 3000),'0.0.0.0',()=>console.log('Forma running on port '+(process.env.PORT || 3000)));
