@@ -17,7 +17,7 @@ interview:'<circle cx="64" cy="89" r="21"/><circle cx="177" cy="89" r="21"/><pat
 function art(c){return '<svg class="course-illustration" viewBox="0 0 240 200" role="img" aria-label="'+escape(c.title)+' illustration"><rect width="240" height="200" rx="12" fill="#e7f0e6"/><circle cx="203" cy="36" r="32" fill="#d5ed98"/><g fill="#f7faf3" stroke="#176b3a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">'+scenes[c.art]+'</g></svg>';}
 let category='All courses';
 function render(){const list=courses.filter(c=>matches(c,category,$('#search').value));$('#course-grid').innerHTML=list.length?list.map(c=>'<article class="course-card">'+art(c)+'<div class="course-body"><span class="category">'+escape(c.level)+'</span><h3>'+escape(c.title)+'</h3><p class="course-summary">'+escape(c.description)+'</p><div class="card-bottom"><span>'+escape(c.duration)+'</span><button class="course-link" data-course="'+c.id+'">View course ↗</button></div></div></article>').join(''):'<p class="empty">No courses match your search.</p>';}
-function showCourse(id){const c=courses.find(c=>c.id===id);if(!c)return;$('#course-detail').innerHTML=art(c)+'<p class="eyebrow">'+escape(c.level)+' · '+escape(c.duration)+'</p><h2>'+escape(c.title)+'</h2><p>'+escape(c.description)+'</p><h3>What we’ll focus on</h3><ul class="course-topics">'+c.topics.map(t=>'<li>'+escape(t)+'</li>').join('')+'</ul><div class="detail-actions"><a class="button" target="_blank" rel="noopener noreferrer" href="'+escape(chat('Hi Mira! I would like a quote for '+c.title+'. Please send a quotation valid for one month.'))+'">Get a quote — valid for a month</a>'+(c.id==='general'?'<a class="button light" target="_blank" rel="noopener noreferrer" href="'+escape(chat('Hi Mira! I would like to book a free trial session for '+c.title+'.'))+'">Book a free trial session</a>':'')+'</div>';$('#course-dialog').showModal();}
+function showCourse(id){const c=courses.find(c=>c.id===id);if(!c)return;$('#course-detail').innerHTML=art(c)+'<p class="eyebrow">'+escape(c.level)+' · '+escape(c.duration)+'</p><h2>'+escape(c.title)+'</h2><p>'+escape(c.description)+'</p><h3>What we’ll focus on</h3><ul class="course-topics">'+c.topics.map(t=>'<li>'+escape(t)+'</li>').join('')+'</ul><div class="detail-actions"><a class="button" target="_blank" rel="noopener noreferrer" href="'+escape(chat('Hi Mira Nasser! I would like a quote for '+c.title+'. Please send a quotation valid for one month.'))+'">Get a quote — valid for a month</a>'+(c.id==='general'?'<a class="button light" target="_blank" rel="noopener noreferrer" href="'+escape(chat('Hi Mira Nasser! I would like to book a free trial session for '+c.title+'.'))+'">Book a free trial session</a>':'')+'</div>';$('#course-dialog').showModal();}
 $('.filters').innerHTML=['All courses','General English','Workshops','IELTS'].map((c,i)=>'<button class="filter '+(i===0?'active':'')+'" aria-pressed="'+(i===0)+'" data-category="'+c+'">'+c+'</button>').join('');
 document.addEventListener('click',e=>{const c=e.target.closest('[data-course]');if(c)showCourse(c.dataset.course);const f=e.target.closest('[data-category]');if(f){category=f.dataset.category;document.querySelectorAll('.filter').forEach(b=>{b.classList.toggle('active',b===f);b.setAttribute('aria-pressed',String(b===f));});render();}const close=e.target.closest('.close');if(close)close.closest('dialog').close();});
 $('#search').addEventListener('input',render);
@@ -43,12 +43,12 @@ function finish(record){
 }
 function showSaveStatus(record){
  const status=$('#results-save-status'),retry=$('#retry-results');retry.hidden=true;
- if(record.emailStatus==='accepted'){status.textContent='Your result was submitted for email delivery to Mira.';return;}
+ if(record.emailStatus==='accepted'){status.textContent='Your result was submitted for email delivery to Mira Nasser.';return;}
  if(!EMAIL_ENDPOINT){status.textContent='Your result is saved in this browser only. Automatic email is not configured.';return;}
- if(!record.consent){status.textContent='Your result has not been emailed to Mira.';return;}
- if(record.emailStatus==='activation-required'){status.textContent='Automatic email delivery is awaiting activation by Mira. Your score is ready. You can retry delivery later.';retry.hidden=false;return;}
+ if(!record.consent){status.textContent='Your result has not been emailed to Mira Nasser.';return;}
+ if(record.emailStatus==='activation-required'){status.textContent='Automatic email delivery is awaiting activation by Mira Nasser. Your score is ready. You can retry delivery later.';retry.hidden=false;return;}
  if(record.emailStatus==='failed'){status.textContent='Your score is ready, but the email request failed. Please retry.';retry.hidden=false;return;}
- if(record.emailStatus==='pending'){status.textContent='Sending your anonymous result to Mira…';return;}
+ if(record.emailStatus==='pending'){status.textContent='Sending your anonymous result to Mira Nasser…';return;}
  status.textContent='Your previous result has not been automatically emailed.';
 }
 async function sendResult(record){
