@@ -1,8 +1,9 @@
-import {STUDENT_CODE,portalResources} from './portal-config.js';
+import {getStudentCode,portalResources} from './portal-config.js';
 export function initializeStudentPortal(doc,code,resources){
  const root=doc.querySelector('#students-portal');if(!root)return;
  const form=root.querySelector('#student-code-form'),gate=root.querySelector('#portal-gate'),content=root.querySelector('#portal-content'),error=root.querySelector('#student-code-error'),input=form.querySelector('input');
  const tabs=[...root.querySelectorAll('[data-portal-tab]')],panels=[...root.querySelectorAll('[data-portal-panel]')];let unlocked=false;
+ const readCode=()=>String(typeof code==='function'?code():code);let currentCode=readCode();
  function select(id,focus=false){
   if(!unlocked)return;
   tabs.forEach(tab=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;if(active&&focus)tab.focus();});
@@ -22,14 +23,17 @@ export function initializeStudentPortal(doc,code,resources){
   unlocked=false;gate.hidden=false;content.hidden=true;panels.forEach(panel=>panel.hidden=true);form.reset();error.textContent='';input.removeAttribute('aria-invalid');if(focus)input.focus();
  }
  form.addEventListener('submit',event=>{
-  event.preventDefault();if(!String(code).trim()||input.value.trim()!==String(code)){error.textContent='That Student Code is incorrect. Please try again.';input.setAttribute('aria-invalid','true');input.focus();return;}
+  event.preventDefault();refreshCode();if(!currentCode.trim()||input.value.trim()!==currentCode){error.textContent='That Student Code is incorrect. Please try again.';input.setAttribute('aria-invalid','true');input.focus();return;}
   unlocked=true;error.textContent='';input.removeAttribute('aria-invalid');input.value='';gate.hidden=true;content.hidden=false;select('exercises',true);
  });
  tabs.forEach((tab,i)=>{
   tab.addEventListener('click',()=>select(tab.dataset.portalTab));
   tab.addEventListener('keydown',event=>{let index;if(event.key==='ArrowRight')index=(i+1)%tabs.length;else if(event.key==='ArrowLeft')index=(i+tabs.length-1)%tabs.length;else if(event.key==='Home')index=0;else if(event.key==='End')index=tabs.length-1;else return;event.preventDefault();select(tabs[index].dataset.portalTab,true);});
  });
+ function refreshCode(){const next=readCode();if(next!==currentCode){currentCode=next;lock(false);error.textContent='The daily Student Code has changed. Please enter today’s code.';}}
+ doc.defaultView.setInterval(refreshCode,30000);
+ doc.addEventListener('visibilitychange',refreshCode);
  root.querySelector('#lock-student-portal').addEventListener('click',()=>lock());
  lock(false);
 }
-if(typeof document!=='undefined')initializeStudentPortal(document,STUDENT_CODE,portalResources);
+if(typeof document!=='undefined')initializeStudentPortal(document,getStudentCode,portalResources);

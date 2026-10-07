@@ -29,6 +29,6 @@ The HTML file `googlef6de591683171555.html` is the Google Search Console verific
 
 ## Students Portal
 
-Exercises, exams, and progress report links are grouped behind a shared Student Code. Edit `STUDENT_CODE` in `portal-config.js` and publish to change the code for all visitors. Add resource entries to the corresponding arrays in that file when content is supplied. No material is uploaded yet. Unlocking lasts only for the current visit; reloading requires the code again.
+Exercises, exams, and progress report links are grouped behind a shared Student Code. Codes change automatically at midnight in Cairo. Edit a date’s 4-digit value in `DAILY_STUDENT_CODES` in `portal-config.js` and publish to choose or replace it. The calendar covers all 366 month-days, including February 29, and repeats yearly. Open portals lock when the daily code changes (checked every 30 seconds, on returning to the page, and on submission). Add resource entries to the corresponding arrays in that file when content is supplied. No material is uploaded yet. Unlocking lasts only for the current visit; reloading requires the code again.
 
 This is a client-side convenience gate, not secure authentication. Public GitHub Pages files and code can be inspected or accessed directly. Do not upload confidential individual progress reports here; use private authenticated storage for those.
