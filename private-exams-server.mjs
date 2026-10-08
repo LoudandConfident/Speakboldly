@@ -1,3 +1,4 @@
+import {cairoDay} from './student-attempts.js';
 import {DatabaseSync} from 'node:sqlite';
 import {randomBytes,randomUUID,createHash,timingSafeEqual} from 'node:crypto';
 import {validateClient} from './admin-clients.js';
@@ -10,6 +11,8 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[]}){
  CREATE TABLE IF NOT EXISTS sessions(token_hash TEXT PRIMARY KEY,role TEXT NOT NULL,client_id TEXT,expires INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS attempts(id TEXT PRIMARY KEY,client_id TEXT NOT NULL REFERENCES clients(id),level INTEGER NOT NULL,opened TEXT NOT NULL,submitted TEXT,answers TEXT,objective INTEGER,reviewed TEXT,marks TEXT,feedback TEXT,total REAL);
  CREATE TABLE IF NOT EXISTS events(id INTEGER PRIMARY KEY,client_id TEXT NOT NULL REFERENCES clients(id),level INTEGER NOT NULL,at TEXT NOT NULL,kind TEXT NOT NULL);`);
+ db.exec('CREATE TABLE IF NOT EXISTS student_attempt_limits(identity TEXT NOT NULL,day TEXT NOT NULL,used INTEGER NOT NULL,PRIMARY KEY(identity,day))');
+ function studentLimit(identity,consume=false){const day=cairoDay(),row=db.prepare('SELECT used FROM student_attempt_limits WHERE identity=? AND day=?').get(identity,day);if((row?.used||0)>=3)throw error('You’ve used your three code attempts for today. Try again after midnight Cairo time.',429);if(consume)db.prepare('INSERT INTO student_attempt_limits VALUES(?,?,1) ON CONFLICT(identity,day) DO UPDATE SET used=used+1').run(identity,day);}
  const limited=new Map(),catalog=new Map(exams.map(e=>[e.level,e]));
  const allClients=()=>db.prepare('SELECT data FROM clients ORDER BY rowid').all().map(r=>JSON.parse(r.data));
  const getClient=id=>{const row=db.prepare('SELECT data FROM clients WHERE id=?').get(id);return row?JSON.parse(row.data):null;};
@@ -38,7 +41,7 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[]}){
    if(path==='/api/status'&&method==='GET'){send({ready:Boolean(adminPassword)&&catalog.size>0});return true;}
    if(!adminPassword||!catalog.size)throw error('Private exam storage is not configured.',503);
    if(path==='/api/admin/login'&&method==='POST'){login(req,'admin');const input=await body(req);if(typeof input.password!=='string'||!safeEqual(input.password,adminPassword))throw error('Incorrect owner password.',401);send({token:issue('admin')});return true;}
-   if(path==='/api/student/login'&&method==='POST'){login(req,'student');const input=await body(req);if(!/^\d{4}$/.test(input.code||'')||input.code==='1962')throw error('Use your individual client code for an interactive exam.',401);const client=allClients().find(c=>safeEqual(c.code,input.code));if(!client)throw error('Incorrect student code.',401);send({token:issue('student',client.id),access:{code:client.code,clientId:client.id,number:allClients().findIndex(c=>c.id===client.id)+1,level:client.level,permissions:client.permissions}});return true;}
+   if(path==='/api/student/login'&&method==='POST'){login(req,'student');const ip='ip:'+(req.socket.remoteAddress||'unknown');studentLimit(ip);const input=await body(req);if(!/^\d{4}$/.test(input.code||'')||input.code==='1962'){studentLimit(ip,true);throw error('Use your individual client code for an interactive exam.',401);}const client=allClients().find(c=>safeEqual(c.code,input.code));if(!client){studentLimit(ip,true);throw error('Incorrect student code.',401);}studentLimit('client:'+client.id,true);send({token:issue('student',client.id),access:{code:client.code,clientId:client.id,number:allClients().findIndex(c=>c.id===client.id)+1,level:client.level,permissions:client.permissions}});return true;}
    if(path.startsWith('/api/admin/')){
     session(req,'admin');
     if(path==='/api/admin/clients'&&method==='GET'){send({clients:allClients()});return true;}

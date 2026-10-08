@@ -54,3 +54,9 @@ The Exams panel contains separate Level one through Level six exam sections, bac
 The interactive exam workflow is implemented with a Node 24/SQLite backend and is validated locally, but it is not connected to an external host. See [PRIVATE-EXAMS-SETUP.md](PRIVATE-EXAMS-SETUP.md) for deployment, private data preparation, shared client management, access tracking and reviewed percentages. Public GitHub Pages alone cannot run the private server. Teacher answer keys are generated only into ignored private data; never publish that directory. The dashboard convenience code remains 1962, and a separate private owner password protects the backend.
 
 Page signatures now use a plain font with “English language Coaching” and “Prepared fully by Mira Nasser Louis.” The extra Lock Admin portal and Open Student portal dashboard buttons have been removed.
+
+## Student code attempt allowance
+
+Individual student code entry is limited to three attempts per Cairo calendar day. On the current unconnected public site, this is stored in the browser and resets at Cairo midnight; changing/clearing browser storage can bypass that local limit. Code 1962 is exempt. The private backend persists three successful logins per client per day and blocks further guesses after three incorrect codes from a source IP that day, without applying that daily allowance to the owner. Shared backend enforcement still requires hosting configuration.
+
+Material contains compressed books for Levels 1–8 named `B-Level-N-Book.pdf`. The duplicate compressed ZIP uploads for Levels 1–2 were identical and added only once.

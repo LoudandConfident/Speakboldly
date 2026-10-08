@@ -47,3 +47,20 @@ test('unconfigured private backend reports unavailable instead of pretending to 
  const backend=createExamBackend({dbPath:':memory:',adminPassword:'',exams:[]}),server=http.createServer((q,r)=>backend.handle(q,r));await new Promise(r=>server.listen(0,'127.0.0.1',r));
  try{const response=await fetch('http://127.0.0.1:'+server.address().port+'/api/student/login',{method:'POST',body:JSON.stringify({code:'4821'})});assert.equal(response.status,503);}finally{await new Promise(r=>server.close(r));backend.close();}
 });
+test('private student login allows three entries per account per day and leaves owner login unaffected',async()=>{
+ const app=await start();try{
+ const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
+ await app.api('admin/clients',owner,client('Limited','4821'));await app.api('admin/clients',owner,client('Other','4831'));
+ for(let i=0;i<3;i++)assert.equal((await app.api('student/login',null,{code:'4821'})).status,200);
+ assert.equal((await app.api('student/login',null,{code:'4821'})).status,429);
+ assert.equal((await app.api('student/login',null,{code:'4831'})).status,200);
+ assert.equal((await app.api('admin/clients',owner)).status,200);
+ }finally{await app.close();}
+});
+test('three incorrect student codes block more guesses for the day without blocking the owner',async()=>{
+ const app=await start();try{
+ for(let i=0;i<3;i++)assert.equal((await app.api('student/login',null,{code:'9999'})).status,401);
+ assert.equal((await app.api('student/login',null,{code:'9999'})).status,429);
+ assert.equal((await app.api('admin/login',null,{password:'test-owner-password'})).status,200);
+ }finally{await app.close();}
+});

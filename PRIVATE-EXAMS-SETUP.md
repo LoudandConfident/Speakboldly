@@ -33,7 +33,7 @@ Students use their assigned code to open permitted exams, then choose **Take int
 
 Students waiting on an open result page receive a status check every 25 seconds. Reopening the exam also retrieves the reviewed result and feedback. Submitted answers are immutable. Review marks can be revised by the owner.
 
-Each code identifies its assigned client account; it does not prove the physical identity of someone sharing that code. The server limits login requests, uses expiring opaque session tokens, and enforces client-specific exam permissions. Use a host that serves the API only over HTTPS.
+Each code identifies its assigned client account; it does not prove the physical identity of someone sharing that code. Student login allows three entries per client per Cairo day, with three incorrect guesses per source IP per day; the allowance is persisted in SQLite. The source IP is the direct connection address, so review proxy handling when hosting behind a reverse proxy. The public 1962 preview is exempt. The server also limits login requests, uses expiring opaque session tokens, and enforces client-specific exam permissions. Use a host that serves the API only over HTTPS.
 
 ## Scope and remaining limitations
 
