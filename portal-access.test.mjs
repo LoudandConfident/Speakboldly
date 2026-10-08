@@ -5,7 +5,7 @@ test('assigned codes return only folder metadata, no client identity, and reject
  const client={name:'Example',email:'test@example.com',level:'3',code:'4821',permissions:['section:exercises']};
  const storage={getItem:()=>JSON.stringify([client])};
  assert.deepEqual(findStudentAccess('4821',storage),{code:'4821',number:1,level:'3',permissions:['section:exercises']});
- assert.equal(findStudentAccess('1962',storage),null);
+ assert.deepEqual(findStudentAccess('1962',storage),{adminPreview:true});
  assert.equal(findStudentAccess('4821',{getItem:()=>JSON.stringify([client,client])}),null);
  assert.equal(findStudentAccess('4821',{getItem:()=>'{invalid'}),null);
 });

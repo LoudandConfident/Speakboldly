@@ -6,6 +6,7 @@ export function validateClient(input,clients=[],editingId=null,{allowLegacy=fals
  const level=String(input.level||''),payment=String(input.payment||'');
  const code=String(input.code||'').trim();
  if(!(allowLegacy&&!code)&&!/^\d{4}$/.test(code))throw new Error('Choose a 4-digit Student Code.');
+ if(code==='1962'&&!allowLegacy)throw new Error('1962 is reserved for full portal access. Choose another client code.');
  if(code&&clients.some(c=>c.id!==editingId&&c.code===code))throw new Error('That Student Code is already assigned. Choose a different code.');
  const permissions=Array.isArray(input.permissions)?[...new Set(input.permissions.filter(p=>typeof p==='string'&&(p.startsWith('section:')||p.startsWith('file:'))))]:[];
  if(!name||name.length>100)throw new Error('Enter a client name (up to 100 characters).');

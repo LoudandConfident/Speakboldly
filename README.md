@@ -31,7 +31,7 @@ The HTML file `googlef6de591683171555.html` is the Google Search Console verific
 
 Exercises, exams, progress reports, final reports, listening tracks, and Full material are offered inside the page, with inline image and PDF viewing. Upload links are in Admin portal and use the owner's GitHub sign-in. Material lists load automatically on opening Student portal. The Refresh materials button has been removed. Browser save capabilities cannot be fully disabled.
 
-The daily-code calendar and shared Student Code have been retired. Admin assigns each client a unique four-digit code and folder/file permissions through a separate client editor. Student code lookup reads only the same browser’s localStorage; it does not work on a student’s separate device. Unselected folders and files are dimmed with lock symbols in this local prototype. Admin can edit grants later and preview the full library. Existing uploads on GitHub Pages are public; confidential reports must move to private authenticated storage.
+The daily-code calendar has been retired. Code 1962 opens the full Student portal as an owner convenience code; it is reserved and cannot be assigned as a new individual client code. Admin assigns each client a unique four-digit code and folder/file permissions through a separate client editor. Student code lookup reads only the same browser’s localStorage; it does not work on a student’s separate device. Unselected folders and files are dimmed with lock symbols in this local prototype. Admin can edit grants later and preview the full library. Existing uploads on GitHub Pages are public; confidential reports must move to private authenticated storage.
 
 The next requested system needs shared backend storage so admin client records, individual client codes, uploaded files, and access grants work across devices. Provider selection is pending; do not claim these permissions are enforced before the backend is connected and verified.
 
@@ -44,3 +44,7 @@ The fixed code is visible in public source and is not secure authentication. Thi
 ## Admin session calendar
 
 The dashboard includes a monthly calendar using Cairo dates. Use + on a date, select an existing client, and enter the session number. Entries display name initials (for example MS #2); clicking an entry opens the client editor. Sessions link to stable client IDs and display the client’s current name. Session data is stored only in the current browser under `speak-boldly-admin-sessions-v1`, without cloud synchronization or automatic emails. Scheduled sessions do not change the hours-taught total. Locking the admin dashboard clears the calendar display; login reloads saved sessions. There are no session delete controls.
+
+## Level exams
+
+The Exams panel contains separate Level one through Level six exam sections, backed by six student PDFs converted from the supplied Word documents. Teacher listening scripts and answer keys are excluded from these public student versions; original attachments are not published. The bundled exam list works when GitHub listing requests fail and avoids duplicate entries. Admin can assign individual exam file permissions alongside folder access. Like other GitHub Pages files, the PDF URLs are public, and the current browser-only code gate does not provide private storage or prevent saving.

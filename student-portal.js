@@ -43,7 +43,10 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
    if(!item||typeof item.title!=='string'||typeof item.url!=='string')continue;
    let url;try{url=new URL(item.url,doc.baseURI);}catch{continue;}
    if(!['http:','https:'].includes(url.protocol))continue;
-   const li=doc.createElement('li'),button=doc.createElement('button');button.type='button';button.textContent=item.title;button.className='portal-resource';const allowed=allowedFile(panel.dataset.portalPanel,url.href);button.classList.toggle('portal-locked',!allowed);button.setAttribute('aria-disabled',String(!allowed));if(!allowed)button.textContent+=' 🔒';button.onclick=()=>{if(allowedFile(panel.dataset.portalPanel,url.href))showDocument(panel,item.title,url);else status.textContent='🔒 Your teacher has not granted access to this file.';};li.append(button);list.append(li);
+   const li=doc.createElement('li'),button=doc.createElement('button');button.type='button';button.textContent=item.title;button.className='portal-resource';const allowed=allowedFile(panel.dataset.portalPanel,url.href);button.classList.toggle('portal-locked',!allowed);button.setAttribute('aria-disabled',String(!allowed));if(!allowed)button.textContent+=' 🔒';button.onclick=()=>{if(allowedFile(panel.dataset.portalPanel,url.href))showDocument(panel,item.title,url);else status.textContent='🔒 Your teacher has not granted access to this file.';};if(panel.dataset.portalPanel==='exams'){
+    const match=item.title.match(/^Level[ -]+([1-6])[ -]+Exam$/i);
+    if(match){li.className='portal-exam-partition';const heading=doc.createElement('h4');heading.textContent='Level '+['one','two','three','four','five','six'][Number(match[1])-1]+' exam:';li.append(heading);button.textContent='Open exam'+(allowed?'':' 🔒');button.setAttribute('aria-label','Open level '+match[1]+' exam');}
+   }li.append(button);list.append(li);
   }
   panel.querySelector('.portal-empty').hidden=list.children.length>0;
  }
