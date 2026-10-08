@@ -7,6 +7,11 @@ export function initializeNavigation(doc,win){
  doc.addEventListener('click',event=>{if(menu?.getAttribute('aria-expanded')==='true'&&!event.target.closest('header'))closeMenu();});
  win.addEventListener('hashchange',closeMenu);
  const reducedMotion=win.matchMedia?.('(prefers-reduced-motion: reduce)');
+ const down=doc.querySelector('#page-down-arrow');
+ function updateDownArrow(){if(down)down.hidden=doc.documentElement.scrollHeight-win.innerHeight-win.scrollY<=12;}
+ down?.addEventListener('click',()=>win.scrollTo({top:doc.documentElement.scrollHeight,behavior:reducedMotion?.matches?'instant':'smooth'}));
+ win.addEventListener('scroll',updateDownArrow,{passive:true});win.addEventListener('resize',updateDownArrow);
+ if(down&&win.ResizeObserver){const sizeObserver=new win.ResizeObserver(updateDownArrow);sizeObserver.observe(doc.querySelector('main')||doc.body);}
  let active=null,transition=null,request=0;
  function showView(){
   const requested=win.location.hash.slice(1).split('/')[0]||'home';
@@ -18,7 +23,7 @@ export function initializeNavigation(doc,win){
    if(ticket!==request)return;
    views.forEach(v=>{v.hidden=v!==next;v.classList.remove('view-enter');});
    doc.querySelectorAll('[data-open-view]').forEach(b=>{if(b.dataset.openView===next.id)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
-   active=next;win.scrollTo({top:0,left:0,behavior:'instant'});
+   active=next;win.scrollTo({top:0,left:0,behavior:'instant'});updateDownArrow();
   };
   if(animate&&typeof doc.startViewTransition==='function'){
    const current=doc.startViewTransition(update);transition=current;
