@@ -89,7 +89,6 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
  root.addEventListener('contextmenu',event=>{if(unlocked&&event.target.closest('#portal-content'))event.preventDefault();});
  root.addEventListener('dragstart',event=>{if(unlocked&&event.target.closest('#portal-content'))event.preventDefault();});
  doc.addEventListener('keydown',event=>{if(unlocked&&(event.ctrlKey||event.metaKey)&&['s','p'].includes(event.key.toLowerCase()))event.preventDefault();});
- root.querySelector('#lock-student-portal').addEventListener('click',()=>lock());
  lock(false);
 }
 if(typeof document!=='undefined')initializeStudentPortal(document,code=>findStudentAccess(code,document.defaultView.localStorage),portalResources);
