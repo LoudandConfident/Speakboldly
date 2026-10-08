@@ -24,3 +24,8 @@ test('student codes must be four digits and unique when creating or editing clie
  assert.doesNotThrow(()=>validateClient(input,[client],'one'));
  for(const code of ['', '123','12345','abcd'])assert.throws(()=>validateClient({...input,code}));
 });
+test('renaming material books preserves previously assigned file permissions',()=>{
+ const access={permissions:['section:material','file:material:/Speakboldly/student-files/material/Berlitz%20English%20Level%205%20_-_%20Book.pdf']};
+ assert.equal(canOpenFile(access,'material','https://loudandconfident.github.io/Speakboldly/student-files/material/B-Level-5-Book.pdf'),true);
+ assert.equal(canOpenFile(access,'material','https://loudandconfident.github.io/Speakboldly/student-files/material/B-Level-6-Book.pdf'),false);
+});
