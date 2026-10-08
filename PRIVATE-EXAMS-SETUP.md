@@ -47,3 +47,23 @@ Each code identifies its assigned client account; it does not prove the physical
 ## Validation
 
 `npm test` covers authorization, client isolation, locked exams, score validation, hidden results before review, persistent data across backend restart, origin restrictions and unconfigured services. A separate-browser functional check also verifies private client creation, student submissions, owner review and student final results.
+
+## Score emails after review
+
+Set SMTP_HOST, SMTP_PORT (587 with STARTTLS or 465 with TLS), SMTP_USER, SMTP_PASSWORD, and SMTP_FROM in the private host's secure environment settings. SMTP_FROM must be an address approved by your sending provider. Replies go to speakboldly16@gmail.com. No password belongs in GitHub or chat.
+
+Saving a review sends the final percentage and feedback to the email registered for that client. The dashboard reports sent, failed, or not configured. Sent means the mail provider accepted the message; inbox delivery is not guaranteed. Saving unchanged marks again does not duplicate a successfully sent email; saving changed marks sends an updated result. If delivery failed, saving again retries. Marks remain saved even if mail fails. Restarting during delivery may leave a sending status; check delivery with the provider before retrying.
+
+GitHub Pages cannot run this server or send SMTP mail. Until private hosting and SMTP are connected, reviews and automatic score email are not live.
+
+## Timers, uploads, and student sessions
+
+Exams start a server-authoritative 25-minute deadline on first opening. Draft answers autosave; time continues if the student leaves. On expiry, saved answers are submitted for teacher review. Students can request 10 extra minutes once. Requests appear in the admin submissions list, checked every 15 seconds while connected; the teacher must approve or decline. Approval after expiry reopens an automatically submitted attempt for 10 minutes. Resolve requests before marking.
+
+Students re-enter their code after switching away from the portal, hiding the browser tab, or leaving the page. Individual codes allow three entries per Cairo calendar day. Changing a client's code invalidates their old server sessions. Browser-only limits can be cleared by a user; private-server limits are authoritative.
+
+The admin's computer file picker uploads to persistent private storage only after connection. PDF, images, audio, and video are supported, up to 32 MB per upload. Multiple files upload sequentially. Selecting a client grants access to those new files; selecting Full library requires assigning file permissions later. No deletion endpoint is provided. Back up the database and uploads directory together. Confidential files must never go to the public GitHub repository.
+
+PDFs display as canvas pages without browser PDF download controls; media hides download controls. Browser shortcuts and context menus are suppressed inside the student portal, but copying, network retrieval, and screenshots cannot be prevented absolutely. Existing public GitHub files remain public.
+
+Development setup: Node 24+, `npm ci`, then `npm start`. Run `npm test`. Vendor PDF.js browser files and its Apache license are committed, so no runtime CDN is required.

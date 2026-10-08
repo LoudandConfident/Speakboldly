@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import http
 import {createExamBackend} from './private-exams-server.mjs';
 const exam={level:1,title:'Test exam',questions:Array.from({length:20},(_,i)=>({number:i+1,question:'Question '+i,options:['Correct','Wrong'],correct:0})),sections:{B:{title:'Corrections',intro:[],questions:['One question']},C:{title:'Reading',intro:['Passage'],questions:['One question']},D:{title:'Listening',intro:[],questions:[]},E:{title:'Writing',intro:[],questions:[]}},teacherNotes:['Private teacher answer key']};
 const client=(name,code)=>({name,email:name.toLowerCase()+'@example.com',level:'1',code,payment:'Paid',hours:0,permissions:['section:exams','file:exams:/Speakboldly/student-files/exams/Level-1-Exam.pdf']});
-async function start(path=':memory:'){const backend=createExamBackend({dbPath:path,adminPassword:'test-owner-password',exams:[exam],origins:['https://allowed.example']});const server=http.createServer((req,res)=>backend.handle(req,res));await new Promise(r=>server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+server.address().port;
+async function start(path=':memory:',options={}){const backend=createExamBackend({dbPath:path,adminPassword:'test-owner-password',exams:[exam],origins:['https://allowed.example'],...options});const server=http.createServer((req,res)=>backend.handle(req,res));await new Promise(r=>server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+server.address().port;
  const api=async(path,token,data,method)=>{const response=await fetch(base+'/api/'+path,{method:method||(data?'POST':'GET'),headers:{...(data?{'Content-Type':'application/json'}:{}),...(token?{Authorization:'Bearer '+token}:{})},body:data?JSON.stringify(data):undefined});return{status:response.status,data:await response.json()};};
  return{api,base,close:async()=>{await new Promise(r=>server.close(r));backend.close();}};
 }
@@ -63,4 +63,51 @@ test('three incorrect student codes block more guesses for the day without block
  assert.equal((await app.api('student/login',null,{code:'9999'})).status,429);
  assert.equal((await app.api('admin/login',null,{password:'test-owner-password'})).status,200);
  }finally{await app.close();}
+});
+test('review emails the registered client, avoids duplicates, and preserves marks on delivery failure',async()=>{
+ const messages=[];let failing=false;const app=await start(':memory:',{sendScoreEmail:async message=>{if(failing)throw new Error('SMTP unavailable');messages.push(message);}});
+ try{const {api}=app;const owner=(await api('admin/login',null,{password:'test-owner-password'})).data.token;
+ await api('admin/clients',owner,{...client('Recipient','4821'),amountPaid:1200});
+ const student=(await api('student/login',null,{code:'4821'})).data.token;
+ const id=(await api('student/exams/1',student)).data.attempt.id;
+ await api('student/attempts/'+id+'/submit',student,{answers:{A:{1:0},B:{},C:{},D:'',E:''}});
+ const data={marks:{B:10,C:10,D:10,E:10},feedback:'Keep practising',to:'attacker@example.com'};
+ const reviewed=await api('admin/attempts/'+id+'/review',owner,data);
+ assert.equal(reviewed.data.attempt.emailStatus,'sent');assert.equal(messages[0].to,'recipient@example.com');assert.equal(messages[0].percentage,41);
+ await api('admin/attempts/'+id+'/review',owner,data);assert.equal(messages.length,1);
+ failing=true;const changed={...data,feedback:'Updated feedback'};
+ assert.equal((await api('admin/attempts/'+id+'/review',owner,changed)).data.attempt.emailStatus,'failed');
+ assert.equal((await api('student/attempts/'+id,student)).data.attempt.percentage,41);
+ failing=false;assert.equal((await api('admin/attempts/'+id+'/review',owner,changed)).data.attempt.emailStatus,'sent');assert.equal(messages.length,2);
+ }finally{await app.close();}
+});
+test('server deadlines save drafts, enforce teacher-approved extra time, and revoke changed codes',async()=>{
+ let clock=Date.now();const app=await start(':memory:',{now:()=>clock});
+ try{const {api}=app,owner=(await api('admin/login',null,{password:'test-owner-password'})).data.token;
+ const person=(await api('admin/clients',owner,client('Timed','4821'))).data.client;
+ const student=(await api('student/login',null,{code:'4821'})).data.token;
+ const opened=(await api('student/exams/1',student)).data.attempt,id=opened.id;assert.equal(opened.deadline,clock+25*60000);
+ await api('student/attempts/'+id+'/draft',student,{answers:{A:{1:0},B:{1:'Saved'},C:{},D:'',E:''}});
+ assert.equal((await api('student/attempts/'+id+'/extra-time',student,{})).data.attempt.extension,'pending');
+ clock+=26*60000;assert.equal((await api('student/attempts/'+id,student)).data.attempt.autoSubmitted,true);
+ const extended=(await api('admin/attempts/'+id+'/extra-time',owner,{decision:'approve'})).data.attempt;
+ assert.equal(extended.deadline,clock+10*60000);assert.equal(extended.submittedAt,null);assert.equal(extended.draftAnswers.B[1],'Saved');
+ assert.equal((await api('student/attempts/'+id+'/extra-time',student,{})).status,400);
+ clock+=11*60000;assert.equal((await api('student/attempts/'+id,student)).data.attempt.autoSubmitted,true);
+ await api('admin/clients',owner,{...person,code:'4831'});assert.equal((await api('student/attempts/'+id,student)).status,401);
+ }finally{await app.close();}
+});
+test('computer uploads grant a client private file access and reject other students',async()=>{
+ const folder=mkdtempSync(join(tmpdir(),'speak-boldly-files-')),app=await start(':memory:',{storageDirectory:folder});
+ try{const {api}=app,owner=(await api('admin/login',null,{password:'test-owner-password'})).data.token;
+ const person=(await api('admin/clients',owner,client('Files','4821'))).data.client;
+ await api('admin/clients',owner,client('Otherfiles','4831'));
+ const data=new FormData();data.set('section','material');data.set('clientId',person.id);data.set('file',new Blob(['%PDF-1.7\nTest'],{type:'application/pdf'}),'Lesson.pdf');
+ const uploaded=await fetch(app.base+'/api/admin/files',{method:'POST',headers:{Authorization:'Bearer '+owner},body:data});assert.equal(uploaded.status,200);const file=(await uploaded.json()).file;
+ const student=(await api('student/login',null,{code:'4821'})).data.token,other=(await api('student/login',null,{code:'4831'})).data.token;
+ const fetchFile=token=>fetch(app.base+file.url,{headers:token?{Authorization:'Bearer '+token}:{}});
+ assert.equal((await fetchFile()).status,401);assert.equal((await fetchFile(other)).status,403);
+ const response=await fetchFile(student);assert.equal(response.status,200);assert.equal(response.headers.get('content-disposition'),'inline');assert.equal(await response.text(),'%PDF-1.7\nTest');
+ assert.equal((await api('student/files?section=material',student)).data.files.length,1);assert.equal((await api('student/files?section=material',other)).data.files.length,0);
+ }finally{await app.close();rmSync(folder,{recursive:true,force:true});}
 });

@@ -1,7 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {validateClient,clientTotals} from './admin-clients.js';
 const sample={name:'Test Client',email:'test@example.com',level:'3',payment:'Unpaid',hours:'1.5',code:'4821',permissions:[]};
 test('client input normalizes names/emails and rejects invalid data or duplicate clients',()=>{
- assert.deepEqual(validateClient({...sample,name:' Test Client ',email:' TEST@EXAMPLE.COM '}),{name:'Test Client',email:'test@example.com',level:'3',payment:'Unpaid',hours:1.5,code:'4821',permissions:[]});
+ assert.deepEqual(validateClient({...sample,name:' Test Client ',email:' TEST@EXAMPLE.COM '}),{name:'Test Client',email:'test@example.com',level:'3',payment:'Unpaid',amountPaid:0,hours:1.5,code:'4821',permissions:[]});
  for(const input of [{...sample,name:''},{...sample,email:'not-email'},{...sample,level:'invalid'},{...sample,payment:'unknown'},{...sample,hours:'-1'},{...sample,hours:'NaN'},{...sample,hours:'0.001'},{...sample,hours:''}])assert.throws(()=>validateClient(input));
  const clients=[{id:'test-id',...validateClient(sample)}];assert.throws(()=>validateClient(sample,clients));assert.doesNotThrow(()=>validateClient(sample,clients,'test-id'));
 });

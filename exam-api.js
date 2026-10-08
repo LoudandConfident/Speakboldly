@@ -16,3 +16,11 @@ export async function loginStudent(code){const result=await request('student/log
 export async function savePrivateClient(client){return(await request('admin/clients',{role:'admin',method:'POST',data:client})).client;}
 export function loadStudentExam(level){return request('student/exams/'+level,{role:'student'});}
 export function submitStudentExam(id,answers){return request('student/attempts/'+id+'/submit',{role:'student',method:'POST',data:{answers}});}
+
+export function studentConnected(){return !!studentToken;}
+export async function uploadPrivateFile(section,clientId,file){
+ const data=new FormData();data.set('section',section);data.set('clientId',clientId);data.set('file',file);
+ const response=await fetch(backendBase()+'/api/admin/files',{method:'POST',headers:{Authorization:'Bearer '+ownerToken},body:data});const result=await response.json();if(!response.ok)throw new Error(result.error||'Upload failed.');return result;
+}
+export async function privateFiles(section){const role=ownerToken?'admin':studentToken?'student':null;if(!role)return[];const result=await request(role+'/files?section='+encodeURIComponent(section),{role});return result.files.map(f=>({...f,url:backendBase()+f.url}));}
+export async function fileBytes(url){const base=backendBase(),privateUrl=base&&url.startsWith(base+'/api/files/');const response=await fetch(url,{headers:privateUrl?{Authorization:'Bearer '+(ownerToken||studentToken)}:{}});if(!response.ok)throw new Error('File unavailable.');return new Uint8Array(await response.arrayBuffer());}

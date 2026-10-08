@@ -1,6 +1,7 @@
+import {renderPdf} from './portal-document.js';
 import {takeStudentAttempt} from './student-attempts.js';
 import {showInteractiveExam} from './interactive-exams.js';
-import {backendBase,loginStudent,clearStudent} from './exam-api.js';
+import {backendBase,loginStudent,clearStudent,fileBytes} from './exam-api.js';
 import {findStudentAccess,canOpenSection,canOpenFile} from './portal-access.js';
 import {portalResources} from './portal-config.js';
 import {loadPortalMaterials} from './portal-materials.js';
@@ -12,6 +13,7 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
   areaButtons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
   root.querySelector('#client-portal').hidden=area!=='client';
   root.querySelector('#admin-portal').hidden=area!=='admin';
+  if(area==='admin')lock(false);
   if(area==='client'&&unlocked)refreshMaterials();
  }));
  const form=root.querySelector('#student-code-form'),gate=root.querySelector('#portal-gate'),content=root.querySelector('#portal-content'),error=root.querySelector('#student-code-error'),input=form.querySelector('input');
@@ -34,11 +36,12 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
   const heading=doc.createElement('h4');heading.textContent=title;heading.tabIndex=-1;
   const close=doc.createElement('button');close.type='button';close.className='button light small';close.textContent='Close document';close.onclick=()=>viewer.remove();
   viewer.append(heading,close);
-  const examLevel=url.pathname.match(/Level-([1-6])-Exam\.pdf$/i);
+  const examLevel=panel.dataset.portalPanel==='exams'?url.pathname.match(/Level-([1-6])-Exam\.pdf$/i):null;
+  if(examLevel&&!access?.adminPreview){showInteractiveExam(doc,panel,Number(examLevel[1]),access);return;}
   if(examLevel){const action=doc.createElement('button');action.type='button';action.className='button';action.textContent='Take interactive exam';action.onclick=()=>showInteractiveExam(doc,panel,Number(examLevel[1]),access);viewer.append(action);}
-  if(/\.(png|jpe?g|webp|gif|avif|svg)$/i.test(url.pathname)){const img=doc.createElement('img');img.src=url.href;img.alt=title;img.className='portal-document-image';viewer.append(img);}
-  else if(/\.pdf$/i.test(url.pathname)){const iframe=doc.createElement('iframe');const source=new URL(url.href);source.hash='toolbar=0&navpanes=0';iframe.src=source.href;iframe.title=title;iframe.className='portal-document-frame';viewer.append(iframe);}
-  else if(/\.(mp4|webm|mp3|wav|ogg)$/i.test(url.pathname)){const media=doc.createElement(/\.(mp4|webm)$/i.test(url.pathname)?'video':'audio');media.src=url.href;media.controls=true;media.setAttribute('controlsList','nodownload');viewer.append(media);}
+  if(/\.(png|jpe?g|webp|gif|avif|svg)$/i.test(url.pathname)){const img=doc.createElement('img');if(url.pathname.startsWith('/api/files/'))fileBytes(url.href).then(bytes=>{if(viewer.isConnected){const objectUrl=URL.createObjectURL(new Blob([bytes]));img.src=objectUrl;close.addEventListener('click',()=>URL.revokeObjectURL(objectUrl),{once:true});}}).catch(()=>{status.textContent='File could not load.';});else img.src=url.href;img.alt=title;img.className='portal-document-image';viewer.append(img);}
+  else if(/\.pdf$/i.test(url.pathname)){renderPdf(doc,viewer,url.href);}
+  else if(/\.(mp4|webm|mp3|wav|ogg)$/i.test(url.pathname)){const media=doc.createElement(/\.(mp4|webm)$/i.test(url.pathname)?'video':'audio');if(url.pathname.startsWith('/api/files/'))fileBytes(url.href).then(bytes=>{if(viewer.isConnected){const objectUrl=URL.createObjectURL(new Blob([bytes]));media.src=objectUrl;close.addEventListener('click',()=>URL.revokeObjectURL(objectUrl),{once:true});}}).catch(()=>{status.textContent='File could not load.';});else media.src=url.href;media.controls=true;media.setAttribute('controlsList','nodownload');viewer.append(media);}
   else{const message=doc.createElement('p');message.textContent='This file format cannot be shown inline. Please ask your teacher for a PDF or image version.';viewer.append(message);}
   panel.append(viewer);heading.focus();
  }
@@ -65,12 +68,14 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
   }));
   materialsLoaded=!failed;loading=false;
  }
+ let generation=0;
  function lock(focus=true){
+  generation++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));
   unlocked=false;access=null;clearStudent();panels.forEach(panel=>panel.querySelector('.portal-document-viewer')?.remove());gate.hidden=false;content.hidden=true;panels.forEach(panel=>panel.hidden=true);form.reset();error.textContent='';input.removeAttribute('aria-invalid');if(focus)input.focus();
  }
  form.addEventListener('submit',async event=>{
-  event.preventDefault();let found;const code=input.value.trim();try{if(code!=='1962'&&!backendBase())takeStudentAttempt(doc.defaultView.localStorage);found=backendBase()&&code!=='1962'?await loginStudent(code):lookup(code);}catch(message){error.textContent=message.message;return;}if(!found){error.textContent='That Student Code is incorrect. Please ask your teacher for your code.';input.setAttribute('aria-invalid','true');input.focus();return;}
-  access=found;unlocked=true;error.textContent='';input.removeAttribute('aria-invalid');input.value='';gate.hidden=true;content.hidden=false;updateAccess();if(!materialsLoaded)refreshMaterials();
+  event.preventDefault();const epoch=generation;let found;const code=input.value.trim();try{if(code!=='1962'&&!backendBase())takeStudentAttempt(doc.defaultView.localStorage);found=backendBase()&&code!=='1962'?await loginStudent(code):lookup(code);}catch(message){error.textContent=message.message;return;}if(!found){error.textContent='That Student Code is incorrect. Please ask your teacher for your code.';input.setAttribute('aria-invalid','true');input.focus();return;}
+  if(epoch!==generation){clearStudent();return;}access=found;unlocked=true;error.textContent='';input.removeAttribute('aria-invalid');input.value='';gate.hidden=true;content.hidden=false;updateAccess();refreshMaterials();
  });
  tabs.forEach((tab,i)=>{
   tab.addEventListener('click',()=>select(tab.dataset.portalTab));
@@ -78,6 +83,12 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
  });
  doc.addEventListener('portal-permissions-changed',()=>{if(!unlocked||access?.adminPreview)return;const next=lookup(access.code);if(!next){lock(false);return;}access=next;updateAccess();});
  doc.addEventListener('portal-admin-preview',()=>{access={adminPreview:true};unlocked=true;gate.hidden=true;content.hidden=false;updateAccess();refreshMaterials();});
+ doc.defaultView.addEventListener('hashchange',()=>{if(!doc.defaultView.location.hash.startsWith('#students-portal'))lock(false);});
+ doc.defaultView.addEventListener('pagehide',()=>lock(false));
+ doc.addEventListener('visibilitychange',()=>{if(doc.hidden&&unlocked)lock(false);});
+ root.addEventListener('contextmenu',event=>{if(unlocked&&event.target.closest('#portal-content'))event.preventDefault();});
+ root.addEventListener('dragstart',event=>{if(unlocked&&event.target.closest('#portal-content'))event.preventDefault();});
+ doc.addEventListener('keydown',event=>{if(unlocked&&(event.ctrlKey||event.metaKey)&&['s','p'].includes(event.key.toLowerCase()))event.preventDefault();});
  root.querySelector('#lock-student-portal').addEventListener('click',()=>lock());
  lock(false);
 }

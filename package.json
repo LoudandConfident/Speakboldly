@@ -9,5 +9,9 @@
   "type": "module",
   "engines": {
     "node": ">=24.0.0"
+  },
+  "dependencies": {
+    "nodemailer": "^10.0.16",
+    "pdfjs-dist": "^6.4.299"
   }
 }

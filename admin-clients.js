@@ -14,6 +14,7 @@ export function validateClient(input,clients=[],editingId=null,{allowLegacy=fals
  if(clients.some(c=>c.id!==editingId&&c.email.toLowerCase()===email))throw new Error('This email already belongs to a client. Edit that client instead.');
  if(!(CLIENT_LEVELS.includes(level)||/^[1-9]\d{0,3}$/.test(level)||((allowLegacy||editingId)&&LEGACY_CLIENT_LEVELS.includes(level)))||!PAYMENT_STATUSES.includes(payment))throw new Error('Choose a valid level and payment status.');
  const hours=Number(input.hours);if(input.hours===''||!Number.isFinite(hours)||hours<0||hours>100000||Math.abs(hours*100-Math.round(hours*100))>0.000001)throw new Error('Enter hours from 0 to 100000, with up to two decimal places.');
- return{name,email,level,payment,hours,code,permissions};
+ const amountPaid=Number(input.amountPaid??0);if(input.amountPaid===''||!Number.isFinite(amountPaid)||amountPaid<0||amountPaid>100000000||Math.abs(amountPaid*100-Math.round(amountPaid*100))>0.000001)throw new Error('Enter an amount paid from 0 to 100000000, with up to two decimal places.');
+ return{name,email,level,payment,amountPaid,hours,code,permissions};
 }
 export function clientTotals(clients){return{clients:clients.length,hours:Math.round(clients.reduce((sum,c)=>sum+c.hours,0)*100)/100};}

@@ -1,2 +1,3 @@
 .private-data/
 .env
+node_modules/
