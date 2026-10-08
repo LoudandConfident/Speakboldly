@@ -1,3 +1,5 @@
+import {showInteractiveExam} from './interactive-exams.js';
+import {backendBase,loginStudent,clearStudent} from './exam-api.js';
 import {findStudentAccess,canOpenSection,canOpenFile} from './portal-access.js';
 import {portalResources} from './portal-config.js';
 import {loadPortalMaterials} from './portal-materials.js';
@@ -31,6 +33,8 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
   const heading=doc.createElement('h4');heading.textContent=title;heading.tabIndex=-1;
   const close=doc.createElement('button');close.type='button';close.className='button light small';close.textContent='Close document';close.onclick=()=>viewer.remove();
   viewer.append(heading,close);
+  const examLevel=url.pathname.match(/Level-([1-6])-Exam\.pdf$/i);
+  if(examLevel){const action=doc.createElement('button');action.type='button';action.className='button';action.textContent='Take interactive exam';action.onclick=()=>showInteractiveExam(doc,panel,Number(examLevel[1]),access);viewer.append(action);}
   if(/\.(png|jpe?g|webp|gif|avif|svg)$/i.test(url.pathname)){const img=doc.createElement('img');img.src=url.href;img.alt=title;img.className='portal-document-image';viewer.append(img);}
   else if(/\.pdf$/i.test(url.pathname)){const iframe=doc.createElement('iframe');const source=new URL(url.href);source.hash='toolbar=0&navpanes=0';iframe.src=source.href;iframe.title=title;iframe.className='portal-document-frame';viewer.append(iframe);}
   else if(/\.(mp4|webm|mp3|wav|ogg)$/i.test(url.pathname)){const media=doc.createElement(/\.(mp4|webm)$/i.test(url.pathname)?'video':'audio');media.src=url.href;media.controls=true;media.setAttribute('controlsList','nodownload');viewer.append(media);}
@@ -61,10 +65,10 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
   materialsLoaded=!failed;loading=false;
  }
  function lock(focus=true){
-  unlocked=false;access=null;panels.forEach(panel=>panel.querySelector('.portal-document-viewer')?.remove());gate.hidden=false;content.hidden=true;panels.forEach(panel=>panel.hidden=true);form.reset();error.textContent='';input.removeAttribute('aria-invalid');if(focus)input.focus();
+  unlocked=false;access=null;clearStudent();panels.forEach(panel=>panel.querySelector('.portal-document-viewer')?.remove());gate.hidden=false;content.hidden=true;panels.forEach(panel=>panel.hidden=true);form.reset();error.textContent='';input.removeAttribute('aria-invalid');if(focus)input.focus();
  }
- form.addEventListener('submit',event=>{
-  event.preventDefault();const found=lookup(input.value.trim());if(!found){error.textContent='That Student Code is incorrect. Please ask your teacher for your code.';input.setAttribute('aria-invalid','true');input.focus();return;}
+ form.addEventListener('submit',async event=>{
+  event.preventDefault();let found;const code=input.value.trim();try{found=backendBase()&&code!=='1962'?await loginStudent(code):lookup(code);}catch(message){error.textContent=message.message;return;}if(!found){error.textContent='That Student Code is incorrect. Please ask your teacher for your code.';input.setAttribute('aria-invalid','true');input.focus();return;}
   access=found;unlocked=true;error.textContent='';input.removeAttribute('aria-invalid');input.value='';gate.hidden=true;content.hidden=false;updateAccess();if(!materialsLoaded)refreshMaterials();
  });
  tabs.forEach((tab,i)=>{

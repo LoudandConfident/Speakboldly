@@ -48,3 +48,9 @@ The dashboard includes a monthly calendar using Cairo dates. Use + on a date, se
 ## Level exams
 
 The Exams panel contains separate Level one through Level six exam sections, backed by six student PDFs converted from the supplied Word documents. Teacher listening scripts and answer keys are excluded from these public student versions; original attachments are not published. The bundled exam list works when GitHub listing requests fail and avoids duplicate entries. Admin can assign individual exam file permissions alongside folder access. Like other GitHub Pages files, the PDF URLs are public, and the current browser-only code gate does not provide private storage or prevent saving.
+
+## Interactive exams and private review
+
+The interactive exam workflow is implemented with a Node 24/SQLite backend and is validated locally, but it is not connected to an external host. See [PRIVATE-EXAMS-SETUP.md](PRIVATE-EXAMS-SETUP.md) for deployment, private data preparation, shared client management, access tracking and reviewed percentages. Public GitHub Pages alone cannot run the private server. Teacher answer keys are generated only into ignored private data; never publish that directory. The dashboard convenience code remains 1962, and a separate private owner password protects the backend.
+
+Page signatures now use a plain font with “English language Coaching” and “Prepared fully by Mira Nasser Louis.” The extra Lock Admin portal and Open Student portal dashboard buttons have been removed.
