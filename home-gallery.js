@@ -30,6 +30,18 @@ export const quoteDetails = [
  {support:['You have something to say.','Say it in English.'],reflection:'Your voice deserves to be heard. Pick something you care about and say a little about it today, using the English you have. Start with a sentence you can say comfortably, then add a little more when you feel ready. It’s okay to pause, rephrase, or tell someone you need a moment. Your thoughts don’t become less valuable because you are still learning how to express them. Give yourself a chance to be heard, one conversation at a time.'},
  {support:['Let’s speak English!'],reflection:'You don’t have to wait for someone else to start. Ask a question, share a thought, or tell a short story. Today can be your turn. Think about something you enjoyed, something you learned, or a question you would like to ask. Practise saying it aloud, then use it in a conversation when you have the opportunity. Listen to the reply and stay curious about the other person. Speaking is a shared experience, and you have something to bring to it.'}
 ];
+export const dailyPractice = [
+ 'Try this today: record a short voice note about something that matters to you. Listen once, choose one phrase you want to improve, and try it again. A few focused minutes are enough to make a start.',
+ 'Try this today: share one opinion in English without apologising for your level first. If you need to pause or correct yourself, give yourself that time. Finishing your thought matters more than getting every word right.',
+ 'Try this today: think of one thing you can do now that used to feel difficult. Write it down, then choose one small next step. Let your own progress guide you rather than comparing yourself with someone else.',
+ 'Try this today: choose a situation you would like to handle more confidently and practise two sentences for it. You can start small, repeat them aloud, and use them when the opportunity comes.',
+ 'Try this today: listen to a short story or conversation from somewhere unfamiliar. Pick one phrase you like and think about when you could use it. Follow your curiosity and see where it takes you.',
+ 'Try this today: describe three things around you directly in English. Keep the sentences simple and use a different explanation if a word is missing. You can practise expressing meaning before searching for the perfect phrase.',
+ 'Try this today: choose one skill to focus on for the week. Notice small changes, such as finding a word more quickly or asking a clearer question. Give yourself credit for the practice you are putting in.',
+ 'Try this today: prepare a simple greeting and a follow-up question for someone you would like to speak with. A conversation can begin with a very small step. You can decide what to say next once it has started.',
+ 'Try this today: say one thought aloud in English that you would usually keep to yourself. Repeat it slowly if that helps, then add a reason or an example. Give your voice a little more space.',
+ 'Try this today: start a conversation with a question you actually want to ask. Listen to the answer and share a little about yourself in return. You have a part to play in making the conversation happen.'
+];
 export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
  if (!page) return;
@@ -42,8 +54,9 @@ export function initializeGallery(doc, win) {
   page.querySelector('#daily-quote-image').src = entry.image;
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');
   page.querySelector('#daily-quote-text').textContent = entry.quote;
-  page.querySelector('figcaption').hidden = Boolean(entry.embedded);
-  page.querySelector('#daily-quote-reflection').textContent = details.reflection;
+  page.querySelector('figcaption').hidden = false;
+  const reflection=page.querySelector('#daily-quote-reflection');
+  reflection.replaceChildren(...[details.reflection,dailyPractice[index]].map(text=>{const paragraph=doc.createElement('p');paragraph.textContent=text;return paragraph;}));
  }
  refresh();
  let interval;
