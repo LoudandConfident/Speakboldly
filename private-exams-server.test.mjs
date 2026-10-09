@@ -155,3 +155,12 @@ test('confirmation button queues future classes for current and subsequently reg
   assert.equal((await disconnected.api('admin/classes/send-confirmations',owner,{})).status,503);
  }finally{await disconnected.close();}
 });
+test('private client storage rejects duplicate names and codes and allows editing the same client',async()=>{
+ const app=await start();try{
+  const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
+  const saved=(await app.api('admin/clients',owner,client('Learner','4821'))).data.client;
+  const repeatedName=await app.api('admin/clients',owner,{...client('Other','4921'),name:' LEARNER '});assert.equal(repeatedName.status,400);assert.match(repeatedName.data.error,/name is already registered/);
+  const repeatedCode=await app.api('admin/clients',owner,client('Other','4821'));assert.equal(repeatedCode.status,400);assert.match(repeatedCode.data.error,/Code is already assigned/);
+  assert.equal((await app.api('admin/clients',owner,{...saved,hours:2})).status,200);
+ }finally{await app.close();}
+});

@@ -14,3 +14,10 @@ test('client levels accept numbers and named programs while preserving saved leg
  assert.throws(()=>validateClient({...sample,level:'0'}));
  assert.equal(validateClient({...sample,level:'B1'},[],null,{allowLegacy:true}).level,'B1');
 });
+test('repeated client names and previously assigned codes are rejected while edits remain valid',()=>{
+ const existing={id:'one',...validateClient(sample)};
+ assert.throws(()=>validateClient({...sample,name:'Another Learner',email:'other@example.com'},[existing]),/Student Code is already assigned/);
+ for(const name of ['TEST CLIENT','  Test   Client  ','test client'])assert.throws(()=>validateClient({...sample,name,code:'5931',email:'other@example.com'},[existing]),/name is already registered/);
+ assert.doesNotThrow(()=>validateClient({...sample,name:' TEST CLIENT '},[existing],'one'));
+ assert.doesNotThrow(()=>validateClient({...sample,name:'Another Learner',code:'5931',email:'other@example.com'},[existing]));
+});

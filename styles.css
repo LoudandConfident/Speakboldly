@@ -41,3 +41,5 @@ main{position:relative}#home{position:relative}.daily-motivation{position:absolu
 .course-booking-note{max-width:900px;line-height:1.8;margin:20px 0 28px}.course-pricing{margin:18px 0;color:var(--ink)}.course-price-option+.course-price-option{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}.course-price-option p{margin:0 0 5px;font-size:14px;line-height:1.6}.course-pricing del{color:var(--muted);margin-right:8px}.course-pricing strong{font-size:20px;color:var(--ink)}.course-pricing span{display:block;font-size:12px;line-height:1.7}.course-quote{font-weight:700;text-decoration:underline;text-underline-offset:3px}
 
 .admin-clients-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.admin-clients-heading h3{margin:12px 0}.admin-clients-heading .button:disabled{opacity:.55;cursor:wait}
+
+.admin-folder-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.admin-folder-heading>label{margin:0}.admin-folder-toggle{font-size:12px;padding:8px 12px}.admin-access-files[hidden]{display:none!important}.admin-access-files:not([hidden]){margin-top:12px}

@@ -10,6 +10,8 @@ export function validateClient(input,clients=[],editingId=null,{allowLegacy=fals
  if(code&&clients.some(c=>c.id!==editingId&&c.code===code))throw new Error('That Student Code is already assigned. Choose a different code.');
  const permissions=Array.isArray(input.permissions)?[...new Set(input.permissions.filter(p=>typeof p==='string'&&(p.startsWith('section:')||p.startsWith('file:'))))]:[];
  if(!name||name.length>100)throw new Error('Enter a client name (up to 100 characters).');
+ const normalizedName=value=>String(value||'').normalize('NFKC').trim().replace(/\s+/gu,' ').toLocaleLowerCase();
+ if(!allowLegacy&&clients.some(c=>c.id!==editingId&&normalizedName(c.name)===normalizedName(name)))throw new Error('This client name is already registered. Edit that client instead.');
  if(email.length>254||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))throw new Error('Enter a valid email address.');
  if(clients.some(c=>c.id!==editingId&&c.email.toLowerCase()===email))throw new Error('This email already belongs to a client. Edit that client instead.');
  if(!(CLIENT_LEVELS.includes(level)||/^[1-9]\d{0,3}$/.test(level)||((allowLegacy||editingId)&&LEGACY_CLIENT_LEVELS.includes(level)))||!PAYMENT_STATUSES.includes(payment))throw new Error('Choose a valid level and payment status.');
