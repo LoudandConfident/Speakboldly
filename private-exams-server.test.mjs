@@ -139,3 +139,19 @@ test('owner can schedule classes before private exam content is uploaded',async(
   assert.equal((await app.api('admin/attempts',owner)).status,503);
  }finally{await app.close();}
 });
+test('confirmation button queues future classes for current and subsequently registered clients',async()=>{
+ const app=await start(':memory:',{sendReminderEmail:async()=>{}});try{
+  assert.equal((await app.api('admin/classes/send-confirmations',null,{})).status,401);
+  const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
+  const first=(await app.api('admin/clients',owner,client('Existing','4821'))).data.client;
+  await app.api('admin/classes',owner,{clientId:first.id,number:1,date:'2028-01-15',time:'14:30'});
+  const queued=await app.api('admin/classes/send-confirmations',owner,{});assert.equal(queued.status,202);assert.equal(queued.data.queued,1);
+  const addedLater=(await app.api('admin/clients',owner,client('New','4921'))).data.client;
+  await app.api('admin/classes',owner,{clientId:addedLater.id,number:1,date:'2028-01-15',time:'15:00'});
+  assert.equal((await app.api('admin/classes/send-confirmations',owner,{})).data.queued,2);
+ }finally{await app.close();}
+ const disconnected=await start();try{
+  const owner=(await disconnected.api('admin/login',null,{password:'test-owner-password'})).data.token;
+  assert.equal((await disconnected.api('admin/classes/send-confirmations',owner,{})).status,503);
+ }finally{await disconnected.close();}
+});

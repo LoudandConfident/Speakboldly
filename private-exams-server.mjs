@@ -55,6 +55,7 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=
    if(path==='/api/student/login'&&method==='POST'){login(req,'student');const ip='ip:'+(req.socket.remoteAddress||'unknown');studentLimit(ip);const input=await body(req);if(!/^\d{4}$/.test(input.code||'')||input.code==='1962'){studentLimit(ip,true);throw error('Use your individual client code for an interactive exam.',401);}const client=allClients().find(c=>safeEqual(c.code,input.code));if(!client){studentLimit(ip,true);throw error('Incorrect student code.',401);}studentLimit('client:'+client.id,true);send({token:issue('student',client.id),access:{code:client.code,clientId:client.id,number:allClients().findIndex(c=>c.id===client.id)+1,level:client.level,permissions:client.permissions}});return true;}
    if(path.startsWith('/api/admin/')){
     session(req,'admin');
+    if(path==='/api/admin/classes/send-confirmations'&&method==='POST'){if(!reminders.emailReady)throw error('Email sending is not connected yet.',503);send(reminders.queueUpcoming(),202);return true;}
     if(path==='/api/admin/classes'&&method==='GET'){send({classes:reminders.list(),emailReady:reminders.emailReady});return true;}
     if(path==='/api/admin/classes'&&method==='POST'){const record=reminders.save(await body(req));send({class:record,emailReady:reminders.emailReady},201);return true;}
     const cancelClass=path.match(/^\/api\/admin\/classes\/([a-f0-9-]+)\/cancel$/);if(cancelClass&&method==='POST'){reminders.cancel(cancelClass[1]);send({ok:true});return true;}

@@ -36,6 +36,11 @@ export function createClassReminders({db,getClient,now=()=>Date.now(),sendEmail=
   return list().find(row=>row.id===id);
  }
  function cancel(id){const row=db.prepare('SELECT status FROM class_sessions WHERE id=?').get(id);if(!row)throw new Error('Class not found.');if(row.status==='sending')throw new Error('A reminder is being sent. Try again shortly.');db.prepare("UPDATE class_sessions SET status='cancelled' WHERE id=?").run(id);}
+ function queueUpcoming(){
+  if(!sendEmail)throw new Error('Email sending is not connected yet.');
+  const result=db.prepare("UPDATE class_sessions SET remind_at=MIN(remind_at,?),retry_at=0 WHERE starts_at>? AND attempts<3 AND status IN ('pending','failed')").run(now(),now());
+  return {queued:Number(result.changes)};
+ }
  let busy=false;
  async function runDue(){
   if(busy||!sendEmail)return;busy=true;
@@ -49,5 +54,5 @@ export function createClassReminders({db,getClient,now=()=>Date.now(),sendEmail=
    }
   }finally{busy=false;}
  }
- return{list,save,cancel,runDue,emailReady:!!sendEmail};
+ return{list,save,cancel,queueUpcoming,runDue,emailReady:!!sendEmail};
 }

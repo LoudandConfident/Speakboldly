@@ -45,3 +45,13 @@ test('failed delivery retries after five minutes; interrupted delivery is flagge
  const restarted=createClassReminders(s.options);await restarted.runDue();assert.equal(calls,2);assert.equal(restarted.list().find(r=>r.id===interrupted.id).reminderStatus,'delivery_unknown');
  }finally{s.db.close();}
 });
+test('manual confirmations include future sessions and skip sent, cancelled and past classes',async()=>{
+ const sent=[],s=setup(async record=>sent.push(record));try{
+  const first=s.jobs.save(booking),cancelled=s.jobs.save({...booking,number:3});s.jobs.cancel(cancelled.id);
+  assert.equal(s.jobs.queueUpcoming().queued,1);await s.jobs.runDue();assert.equal(sent.length,1);assert.equal(s.jobs.list().find(r=>r.id===first.id).reminderStatus,'sent');
+  assert.equal(s.jobs.queueUpcoming().queued,0);
+  const later=s.jobs.save({...booking,number:4});assert.equal(s.jobs.queueUpcoming().queued,1);await s.jobs.runDue();assert.equal(sent.length,2);assert.equal(s.jobs.list().find(r=>r.id===later.id).reminderStatus,'sent');
+  s.jobs.save({...booking,number:5});s.setNow(cairoSessionTimestamp(booking.date,booking.time));assert.equal(s.jobs.queueUpcoming().queued,0);
+ }finally{s.db.close();}
+ const disconnected=setup(null);try{disconnected.jobs.save(booking);assert.throws(()=>disconnected.jobs.queueUpcoming(),/not connected/);}finally{disconnected.db.close();}
+});

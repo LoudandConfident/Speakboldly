@@ -1,5 +1,5 @@
 import {initializeExamReview} from './exam-review.js';
-import {ownerConnected,savePrivateClient,uploadPrivateFile} from './exam-api.js';
+import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
 import {initializeAdminCalendar} from './admin-calendar.js';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals} from './admin-clients.js';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js';
@@ -13,6 +13,16 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  let unlocked=false,clients=[],editingId=null;let materialCatalog={};
  const review=initializeExamReview(doc,()=>unlocked,records=>{clients=records;clearForm();render();calendar?.refresh();loadAccessOptions();});
  const calendar=initializeAdminCalendar(doc,()=>unlocked,()=>clients,openClientInfo);
+ const sendConfirmations=root.querySelector('#send-class-confirmations'),emailStatus=root.querySelector('#class-confirmations-status');
+ sendConfirmations?.addEventListener('click',async()=>{
+  if(!unlocked)return;
+  if(!ownerConnected()){emailStatus.textContent='Email sending is not connected yet. Registered clients and class times need a connected private email service before this button can send.';return;}
+  sendConfirmations.disabled=true;emailStatus.textContent='Queuing confirmations for upcoming classes…';
+  try{const result=await request('admin/classes/send-confirmations',{role:'admin',method:'POST',data:{}});if(!unlocked)return;emailStatus.textContent=result.queued?result.queued+' class confirmation'+(result.queued===1?'':'s')+' queued for sending. Check the session calendar for delivery status.':'No unsent upcoming classes found. Add a future class with its date, time and session number.';}
+  catch(error){if(unlocked)emailStatus.textContent=error.message;}
+  finally{sendConfirmations.disabled=false;}
+ });
+
  for(const [name,values]of [['level',CLIENT_LEVELS],['payment',PAYMENT_STATUSES]])for(const value of values){const option=doc.createElement('option');option.value=option.textContent=value;(name==='level'?root.querySelector('#admin-client-level-options'):form.elements[name]).append(option);}
  function renderAccess(selected=[]){
   const options=root.querySelector('#admin-access-options');options.replaceChildren();const allowed=new Set(selected);
@@ -44,7 +54,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  function openClientInfo(id){const client=clients.find(c=>c.id===id);if(!client)return;if(!unlocked)return;editingId=client.id;for(const key of ['name','email','code','level','payment','amountPaid','hours'])form.elements[key].value=client[key]??(key==='amountPaid'?0:'');root.querySelector('#save-admin-client').textContent='Save changes';root.querySelector('#cancel-admin-edit').hidden=false;renderAccess(client.permissions);openClientPage();status.textContent='Editing '+client.name;form.elements.name.focus();}
  function openClientPage(){root.querySelector('#admin-overview').hidden=true;root.querySelector('#admin-client-page').hidden=false;root.querySelector('#admin-client-page-title').textContent=editingId?'Edit client folder':'Add client';doc.defaultView.location.hash='students-portal/client';}
  function showDashboard(){root.querySelector('#admin-overview').hidden=false;root.querySelector('#admin-client-page').hidden=true;doc.defaultView.location.hash='students-portal';}
- function lock(){unlocked=false;review?.lock();calendar?.lock();gate.hidden=false;dashboard.hidden=true;login.reset();loginError.textContent='';password.removeAttribute('aria-invalid');clearForm();tbody.replaceChildren();clients=[];status.textContent='';}
+ function lock(){unlocked=false;if(emailStatus)emailStatus.textContent='';review?.lock();calendar?.lock();gate.hidden=false;dashboard.hidden=true;login.reset();loginError.textContent='';password.removeAttribute('aria-invalid');clearForm();tbody.replaceChildren();clients=[];status.textContent='';}
  login.addEventListener('submit',event=>{event.preventDefault();if(password.value!==ADMIN_CODE){loginError.textContent='Incorrect admin password. Please try again.';password.setAttribute('aria-invalid','true');password.focus();return;}unlocked=true;loginError.textContent='';password.value='';gate.hidden=true;dashboard.hidden=false;showDashboard();load();render();calendar?.load();loadAccessOptions();});
  form.addEventListener('submit',async event=>{event.preventDefault();if(!unlocked||!form.reportValidity())return;try{const data=new doc.defaultView.FormData(form);const input={...Object.fromEntries(data),permissions:data.getAll('permissions')};let client=validateClient(input,clients,editingId);if(ownerConnected())client=await savePrivateClient({...client,...(editingId?{id:editingId}:{})});if(editingId){const index=clients.findIndex(c=>c.id===editingId);clients[index]={id:editingId,...client};}else clients.push({id:client.id||doc.defaultView.crypto.randomUUID(),...client});const saved=ownerConnected()?true:save();doc.dispatchEvent(new doc.defaultView.CustomEvent('portal-permissions-changed'));clearForm();render();calendar?.refresh();showDashboard();status.textContent=ownerConnected()?'Client saved in private storage.':saved?'Client folder saved in this browser.':'Client updated for this visit only. Browser storage is unavailable.';}catch(error){status.textContent=error.message;}});
  root.querySelector('#cancel-admin-edit').onclick=()=>{clearForm();showDashboard();status.textContent='';};
