@@ -45,3 +45,5 @@ main{position:relative}#home{position:relative}.daily-motivation{position:absolu
 .admin-folder-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.admin-folder-heading>label{margin:0}.admin-folder-toggle{font-size:12px;padding:8px 12px}.admin-access-files[hidden]{display:none!important}.admin-access-files:not([hidden]){margin-top:12px}
 
 .motivation-reflection p{margin:20px 0;color:var(--ink);font-size:17px;line-height:1.8}
+
+.motivation-page{padding-top:44px}.motivation-page h2{margin-bottom:18px}.motivation-layout{display:grid;grid-template-columns:minmax(0,650px) minmax(230px,1fr);gap:48px;align-items:start}.motivation-subscribe{padding-top:12px;color:var(--ink);max-width:360px}.motivation-subscribe h3{font-size:22px;line-height:1.4;margin:0 0 16px}.motivation-subscribe p{font-size:17px;line-height:1.8;margin:0;color:var(--ink)}@media(max-width:800px){.motivation-layout{grid-template-columns:1fr;gap:24px}.motivation-subscribe{max-width:650px;padding-top:0}}
