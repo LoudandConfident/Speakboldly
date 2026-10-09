@@ -32,12 +32,6 @@ export function initializeGallery(doc, win) {
   win.clearTimeout(closeTimer);
   if (open) refresh();
   card.hidden = !open;
-  if (open) {
-   // Prefer above, but keep the card visible when the bubble is near the page top.
-   const roomAbove = root.getBoundingClientRect().top;
-   card.style.bottom = card.offsetHeight <= roomAbove - 12 ? '100%' : 'auto';
-   card.style.top = card.offsetHeight <= roomAbove - 12 ? 'auto' : '100%';
-  }
   button.setAttribute('aria-expanded', String(open));
  }
  button.addEventListener('pointerenter', e => { if (e.pointerType !== 'touch') show(true); });
