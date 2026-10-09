@@ -19,7 +19,7 @@ function art(c){return '<svg class="course-illustration" viewBox="0 0 240 200" r
 function coursePricing(c){
  const money=amount=>Number(amount).toLocaleString('en-GB')+' EGP';
  if(c.priceOptions)return '<div class="course-pricing">'+c.priceOptions.map(option=>'<div class="course-price-option"><p><del aria-label="Previous price: '+money(option.previous)+'">'+money(option.previous)+'</del> <strong>'+money(option.amount)+'</strong></p><span>'+escape(option.schedule)+'</span></div>').join('')+'</div>';
- if(c.price)return '<p class="course-pricing course-fixed-price"><strong>'+money(c.price)+'</strong><span>Presentations and meetings</span></p>';
+ if(c.price)return '<p class="course-pricing course-fixed-price"><strong>'+money(c.price)+'</strong><span>'+escape(c.id==='speaking'?'Presentations and meetings':'E-mail and business writing')+'</span></p>';
  if(c.id==='ielts')return '<p class="course-pricing"><a class="course-quote" href="#quote">Get a quote</a></p>';
  return '';
 }

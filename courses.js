@@ -23,6 +23,7 @@ export const courses = [
     "title": "E-mail and business writing workshop",
     "level": "Intermediate and advanced",
     "duration": "5 sessions",
+    "price": 1500,
     "category": "Workshops",
     "description": "Write clear, professional emails and business messages with confidence. Practice choosing the right tone, organizing your ideas, making requests and following up politely.",
     "topics": [
@@ -38,7 +39,7 @@ export const courses = [
     "title": "Meetings, presentation and public speaking workshop",
     "level": "Intermediate and advanced",
     "duration": "5 sessions",
-    "price": 1500,
+    "price": 2500,
     "category": "Workshops",
     "description": "Communicate your ideas confidently at work and in front of an audience. Practice contributing to meetings, structuring presentations, handling questions and delivering your message clearly.",
     "topics": [
