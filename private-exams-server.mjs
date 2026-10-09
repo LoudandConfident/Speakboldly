@@ -1,3 +1,4 @@
+import {createClassReminders} from './class-reminders.mjs';
 import {createPortalUploads} from './portal-uploads-server.mjs';
 import {cairoDay} from './student-attempts.js';
 import {DatabaseSync} from 'node:sqlite';
@@ -6,7 +7,7 @@ import {validateClient} from './admin-clients.js';
 import {canOpenFile} from './portal-access.js';
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const safeEqual=(a,b)=>timingSafeEqual(Buffer.from(hash(a)),Buffer.from(hash(b)));
-export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=>Date.now(),sendScoreEmail=null,storageDirectory=null}){
+export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=>Date.now(),sendScoreEmail=null,sendReminderEmail=null,storageDirectory=null}){
  const db=new DatabaseSync(dbPath);db.exec('PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;');
  db.exec(`CREATE TABLE IF NOT EXISTS clients(id TEXT PRIMARY KEY,data TEXT NOT NULL);
  CREATE TABLE IF NOT EXISTS sessions(token_hash TEXT PRIMARY KEY,role TEXT NOT NULL,client_id TEXT,expires INTEGER NOT NULL);
@@ -22,6 +23,7 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=
  const limited=new Map(),catalog=new Map(exams.map(e=>[e.level,e]));
  const allClients=()=>db.prepare('SELECT data FROM clients ORDER BY rowid').all().map(r=>JSON.parse(r.data));
  const getClient=id=>{const row=db.prepare('SELECT data FROM clients WHERE id=?').get(id);return row?JSON.parse(row.data):null;};
+ const reminders=createClassReminders({db,getClient,now,sendEmail:sendReminderEmail});
  const error=(message,status=400)=>Object.assign(new Error(message),{status});
  const iso=()=>new Date(now()).toISOString();
  function permission(client,level){return canOpenFile(client,'exams','https://loudandconfident.github.io/Speakboldly/student-files/exams/Level-'+level+'-Exam.pdf');}
@@ -45,13 +47,17 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=
   const send=(value,status=200)=>{res.writeHead(status,headers);res.end(JSON.stringify(value));};
   try{
    const path=url.pathname,method=req.method;
-   if(path==='/api/status'&&method==='GET'){send({ready:Boolean(adminPassword)&&catalog.size>0,emailReady:!!sendScoreEmail});return true;}
-   if(!adminPassword||!catalog.size)throw error('Private exam storage is not configured.',503);
+   if(path==='/api/status'&&method==='GET'){send({ready:Boolean(adminPassword)&&catalog.size>0,emailReady:!!sendScoreEmail,remindersReady:!!adminPassword&&reminders.emailReady});return true;}
+   if(!adminPassword)throw error('Private storage is not configured.',503);
+   if(!catalog.size&&!(path.startsWith('/api/admin/')&&!/\/(attempts|exams)(\/|$)/.test(path)))throw error('Private exam storage is not configured.',503);
    if(await uploads(req,res,url,headers))return true;
    if(path==='/api/admin/login'&&method==='POST'){login(req,'admin');const input=await body(req);if(typeof input.password!=='string'||!safeEqual(input.password,adminPassword))throw error('Incorrect owner password.',401);send({token:issue('admin')});return true;}
    if(path==='/api/student/login'&&method==='POST'){login(req,'student');const ip='ip:'+(req.socket.remoteAddress||'unknown');studentLimit(ip);const input=await body(req);if(!/^\d{4}$/.test(input.code||'')||input.code==='1962'){studentLimit(ip,true);throw error('Use your individual client code for an interactive exam.',401);}const client=allClients().find(c=>safeEqual(c.code,input.code));if(!client){studentLimit(ip,true);throw error('Incorrect student code.',401);}studentLimit('client:'+client.id,true);send({token:issue('student',client.id),access:{code:client.code,clientId:client.id,number:allClients().findIndex(c=>c.id===client.id)+1,level:client.level,permissions:client.permissions}});return true;}
    if(path.startsWith('/api/admin/')){
     session(req,'admin');
+    if(path==='/api/admin/classes'&&method==='GET'){send({classes:reminders.list(),emailReady:reminders.emailReady});return true;}
+    if(path==='/api/admin/classes'&&method==='POST'){const record=reminders.save(await body(req));send({class:record,emailReady:reminders.emailReady},201);return true;}
+    const cancelClass=path.match(/^\/api\/admin\/classes\/([a-f0-9-]+)\/cancel$/);if(cancelClass&&method==='POST'){reminders.cancel(cancelClass[1]);send({ok:true});return true;}
     if(path==='/api/admin/clients'&&method==='GET'){send({clients:allClients()});return true;}
     if(path==='/api/admin/clients'&&method==='POST'){const input=await body(req),existing=allClients();if(input.id&&!getClient(input.id))throw error('Client not found.',404);let validated;try{validated=validateClient(input,existing,input.id||null);}catch(e){throw error(e.message);}const client={id:input.id||randomUUID(),...validated};if(input.id&&getClient(input.id).code!==client.code)db.prepare('DELETE FROM sessions WHERE role=? AND client_id=?').run('student',input.id);db.prepare('INSERT INTO clients VALUES(?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data').run(client.id,JSON.stringify(client));send({client});return true;}
     if(path==='/api/admin/attempts'&&method==='GET'){const rows=db.prepare('SELECT * FROM attempts ORDER BY opened DESC').all().map(expire);send({attempts:rows.map(r=>attemptData(r,true)),events:db.prepare('SELECT * FROM events ORDER BY at DESC LIMIT 200').all().map(e=>({...e,clientName:getClient(e.client_id)?.name}))});return true;}
@@ -87,5 +93,5 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=
   }catch(e){send({error:e.status?e.message:'The request could not be completed.'},e.status||400);}
   return true;
  }
- return{handle,close(){db.close();}};
+ return{handle,runReminders:reminders.runDue,close(){db.close();}};
 }

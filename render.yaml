@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: speak-boldly-private
+    runtime: node
+    plan: starter
+    buildCommand: npm ci --no-audit --no-fund
+    startCommand: node server.mjs
+    healthCheckPath: /api/status
+    autoDeploy: true
+    disk:
+      name: speak-boldly-private-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 24
+      - key: EXAM_DATA_DIR
+        value: /var/data
+      - key: EXAM_ADMIN_PASSWORD
+        generateValue: true
+      - key: EXAM_ALLOWED_ORIGINS
+        value: https://loudandconfident.github.io
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 465
+      - key: SMTP_USER
+        value: speakboldly16@gmail.com
+      - key: SMTP_FROM
+        value: speakboldly16@gmail.com
+      - key: SMTP_PASSWORD
+        sync: false

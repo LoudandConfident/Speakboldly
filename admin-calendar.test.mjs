@@ -9,3 +9,9 @@ test('sessions retain client identity and reject invalid dates and numbers',()=>
  assert.deepEqual(validateSession(valid),{...valid,number:2});
  for(const patch of [{date:'2027-02-29'},{date:'2026-02-30'},{number:0},{number:1.5},{name:''},{clientId:''}])assert.throws(()=>validateSession({...valid,...patch}));
 });
+
+test('calendar preserves class time and rejects invalid times',()=>{
+ const valid={name:'Mira',date:'2028-01-15',time:'14:30',number:2,clientId:'one'};
+ assert.deepEqual(validateSession(valid),valid);
+ for(const time of ['25:00','12:60','2:30','bad'])assert.throws(()=>validateSession({...valid,time}));
+});

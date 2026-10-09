@@ -64,3 +64,13 @@ Material contains compressed books for Levels 1–8 named `B-Level-N-Book.pdf`. 
 ## Daily motivation
 
 A small “Let me motivate you today” tab at the top right opens a dedicated page showing the daily picture, related motivational phrases in dark green, and a short reflection. Content changes at midnight in Africa/Cairo. Update `dailyQuotes` and `quoteDetails` in `home-gallery.js` to change the rotation. Promotional coaching lists are excluded.
+
+## Automatic class confirmations
+
+The private Node server stores class dates, Cairo times, session numbers and reminder status in SQLite. Every 30 seconds it checks for reminders due 24 hours before class. It sends to the client's current registered email address, confirming the date, time, session number, Zoom meeting link, passcode and no same-day cancellation policy. Classes added less than 24 hours ahead are reminded on the next check. Past or cancelled classes do not receive pending reminders. Use Cancel before adding a replacement session with the same number.
+
+**Activation:** GitHub Pages cannot run this scheduler. Deploy `server.mjs` on an always-on Node 24+ host with persistent storage, configure `EXAM_ADMIN_PASSWORD`, `EXAM_DATA_DIR`, `EXAM_ALLOWED_ORIGINS` and SMTP credentials privately, and point `EXAM_BACKEND_URL` in `exam-config.js` to that HTTPS server. Set `SMTP_FROM=speakboldly16@gmail.com` and use an email provider authorized to send from that address (for Gmail, use an app password in the host's secret settings). Sign in to private storage, save clients there, then schedule their classes with times. Existing browser-only calendar entries must be entered in private storage; they do not automatically send.
+
+The backend `/api/status` exposes `remindersReady`; the private calendar shows email connection state and each session's reminder status in the entry tooltip. Failed sends retry after five minutes, up to three attempts. A delivery interrupted during server shutdown is marked `delivery_unknown` and is not blindly resent; check the sender's mailbox/provider before rescheduling. A `sent` status means the provider accepted the email, not that inbox arrival is guaranteed. Verify one controlled test delivery before relying on live reminders. Server downtime can delay a reminder; an always-on host is required.
+
+For the prepared Render deployment, follow [CLASS-REMINDERS-SETUP.md](CLASS-REMINDERS-SETUP.md). Hosting and Gmail delivery are not activated by publishing the website.

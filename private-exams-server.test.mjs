@@ -111,3 +111,31 @@ test('computer uploads grant a client private file access and reject other stude
  assert.equal((await api('student/files?section=material',student)).data.files.length,1);assert.equal((await api('student/files?section=material',other)).data.files.length,0);
  }finally{await app.close();rmSync(folder,{recursive:true,force:true});}
 });
+test('class scheduling is private, retains class times and supports cancelling reminders',async()=>{
+ const sent=[];const app=await start(':memory:',{sendReminderEmail:async record=>sent.push(record)});
+ try{
+  assert.equal((await app.api('admin/classes')).status,401);
+  const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
+  const person=(await app.api('admin/clients',owner,client('Classes','4921'))).data.client;
+  const student=(await app.api('student/login',null,{code:'4921'})).data.token;
+  assert.equal((await app.api('admin/classes',student)).status,401);
+  const booking={clientId:person.id,number:5,date:'2028-01-15',time:'14:30'};
+  assert.equal((await app.api('admin/classes',owner,{...booking,time:''})).status,400);
+  const saved=await app.api('admin/classes',owner,booking);assert.equal(saved.status,201);assert.equal(saved.data.emailReady,true);
+  assert.equal(saved.data.class.time,'14:30');assert.equal(saved.data.class.reminderAt,'2028-01-14T12:30:00.000Z');
+  assert.equal((await app.api('admin/classes',owner,booking)).status,400);
+  const list=await app.api('admin/classes',owner);assert.equal(list.data.classes.length,1);
+  assert.equal((await app.api('admin/classes/'+saved.data.class.id+'/cancel',student,{})).status,401);
+  assert.equal((await app.api('admin/classes/'+saved.data.class.id+'/cancel',owner,{})).status,200);
+  assert.equal((await app.api('admin/classes',owner)).data.classes[0].reminderStatus,'cancelled');assert.equal(sent.length,0);
+ }finally{await app.close();}
+});
+test('owner can schedule classes before private exam content is uploaded',async()=>{
+ const app=await start(':memory:',{exams:[]});try{
+  const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
+  const person=(await app.api('admin/clients',owner,client('Calendar','4921'))).data.client;
+  const saved=await app.api('admin/classes',owner,{clientId:person.id,number:1,date:'2028-01-15',time:'14:30'});
+  assert.equal(saved.status,201);assert.equal(saved.data.emailReady,false);
+  assert.equal((await app.api('admin/attempts',owner)).status,503);
+ }finally{await app.close();}
+});
