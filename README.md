@@ -63,4 +63,4 @@ Material contains compressed books for Levels 1–8 named `B-Level-N-Book.pdf`. 
 
 ## Daily motivation
 
-A “Quote of the day” button with the SB icon sits at the top right below the navigation. Its picture card floats over the page without shifting content. Hovering, focusing, or tapping it reveals a picture and dark green motivational quote on hover, keyboard focus, or tap. Content changes at midnight in Africa/Cairo and cycles through five entries. Update `dailyQuotes` in `home-gallery.js` to replace quotes or image paths. Press Escape or click outside to dismiss the card.
+A text-only “Quote of the day” button sits at the top right below the navigation. Its picture card floats over the page without shifting content. Hovering, focusing, or tapping it reveals a picture and dark green motivational quote on hover, keyboard focus, or tap. Content changes at midnight in Africa/Cairo and cycles through five entries. Update `dailyQuotes` in `home-gallery.js` to replace quotes or image paths. Press Escape or click outside to dismiss the card.
