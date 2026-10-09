@@ -63,7 +63,7 @@ Material contains compressed books for Levels 1–8 named `B-Level-N-Book.pdf`. 
 
 ## Daily motivation
 
-A small “Let me motivate you today” tab at the top right opens a dedicated page showing the daily picture, related motivational phrases in dark green, and a short reflection. Content changes at midnight in Africa/Cairo. Update `dailyQuotes` and `quoteDetails` in `home-gallery.js` to change the rotation. Promotional coaching lists are excluded.
+A small “Let me motivate you today” tab at the top right opens a dedicated page showing the daily picture, a longer related reflection in dark green. Content changes at midnight in Africa/Cairo. Update `dailyQuotes` and `quoteDetails` in `home-gallery.js` to change the rotation. Promotional coaching lists are excluded.
 
 ## Automatic class confirmations
 
