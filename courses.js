@@ -3,7 +3,11 @@ export const courses = [
     "id": "general",
     "title": "General English",
     "level": "Beginner, Intermediate, Advanced",
-    "duration": "8 sessions per level",
+    "duration": "4 or 8 sessions per month",
+    "priceOptions": [
+      { "previous": 3500, "amount": 3000, "schedule": "8 sessions per month · twice a week" },
+      { "previous": 2500, "amount": 2000, "schedule": "4 sessions per month · once a week" }
+    ],
     "category": "General English",
     "description": "Build confidence in everyday conversations through private coaching tailored to your level. Develop speaking, listening, vocabulary and grammar with practical activities and personalized feedback.",
     "topics": [
@@ -34,6 +38,7 @@ export const courses = [
     "title": "Meetings, presentation and public speaking workshop",
     "level": "Intermediate and advanced",
     "duration": "5 sessions",
+    "price": 1500,
     "category": "Workshops",
     "description": "Communicate your ideas confidently at work and in front of an audience. Practice contributing to meetings, structuring presentations, handling questions and delivering your message clearly.",
     "topics": [
