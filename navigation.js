@@ -22,7 +22,7 @@ export function initializeNavigation(doc,win){
   const update=()=>{
    if(ticket!==request)return;
    views.forEach(v=>{v.hidden=v!==next;v.classList.remove('view-enter');});
-   doc.querySelectorAll('[data-open-view]').forEach(b=>{if(b.dataset.openView===next.id)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+   doc.querySelectorAll('[data-open-view]').forEach(b=>{if(b.dataset.openView===(next.id==='assessment'?'placement':next.id))b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
    active=next;win.scrollTo({top:0,left:0,behavior:'instant'});updateDownArrow();
   };
   if(animate&&typeof doc.startViewTransition==='function'){

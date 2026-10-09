@@ -1,7 +1,7 @@
 // Bind this script to your private Google Sheet. Run setupResultsSheet once.
 // Deploy as a web app: execute as yourself, access Anyone. Keep the spreadsheet private.
-const TEST_VERSION = 'language-hub-60-v1';
-const ANSWER_KEY = [0, 2, 3, 2, 2, 1, 0, 2, 3, 2, 2, 3, 3, 2, 2, 0, 3, 2, 1, 2, 0, 0, 2, 3, 1, 1, 3, 1, 0, 2, 3, 1, 1, 2, 2, 0, 1, 2, 3, 0, 3, 1, 0, 2, 1, 3, 2, 0, 3, 0, 1, 3, 2, 1, 3, 0, 1, 0, 2, 3];
+const TEST_VERSION = 'language-hub-50-v1';
+const ANSWER_KEY = [2, 3, 3, 2, 2, 0, 3, 2, 1, 2, 0, 0, 2, 3, 1, 1, 3, 1, 0, 2, 3, 1, 1, 2, 2, 0, 1, 2, 3, 0, 3, 1, 0, 2, 1, 3, 2, 0, 3, 0, 1, 3, 2, 1, 3, 0, 1, 0, 2, 3];
 const LEVELS = ['Below A1','A1–A2','A2–B1','B1–B2','B2–C1'];
 function setupResultsSheet() {
  const ss=SpreadsheetApp.getActiveSpreadsheet();
@@ -15,7 +15,7 @@ function setupResultsSheet() {
  analysis.getRange('A6:C6').setValues([['Estimated level','Participants','Share']]);
  LEVELS.forEach((level,i)=>{const row=i+7;analysis.getRange(row,1).setValue(level);analysis.getRange(row,2).setFormula('=COUNTIF(Results!G2:G,A'+row+')');analysis.getRange(row,3).setFormula('=IFERROR(B'+row+'/$B$2,0)');});
  analysis.getRange('C7:C11').setNumberFormat('0.0%');analysis.getRange('B4').setNumberFormat('0.0"%"');
- analysis.getRange('A13').setValue('Provisional estimates for a shortened 60-question test. These are not certified CEFR levels.');
+ analysis.getRange('A13').setValue('Provisional estimates for a shortened 50-question test. These are not certified CEFR levels.');
  analysis.getRange('A14').setValue('Only anonymous results are stored. No names, emails, or submitted answer choices are retained.');
  analysis.getRange('A1:C1').setFontWeight('bold');analysis.getRange('A6:C6').setFontWeight('bold');analysis.autoResizeColumns(1,3);
  if(analysis.getCharts().length===0)analysis.insertChart(analysis.newChart().setChartType(Charts.ChartType.PIE).addRange(analysis.getRange('A6:B11')).setPosition(16,1,0,0).setOption('title','Estimated level distribution').build());
@@ -26,7 +26,7 @@ function gradeAnswers(answers){
  if(Object.keys(answers).some(k=>!allowed.has(k)))throw new Error('Unknown question');
  let score=0,answered=0;
  ANSWER_KEY.forEach((correct,i)=>{const v=answers['q'+(i+1)];if(v===undefined||v===null||v==='')return;if(!['string','number'].includes(typeof v)||!String(v).match(/^[0-3]$/))throw new Error('Invalid answer');answered++;if(Number(v)===correct)score++;});
- return {score:score,total:60,answered:answered,percentage:Math.round(score/60*100),level:score<12?LEVELS[0]:score<24?LEVELS[1]:score<36?LEVELS[2]:score<48?LEVELS[3]:LEVELS[4]};
+ return {score:score,total:50,answered:answered,percentage:Math.round(score/50*100),level:score<10?LEVELS[0]:score<20?LEVELS[1]:score<30?LEVELS[2]:score<40?LEVELS[3]:LEVELS[4]};
 }
 function jsonResponse(value){return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);}
 function doGet(){return jsonResponse({ok:true,version:TEST_VERSION,service:'Anonymous placement result collection'});}

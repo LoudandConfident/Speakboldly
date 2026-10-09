@@ -1,3 +1,4 @@
+import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } from './assessment-time.js';
 import { questions, TEST_VERSION } from './placement-questions.js';
 import { scoreAnswers } from './placement-scoring.js';
 import { EMAIL_ENDPOINT } from './placement-config.js';
@@ -22,9 +23,9 @@ $('.filters').innerHTML=['All courses','General English','Workshops','IELTS'].ma
 document.addEventListener('click',e=>{const c=e.target.closest('[data-course]');if(c)showCourse(c.dataset.course);const f=e.target.closest('[data-category]');if(f){category=f.dataset.category;document.querySelectorAll('.filter').forEach(b=>{b.classList.toggle('active',b===f);b.setAttribute('aria-pressed',String(b===f));});render();}const close=e.target.closest('.close');if(close)close.closest('dialog').close();});
 $('#search').addEventListener('input',render);
 
-const form=$('#placement-form'),storageKey='speak-boldly-'+TEST_VERSION;let locked=false,testPage=0;
+const form=$('#placement-form'),storageKey='speak-boldly-'+TEST_VERSION;let locked=false,testPage=0,deadline=null,timerInterval=null;
 const pageSize=10,pageCount=Math.ceil(questions.length/pageSize);
-form.innerHTML='<div class="placement-participant"><p class="demo-note">Press Submit to see your estimated CEFR range immediately. </p></div><div class="test-submit-bar"><span id="answered-count">0 / '+questions.length+' answered</span><button class="button" type="submit">Submit my answers</button></div>'+questions.map(q=>'<fieldset class="placement-question"><legend>'+q.number+'. '+escape(q.question)+'</legend>'+q.options.map((option,j)=>'<label><input type="radio" name="q'+q.number+'" value="'+j+'"> '+String.fromCharCode(97+j)+') '+escape(option)+'</label>').join('')+'</fieldset>').join('')+'<div class="test-pager"><button type="button" class="button light" id="test-prev">Previous</button><span id="test-page-label"></span><button type="button" class="button light" id="test-next">Next</button></div><p class="demo-note">Selected from Language Hub. © Springer Nature Limited, 2019.</p><button class="button" type="submit">Submit my answers</button>';
+form.innerHTML='<div class="placement-participant"><p class="demo-note">Press Submit to see your estimated CEFR range immediately. </p></div><div class="test-submit-bar"><span id="assessment-timer" class="assessment-timer" role="timer" aria-label="Time remaining">20:00 remaining</span><span id="answered-count">0 / '+questions.length+' answered</span><button class="button" type="submit">Submit my answers</button></div>'+questions.map(q=>'<fieldset class="placement-question"><legend>'+q.number+'. '+escape(q.question)+'</legend>'+q.options.map((option,j)=>'<label><input type="radio" name="q'+q.number+'" value="'+j+'"> '+String.fromCharCode(97+j)+') '+escape(option)+'</label>').join('')+'</fieldset>').join('')+'<div class="test-pager"><button type="button" class="button light" id="test-prev">Previous</button><span id="test-page-label"></span><button type="button" class="button light" id="test-next">Next</button></div><p class="demo-note">Selected from Language Hub. © Springer Nature Limited, 2019.</p><button class="button" type="submit">Submit my answers</button>';
 const fields=[...form.querySelectorAll('.placement-question')];
 function renderPage(){fields.forEach((f,i)=>f.hidden=Math.floor(i/pageSize)!==testPage);$('#test-page-label').textContent='Page '+(testPage+1)+' of '+pageCount;$('#test-prev').disabled=testPage===0;$('#test-next').disabled=testPage===pageCount-1;}
 $('#test-prev').onclick=()=>{if(testPage>0){testPage--;renderPage();form.scrollIntoView({behavior:'smooth'});}};
@@ -35,12 +36,27 @@ form.addEventListener('change',count);
 // Clear legacy saved results; assessment feedback lasts only while this page is open.
 try{localStorage.removeItem(storageKey);}catch{}
 function clearAssessmentResult(){
- locked=false;testPage=0;form.reset();form.querySelectorAll('input,button').forEach(element=>element.disabled=false);const result=$('#placement-result');result.hidden=true;result.replaceChildren();count();renderPage();
+ clearInterval(timerInterval);timerInterval=null;deadline=null;locked=false;testPage=0;$('#assessment-timer').textContent='20:00 remaining';$('#assessment-timer').classList.remove('is-urgent');form.reset();form.querySelectorAll('input,button').forEach(element=>element.disabled=false);const result=$('#placement-result');result.hidden=true;result.replaceChildren();count();renderPage();
 }
-window.addEventListener('hashchange',()=>{if(location.hash.slice(1).split('/')[0]!=='placement')clearAssessmentResult();});
+function tickTimer(){
+ if(locked||deadline===null)return;
+ const seconds=remainingSeconds(deadline);
+ $('#assessment-timer').textContent=formatTime(seconds)+' remaining';
+ $('#assessment-timer').classList.toggle('is-urgent',seconds<=60);
+ if(seconds===0)submitAssessment(true);
+}
+function startAssessment(){
+ if(location.hash.slice(1).split('/')[0]!=='assessment')return;
+ if(deadline===null&&!locked){deadline=Date.now()+ASSESSMENT_DURATION_MS;timerInterval=setInterval(tickTimer,250);tickTimer();}
+}
+window.addEventListener('hashchange',startAssessment);
+window.addEventListener('pageshow',startAssessment);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)tickTimer();});
+form.addEventListener('change',tickTimer);
+
 window.addEventListener('pagehide',clearAssessmentResult);
 function finish(record){
- locked=true;form.querySelectorAll('input,button').forEach(e=>{if(!['test-prev','test-next'].includes(e.id))e.disabled=true;});renderPage();
+ locked=true;clearInterval(timerInterval);timerInterval=null;form.querySelectorAll('input,button').forEach(e=>{if(!['test-prev','test-next'].includes(e.id))e.disabled=true;});renderPage();
  const resultScore=scoreAnswers(record.answers);
  const result=$('#placement-result');result.hidden=false;
  result.innerHTML='<h3>Your result: '+escape(resultScore.level)+'</h3><p class="placement-score"><strong>'+resultScore.score+' / '+resultScore.total+'</strong> · '+resultScore.percentage+'%</p>';
@@ -57,10 +73,23 @@ async function sendResult(record){
   if(!response.ok)throw new Error('Email request failed');record.emailStatus=emailResponseStatus(await response.json());
  }catch{record.emailStatus='failed';}finally{clearTimeout(timeout);}
 }
-form.addEventListener('submit',e=>{
- e.preventDefault();if(locked||!form.reportValidity()||!confirm('Submit now? Your score and estimated level will appear immediately. You cannot change your answers afterwards.'))return;
+function submitAssessment(timedOut=false){
+ if(locked||deadline===null)return;
+ const expired=remainingSeconds(deadline)===0;
+ if(!timedOut&&!expired&&(!form.reportValidity()||!confirm('Submit now? Your score and estimated level will appear immediately. You cannot change your answers afterwards.')))return;
+ // A confirmation dialog can remain open past the deadline.
+ const autoSubmitted=timedOut||remainingSeconds(deadline)===0;
  const answers=collectAnswers();
  const record={version:TEST_VERSION,attemptId:crypto.randomUUID(),answers,answered:Object.keys(answers).length,submittedAt:new Date().toISOString(),consent:Boolean(EMAIL_ENDPOINT),emailStatus:'not-sent'};
- finish(record);sendResult(record);$('#placement-result').scrollIntoView({behavior:'smooth'});
-});
+ finish(record);
+ $('#assessment-timer').textContent=autoSubmitted?'Time is up — answers submitted':'Assessment submitted';
+ sendResult(record);
+ if(location.hash.slice(1).split('/')[0]==='assessment')$('#placement-result').scrollIntoView({behavior:'smooth'});
+}
+form.addEventListener('submit',e=>{e.preventDefault();submitAssessment();});
+// Do not accept additional choices if a background tab resumes after its deadline.
+form.addEventListener('click',e=>{if(deadline!==null&&!locked&&remainingSeconds(deadline)===0){e.preventDefault();tickTimer();}},true);
+function updateOffer(){document.querySelectorAll('.home-pricing-note').forEach(note=>{note.hidden=!offerIsActive();});}
+updateOffer();setInterval(updateOffer,1000);
+startAssessment();
 renderPage();$('#year').textContent=new Date().getFullYear();render();
