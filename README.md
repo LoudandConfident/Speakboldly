@@ -63,4 +63,4 @@ Material contains compressed books for Levels 1–8 named `B-Level-N-Book.pdf`. 
 
 ## Daily motivation
 
-A text-only “Quote of the day” button sits at the top right below the navigation. Its picture card floats over the page without shifting content. Hovering, focusing, or tapping it reveals a picture and dark green motivational quote on hover, keyboard focus, or tap. Content changes at midnight in Africa/Cairo and cycles through five entries. Update `dailyQuotes` in `home-gallery.js` to replace quotes or image paths. Press Escape or click outside to dismiss the card.
+A small “Let me motivate you today” tab at the top right opens a dedicated page showing the daily picture, related motivational phrases in dark green, and a short reflection. Content changes at midnight in Africa/Cairo. Update `dailyQuotes` and `quoteDetails` in `home-gallery.js` to change the rotation. Promotional coaching lists are excluded.
