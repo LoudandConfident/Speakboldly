@@ -10,6 +10,11 @@ export const dailyQuotes = [
  { image: './images/daily-motivation-unmute.png', alt: 'A microphone on a sunlit desk', quote: 'Unmute yourself. You have something to say. Say it in English.', embedded: true },
  { image: './images/daily-motivation-talk.png', alt: 'A hand holding a microphone beside a notebook', quote: 'Your turn to talk.', embedded: true }
 ];
+dailyQuotes.push(
+ {image:'./images/daily-motivation-start.png',alt:'A hand opening curtains to a bright morning',quote:'Start when you’re not ready.',embedded:true},
+ {image:'./images/daily-motivation-listen.png',alt:'Headphones and an open book on a sunlit desk',quote:'Listen. Learn. Try again.',embedded:true},
+ {image:'./images/daily-motivation-keep-going.png',alt:'A winding countryside path leading towards sunrise',quote:'Keep going. You’re getting there.',embedded:true}
+);
 export function cairoDayNumber(now = new Date()) {
  const parts = new Intl.DateTimeFormat('en-GB', {timeZone:'Africa/Cairo', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(now);
  const part = type => Number(parts.find(p => p.type === type).value);
@@ -42,6 +47,16 @@ export const dailyPractice = [
  'Try this today: say one thought aloud in English that you would usually keep to yourself. Repeat it slowly if that helps, then add a reason or an example. Give your voice a little more space.',
  'Try this today: start a conversation with a question you actually want to ask. Listen to the answer and share a little about yourself in return. You have a part to play in making the conversation happen.'
 ];
+quoteDetails.push(
+ {support:[],reflection:'Readiness often grows through practice. You might be waiting to know more words, feel less nervous, or find the perfect moment to speak. Give yourself a smaller beginning instead: one greeting, one question, or a short voice note. You can pause, ask for help, and correct yourself as you go. Starting with the English you have gives you something real to build on. You don’t need complete confidence to take your first step.'},
+ {support:[],reflection:'Listening gives you a chance to notice how English sounds in everyday life. Pay attention to a useful phrase, the rhythm of a sentence, or the way someone asks a question. Then try it aloud and make it your own. If the first attempt feels awkward, listen again and give yourself another try. Repetition can help you become more familiar with the language. Choose something short enough to enjoy and return to, rather than trying to understand everything at once.'},
+ {support:[],reflection:'Progress can be easy to miss when you are focused on everything you still want to learn. Look for the small changes: a word you remember, a question you can ask, or a conversation you stay in a little longer. Difficult days don’t erase those achievements. Adjust your pace when you need to, and choose a manageable next step. You can keep learning without rushing. Give yourself credit for showing up and making English a part of your life.'}
+);
+dailyPractice.push(
+ 'Try this today: record a thirty-second introduction without writing a script first. Say what you can, pause when you need to, and finish your thought. Let this be a beginning you can build on.',
+ 'Try this today: listen to a short English clip and choose one useful sentence. Repeat it aloud, then change a few words to make it about your own life. Listen once more and try again.',
+ 'Try this today: write down three things that feel easier in English than they used to. Choose one small task for tomorrow, and keep this list to remind yourself of the progress you are making.'
+);
 export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
  if (!page) return;
