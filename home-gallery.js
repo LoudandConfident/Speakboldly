@@ -15,6 +15,7 @@ dailyQuotes.push(
  {image:'./images/daily-motivation-listen.png',alt:'Headphones and an open book on a sunlit desk',quote:'Listen. Learn. Try again.',embedded:true},
  {image:'./images/daily-motivation-keep-going.png',alt:'A winding countryside path leading towards sunrise',quote:'Keep going. You’re getting there.',embedded:true}
 );
+dailyQuotes.push({image:'./images/daily-motivation-accents.png',alt:'Egyptian friends listening and speaking with encouragement at a sunny Cairo cafe',quote:'عقدة الخواجة — Your accent carries your story.',embedded:true});
 export function cairoDayNumber(now = new Date()) {
  const parts = new Intl.DateTimeFormat('en-GB', {timeZone:'Africa/Cairo', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(now);
  const part = type => Number(parts.find(p => p.type === type).value);
@@ -57,6 +58,8 @@ dailyPractice.push(
  'Try this today: listen to a short English clip and choose one useful sentence. Repeat it aloud, then change a few words to make it about your own life. Listen once more and try again.',
  'Try this today: write down three things that feel easier in English than they used to. Choose one small task for tomorrow, and keep this list to remind yourself of the progress you are making.'
 );
+quoteDetails.push({support:[],reflection:'In Egypt, we sometimes make it difficult for each other to be ourselves. Why do some people mock an Egyptian mixing up “B” and “P” or pronouncing “th” differently, yet encourage an American learning Arabic or respect an Indian speaking English? We deserve that same encouragement. Learning another language is challenging, especially when the job market makes it feel compulsory. It also opens your mind and gives you new ways to express yourself. There is nothing shameful about your Arabic showing up in your English accent. You can work on pronunciation so people understand you clearly while still sounding like yourself. Before laughing at someone’s pronunciation, remember the effort they are making to communicate in another language. Your accent carries your story. It shouldn’t silence your voice.'});
+dailyPractice.push('Try this today: say one thought aloud in English without apologising for your accent. Practise a sound if it helps you communicate more clearly, and encourage someone else who is learning. A little kindness can help both of you keep speaking.');
 export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
  if (!page) return;
