@@ -1,4 +1,4 @@
-import {initializeClientSheet,clientSheetConnected,syncClientToSheet} from './client-sheet.js?v=remember-owner-connection';
+import {initializeClientSheet,clientSheetConnected,syncClientToSheet} from './client-sheet.js?v=new-client-sheet';
 import {initializeExamReview} from './exam-review.js';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
 import {initializeAdminCalendar} from './admin-calendar.js?v=calendar-only-scheduling';
