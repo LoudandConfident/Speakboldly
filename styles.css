@@ -106,3 +106,5 @@ main #home>.page-signature{font-size:12px}
  #daily-quote .motivation-subscribe>p{font-size:14px;line-height:1.4;max-width:850px}
  #daily-quote>.page-signature{margin-top:10px}
 }
+
+body .page-signature>span,body .page-signature>small{display:block}body .page-signature>span{font-size:13px;font-weight:600}body .page-signature>small{font-size:11px;line-height:1.4}#daily-quote>.page-signature{margin-top:8px}
