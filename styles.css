@@ -198,3 +198,8 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 @keyframes review-slide-next{from{transform:translate(calc(-50% + 80px),-50%);opacity:.35}to{transform:translate(-50%,-50%);opacity:1}}
 @keyframes review-slide-previous{from{transform:translate(calc(-50% - 80px),-50%);opacity:.35}to{transform:translate(-50%,-50%);opacity:1}}
 @media(prefers-reduced-motion:reduce){#reviews .review-card{transition:none!important;animation:none!important}}
+@media(max-width:680px){
+ #reviews .review-cards{height:325px}
+ #reviews .review-card{width:88%;height:280px;padding:22px 18px 50px}
+ #reviews .review-card blockquote{font-size:18px;line-height:1.6}
+}
