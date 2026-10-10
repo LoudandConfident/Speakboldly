@@ -1,0 +1,13 @@
+.teacher-documents{color:var(--ink);font-family:"DM Sans",sans-serif}
+.teacher-document-types,.teacher-document-actions,.teacher-book-list{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.teacher-document-types [aria-pressed=true],.teacher-document-client[aria-pressed=true]{background:var(--ink);color:#fff}
+#teacher-document-form{max-width:740px;padding:24px;border:1px solid #d8dfd4;border-radius:18px;background:#fffdf7}
+.teacher-document-brand{display:flex;gap:14px;align-items:center;margin-bottom:20px;color:var(--ink)}
+.teacher-document-brand img{width:54px;height:54px;object-fit:contain}
+.teacher-document-brand strong,.teacher-document-brand span{display:block}.teacher-document-brand strong{font-size:22px}.teacher-document-brand span{font-size:12px;margin-top:4px}
+#teacher-document-fields{display:grid;grid-template-columns:1fr;gap:14px}#teacher-document-fields label{display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:600}
+#teacher-document-fields input,#teacher-document-fields textarea{width:100%;box-sizing:border-box;font:inherit;color:var(--ink);padding:12px;border:1px solid #cbd6ca;border-radius:10px;background:#fff}
+.teacher-document-dialog{width:min(760px,calc(100% - 32px));box-sizing:border-box;color:var(--ink);font-family:"DM Sans",sans-serif}
+#teacher-document-clients{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.teacher-document-client{white-space:normal;text-align:left}.teacher-document-client strong,.teacher-document-client span{display:block;overflow-wrap:anywhere}.teacher-document-client span{font-size:12px;margin-top:5px}
+#teacher-document-preview-content{padding:24px;border:1px solid #d8dfd4;border-radius:14px;background:#fffdf7;margin-bottom:20px}#teacher-document-preview-content h4{margin:22px 0 6px;font-size:14px}#teacher-document-preview-content p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;font-size:15px;margin-top:0}.teacher-document-recipient{font-weight:600}
+@media(max-width:540px){#teacher-document-clients{grid-template-columns:1fr}#teacher-document-form,#teacher-document-preview-content{padding:16px}.teacher-document-actions .button{flex:1 1 auto}}

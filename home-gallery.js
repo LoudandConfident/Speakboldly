@@ -15,7 +15,7 @@ dailyQuotes.push(
  {image:'./images/daily-motivation-listen-clean.png',alt:'Headphones and an open book on a sunlit desk',quote:'Listen. Learn. Try again.',embedded:false},
  {image:'./images/daily-motivation-keep-going-clean.png',alt:'A winding countryside path leading towards sunrise',quote:'Keep going. You’re getting there.',embedded:false}
 );
-dailyQuotes.push({image:'./images/daily-motivation-accents-story.png',alt:'A foreign tourist in a sun hat speaking with an Egyptian tour guide at the Pyramids of Giza',quote:'عقدة الخواجة — Your accent tells your story.',embedded:false});
+dailyQuotes.push({image:'./images/daily-motivation-accents-story.png',alt:'A foreign tourist in a sun hat speaking with an Egyptian tour guide at the Pyramids of Giza',quote:'عقدة الخواجة',embedded:false});
 dailyQuotes.push({image:'./images/daily-motivation-french-clean.png',alt:'An original green cartoon bird reminding a learner to practise French',quote:'I learn French myself!',embedded:false});
 dailyQuotes.push({image:'./images/daily-motivation-language-skill.png',alt:'A shy young woman with a bun, glasses and Arabic books standing among stylish women chatting together',quote:'Language is just a skill!',embedded:false});
 dailyQuotes.push({image:'./images/daily-motivation-ballet.png',alt:'A slightly chubby adult ballerina practising at the barre while two other women exchange smirks in a dance studio',quote:"It's never too late!",embedded:false});
