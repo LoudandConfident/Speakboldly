@@ -55,6 +55,9 @@ export const courses = [
     "title": "Interview preparation workshop",
     "level": "Intermediate and advanced",
     "duration": "2 sessions",
+    "priceOptions": [
+      { "previous": 900, "amount": 600, "schedule": "2 sessions" }
+    ],
     "category": "Workshops",
     "description": "Prepare to express your experience, strengths and goals clearly in English. Develop focused answers to common interview questions and build confidence through realistic practice and feedback.",
     "topics": [
