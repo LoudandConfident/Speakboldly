@@ -2,7 +2,7 @@ import {initializeTeacherDocuments} from './teacher-documents.js?v=reports-confi
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet} from './client-sheet.js?v=new-client-sheet';
 import {initializeExamReview} from './exam-review.js';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=calendar-only-scheduling';
+import {initializeAdminCalendar} from './admin-calendar.js?v=mobile-assessment-page';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=four-digit-restored';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=four-digit-restored';
 import {loadPortalMaterials} from './portal-materials.js';

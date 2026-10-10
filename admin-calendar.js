@@ -1,5 +1,5 @@
 import {ownerConnected,request} from './exam-api.js';
-import {openPopup} from './popups.js';
+import {openPopup} from './popups.js?v=mobile-assessment-page';
 const STORAGE_KEY='speak-boldly-admin-sessions-v1';
 export function sessionInitials(name){const words=name.trim().split(/\s+/u).filter(Boolean);return words.map(w=>Array.from(w)[0]).join('').toLocaleUpperCase();}
 export function validateSession(input){

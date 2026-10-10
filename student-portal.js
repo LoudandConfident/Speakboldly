@@ -1,5 +1,5 @@
 import {renderPdf} from './portal-document.js';
-import {openPopup} from './popups.js';
+import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {takeStudentAttempt} from './student-attempts.js';
 import {showInteractiveExam} from './interactive-exams.js';
 import {backendBase,loginStudent,clearStudent,fileBytes} from './exam-api.js';

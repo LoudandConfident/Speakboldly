@@ -1,4 +1,4 @@
-import {openPopup} from './popups.js';
+import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {courses} from './courses.js';
 import {reviewsConnected,reviewRequest} from './reviews-api.js?v=separate-review-sheet';
 export function initializeReviews(doc, api = reviewRequest, connected = reviewsConnected) {

@@ -1,5 +1,4 @@
 export function initializeNavigation(doc,win){
- const views=[...doc.querySelectorAll('[data-view]')];
  const menu=doc.querySelector('.mobile-menu-toggle'),nav=doc.querySelector('#main-navigation');
  function closeMenu(){menu?.setAttribute('aria-expanded','false');nav?.classList.remove('mobile-open');}
  menu?.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));nav?.classList.toggle('mobile-open',open);});
@@ -14,6 +13,7 @@ export function initializeNavigation(doc,win){
  if(down&&win.ResizeObserver){const sizeObserver=new win.ResizeObserver(updateDownArrow);sizeObserver.observe(doc.querySelector('main')||doc.body);}
  let active=null,transition=null,request=0;
  function showView(){
+  const views=[...doc.querySelectorAll('[data-view]')];
   const requested=win.location.hash.slice(1).split('/')[0]||'home';
   const next=views.find(v=>v.id===requested)||views.find(v=>v.id==='home');
   if(!next||next===active)return;

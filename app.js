@@ -52,7 +52,7 @@ function tickTimer(){
  if(seconds===0)submitAssessment(true);
 }
 function startAssessment(){
- if(!document.querySelector('#assessment-dialog')?.open)return;
+ if(!document.querySelector('#assessment-dialog')?.open && !(window.location.hash==='#assessment' && document.querySelector('#assessment')?.hasAttribute('data-view')))return;
  if(deadline===null&&!locked){deadline=Date.now()+ASSESSMENT_DURATION_MS;timerInterval=setInterval(tickTimer,250);tickTimer();}
 }
 document.addEventListener('assessment-open',startAssessment);
@@ -82,7 +82,7 @@ function submitAssessment(timedOut=false){
  const record={version:TEST_VERSION,attemptId:crypto.randomUUID(),answers,answered:Object.keys(answers).length,submittedAt:new Date().toISOString(),consent:false,emailStatus:'disabled'};
  finish(record);
  $('#assessment-timer').textContent=autoSubmitted?'Time is up — answers submitted':'Assessment submitted';
- if(document.querySelector('#assessment-dialog')?.open)$('#placement-result').scrollIntoView({behavior:'smooth'});
+ if(document.querySelector('#assessment-dialog')?.open || window.location.hash==='#assessment')$('#placement-result').scrollIntoView({behavior:'smooth'});
 }
 form.addEventListener('submit',e=>{e.preventDefault();submitAssessment();});
 // Do not accept additional choices if a background tab resumes after its deadline.
