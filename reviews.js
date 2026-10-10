@@ -1,3 +1,4 @@
+import {openPopup} from './popups.js';
 import {EMAIL_ENDPOINT} from './placement-config.js';
 import {courses} from './courses.js';
 export function initializeReviews(doc, send = fetch) {
@@ -10,11 +11,7 @@ export function initializeReviews(doc, send = fetch) {
   option.value = course.title; option.textContent = course.title;
   programSelect.append(option);
  }
- opener.addEventListener('click', () => {
-  form.hidden = !form.hidden;
-  opener.setAttribute('aria-expanded', String(!form.hidden));
-  if (!form.hidden) form.elements.name.focus();
- });
+ opener.addEventListener('click', () => openPopup(doc.querySelector('#review-dialog')));
  form.addEventListener('submit', async event => {
   event.preventDefault();
   if (!form.reportValidity()) return;

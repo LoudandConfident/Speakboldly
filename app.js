@@ -54,9 +54,10 @@ function tickTimer(){
  if(seconds===0)submitAssessment(true);
 }
 function startAssessment(){
- if(location.hash.slice(1).split('/')[0]!=='assessment')return;
+ if(!document.querySelector('#assessment-dialog')?.open)return;
  if(deadline===null&&!locked){deadline=Date.now()+ASSESSMENT_DURATION_MS;timerInterval=setInterval(tickTimer,250);tickTimer();}
 }
+document.addEventListener('assessment-open',startAssessment);
 window.addEventListener('hashchange',startAssessment);
 window.addEventListener('pageshow',startAssessment);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)tickTimer();});
@@ -92,7 +93,7 @@ function submitAssessment(timedOut=false){
  finish(record);
  $('#assessment-timer').textContent=autoSubmitted?'Time is up — answers submitted':'Assessment submitted';
  sendResult(record);
- if(location.hash.slice(1).split('/')[0]==='assessment')$('#placement-result').scrollIntoView({behavior:'smooth'});
+ if(document.querySelector('#assessment-dialog')?.open)$('#placement-result').scrollIntoView({behavior:'smooth'});
 }
 form.addEventListener('submit',e=>{e.preventDefault();submitAssessment();});
 // Do not accept additional choices if a background tab resumes after its deadline.

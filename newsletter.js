@@ -1,11 +1,8 @@
+import {openPopup} from './popups.js';
 import {EMAIL_ENDPOINT} from './placement-config.js';
 const opener = document.querySelector('#newsletter-open');
 const form = document.querySelector('#newsletter-form');
-opener?.addEventListener('click', () => {
- form.hidden = !form.hidden;
- opener.setAttribute('aria-expanded', String(!form.hidden));
- if (!form.hidden) form.querySelector('input[type=email]').focus();
-});
+opener?.addEventListener('click', () => openPopup(document.querySelector('#newsletter-dialog')));
 form?.addEventListener('submit', async event => {
  event.preventDefault();
  if (!form.reportValidity()) return;
