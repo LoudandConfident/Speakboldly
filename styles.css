@@ -108,3 +108,5 @@ main #home>.page-signature{font-size:12px}
 }
 
 body .page-signature>span,body .page-signature>small{display:block}body .page-signature>span{font-size:13px;font-weight:600}body .page-signature>small{font-size:11px;line-height:1.4}#daily-quote>.page-signature{margin-top:8px}
+
+#home .daily-quote-trigger{min-height:30px;padding:4px 10px;font-size:10px}
