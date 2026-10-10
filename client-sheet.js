@@ -1,4 +1,5 @@
-// The private connection key is kept only in memory, never in published code or browser storage.
+// Connection details stay in this owner's browser; never put the key in published code.
+const CONNECTION_STORAGE_KEY = 'speak-boldly-client-sheet-connection-v1';
 let endpoint = '', key = '';
 export const clientSheetConnected = () => !!(endpoint && key);
 export function clearClientSheet() {endpoint = '';key = '';}
@@ -20,13 +21,28 @@ export async function syncClientToSheet(client,fetcher = globalThis.fetch) {
 export function initializeClientSheet(doc) {
  const form = doc.querySelector('#client-sheet-connect');
  if (!form) return;
+ const status = doc.querySelector('#client-sheet-status'), change = doc.querySelector('#client-sheet-change');
+ const validUrl = url => /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(url);
+ function restore() {
+  try {
+   const saved = JSON.parse(doc.defaultView.localStorage.getItem(CONNECTION_STORAGE_KEY)||'null');
+   if(saved && validUrl(saved.endpoint) && typeof saved.key === 'string' && saved.key) {
+    endpoint = saved.endpoint;key = saved.key;form.elements.endpoint.value = endpoint;
+    form.hidden = true;if(change)change.hidden = false;
+    status.textContent = 'Saved sheet connection loaded. Saving or syncing a student will check delivery.';
+   }
+  }catch{}
+ }
+ change?.addEventListener('click',()=>{form.hidden = false;form.elements.endpoint.value = endpoint||form.elements.endpoint.defaultValue;form.elements.key.value = '';form.elements.key.focus();});
  form.addEventListener('submit',event=>{
   event.preventDefault();
   const url = form.elements.endpoint.value.trim(), secret = form.elements.key.value.trim();
-  const status = doc.querySelector('#client-sheet-status');
-  if (!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(url) || !secret) {status.textContent = 'Enter your Apps Script web app URL and private connection key.';return;}
+  if (!validUrl(url) || !secret) {status.textContent = 'Enter your Apps Script web app URL and private connection key.';return;}
   endpoint = url;key = secret;form.elements.key.value = '';
-  status.textContent = 'Connection details set for this visit. New and edited clients will be sent to your sheet when saved. The first save will verify the connection.';
+  try {doc.defaultView.localStorage.setItem(CONNECTION_STORAGE_KEY,JSON.stringify({endpoint,key}));}
+  catch {status.textContent = 'Your browser could not remember the connection. It will work only for this visit.';}
+  form.hidden = true;if(change)change.hidden = false;
+  doc.dispatchEvent(new doc.defaultView.Event('client-sheet-configured'));
  });
- return {lock(){clearClientSheet();form.reset();doc.querySelector('#client-sheet-status').textContent = '';}};
+ return {restore,lock(){clearClientSheet();form.reset();form.hidden = false;if(change)change.hidden = true;status.textContent = '';}};
 }
