@@ -76,3 +76,11 @@ The backend `/api/status` exposes `remindersReady`; the private calendar shows e
 For the prepared Render deployment, follow [CLASS-REMINDERS-SETUP.md](CLASS-REMINDERS-SETUP.md). Hosting and Gmail delivery are not activated by publishing the website.
 
 The teacher dashboard's button next to the Clients table queues confirmations for all future, unsent scheduled classes using the current registered client addresses. New clients are included when their future classes are scheduled. It requires the same private backend and SMTP connection as automatic reminders. Queue acceptance is shown separately from delivery; sent, failed and interrupted statuses are available in the calendar. Classes with an earlier confirmation are not sent twice.
+
+## Editable teacher PDF documents
+
+Teacher Portal → Reports and Confirmation Documents uses the three supplied PDF templates. The progress report is rebuilt as two landscape pages; final and registration/payment reports retain their portrait layouts. Footer email addresses are removed and optional typed signature fields are provided. Blank templates are public; completed reports and recipient details are stored only on the teacher’s device. No email is sent by this feature until Apps Script integration is added.
+
+PDF view supports editable field overlays; Edit fields provides larger mobile inputs. Download editable PDF preserves AcroForm fields. Preview final PDF flattens entered values into the document. Prepared documents can be reopened and edited for a selected client.
+
+Rebuild templates with `python scripts/build-teacher-templates.py /path/to/the/three/source/pdfs` (PyMuPDF and reportlab). Source PDFs are not overwritten. Rebuild the browser PDF libraries after dependency changes with `node scripts/build-pdf-vendors.mjs`.

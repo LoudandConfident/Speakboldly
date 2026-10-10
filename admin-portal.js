@@ -1,4 +1,4 @@
-import {initializeTeacherDocuments} from './teacher-documents.js?v=reports-confirmations';
+import {initializeTeacherDocuments} from './teacher-documents.js?v=editable-pdf-templates';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet} from './client-sheet.js?v=new-client-sheet';
 import {initializeExamReview} from './exam-review.js';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
@@ -87,7 +87,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  doc.addEventListener('portal-sign-out',lock);
  doc.querySelector('[data-portal-area="client"]').addEventListener('click',lock);
  doc.defaultView.addEventListener('hashchange',()=>{if(doc.defaultView.location.hash.split('/')[0]!=='#students-portal')lock();else if(doc.defaultView.location.hash==='#students-portal'&&unlocked){root.querySelector('#admin-overview').hidden=false;root.querySelector('#admin-client-page').hidden=true;}});
- const upload=root.querySelector('#private-upload-form');upload.onsubmit=async event=>{event.preventDefault();const note=root.querySelector('#private-upload-status');if(!ownerConnected()){note.textContent='Connect private storage under Exam submissions & reviews before uploading from your computer.';return;}const button=upload.querySelector('button');button.disabled=true;try{for(const file of upload.elements.file.files){const result=await uploadPrivateFile(upload.elements.section.value,upload.elements.clientId.value,file);clients=result.clients;}render();await loadAccessOptions();upload.elements.file.value='';note.textContent='Files uploaded and saved in private storage.';}catch(error){note.textContent=error.message;}finally{button.disabled=false;}};
+ const upload=root.querySelector('#private-upload-form');upload.onsubmit=async event=>{event.preventDefault();const note=root.querySelector('#private-upload-status');if(!ownerConnected()){note.textContent='Connect private storage under Exam Review before uploading from your computer.';return;}const button=upload.querySelector('button');button.disabled=true;try{for(const file of upload.elements.file.files){const result=await uploadPrivateFile(upload.elements.section.value,upload.elements.clientId.value,file);clients=result.clients;}render();await loadAccessOptions();upload.elements.file.value='';note.textContent='Files uploaded and saved in private storage.';}catch(error){note.textContent=error.message;}finally{button.disabled=false;}};
  lock();return{lock};
 }
 if(typeof document!=='undefined')initializeAdminPortal(document);

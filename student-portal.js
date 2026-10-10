@@ -1,4 +1,4 @@
-import {renderPdf} from './portal-document.js';
+import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {takeStudentAttempt} from './student-attempts.js';
 import {showInteractiveExam} from './interactive-exams.js';

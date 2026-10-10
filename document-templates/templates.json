@@ -1,0 +1,884 @@
+{
+  "progress": {
+    "title": "Progress report",
+    "url": "./document-templates/progress-report.pdf",
+    "pages": [
+      {
+        "width": 841.8897705078125,
+        "height": 595.2755737304688,
+        "fields": [
+          {
+            "name": "Comments_Student information",
+            "label": "Comments — Student information",
+            "x": 0.3622147410936815,
+            "y": 0.20494704447198014,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p1_Student information_Student name",
+            "label": "Student name",
+            "x": 0.21261690813992248,
+            "y": 0.17974863106153546,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Student information_Age / Level",
+            "label": "Age / Level",
+            "x": 0.21261690813992248,
+            "y": 0.2059549912616586,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Student information_Course / Program",
+            "label": "Course / Program",
+            "x": 0.21261690813992248,
+            "y": 0.23216135146178174,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Student information_Session date",
+            "label": "Session date",
+            "x": 0.21261690813992248,
+            "y": 0.25836771166190486,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Student information_Instructor",
+            "label": "Instructor",
+            "x": 0.21261690813992248,
+            "y": 0.2845740205957247,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Attendance & punctuality",
+            "label": "Comments — Attendance & punctuality",
+            "x": 0.8360830540597246,
+            "y": 0.20494704447198014,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p1_Attendance & punctuality_Attendance consistency",
+            "label": "Attendance consistency",
+            "x": 0.6864852211059655,
+            "y": 0.17974863106153546,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Attendance & punctuality_Punctuality",
+            "label": "Punctuality",
+            "x": 0.6864852211059655,
+            "y": 0.20662693869934312,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Attendance & punctuality_Notes",
+            "label": "Notes",
+            "x": 0.6864852211059655,
+            "y": 0.2335052463371508,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Participation & engagement",
+            "label": "Comments — Participation & engagement",
+            "x": 0.3622147410936815,
+            "y": 0.39981477484608574,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p1_Participation & engagement_Level of participation",
+            "label": "Level of participation",
+            "x": 0.21261690813992248,
+            "y": 0.37461636143564103,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Participation & engagement_Willingness to speak",
+            "label": "Willingness to speak",
+            "x": 0.21261690813992248,
+            "y": 0.4014946690734487,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Participation & engagement_Interaction with teacher/peers",
+            "label": "Interaction with teacher/peers",
+            "x": 0.21261690813992248,
+            "y": 0.4283729767112564,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Participation & engagement_Notes",
+            "label": "Notes",
+            "x": 0.21261690813992248,
+            "y": 0.45525128434906403,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Speaking",
+            "label": "Comments — Speaking",
+            "x": 0.8360830540597246,
+            "y": 0.39981477484608574,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p1_Speaking_Fluency",
+            "label": "Fluency",
+            "x": 0.6864852211059655,
+            "y": 0.37461636143564103,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Speaking_Pronunciation",
+            "label": "Pronunciation",
+            "x": 0.6864852211059655,
+            "y": 0.4014946690734487,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Speaking_Confidence",
+            "label": "Confidence",
+            "x": 0.6864852211059655,
+            "y": 0.4283729767112564,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Speaking_Common errors",
+            "label": "Common errors",
+            "x": 0.6864852211059655,
+            "y": 0.45525128434906403,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Listening",
+            "label": "Comments — Listening",
+            "x": 0.3622147410936815,
+            "y": 0.5946825052201913,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p1_Listening_Understanding instructions",
+            "label": "Understanding instructions",
+            "x": 0.21261690813992248,
+            "y": 0.5694840918097467,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Listening_Comprehension",
+            "label": "Comprehension",
+            "x": 0.21261690813992248,
+            "y": 0.5963623994475543,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p1_Listening_Needs repetition",
+            "label": "Needs repetition",
+            "x": 0.21261690813992248,
+            "y": 0.623240707085362,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Reading",
+            "label": "Comments — Reading",
+            "x": 0.8360830540597246,
+            "y": 0.5946825052201913,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p2_Reading_Reading speed",
+            "label": "Reading speed",
+            "x": 0.6864852211059655,
+            "y": 0.5694840918097467,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Reading_Accuracy",
+            "label": "Accuracy",
+            "x": 0.6864852211059655,
+            "y": 0.5963623994475543,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Reading_Comprehension",
+            "label": "Comprehension",
+            "x": 0.6864852211059655,
+            "y": 0.623240707085362,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Writing",
+            "label": "Comments — Writing",
+            "x": 0.3622147410936815,
+            "y": 0.7895502355942969,
+            "width": 0.12353161143325106,
+            "height": 0.1159127529543489,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p2_Writing_Sentence structure",
+            "label": "Sentence structure",
+            "x": 0.21261690813992248,
+            "y": 0.7643518221838522,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Writing_Grammar accuracy",
+            "label": "Grammar accuracy",
+            "x": 0.21261690813992248,
+            "y": 0.7912301298216599,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Writing_Vocabulary use",
+            "label": "Vocabulary use",
+            "x": 0.21261690813992248,
+            "y": 0.8181084374594676,
+            "width": 0.1424710092172253,
+            "height": 0.023518570449385035,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Strengths",
+            "label": "Comments — Strengths",
+            "x": 0.8360830540597246,
+            "y": 0.7895502355942969,
+            "width": 0.12353161143325106,
+            "height": 0.1159127529543489,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p2_Strengths_Strength 1",
+            "label": "Strength 1",
+            "x": 0.6864852211059655,
+            "y": 0.7643518221838522,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Strengths_Strength 2",
+            "label": "Strength 2",
+            "x": 0.6864852211059655,
+            "y": 0.7912301298216599,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Strengths_Strength 3",
+            "label": "Strength 3",
+            "x": 0.6864852211059655,
+            "y": 0.8181084374594676,
+            "width": 0.1424710092172253,
+            "height": 0.023518570449385035,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Signature_page_1",
+            "label": "Signature — page 1",
+            "x": 0.7529367771334979,
+            "y": 0.9294444424507549,
+            "width": 0.21380471209601146,
+            "height": 0.030238096092533626,
+            "multiline": false,
+            "maxLength": 300
+          }
+        ]
+      },
+      {
+        "width": 841.8897705078125,
+        "height": 595.2755737304688,
+        "fields": [
+          {
+            "name": "Comments_Areas for improvement",
+            "label": "Comments — Areas for improvement",
+            "x": 0.3622147410936815,
+            "y": 0.20494704447198014,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p2_Areas for improvement_Area 1",
+            "label": "Area 1",
+            "x": 0.21261690813992248,
+            "y": 0.17974863106153546,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Areas for improvement_Area 2",
+            "label": "Area 2",
+            "x": 0.21261690813992248,
+            "y": 0.20662693869934312,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Areas for improvement_Area 3",
+            "label": "Area 3",
+            "x": 0.21261690813992248,
+            "y": 0.2335052463371508,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Behavior & attitude",
+            "label": "Comments — Behavior & attitude",
+            "x": 0.8360830540597246,
+            "y": 0.20494704447198014,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p2_Behavior & attitude_Focus",
+            "label": "Focus",
+            "x": 0.6864852211059655,
+            "y": 0.17974863106153546,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Behavior & attitude_Motivation",
+            "label": "Motivation",
+            "x": 0.6864852211059655,
+            "y": 0.20662693869934312,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Behavior & attitude_Attitude",
+            "label": "Attitude",
+            "x": 0.6864852211059655,
+            "y": 0.2335052463371508,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Homework & practice",
+            "label": "Comments — Homework & practice",
+            "x": 0.3622147410936815,
+            "y": 0.39981477484608574,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p2_Homework & practice_Completion rate",
+            "label": "Completion rate",
+            "x": 0.21261690813992248,
+            "y": 0.37461636143564103,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Homework & practice_Quality",
+            "label": "Quality",
+            "x": 0.21261690813992248,
+            "y": 0.4014946690734487,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p2_Homework & practice_Effort",
+            "label": "Effort",
+            "x": 0.21261690813992248,
+            "y": 0.4283729767112564,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Progress since start",
+            "label": "Comments — Progress since start",
+            "x": 0.8360830540597246,
+            "y": 0.39981477484608574,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p3_Progress since start_Improvements",
+            "label": "Improvements",
+            "x": 0.6864852211059655,
+            "y": 0.37461636143564103,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p3_Progress since start_Skills developed",
+            "label": "Skills developed",
+            "x": 0.6864852211059655,
+            "y": 0.4014946690734487,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p3_Progress since start_Remaining gaps",
+            "label": "Remaining gaps",
+            "x": 0.6864852211059655,
+            "y": 0.4283729767112564,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Instructor recommendations",
+            "label": "Comments — Instructor recommendations",
+            "x": 0.3622147410936815,
+            "y": 0.5946825052201913,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p3_Instructor recommendations_Focus areas",
+            "label": "Focus areas",
+            "x": 0.21261690813992248,
+            "y": 0.5694840918097467,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p3_Instructor recommendations_Practice activities",
+            "label": "Practice activities",
+            "x": 0.21261690813992248,
+            "y": 0.5963623994475543,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p3_Instructor recommendations_Study tips",
+            "label": "Study tips",
+            "x": 0.21261690813992248,
+            "y": 0.623240707085362,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Overall evaluation",
+            "label": "Comments — Overall evaluation",
+            "x": 0.8360830540597246,
+            "y": 0.5946825052201913,
+            "width": 0.12353161143325106,
+            "height": 0.11591270168804557,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p3_Overall evaluation_Rating",
+            "label": "Rating",
+            "x": 0.6864852211059655,
+            "y": 0.5694840918097467,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p3_Overall evaluation_General comment",
+            "label": "General comment",
+            "x": 0.6864852211059655,
+            "y": 0.5963623994475543,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comments_Next steps",
+            "label": "Comments — Next steps",
+            "x": 0.3622147410936815,
+            "y": 0.7895502355942969,
+            "width": 0.12353161143325106,
+            "height": 0.1159127529543489,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "p3_Next steps_Goals",
+            "label": "Goals",
+            "x": 0.21261690813992248,
+            "y": 0.7643518221838522,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "p3_Next steps_Targets",
+            "label": "Targets",
+            "x": 0.21261690813992248,
+            "y": 0.7912301298216599,
+            "width": 0.1424710092172253,
+            "height": 0.02351851918308171,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Signature_page_2",
+            "label": "Signature — page 2",
+            "x": 0.7529367771334979,
+            "y": 0.9294444424507549,
+            "width": 0.21380471209601146,
+            "height": 0.030238096092533626,
+            "multiline": false,
+            "maxLength": 300
+          }
+        ]
+      }
+    ]
+  },
+  "final": {
+    "title": "Final exam report",
+    "url": "./document-templates/final-report.pdf",
+    "pages": [
+      {
+        "width": 595.2755737304688,
+        "height": 841.8897705078125,
+        "fields": [
+          {
+            "name": "Student name",
+            "label": "Student name",
+            "x": 0.2687830763780767,
+            "y": 0.2279274285421809,
+            "width": 0.6304232699801445,
+            "height": 0.029695098902223813,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Current level",
+            "label": "Current level",
+            "x": 0.11927249014277153,
+            "y": 0.3170127252488523,
+            "width": 0.21670635532982432,
+            "height": 0.02850729494613486,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Final exam grade",
+            "label": "Final exam grade",
+            "x": 0.39309524920293715,
+            "y": 0.3170127252488523,
+            "width": 0.21670635532982432,
+            "height": 0.02850729494613486,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Next level",
+            "label": "Next level",
+            "x": 0.6669180082631028,
+            "y": 0.3170127252488523,
+            "width": 0.21670635532982432,
+            "height": 0.02850729494613486,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Comprehension",
+            "label": "Comprehension",
+            "x": 0.10079365364177875,
+            "y": 0.400159002175079,
+            "width": 0.7984126927164424,
+            "height": 0.03325851077049067,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "Vocabulary",
+            "label": "Vocabulary",
+            "x": 0.10079365364177875,
+            "y": 0.4654882197599714,
+            "width": 0.7984126927164424,
+            "height": 0.03325851077049067,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "Structure and grammar",
+            "label": "Structure and grammar",
+            "x": 0.10079365364177875,
+            "y": 0.5308174373448638,
+            "width": 0.7984126927164424,
+            "height": 0.03325851077049067,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "Pronunciation",
+            "label": "Pronunciation",
+            "x": 0.10079365364177875,
+            "y": 0.5961466549297562,
+            "width": 0.7984126927164424,
+            "height": 0.03325851077049067,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "Fluency",
+            "label": "Fluency",
+            "x": 0.10079365364177875,
+            "y": 0.6614758725146486,
+            "width": 0.7984126927164424,
+            "height": 0.03325851077049067,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "Development points",
+            "label": "Development points",
+            "x": 0.10079365364177875,
+            "y": 0.7315563059238968,
+            "width": 0.7984126927164424,
+            "height": 0.09621212044320515,
+            "multiline": true,
+            "maxLength": 2000
+          },
+          {
+            "name": "Signature",
+            "label": "Signature",
+            "x": 0.6165211814422134,
+            "y": 0.8647212800327574,
+            "width": 0.2822222301969805,
+            "height": 0.021380471209601144,
+            "multiline": false,
+            "maxLength": 300
+          }
+        ]
+      }
+    ]
+  },
+  "registration": {
+    "title": "Registration & payment confirmation",
+    "url": "./document-templates/registration-payment-confirmation.pdf",
+    "pages": [
+      {
+        "width": 595.2755737304688,
+        "height": 841.8897705078125,
+        "fields": [
+          {
+            "name": "Student name",
+            "label": "Student name",
+            "x": 0.10079365364177875,
+            "y": 0.2613168703395695,
+            "width": 0.7984126927164424,
+            "height": 0.029695098902223813,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Program",
+            "label": "Program",
+            "x": 0.10079365364177875,
+            "y": 0.32308267605619506,
+            "width": 0.7984126927164424,
+            "height": 0.029695098902223813,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Total duration",
+            "label": "Total duration",
+            "x": 0.10079365364177875,
+            "y": 0.3848484817728206,
+            "width": 0.7984126927164424,
+            "height": 0.029695062653323785,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Session format",
+            "label": "Session format",
+            "x": 0.10079365364177875,
+            "y": 0.4466142512405461,
+            "width": 0.7984126927164424,
+            "height": 0.029695098902223813,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Amount paid",
+            "label": "Amount paid",
+            "x": 0.10079365364177875,
+            "y": 0.5083800569571716,
+            "width": 0.7984126927164424,
+            "height": 0.029695098902223813,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Payment method",
+            "label": "Payment method",
+            "x": 0.10079365364177875,
+            "y": 0.5701458626737972,
+            "width": 0.7984126927164424,
+            "height": 0.029695098902223813,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Date",
+            "label": "Date",
+            "x": 0.10079365364177875,
+            "y": 0.6319117046393227,
+            "width": 0.7984126927164424,
+            "height": 0.029695098902223813,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Time",
+            "label": "Time",
+            "x": 0.10079365364177875,
+            "y": 0.6936775103559483,
+            "width": 0.7984126927164424,
+            "height": 0.029695098902223813,
+            "multiline": false,
+            "maxLength": 300
+          },
+          {
+            "name": "Signature",
+            "label": "Signature",
+            "x": 0.6165211814422134,
+            "y": 0.8647212800327574,
+            "width": 0.2822222301969805,
+            "height": 0.021380471209601144,
+            "multiline": false,
+            "maxLength": 300
+          }
+        ]
+      }
+    ]
+  }
+}
