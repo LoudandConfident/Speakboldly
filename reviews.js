@@ -1,7 +1,7 @@
 import {openPopup} from './popups.js';
 import {courses} from './courses.js';
-import {backendBase,request} from './exam-api.js';
-export function initializeReviews(doc, api = request, connected = () => !!backendBase()) {
+import {REVIEWS_ENDPOINT,reviewRequest} from './reviews-api.js';
+export function initializeReviews(doc, api = reviewRequest, connected = () => !!REVIEWS_ENDPOINT) {
  const opener = doc.querySelector('#review-open'), form = doc.querySelector('#review-form');
  if (!opener || !form) return;
  const album = doc.querySelector('#review-album'), cards = doc.querySelector('#review-cards');

@@ -1,10 +1,12 @@
 import {ownerConnected,request} from './exam-api.js';
+import {REVIEWS_ENDPOINT} from './reviews-api.js';
 export function initializeReviewManagement(doc,isUnlocked) {
  const panel = doc.querySelector('#review-management');
  if (!panel) return;
  const status = doc.querySelector('#review-management-status'), list = doc.querySelector('#review-management-list');
  async function refresh() {
   list.replaceChildren();
+  if (REVIEWS_ENDPOINT) {status.textContent = 'Reviews are published automatically through your Google Sheet. To remove a review, delete its row from the Reviews tab, then refresh the website.';return;}
   if (!isUnlocked() || !ownerConnected()) {status.textContent = 'Connect private storage and sign in as the owner to manage public reviews.';return;}
   status.textContent = 'Loading reviews…';
   try {
