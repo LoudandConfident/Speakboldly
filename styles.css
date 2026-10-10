@@ -137,3 +137,5 @@ body .page-signature>span,body .page-signature>small{display:block}body .page-si
 #daily-quote .motivation-page-heading{font-size:24px;line-height:1.35;font-weight:700;letter-spacing:-.5px;margin:0 0 20px}#daily-quote #daily-quote-image{width:360px;max-width:100%;height:auto;max-height:360px;object-fit:contain;object-position:top left}
 
 #daily-quote .motivation-content{padding-top:22px}@media(max-width:800px){#daily-quote .motivation-content{padding-top:0}}
+
+#daily-quote .motivation-page-heading{font-size:22px;margin-bottom:28px}
