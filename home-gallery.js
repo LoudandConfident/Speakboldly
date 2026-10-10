@@ -15,7 +15,7 @@ dailyQuotes.push(
  {image:'./images/daily-motivation-listen.png',alt:'Headphones and an open book on a sunlit desk',quote:'Listen. Learn. Try again.',embedded:true},
  {image:'./images/daily-motivation-keep-going.png',alt:'A winding countryside path leading towards sunrise',quote:'Keep going. You’re getting there.',embedded:true}
 );
-dailyQuotes.push({image:'./images/daily-motivation-accents-pyramids.png',alt:'A foreign tourist in a sun hat speaking with an Egyptian tour guide at the Pyramids of Giza',quote:'عقدة الخواجة — Your accent tells your story.',embedded:true});
+dailyQuotes.push({image:'./images/daily-motivation-accents-pyramids.png',alt:'A foreign tourist in a sun hat speaking with an Egyptian tour guide at the Pyramids of Giza',quote:'عقدة الخواجة — Your accent tells your story.',displayTitle:'عقدة الخواجة',embedded:true});
 dailyQuotes.push({image:'./images/daily-motivation-french.png',alt:'An original green cartoon bird reminding a learner to practise French',quote:'I learn French myself!',embedded:false});
 export function cairoDayNumber(now = new Date()) {
  const parts = new Intl.DateTimeFormat('en-GB', {timeZone:'Africa/Cairo', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(now);
@@ -75,8 +75,11 @@ export function initializeGallery(doc, win) {
   page.querySelector('#daily-quote-image').src = entry.image;
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');
   const headline = doc.createElement('strong');
-  headline.textContent = entry.quote;
-  page.querySelector('#daily-quote-text').replaceChildren(headline);
+  const heading = page.querySelector('#daily-quote-text');
+  const title = entry.displayTitle || (entry.embedded ? '' : entry.quote);
+  headline.textContent = title;
+  heading.replaceChildren(headline);
+  heading.hidden = !title;
   const reflection=page.querySelector('#daily-quote-reflection');
   reflection.replaceChildren(...[details.reflection,dailyPractice[index]].map(text=>{const paragraph=doc.createElement('p');paragraph.textContent=text;return paragraph;}));
  }
