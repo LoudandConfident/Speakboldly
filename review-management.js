@@ -1,5 +1,5 @@
 import {ownerConnected,request} from './exam-api.js';
-import {REVIEWS_ENDPOINT} from './reviews-api.js?v=combined-reviews-clients';
+import {REVIEWS_ENDPOINT} from './reviews-api.js?v=separate-review-sheet';
 export function initializeReviewManagement(doc,isUnlocked) {
  const panel = doc.querySelector('#review-management');
  if (!panel) return;
