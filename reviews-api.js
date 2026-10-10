@@ -1,11 +1,15 @@
-export const REVIEWS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz_d7sdw-RbiuInL8mz8TJfEH7lRyk_ZSQrDF75UJKJug1GeM58yAtaqyuhr7ja_guApw/exec';
+import {backendBase,request} from './exam-api.js';
+// Reviews must use their own storage, separate from student reminders.
+export const REVIEWS_ENDPOINT = '';
+export const reviewsConnected = () => !!(REVIEWS_ENDPOINT || backendBase());
 
-export async function reviewRequest(path, {method = 'GET', data} = {}, fetcher = globalThis.fetch) {
+export async function reviewRequest(path, {method = 'GET', data} = {}, fetcher = globalThis.fetch, endpoint = REVIEWS_ENDPOINT) {
  if (path !== 'reviews' || !['GET','POST'].includes(method)) throw new Error('Unsupported review request.');
+ if (!endpoint) return request(path,{method,data});
  const controller = new AbortController();
  const timer = setTimeout(() => controller.abort(), 30000);
  try {
-  const response = await fetcher(REVIEWS_ENDPOINT, {
+  const response = await fetcher(endpoint, {
    method, redirect:'follow', credentials:'omit', signal:controller.signal,
    ...(method === 'POST' ? {headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify(data)} : {})
   });

@@ -1,7 +1,7 @@
 import {openPopup} from './popups.js';
 import {courses} from './courses.js';
-import {REVIEWS_ENDPOINT,reviewRequest} from './reviews-api.js';
-export function initializeReviews(doc, api = reviewRequest, connected = () => !!REVIEWS_ENDPOINT) {
+import {reviewsConnected,reviewRequest} from './reviews-api.js';
+export function initializeReviews(doc, api = reviewRequest, connected = reviewsConnected) {
  const opener = doc.querySelector('#review-open'), form = doc.querySelector('#review-form');
  if (!opener || !form) return;
  const album = doc.querySelector('#review-album'), cards = doc.querySelector('#review-cards');
@@ -35,8 +35,8 @@ export function initializeReviews(doc, api = reviewRequest, connected = () => !!
   try {reviews = (await api('reviews')).reviews;render();listStatus.textContent = reviews.length ? '' : 'Be the first to share your experience.';}
   catch {listStatus.textContent = 'Reviews could not be loaded. Please try again later.';}
  }
- previous?.addEventListener('click',()=>{selected = (selected-1+reviews.length)%reviews.length;render();});
- next?.addEventListener('click',()=>{selected = (selected+1)%reviews.length;render();});
+ previous?.addEventListener('click',()=>{if (!reviews.length) return;selected = (selected-1+reviews.length)%reviews.length;render();});
+ next?.addEventListener('click',()=>{if (!reviews.length) return;selected = (selected+1)%reviews.length;render();});
  cards?.addEventListener('keydown',event=>{if (event.key === 'ArrowLeft') previous.click();if (event.key === 'ArrowRight') next.click();});
  opener.addEventListener('click', () => {
   openPopup(doc.querySelector('#review-dialog'));
