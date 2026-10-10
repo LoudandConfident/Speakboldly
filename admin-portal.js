@@ -15,6 +15,25 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  let unlocked=false,clients=[],editingId=null;let materialCatalog={};
  const testimonials=initializeReviewManagement(doc,()=>unlocked);
  const clientSheet=initializeClientSheet(doc);
+ const syncExisting=root.querySelector('#sync-existing-clients');
+ syncExisting?.addEventListener('click',async()=>{
+  if(!unlocked)return;
+  const note=doc.querySelector('#client-sheet-status');
+  if(!clientSheetConnected()){note.textContent='Enter your Apps Script URL and private connection key first.';return;}
+  const records=clients.map(client=>({...client}));
+  if(!records.length){note.textContent='No existing students are saved in this browser.';return;}
+  syncExisting.disabled=true;
+  let count=0;
+  try{
+   for(const client of records){
+    if(!unlocked)return;
+    note.textContent='Syncing student '+(count+1)+' of '+records.length+'…';
+    await syncClientToSheet(client);count++;
+   }
+   note.textContent=count+' student'+(count===1?'':'s')+' synced to Google Sheets. Existing matching records were updated.';
+  }catch(error){note.textContent=count+' of '+records.length+' students synced. '+error.message+' You can retry; students already synced will not be duplicated.';}
+  finally{syncExisting.disabled=false;}
+ });
  const review=initializeExamReview(doc,()=>unlocked,records=>{clients=records;clearForm();render();calendar?.refresh();loadAccessOptions();});
  const calendar=initializeAdminCalendar(doc,()=>unlocked,()=>clients,openClientInfo);
  const sendConfirmations=root.querySelector('#send-class-confirmations'),emailStatus=root.querySelector('#class-confirmations-status');
