@@ -189,3 +189,12 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 #home .daily-motivation{display:flex;align-items:center;gap:12px}#home .daily-motivation>button{display:inline-flex;align-items:center;justify-content:center;min-width:180px;min-height:34px;margin:0;padding:7px 16px;border:1px solid #a8bbb0;border-radius:999px;background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;line-height:1.3}#home .daily-motivation>button:hover{background:#edf0e6;color:var(--ink)}@media(max-width:680px){#home .daily-motivation{gap:8px}#home .daily-motivation>button{min-width:0;padding:7px 12px;font-size:10px}}
 
 #students-portal .portal-choice{gap:0;letter-spacing:0;word-spacing:normal;font-stretch:normal;transform:none}#students-portal .portal-choice-label{display:block;width:100%;font-family:'DM Sans',sans-serif;font-size:20px;font-style:normal;font-weight:600;font-stretch:normal;line-height:1.4;letter-spacing:0;word-spacing:normal;text-align:center;white-space:nowrap;color:var(--ink);transform:none}
+/* Reviews can be browsed by hand without interrupting vertical reading. */
+#reviews .review-cards{touch-action:pan-y pinch-zoom;cursor:grab;outline-offset:4px}
+#reviews .review-cards.is-dragging{cursor:grabbing;user-select:none}
+#reviews .review-card{transition:transform .38s cubic-bezier(.22,.61,.36,1),filter .38s,opacity .38s}
+#reviews .review-card.is-selected.review-enter-next{animation:review-slide-next .38s cubic-bezier(.22,.61,.36,1) both}
+#reviews .review-card.is-selected.review-enter-previous{animation:review-slide-previous .38s cubic-bezier(.22,.61,.36,1) both}
+@keyframes review-slide-next{from{transform:translate(calc(-50% + 80px),-50%);opacity:.35}to{transform:translate(-50%,-50%);opacity:1}}
+@keyframes review-slide-previous{from{transform:translate(calc(-50% - 80px),-50%);opacity:.35}to{transform:translate(-50%,-50%);opacity:1}}
+@media(prefers-reduced-motion:reduce){#reviews .review-card{transition:none!important;animation:none!important}}

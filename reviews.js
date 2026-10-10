@@ -8,13 +8,13 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  const listStatus = doc.querySelector('#review-list-status'), position = doc.querySelector('#review-position');
  const previous = doc.querySelector('#review-previous'), next = doc.querySelector('#review-next');
  let reviews = [], selected = 0, submissionId = null, successTimer = null, loadVersion = 0;
- let hovering = false, focused = false, rotationTimer;
+ let hovering = false, focused = false, rotationTimer, drag = null;
  const view = doc.querySelector('#reviews');
  function restartRotation() {
   doc.defaultView.clearInterval(rotationTimer);
   rotationTimer = doc.defaultView.setInterval(()=>{
-   if (reviews.length < 2 || doc.hidden || view?.hidden || hovering || focused || doc.querySelector('dialog[open]')) return;
-   selected = (selected+1)%reviews.length;render();
+   if (reviews.length < 2 || doc.hidden || view?.hidden || hovering || focused || drag || doc.querySelector('dialog[open]')) return;
+   moveReview(1);
   },15000);
  }
  album?.addEventListener('mouseenter',()=>{hovering = true;});
@@ -53,8 +53,52 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   try {const result = await api('reviews');if(version !== loadVersion)return;reviews = result.reviews;const index=reviews.findIndex(review=>review.id===selectedId);selected=index<0?0:index;render();listStatus.textContent = reviews.length ? '' : 'Be the first to share your experience.';}
   catch {if(version===loadVersion)listStatus.textContent = 'Reviews could not be loaded. Please try again later.';}
  }
- previous?.addEventListener('click',()=>{if (!reviews.length) return;selected = (selected-1+reviews.length)%reviews.length;render();restartRotation();});
- next?.addEventListener('click',()=>{if (!reviews.length) return;selected = (selected+1)%reviews.length;render();restartRotation();});
+ function moveReview(direction){
+  if(reviews.length<2)return;
+  selected=(selected+direction+reviews.length)%reviews.length;render();
+  cards.querySelector('.is-selected')?.classList.add(direction>0?'review-enter-next':'review-enter-previous');
+  restartRotation();
+ }
+ previous?.addEventListener('click',()=>moveReview(-1));
+ next?.addEventListener('click',()=>moveReview(1));
+ cards?.setAttribute('tabindex','0');
+ cards?.setAttribute('aria-label','Reviews. Swipe left or right, or use the arrow keys.');
+ cards?.addEventListener('pointerdown',event=>{
+  if(reviews.length<2||event.isPrimary===false||event.button>0)return;
+  drag={id:event.pointerId,x:event.clientX,y:event.clientY,dx:0,horizontal:false};
+ });
+ cards?.addEventListener('pointermove',event=>{
+  if(!drag||event.pointerId!==drag.id)return;
+  const dx=event.clientX-drag.x,dy=event.clientY-drag.y;
+  if(!drag.horizontal){
+   if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){drag=null;return;}
+   if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy))return;
+   drag.horizontal=true;cards.setPointerCapture?.(event.pointerId);cards.classList.add('is-dragging');
+  }
+  event.preventDefault();drag.dx=dx;
+  const card=cards.querySelector('.is-selected');
+  if(card){card.style.animation='none';card.style.transition='none';card.style.transform='translate(calc(-50% + '+Math.max(-150,Math.min(150,dx))+'px), -50%)';}
+ });
+ function finishDrag(event,cancelled=false){
+  if(!drag||event.pointerId!==drag.id)return;
+  const gesture=drag;drag=null;cards.classList.remove('is-dragging');
+  const card=cards.querySelector('.is-selected');if(card){card.style.animation='';card.style.transition='';card.style.transform='';}
+  if(cards.hasPointerCapture?.(event.pointerId))cards.releasePointerCapture(event.pointerId);
+  if(!cancelled&&gesture.horizontal&&Math.abs(gesture.dx)>=40)moveReview(gesture.dx<0?1:-1);
+  else restartRotation();
+ }
+ cards?.addEventListener('pointerup',event=>finishDrag(event));
+ cards?.addEventListener('pointercancel',event=>finishDrag(event,true));
+ cards?.addEventListener('lostpointercapture',event=>finishDrag(event,true));
+ let wheelDistance=0,lastWheel=0,lastWheelMove=0;
+ cards?.addEventListener('wheel',event=>{
+  if(reviews.length<2)return;
+  const horizontal=event.shiftKey?event.deltaY:event.deltaX;
+  if(!horizontal||(!event.shiftKey&&Math.abs(event.deltaY)>Math.abs(horizontal)))return;
+  event.preventDefault();const now=Date.now();if(now-lastWheel>180)wheelDistance=0;lastWheel=now;
+  wheelDistance+=horizontal;
+  if(Math.abs(wheelDistance)>=45&&now-lastWheelMove>450){moveReview(wheelDistance>0?1:-1);lastWheelMove=now;wheelDistance=0;}
+ },{passive:false});
  cards?.addEventListener('keydown',event=>{if (event.key === 'ArrowLeft') previous.click();if (event.key === 'ArrowRight') next.click();});
  opener.addEventListener('click', () => {
   doc.defaultView.clearTimeout(successTimer);
