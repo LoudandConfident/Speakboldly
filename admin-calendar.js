@@ -1,4 +1,5 @@
 import {ownerConnected,request} from './exam-api.js';
+import {openPopup} from './popups.js';
 const STORAGE_KEY='speak-boldly-admin-sessions-v1';
 export function sessionInitials(name){const words=name.trim().split(/\s+/u).filter(Boolean);return words.map(w=>Array.from(w)[0]).join('').toLocaleUpperCase();}
 export function validateSession(input){
@@ -34,7 +35,7 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    const add=doc.createElement('button');add.type='button';add.className='calendar-add';add.textContent='+';add.setAttribute('aria-label','Add session on '+date);header.append(number,add);cell.append(header);
    const items=sessions.filter(s=>s.date===date&&s.reminderStatus!=='cancelled');
    for(const item of items){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name;const badge=doc.createElement('button');badge.type='button';badge.className='calendar-session';badge.textContent=sessionInitials(name)+' #'+item.number;badge.title=name+' — session '+item.number+(item.time?' — '+item.time+' Cairo time':'')+(item.reminderStatus?' — Reminder: '+item.reminderStatus:'');badge.setAttribute('aria-label','Open '+name+' client information, session '+item.number);badge.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};cell.append(badge);if(item.id&&item.reminderStatus!=='cancelled'){const cancel=doc.createElement('button');cancel.type='button';cancel.className='calendar-cancel';cancel.textContent='Cancel';cancel.setAttribute('aria-label','Cancel '+name+' session '+item.number);cancel.onclick=async()=>{if(!isUnlocked()||!doc.defaultView.confirm('Cancel this class and stop its pending reminder?'))return;cancel.disabled=true;try{await request('admin/classes/'+item.id+'/cancel',{role:'admin',method:'POST',data:{}});await load();}catch(error){status.textContent=error.message;cancel.disabled=false;}};cell.append(cancel);}}
-   add.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;populateClients();render();root.querySelector('#calendar-session-details').open=true;chooser.focus();};grid.append(cell);
+   add.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};grid.append(cell);
   }
  }
  async function load(){
@@ -52,7 +53,8 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    if(ownerConnected()){const response=await request('admin/classes',{role:'admin',method:'POST',data:record});if(!isUnlocked())return;await load();status.textContent='Session '+record.number+' saved for '+record.date+' at '+record.time+' Cairo time. '+(response.emailReady?'Reminder scheduled; bookings within 24 hours are reminded shortly.':'Email delivery is not configured yet.');}
    else{const updated=[...sessions,record];doc.defaultView.localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));sessions=updated;selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();status.textContent=sessionInitials(record.name)+' #'+record.number+' saved in this browser. Automatic reminders require the private server and email connection.';}}
 
-  catch(error){status.textContent=error.message;}
+  catch(error){status.textContent=error.message;return;}
+  root.querySelector('#calendar-session-dialog')?.close();
  };
- return{load,refresh(){if(ownerConnected())load();else{populateClients();render();}},lock(){sessions=[];grid.replaceChildren();heading.textContent='';form.reset();status.textContent='';root.querySelector('#calendar-session-details').open=false;}};
+ return{load,refresh(){if(ownerConnected())load();else{populateClients();render();}},lock(){sessions=[];grid.replaceChildren();heading.textContent='';form.reset();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
 }
