@@ -17,6 +17,7 @@ dailyQuotes.push(
 );
 dailyQuotes.push({image:'./images/daily-motivation-accents-pyramids-clean.png',alt:'A foreign tourist in a sun hat speaking with an Egyptian tour guide at the Pyramids of Giza',quote:'عقدة الخواجة — Your accent tells your story.',embedded:false});
 dailyQuotes.push({image:'./images/daily-motivation-french-clean.png',alt:'An original green cartoon bird reminding a learner to practise French',quote:'I learn French myself!',embedded:false});
+dailyQuotes.push({image:'./images/daily-motivation-language-skill.png',alt:'A shy young woman with a bun, glasses and Arabic books standing among stylish women chatting together',quote:'Language is just a skill!',embedded:false});
 export function cairoDayNumber(now = new Date()) {
  const parts = new Intl.DateTimeFormat('en-GB', {timeZone:'Africa/Cairo', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(now);
  const part = type => Number(parts.find(p => p.type === type).value);
@@ -63,6 +64,8 @@ quoteDetails.push({support:[],reflection:'In Egypt, we sometimes make it difficu
 dailyPractice.push('Try this today: say one thought aloud in English without apologising for your accent. Practise a sound if it helps you communicate more clearly, and encourage someone else who is learning. A little kindness can help both of you keep speaking.');
 quoteDetails.push({support:[],reflection:'I became much more empathetic towards my students when I started learning French myself. I opened mobile apps, revisited old French courses and schoolbooks, and started having conversations with my phone! Suddenly, I understood what it feels like to understand someone but not be able to reply. I struggled with the French “R” because my English pronunciation habits kept getting in the way. And I felt the frustration of recognising a word but not remembering what it means. I took a placement test at a language centre, waited my turn, felt disappointed, then found my motivation again. It even brought back a school memory: in second grade, I had to learn how to ask to go to the bathroom in French before I could actually go! Being a teacher doesn’t make me immune to feeling awkward as a learner. It reminds me why patience, encouragement, and space to make mistakes matter so much.'});
 dailyPractice.push('Here’s what I want you to remember: understanding can come before speaking. Needing time to reply doesn’t mean you aren’t learning. Try using one small sentence today, even if you hesitate. Forget a word? Look it up and use it in your own sentence. You don’t have to feel confident every day to keep making progress. I’m learning that alongside you.');
+quoteDetails.push({support:[],reflection:"Your value is not by any means tied to the number of skills you've gained over the years! The cultural pressure might give you the impression that you are obliged to own skills and learn languages to be able to fit in in the market, or at work, or with certain groups of friends.",paragraphs:["Your value is not by any means tied to the number of skills you've gained over the years! The cultural pressure might give you the impression that you are obliged to own skills and learn languages to be able to fit in in the market, or at work, or with certain groups of friends.", "Here's your new vocabulary for today: Bullshit!", "Cambridge Dictionary meaning, paraphrased: nonsense or something untrue. Our definition for today: the idea that your English level decides whether you deserve a seat at the table.", "It's just a skill, like any other skill that requires time and effort, that people learn because they love it or because they'll start using at work or wit their kids. It's not by any means related to your identity!"]});
+dailyPractice.push("It's just a skill, like any other skill that requires time and effort, that people learn because they love it or because they'll start using at work or wit their kids. It's not by any means related to your identity!");
 export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
  if (!page) return;
@@ -81,7 +84,7 @@ export function initializeGallery(doc, win) {
   heading.replaceChildren(headline);
   heading.hidden = !title;
   const reflection=page.querySelector('#daily-quote-reflection');
-  reflection.replaceChildren(...[details.reflection,dailyPractice[index]].map(text=>{const paragraph=doc.createElement('p');paragraph.textContent=text;return paragraph;}));
+  reflection.replaceChildren(...(details.paragraphs||[details.reflection,dailyPractice[index]]).map(text=>{const paragraph=doc.createElement('p');paragraph.textContent=text;return paragraph;}));
  }
  refresh();
  let interval;
