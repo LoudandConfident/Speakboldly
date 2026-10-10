@@ -168,3 +168,5 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 #reviews #review-position{margin-top:-20px;position:relative}#reviews>.page-signature{transform:translateY(-16px)}@media(min-width:801px){.reviews-layout{gap:62px}.reviews-album-area{transform:translateX(12px)}}
 
 .reviews-copy #review-open{min-height:40px;padding:11px 12px}#home .home-bottom-row>.review-link{min-height:36px;padding:8px 10px}
+
+#reviews .review-album{grid-template-columns:40px minmax(0,1fr) 40px;align-items:center}#reviews .review-card{top:50%;left:50%;margin:0;transform:translate(-50%,-50%)}#reviews .review-card.is-selected{transform:translate(-50%,-50%) scale(1)}#reviews .review-card.is-previous{transform:translate(-76%,-50%) scale(.85)}#reviews .review-card.is-next{transform:translate(-24%,-50%) scale(.85)}#reviews .review-arrow{justify-self:center;align-self:center}@media(max-width:680px){#reviews .review-album{grid-template-columns:32px minmax(0,1fr) 32px}}
