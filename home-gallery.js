@@ -68,7 +68,9 @@ export function initializeGallery(doc, win) {
   const index = nextDay % dailyQuotes.length, entry = dailyQuotes[index], details = quoteDetails[index];
   page.querySelector('#daily-quote-image').src = entry.image;
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');
-  page.querySelector('#daily-quote-text').textContent = entry.quote;
+  const headline = doc.createElement('strong');
+  headline.textContent = entry.quote;
+  page.querySelector('#daily-quote-text').replaceChildren(headline);
   const reflection=page.querySelector('#daily-quote-reflection');
   reflection.replaceChildren(...[details.reflection,dailyPractice[index]].map(text=>{const paragraph=doc.createElement('p');paragraph.textContent=text;return paragraph;}));
  }
