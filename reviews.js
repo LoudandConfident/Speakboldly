@@ -7,7 +7,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  const album = doc.querySelector('#review-album'), cards = doc.querySelector('#review-cards');
  const listStatus = doc.querySelector('#review-list-status'), position = doc.querySelector('#review-position');
  const previous = doc.querySelector('#review-previous'), next = doc.querySelector('#review-next');
- let reviews = [], selected = 0, submissionId = null, awaitingRefresh = false;
+ let reviews = [], selected = 0, submissionId = null, successTimer = null, loadVersion = 0;
  let hovering = false, focused = false, rotationTimer;
  const view = doc.querySelector('#reviews');
  function restartRotation() {
@@ -47,16 +47,18 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   position.textContent = 'Review '+(selected+1)+' of '+reviews.length;
  }
  async function load() {
-  if (awaitingRefresh) return;
+  const version = ++loadVersion, selectedId = reviews[selected]?.id;
   if (!connected()) {listStatus.textContent = '';album.hidden = true;return;}
   listStatus.textContent = 'Loading reviews…';
-  try {reviews = (await api('reviews')).reviews;render();listStatus.textContent = reviews.length ? '' : 'Be the first to share your experience.';}
-  catch {listStatus.textContent = 'Reviews could not be loaded. Please try again later.';}
+  try {const result = await api('reviews');if(version !== loadVersion)return;reviews = result.reviews;const index=reviews.findIndex(review=>review.id===selectedId);selected=index<0?0:index;render();listStatus.textContent = reviews.length ? '' : 'Be the first to share your experience.';}
+  catch {if(version===loadVersion)listStatus.textContent = 'Reviews could not be loaded. Please try again later.';}
  }
  previous?.addEventListener('click',()=>{if (!reviews.length) return;selected = (selected-1+reviews.length)%reviews.length;render();restartRotation();});
  next?.addEventListener('click',()=>{if (!reviews.length) return;selected = (selected+1)%reviews.length;render();restartRotation();});
  cards?.addEventListener('keydown',event=>{if (event.key === 'ArrowLeft') previous.click();if (event.key === 'ArrowRight') next.click();});
  opener.addEventListener('click', () => {
+  doc.defaultView.clearTimeout(successTimer);
+  doc.querySelector('#review-status').textContent = '';
   openPopup(doc.querySelector('#review-dialog'));
   form.querySelector('button[type=submit]').disabled = !connected();
   if (!connected()) doc.querySelector('#review-status').textContent = 'Review sharing is not connected yet. Please come back once it is ready.';
@@ -72,8 +74,16 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   try {
    const data = {submissionId,name:form.elements.name.value.trim(),age:form.elements.age.value,program:form.elements.program.value,level:form.elements.level.value.trim(),message:form.elements.message.value.trim()};
    const result = await api('reviews',{method:'POST',data});
-   awaitingRefresh = true;
+   ++loadVersion;
+   reviews = [result.review,...reviews.filter(review=>review.id!==result.review.id)];selected=0;render();listStatus.textContent='';
    status.textContent = 'Thank you for submitting your review!';form.reset();submissionId = null;
+   doc.defaultView.clearTimeout(successTimer);
+   successTimer=doc.defaultView.setTimeout(()=>{
+    const dialog=doc.querySelector('#review-dialog');
+    if(!dialog?.open)return;
+    dialog.close();doc.defaultView.location.hash='reviews';
+    listStatus.textContent='Thank you for submitting your review!';restartRotation();
+   },1400);
   } catch (error) {status.textContent = error.message || 'Your review could not be shared. Please try again.';}
   finally {button.disabled = false;}
  });
