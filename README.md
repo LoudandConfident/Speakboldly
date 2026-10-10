@@ -31,7 +31,7 @@ The HTML file `googlef6de591683171555.html` is the Google Search Console verific
 
 Exercises, exams, progress reports, final reports, listening tracks, and Full material are offered inside the page, with inline image and PDF viewing. Upload links are in Admin portal and use the owner's GitHub sign-in. Material lists load automatically on opening Student portal. The Refresh materials button has been removed. Browser save capabilities cannot be fully disabled.
 
-The daily-code calendar has been retired. Code 1962 opens only the Teacher portal. Admin assigns each client a unique six-digit code and folder/file permissions through a separate client editor. Student code lookup reads only the same browser’s localStorage; it does not work on a student’s separate device. Unselected folders and files are dimmed with lock symbols in this local prototype. Admin can edit grants later and preview the full library. Existing uploads on GitHub Pages are public; confidential reports must move to private authenticated storage.
+The daily-code calendar has been retired. Code 1962 opens the full Student portal as an owner convenience code; it is reserved and cannot be assigned as a new individual client code. Admin assigns each client a unique four-digit code and folder/file permissions through a separate client editor. Student code lookup reads only the same browser’s localStorage; it does not work on a student’s separate device. Unselected folders and files are dimmed with lock symbols in this local prototype. Admin can edit grants later and preview the full library. Existing uploads on GitHub Pages are public; confidential reports must move to private authenticated storage.
 
 The next requested system needs shared backend storage so admin client records, individual client codes, uploaded files, and access grants work across devices. Provider selection is pending; do not claim these permissions are enforced before the backend is connected and verified.
 
@@ -57,7 +57,7 @@ Page signatures now use a plain font with “English language Coaching” and �
 
 ## Student code attempt allowance
 
-Individual student code entry is limited to three attempts per Cairo calendar day. On the current unconnected public site, this is stored in the browser and resets at Cairo midnight; changing/clearing browser storage can bypass that local limit. Code 1962 cannot open the Student portal. The private backend persists three successful logins per client per day and blocks further guesses after three incorrect codes from a source IP that day, without applying that daily allowance to the owner. Shared backend enforcement still requires hosting configuration.
+Individual student code entry is limited to three attempts per Cairo calendar day. On the current unconnected public site, this is stored in the browser and resets at Cairo midnight; changing/clearing browser storage can bypass that local limit. Code 1962 is exempt. The private backend persists three successful logins per client per day and blocks further guesses after three incorrect codes from a source IP that day, without applying that daily allowance to the owner. Shared backend enforcement still requires hosting configuration.
 
 Material contains compressed books for Levels 1–8 named `B-Level-N-Book.pdf`. The duplicate compressed ZIP uploads for Levels 1–2 were identical and added only once.
 

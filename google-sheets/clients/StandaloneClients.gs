@@ -1,7 +1,6 @@
 // Open your private Google Sheet > Extensions > Apps Script.
-// Use this as the ONLY .gs code in the separate Class reminders / Clients project.
-// Keep the Reviews project unchanged. Run setupClientSync, then deploy as Me / Anyone.
-const CLIENT_HEADERS = ['Client ID','Name','Email','Student Code','Level / Program','Payment status','Amount paid','Hours taught','Updated at'];
+// Paste this into a NEW project, save, and run setupClientSync once.
+const CLIENT_HEADERS = ['Client ID','Name','Email','Student Code','Level / Program','Payment status','Amount paid','Hours taught','Updated at (UTC)'];
 function setupClientSync() {
  const ss=SpreadsheetApp.getActiveSpreadsheet();
  if(!ss)throw new Error('Open Apps Script from your Google Sheet.');
@@ -10,7 +9,7 @@ function setupClientSync() {
  if(!props.getProperty('CLIENT_SYNC_KEY'))props.setProperty('CLIENT_SYNC_KEY',Utilities.getUuid()+Utilities.getUuid());
  const sheet=ss.getSheetByName('Clients')||ss.insertSheet('Clients');
  if(sheet.getLastRow()===0)sheet.appendRow(CLIENT_HEADERS);
- else if(JSON.stringify(sheet.getRange(1,1,1,CLIENT_HEADERS.length).getValues()[0].map((value,index)=>index===8&&value==='Updated at (UTC)'?'Updated at':value))!==JSON.stringify(CLIENT_HEADERS))throw new Error('Rename the existing Clients tab; its headers differ. No data was replaced.');
+ else if(JSON.stringify(sheet.getRange(1,1,1,CLIENT_HEADERS.length).getValues()[0])!==JSON.stringify(CLIENT_HEADERS))throw new Error('Rename the existing Clients tab; its headers differ. No data was replaced.');
  sheet.setFrozenRows(1);sheet.getRange('A1:I1').setFontWeight('bold');sheet.getRange('D2:D').setNumberFormat('@');sheet.autoResizeColumns(1,9);
  SpreadsheetApp.getUi().alert('Clients sheet ready','Keep your connection key private. Find it under Apps Script > Project Settings > Script Properties > CLIENT_SYNC_KEY. Do not send it in chat. After deploying, share only the web app URL with your website maintainer.',SpreadsheetApp.getUi().ButtonSet.OK);
 }
@@ -24,10 +23,9 @@ function doPost(e){
   const p=JSON.parse(e.postData.contents),props=PropertiesService.getScriptProperties();
   const key=props.getProperty('CLIENT_SYNC_KEY');
   if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
-  if(p.action==='checkConnection'){const id=props.getProperty('CLIENT_SHEET_ID');if(!id)throw new Error('Run setupClientSync first.');const sheet=SpreadsheetApp.openById(id).getSheetByName('Clients');if(!sheet)throw new Error('Clients tab is missing. Run setupClientSync.');return clientSyncResponse({ok:true,connected:true});}
   if(p.action!=='upsertClient'||!p.client)throw new Error('Invalid action.');
   const c=p.client,name=String(c.name||'').trim(),email=String(c.email||'').trim().toLowerCase(),code=String(c.code||'').trim(),id=String(c.id||'');
-  if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!name||name.length>100||!/^(?:\d{4}|\d{6})$/.test(code)||code==='1962'||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Check client details.');
+  if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!name||name.length>100||!/^\d{4}$/.test(code)||code==='1962'||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Check client details.');
   const hours=Number(c.hours),amount=Number(c.amountPaid??0);
   if(!Number.isFinite(hours)||hours<0||hours>100000||!Number.isFinite(amount)||amount<0||amount>100000000)throw new Error('Invalid hours or amount.');
   if(!['Unpaid','Part paid','Paid'].includes(c.payment)||!String(c.level||'')||String(c.level).length>100)throw new Error('Invalid program or payment status.');
@@ -37,7 +35,7 @@ function doPost(e){
   let rowNumber=sheet.getLastRow()+1;
   rows.forEach((row,i)=>{
    if(String(row[0])===id){rowNumber=i+2;return;}
-   if(String(row[3]).padStart(code.length,'0')===code)throw new Error('Student Code is already assigned.');
+   if(String(row[3]).padStart(4,'0')===code)throw new Error('Student Code is already assigned.');
    if(normalizedClientName(row[1])===normalizedClientName(name))throw new Error('Client name is already registered.');
    if(String(row[2]).toLowerCase()===email)throw new Error('Email already belongs to another client.');
   });
@@ -46,10 +44,4 @@ function doPost(e){
   return clientSyncResponse({ok:true,clientId:id});
  }catch(error){return clientSyncResponse({ok:false,error:error.message});}
  finally{if(lock.hasLock())lock.releaseLock();}
-}
-
-// Public health check: no student details or keys are exposed.
-function doGet() {
- const props=PropertiesService.getScriptProperties();
- return clientSyncResponse({ok:true,service:'Speak Boldly Clients',configured:!!(props.getProperty('CLIENT_SHEET_ID')&&props.getProperty('CLIENT_SYNC_KEY'))});
 }

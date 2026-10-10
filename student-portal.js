@@ -3,7 +3,7 @@ import {openPopup} from './popups.js';
 import {takeStudentAttempt} from './student-attempts.js';
 import {showInteractiveExam} from './interactive-exams.js';
 import {backendBase,loginStudent,clearStudent,fileBytes} from './exam-api.js';
-import {findStudentAccess,canOpenSection,canOpenFile} from './portal-access.js?v=six-digit-students';
+import {findStudentAccess,canOpenSection,canOpenFile} from './portal-access.js?v=four-digit-restored';
 import {portalResources} from './portal-config.js';
 import {loadPortalMaterials} from './portal-materials.js';
 export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMaterials){

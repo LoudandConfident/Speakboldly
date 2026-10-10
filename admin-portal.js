@@ -2,8 +2,8 @@ import {initializeClientSheet,clientSheetConnected,syncClientToSheet} from './cl
 import {initializeExamReview} from './exam-review.js';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
 import {initializeAdminCalendar} from './admin-calendar.js?v=calendar-only-scheduling';
-import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=six-digit-students';
-import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=six-digit-students';
+import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=four-digit-restored';
+import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=four-digit-restored';
 import {loadPortalMaterials} from './portal-materials.js';
 // Fixed Admin portal convenience code, independent of each assigned Student Code.
 const ADMIN_CODE='1962';
