@@ -25,7 +25,7 @@ function handleClientSync(e){
   if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
   if(p.action!=='upsertClient'||!p.client)throw new Error('Invalid action.');
   const c=p.client,name=String(c.name||'').trim(),email=String(c.email||'').trim().toLowerCase(),code=String(c.code||'').trim(),id=String(c.id||'');
-  if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!name||name.length>100||!/^\d{4}$/.test(code)||code==='1962'||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Check client details.');
+  if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!name||name.length>100||!/^(?:\d{4}|\d{6})$/.test(code)||code==='1962'||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Check client details.');
   const hours=Number(c.hours),amount=Number(c.amountPaid??0);
   if(!Number.isFinite(hours)||hours<0||hours>100000||!Number.isFinite(amount)||amount<0||amount>100000000)throw new Error('Invalid hours or amount.');
   if(!['Unpaid','Part paid','Paid'].includes(c.payment)||!String(c.level||'')||String(c.level).length>100)throw new Error('Invalid program or payment status.');
@@ -35,7 +35,7 @@ function handleClientSync(e){
   let rowNumber=sheet.getLastRow()+1;
   rows.forEach((row,i)=>{
    if(String(row[0])===id){rowNumber=i+2;return;}
-   if(String(row[3]).padStart(4,'0')===code)throw new Error('Student Code is already assigned.');
+   if(String(row[3]).padStart(code.length,'0')===code)throw new Error('Student Code is already assigned.');
    if(normalizedClientName(row[1])===normalizedClientName(name))throw new Error('Client name is already registered.');
    if(String(row[2]).toLowerCase()===email)throw new Error('Email already belongs to another client.');
   });

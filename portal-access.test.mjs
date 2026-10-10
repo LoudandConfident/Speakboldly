@@ -2,13 +2,13 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import {findStudentAccess,canOpenSection,canOpenFile,filePermission} from './portal-access.js';
 import {validateClient} from './admin-clients.js';
 test('assigned codes return only folder metadata, no client identity, and reject ambiguous codes',()=>{
- const client={name:'Example',email:'test@example.com',level:'3',code:'4821',permissions:['section:exercises']};
+ const client={name:'Example',email:'test@example.com',level:'3',code:'482123',permissions:['section:exercises']};
  const storage={getItem:()=>JSON.stringify([client])};
- assert.deepEqual(findStudentAccess('4821',storage),{code:'4821',number:1,level:'3',permissions:['section:exercises']});
+ assert.deepEqual(findStudentAccess('482123',storage),{code:'482123',number:1,level:'3',permissions:['section:exercises']});
  assert.equal(findStudentAccess('1962',storage),null);
  assert.equal(findStudentAccess('1962',{getItem:()=>JSON.stringify([{...client,code:'1962'}])}),null);
- assert.equal(findStudentAccess('4821',{getItem:()=>JSON.stringify([client,client])}),null);
- assert.equal(findStudentAccess('4821',{getItem:()=>'{invalid'}),null);
+ assert.equal(findStudentAccess('482123',{getItem:()=>JSON.stringify([client,client])}),null);
+ assert.equal(findStudentAccess('482123',{getItem:()=>'{invalid'}),null);
 });
 test('file access requires both its folder and its exact file grant',()=>{
  const url='https://loudandconfident.github.io/Speakboldly/student-files/exercises/one.pdf';
@@ -18,15 +18,22 @@ test('file access requires both its folder and its exact file grant',()=>{
  assert.equal(canOpenFile({permissions:[grant]},'exercises',url),false);
  assert.equal(canOpenSection(access,'exams'),false);
 });
-test('student codes must be four digits and unique when creating or editing clients',()=>{
- const input={name:'Example',email:'one@example.com',level:'1',payment:'Paid',hours:0,code:'4821'};
+test('student codes must be six digits and unique when creating or editing clients',()=>{
+ const input={name:'Example',email:'one@example.com',level:'1',payment:'Paid',hours:0,code:'482123'};
  const client={id:'one',...validateClient(input)};
  assert.throws(()=>validateClient({...input,email:'two@example.com'},[client]),/already assigned/);
  assert.doesNotThrow(()=>validateClient(input,[client],'one'));
- for(const code of ['', '123','12345','abcd'])assert.throws(()=>validateClient({...input,code}));
+ for(const code of ['', '123','1234','12345','1234567','abcdef'])assert.throws(()=>validateClient({...input,code}));
 });
 test('renaming material books preserves previously assigned file permissions',()=>{
  const access={permissions:['section:material','file:material:/Speakboldly/student-files/material/Berlitz%20English%20Level%205%20_-_%20Book.pdf']};
  assert.equal(canOpenFile(access,'material','https://loudandconfident.github.io/Speakboldly/student-files/material/B-Level-5-Book.pdf'),true);
  assert.equal(canOpenFile(access,'material','https://loudandconfident.github.io/Speakboldly/student-files/material/B-Level-6-Book.pdf'),false);
+});
+
+test('four-digit student codes stop working without changing stored student records',()=>{
+ const storage={getItem:()=>JSON.stringify([{code:'4821',level:'3',permissions:[]}])};
+ assert.equal(findStudentAccess('4821',storage),null);
+ const updated={getItem:()=>JSON.stringify([{code:'004821',level:'3',permissions:[]}])};
+ assert.equal(findStudentAccess('004821',updated).code,'004821');
 });

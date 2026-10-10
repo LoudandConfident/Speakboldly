@@ -11,11 +11,11 @@ test('private workflow links clients, tracks access, hides grades until review a
  const {api}=app;assert.equal((await api('admin/clients')).status,401);
  assert.equal((await api('admin/login',null,{password:'wrong'})).status,401);
  const owner=(await api('admin/login',null,{password:'test-owner-password'})).data.token;
- const first=(await api('admin/clients',owner,client('First','4821'))).data.client;
- const second=(await api('admin/clients',owner,client('Second','4831'))).data.client;
+ const first=(await api('admin/clients',owner,client('First','482123'))).data.client;
+ const second=(await api('admin/clients',owner,client('Second','483123'))).data.client;
  assert.notEqual(first.id,second.id);
- const login=(await api('student/login',null,{code:'4821'})).data;const student=login.token;
- const other=(await api('student/login',null,{code:'4831'})).data.token;
+ const login=(await api('student/login',null,{code:'482123'})).data;const student=login.token;
+ const other=(await api('student/login',null,{code:'483123'})).data.token;
  assert.equal((await api('admin/clients',student)).status,401);
  assert.equal((await api('student/login',null,{code:'1962'})).status,401);
  const opened=await api('student/exams/1',student);assert.equal(opened.status,200);assert(!JSON.stringify(opened.data).includes('correct'));assert(!JSON.stringify(opened.data).includes('teacher'));
@@ -34,8 +34,8 @@ test('private workflow links clients, tracks access, hides grades until review a
 });
 test('clients, submissions and reviewed percentages survive backend restart',async()=>{
  const folder=mkdtempSync(join(tmpdir(),'speak-boldly-db-')),path=join(folder,'portal.sqlite');let app=await start(path);
- try{const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;await app.api('admin/clients',owner,client('Persisted','4821'));
- const student=(await app.api('student/login',null,{code:'4821'})).data.token;
+ try{const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;await app.api('admin/clients',owner,client('Persisted','482123'));
+ const student=(await app.api('student/login',null,{code:'482123'})).data.token;
  const id=(await app.api('student/exams/1',student)).data.attempt.id;
  await app.api('student/attempts/'+id+'/submit',student,{answers:{A:{1:0},B:{},C:{},D:'Test summary',E:'Test essay'}});
  await app.api('admin/attempts/'+id+'/review',owner,{marks:{B:10,C:10,D:10,E:10},feedback:'Reviewed'});
@@ -45,30 +45,30 @@ test('clients, submissions and reviewed percentages survive backend restart',asy
 });
 test('unconfigured private backend reports unavailable instead of pretending to save',async()=>{
  const backend=createExamBackend({dbPath:':memory:',adminPassword:'',exams:[]}),server=http.createServer((q,r)=>backend.handle(q,r));await new Promise(r=>server.listen(0,'127.0.0.1',r));
- try{const response=await fetch('http://127.0.0.1:'+server.address().port+'/api/student/login',{method:'POST',body:JSON.stringify({code:'4821'})});assert.equal(response.status,503);}finally{await new Promise(r=>server.close(r));backend.close();}
+ try{const response=await fetch('http://127.0.0.1:'+server.address().port+'/api/student/login',{method:'POST',body:JSON.stringify({code:'482123'})});assert.equal(response.status,503);}finally{await new Promise(r=>server.close(r));backend.close();}
 });
 test('private student login allows three entries per account per day and leaves owner login unaffected',async()=>{
  const app=await start();try{
  const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
- await app.api('admin/clients',owner,client('Limited','4821'));await app.api('admin/clients',owner,client('Other','4831'));
- for(let i=0;i<3;i++)assert.equal((await app.api('student/login',null,{code:'4821'})).status,200);
- assert.equal((await app.api('student/login',null,{code:'4821'})).status,429);
- assert.equal((await app.api('student/login',null,{code:'4831'})).status,200);
+ await app.api('admin/clients',owner,client('Limited','482123'));await app.api('admin/clients',owner,client('Other','483123'));
+ for(let i=0;i<3;i++)assert.equal((await app.api('student/login',null,{code:'482123'})).status,200);
+ assert.equal((await app.api('student/login',null,{code:'482123'})).status,429);
+ assert.equal((await app.api('student/login',null,{code:'483123'})).status,200);
  assert.equal((await app.api('admin/clients',owner)).status,200);
  }finally{await app.close();}
 });
 test('three incorrect student codes block more guesses for the day without blocking the owner',async()=>{
  const app=await start();try{
- for(let i=0;i<3;i++)assert.equal((await app.api('student/login',null,{code:'9999'})).status,401);
- assert.equal((await app.api('student/login',null,{code:'9999'})).status,429);
+ for(let i=0;i<3;i++)assert.equal((await app.api('student/login',null,{code:'999923'})).status,401);
+ assert.equal((await app.api('student/login',null,{code:'999923'})).status,429);
  assert.equal((await app.api('admin/login',null,{password:'test-owner-password'})).status,200);
  }finally{await app.close();}
 });
 test('review emails the registered client, avoids duplicates, and preserves marks on delivery failure',async()=>{
  const messages=[];let failing=false;const app=await start(':memory:',{sendScoreEmail:async message=>{if(failing)throw new Error('SMTP unavailable');messages.push(message);}});
  try{const {api}=app;const owner=(await api('admin/login',null,{password:'test-owner-password'})).data.token;
- await api('admin/clients',owner,{...client('Recipient','4821'),amountPaid:1200});
- const student=(await api('student/login',null,{code:'4821'})).data.token;
+ await api('admin/clients',owner,{...client('Recipient','482123'),amountPaid:1200});
+ const student=(await api('student/login',null,{code:'482123'})).data.token;
  const id=(await api('student/exams/1',student)).data.attempt.id;
  await api('student/attempts/'+id+'/submit',student,{answers:{A:{1:0},B:{},C:{},D:'',E:''}});
  const data={marks:{B:10,C:10,D:10,E:10},feedback:'Keep practising',to:'attacker@example.com'};
@@ -84,8 +84,8 @@ test('review emails the registered client, avoids duplicates, and preserves mark
 test('server deadlines save drafts, enforce teacher-approved extra time, and revoke changed codes',async()=>{
  let clock=Date.now();const app=await start(':memory:',{now:()=>clock});
  try{const {api}=app,owner=(await api('admin/login',null,{password:'test-owner-password'})).data.token;
- const person=(await api('admin/clients',owner,client('Timed','4821'))).data.client;
- const student=(await api('student/login',null,{code:'4821'})).data.token;
+ const person=(await api('admin/clients',owner,client('Timed','482123'))).data.client;
+ const student=(await api('student/login',null,{code:'482123'})).data.token;
  const opened=(await api('student/exams/1',student)).data.attempt,id=opened.id;assert.equal(opened.deadline,clock+25*60000);
  await api('student/attempts/'+id+'/draft',student,{answers:{A:{1:0},B:{1:'Saved'},C:{},D:'',E:''}});
  assert.equal((await api('student/attempts/'+id+'/extra-time',student,{})).data.attempt.extension,'pending');
@@ -94,17 +94,17 @@ test('server deadlines save drafts, enforce teacher-approved extra time, and rev
  assert.equal(extended.deadline,clock+10*60000);assert.equal(extended.submittedAt,null);assert.equal(extended.draftAnswers.B[1],'Saved');
  assert.equal((await api('student/attempts/'+id+'/extra-time',student,{})).status,400);
  clock+=11*60000;assert.equal((await api('student/attempts/'+id,student)).data.attempt.autoSubmitted,true);
- await api('admin/clients',owner,{...person,code:'4831'});assert.equal((await api('student/attempts/'+id,student)).status,401);
+ await api('admin/clients',owner,{...person,code:'483123'});assert.equal((await api('student/attempts/'+id,student)).status,401);
  }finally{await app.close();}
 });
 test('computer uploads grant a client private file access and reject other students',async()=>{
  const folder=mkdtempSync(join(tmpdir(),'speak-boldly-files-')),app=await start(':memory:',{storageDirectory:folder});
  try{const {api}=app,owner=(await api('admin/login',null,{password:'test-owner-password'})).data.token;
- const person=(await api('admin/clients',owner,client('Files','4821'))).data.client;
- await api('admin/clients',owner,client('Otherfiles','4831'));
+ const person=(await api('admin/clients',owner,client('Files','482123'))).data.client;
+ await api('admin/clients',owner,client('Otherfiles','483123'));
  const data=new FormData();data.set('section','material');data.set('clientId',person.id);data.set('file',new Blob(['%PDF-1.7\nTest'],{type:'application/pdf'}),'Lesson.pdf');
  const uploaded=await fetch(app.base+'/api/admin/files',{method:'POST',headers:{Authorization:'Bearer '+owner},body:data});assert.equal(uploaded.status,200);const file=(await uploaded.json()).file;
- const student=(await api('student/login',null,{code:'4821'})).data.token,other=(await api('student/login',null,{code:'4831'})).data.token;
+ const student=(await api('student/login',null,{code:'482123'})).data.token,other=(await api('student/login',null,{code:'483123'})).data.token;
  const fetchFile=token=>fetch(app.base+file.url,{headers:token?{Authorization:'Bearer '+token}:{}});
  assert.equal((await fetchFile()).status,401);assert.equal((await fetchFile(other)).status,403);
  const response=await fetchFile(student);assert.equal(response.status,200);assert.equal(response.headers.get('content-disposition'),'inline');assert.equal(await response.text(),'%PDF-1.7\nTest');
@@ -116,8 +116,8 @@ test('class scheduling is private, retains class times and supports cancelling r
  try{
   assert.equal((await app.api('admin/classes')).status,401);
   const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
-  const person=(await app.api('admin/clients',owner,client('Classes','4921'))).data.client;
-  const student=(await app.api('student/login',null,{code:'4921'})).data.token;
+  const person=(await app.api('admin/clients',owner,client('Classes','492123'))).data.client;
+  const student=(await app.api('student/login',null,{code:'492123'})).data.token;
   assert.equal((await app.api('admin/classes',student)).status,401);
   const booking={clientId:person.id,number:5,date:'2028-01-15',time:'14:30'};
   assert.equal((await app.api('admin/classes',owner,{...booking,time:''})).status,400);
@@ -133,7 +133,7 @@ test('class scheduling is private, retains class times and supports cancelling r
 test('owner can schedule classes before private exam content is uploaded',async()=>{
  const app=await start(':memory:',{exams:[]});try{
   const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
-  const person=(await app.api('admin/clients',owner,client('Calendar','4921'))).data.client;
+  const person=(await app.api('admin/clients',owner,client('Calendar','492123'))).data.client;
   const saved=await app.api('admin/classes',owner,{clientId:person.id,number:1,date:'2028-01-15',time:'14:30'});
   assert.equal(saved.status,201);assert.equal(saved.data.emailReady,false);
   assert.equal((await app.api('admin/attempts',owner)).status,503);
@@ -143,10 +143,10 @@ test('confirmation button queues future classes for current and subsequently reg
  const app=await start(':memory:',{sendReminderEmail:async()=>{}});try{
   assert.equal((await app.api('admin/classes/send-confirmations',null,{})).status,401);
   const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
-  const first=(await app.api('admin/clients',owner,client('Existing','4821'))).data.client;
+  const first=(await app.api('admin/clients',owner,client('Existing','482123'))).data.client;
   await app.api('admin/classes',owner,{clientId:first.id,number:1,date:'2028-01-15',time:'14:30'});
   const queued=await app.api('admin/classes/send-confirmations',owner,{});assert.equal(queued.status,202);assert.equal(queued.data.queued,1);
-  const addedLater=(await app.api('admin/clients',owner,client('New','4921'))).data.client;
+  const addedLater=(await app.api('admin/clients',owner,client('New','492123'))).data.client;
   await app.api('admin/classes',owner,{clientId:addedLater.id,number:1,date:'2028-01-15',time:'15:00'});
   assert.equal((await app.api('admin/classes/send-confirmations',owner,{})).data.queued,2);
  }finally{await app.close();}
@@ -158,9 +158,9 @@ test('confirmation button queues future classes for current and subsequently reg
 test('private client storage rejects duplicate names and codes and allows editing the same client',async()=>{
  const app=await start();try{
   const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
-  const saved=(await app.api('admin/clients',owner,client('Learner','4821'))).data.client;
-  const repeatedName=await app.api('admin/clients',owner,{...client('Other','4921'),name:' LEARNER '});assert.equal(repeatedName.status,400);assert.match(repeatedName.data.error,/name is already registered/);
-  const repeatedCode=await app.api('admin/clients',owner,client('Other','4821'));assert.equal(repeatedCode.status,400);assert.match(repeatedCode.data.error,/Code is already assigned/);
+  const saved=(await app.api('admin/clients',owner,client('Learner','482123'))).data.client;
+  const repeatedName=await app.api('admin/clients',owner,{...client('Other','492123'),name:' LEARNER '});assert.equal(repeatedName.status,400);assert.match(repeatedName.data.error,/name is already registered/);
+  const repeatedCode=await app.api('admin/clients',owner,client('Other','482123'));assert.equal(repeatedCode.status,400);assert.match(repeatedCode.data.error,/Code is already assigned/);
   assert.equal((await app.api('admin/clients',owner,{...saved,hours:2})).status,200);
  }finally{await app.close();}
 });
