@@ -83,3 +83,7 @@ main{position:relative}#home{position:relative}.daily-motivation{position:absolu
 #daily-quote .motivation-subscribe>#newsletter-open{grid-column:2;grid-row:1/3;margin:0}
 #daily-quote .newsletter-form{grid-column:1/-1;max-width:480px;margin-top:12px}
 @media(max-width:800px){#daily-quote .motivation-layout{grid-template-columns:1fr}#daily-quote #daily-quote-image{height:auto;max-height:340px}#daily-quote .motivation-layout>.motivation-subscribe{grid-template-columns:1fr}#daily-quote .motivation-subscribe>#newsletter-open{grid-column:1;grid-row:auto;justify-self:start;margin-top:8px}}
+
+/* Show the entire coaching illustration inside the available home image area. */
+main #home .coaching-photo{height:auto;aspect-ratio:16/9;width:100%;background:transparent}
+main #home .coaching-photo img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
