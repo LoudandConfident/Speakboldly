@@ -87,3 +87,9 @@ main{position:relative}#home{position:relative}.daily-motivation{position:absolu
 /* Show the entire coaching illustration inside the available home image area. */
 main #home .coaching-photo{height:auto;aspect-ratio:16/9;width:100%;background:transparent}
 main #home .coaching-photo img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+
+body .page-signature{font-family:"DM Sans",sans-serif;font-size:12px;font-style:normal;line-height:1.5;color:var(--ink)}
+main #home .hero-copy{transform:translateY(-6px)}
+main #home>.page-signature{font-size:12px}
+#daily-quote>.page-signature{margin-top:16px;font-size:12px}
+@media(min-width:1100px) and (min-height:640px){main #home{min-height:calc(100dvh - 116px)}main #home .hero{padding-bottom:16px}main #home>.page-signature{padding-bottom:14px}}
