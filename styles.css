@@ -164,3 +164,7 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 .review-card blockquote{margin:18px 0 0;font-size:22px;line-height:1.55}.review-card h3{font-size:16px}.review-card-details{font-size:12px}@media(max-width:680px){.review-card blockquote{font-size:19px}}
 
 .reviews-layout{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.5fr);gap:42px;align-items:start}.reviews-copy #review-open{width:auto;height:auto;min-height:28px;padding:5px 12px;font-size:11px;border-radius:6px}.reviews-album-area{min-width:0}.reviews-album-area .review-album{width:100%;margin:0;max-width:none}.reviews-album-area .review-cards{min-height:380px}.reviews-album-area .review-card{max-height:350px;padding:22px}.reviews-album-area #review-list-status{margin-top:16px}@media(max-width:800px){.reviews-layout{grid-template-columns:1fr;gap:24px}.reviews-album-area .review-cards{min-height:330px}.reviews-album-area .review-card{max-height:300px}}
+
+#reviews #review-position{margin-top:-20px;position:relative}#reviews>.page-signature{transform:translateY(-16px)}@media(min-width:801px){.reviews-layout{gap:62px}.reviews-album-area{transform:translateX(12px)}}
+
+.reviews-copy #review-open{min-height:40px;padding:11px 12px}#home .home-bottom-row>.review-link{min-height:36px;padding:8px 10px}
