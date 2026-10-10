@@ -4,19 +4,19 @@ export const dailyQuotes = [
  { image: './images/daily-motivation-2.png', alt: 'A welcoming study space with notes and books', quote: 'Drop the shame and get in the game.' },
  { image: './images/daily-motivation-3.png', alt: 'A runner preparing to move forward', quote: 'It’s not how you start that matters. It’s how you finish.' },
  { image: './images/daily-motivation-4.png', alt: 'A woman celebrating on a mountain at sunrise', quote: 'It is never too late to be what you might have been.' },
- { image: './images/daily-motivation-5.png', alt: 'An open window overlooking a mountain lake', quote: 'To learn a language is to have one more window from which to look at the world.' } ,{ image: './images/daily-motivation-translation.png', alt: 'A quiet cafe scene with a thoughtful speech bubble', quote: 'Lost in Translation? Don’t translate every thought—think in English.', embedded: true },
- { image: './images/daily-motivation-fluency.png', alt: 'A work in progress sign in a sunny street', quote: 'Fluency: loading… Work in progress.', embedded: true },
- { image: './images/daily-motivation-doors.png', alt: 'An open green door leading to a flower-lined street', quote: 'English opens doors. Don’t let hesitation keep you from entering them.', embedded: true },
- { image: './images/daily-motivation-unmute.png', alt: 'A microphone on a sunlit desk', quote: 'Unmute yourself. You have something to say. Say it in English.', embedded: true },
- { image: './images/daily-motivation-talk.png', alt: 'A hand holding a microphone beside a notebook', quote: 'Your turn to talk.', embedded: true }
+ { image: './images/daily-motivation-5.png', alt: 'An open window overlooking a mountain lake', quote: 'To learn a language is to have one more window from which to look at the world.' } ,{ image: './images/daily-motivation-translation-clean.png', alt: 'A quiet cafe scene with a thoughtful speech bubble', quote: 'Lost in Translation? Don’t translate every thought—think in English.', embedded: false },
+ { image: './images/daily-motivation-fluency-clean.png', alt: 'A work in progress sign in a sunny street', quote: 'Fluency: loading… Work in progress.', embedded: false },
+ { image: './images/daily-motivation-doors-clean.png', alt: 'An open green door leading to a flower-lined street', quote: 'English opens doors. Don’t let hesitation keep you from entering them.', embedded: false },
+ { image: './images/daily-motivation-unmute-clean.png', alt: 'A microphone on a sunlit desk', quote: 'Unmute yourself. You have something to say. Say it in English.', embedded: false },
+ { image: './images/daily-motivation-talk-clean.png', alt: 'A hand holding a microphone beside a notebook', quote: 'Your turn to talk.', embedded: false }
 ];
 dailyQuotes.push(
- {image:'./images/daily-motivation-start.png',alt:'A hand opening curtains to a bright morning',quote:'Start when you’re not ready.',embedded:true},
- {image:'./images/daily-motivation-listen.png',alt:'Headphones and an open book on a sunlit desk',quote:'Listen. Learn. Try again.',embedded:true},
- {image:'./images/daily-motivation-keep-going.png',alt:'A winding countryside path leading towards sunrise',quote:'Keep going. You’re getting there.',embedded:true}
+ {image:'./images/daily-motivation-start-clean.png',alt:'A hand opening curtains to a bright morning',quote:'Start when you’re not ready.',embedded:false},
+ {image:'./images/daily-motivation-listen-clean.png',alt:'Headphones and an open book on a sunlit desk',quote:'Listen. Learn. Try again.',embedded:false},
+ {image:'./images/daily-motivation-keep-going-clean.png',alt:'A winding countryside path leading towards sunrise',quote:'Keep going. You’re getting there.',embedded:false}
 );
-dailyQuotes.push({image:'./images/daily-motivation-accents-pyramids.png',alt:'A foreign tourist in a sun hat speaking with an Egyptian tour guide at the Pyramids of Giza',quote:'عقدة الخواجة — Your accent tells your story.',displayTitle:'عقدة الخواجة',embedded:true});
-dailyQuotes.push({image:'./images/daily-motivation-french.png',alt:'An original green cartoon bird reminding a learner to practise French',quote:'I learn French myself!',embedded:false});
+dailyQuotes.push({image:'./images/daily-motivation-accents-pyramids-clean.png',alt:'A foreign tourist in a sun hat speaking with an Egyptian tour guide at the Pyramids of Giza',quote:'عقدة الخواجة — Your accent tells your story.',embedded:false});
+dailyQuotes.push({image:'./images/daily-motivation-french-clean.png',alt:'An original green cartoon bird reminding a learner to practise French',quote:'I learn French myself!',embedded:false});
 export function cairoDayNumber(now = new Date()) {
  const parts = new Intl.DateTimeFormat('en-GB', {timeZone:'Africa/Cairo', year:'numeric', month:'2-digit', day:'2-digit'}).formatToParts(now);
  const part = type => Number(parts.find(p => p.type === type).value);
@@ -76,7 +76,7 @@ export function initializeGallery(doc, win) {
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');
   const headline = doc.createElement('strong');
   const heading = page.querySelector('#daily-quote-text');
-  const title = entry.displayTitle || (entry.embedded ? '' : entry.quote);
+  const title = entry.quote;
   headline.textContent = title;
   heading.replaceChildren(headline);
   heading.hidden = !title;

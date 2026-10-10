@@ -1,36 +1,68 @@
 import {openPopup} from './popups.js';
-import {EMAIL_ENDPOINT} from './placement-config.js';
 import {courses} from './courses.js';
-export function initializeReviews(doc, send = fetch) {
- const opener = doc.querySelector('#review-open');
- const form = doc.querySelector('#review-form');
+import {backendBase,request} from './exam-api.js';
+export function initializeReviews(doc, api = request, connected = () => !!backendBase()) {
+ const opener = doc.querySelector('#review-open'), form = doc.querySelector('#review-form');
  if (!opener || !form) return;
- const programSelect = form.elements.program;
- for (const course of courses) {
-  const option = doc.createElement('option');
-  option.value = course.title; option.textContent = course.title;
-  programSelect.append(option);
+ const album = doc.querySelector('#review-album'), cards = doc.querySelector('#review-cards');
+ const listStatus = doc.querySelector('#review-list-status'), position = doc.querySelector('#review-position');
+ const previous = doc.querySelector('#review-previous'), next = doc.querySelector('#review-next');
+ let reviews = [], selected = 0, submissionId = null;
+ for (const course of courses) {const option = doc.createElement('option');option.value = option.textContent = course.title;form.elements.program.append(option);}
+ function render() {
+  if (!album) return;
+  album.hidden = !reviews.length;
+  cards.replaceChildren();
+  if (!reviews.length) return;
+  selected = Math.min(selected,reviews.length-1);
+  const indices = [...new Set([selected-1,selected+1,selected].map(i => (i+reviews.length)%reviews.length))];
+  for (const index of indices) {
+   const review = reviews[index], card = doc.createElement('article');
+   const side = index === selected ? 'selected' : index === (selected-1+reviews.length)%reviews.length ? 'previous' : 'next';
+   card.className = 'review-card is-'+side;
+   if (side !== 'selected') card.setAttribute('aria-hidden','true');
+   const quote = doc.createElement('blockquote');quote.textContent = review.message;
+   const name = doc.createElement('h3');name.textContent = review.name || 'Anonymous';
+   const detail = doc.createElement('p');detail.className = 'review-card-details';detail.textContent = [review.program,review.level,review.age ? 'Age '+review.age : ''].filter(Boolean).join(' · ');
+   card.append(quote,name,detail);cards.append(card);
+  }
+  previous.disabled = next.disabled = reviews.length < 2;
+  position.textContent = 'Review '+(selected+1)+' of '+reviews.length;
  }
- opener.addEventListener('click', () => openPopup(doc.querySelector('#review-dialog')));
+ async function load() {
+  if (!connected()) {listStatus.textContent = 'Review sharing is being connected. Public reviews will appear here.';album.hidden = true;return;}
+  listStatus.textContent = 'Loading reviews…';
+  try {reviews = (await api('reviews')).reviews;render();listStatus.textContent = reviews.length ? '' : 'Be the first to share your experience.';}
+  catch {listStatus.textContent = 'Reviews could not be loaded. Please try again later.';}
+ }
+ previous?.addEventListener('click',()=>{selected = (selected-1+reviews.length)%reviews.length;render();});
+ next?.addEventListener('click',()=>{selected = (selected+1)%reviews.length;render();});
+ cards?.addEventListener('keydown',event=>{if (event.key === 'ArrowLeft') previous.click();if (event.key === 'ArrowRight') next.click();});
+ opener.addEventListener('click', () => {
+  openPopup(doc.querySelector('#review-dialog'));
+  form.querySelector('button[type=submit]').disabled = !connected();
+  if (!connected()) doc.querySelector('#review-status').textContent = 'Review sharing is not connected yet. Please come back once it is ready.';
+ });
+ form.addEventListener('input',()=>{submissionId = null;});
  form.addEventListener('submit', async event => {
   event.preventDefault();
   if (!form.reportValidity()) return;
-  const button = form.querySelector('button[type=submit]');
-  const status = doc.querySelector('#review-status');
-  button.disabled = true;
-  status.textContent = 'Sending your review…';
+  const button = form.querySelector('button[type=submit]'), status = doc.querySelector('#review-status');
+  if (!connected()) {status.textContent = 'Review sharing is not connected yet.';return;}
+  button.disabled = true;status.textContent = 'Sharing your review…';
+  submissionId ||= doc.defaultView.crypto.randomUUID();
   try {
-   const response = await send(EMAIL_ENDPOINT, {
-    method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
-    body:JSON.stringify({_subject:'Speak Boldly — review awaiting approval',name:form.elements.name.value.trim() || 'Anonymous',age:form.elements.age.value || 'Not shared',program:form.elements.program.value,level:form.elements.level.value.trim(),review:form.elements.message.value.trim(),publicationConsent:'I agree to publication of my review, program, level, and name and age if provided.',consentRecordedAt:new Date().toISOString()})
-   });
-   const result = await response.json();
-   if (!response.ok || !(result.success === true || result.success === 'true')) throw new Error('Request not accepted');
-   status.textContent = 'Thank you! Your review has been submitted for approval before publication.';
-   form.reset();
-  } catch {
-   status.textContent = 'Your review could not be sent. Please try again or email speakboldly16@gmail.com.';
-  } finally {button.disabled = false;}
+   const data = {submissionId,name:form.elements.name.value.trim(),age:form.elements.age.value,program:form.elements.program.value,level:form.elements.level.value.trim(),message:form.elements.message.value.trim()};
+   const result = await api('reviews',{method:'POST',data});
+   reviews = [result.review,...reviews.filter(review=>review.id !== result.review.id)];selected = 0;render();listStatus.textContent = '';
+   status.textContent = 'Thank you! Your review is now published.';form.reset();submissionId = null;
+   doc.dispatchEvent(new doc.defaultView.CustomEvent('reviews-changed'));
+  } catch (error) {status.textContent = error.message || 'Your review could not be shared. Please try again.';}
+  finally {button.disabled = false;}
  });
+ doc.addEventListener('reviews-changed',load);
+ doc.defaultView.addEventListener('hashchange',()=>{if(doc.defaultView.location.hash === '#reviews')load();});
+ load();
+ return {load};
 }
 if (typeof document !== 'undefined') initializeReviews(document);

@@ -1,8 +1,6 @@
 import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } from './assessment-time.js';
 import { questions, TEST_VERSION } from './placement-questions.js';
 import { scoreAnswers } from './placement-scoring.js';
-import { EMAIL_ENDPOINT } from './placement-config.js';
-import { buildResultEmail, emailResponseStatus } from './placement-email.js';
 
 import {courses,matches} from './courses.js';
 const $=s=>document.querySelector(s);
@@ -74,14 +72,6 @@ function finish(record){
  const contact=document.createElement('a');contact.className='button';contact.href='#contact';contact.textContent='Contact us';result.append(contact);
  return record;
 }
-async function sendResult(record){
- if(!EMAIL_ENDPOINT||!record.consent||record.emailStatus==='accepted'||record.emailStatus==='pending')return;
- record.emailStatus='pending';const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),20000);
- try{
-  const response=await fetch(EMAIL_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(buildResultEmail(record)),signal:controller.signal});
-  if(!response.ok)throw new Error('Email request failed');record.emailStatus=emailResponseStatus(await response.json());
- }catch{record.emailStatus='failed';}finally{clearTimeout(timeout);}
-}
 function submitAssessment(timedOut=false){
  if(locked||deadline===null)return;
  const expired=remainingSeconds(deadline)===0;
@@ -89,10 +79,9 @@ function submitAssessment(timedOut=false){
  // A confirmation dialog can remain open past the deadline.
  const autoSubmitted=timedOut||remainingSeconds(deadline)===0;
  const answers=collectAnswers();
- const record={version:TEST_VERSION,attemptId:crypto.randomUUID(),answers,answered:Object.keys(answers).length,submittedAt:new Date().toISOString(),consent:Boolean(EMAIL_ENDPOINT),emailStatus:'not-sent'};
+ const record={version:TEST_VERSION,attemptId:crypto.randomUUID(),answers,answered:Object.keys(answers).length,submittedAt:new Date().toISOString(),consent:false,emailStatus:'disabled'};
  finish(record);
  $('#assessment-timer').textContent=autoSubmitted?'Time is up — answers submitted':'Assessment submitted';
- sendResult(record);
  if(document.querySelector('#assessment-dialog')?.open)$('#placement-result').scrollIntoView({behavior:'smooth'});
 }
 form.addEventListener('submit',e=>{e.preventDefault();submitAssessment();});

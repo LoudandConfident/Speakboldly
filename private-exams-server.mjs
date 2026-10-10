@@ -1,3 +1,4 @@
+import {createPublicReviews} from './reviews-server.mjs';
 import {createClassReminders} from './class-reminders.mjs';
 import {createPortalUploads} from './portal-uploads-server.mjs';
 import {cairoDay} from './student-attempts.js';
@@ -23,6 +24,7 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=
  const limited=new Map(),catalog=new Map(exams.map(e=>[e.level,e]));
  const allClients=()=>db.prepare('SELECT data FROM clients ORDER BY rowid').all().map(r=>JSON.parse(r.data));
  const getClient=id=>{const row=db.prepare('SELECT data FROM clients WHERE id=?').get(id);return row?JSON.parse(row.data):null;};
+ const publicReviews=createPublicReviews({db,now});
  const reminders=createClassReminders({db,getClient,now,sendEmail:sendReminderEmail});
  const error=(message,status=400)=>Object.assign(new Error(message),{status});
  const iso=()=>new Date(now()).toISOString();
@@ -43,18 +45,22 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=
   const url=new URL(req.url,'http://localhost');if(!url.pathname.startsWith('/api/'))return false;
   const origin=req.headers.origin;if(origin&&!origins.includes(origin)){res.writeHead(403,{'Content-Type':'application/json'});res.end(JSON.stringify({error:'This website origin is not allowed.'}));return true;}
   const headers={'Content-Type':'application/json','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'};if(origin){headers['Access-Control-Allow-Origin']=origin;headers.Vary='Origin';}
-  if(req.method==='OPTIONS'){res.writeHead(204,{...headers,'Access-Control-Allow-Methods':'GET,POST,OPTIONS','Access-Control-Allow-Headers':'Authorization,Content-Type'});res.end();return true;}
+  if(req.method==='OPTIONS'){res.writeHead(204,{...headers,'Access-Control-Allow-Methods':'GET,POST,DELETE,OPTIONS','Access-Control-Allow-Headers':'Authorization,Content-Type'});res.end();return true;}
   const send=(value,status=200)=>{res.writeHead(status,headers);res.end(JSON.stringify(value));};
   try{
    const path=url.pathname,method=req.method;
    if(path==='/api/status'&&method==='GET'){send({ready:Boolean(adminPassword)&&catalog.size>0,emailReady:!!sendScoreEmail,remindersReady:!!adminPassword&&reminders.emailReady});return true;}
    if(!adminPassword)throw error('Private storage is not configured.',503);
+   if(path==='/api/reviews'&&method==='GET'){send({reviews:publicReviews.list()});return true;}
+   if(path==='/api/reviews'&&method==='POST'){const result=publicReviews.save(await body(req),req.socket.remoteAddress||'unknown');send(result,result.duplicate?200:201);return true;}
    if(!catalog.size&&!(path.startsWith('/api/admin/')&&!/\/(attempts|exams)(\/|$)/.test(path)))throw error('Private exam storage is not configured.',503);
    if(await uploads(req,res,url,headers))return true;
    if(path==='/api/admin/login'&&method==='POST'){login(req,'admin');const input=await body(req);if(typeof input.password!=='string'||!safeEqual(input.password,adminPassword))throw error('Incorrect owner password.',401);send({token:issue('admin')});return true;}
    if(path==='/api/student/login'&&method==='POST'){login(req,'student');const ip='ip:'+(req.socket.remoteAddress||'unknown');studentLimit(ip);const input=await body(req);if(!/^\d{4}$/.test(input.code||'')||input.code==='1962'){studentLimit(ip,true);throw error('Use your individual client code for an interactive exam.',401);}const client=allClients().find(c=>safeEqual(c.code,input.code));if(!client){studentLimit(ip,true);throw error('Incorrect student code.',401);}studentLimit('client:'+client.id,true);send({token:issue('student',client.id),access:{code:client.code,clientId:client.id,number:allClients().findIndex(c=>c.id===client.id)+1,level:client.level,permissions:client.permissions}});return true;}
    if(path.startsWith('/api/admin/')){
     session(req,'admin');
+    if(path==='/api/admin/reviews'&&method==='GET'){send({reviews:publicReviews.list()});return true;}
+    const deleteReview=path.match(/^\/api\/admin\/reviews\/([a-f0-9-]+)$/);if(deleteReview&&method==='DELETE'){publicReviews.remove(deleteReview[1]);send({ok:true});return true;}
     if(path==='/api/admin/classes/send-confirmations'&&method==='POST'){if(!reminders.emailReady)throw error('Email sending is not connected yet.',503);send(reminders.queueUpcoming(),202);return true;}
     if(path==='/api/admin/classes'&&method==='GET'){send({classes:reminders.list(),emailReady:reminders.emailReady});return true;}
     if(path==='/api/admin/classes'&&method==='POST'){const record=reminders.save(await body(req));send({class:record,emailReady:reminders.emailReady},201);return true;}
