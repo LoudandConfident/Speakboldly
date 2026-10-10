@@ -11,6 +11,10 @@ export async function syncClientToSheet(client,fetcher = globalThis.fetch) {
   try {result = await response.json();} catch {throw new Error('The client sheet could not be reached. Check its deployment.');}
   if (!response.ok || !result.ok || result.clientId !== client.id) throw new Error(result.error || 'The client was not saved to the sheet.');
   return result;
+ } catch(error) {
+  if(error.name === 'AbortError') throw new Error('Google Sheets took too long to respond. Retry syncing; existing rows will not be duplicated.');
+  if(error instanceof TypeError) throw new Error('Could not reach Apps Script. Check that the deployed Web app has access set to Anyone and that this is the Clients deployment URL.');
+  throw error;
  } finally {clearTimeout(timer);}
 }
 export function initializeClientSheet(doc) {

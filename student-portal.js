@@ -1,4 +1,5 @@
 import {renderPdf} from './portal-document.js';
+import {openPopup} from './popups.js';
 import {takeStudentAttempt} from './student-attempts.js';
 import {showInteractiveExam} from './interactive-exams.js';
 import {backendBase,loginStudent,clearStudent,fileBytes} from './exam-api.js';
@@ -8,6 +9,7 @@ import {loadPortalMaterials} from './portal-materials.js';
 export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMaterials){
  const root=doc.querySelector('#students-portal');if(!root)return;
  const areaButtons=[...root.querySelectorAll('[data-portal-area]')];
+ root.querySelector('#portal-sign-out')?.addEventListener('click',()=>{lock(false);doc.dispatchEvent(new doc.defaultView.Event('portal-sign-out'));root.querySelector('#client-portal').hidden=true;root.querySelector('#admin-portal').hidden=true;doc.defaultView.location.hash='students-portal';});
  areaButtons.forEach(button=>button.addEventListener('click',()=>{
   const area=button.dataset.portalArea;
   areaButtons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
@@ -15,6 +17,8 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
   root.querySelector('#admin-portal').hidden=area!=='admin';
   if(area==='admin')lock(false);
   if(area==='client'&&unlocked)refreshMaterials();
+  if(area==='client'&&!unlocked)openPopup(root.querySelector('#student-login-dialog'));
+  if(area==='admin'&&root.querySelector('#admin-dashboard').hidden)openPopup(root.querySelector('#teacher-login-dialog'));
  }));
  const form=root.querySelector('#student-code-form'),gate=root.querySelector('#portal-gate'),content=root.querySelector('#portal-content'),error=root.querySelector('#student-code-error'),input=form.querySelector('input');
  const tabs=[...root.querySelectorAll('[data-portal-tab]')],panels=[...root.querySelectorAll('[data-portal-panel]')];let unlocked=false;
@@ -70,12 +74,13 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
  }
  let generation=0;
  function lock(focus=true){
+  const dialog=root.querySelector('#student-login-dialog');if(dialog?.open)dialog.close();
   generation++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));
-  unlocked=false;access=null;clearStudent();panels.forEach(panel=>panel.querySelector('.portal-document-viewer')?.remove());gate.hidden=false;content.hidden=true;panels.forEach(panel=>panel.hidden=true);form.reset();error.textContent='';input.removeAttribute('aria-invalid');if(focus)input.focus();
+  unlocked=false;root.classList.remove('portal-session-active');access=null;clearStudent();panels.forEach(panel=>panel.querySelector('.portal-document-viewer')?.remove());gate.hidden=false;content.hidden=true;panels.forEach(panel=>panel.hidden=true);form.reset();error.textContent='';input.removeAttribute('aria-invalid');if(focus)input.focus();
  }
  form.addEventListener('submit',async event=>{
   event.preventDefault();const epoch=generation;let found;const code=input.value.trim();try{if(code!=='1962'&&!backendBase())takeStudentAttempt(doc.defaultView.localStorage);found=backendBase()&&code!=='1962'?await loginStudent(code):lookup(code);}catch(message){error.textContent=message.message;return;}if(!found){error.textContent='That Student Code is incorrect. Please ask your teacher for your code.';input.setAttribute('aria-invalid','true');input.focus();return;}
-  if(epoch!==generation){clearStudent();return;}access=found;unlocked=true;error.textContent='';input.removeAttribute('aria-invalid');input.value='';gate.hidden=true;content.hidden=false;updateAccess();refreshMaterials();
+  if(epoch!==generation){clearStudent();return;}access=found;unlocked=true;error.textContent='';input.removeAttribute('aria-invalid');input.value='';gate.hidden=true;content.hidden=false;root.querySelector('#student-login-dialog')?.close();root.classList.add('portal-session-active');doc.defaultView.location.hash='students-portal/student';doc.defaultView.scrollTo({top:0,left:0,behavior:'instant'});updateAccess();refreshMaterials();
  });
  tabs.forEach((tab,i)=>{
   tab.addEventListener('click',()=>select(tab.dataset.portalTab));
