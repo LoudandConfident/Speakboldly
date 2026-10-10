@@ -7,7 +7,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  const album = doc.querySelector('#review-album'), cards = doc.querySelector('#review-cards');
  const listStatus = doc.querySelector('#review-list-status'), position = doc.querySelector('#review-position');
  const previous = doc.querySelector('#review-previous'), next = doc.querySelector('#review-next');
- let reviews = [], selected = 0, submissionId = null;
+ let reviews = [], selected = 0, submissionId = null, awaitingRefresh = false;
  for (const course of courses) {const option = doc.createElement('option');option.value = option.textContent = course.title;form.elements.program.append(option);}
  function render() {
   if (!album) return;
@@ -23,13 +23,14 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
    if (side !== 'selected') card.setAttribute('aria-hidden','true');
    const quote = doc.createElement('blockquote');quote.textContent = review.message;
    const name = doc.createElement('h3');name.textContent = review.name || 'Anonymous';
-   const detail = doc.createElement('p');detail.className = 'review-card-details';detail.textContent = [review.program,review.level,review.age ? 'Age '+review.age : ''].filter(Boolean).join(' · ');
-   card.append(quote,name,detail);cards.append(card);
+   const detail = doc.createElement('p');detail.className = 'review-card-details';detail.textContent = [review.age ? 'Age '+review.age : '',review.level,review.program].filter(Boolean).join(' · ');
+   card.append(name,detail,quote);cards.append(card);
   }
   previous.disabled = next.disabled = reviews.length < 2;
   position.textContent = 'Review '+(selected+1)+' of '+reviews.length;
  }
  async function load() {
+  if (awaitingRefresh) return;
   if (!connected()) {listStatus.textContent = '';album.hidden = true;return;}
   listStatus.textContent = 'Loading reviews…';
   try {reviews = (await api('reviews')).reviews;render();listStatus.textContent = reviews.length ? '' : 'Be the first to share your experience.';}
@@ -54,9 +55,8 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   try {
    const data = {submissionId,name:form.elements.name.value.trim(),age:form.elements.age.value,program:form.elements.program.value,level:form.elements.level.value.trim(),message:form.elements.message.value.trim()};
    const result = await api('reviews',{method:'POST',data});
-   reviews = [result.review,...reviews.filter(review=>review.id !== result.review.id)];selected = 0;render();listStatus.textContent = '';
-   status.textContent = 'Thank you! Your review is now published.';form.reset();submissionId = null;
-   doc.dispatchEvent(new doc.defaultView.CustomEvent('reviews-changed'));
+   awaitingRefresh = true;
+   status.textContent = 'Thank you! Your review has been saved. Refresh the page to see it in the album.';form.reset();submissionId = null;
   } catch (error) {status.textContent = error.message || 'Your review could not be shared. Please try again.';}
   finally {button.disabled = false;}
  });

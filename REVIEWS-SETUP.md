@@ -1,6 +1,6 @@
 # Review album — Google Sheets
 
-The configured Apps Script web app in reviews-api.js stores reviews in the private workbook Reviews tab. Reviews appear automatically without approval after a successful save. No review emails are sent. Student class reminders are separate; this review deployment does not activate them.
+The configured Apps Script web app in reviews-api.js stores reviews in the private workbook Reviews tab. Reviews are saved automatically without approval. The submitting browser shows a success message; the new review joins its album only after a page refresh. No review emails are sent. Student class reminders are separate; this review deployment does not activate them.
 
 The sheet-bound code supplied in the conversation requires setupReviews to be run once and the web app deployed executing as the owner with Anyone access. Keep the workbook private.
 
