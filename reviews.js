@@ -40,7 +40,8 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
    const quote = doc.createElement('blockquote');quote.textContent = review.message;
    const name = doc.createElement('h3');name.textContent = review.name || 'Anonymous';
    const detail = doc.createElement('p');detail.className = 'review-card-details';detail.textContent = [review.age ? 'Age: '+review.age : '',review.level ? 'Level: '+review.level : '',review.program ? 'Program: '+review.program : ''].filter(Boolean).join(' · ');
-   card.append(name,detail,quote);cards.append(card);
+   const content = doc.createElement('div');content.className = 'review-card-content';
+   content.append(name,detail,quote);card.append(content);cards.append(card);
   }
   previous.disabled = next.disabled = reviews.length < 2;
   position.textContent = 'Review '+(selected+1)+' of '+reviews.length;
