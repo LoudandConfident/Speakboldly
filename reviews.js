@@ -30,7 +30,7 @@ export function initializeReviews(doc, api = request, connected = () => !!backen
   position.textContent = 'Review '+(selected+1)+' of '+reviews.length;
  }
  async function load() {
-  if (!connected()) {listStatus.textContent = 'Review sharing is being connected. Public reviews will appear here.';album.hidden = true;return;}
+  if (!connected()) {listStatus.textContent = '';album.hidden = true;return;}
   listStatus.textContent = 'Loading reviews…';
   try {reviews = (await api('reviews')).reviews;render();listStatus.textContent = reviews.length ? '' : 'Be the first to share your experience.';}
   catch {listStatus.textContent = 'Reviews could not be loaded. Please try again later.';}
