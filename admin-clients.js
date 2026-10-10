@@ -20,3 +20,16 @@ export function validateClient(input,clients=[],editingId=null,{allowLegacy=fals
  return{name,email,level,payment,amountPaid,hours,code,permissions};
 }
 export function clientTotals(clients){return{clients:clients.length,hours:Math.round(clients.reduce((sum,c)=>sum+c.hours,0)*100)/100};}
+export function removeBrowserClient(storage,id) {
+ const clientKey='speak-boldly-admin-clients-v1',sessionKey='speak-boldly-admin-sessions-v1';
+ const oldClients=storage.getItem(clientKey),oldSessions=storage.getItem(sessionKey);
+ const clients=JSON.parse(oldClients||'[]'),sessions=JSON.parse(oldSessions||'[]');
+ if(!Array.isArray(clients)||!Array.isArray(sessions))throw new Error('Saved records could not be read. Nothing was deleted.');
+ try {
+  storage.setItem(sessionKey,JSON.stringify(sessions.filter(session=>session.clientId!==id)));
+  storage.setItem(clientKey,JSON.stringify(clients.filter(client=>client.id!==id)));
+ }catch(error){
+  try{if(oldSessions===null)storage.removeItem(sessionKey);else storage.setItem(sessionKey,oldSessions);}catch{}
+  throw new Error('Browser storage could not be updated. The client was not deleted.');
+ }
+}
