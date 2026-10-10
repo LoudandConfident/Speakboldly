@@ -1,6 +1,6 @@
 import {backendBase,request} from './exam-api.js';
 // Reviews must use their own storage, separate from student reminders.
-export const REVIEWS_ENDPOINT = '';
+export const REVIEWS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz_d7sdw-RbiuInL8mz8TJfEH7lRyk_ZSQrDF75UJKJug1GeM58yAtaqyuhr7ja_guApw/exec';
 export const reviewsConnected = () => !!(REVIEWS_ENDPOINT || backendBase());
 
 export async function reviewRequest(path, {method = 'GET', data} = {}, fetcher = globalThis.fetch, endpoint = REVIEWS_ENDPOINT) {

@@ -1,6 +1,6 @@
 import {openPopup} from './popups.js';
 import {courses} from './courses.js';
-import {reviewsConnected,reviewRequest} from './reviews-api.js';
+import {reviewsConnected,reviewRequest} from './reviews-api.js?v=google-reviews-enabled';
 export function initializeReviews(doc, api = reviewRequest, connected = reviewsConnected) {
  const opener = doc.querySelector('#review-open'), form = doc.querySelector('#review-form');
  if (!opener || !form) return;
