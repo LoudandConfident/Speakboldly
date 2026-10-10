@@ -93,3 +93,16 @@ main #home .hero-copy{transform:translateY(-6px)}
 main #home>.page-signature{font-size:12px}
 #daily-quote>.page-signature{margin-top:16px;font-size:12px}
 @media(min-width:1100px) and (min-height:640px){main #home{min-height:calc(100dvh - 116px)}main #home .hero{padding-bottom:16px}main #home>.page-signature{padding-bottom:14px}}
+
+@media(min-width:1000px) and (min-height:640px){
+ body:has(#daily-quote:not([hidden])) main{padding-bottom:0}
+ main #daily-quote{padding-top:12px;padding-bottom:12px}
+ #daily-quote .motivation-layout{gap:12px 32px}
+ #daily-quote #daily-quote-image{height:clamp(260px,calc(100dvh - 350px),340px);max-height:340px}
+ #daily-quote .motivation-headline,#daily-quote .motivation-headline strong{font-size:26px;line-height:1.2}
+ #daily-quote .motivation-reflection p{font-size:clamp(13.5px,1.9dvh,15px);line-height:1.45;margin:10px 0}
+ #daily-quote .motivation-layout>.motivation-subscribe{padding-top:10px;gap:4px 20px}
+ #daily-quote .motivation-subscribe h3{font-size:18px}
+ #daily-quote .motivation-subscribe>p{font-size:14px;line-height:1.4;max-width:850px}
+ #daily-quote>.page-signature{margin-top:10px}
+}
