@@ -69,7 +69,6 @@ export function initializeGallery(doc, win) {
   page.querySelector('#daily-quote-image').src = entry.image;
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');
   page.querySelector('#daily-quote-text').textContent = entry.quote;
-  page.querySelector('figcaption').hidden = false;
   const reflection=page.querySelector('#daily-quote-reflection');
   reflection.replaceChildren(...[details.reflection,dailyPractice[index]].map(text=>{const paragraph=doc.createElement('p');paragraph.textContent=text;return paragraph;}));
  }
