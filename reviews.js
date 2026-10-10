@@ -73,7 +73,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
    const data = {submissionId,name:form.elements.name.value.trim(),age:form.elements.age.value,program:form.elements.program.value,level:form.elements.level.value.trim(),message:form.elements.message.value.trim()};
    const result = await api('reviews',{method:'POST',data});
    awaitingRefresh = true;
-   status.textContent = 'Thank you! Your review has been saved. Refresh the page to see it in the album.';form.reset();submissionId = null;
+   status.textContent = 'Thank you for submitting your review!';form.reset();submissionId = null;
   } catch (error) {status.textContent = error.message || 'Your review could not be shared. Please try again.';}
   finally {button.disabled = false;}
  });
