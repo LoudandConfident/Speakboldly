@@ -206,3 +206,4 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 
 .course-card.course-coming-soon{opacity:.55}.course-card.course-coming-soon:hover{transform:none}.coming-soon-label{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.3px}
 .join-sb-content{max-width:760px}.join-sb-content p,.join-sb-steps{font-size:16px;line-height:1.85}.join-sb-steps{padding-left:24px}.join-sb-steps li{padding:10px 0}.join-sb-whatsapp-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.join-sb-whatsapp{display:inline-grid;place-items:center;flex:none;width:52px;height:52px;border-radius:50%;background:#176b3a;color:#fff}.join-sb-whatsapp:hover{background:#12552e}.join-sb-content a{overflow-wrap:anywhere}@media(max-width:680px){.join-sb-content p,.join-sb-steps{font-size:14px}}
+.course-detail-coming-soon{opacity:.55}

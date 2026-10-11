@@ -43,23 +43,6 @@ export const courses = [
     "art": "writing"
   },
   {
-    "id": "speaking",
-    "title": "Meetings, presentation and public speaking workshop",
-    "level": "Intermediate and advanced",
-    "duration": "5 sessions",
-    "price": 2500,
-    "category": "Workshops",
-    "description": "Communicate your ideas confidently at work and in front of an audience. Practice contributing to meetings, structuring presentations, handling questions and delivering your message clearly.",
-    "topics": [
-      "Meeting contributions and professional discussions",
-      "Presentation structure and delivery",
-      "Public speaking confidence",
-      "Handling questions and audience engagement"
-    ],
-    "art": "speaking",
-    "comingSoon": true
-  },
-  {
     "id": "interview",
     "title": "Interview preparation workshop",
     "level": "Intermediate and advanced",
@@ -80,6 +63,23 @@ export const courses = [
       "Mock interviews and personalized feedback"
     ],
     "art": "interview"
+  },
+  {
+    "id": "speaking",
+    "title": "Meetings, presentation and public speaking workshop",
+    "level": "Intermediate and advanced",
+    "duration": "5 sessions",
+    "price": 2500,
+    "category": "Workshops",
+    "description": "Communicate your ideas confidently at work and in front of an audience. Practice contributing to meetings, structuring presentations, handling questions and delivering your message clearly.",
+    "topics": [
+      "Meeting contributions and professional discussions",
+      "Presentation structure and delivery",
+      "Public speaking confidence",
+      "Handling questions and audience engagement"
+    ],
+    "art": "speaking",
+    "comingSoon": true
   },
   {
     "id": "ielts",
@@ -142,12 +142,14 @@ export const courses = [
     "level": "Instructors · 0–2 years of experience",
     "duration": "Stay tuned",
     "category": "Training",
-    "description": "Before joining, instructors must complete an interview and an English exam. Admission requires a score of at least 93%. After more than 8 years working at Berlitz, Ucan, Oxford Academy, Kayan Academy and Bright Bridges, I am more than happy to share my experience with instructors who share the same vision and want to support others for a living.",
+    "description": "Before joining, instructors must complete an interview and an English exam. Admission requires a score of at least 93%.",
     "topics": [
       "Beginner teachers · 0–2 years of experience"
     ],
     "art": "training",
-    "comingSoon": true
+    "comingSoon": true,
+    "detailDescription": "After more than 8 years working at Berlitz, Ucan, Oxford Academy, Kayan Academy and Bright Bridges, I am more than happy to share my experience with instructors who share the same vision and want to support others for a living.",
+    "previewDetails": true
   },
   {
     "id": "different-learners",
