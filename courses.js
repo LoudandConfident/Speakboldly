@@ -128,7 +128,7 @@ export const courses = [
   "level": "Instructors · 0–2 years of experience",
   "duration": "Stay tuned",
   "category": "Workshops",
-  "description": "Build a strong teaching foundation with practical lesson planning, classroom communication and engaging learning activities.",
+  "description": "Before joining, instructors must complete an interview and an English exam. Admission requires a score of at least 93%. After more than 8 years working at Berlitz, Ucan, Oxford Academy, Kayan Academy and Bright Bridges, I am more than happy to share my experience with instructors who share the same vision and want to support others for a living.",
   "topics": [
     "Beginner teachers · 0–2 years of experience"
   ],
