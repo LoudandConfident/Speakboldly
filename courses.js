@@ -56,7 +56,8 @@ export const courses = [
       "Public speaking confidence",
       "Handling questions and audience engagement"
     ],
-    "art": "speaking"
+    "art": "speaking",
+    "comingSoon": true
   },
   {
     "id": "interview",
