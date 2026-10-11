@@ -87,7 +87,7 @@ export const courses = [
   "id": "pronunciation",
   "title": "Pronunciation workshop",
   "level": "Accent and pronunciation development",
-  "duration": "Coming soon",
+  "duration": "Stay tuned",
   "category": "Workshops",
   "description": "Develop clearer pronunciation through practice with English sounds, word stress, rhythm and intonation.",
   "topics": [
@@ -100,7 +100,7 @@ export const courses = [
   "id": "information-technology",
   "title": "English for Information Technology",
   "level": "English for IT",
-  "duration": "Coming soon",
+  "duration": "Stay tuned",
   "category": "Workshops",
   "description": "Build confidence explaining technical ideas, discussing IT projects and communicating with colleagues in English.",
   "topics": [
@@ -113,7 +113,7 @@ export const courses = [
   "id": "kids",
   "title": "Let the kids speak!",
   "level": "Ages 6–14",
-  "duration": "Coming soon",
+  "duration": "Stay tuned",
   "category": "General English",
   "description": "Help children express themselves in English through playful conversations, stories and age-appropriate speaking activities.",
   "topics": [
@@ -126,7 +126,7 @@ export const courses = [
   "id": "instructor-training",
   "title": "Instructor training",
   "level": "Beginner teachers · 0–2 years of experience",
-  "duration": "Coming soon",
+  "duration": "Stay tuned",
   "category": "Workshops",
   "description": "Build a strong teaching foundation with practical lesson planning, classroom communication and engaging learning activities.",
   "topics": [
@@ -139,7 +139,7 @@ export const courses = [
   "id": "different-learners",
   "title": "The different learners",
   "level": "Understanding learning preferences",
-  "duration": "Coming soon",
+  "duration": "Stay tuned",
   "category": "Workshops",
   "description": "Explore visual, auditory, reading and writing, and hands-on learning preferences, with flexible activities that support different learners.",
   "topics": [
