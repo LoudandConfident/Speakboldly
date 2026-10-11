@@ -107,8 +107,7 @@ export const courses = [
       "Accent and pronunciation development"
     ],
     "art": "pronunciation",
-    "comingSoon": true,
-    "imagePanel": 0
+    "comingSoon": true
   },
   {
     "id": "information-technology",
@@ -121,8 +120,7 @@ export const courses = [
       "English for IT"
     ],
     "art": "technology",
-    "comingSoon": true,
-    "imagePanel": 1
+    "comingSoon": true
   },
   {
     "id": "kids",
@@ -135,8 +133,7 @@ export const courses = [
       "Ages 6–14"
     ],
     "art": "kids",
-    "comingSoon": true,
-    "imagePanel": 2
+    "comingSoon": true
   },
   {
     "id": "instructor-training",
@@ -149,8 +146,7 @@ export const courses = [
       "Beginner teachers · 0–2 years of experience"
     ],
     "art": "training",
-    "comingSoon": true,
-    "imagePanel": 3
+    "comingSoon": true
   },
   {
     "id": "different-learners",
@@ -163,8 +159,7 @@ export const courses = [
       "Understanding learning preferences"
     ],
     "art": "learners",
-    "comingSoon": true,
-    "imagePanel": 4
+    "comingSoon": true
   }
 ];
 export function matches(c,category,query){return(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
