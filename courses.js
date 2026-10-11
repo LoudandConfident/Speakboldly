@@ -82,6 +82,71 @@ export const courses = [
       "Timed practice and exam preparation"
     ],
     "art": "ielts"
-  }
+  } ,
+  {
+  "id": "pronunciation",
+  "title": "Pronunciation workshop",
+  "level": "Accent and pronunciation development",
+  "duration": "Coming soon",
+  "category": "Workshops",
+  "description": "Develop clearer pronunciation through practice with English sounds, word stress, rhythm and intonation.",
+  "topics": [
+    "Accent and pronunciation development"
+  ],
+  "art": "speaking",
+  "comingSoon": true
+},
+  {
+  "id": "information-technology",
+  "title": "English for Information Technology",
+  "level": "English for IT",
+  "duration": "Coming soon",
+  "category": "Workshops",
+  "description": "Build confidence explaining technical ideas, discussing IT projects and communicating with colleagues in English.",
+  "topics": [
+    "English for IT"
+  ],
+  "art": "writing",
+  "comingSoon": true
+},
+  {
+  "id": "kids",
+  "title": "Let the kids speak!",
+  "level": "Ages 6–14",
+  "duration": "Coming soon",
+  "category": "General English",
+  "description": "Help children express themselves in English through playful conversations, stories and age-appropriate speaking activities.",
+  "topics": [
+    "Ages 6–14"
+  ],
+  "art": "general",
+  "comingSoon": true
+},
+  {
+  "id": "instructor-training",
+  "title": "Instructor training",
+  "level": "Beginner teachers · 0–2 years of experience",
+  "duration": "Coming soon",
+  "category": "Workshops",
+  "description": "Build a strong teaching foundation with practical lesson planning, classroom communication and engaging learning activities.",
+  "topics": [
+    "Beginner teachers · 0–2 years of experience"
+  ],
+  "art": "interview",
+  "comingSoon": true
+},
+  {
+  "id": "different-learners",
+  "title": "The different learners",
+  "level": "Understanding learning preferences",
+  "duration": "Coming soon",
+  "category": "Workshops",
+  "description": "Explore visual, auditory, reading and writing, and hands-on learning preferences, with flexible activities that support different learners.",
+  "topics": [
+    "Understanding learning preferences"
+  ],
+  "art": "general",
+  "comingSoon": true
+}
 ];
 export function matches(c,category,query){return(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}

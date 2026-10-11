@@ -203,3 +203,5 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
  #reviews .review-card{width:88%;height:280px;padding:22px 18px 50px}
  #reviews .review-card blockquote{font-size:18px;line-height:1.6}
 }
+
+.course-card.course-coming-soon{opacity:.55}.course-card.course-coming-soon:hover{transform:none}.coming-soon-label{font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.3px}
