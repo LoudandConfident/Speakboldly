@@ -1,4 +1,5 @@
 // Connection details stay in this owner's browser; never put the key in published code.
+import {validateClient} from './admin-clients.js?v=four-digit-restored';
 const CONNECTION_STORAGE_KEY = 'speak-boldly-client-sheet-connection-v1';
 let endpoint = '', key = '';
 export const clientSheetConnected = () => !!(endpoint && key);
@@ -9,7 +10,7 @@ async function sheetRequest(url,secret,payload,fetcher = globalThis.fetch) {
   const response = await fetcher(url,{method:'POST',credentials:'omit',redirect:'follow',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({...payload,key:secret}),signal:controller.signal});
   let result;
   try {result = await response.json();} catch {throw new Error('The client sheet could not be reached. Check its deployment.');}
-  if (!response.ok || !result.ok) throw new Error(result.error || 'The client was not saved to the sheet.');
+  if (!response.ok || !result.ok) throw new Error(result.error || 'The client sheet request failed.');
   return result;
  } catch(error) {
   if(error.name === 'AbortError') throw new Error('Google Sheets took too long to respond. Retry syncing; existing rows will not be duplicated.');
@@ -23,6 +24,24 @@ export async function syncClientToSheet(client,fetcher = globalThis.fetch) {
  if(result.clientId !== client.id) throw new Error('The client was not saved to the sheet.');
  return result;
 }
+
+export async function loadClientsFromSheet(fetcher = globalThis.fetch) {
+ if (!clientSheetConnected()) throw new Error('Connect your client sheet on this device first.');
+ const result = await sheetRequest(endpoint,key,{action:'listClients'},fetcher);
+ if (!Array.isArray(result.clients)) throw new Error('Update your Clients Apps Script deployment to support loading students.');
+ const records=[];
+ for(const entry of result.clients){
+  if(!entry || typeof entry.id!=='string' || !/^[a-zA-Z0-9-]{1,100}$/.test(entry.id) || records.some(c=>c.id===entry.id)) throw new Error('The sheet contains an invalid or duplicate Client ID.');
+  records.push({id:entry.id,...validateClient(entry,records,entry.id,{allowLegacy:true})});
+ }
+ return records;
+}
+export function mergeSheetClients(local,remote) {
+ // Sheet values take precedence; retain browser records that have never been synced.
+ const ids=new Set(remote.map(c=>c.id)),emails=new Set(remote.map(c=>c.email.toLowerCase()));
+ return [...remote,...local.filter(c=>!ids.has(c.id)&&!emails.has(c.email.toLowerCase()))];
+}
+
 export function initializeClientSheet(doc) {
  const form = doc.querySelector('#client-sheet-connect');
  if (!form) return;
@@ -39,7 +58,7 @@ export function initializeClientSheet(doc) {
    if(saved && validUrl(saved.endpoint) && typeof saved.key === 'string' && saved.key) {
     endpoint = saved.endpoint;key = saved.key;form.elements.endpoint.value = endpoint;
     form.hidden = true;if(change)change.hidden = false;
-    status.textContent = 'Saved sheet connection loaded. Saving or syncing a student will check delivery.';
+    status.textContent = 'Saved sheet connection loaded.';
    }
   }catch{}
  }
@@ -56,7 +75,7 @@ export function initializeClientSheet(doc) {
   } catch(error) {status.textContent = error.message;return;}
   finally {button.disabled = false;}
   endpoint = url;key = secret;form.elements.key.value = '';
-  status.textContent = 'Sheet connected. Syncing existing students…';
+  status.textContent = 'Sheet connected. Loading students…';
   try {doc.defaultView.localStorage.setItem(CONNECTION_STORAGE_KEY,JSON.stringify({endpoint,key}));}
   catch {status.textContent = 'Your browser could not remember the connection. It will work only for this visit.';}
   form.hidden = true;if(change)change.hidden = false;

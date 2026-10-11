@@ -10,7 +10,7 @@ function setupClientSync() {
  const sheet=ss.getSheetByName('Clients')||ss.insertSheet('Clients');
  if(sheet.getLastRow()===0)sheet.appendRow(CLIENT_HEADERS);
  else if(JSON.stringify(sheet.getRange(1,1,1,CLIENT_HEADERS.length).getValues()[0])!==JSON.stringify(CLIENT_HEADERS))throw new Error('Rename the existing Clients tab; its headers differ. No data was replaced.');
- sheet.setFrozenRows(1);sheet.getRange('A1:I1').setFontWeight('bold');sheet.getRange('D2:D').setNumberFormat('@');sheet.autoResizeColumns(1,9);
+ sheet.setFrozenRows(1);sheet.getRange('A1:I1').setFontWeight('bold');sheet.getRange('D2:D').setNumberFormat('@');sheet.getRange(1,10).setValue('Permissions');sheet.autoResizeColumns(1,10);
  SpreadsheetApp.getUi().alert('Clients sheet ready','Keep your connection key private. Find it under Apps Script > Project Settings > Script Properties > CLIENT_SYNC_KEY. Do not send it in chat. After deploying, share only the web app URL with your website maintainer.',SpreadsheetApp.getUi().ButtonSet.OK);
 }
 function clientSyncResponse(value){return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);}
@@ -23,6 +23,18 @@ function handleClientSync(e){
   const p=JSON.parse(e.postData.contents),props=PropertiesService.getScriptProperties();
   const key=props.getProperty('CLIENT_SYNC_KEY');
   if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
+  if(p.action==='checkConnection')return clientSyncResponse({ok:true,connected:true});
+  if(p.action==='listClients'){
+   lock.waitLock(20000);
+   const sheet=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
+   if(!sheet)throw new Error('Clients tab not found. Run setupClientSync first.');
+   const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
+   const clients=rows.filter(row=>String(row[0]).trim()).map(row=>{
+    let permissions=[];if(row[9]){permissions=JSON.parse(String(row[9]));if(!Array.isArray(permissions))throw new Error('Invalid Permissions column.');}
+    return {id:String(row[0]),name:String(row[1]),email:String(row[2]),code:String(row[3]).padStart(4,'0'),level:String(row[4]),payment:String(row[5]),amountPaid:Number(row[6]||0),hours:Number(row[7]||0),permissions};
+   });
+   return clientSyncResponse({ok:true,clients});
+  }
   if(p.action!=='upsertClient'||!p.client)throw new Error('Invalid action.');
   const c=p.client,name=String(c.name||'').trim(),email=String(c.email||'').trim().toLowerCase(),code=String(c.code||'').trim(),id=String(c.id||'');
   if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!name||name.length>100||!/^\d{4}$/.test(code)||code==='1962'||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Check client details.');
@@ -39,8 +51,12 @@ function handleClientSync(e){
    if(normalizedClientName(row[1])===normalizedClientName(name))throw new Error('Client name is already registered.');
    if(String(row[2]).toLowerCase()===email)throw new Error('Email already belongs to another client.');
   });
-  const values=[id,name,email,code,String(c.level),c.payment,amount,hours,new Date().toISOString()].map(v=>typeof v==='string'?safeSheetText(v):v);
-  sheet.getRange(rowNumber,4).setNumberFormat('@');sheet.getRange(rowNumber,1,1,9).setValues([values]);
+  let permissions=c.permissions;
+  if(permissions!==undefined&&(!Array.isArray(permissions)||permissions.length>500||permissions.some(p=>typeof p!=='string'||p.length>2000||! /^(section:|file:)/.test(p))))throw new Error('Invalid file permissions.');
+  if(permissions===undefined){const previous=rowNumber<=sheet.getLastRow()?sheet.getRange(rowNumber,10).getValue():'';permissions=previous?JSON.parse(String(previous)):[];}
+  sheet.getRange(1,10).setValue('Permissions');
+  const values=[id,name,email,code,String(c.level),c.payment,amount,hours,new Date().toISOString(),JSON.stringify(permissions)].map(v=>typeof v==='string'?safeSheetText(v):v);
+  sheet.getRange(rowNumber,4).setNumberFormat('@');sheet.getRange(rowNumber,1,1,10).setValues([values]);
   return clientSyncResponse({ok:true,clientId:id});
  }catch(error){return clientSyncResponse({ok:false,error:error.message});}
  finally{if(lock.hasLock())lock.releaseLock();}
@@ -51,6 +67,6 @@ function handleClientSync(e){
 function doPost(e) {
  let data;
  try {data = JSON.parse(e.postData.contents);} catch {return clientSyncResponse({ok:false,error:'Invalid request.'});}
- if (data.action === 'upsertClient') return handleClientSync(e);
+ if (['upsertClient','checkConnection','listClients'].includes(data.action)) return handleClientSync(e);
  return handleReviewPost(e);
 }

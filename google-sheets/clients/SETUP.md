@@ -1,12 +1,21 @@
-# Automatic client saving
+# Students across devices
 
-The website connection is prepared but requires Apps Script installation. Keep the spreadsheet private. Reviews and Clients use separate tabs.
+The Teacher Portal reads the private Clients sheet after teacher login and after connecting it, and includes Refresh students. The connection key remains private and must be entered once on each device. It is never included in the public website. The teacher convenience code alone does not authorize access to the sheet.
 
-1. In the existing sheet-bound Apps Script project, add a Script file called Clients and paste Clients.gs into it.
-2. In the existing review Code.gs, rename only `function doPost(event)` to `function handleReviewPost(event)`. The Clients file contains the single doPost router; it preserves review submissions and handles authenticated client writes separately. Keep doGet unchanged.
-3. Save and run setupClientSync. This creates the Clients tab and CLIENT_SYNC_KEY in Script Properties. Existing rows are not erased. Authorize spreadsheet access when requested.
-4. Deploy → Manage deployments → Edit → Version: New version → Deploy. Keep the same web app URL and owner/Anyone settings.
-5. In Teacher Portal open Google Sheets — automatic client saving. Enter the web app URL and private CLIENT_SYNC_KEY. Never send the key in chat or publish it. The owner connection is remembered in local browser storage on this device and restored after teacher login. It is not published or shared across devices. Connecting starts a sync of existing clients; future saves sync automatically. A Google network/deployment failure still requires correcting the Apps Script deployment.
-6. Add a test client and verify a row appears. Edit that same client and verify its row updates rather than duplicating. Incorrect keys and duplicate student codes, names or emails must show errors without pretending to save.
+## Update the current deployment
 
-New or edited clients sync when saved. Use Sync existing students to transfer the clients currently saved in this browser. It uses stable client IDs and stops on an error; retries update already-synced rows without duplicates. The Clients tab does not schedule sessions or activate email reminders. Date/time/session scheduling needs a separate Classes setup.
+For a separate Clients Apps Script project, replace its current client code with StandaloneClients.gs. For a combined Reviews/Clients project, use Clients.gs and keep the existing handleReviewPost and doGet functions. Do not install both client files together.
+
+Keep the existing CLIENT_SYNC_KEY and CLIENT_SHEET_ID Script Properties. Existing rows and deployment URLs must be preserved. Choose Deploy > Manage deployments > Edit > New version > Deploy. The updated script supports authenticated checkConnection, listClients and upsertClient requests. Permissions are stored in column J; the existing nine columns remain compatible.
+
+On the original device, use Sync existing students to upload browser-only records. Connecting now loads the sheet without automatically overwriting it with potentially older browser data. Then open Teacher Portal on the phone, expand Google Sheets — load and save students, and enter the existing private key there. Do not send the key in chat.
+
+## Verify
+
+1. Check that the same clients appear on the original device and phone after connecting.
+2. Change a client's hours on one device; use Refresh students on the other and verify the update.
+3. Verify that Student Codes with leading zeroes remain four digits.
+4. Verify that report recipient selection lists the loaded clients.
+5. A wrong connection key must not return client data. A failed request must report an error and preserve existing browser records.
+
+The sheet takes precedence for matching Client IDs or emails. Browser-only records remain available until synced. Deleting connected clients through the browser is disabled; removing a sheet row does not erase an old browser copy. Client deletion and conflict resolution need a separate authenticated workflow. Calendar sessions, PDF drafts and email delivery are outside this change.
