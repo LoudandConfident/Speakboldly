@@ -62,3 +62,19 @@
  header .mobile-menu-toggle{padding:10px 8px}
  .admin-clients-table td{grid-template-columns:1fr;gap:6px}
 }
+
+/* Compact student cards and clean button labels on phones. */
+@media(max-width:680px){
+ .mobile-button-arrow{display:none!important}
+ #admin-students-list .admin-clients-heading{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+ #admin-students-list .admin-clients-heading h3{width:100%;margin-bottom:4px}
+ #admin-students-list .admin-clients-heading .button{flex:1;padding:10px 12px;font-size:13px;line-height:1.4}
+ #admin-students-list .admin-clients-table tr{padding:16px;margin-bottom:12px;background:#fffef9;border-radius:12px;box-shadow:0 2px 8px #193c3208}
+ #admin-students-list .admin-clients-table td{grid-template-columns:110px minmax(0,1fr);gap:12px;padding:8px 0;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+ #admin-students-list .admin-clients-table td::before{font-weight:500;color:var(--muted);font-size:12px}
+ #admin-students-list .admin-clients-table td:first-child{display:block;font-size:19px;font-weight:700;padding:0 0 12px;margin-bottom:4px;color:var(--ink)}
+ #admin-students-list .admin-clients-table td:first-child::before{display:none}
+ #admin-students-list .admin-clients-table td:last-child{display:flex;gap:10px;padding-top:12px;margin-top:4px}
+ #admin-students-list .admin-clients-table td:last-child::before{display:none}
+ #admin-students-list .admin-client-actions .button{flex:1;font-size:13px;padding:10px 14px}
+}
