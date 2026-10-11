@@ -86,7 +86,7 @@ export const courses = [
   {
   "id": "pronunciation",
   "title": "Pronunciation workshop",
-  "level": "Accent and pronunciation development",
+  "level": "Advanced",
   "duration": "Stay tuned",
   "category": "Workshops",
   "description": "Develop clearer pronunciation through practice with English sounds, word stress, rhythm and intonation.",
@@ -99,7 +99,7 @@ export const courses = [
   {
   "id": "information-technology",
   "title": "English for Information Technology",
-  "level": "English for IT",
+  "level": "Beginner, Intermediate, Advanced",
   "duration": "Stay tuned",
   "category": "Workshops",
   "description": "Build confidence explaining technical ideas, discussing IT projects and communicating with colleagues in English.",
@@ -112,7 +112,7 @@ export const courses = [
   {
   "id": "kids",
   "title": "Let the kids speak!",
-  "level": "Ages 6–14",
+  "level": "Beginner, Intermediate, Advanced · Ages 6–14",
   "duration": "Stay tuned",
   "category": "General English",
   "description": "Help children express themselves in English through playful conversations, stories and age-appropriate speaking activities.",
@@ -125,7 +125,7 @@ export const courses = [
   {
   "id": "instructor-training",
   "title": "Instructor training",
-  "level": "Beginner teachers · 0–2 years of experience",
+  "level": "Instructors · 0–2 years of experience",
   "duration": "Stay tuned",
   "category": "Workshops",
   "description": "Build a strong teaching foundation with practical lesson planning, classroom communication and engaging learning activities.",
