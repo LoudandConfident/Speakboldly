@@ -84,7 +84,7 @@ export const courses = [
     "id": "ielts",
     "title": "IELTS preparation",
     "level": "Advanced level",
-    "duration": "8 sessions",
+    "duration": "Stay tuned",
     "category": "IELTS",
     "description": "Prepare for IELTS with focused practice across listening, reading, writing and speaking. Build familiarity with task types, improve your answer structure and time management, and receive personalized feedback on your performance.",
     "topics": [
@@ -93,7 +93,8 @@ export const courses = [
       "Speaking practice and personalized feedback",
       "Timed practice and exam preparation"
     ],
-    "art": "ielts"
+    "art": "ielts",
+    "comingSoon": true
   },
   {
     "id": "pronunciation",
@@ -106,7 +107,8 @@ export const courses = [
       "Accent and pronunciation development"
     ],
     "art": "pronunciation",
-    "comingSoon": true
+    "comingSoon": true,
+    "imagePanel": 0
   },
   {
     "id": "information-technology",
@@ -119,7 +121,8 @@ export const courses = [
       "English for IT"
     ],
     "art": "technology",
-    "comingSoon": true
+    "comingSoon": true,
+    "imagePanel": 1
   },
   {
     "id": "kids",
@@ -132,7 +135,8 @@ export const courses = [
       "Ages 6–14"
     ],
     "art": "kids",
-    "comingSoon": true
+    "comingSoon": true,
+    "imagePanel": 2
   },
   {
     "id": "instructor-training",
@@ -145,7 +149,8 @@ export const courses = [
       "Beginner teachers · 0–2 years of experience"
     ],
     "art": "training",
-    "comingSoon": true
+    "comingSoon": true,
+    "imagePanel": 3
   },
   {
     "id": "different-learners",
@@ -158,7 +163,8 @@ export const courses = [
       "Understanding learning preferences"
     ],
     "art": "learners",
-    "comingSoon": true
+    "comingSoon": true,
+    "imagePanel": 4
   }
 ];
 export function matches(c,category,query){return(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
