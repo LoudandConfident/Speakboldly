@@ -163,6 +163,24 @@ export const courses = [
     ],
     "art": "learners",
     "comingSoon": true
+  },
+  {
+    "id": "urgent-session",
+    "title": "1 urgent session",
+    "level": "Your current English level",
+    "duration": "90 minutes",
+    "category": "Others",
+    "description": "Book session by session, with no commitment. A little pricier, but useful when something urgent comes up. Enjoy 90 minutes of interactive conversation about the topic you need, or a topic your instructor chooses based on your previously communicated needs and English level. It can also be your trial session to help you decide what would support you most with your current needs.",
+    "price": 500,
+    "priceLabel": "90 minutes · no commitment",
+    "showComingSoonPrice": true,
+    "topics": [
+      "Interactive conversation tailored to your needs",
+      "Urgent topics or instructor-selected practice",
+      "A trial to help you choose your next step"
+    ],
+    "art": "urgent",
+    "comingSoon": true
   }
 ];
 export function matches(c,category,query){return(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
