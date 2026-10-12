@@ -244,3 +244,5 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
  #reviews .review-card,#reviews .review-card.is-selected,#reviews .review-card.is-previous,#reviews .review-card.is-next{position:relative;top:auto;left:auto;flex:0 0 100%;width:100%;height:285px;max-height:none;margin:0;padding:22px 18px 50px;transform:none;filter:none;opacity:1;pointer-events:auto;scroll-snap-align:start;scroll-snap-stop:always;animation:none}
  #reviews .review-card-content{overflow-y:auto;overflow-x:hidden;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding-right:4px}
 }
+
+#home .hero-copy .home-slogan{position:relative;top:-14px}#home .hero-copy>.button{margin-top:16px}@media(max-width:680px){#home .hero-copy .home-slogan{top:-8px}#home .hero-copy>.button{margin-top:12px}}
