@@ -1,19 +1,38 @@
 export const courses = [
   {
-    "id": "general",
-    "title": "General English",
+    "id": "general-4",
+    "title": "General English — 4 sessions",
     "level": "Beginner, Intermediate, Advanced",
-    "duration": "4 or 8 sessions per month",
+    "duration": "4 sessions per month",
+    "priceOptions": [
+      {
+        "previous": 2500,
+        "amount": 2000,
+        "schedule": "4 sessions per month · once a week"
+      }
+    ],
+    "category": "General English",
+    "description": "Build confidence in everyday conversations through private coaching tailored to your level. Develop speaking, listening, vocabulary and grammar with practical activities and personalized feedback.",
+    "topics": [
+      "Everyday conversations and useful vocabulary",
+      "Grammar in real communication",
+      "Listening and clear pronunciation",
+      "Personalized speaking practice"
+    ],
+    "art": "general",
+    "summary": "Private English coaching tailored to your level and everyday needs.",
+    "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions."
+  },
+  {
+    "id": "general-8",
+    "title": "General English — 8 sessions",
+    "level": "Beginner, Intermediate, Advanced",
+    "duration": "8 sessions per month",
     "priceOptions": [
       {
         "previous": 3500,
         "amount": 3000,
         "schedule": "8 sessions per month · twice a week"
-      },
-      {
-        "previous": 2500,
-        "amount": 2000,
-        "schedule": "4 sessions per month · once a week"
       }
     ],
     "category": "General English",
