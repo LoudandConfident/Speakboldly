@@ -10,6 +10,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  let reviews = [], selected = 0, submissionId = null, successTimer = null, loadVersion = 0;
  let hovering = false, focused = false, rotationTimer, drag = null;
  const view = doc.querySelector('#reviews');
+ const mobileReviews=()=>Boolean(doc.defaultView.matchMedia?.('(max-width: 680px)').matches);
  function restartRotation() {
   doc.defaultView.clearInterval(rotationTimer);
   rotationTimer = doc.defaultView.setInterval(()=>{
@@ -31,12 +32,12 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   cards.replaceChildren();
   if (!reviews.length) return;
   selected = Math.min(selected,reviews.length-1);
-  const indices = [...new Set([selected-1,selected+1,selected].map(i => (i+reviews.length)%reviews.length))];
+  const indices = mobileReviews()?reviews.map((_,index)=>index):[...new Set([selected-1,selected+1,selected].map(i => (i+reviews.length)%reviews.length))];
   for (const index of indices) {
    const review = reviews[index], card = doc.createElement('article');
    const side = index === selected ? 'selected' : index === (selected-1+reviews.length)%reviews.length ? 'previous' : 'next';
    card.className = 'review-card is-'+side;
-   if (side !== 'selected') card.setAttribute('aria-hidden','true');
+   if (side !== 'selected'&&!mobileReviews()) card.setAttribute('aria-hidden','true');
    const quote = doc.createElement('blockquote');quote.textContent = review.message;
    const name = doc.createElement('h3');name.textContent = review.name || 'Anonymous';
    const detail = doc.createElement('p');detail.className = 'review-card-details';detail.textContent = [review.age ? 'Age: '+review.age : '',review.level ? 'Level: '+review.level : '',review.program ? 'Program: '+review.program : ''].filter(Boolean).join(' · ');
@@ -45,6 +46,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   }
   previous.disabled = next.disabled = reviews.length < 2;
   position.textContent = 'Review '+(selected+1)+' of '+reviews.length;
+  if(mobileReviews()){const target=cards.children[selected];if(target)cards.scrollLeft=target.offsetLeft-cards.children[0].offsetLeft;}
  }
  async function load() {
   const version = ++loadVersion, selectedId = reviews[selected]?.id;
@@ -61,10 +63,11 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  }
  previous?.addEventListener('click',()=>moveReview(-1));
  next?.addEventListener('click',()=>moveReview(1));
+ cards?.addEventListener('scroll',()=>{if(!mobileReviews()||!cards.children.length)return;const first=cards.children[0].offsetLeft;let closest=0,distance=Infinity;for(let i=0;i<cards.children.length;i++){const delta=Math.abs(cards.children[i].offsetLeft-first-cards.scrollLeft);if(delta<distance){distance=delta;closest=i;}}selected=closest;position.textContent='Review '+(selected+1)+' of '+reviews.length;restartRotation();},{passive:true});
  cards?.setAttribute('tabindex','0');
  cards?.setAttribute('aria-label','Reviews. Swipe left or right, or use the arrow keys.');
  cards?.addEventListener('pointerdown',event=>{
-  if(reviews.length<2||event.isPrimary===false||event.button>0)return;
+  if(mobileReviews()||reviews.length<2||event.isPrimary===false||event.button>0)return;
   drag={id:event.pointerId,x:event.clientX,y:event.clientY,dx:0,horizontal:false};
  });
  cards?.addEventListener('pointermove',event=>{
@@ -92,7 +95,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  cards?.addEventListener('lostpointercapture',event=>finishDrag(event,true));
  let wheelDistance=0,lastWheel=0,lastWheelMove=0;
  cards?.addEventListener('wheel',event=>{
-  if(reviews.length<2)return;
+  if(mobileReviews()||reviews.length<2)return;
   const horizontal=event.shiftKey?event.deltaY:event.deltaX;
   if(!horizontal||(!event.shiftKey&&Math.abs(event.deltaY)>Math.abs(horizontal)))return;
   event.preventDefault();const now=Date.now();if(now-lastWheel>180)wheelDistance=0;lastWheel=now;

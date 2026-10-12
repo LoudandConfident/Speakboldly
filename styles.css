@@ -231,3 +231,16 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 #home .home-speech-bubble{width:130px;height:auto;min-height:34px;padding:7px 12px;border:1px solid #a8bbb0;border-radius:999px;background:#fff;color:var(--ink);font-size:11px;font-weight:600;line-height:1.3}
 #home .home-speech-bubble:hover{background:#edf0e6}
 @media(max-width:680px){#home .home-speech-bubble{width:100px;min-height:34px;padding:7px 9px;font-size:10px}}
+
+#students-portal .portal-area-choices{gap:24px;max-width:680px;margin:28px 0 36px}
+#students-portal .portal-choice{background:transparent url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20360%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M30%202h300a28%2028%200%200%201%2028%2028v101a28%2028%200%200%201-28%2028H112l-40%2019v-19H30a28%2028%200%200%201-28-28V30A28%2028%200%200%201%2030%202Z%22%20fill%3D%22%23fffef9%22%20stroke%3D%22%239fb5a7%22%20stroke-width%3D%222%22%2F%3E%3C%2Fsvg%3E") center/100% 100% no-repeat;min-height:140px;padding:20px 24px 34px;filter:drop-shadow(0 5px 7px #193c3209);transition:filter .2s,transform .2s}
+#students-portal .portal-choice-label{font-size:19px;font-weight:600}
+#students-portal .portal-choice:hover,#students-portal .portal-choice[aria-pressed="true"]{background-color:transparent;filter:drop-shadow(0 7px 10px #193c3218);transform:translateY(-2px)}
+@media(max-width:680px){
+ #students-portal .portal-area-choices{gap:18px;max-width:320px}
+ #students-portal .portal-choice{min-height:126px;padding:18px 20px 30px}
+ #students-portal .portal-choice-label{font-size:18px}
+ #reviews .review-cards{display:flex;gap:12px;height:310px;min-height:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-padding-inline:0;touch-action:pan-x pan-y pinch-zoom;cursor:auto;scrollbar-width:thin;scrollbar-color:#9fb5a7 transparent;overscroll-behavior-x:contain;position:relative}
+ #reviews .review-card,#reviews .review-card.is-selected,#reviews .review-card.is-previous,#reviews .review-card.is-next{position:relative;top:auto;left:auto;flex:0 0 100%;width:100%;height:285px;max-height:none;margin:0;padding:22px 18px 50px;transform:none;filter:none;opacity:1;pointer-events:auto;scroll-snap-align:start;scroll-snap-stop:always;animation:none}
+ #reviews .review-card-content{overflow-y:auto;overflow-x:hidden;touch-action:pan-x pan-y pinch-zoom;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding-right:4px}
+}
