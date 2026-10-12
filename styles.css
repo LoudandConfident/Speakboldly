@@ -298,3 +298,5 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 @media(max-width:680px){
  #home .home-picture-and-reviews .coaching-photo{width:calc(100% + 6px);height:auto;top:-9px}
 }
+
+@media(min-width:681px){#home .hero-copy .home-slogan{top:-24px}}@media(max-width:680px){#home .hero-copy .home-slogan{top:-14px}}
