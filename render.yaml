@@ -30,3 +30,7 @@ services:
         value: speakboldly16@gmail.com
       - key: SMTP_PASSWORD
         sync: false
+      - key: EXAM_CLIENT_SHEET_URL
+        value: https://script.google.com/macros/s/AKfycbz6CwMAv4mosev17Pw3BfnbMPESUk64QT-AlKPL6_8e3tlknBg-9ReLA3ejvFfRKfJX/exec
+      - key: EXAM_CLIENT_SHEET_KEY
+        sync: false

@@ -1,3 +1,4 @@
+import {createSheetClientLoader} from './sheet-clients-server.mjs';
 import {createReminderMailer} from './class-reminders.mjs';
 import {createScoreMailer} from './score-mailer.mjs';
 import {createExamBackend} from './private-exams-server.mjs';
@@ -10,7 +11,7 @@ if(process.env.EXAM_ADMIN_PASSWORD&&process.env.EXAM_ADMIN_PASSWORD.length<12)th
 const privatePath=process.env.EXAM_DATA_DIR||fileURLToPath(new URL('./.private-data/',root));
 mkdirSync(privatePath,{recursive:true});
 let privateExams=[];try{privateExams=JSON.parse(readFileSync(privatePath+'/exams.json','utf8'));}catch{}
-const examBackend=createExamBackend({dbPath:privatePath+'/portal.sqlite',storageDirectory:privatePath+'/uploads',sendScoreEmail:createScoreMailer(process.env),sendReminderEmail:createReminderMailer(process.env),adminPassword:process.env.EXAM_ADMIN_PASSWORD||'',exams:privateExams,origins:(process.env.EXAM_ALLOWED_ORIGINS||'http://localhost:'+ (process.env.PORT||3000)+',http://127.0.0.1:'+(process.env.PORT||3000)).split(',')});
+const examBackend=createExamBackend({getSheetClients:createSheetClientLoader(process.env),dbPath:privatePath+'/portal.sqlite',storageDirectory:privatePath+'/uploads',sendScoreEmail:createScoreMailer(process.env),sendReminderEmail:createReminderMailer(process.env),adminPassword:process.env.EXAM_ADMIN_PASSWORD||'',exams:privateExams,origins:(process.env.EXAM_ALLOWED_ORIGINS||'http://localhost:'+ (process.env.PORT||3000)+',http://127.0.0.1:'+(process.env.PORT||3000)).split(',')});
 
 const reminderTimer=setInterval(()=>examBackend.runReminders().catch(()=>console.error('Class reminder job failed.')),30000);reminderTimer.unref();
 examBackend.runReminders().catch(()=>console.error('Class reminder job failed.'));

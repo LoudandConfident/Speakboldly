@@ -68,7 +68,7 @@ function doPost(event) {
 
   try {
     if (!event || !event.postData ||
-        event.postData.contents.length > 20000) {
+        event.postData.contents.length > 8000000) {
       throw new Error('Invalid request.');
     }
 
@@ -92,6 +92,9 @@ function doPost(event) {
     if (!sheet) {
       throw new Error('Clients tab is missing.');
     }
+
+    if(data.action!=='sendClientEmail'&&event.postData.contents.length>20000)throw new Error('Request too large.');
+    if(data.action==='sendClientEmail')return handleClientEmail(data);
 
     if (data.action === 'checkConnection') {
       return response({ ok: true, connected: true });

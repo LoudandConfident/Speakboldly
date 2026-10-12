@@ -8,7 +8,7 @@ import {validateClient} from './admin-clients.js';
 import {canOpenFile} from './portal-access.js';
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const safeEqual=(a,b)=>timingSafeEqual(Buffer.from(hash(a)),Buffer.from(hash(b)));
-export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=>Date.now(),sendScoreEmail=null,sendReminderEmail=null,storageDirectory=null}){
+export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=>Date.now(),sendScoreEmail=null,sendReminderEmail=null,storageDirectory=null,getSheetClients=null}){
  const db=new DatabaseSync(dbPath);db.exec('PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;');
  db.exec(`CREATE TABLE IF NOT EXISTS clients(id TEXT PRIMARY KEY,data TEXT NOT NULL);
  CREATE TABLE IF NOT EXISTS sessions(token_hash TEXT PRIMARY KEY,role TEXT NOT NULL,client_id TEXT,expires INTEGER NOT NULL);
@@ -29,6 +29,16 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=
  const error=(message,status=400)=>Object.assign(new Error(message),{status});
  const iso=()=>new Date(now()).toISOString();
  function permission(client,level){return canOpenFile(client,'exams','https://loudandconfident.github.io/Speakboldly/student-files/exams/Level-'+level+'-Exam.pdf');}
+ async function refreshSheetClients(){
+  if(!getSheetClients)return;
+  const input=await getSheetClients();const validated=[];
+  for(const record of input){if(!record||!/^[a-zA-Z0-9-]{1,100}$/.test(record.id)||validated.some(c=>c.id===record.id))throw error('Invalid shared client data.',503);validated.push({id:record.id,...validateClient(record,validated,null,{allowLegacy:true})});}
+  db.exec('BEGIN');
+  try{for(const client of validated)db.prepare('INSERT INTO clients(id,data) VALUES(?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data').run(client.id,JSON.stringify(client));
+   const ids=new Set(validated.map(c=>c.id));for(const client of allClients())if(!ids.has(client.id))db.prepare('UPDATE clients SET data=? WHERE id=?').run(JSON.stringify({...client,permissions:[],sheetDisabled:true}),client.id);
+   db.exec('COMMIT');
+  }catch(error){db.exec('ROLLBACK');throw error;}
+ }
  function publicExam(level){const e=catalog.get(level);if(!e)throw error('Exam not found.',404);return{level:e.level,title:e.title,questions:e.questions.map(({correct,...q})=>q),sections:e.sections};}
  function session(req,role){const bearer=req.headers.authorization?.match(/^Bearer (\S+)$/)?.[1];if(!bearer)throw error('Please sign in.',401);const s=db.prepare('SELECT * FROM sessions WHERE token_hash=? AND expires>?').get(hash(bearer),Date.now());if(!s||s.role!==role)throw error('Please sign in again.',401);return s;}
  function login(req,key){const id=(req.socket.remoteAddress||'unknown')+':'+key,now=Date.now(),old=limited.get(id);if(old&&old.until>now&&old.count>=10)throw error('Too many attempts. Please wait 15 minutes.',429);const record=old&&old.until>now?old:{count:0,until:now+900000};record.count++;limited.set(id,record);}
@@ -56,7 +66,7 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=
    if(!catalog.size&&!(path.startsWith('/api/admin/')&&!/\/(attempts|exams)(\/|$)/.test(path)))throw error('Private exam storage is not configured.',503);
    if(await uploads(req,res,url,headers))return true;
    if(path==='/api/admin/login'&&method==='POST'){login(req,'admin');const input=await body(req);if(typeof input.password!=='string'||!safeEqual(input.password,adminPassword))throw error('Incorrect owner password.',401);send({token:issue('admin')});return true;}
-   if(path==='/api/student/login'&&method==='POST'){login(req,'student');const ip='ip:'+(req.socket.remoteAddress||'unknown');studentLimit(ip);const input=await body(req);if(!/^\d{4}$/.test(input.code||'')||input.code==='1962'){studentLimit(ip,true);throw error('Use your individual client code for an interactive exam.',401);}const client=allClients().find(c=>safeEqual(c.code,input.code));if(!client){studentLimit(ip,true);throw error('Incorrect student code.',401);}studentLimit('client:'+client.id,true);send({token:issue('student',client.id),access:{code:client.code,clientId:client.id,number:allClients().findIndex(c=>c.id===client.id)+1,level:client.level,permissions:client.permissions}});return true;}
+   if(path==='/api/student/login'&&method==='POST'){login(req,'student');const ip='ip:'+(req.socket.remoteAddress||'unknown');studentLimit(ip);const input=await body(req);if(!/^\d{4}$/.test(input.code||'')||input.code==='1962'){studentLimit(ip,true);throw error('Use your individual client code for an interactive exam.',401);}await refreshSheetClients();const client=allClients().find(c=>!c.sheetDisabled&&safeEqual(c.code,input.code));if(!client){studentLimit(ip,true);throw error('Incorrect student code.',401);}studentLimit('client:'+client.id,true);send({token:issue('student',client.id),access:{code:client.code,clientId:client.id,number:allClients().findIndex(c=>c.id===client.id)+1,level:client.level,permissions:client.permissions}});return true;}
    if(path.startsWith('/api/admin/')){
     session(req,'admin');
     if(path==='/api/admin/reviews'&&method==='GET'){send({reviews:publicReviews.list()});return true;}
@@ -81,7 +91,7 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=
      send({attempt:attemptData(db.prepare('SELECT * FROM attempts WHERE id=?').get(row.id),true)});return true;}
    }
    if(path.startsWith('/api/student/')){
-    const s=session(req,'student'),client=getClient(s.client_id);if(!client)throw error('Client not found.',403);
+    const s=session(req,'student');await refreshSheetClients();const client=getClient(s.client_id);if(!client||client.sheetDisabled)throw error('Client not found.',403);
     const open=path.match(/^\/api\/student\/exams\/([1-6])$/);
     if(open&&method==='GET'){const level=Number(open[1]);if(!permission(client,level))throw error('Your teacher has not granted access to this exam.',403);const exam=publicExam(level);db.prepare('INSERT INTO events(client_id,level,at,kind) VALUES(?,?,?,?)').run(client.id,level,iso(),'Opened');let row=db.prepare('SELECT * FROM attempts WHERE client_id=? AND level=? ORDER BY opened DESC LIMIT 1').get(client.id,level);if(!row){const id=randomUUID();db.prepare('INSERT INTO attempts(id,client_id,level,opened,deadline) VALUES(?,?,?,?,?)').run(id,client.id,level,iso(),now()+25*60000);row=db.prepare('SELECT * FROM attempts WHERE id=?').get(id);}send({exam,attempt:attemptData(expire(row))});return true;}
     const progress=path.match(/^\/api\/student\/attempts\/([a-f0-9-]+)$/);
