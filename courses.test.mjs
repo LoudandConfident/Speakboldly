@@ -18,3 +18,9 @@ test('General English has distinct four- and eight-session packages with their o
  for(const [i,count] of [8,4].entries()){assert.equal(packages[i].duration,count+' sessions per month');assert.equal(packages[i].priceOptions.length,1);assert(packages[i].priceOptions[0].schedule.startsWith(count+' sessions'));}
  assert.equal(packages[0].priceOptions[0].amount,3000);assert.equal(packages[1].priceOptions[0].amount,2000);
 });
+
+test('first program row ends with active interview preparation and writing is visually dimmed',()=>{
+ assert.deepEqual(courses.slice(0,4).map(c=>c.id),['general-8','general-4','urgent-session','interview']);
+ const interview=courses.find(c=>c.id==='interview');assert(!interview.comingSoon&&!interview.dimmed);
+ const writing=courses.find(c=>c.id==='writing');assert.equal(writing.dimmed,true);assert(!writing.comingSoon);assert.equal(writing.price,1500);
+});

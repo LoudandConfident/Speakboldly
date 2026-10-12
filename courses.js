@@ -48,22 +48,24 @@ export const courses = [
     "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions."
   },
   {
-    "id": "writing",
-    "title": "E-mail and business writing workshop",
-    "level": "Intermediate and advanced",
-    "duration": "5 sessions",
-    "price": 1500,
-    "category": "Workshops",
-    "description": "Write clear, professional emails and business messages with confidence. Practice choosing the right tone, organizing your ideas, making requests and following up politely.",
+    "id": "urgent-session",
+    "title": "One Session",
+    "level": "Your current English level",
+    "duration": "90 minutes",
+    "category": "Others",
+    "description": "Book session by session, with no commitment. A little pricier, but useful when something urgent comes up. Enjoy 90 minutes of interactive conversation about the topic you need, or a topic your instructor chooses based on your previously communicated needs and English level. It can also be your trial session to help you decide what would support you most with your current needs.",
+    "price": 500,
+    "priceLabel": "90 minutes · no commitment",
+    "showComingSoonPrice": true,
     "topics": [
-      "Professional emails and appropriate tone",
-      "Requests, follow-ups and replies",
-      "Clear structure and concise writing",
-      "Editing and practical writing feedback"
+      "Interactive conversation tailored to your needs",
+      "Urgent topics or instructor-selected practice",
+      "A trial to help you choose your next step"
     ],
-    "art": "writing",
-    "summary": "Write clear, professional emails and business messages.",
-    "detailDescription": "Bring examples of the kinds of messages you need to write, such as requests, updates or follow-ups. Practise adapting your tone to the reader, arranging key information clearly and revising drafts with instructor feedback."
+    "art": "urgent",
+    "comingSoon": true,
+    "summary": "One 90-minute conversation session tailored to your immediate needs.",
+    "detailDescription": "Before the session, tell your instructor your topic, current English level and what you need help with. Use the conversation to rehearse an upcoming situation, work through an immediate communication need or explore what kind of coaching would help you next. Each session stands on its own, with no ongoing commitment."
   },
   {
     "id": "interview",
@@ -90,24 +92,23 @@ export const courses = [
     "detailDescription": "Practise describing your experience, strengths and achievements in your own words. Work on focused answers, follow-up questions and the questions you want to ask an employer, using mock interviews and feedback to prepare."
   },
   {
-    "id": "urgent-session",
-    "title": "One Session",
-    "level": "Your current English level",
-    "duration": "90 minutes",
-    "category": "Others",
-    "description": "Book session by session, with no commitment. A little pricier, but useful when something urgent comes up. Enjoy 90 minutes of interactive conversation about the topic you need, or a topic your instructor chooses based on your previously communicated needs and English level. It can also be your trial session to help you decide what would support you most with your current needs.",
-    "price": 500,
-    "priceLabel": "90 minutes · no commitment",
-    "showComingSoonPrice": true,
+    "id": "writing",
+    "title": "E-mail and business writing workshop",
+    "level": "Intermediate and advanced",
+    "duration": "5 sessions",
+    "price": 1500,
+    "category": "Workshops",
+    "description": "Write clear, professional emails and business messages with confidence. Practice choosing the right tone, organizing your ideas, making requests and following up politely.",
     "topics": [
-      "Interactive conversation tailored to your needs",
-      "Urgent topics or instructor-selected practice",
-      "A trial to help you choose your next step"
+      "Professional emails and appropriate tone",
+      "Requests, follow-ups and replies",
+      "Clear structure and concise writing",
+      "Editing and practical writing feedback"
     ],
-    "art": "urgent",
-    "comingSoon": true,
-    "summary": "One 90-minute conversation session tailored to your immediate needs.",
-    "detailDescription": "Before the session, tell your instructor your topic, current English level and what you need help with. Use the conversation to rehearse an upcoming situation, work through an immediate communication need or explore what kind of coaching would help you next. Each session stands on its own, with no ongoing commitment."
+    "art": "writing",
+    "summary": "Write clear, professional emails and business messages.",
+    "detailDescription": "Bring examples of the kinds of messages you need to write, such as requests, updates or follow-ups. Practise adapting your tone to the reader, arranging key information clearly and revising drafts with instructor feedback.",
+    "dimmed": true
   },
   {
     "id": "speaking",
