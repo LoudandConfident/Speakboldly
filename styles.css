@@ -224,3 +224,5 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 @media(max-width:680px){#home .home-picture-and-reviews{grid-template-columns:minmax(0,1fr) 100px;gap:8px}#home .home-speech-links{gap:6px;margin:0}#home .home-speech-bubble{width:100px;height:56px;font-size:10px;padding-left:10px;padding-right:10px}}
 
 .join-sb-whatsapp svg{width:22px;height:22px}
+
+#placement #assessment-start{display:inline-flex;width:fit-content;max-width:100%;min-height:36px;padding:8px 12px;font-size:12px;line-height:1.4;gap:6px;flex:none}
