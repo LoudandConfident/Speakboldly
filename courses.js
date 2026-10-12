@@ -21,7 +21,7 @@ export const courses = [
     ],
     "art": "general",
     "summary": "Private English coaching tailored to your level and everyday needs.",
-    "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions."
+    "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions. This is an ongoing program; how long you continue depends on your English level."
   },
   {
     "id": "general-4",
@@ -45,7 +45,7 @@ export const courses = [
     ],
     "art": "general",
     "summary": "Private English coaching tailored to your level and everyday needs.",
-    "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions."
+    "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions. This is an ongoing program; how long you continue depends on your English level."
   },
   {
     "id": "urgent-session",
