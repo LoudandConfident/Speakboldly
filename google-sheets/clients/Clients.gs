@@ -19,10 +19,13 @@ function safeSheetText(value){const s=String(value??'');return /^[=+\-@]/.test(s
 function handleClientSync(e){
  const lock=LockService.getScriptLock();
  try{
-  if(!e?.postData?.contents||e.postData.contents.length>20000)throw new Error('Invalid request.');
+  if(!e?.postData?.contents||e.postData.contents.length>8000000)throw new Error('Invalid request.');
   const p=JSON.parse(e.postData.contents),props=PropertiesService.getScriptProperties();
   const key=props.getProperty('CLIENT_SYNC_KEY');
   if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
+  if(!['sendClientEmail','uploadLibraryFile'].includes(p.action)&&e.postData.contents.length>20000)throw new Error('Request too large.');
+  if(p.action==='sendClientEmail'){if(typeof handleClientEmail!=='function')throw new Error('Add EmailActions.gs and authorizeClientEmails, then deploy a New version to enable email sending.');return handleClientEmail(p);}
+  if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(p.action)){if(typeof handleLibraryAction!=='function')throw new Error('Add LibraryActions.gs to enable library sharing.');return handleLibraryAction(p);}
   if(p.action==='checkConnection')return clientSyncResponse({ok:true,connected:true});
   if(['listTeacherDocuments','saveTeacherDocument'].includes(p.action)){if(typeof handleSheetDocumentAction!=='function')throw new Error('Add TeacherDocuments.gs to enable shared reports.');return handleSheetDocumentAction(p);}
   if(['listSessions','saveSession','cancelSession'].includes(p.action)){if(typeof handleSheetSessionAction!=='function')throw new Error('Add Sessions.gs and run setupSheetReminders first.');return handleSheetSessionAction(p);}
@@ -69,6 +72,6 @@ function handleClientSync(e){
 function doPost(e) {
  let data;
  try {data = JSON.parse(e.postData.contents);} catch {return clientSyncResponse({ok:false,error:'Invalid request.'});}
- if (['upsertClient','checkConnection','listClients','listSessions','saveSession','cancelSession','listTeacherDocuments','saveTeacherDocument'].includes(data.action)) return handleClientSync(e);
+ if (['upsertClient','checkConnection','listClients','listSessions','saveSession','cancelSession','listTeacherDocuments','saveTeacherDocument','sendClientEmail','listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(data.action)) return handleClientSync(e);
  return handleReviewPost(e);
 }

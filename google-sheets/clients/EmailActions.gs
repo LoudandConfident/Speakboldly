@@ -1,3 +1,5 @@
+// Run once in Apps Script to grant email permission. This does not send an email.
+function authorizeClientEmails(){MailApp.getRemainingDailyQuota();}
 const SB_EMAIL_LOGO='https://loudandconfident.github.io/Speakboldly/speak-boldly-preview-dark-green.png';
 const SB_ZOOM_URL='https://us06web.zoom.us/j/79051707388';
 const SB_ZOOM_PASSCODE='7P1NpA';

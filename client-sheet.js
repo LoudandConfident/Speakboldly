@@ -10,6 +10,7 @@ async function sheetRequest(url,secret,payload,fetcher = globalThis.fetch) {
   const response = await fetcher(url,{method:'POST',credentials:'omit',redirect:'follow',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({...payload,key:secret}),signal:controller.signal});
   let result;
   try {result = await response.json();} catch {throw new Error('The client sheet could not be reached. Check its deployment.');}
+  if(result.error==='Invalid action.'&&payload.action==='sendClientEmail')throw new Error('Your connected Clients Apps Script deployment does not support email sending yet. Update the script and deploy a New version, then retry. No email was sent.');
   if (!response.ok || !result.ok) throw new Error(result.error || 'The client sheet request failed.');
   return result;
  } catch(error) {

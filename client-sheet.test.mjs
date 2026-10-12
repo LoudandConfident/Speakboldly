@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import {mergeSheetClients,initializeClientSheet,loadClientsFromSheet,clearClientSheet} from './client-sheet.js';
+import {mergeSheetClients,initializeClientSheet,loadClientsFromSheet,clearClientSheet,sendSheetClientEmail} from './client-sheet.js';
 const client={id:'client-1',name:'Test Learner',email:'test@example.com',code:'0012',level:'2',payment:'Paid',amountPaid:100,hours:3,permissions:['section:reports']};
 test('sheet values win while browser-only clients are preserved',()=>{
  const other={...client,id:'client-2',email:'other@example.com'};
@@ -19,6 +19,7 @@ test('authenticated client loading validates every returned row',async()=>{
   assert.deepEqual(rows,[client]);
   await assert.rejects(loadClientsFromSheet(async()=>({ok:true,json:async()=>({ok:true,clients:[client,client]})})),/duplicate Client ID/);
   await assert.rejects(loadClientsFromSheet(async()=>({ok:true,json:async()=>({ok:true})})),/Update your Clients/);
+  await assert.rejects(sendSheetClientEmail(client.id,'confirmation',{requestId:'test-email-request'},async()=>({ok:true,json:async()=>({ok:false,error:'Invalid action.'})})),/deploy a New version.*No email was sent/);
  }finally{globalThis.fetch=previous;clearClientSheet();}
 });
 for(const filename of ['StandaloneClients.gs','Clients.gs']){
@@ -33,5 +34,21 @@ for(const filename of ['StandaloneClients.gs','Clients.gs']){
   assert.deepEqual(JSON.parse(JSON.stringify(call({action:'listClients',key:'private-test-key'}).clients)),[client]);
  });
 }
+
+test('combined Clients router authenticates and dispatches confirmation and PDF emails',()=>{
+ const handled=[],context={PropertiesService:{getScriptProperties:()=>({getProperty:()=> 'private-test-key'})},LockService:{getScriptLock:()=>({hasLock:()=>false})},ContentService:{MimeType:{JSON:'json'},createTextOutput:s=>({setMimeType:()=>JSON.parse(s)})},handleReviewPost:()=>{throw new Error('Client emails must not reach the review handler.');},handleClientEmail:p=>{handled.push(p);return {ok:true,recipient:'test@example.com'};}};
+ vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/Clients.gs','utf8'),context);
+ const call=p=>context.doPost({postData:{contents:JSON.stringify(p)}});
+ assert.equal(call({action:'sendClientEmail',key:'wrong',kind:'confirmation'}).ok,false);assert.equal(handled.length,0);
+ assert.equal(call({action:'sendClientEmail',key:'private-test-key',kind:'confirmation'}).ok,true);
+ assert.equal(call({action:'sendClientEmail',key:'private-test-key',kind:'progress',pdfBase64:'a'.repeat(21000)}).ok,true);assert.equal(handled.length,2);
+ delete context.handleClientEmail;assert.match(call({action:'sendClientEmail',key:'private-test-key'}).error,/Add EmailActions.gs/);
+});
+
+test('email permission setup does not send messages',()=>{
+ for(const filename of ['EmailActions.gs','UnifiedCode.gs']){
+  let checked=0;const context={MailApp:{getRemainingDailyQuota:()=>{checked++;return 100;},sendEmail:()=>{throw new Error('Must not send email during permission setup.');}}};vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/'+filename,'utf8'),context);context.authorizeClientEmails();assert.equal(checked,1);
+ }
+});
 
 
