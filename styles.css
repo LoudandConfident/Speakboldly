@@ -246,3 +246,9 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 }
 
 #home .hero-copy .home-slogan{position:relative;top:-14px}#home .hero-copy>.button{margin-top:16px}@media(max-width:680px){#home .hero-copy .home-slogan{top:-8px}#home .hero-copy>.button{margin-top:12px}}
+
+#home .home-picture-and-reviews{display:flex;flex-direction:column;align-items:stretch;gap:12px;min-width:0}
+#home .home-speech-links{display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:10px;margin:0}
+#home .home-picture-and-reviews .coaching-photo{width:100%;height:440px}
+#home .home-speech-bubble{width:auto;min-width:130px;height:auto;min-height:34px;padding:7px 16px}
+@media(max-width:680px){#home .home-picture-and-reviews{gap:10px}#home .home-picture-and-reviews .coaching-photo{height:auto;aspect-ratio:16/9}#home .home-speech-links{flex-direction:row;justify-content:flex-end;gap:8px}#home .home-speech-bubble{width:auto;min-width:0;min-height:34px;padding:7px 12px}}
