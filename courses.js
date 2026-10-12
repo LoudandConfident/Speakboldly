@@ -134,7 +134,7 @@ export const courses = [
     "id": "kids",
     "title": "Let the kids speak!",
     "level": "Beginner, Intermediate, Advanced · Ages 6–14",
-    "duration": "Stay tuned",
+    "duration": "8 sessions",
     "category": "Kids",
     "description": "Help children express themselves in English through playful conversations, stories and age-appropriate speaking activities.",
     "topics": [
@@ -142,13 +142,15 @@ export const courses = [
     ],
     "art": "kids",
     "comingSoon": true,
-    "summary": "Playful English speaking activities for children aged 6–14."
+    "summary": "Playful English speaking activities for children aged 6–14.",
+    "price": 4000,
+    "priceLabel": "8 sessions"
   },
   {
     "id": "instructor-training",
     "title": "Instructor training",
     "level": "Instructors · 0–2 years of experience",
-    "duration": "Stay tuned",
+    "duration": "8 sessions",
     "category": "Training",
     "description": "Before joining, instructors must complete an interview and an English exam. Admission requires a score of at least 93%.",
     "topics": [
@@ -158,7 +160,9 @@ export const courses = [
     "comingSoon": true,
     "detailDescription": "After more than 8 years working at Berlitz, Ucan, Oxford Academy, Kayan Academy and Bright Bridges, I am more than happy to share my experience with instructors who share the same vision and want to support others for a living.",
     "previewDetails": true,
-    "summary": "Practical training for instructors with 0–2 years of experience."
+    "summary": "Practical training for instructors with 0–2 years of experience.",
+    "price": 6000,
+    "priceLabel": "8 sessions"
   },
   {
     "id": "different-learners",
