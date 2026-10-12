@@ -63,7 +63,6 @@ export const courses = [
       "A trial to help you choose your next step"
     ],
     "art": "urgent",
-    "comingSoon": true,
     "summary": "One 90-minute conversation session tailored to your immediate needs.",
     "detailDescription": "Before the session, tell your instructor your topic, current English level and what you need help with. Use the conversation to rehearse an upcoming situation, work through an immediate communication need or explore what kind of coaching would help you next. Each session stands on its own, with no ongoing commitment."
   },
@@ -107,8 +106,7 @@ export const courses = [
     ],
     "art": "writing",
     "summary": "Write clear, professional emails and business messages.",
-    "detailDescription": "Bring examples of the kinds of messages you need to write, such as requests, updates or follow-ups. Practise adapting your tone to the reader, arranging key information clearly and revising drafts with instructor feedback.",
-    "dimmed": true
+    "detailDescription": "Bring examples of the kinds of messages you need to write, such as requests, updates or follow-ups. Practise adapting your tone to the reader, arranging key information clearly and revising drafts with instructor feedback."
   },
   {
     "id": "speaking",

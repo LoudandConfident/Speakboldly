@@ -19,8 +19,8 @@ test('General English has distinct four- and eight-session packages with their o
  assert.equal(packages[0].priceOptions[0].amount,3000);assert.equal(packages[1].priceOptions[0].amount,2000);
 });
 
-test('first program row ends with active interview preparation and writing is visually dimmed',()=>{
+test('featured program order and all five featured programs are undimmed',()=>{
  assert.deepEqual(courses.slice(0,4).map(c=>c.id),['general-8','general-4','urgent-session','interview']);
  const interview=courses.find(c=>c.id==='interview');assert(!interview.comingSoon&&!interview.dimmed);
- const writing=courses.find(c=>c.id==='writing');assert.equal(writing.dimmed,true);assert(!writing.comingSoon);assert.equal(writing.price,1500);
+ const writing=courses.find(c=>c.id==='writing');assert(!writing.dimmed);assert(!courses.find(c=>c.id==='urgent-session').comingSoon);assert(!writing.comingSoon);assert.equal(writing.price,1500);
 });
