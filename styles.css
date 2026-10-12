@@ -280,3 +280,14 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
  #home .home-picture-and-reviews{width:100%;top:-14px}
  #home .home-picture-and-reviews .coaching-photo{height:auto;aspect-ratio:16/9}
 }
+
+@media(min-width:681px){
+ #home .home-picture-and-reviews{top:0;gap:14px}
+ #home .home-speech-links{position:relative;top:0;margin:0;z-index:1}
+ #home .home-picture-and-reviews .coaching-photo{position:relative;top:-8px}
+}
+@media(max-width:680px){
+ #home .home-picture-and-reviews{top:0;gap:12px}
+ #home .home-speech-links{position:relative;top:0;margin:0;z-index:1}
+ #home .home-picture-and-reviews .coaching-photo{position:relative;top:-6px}
+}
