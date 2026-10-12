@@ -1,3 +1,26 @@
+const SB_EMAIL_LOGO='https://loudandconfident.github.io/Speakboldly/speak-boldly-preview-dark-green.png';
+const SB_ZOOM_URL='https://us06web.zoom.us/j/79051707388';
+const SB_ZOOM_PASSCODE='7P1NpA';
+function sbEmailEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function sbBrandedEmail(title,content){
+ return '<!doctype html><html><body style="margin:0;background:#faf9f4;font-family:Arial,sans-serif;color:#193c32"><table role="presentation" style="width:100%;max-width:600px;margin:auto;background:#fffef9;border-collapse:collapse"><tr><td style="padding:28px 28px 12px"><img src="'+SB_EMAIL_LOGO+'" width="58" height="58" alt="Speak Boldly logo" style="display:block;border-radius:10px"><h1 style="font-size:24px;margin:18px 0">'+sbEmailEscape(title)+'</h1></td></tr><tr><td style="padding:0 28px 28px;font-size:15px;line-height:1.7">'+content+'<p style="margin-top:28px">Speak Boldly<br><a href="mailto:speakboldly16@gmail.com" style="color:#176b3a">speakboldly16@gmail.com</a></p></td></tr></table></body></html>';
+}
+function sbUpcomingClientMeetings(book,clientId){
+ const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return [];
+ return sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues().filter(r=>String(r[1])===String(clientId)&&String(r[7])!=='cancelled'&&Number.isFinite(Date.parse(r[5]))&&Date.parse(r[5])>Date.now()).sort((a,b)=>Date.parse(a[5])-Date.parse(b[5]));
+}
+function sbCalendarEmail(client,meetings,reminder=false){
+ const heading=reminder?'Your upcoming class reminder':'Your class confirmation',name=String(client[1]),program=String(client[4]||'');
+ const lines=meetings.map(r=>'Session '+r[2]+' — '+Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy — h:mm a')+' (Cairo time)');
+ const intro=reminder?'This is a reminder for your upcoming English class.':'Your upcoming English sessions are confirmed below.';
+ const portalInfo=!reminder&&client[3]?'\n\nStudent portal passcode: '+String(client[3]).padStart(4,'0')+'\nStudent portal: https://loudandconfident.github.io/Speakboldly/#students-portal':'';
+ const body='Hello '+name+',\n\n'+intro+(program?'\n\nProgram / Level: '+program:'')+'\n\n'+lines.join('\n')+portalInfo+'\n\nJoin on Zoom:\n'+SB_ZOOM_URL+'\nPasscode: '+SB_ZOOM_PASSCODE+'\n\nPlease note: No same-day cancellations are allowed.\n\nIf you have any questions, reply to this email.\n\nSee you in class!\nSpeak Boldly';
+ const rows=meetings.map(r=>'<tr><td style="padding:10px;border-bottom:1px solid #dedfd5;vertical-align:top">Session '+sbEmailEscape(r[2])+'</td><td style="padding:10px;border-bottom:1px solid #dedfd5">'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy'))+'<br><strong>'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','h:mm a'))+'</strong> · Cairo time</td></tr>').join('');
+ const portalHtml=!reminder&&client[3]?'<p><strong>Student portal passcode:</strong> '+sbEmailEscape(String(client[3]).padStart(4,'0'))+'<br><a href="https://loudandconfident.github.io/Speakboldly/#students-portal" style="color:#176b3a">Open Student portal</a></p>':'';
+ const content='<p>Hello '+sbEmailEscape(name)+',</p><p>'+intro+'</p>'+(program?'<p><strong>Program / Level:</strong> '+sbEmailEscape(program)+'</p>':'')+'<table style="width:100%;border-collapse:collapse;background:#edf0e6;font-size:14px">'+rows+'</table>'+portalHtml+'<p><a href="'+SB_ZOOM_URL+'" style="display:inline-block;padding:10px 16px;background:#193c32;color:#fffef9;text-decoration:none;border-radius:6px">Join on Zoom</a><br><strong>Zoom passcode:</strong> '+SB_ZOOM_PASSCODE+'</p><p><strong>No same-day cancellations are allowed.</strong></p><p>If you have any questions, reply to this email.</p><p>See you in class!</p>';
+ return {body,htmlBody:sbBrandedEmail(heading,content)};
+}
+
 // Owner-authorized individual emails. Recipients come from Clients, never from browser input.
 function handleClientEmail(p){
  const respond=typeof response==='function'?response:clientSyncResponse;
@@ -20,9 +43,16 @@ function handleClientEmail(p){
   if(existing){if(String(existing[1])!==id||String(existing[2])!==kind)throw new Error('Email request identity mismatch.');if(existing[4]==='sent')return respond({ok:true,status:'sent',recipient:String(existing[3])});throw new Error('This email has an uncertain delivery status. Check EmailLog before sending it again.');}
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached. Try again tomorrow.');
   const labels={confirmation:'Email confirmation',progress:'Progress report',final:'Final report',registration:'Payment and registration confirmation'};
-  const body='Hello '+client[1]+',\n\n'+(kind==='confirmation'?'This confirms your Speak Boldly client details.\n\nProgram / Level: '+client[4]+'\nStudent portal passcode: '+String(client[3]).padStart(4,'0')+'\nStudent portal: https://loudandconfident.github.io/Speakboldly/#students-portal':'Please find your '+labels[kind].toLowerCase()+' attached.')+'\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
+  let message;
+  if(kind==='confirmation'){
+   const meetings=sbUpcomingClientMeetings(book,id);if(!meetings.length)throw new Error('No upcoming calendar sessions are saved for this client. Add or sync their appointments first.');
+   message=sbCalendarEmail(client,meetings);
+  }else{
+   const body='Hello '+client[1]+',\n\nPlease find your '+labels[kind].toLowerCase()+' attached.\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
+   message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p><p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p><p>If you have any questions, reply to this email.</p>')};
+  }
   const row=log.getLastRow()+1;log.getRange(row,1,1,7).setValues([[requestId,id,kind,String(client[2]),'sending','','']]);SpreadsheetApp.flush();
-  try{MailApp.sendEmail({to:String(client[2]),subject:labels[kind]+' — Speak Boldly',body,name:'Speak Boldly',replyTo:'speakboldly16@gmail.com',...(attachment?{attachments:[attachment]}:{})});log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}
+  try{MailApp.sendEmail({to:String(client[2]),subject:(kind==='confirmation'?'Your class confirmation':labels[kind])+' — Speak Boldly',...message,name:'Speak Boldly',replyTo:'speakboldly16@gmail.com',...(attachment?{attachments:[attachment]}:{})});log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}
   catch(error){log.getRange(row,5).setValue('delivery_unknown');log.getRange(row,7).setValue(String(error.message||error));throw new Error('Email delivery could not be confirmed. Check EmailLog before trying another send.');}
  }finally{lock.releaseLock();}
 }

@@ -76,7 +76,7 @@ function sendDueSheetReminders(){
  try{
   const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
   const clients=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
-  const people=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,3).getValues():[];
+  const people=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,9).getValues():[];
   let remaining=MailApp.getRemainingDailyQuota(),count=0;
   for(let i=0;i<rows.length;i++){
    const r=rows[i],row=i+2,status=String(r[7]),starts=Date.parse(r[5]),due=Date.parse(r[6]);
@@ -91,7 +91,7 @@ function sendDueSheetReminders(){
    // Persist a claim first. An interrupted send is not retried blindly.
    sheet.getRange(row,8).setValue('sending');sheet.getRange(row,10).setValue('');SpreadsheetApp.flush();
    try{
-    MailApp.sendEmail({to:email,subject:'Your class reminder — Session '+r[2]+' — Speak Boldly',body:text,name:'Speak Boldly',replyTo:'speakboldly16@gmail.com'});
+    MailApp.sendEmail({to:email,subject:'Your class reminder — Session '+r[2]+' — Speak Boldly',body:text,...(typeof sbCalendarEmail==='function'?{htmlBody:sbCalendarEmail(person,[r],true).htmlBody}:{}),name:'Speak Boldly',replyTo:'speakboldly16@gmail.com'});
     sheet.getRange(row,8,1,3).setValues([['sent',new Date().toISOString(),'']]);remaining--;count++;
    }catch(error){sheet.getRange(row,8).setValue('delivery_unknown');sheet.getRange(row,10).setValue(String(error.message||error));}
   }

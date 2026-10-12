@@ -1,0 +1,459 @@
+const CLIENT_HEADERS = [
+  'Client ID',
+  'Name',
+  'Email',
+  'Student Code',
+  'Level / Program',
+  'Payment status',
+  'Amount paid',
+  'Hours taught',
+  'Updated at'
+];
+
+function setupClientSync() {
+  const book = SpreadsheetApp.getActiveSpreadsheet();
+  if (!book) {
+    throw new Error('Open Apps Script from your Google Sheet.');
+  }
+
+  const properties = PropertiesService.getScriptProperties();
+  properties.setProperty('CLIENT_SHEET_ID', book.getId());
+
+  if (!properties.getProperty('CLIENT_SYNC_KEY')) {
+    properties.setProperty(
+      'CLIENT_SYNC_KEY',
+      Utilities.getUuid() + Utilities.getUuid()
+    );
+  }
+
+  const sheet =
+    book.getSheetByName('Clients') || book.insertSheet('Clients');
+
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(CLIENT_HEADERS);
+  } else {
+    const headers = sheet.getRange(1, 1, 1, 9).getValues()[0];
+    if (JSON.stringify(headers) !== JSON.stringify(CLIENT_HEADERS)) {
+      throw new Error('Clients tab must be empty before first setup.');
+    }
+  }
+
+  book.setSpreadsheetTimeZone('Africa/Cairo');
+  sheet.setFrozenRows(1);
+  sheet.getRange('A1:I1').setFontWeight('bold');
+  sheet.getRange('D2:D').setNumberFormat('@');
+  sheet.autoResizeColumns(1, 9);
+}
+
+function response(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet() {
+  const properties = PropertiesService.getScriptProperties();
+  return response({
+    ok: true,
+    service: 'Speak Boldly Clients',
+    configured: Boolean(
+      properties.getProperty('CLIENT_SHEET_ID') &&
+      properties.getProperty('CLIENT_SYNC_KEY')
+    )
+  });
+}
+
+function doPost(event) {
+  const lock = LockService.getScriptLock();
+
+  try {
+    if (!event || !event.postData ||
+        event.postData.contents.length > 8000000) {
+      throw new Error('Invalid request.');
+    }
+
+    const data = JSON.parse(event.postData.contents);
+    const properties = PropertiesService.getScriptProperties();
+    const key = properties.getProperty('CLIENT_SYNC_KEY');
+
+    if (!key || data.key !== key) {
+      throw new Error('Incorrect connection key.');
+    }
+
+    const sheetId = properties.getProperty('CLIENT_SHEET_ID');
+    if (!sheetId) {
+      throw new Error('Run setupClientSync first.');
+    }
+
+    const sheet = SpreadsheetApp
+      .openById(sheetId)
+      .getSheetByName('Clients');
+
+    if (!sheet) {
+      throw new Error('Clients tab is missing.');
+    }
+
+    if(!['sendClientEmail','uploadLibraryFile'].includes(data.action)&&event.postData.contents.length>20000)throw new Error('Request too large.');
+    if(data.action==='sendClientEmail')return handleClientEmail(data);
+    if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(data.action))return handleLibraryAction(data);
+
+    if (data.action === 'checkConnection') {
+      return response({ ok: true, connected: true });
+    }
+
+    if(['listTeacherDocuments','saveTeacherDocument'].includes(data.action)){if(typeof handleSheetDocumentAction!=='function')throw new Error('Update your Clients Apps Script to enable shared reports.');return handleSheetDocumentAction(data);}
+
+    if (['listSessions', 'saveSession', 'cancelSession'].includes(data.action)) {
+      return handleSheetSessionAction(data);
+    }
+
+    if (data.action !== 'upsertClient' || !data.client) {
+          if (data.action === 'listClients') {
+      const rows = sheet.getLastRow() > 1
+        ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 10).getValues()
+        : [];
+      const clients = rows.filter(row => row[0] && row[1] && row[2]).map(row => ({
+        id: String(row[0]), name: String(row[1]).trim(),
+        email: String(row[2]).trim().toLowerCase(),
+        code: String(row[3]).padStart(4, '0'), level: String(row[4]),
+        payment: String(row[5]), amountPaid: Number(row[6] || 0),
+        hours: Number(row[7] || 0),
+        permissions: row[9] ? JSON.parse(String(row[9])) : []
+      }));
+      return response({ ok: true, clients });
+    }
+
+
+      throw new Error('Invalid action.');
+    }
+
+    const client = data.client;
+    if(client.permissions!==undefined&&(!Array.isArray(client.permissions)||client.permissions.length>500||client.permissions.some(p=>typeof p!=='string'||p.length>2000||!/^(section:|file:)/.test(p))))throw new Error('Invalid client access selections.');
+    const text = value => String(value == null ? '' : value).trim();
+
+    const id = text(client.id);
+    const name = text(client.name);
+    const email = text(client.email).toLowerCase();
+    const code = text(client.code);
+    const level = text(client.level);
+    const payment = text(client.payment);
+    const amount = Number(client.amountPaid || 0);
+    const hours = Number(client.hours);
+
+    if (!/^[A-Za-z0-9-]{1,100}$/.test(id)) {
+      throw new Error('Invalid student ID.');
+    }
+    if (!name || name.length > 100) {
+      throw new Error('Check the student name.');
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+        email.length > 254) {
+      throw new Error('Check the student email.');
+    }
+    if (!/^\d{4}$/.test(code) || code === '1962') {
+      throw new Error('Choose a valid four-digit student code.');
+    }
+    if (!level || level.length > 100) {
+      throw new Error('Check the level or program.');
+    }
+    if (!['Unpaid', 'Part paid', 'Paid'].includes(payment)) {
+      throw new Error('Check the payment status.');
+    }
+    if (!Number.isFinite(amount) || amount < 0 ||
+        amount > 100000000 ||
+        !Number.isFinite(hours) || hours < 0 ||
+        hours > 100000) {
+      throw new Error('Check the amount paid and hours.');
+    }
+
+    lock.waitLock(20000);
+
+    const rows = sheet.getLastRow() > 1
+      ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getValues()
+      : [];
+
+    const normalize = value =>
+      text(value).normalize('NFKC').replace(/\s+/g, ' ').toLowerCase();
+
+    let targetRow = sheet.getLastRow() + 1;
+
+    rows.forEach((row, index) => {
+      if (String(row[0]) === id) {
+        targetRow = index + 2;
+        return;
+      }
+
+      if (String(row[3]).padStart(4, '0') === code) {
+        throw new Error('Student code is already assigned.');
+      }
+      if (normalize(row[1]) === normalize(name)) {
+        throw new Error('Student name is already registered.');
+      }
+      if (text(row[2]).toLowerCase() === email) {
+        throw new Error('Email already belongs to another student.');
+      }
+    });
+
+    const safe = value =>
+      /^[=+\-@\t\r]/.test(value) ? "'" + value : value;
+
+    sheet.getRange(targetRow, 4).setNumberFormat('@');
+    sheet.getRange(targetRow, 1, 1, 9).setValues([[
+      id,
+      safe(name),
+      safe(email),
+      code,
+      safe(level),
+      payment,
+      amount,
+      hours,
+      new Date().toISOString()
+    ]]);
+
+    if(client.permissions!==undefined){sheet.getRange(1,10).setValue('Permissions');sheet.getRange(targetRow,10).setValue(JSON.stringify(client.permissions));}
+    return response({ ok: true, clientId: id });
+
+  } catch (error) {
+    return response({ ok: false, error: error.message });
+  } finally {
+    if (lock.hasLock()) lock.releaseLock();
+  }
+}
+
+// Add this file to the existing Clients Apps Script project.
+// Run setupSheetReminders once from the Google account that should send reminders.
+const SB_SESSION_HEADERS=['Session ID','Client ID','Session number','Date (Cairo)','Time (Cairo)','Starts at (UTC)','Remind at (UTC)','Status','Sent at (UTC)','Last error'];
+function setupSheetReminders(){
+ const props=PropertiesService.getScriptProperties(),id=props.getProperty('CLIENT_SHEET_ID');
+ if(!id)throw new Error('Run setupClientSync first.');
+ const sheet=SpreadsheetApp.openById(id).getSheetByName('Sessions')||SpreadsheetApp.openById(id).insertSheet('Sessions');
+ if(!sheet.getLastRow())sheet.appendRow(SB_SESSION_HEADERS);
+ else if(JSON.stringify(sheet.getRange(1,1,1,10).getValues()[0])!==JSON.stringify(SB_SESSION_HEADERS))throw new Error('Sessions headers differ. Existing data has not been replaced.');
+ sheet.setFrozenRows(1);sheet.getRange('A1:J1').setFontWeight('bold');
+ // Authorization is requested here before any clients are emailed.
+ MailApp.getRemainingDailyQuota();
+ ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='sendDueSheetReminders').forEach(t=>ScriptApp.deleteTrigger(t));
+ ScriptApp.newTrigger('sendDueSheetReminders').timeBased().everyMinutes(5).create();
+ props.setProperty('SB_REMINDERS_ENABLED','true');
+}
+function sbSessionsSheet(){
+ const id=PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID');
+ const sheet=SpreadsheetApp.openById(id).getSheetByName('Sessions');
+ if(!sheet)throw new Error('Add Sessions.gs and run setupSheetReminders first.');
+ return sheet;
+}
+function sbCairoTimestamp(date,time){
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(time))throw new Error('Choose a valid date and Cairo time.');
+ const utc=Date.parse(date+'T'+time+':00Z'),matches=[];
+ for(const offset of [2,3]){
+  const value=utc-offset*3600000;
+  if(Utilities.formatDate(new Date(value),'Africa/Cairo','yyyy-MM-dd HH:mm')===date+' '+time)matches.push(value);
+ }
+ if(matches.length!==1)throw new Error('This Cairo time is invalid or ambiguous. Choose another time.');
+ return matches[0];
+}
+function sbSessionId(c){
+ const bytes=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,[c.clientId,c.number,c.date,c.time].join('|'));
+ return bytes.map(b=>(b&255).toString(16).padStart(2,'0')).join('');
+}
+function sbListSheetSessions(){
+ const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
+ return rows.filter(r=>r[0]).map(r=>({id:String(r[0]),clientId:String(r[1]),number:Number(r[2]),date:String(r[3]),time:String(r[4]),name:'',reminderStatus:String(r[7]),reminderAt:new Date(r[6]).toISOString(),sentAt:r[8]?new Date(r[8]).toISOString():null}));
+}
+function sbSaveSheetSession(input,allowPast=false){
+ const c={clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||'')};
+ if(!/^[a-zA-Z0-9-]{1,100}$/.test(c.clientId)||!Number.isInteger(c.number)||c.number<1||c.number>9999)throw new Error('Choose an existing client and valid session number.');
+ const starts=sbCairoTimestamp(c.date,c.time),id=sbSessionId(c),sheet=sbSessionsSheet();
+ const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
+ const existing=rows.find(r=>String(r[0])===id);
+ if(existing)return id; // Retries never create duplicate reminders or restore cancelled classes.
+ if(starts<=Date.now()&&!allowPast)throw new Error('Choose a future session.');
+ const clients=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
+ const ids=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,1).getValues():[];
+ if(!ids.some(r=>String(r[0])===c.clientId))throw new Error('Save this client to the Clients sheet first.');
+ const row=sheet.getLastRow()+1;sheet.getRange(row,4,1,2).setNumberFormat('@');
+ sheet.getRange(row,1,1,10).setValues([[id,c.clientId,c.number,c.date,c.time,new Date(starts).toISOString(),new Date(starts-86400000).toISOString(),starts<=Date.now()?'expired':'pending','','']]);
+ return id;
+}
+function handleSheetSessionAction(p){
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{
+  if(p.action==='saveSession'){if(!p.session)throw new Error('Session missing.');sbSaveSheetSession(p.session,p.importPast===true);}
+  if(p.action==='cancelSession'){
+   const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[],index=rows.findIndex(r=>String(r[0])===String(p.sessionId));
+   if(index<0)throw new Error('Session not found.');
+   if(rows[index][7]==='sending')throw new Error('A reminder is being sent. Try again shortly.');
+   sheet.getRange(index+2,8).setValue('cancelled');
+  }
+  const props=PropertiesService.getScriptProperties();
+  const ready=props.getProperty('SB_REMINDERS_ENABLED')==='true'&&ScriptApp.getProjectTriggers().some(t=>t.getHandlerFunction()==='sendDueSheetReminders');
+  const respond=typeof clientSyncResponse==='function'?clientSyncResponse:response;
+  return respond({ok:true,classes:sbListSheetSessions(),emailReady:ready});
+ }finally{lock.releaseLock();}
+}
+function sendDueSheetReminders(){
+ const props=PropertiesService.getScriptProperties();
+ if(props.getProperty('SB_REMINDERS_ENABLED')!=='true')return;
+ const lock=LockService.getScriptLock();if(!lock.tryLock(1000))return;
+ try{
+  const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
+  const clients=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
+  const people=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,9).getValues():[];
+  let remaining=MailApp.getRemainingDailyQuota(),count=0;
+  for(let i=0;i<rows.length;i++){
+   const r=rows[i],row=i+2,status=String(r[7]),starts=Date.parse(r[5]),due=Date.parse(r[6]);
+   if(status==='sending'){sheet.getRange(row,8).setValue('delivery_unknown');continue;}
+   if(!['pending','failed'].includes(status)||!Number.isFinite(starts)||!Number.isFinite(due))continue;
+   if(starts<=Date.now()){sheet.getRange(row,8).setValue('expired');continue;}
+   if(due>Date.now()||remaining<1||count>=20)continue;
+   const person=people.find(c=>String(c[0])===String(r[1])),email=person?String(person[2]).trim():'';
+   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){sheet.getRange(row,8).setValue('failed');sheet.getRange(row,10).setValue('Client email missing or invalid.');continue;}
+   const when=Utilities.formatDate(new Date(starts),'Africa/Cairo','EEEE, d MMMM yyyy — h:mm a');
+   const text='Hello '+String(person[1])+',\n\nThis is a reminder confirming your upcoming English class.\n\nSession number: '+r[2]+'\nDate and time: '+when+' (Cairo time)\n\nJoin on Zoom:\nhttps://us06web.zoom.us/j/79051707388\nPasscode: 7P1NpA\n\nPlease note: No same-day cancellations are allowed.\n\nSee you in class!\nSpeak Boldly';
+   // Persist a claim first. An interrupted send is not retried blindly.
+   sheet.getRange(row,8).setValue('sending');sheet.getRange(row,10).setValue('');SpreadsheetApp.flush();
+   try{
+    MailApp.sendEmail({to:email,subject:'Your class reminder — Session '+r[2]+' — Speak Boldly',body:text,...(typeof sbCalendarEmail==='function'?{htmlBody:sbCalendarEmail(person,[r],true).htmlBody}:{}),name:'Speak Boldly',replyTo:'speakboldly16@gmail.com'});
+    sheet.getRange(row,8,1,3).setValues([['sent',new Date().toISOString(),'']]);remaining--;count++;
+   }catch(error){sheet.getRange(row,8).setValue('delivery_unknown');sheet.getRange(row,10).setValue(String(error.message||error));}
+  }
+ }finally{lock.releaseLock();}
+}
+
+
+// Shared report field data; PDF templates remain on the website.
+function sbTeacherDocumentsSheet(){
+ const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID'));
+ let sheet=book.getSheetByName('TeacherDocuments');
+ if(!sheet){sheet=book.insertSheet('TeacherDocuments');sheet.appendRow(['Record ID','Version','Updated at (UTC)','JSON']);sheet.setFrozenRows(1);}
+ return sheet;
+}
+function handleSheetDocumentAction(p){
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{
+  const sheet=sbTeacherDocumentsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,4).getValues():[];
+  if(p.action==='saveTeacherDocument'){
+   const record=p.record,id=String(record?.id||'');
+   if(!/^(draft:(progress|final|registration)|document:[a-zA-Z0-9-]{1,100})$/.test(id))throw new Error('Invalid document identity.');
+   if(!record||!['progress','final','registration'].includes(record.type)||!record.values||typeof record.values!=='object'||Array.isArray(record.values))throw new Error('Invalid report fields.');
+   if(Object.keys(record.values).length>1000||Object.values(record.values).some(v=>typeof v!=='string'||v.length>15000))throw new Error('Invalid report values.');
+   const encoded=JSON.stringify(record);if(encoded.length>18000)throw new Error('Report is too large to sync.');
+   const index=rows.findIndex(r=>String(r[0])===id),version=index<0?0:Number(rows[index][1]);
+   if(Number(p.expectedVersion)!==version)throw new Error('This report changed on another device. Reopen the report and review the latest version before saving.');
+   sheet.getRange(index<0?sheet.getLastRow()+1:index+2,1,1,4).setValues([[id,version+1,new Date().toISOString(),encoded]]);
+  }
+  const latest=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,4).getValues():[];
+  const respond=typeof clientSyncResponse==='function'?clientSyncResponse:response;
+  return respond({ok:true,records:latest.filter(r=>r[0]).map(r=>({id:String(r[0]),version:Number(r[1]),updatedAt:String(r[2]),record:JSON.parse(String(r[3]))}))});
+ }finally{lock.releaseLock();}
+}
+
+
+const SB_EMAIL_LOGO='https://loudandconfident.github.io/Speakboldly/speak-boldly-preview-dark-green.png';
+const SB_ZOOM_URL='https://us06web.zoom.us/j/79051707388';
+const SB_ZOOM_PASSCODE='7P1NpA';
+function sbEmailEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function sbBrandedEmail(title,content){
+ return '<!doctype html><html><body style="margin:0;background:#faf9f4;font-family:Arial,sans-serif;color:#193c32"><table role="presentation" style="width:100%;max-width:600px;margin:auto;background:#fffef9;border-collapse:collapse"><tr><td style="padding:28px 28px 12px"><img src="'+SB_EMAIL_LOGO+'" width="58" height="58" alt="Speak Boldly logo" style="display:block;border-radius:10px"><h1 style="font-size:24px;margin:18px 0">'+sbEmailEscape(title)+'</h1></td></tr><tr><td style="padding:0 28px 28px;font-size:15px;line-height:1.7">'+content+'<p style="margin-top:28px">Speak Boldly<br><a href="mailto:speakboldly16@gmail.com" style="color:#176b3a">speakboldly16@gmail.com</a></p></td></tr></table></body></html>';
+}
+function sbUpcomingClientMeetings(book,clientId){
+ const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return [];
+ return sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues().filter(r=>String(r[1])===String(clientId)&&String(r[7])!=='cancelled'&&Number.isFinite(Date.parse(r[5]))&&Date.parse(r[5])>Date.now()).sort((a,b)=>Date.parse(a[5])-Date.parse(b[5]));
+}
+function sbCalendarEmail(client,meetings,reminder=false){
+ const heading=reminder?'Your upcoming class reminder':'Your class confirmation',name=String(client[1]),program=String(client[4]||'');
+ const lines=meetings.map(r=>'Session '+r[2]+' — '+Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy — h:mm a')+' (Cairo time)');
+ const intro=reminder?'This is a reminder for your upcoming English class.':'Your upcoming English sessions are confirmed below.';
+ const portalInfo=!reminder&&client[3]?'\n\nStudent portal passcode: '+String(client[3]).padStart(4,'0')+'\nStudent portal: https://loudandconfident.github.io/Speakboldly/#students-portal':'';
+ const body='Hello '+name+',\n\n'+intro+(program?'\n\nProgram / Level: '+program:'')+'\n\n'+lines.join('\n')+portalInfo+'\n\nJoin on Zoom:\n'+SB_ZOOM_URL+'\nPasscode: '+SB_ZOOM_PASSCODE+'\n\nPlease note: No same-day cancellations are allowed.\n\nIf you have any questions, reply to this email.\n\nSee you in class!\nSpeak Boldly';
+ const rows=meetings.map(r=>'<tr><td style="padding:10px;border-bottom:1px solid #dedfd5;vertical-align:top">Session '+sbEmailEscape(r[2])+'</td><td style="padding:10px;border-bottom:1px solid #dedfd5">'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy'))+'<br><strong>'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','h:mm a'))+'</strong> · Cairo time</td></tr>').join('');
+ const portalHtml=!reminder&&client[3]?'<p><strong>Student portal passcode:</strong> '+sbEmailEscape(String(client[3]).padStart(4,'0'))+'<br><a href="https://loudandconfident.github.io/Speakboldly/#students-portal" style="color:#176b3a">Open Student portal</a></p>':'';
+ const content='<p>Hello '+sbEmailEscape(name)+',</p><p>'+intro+'</p>'+(program?'<p><strong>Program / Level:</strong> '+sbEmailEscape(program)+'</p>':'')+'<table style="width:100%;border-collapse:collapse;background:#edf0e6;font-size:14px">'+rows+'</table>'+portalHtml+'<p><a href="'+SB_ZOOM_URL+'" style="display:inline-block;padding:10px 16px;background:#193c32;color:#fffef9;text-decoration:none;border-radius:6px">Join on Zoom</a><br><strong>Zoom passcode:</strong> '+SB_ZOOM_PASSCODE+'</p><p><strong>No same-day cancellations are allowed.</strong></p><p>If you have any questions, reply to this email.</p><p>See you in class!</p>';
+ return {body,htmlBody:sbBrandedEmail(heading,content)};
+}
+
+// Owner-authorized individual emails. Recipients come from Clients, never from browser input.
+function handleClientEmail(p){
+ const respond=typeof response==='function'?response:clientSyncResponse;
+ const id=String(p.clientId||''),kind=String(p.kind||''),requestId=String(p.requestId||'');
+ if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!['confirmation','progress','final','registration'].includes(kind)||! /^[a-zA-Z0-9-]{1,100}$/.test(requestId))throw new Error('Invalid email request.');
+ const props=PropertiesService.getScriptProperties(),book=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')),clients=book.getSheetByName('Clients');
+ const rows=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,9).getValues():[],client=rows.find(r=>String(r[0])===id);
+ if(!client||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(client[2])))throw new Error('Client email missing or invalid.');
+ let attachment=null;
+ if(kind!=='confirmation'){
+  if(typeof p.pdfBase64!=='string'||p.pdfBase64.length>7500000||! /^[A-Za-z0-9+/]*={0,2}$/.test(p.pdfBase64))throw new Error('A valid completed PDF is required.');
+  const bytes=Utilities.base64Decode(p.pdfBase64);
+  if(bytes.length>5500000||String.fromCharCode(...bytes.slice(0,4).map(b=>b&255))!=='%PDF')throw new Error('Invalid PDF attachment.');
+  attachment=Utilities.newBlob(bytes,'application/pdf',kind+'-report.pdf');
+ }
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{
+  let log=book.getSheetByName('EmailLog');if(!log){log=book.insertSheet('EmailLog');log.appendRow(['Request ID','Client ID','Kind','Recipient','Status','Sent at (UTC)','Error']);}
+  const logs=log.getLastRow()>1?log.getRange(2,1,log.getLastRow()-1,7).getValues():[],existing=logs.find(r=>String(r[0])===requestId);
+  if(existing){if(String(existing[1])!==id||String(existing[2])!==kind)throw new Error('Email request identity mismatch.');if(existing[4]==='sent')return respond({ok:true,status:'sent',recipient:String(existing[3])});throw new Error('This email has an uncertain delivery status. Check EmailLog before sending it again.');}
+  if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached. Try again tomorrow.');
+  const labels={confirmation:'Email confirmation',progress:'Progress report',final:'Final report',registration:'Payment and registration confirmation'};
+  let message;
+  if(kind==='confirmation'){
+   const meetings=sbUpcomingClientMeetings(book,id);if(!meetings.length)throw new Error('No upcoming calendar sessions are saved for this client. Add or sync their appointments first.');
+   message=sbCalendarEmail(client,meetings);
+  }else{
+   const body='Hello '+client[1]+',\n\nPlease find your '+labels[kind].toLowerCase()+' attached.\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
+   message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p><p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p><p>If you have any questions, reply to this email.</p>')};
+  }
+  const row=log.getLastRow()+1;log.getRange(row,1,1,7).setValues([[requestId,id,kind,String(client[2]),'sending','','']]);SpreadsheetApp.flush();
+  try{MailApp.sendEmail({to:String(client[2]),subject:(kind==='confirmation'?'Your class confirmation':labels[kind])+' — Speak Boldly',...message,name:'Speak Boldly',replyTo:'speakboldly16@gmail.com',...(attachment?{attachments:[attachment]}:{})});log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}
+  catch(error){log.getRange(row,5).setValue('delivery_unknown');log.getRange(row,7).setValue(String(error.message||error));throw new Error('Email delivery could not be confirmed. Check EmailLog before trying another send.');}
+ }finally{lock.releaseLock();}
+}
+
+
+const SB_LIBRARY_SECTIONS={material:'Materials',exams:'Exams',exercises:'Exercises',reports:'Progress reports',final:'Final reports',listening:'Listening tracks'};
+function setupFullLibrary(){
+ const props=PropertiesService.getScriptProperties();if(!props.getProperty('CLIENT_SHEET_ID'))throw new Error('Connect the Clients sheet first.');
+ let root=props.getProperty('SB_LIBRARY_FOLDER_ID');if(!root){const folder=DriveApp.createFolder('Speak Boldly — Full library');folder.setSharing(DriveApp.Access.PRIVATE,DriveApp.Permission.NONE);root=folder.getId();props.setProperty('SB_LIBRARY_FOLDER_ID',root);}
+ const folder=DriveApp.getFolderById(root);
+ for(const [section,label]of Object.entries(SB_LIBRARY_SECTIONS)){const key='SB_LIBRARY_'+section;if(!props.getProperty(key)){const child=folder.createFolder(label);props.setProperty(key,child.getId());}}
+}
+function sbLibraryFolder(section){
+ if(!SB_LIBRARY_SECTIONS[section])throw new Error('Unknown library folder.');
+ const id=PropertiesService.getScriptProperties().getProperty('SB_LIBRARY_'+section);if(!id)throw new Error('Run setupFullLibrary in Apps Script once.');
+ return DriveApp.getFolderById(id);
+}
+function sbLibraryItem(file){return{id:file.getId(),title:file.getName(),mimeType:file.getMimeType(),url:file.getUrl(),size:file.getSize()};}
+function handleLibraryAction(p){
+ const respond=typeof response==='function'?response:clientSyncResponse;
+ const folder=sbLibraryFolder(String(p.section||''));
+ if(p.action==='listLibrary'){const files=folder.getFiles(),items=[];while(files.hasNext())items.push(sbLibraryItem(files.next()));return respond({ok:true,items,folderUrl:folder.getUrl()});}
+ if(p.action==='uploadLibraryFile'){
+  if(typeof p.base64!=='string'||p.base64.length>7500000||! /^[A-Za-z0-9+/]*={0,2}$/.test(p.base64)||!p.name||String(p.name).length>250)throw new Error('Check file name and size. Files must be below 5 MB.');
+  const bytes=Utilities.base64Decode(p.base64);if(bytes.length>5000000)throw new Error('For larger books, upload directly to this folder in Google Drive, then Refresh.');
+  const file=folder.createFile(Utilities.newBlob(bytes,String(p.mimeType||'application/octet-stream'),String(p.name)));file.setSharing(DriveApp.Access.PRIVATE,DriveApp.Permission.NONE);return respond({ok:true,item:sbLibraryItem(file)});
+ }
+ const file=DriveApp.getFileById(String(p.fileId||'')),parents=file.getParents();let found=false;while(parents.hasNext())if(parents.next().getId()===folder.getId())found=true;if(!found)throw new Error('File not found in this library folder.');
+ if(p.action==='readLibraryFile'){const blob=file.getBlob();if(blob.getBytes().length>7000000)throw new Error('This book is too large for inline reading. Open it in Google Drive.');return respond({ok:true,base64:Utilities.base64Encode(blob.getBytes()),mimeType:blob.getContentType()});}
+ if(p.action==='sendLibraryFile'){
+  const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')),sheet=book.getSheetByName('Clients'),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,3).getValues():[],client=rows.find(r=>String(r[0])===String(p.clientId));
+  if(!client||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(client[2])))throw new Error('Client email missing or invalid.');
+  const requestId=String(p.requestId||'');if(!/^[a-zA-Z0-9-]{1,100}$/.test(requestId))throw new Error('Missing send identity.');
+  const lock=LockService.getScriptLock();lock.waitLock(20000);
+  try{
+   let log=book.getSheetByName('LibrarySendLog');if(!log){log=book.insertSheet('LibrarySendLog');log.appendRow(['Request ID','Client ID','File ID','Status','Sent at (UTC)','Error']);}
+   const logs=log.getLastRow()>1?log.getRange(2,1,log.getLastRow()-1,6).getValues():[],old=logs.find(r=>String(r[0])===requestId);
+   if(old){
+    if(String(old[1])!==String(p.clientId)||String(old[2])!==file.getId())throw new Error('Send identity mismatch.');
+    if(old[3]==='sent')return respond({ok:true,recipient:String(client[2]),url:file.getUrl()});
+    throw new Error('Delivery is uncertain. Check LibrarySendLog before trying again.');
+   }
+   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
+   const row=log.getLastRow()+1;log.getRange(row,1,1,6).setValues([[requestId,String(p.clientId),file.getId(),'sending','','']]);SpreadsheetApp.flush();
+   try{
+    file.addViewer(String(client[2]));
+    MailApp.sendEmail({to:String(client[2]),subject:'Your learning material — Speak Boldly',body:'Hello '+client[1]+',\n\nYour teacher has shared '+file.getName()+' with you.\n\nView it here:\n'+file.getUrl()+'\n\nOpen the link while signed in to Google using '+client[2]+'. You have viewer access.\n\nSpeak Boldly',name:'Speak Boldly',replyTo:'speakboldly16@gmail.com'});
+    log.getRange(row,4,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,recipient:String(client[2]),url:file.getUrl()});
+   }catch(error){log.getRange(row,4).setValue('delivery_unknown');log.getRange(row,6).setValue(String(error.message||error));throw new Error('Sharing or delivery could not be confirmed. Check LibrarySendLog before sending again.');}
+  }finally{lock.releaseLock();}
+ }
+ throw new Error('Unknown library action.');
+}
