@@ -24,7 +24,8 @@ export const courses = [
       "Listening and clear pronunciation",
       "Personalized speaking practice"
     ],
-    "art": "general"
+    "art": "general",
+    "summary": "Private English coaching tailored to your level and everyday needs."
   },
   {
     "id": "writing",
@@ -40,7 +41,8 @@ export const courses = [
       "Clear structure and concise writing",
       "Editing and practical writing feedback"
     ],
-    "art": "writing"
+    "art": "writing",
+    "summary": "Write clear, professional emails and business messages."
   },
   {
     "id": "interview",
@@ -62,7 +64,8 @@ export const courses = [
       "Explaining achievements with examples",
       "Mock interviews and personalized feedback"
     ],
-    "art": "interview"
+    "art": "interview",
+    "summary": "Prepare clear answers and practise for your next interview."
   },
   {
     "id": "speaking",
@@ -79,7 +82,8 @@ export const courses = [
       "Handling questions and audience engagement"
     ],
     "art": "speaking",
-    "comingSoon": true
+    "comingSoon": true,
+    "summary": "Speak confidently in meetings, presentations and public settings."
   },
   {
     "id": "ielts",
@@ -95,7 +99,8 @@ export const courses = [
       "Timed practice and exam preparation"
     ],
     "art": "ielts",
-    "comingSoon": true
+    "comingSoon": true,
+    "summary": "Focused IELTS practice across all four language skills."
   },
   {
     "id": "pronunciation",
@@ -108,7 +113,8 @@ export const courses = [
       "Accent and pronunciation development"
     ],
     "art": "pronunciation",
-    "comingSoon": true
+    "comingSoon": true,
+    "summary": "Develop clearer sounds, stress, rhythm and intonation."
   },
   {
     "id": "information-technology",
@@ -121,7 +127,8 @@ export const courses = [
       "English for IT"
     ],
     "art": "technology",
-    "comingSoon": true
+    "comingSoon": true,
+    "summary": "Explain technical ideas and communicate confidently in IT."
   },
   {
     "id": "kids",
@@ -134,7 +141,8 @@ export const courses = [
       "Ages 6–14"
     ],
     "art": "kids",
-    "comingSoon": true
+    "comingSoon": true,
+    "summary": "Playful English speaking activities for children aged 6–14."
   },
   {
     "id": "instructor-training",
@@ -149,7 +157,8 @@ export const courses = [
     "art": "training",
     "comingSoon": true,
     "detailDescription": "After more than 8 years working at Berlitz, Ucan, Oxford Academy, Kayan Academy and Bright Bridges, I am more than happy to share my experience with instructors who share the same vision and want to support others for a living.",
-    "previewDetails": true
+    "previewDetails": true,
+    "summary": "Practical training for instructors with 0–2 years of experience."
   },
   {
     "id": "different-learners",
@@ -162,7 +171,8 @@ export const courses = [
       "Understanding learning preferences"
     ],
     "art": "learners",
-    "comingSoon": true
+    "comingSoon": true,
+    "summary": "Explore learning preferences and ways to support different learners."
   },
   {
     "id": "urgent-session",
@@ -180,7 +190,8 @@ export const courses = [
       "A trial to help you choose your next step"
     ],
     "art": "urgent",
-    "comingSoon": true
+    "comingSoon": true,
+    "summary": "One 90-minute conversation session tailored to your immediate needs."
   }
 ];
 export function matches(c,category,query){return(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
