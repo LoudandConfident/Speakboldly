@@ -2,6 +2,12 @@ import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSessi
 import {ownerConnected,request} from './exam-api.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 const STORAGE_KEY='speak-boldly-admin-sessions-v1';
+export function calendarSlots(date){
+ const weekday=new Date(date+'T12:00:00Z').getUTCDay();
+ if([2,3,4].includes(weekday))return[{time:'18:00',label:'6–7:30pm'},{time:'19:30',label:'7:30–9pm'}];
+ if(weekday===6)return[{time:'10:00',label:'10–11:30am'},{time:'11:30',label:'11:30am–1pm'}];
+ return[];
+}
 export function sessionInitials(name){const words=name.trim().split(/\s+/u).filter(Boolean);return words.map(w=>Array.from(w)[0]).join('').toLocaleUpperCase();}
 export function validateSession(input){
  const name=String(input.name||'').trim(),date=String(input.date||''),number=Number(input.number);
@@ -35,8 +41,12 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    const number=doc.createElement('span');number.className='calendar-day-number';number.textContent=day;if(date===today)number.setAttribute('aria-current','date');
    const add=doc.createElement('button');add.type='button';add.className='calendar-add';add.textContent='+';add.setAttribute('aria-label','Add session on '+date);header.append(number,add);cell.append(header);
    const items=sessions.filter(s=>s.date===date&&s.reminderStatus!=='cancelled');
+   for(const slot of calendarSlots(date)){
+    const booked=items.some(item=>item.time===slot.time),button=doc.createElement('button');button.type='button';button.className='calendar-slot';button.textContent=slot.label+(booked?' · Booked':'');button.disabled=booked;button.setAttribute('aria-label',(booked?'Booked slot':'Add session')+' on '+date+' at '+slot.label+' Cairo time');
+    button.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;form.elements.time.value=slot.time;populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};cell.append(button);
+   }
    for(const item of items){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name;const badge=doc.createElement('button');badge.type='button';badge.className='calendar-session';badge.textContent=sessionInitials(name)+' #'+item.number;badge.title=name+' — session '+item.number+(item.time?' — '+item.time+' Cairo time':'')+(item.reminderStatus?' — Reminder: '+item.reminderStatus:'');badge.setAttribute('aria-label','Open '+name+' client information, session '+item.number);badge.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};cell.append(badge);if(item.id&&item.reminderStatus!=='cancelled'){const cancel=doc.createElement('button');cancel.type='button';cancel.className='calendar-cancel';cancel.textContent='Cancel';cancel.setAttribute('aria-label','Cancel '+name+' session '+item.number);cancel.onclick=async()=>{if(!isUnlocked()||!doc.defaultView.confirm('Cancel this class and stop its pending reminder?'))return;cancel.disabled=true;try{if(clientSheetConnected())await cancelSheetSession(item.id);else await request('admin/classes/'+item.id+'/cancel',{role:'admin',method:'POST',data:{}});await load();}catch(error){status.textContent=error.message;cancel.disabled=false;}};cell.append(cancel);}}
-   add.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};grid.append(cell);
+   add.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;form.elements.time.value='';populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};grid.append(cell);
   }
  }
  let loading=false,loadEpoch=0;
