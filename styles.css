@@ -217,3 +217,8 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 #home .home-speech-bubble:hover .home-bubble-shape{fill:#2b5547}
 #home .home-speech-bubble:focus-visible{outline:3px solid #8aab4f;outline-offset:3px;border-radius:12px}
 @media(max-width:680px){#home .home-speech-links{justify-content:center;gap:8px;margin-top:10px}#home .home-speech-bubble{flex-basis:145px;width:145px;height:60px;font-size:11px}}
+
+#home .home-picture-and-reviews{display:grid;grid-template-columns:minmax(0,1fr) 130px;align-items:center;gap:14px}
+#home .home-speech-links{flex-direction:column;align-items:center;justify-content:center;gap:10px;margin:0}
+#home .home-speech-bubble{flex:none;width:130px;height:64px;font-size:11px}
+@media(max-width:680px){#home .home-picture-and-reviews{grid-template-columns:minmax(0,1fr) 100px;gap:8px}#home .home-speech-links{gap:6px;margin:0}#home .home-speech-bubble{width:100px;height:56px;font-size:10px;padding-left:10px;padding-right:10px}}
