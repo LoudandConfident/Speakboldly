@@ -61,3 +61,10 @@ test('permission retry checks spreadsheet and mail access without sending or cha
   sheetId='';assert.throws(()=>context.retryPermissions(),/CLIENT_SHEET_ID is missing/);
  }
 });
+
+test('branded email signature shows Speak Boldly without an email address',()=>{
+ for(const filename of ['EmailActions.gs','UnifiedCode.gs']){
+  const context={};vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/'+filename,'utf8'),context);
+  const html=context.sbBrandedEmail('Class confirmation','<p>Class details</p>');assert(html.includes('Speak Boldly</p>'));assert(!html.includes('mailto:'));assert(!html.includes('speakboldly16@gmail.com'));
+ }
+});

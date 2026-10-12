@@ -25,7 +25,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
   if(action==='exam'){authorization.close();examAuthorization.querySelector('#client-exam-authorization-name').textContent=client.name+' · Student passcode '+client.code;examAuthorization.querySelector('[role=status]').textContent='Select the exam to make available in this client’s Student portal. Interactive exam delivery must be connected before clients can take this exam on their own devices.';examAuthorization.showModal();return;}
   if(action!=='confirmation'){authorization.close();await documents.openForClient(action,client);return;}
   if(!clientSheetConnected()){note.textContent='Connect your Clients sheet first.';return;}
-  if(!doc.defaultView.confirm('Send an email confirmation to '+client.email+'?'))return;button.disabled=true;note.textContent='Sending confirmation…';
+  if(!doc.defaultView.confirm('Send class confirmation to the client '+client.name+' ('+client.email+')?'))return;button.disabled=true;note.textContent='Sending confirmation…';
   try{confirmationId ||= doc.defaultView.crypto.randomUUID();const result=await sendSheetClientEmail(client.id,'confirmation',{requestId:confirmationId});note.textContent='Email sent to '+result.recipient+'.';}catch(error){note.textContent=error.message;button.disabled=false;}
  }));
  examAuthorization.querySelector('form').onsubmit=async event=>{event.preventDefault();if(!unlocked)return;const client=clients.find(c=>c.id===authorizationClientId);if(!client)return;const form=event.currentTarget,note=examAuthorization.querySelector('[role=status]'),button=form.querySelector('button');button.disabled=true;
