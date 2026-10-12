@@ -97,6 +97,8 @@ function doPost(event) {
       return response({ ok: true, connected: true });
     }
 
+    if(['listTeacherDocuments','saveTeacherDocument'].includes(data.action)){if(typeof handleSheetDocumentAction!=='function')throw new Error('Update your Clients Apps Script to enable shared reports.');return handleSheetDocumentAction(data);}
+
     if (['listSessions', 'saveSession', 'cancelSession'].includes(data.action)) {
       return handleSheetSessionAction(data);
     }
@@ -104,14 +106,15 @@ function doPost(event) {
     if (data.action !== 'upsertClient' || !data.client) {
           if (data.action === 'listClients') {
       const rows = sheet.getLastRow() > 1
-        ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getValues()
+        ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 10).getValues()
         : [];
       const clients = rows.filter(row => row[0] && row[1] && row[2]).map(row => ({
         id: String(row[0]), name: String(row[1]).trim(),
         email: String(row[2]).trim().toLowerCase(),
         code: String(row[3]).padStart(4, '0'), level: String(row[4]),
         payment: String(row[5]), amountPaid: Number(row[6] || 0),
-        hours: Number(row[7] || 0)
+        hours: Number(row[7] || 0),
+        permissions: row[9] ? JSON.parse(String(row[9])) : []
       }));
       return response({ ok: true, clients });
     }
@@ -121,6 +124,7 @@ function doPost(event) {
     }
 
     const client = data.client;
+    if(client.permissions!==undefined&&(!Array.isArray(client.permissions)||client.permissions.length>500||client.permissions.some(p=>typeof p!=='string'||p.length>2000||!/^(section:|file:)/.test(p))))throw new Error('Invalid client access selections.');
     const text = value => String(value == null ? '' : value).trim();
 
     const id = text(client.id);
@@ -202,6 +206,7 @@ function doPost(event) {
       new Date().toISOString()
     ]]);
 
+    if(client.permissions!==undefined){sheet.getRange(1,10).setValue('Permissions');sheet.getRange(targetRow,10).setValue(JSON.stringify(client.permissions));}
     return response({ ok: true, clientId: id });
 
   } catch (error) {

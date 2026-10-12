@@ -39,29 +39,51 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    add.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};grid.append(cell);
   }
  }
- async function load(){
-  sessions=[];storageReadable=true;status.textContent='';
-  try{const data=JSON.parse(doc.defaultView.localStorage.getItem(STORAGE_KEY)||'[]');if(!Array.isArray(data))throw new Error();sessions=data.map(entry=>validateSession(entry));}
-  catch{storageReadable=false;status.textContent='Saved sessions could not be read. No records will be overwritten.';}
-  if(clientSheetConnected()){
-   try{
-    let response=await loadSheetSessions();
-    const today=cairoToday(),currentTime=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date());
-    const future=sessions.filter(s=>s.time&&(s.date>today||(s.date===today&&s.time>currentTime)));
-    for(const record of future){if(!isUnlocked())return;response=await saveSheetSession(record);}
-    if(!isUnlocked())return;
-    sessions=response.classes;storageReadable=true;
-    status.textContent=response.emailReady?'Sheet calendar connected. Reminders are checked every 5 minutes and sent when due, 24 hours before class.':'Calendar saved to the sheet. Run setupSheetReminders in Apps Script to activate email reminders.';
-   }catch(error){storageReadable=false;status.textContent=error.message;}
-  }
-  else if(ownerConnected()){try{const response=await request('admin/classes',{role:'admin'});if(!isUnlocked())return;sessions=response.classes;storageReadable=true;status.textContent=response.emailReady?'Private calendar connected. Reminders are sent 24 hours before class.':'Classes are stored privately, but email delivery is not configured yet.';}catch(error){storageReadable=false;status.textContent=error.message;}}
-  populateClients();form.reset();selected=cairoToday();month=selected.slice(0,7);form.elements.date.value=selected;render();
+ let loading=false,loadEpoch=0;
+ async function load({background=false}={}){
+  if(loading||!isUnlocked())return;
+  if(background&&(root.querySelector('#calendar-session-dialog')?.open))return;
+  loading=true;const epoch=loadEpoch,oldMonth=month,oldSelected=selected;
+  try{
+   let local=[],localError=false;
+   try{const data=JSON.parse(doc.defaultView.localStorage.getItem(STORAGE_KEY)||'[]');if(!Array.isArray(data))throw new Error();for(const entry of data){try{local.push(validateSession(entry));}catch{localError=true;}}}catch{localError=true;}
+   storageReadable=!localError;
+   if(clientSheetConnected()){
+    let sharedLoaded=false;
+    try{
+     let response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;
+     sessions=response.classes;storageReadable=true;sharedLoaded=true;
+     const warnings=[];
+     if(!background){
+      const today=cairoToday(),currentTime=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date());
+      const future=local.filter(s=>s.time);
+      const untimed=local.filter(s=>!s.time);if(untimed.length)warnings.push(untimed.length+' old appointment(s) need a class time before they can sync.');
+      for(const record of future){if(!isUnlocked()||epoch!==loadEpoch)return;try{await saveSheetSession(record,undefined,{importPast:true});}catch(error){warnings.push(error.message);}}
+      response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes;
+     }
+     status.textContent=(response.emailReady?'Shared sheet calendar connected. Reminders are checked every 5 minutes.':'Shared calendar connected; run setupSheetReminders in Apps Script to activate email reminders.')+(warnings.length?' '+warnings.length+' browser appointment(s) could not upload: '+warnings[0]:'')+(localError?' Some old browser entries could not be read; shared appointments are still shown.':'');
+    }catch(error){status.textContent='Calendar could not sync: '+error.message;if(!background&&!sharedLoaded){sessions=local;storageReadable=false;}}
+   }else if(ownerConnected()){
+    try{const response=await request('admin/classes',{role:'admin'});if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes;storageReadable=true;status.textContent=response.emailReady?'Private calendar connected. Reminders are sent 24 hours before class.':'Classes are stored privately, but email delivery is not configured yet.';}catch(error){status.textContent=error.message;if(!background)storageReadable=false;}
+   }else{sessions=local;status.textContent=localError?'Saved browser sessions could not all be read. Connect your sheet to view shared appointments.':'Calendar is on this device only. Connect the Clients sheet to sync appointments.';}
+   if(!isUnlocked()||epoch!==loadEpoch)return;
+   if(background&&root.querySelector('#calendar-session-dialog')?.open)return;
+   populateClients();
+   if(background){month=oldMonth;selected=oldSelected;}else{form.reset();selected=cairoToday();month=selected.slice(0,7);form.elements.date.value=selected;}
+   render();
+  }finally{loading=false;}
  }
+ const poll=()=>{if(isUnlocked()&&!doc.hidden&&(clientSheetConnected()||ownerConnected()))load({background:true});};
+ let pollTimer=doc.defaultView.setInterval(poll,60000);
+ doc.defaultView.addEventListener('focus',poll);
+ doc.addEventListener('visibilitychange',()=>{if(!doc.hidden)poll();});
+ doc.defaultView.addEventListener('pagehide',()=>doc.defaultView.clearInterval(pollTimer));
+ doc.defaultView.addEventListener('pageshow',()=>{doc.defaultView.clearInterval(pollTimer);pollTimer=doc.defaultView.setInterval(poll,60000);poll();});
  function shift(step){if(!isUnlocked())return;const [year,m]=month.split('-').map(Number),date=new Date(Date.UTC(year,m-1+step,1));if(date.getUTCFullYear()<1900||date.getUTCFullYear()>9999)return;month=dateString(date.getUTCFullYear(),date.getUTCMonth(),1).slice(0,7);render();}
  root.querySelector('#calendar-previous').onclick=()=>shift(-1);root.querySelector('#calendar-next').onclick=()=>shift(1);
  root.querySelector('#calendar-today').onclick=()=>{if(!isUnlocked())return;selected=cairoToday();month=selected.slice(0,7);form.elements.date.value=selected;render();};
  form.onsubmit=async event=>{event.preventDefault();if(!isUnlocked()||!form.reportValidity())return;if(!storageReadable){status.textContent='Browser storage is unavailable or contains unreadable records. Existing sessions have been kept.';return;}
-  try{const input=Object.fromEntries(new doc.defaultView.FormData(form)),client=getClients().find(c=>c.id===input.clientId);if(!client)throw new Error('Choose an existing client.');const record=validateSession({...input,name:client.name});if(!record.time)throw new Error('Choose a class time.');
+  try{loadEpoch++;const input=Object.fromEntries(new doc.defaultView.FormData(form)),client=getClients().find(c=>c.id===input.clientId);if(!client)throw new Error('Choose an existing client.');const record=validateSession({...input,name:client.name});if(!record.time)throw new Error('Choose a class time.');
    if(clientSheetConnected()){
     const response=await saveSheetSession(record);if(!isUnlocked())return;
     sessions=response.classes;selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();
@@ -73,5 +95,5 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
   catch(error){status.textContent=error.message;return;}
   root.querySelector('#calendar-session-dialog')?.close();
  };
- return{load,refresh(){if(clientSheetConnected()||ownerConnected())load();else{populateClients();render();}},lock(){sessions=[];grid.replaceChildren();heading.textContent='';form.reset();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
+ return{load,refresh(){if(clientSheetConnected()||ownerConnected())load();else{populateClients();render();}},lock(){loadEpoch++;sessions=[];grid.replaceChildren();heading.textContent='';form.reset();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
 }

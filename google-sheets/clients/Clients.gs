@@ -24,6 +24,7 @@ function handleClientSync(e){
   const key=props.getProperty('CLIENT_SYNC_KEY');
   if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
   if(p.action==='checkConnection')return clientSyncResponse({ok:true,connected:true});
+  if(['listTeacherDocuments','saveTeacherDocument'].includes(p.action)){if(typeof handleSheetDocumentAction!=='function')throw new Error('Add TeacherDocuments.gs to enable shared reports.');return handleSheetDocumentAction(p);}
   if(['listSessions','saveSession','cancelSession'].includes(p.action)){if(typeof handleSheetSessionAction!=='function')throw new Error('Add Sessions.gs and run setupSheetReminders first.');return handleSheetSessionAction(p);}
   if(p.action==='listClients'){
    lock.waitLock(20000);
@@ -68,6 +69,6 @@ function handleClientSync(e){
 function doPost(e) {
  let data;
  try {data = JSON.parse(e.postData.contents);} catch {return clientSyncResponse({ok:false,error:'Invalid request.'});}
- if (['upsertClient','checkConnection','listClients','listSessions','saveSession','cancelSession'].includes(data.action)) return handleClientSync(e);
+ if (['upsertClient','checkConnection','listClients','listSessions','saveSession','cancelSession','listTeacherDocuments','saveTeacherDocument'].includes(data.action)) return handleClientSync(e);
  return handleReviewPost(e);
 }

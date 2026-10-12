@@ -38,25 +38,25 @@ function sbListSheetSessions(){
  const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
  return rows.filter(r=>r[0]).map(r=>({id:String(r[0]),clientId:String(r[1]),number:Number(r[2]),date:String(r[3]),time:String(r[4]),name:'',reminderStatus:String(r[7]),reminderAt:new Date(r[6]).toISOString(),sentAt:r[8]?new Date(r[8]).toISOString():null}));
 }
-function sbSaveSheetSession(input){
+function sbSaveSheetSession(input,allowPast=false){
  const c={clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||'')};
  if(!/^[a-zA-Z0-9-]{1,100}$/.test(c.clientId)||!Number.isInteger(c.number)||c.number<1||c.number>9999)throw new Error('Choose an existing client and valid session number.');
  const starts=sbCairoTimestamp(c.date,c.time),id=sbSessionId(c),sheet=sbSessionsSheet();
  const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
  const existing=rows.find(r=>String(r[0])===id);
  if(existing)return id; // Retries never create duplicate reminders or restore cancelled classes.
- if(starts<=Date.now())throw new Error('Choose a future session.');
+ if(starts<=Date.now()&&!allowPast)throw new Error('Choose a future session.');
  const clients=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
  const ids=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,1).getValues():[];
  if(!ids.some(r=>String(r[0])===c.clientId))throw new Error('Save this client to the Clients sheet first.');
  const row=sheet.getLastRow()+1;sheet.getRange(row,4,1,2).setNumberFormat('@');
- sheet.getRange(row,1,1,10).setValues([[id,c.clientId,c.number,c.date,c.time,new Date(starts).toISOString(),new Date(starts-86400000).toISOString(),'pending','','']]);
+ sheet.getRange(row,1,1,10).setValues([[id,c.clientId,c.number,c.date,c.time,new Date(starts).toISOString(),new Date(starts-86400000).toISOString(),starts<=Date.now()?'expired':'pending','','']]);
  return id;
 }
 function handleSheetSessionAction(p){
  const lock=LockService.getScriptLock();lock.waitLock(20000);
  try{
-  if(p.action==='saveSession'){if(!p.session)throw new Error('Session missing.');sbSaveSheetSession(p.session);}
+  if(p.action==='saveSession'){if(!p.session)throw new Error('Session missing.');sbSaveSheetSession(p.session,p.importPast===true);}
   if(p.action==='cancelSession'){
    const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[],index=rows.findIndex(r=>String(r[0])===String(p.sessionId));
    if(index<0)throw new Error('Session not found.');

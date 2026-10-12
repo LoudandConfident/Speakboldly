@@ -1,8 +1,8 @@
-import {initializeTeacherDocuments} from './teacher-documents.js?v=editable-pdf-templates';
-import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients} from './client-sheet.js?v=sheet-class-reminders';
+import {initializeTeacherDocuments} from './teacher-documents.js?v=shared-teacher-data';
+import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients} from './client-sheet.js?v=shared-teacher-data';
 import {initializeExamReview} from './exam-review.js';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=sheet-class-reminders';
+import {initializeAdminCalendar} from './admin-calendar.js?v=shared-teacher-data';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=four-digit-restored';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=four-digit-restored';
 import {loadPortalMaterials} from './portal-materials.js';
@@ -35,6 +35,10 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
   }catch(error){if(unlocked&&epoch===sheetGeneration)status.textContent='Students could not load. '+error.message;return false;}
   finally{if(epoch===sheetGeneration){sheetLoading=false;refreshClients.disabled=false;root.querySelector('#admin-add-client').disabled=false;}}
  }
+ let syncTimer;
+ function refreshConnected(){if(unlocked&&!doc.hidden&&clientSheetConnected()&&!editingId&&!form.dataset.saving&&!doc.querySelector('dialog[open]'))refreshSheetClients();}
+ function startSyncTimer(){doc.defaultView.clearInterval(syncTimer);syncTimer=doc.defaultView.setInterval(refreshConnected,60000);}
+ startSyncTimer();doc.defaultView.addEventListener('focus',refreshConnected);doc.addEventListener('visibilitychange',()=>{if(!doc.hidden)refreshConnected();});doc.defaultView.addEventListener('pagehide',()=>doc.defaultView.clearInterval(syncTimer));doc.defaultView.addEventListener('pageshow',startSyncTimer);
  syncExisting?.addEventListener('click',async()=>{
   if(!unlocked||sheetLoading)return;
   const note=doc.querySelector('#client-sheet-status');
