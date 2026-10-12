@@ -4,654 +4,138 @@
     "url": "./document-templates/progress-report.pdf",
     "pages": [
       {
-        "width": 841.8897705078125,
-        "height": 595.2755737304688,
+        "width": 595.2755737304688,
+        "height": 841.8897705078125,
         "fields": [
-          {
-            "name": "Comments_Student information",
-            "label": "Comments — Student information",
-            "x": 0.3622147410936815,
-            "y": 0.20494704447198014,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
-            "multiline": true,
-            "maxLength": 2000
-          },
           {
             "name": "p1_Student information_Student name",
             "label": "Student name",
-            "x": 0.21261690813992248,
-            "y": 0.17974863106153546,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
+            "x": 0.06047619218506725,
+            "y": 0.17223157363289812,
+            "width": 0.41997355684074483,
+            "height": 0.026131687033956956,
             "multiline": false,
             "maxLength": 300
           },
           {
             "name": "p1_Student information_Age / Level",
-            "label": "Age / Level",
-            "x": 0.21261690813992248,
-            "y": 0.2059549912616586,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
+            "label": "Level",
+            "x": 0.5174074220277977,
+            "y": 0.17223157363289812,
+            "width": 0.41997355684074483,
+            "height": 0.026131687033956956,
             "multiline": false,
             "maxLength": 300
           },
           {
             "name": "p1_Student information_Course / Program",
             "label": "Course / Program",
-            "x": 0.21261690813992248,
-            "y": 0.23216135146178174,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
+            "x": 0.06047619218506725,
+            "y": 0.2328095753934347,
+            "width": 0.41997355684074483,
+            "height": 0.026131687033956956,
             "multiline": false,
             "maxLength": 300
           },
           {
             "name": "p1_Student information_Session date",
-            "label": "Session date",
-            "x": 0.21261690813992248,
-            "y": 0.25836771166190486,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Student information_Instructor",
-            "label": "Instructor",
-            "x": 0.21261690813992248,
-            "y": 0.2845740205957247,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "Comments_Attendance & punctuality",
-            "label": "Comments — Attendance & punctuality",
-            "x": 0.8360830540597246,
-            "y": 0.20494704447198014,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
-            "multiline": true,
-            "maxLength": 2000
-          },
-          {
-            "name": "p1_Attendance & punctuality_Attendance consistency",
-            "label": "Attendance consistency",
-            "x": 0.6864852211059655,
-            "y": 0.17974863106153546,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Attendance & punctuality_Punctuality",
-            "label": "Punctuality",
-            "x": 0.6864852211059655,
-            "y": 0.20662693869934312,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Attendance & punctuality_Notes",
-            "label": "Notes",
-            "x": 0.6864852211059655,
-            "y": 0.2335052463371508,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "Comments_Participation & engagement",
-            "label": "Comments — Participation & engagement",
-            "x": 0.3622147410936815,
-            "y": 0.39981477484608574,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
-            "multiline": true,
-            "maxLength": 2000
-          },
-          {
-            "name": "p1_Participation & engagement_Level of participation",
-            "label": "Level of participation",
-            "x": 0.21261690813992248,
-            "y": 0.37461636143564103,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Participation & engagement_Willingness to speak",
-            "label": "Willingness to speak",
-            "x": 0.21261690813992248,
-            "y": 0.4014946690734487,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Participation & engagement_Interaction with teacher/peers",
-            "label": "Interaction with teacher/peers",
-            "x": 0.21261690813992248,
-            "y": 0.4283729767112564,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Participation & engagement_Notes",
-            "label": "Notes",
-            "x": 0.21261690813992248,
-            "y": 0.45525128434906403,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
+            "label": "Report date",
+            "x": 0.5174074220277977,
+            "y": 0.2328095753934347,
+            "width": 0.41997355684074483,
+            "height": 0.026131687033956956,
             "multiline": false,
             "maxLength": 300
           },
           {
             "name": "Comments_Speaking",
-            "label": "Comments — Speaking",
-            "x": 0.8360830540597246,
-            "y": 0.39981477484608574,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
+            "label": "Speaking / pronunciation",
+            "x": 0.31917990319896605,
+            "y": 0.3171436562757503,
+            "width": 0.6203439046159667,
+            "height": 0.04513655033138019,
             "multiline": true,
             "maxLength": 2000
-          },
-          {
-            "name": "p1_Speaking_Fluency",
-            "label": "Fluency",
-            "x": 0.6864852211059655,
-            "y": 0.37461636143564103,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Speaking_Pronunciation",
-            "label": "Pronunciation",
-            "x": 0.6864852211059655,
-            "y": 0.4014946690734487,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Speaking_Confidence",
-            "label": "Confidence",
-            "x": 0.6864852211059655,
-            "y": 0.4283729767112564,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Speaking_Common errors",
-            "label": "Common errors",
-            "x": 0.6864852211059655,
-            "y": 0.45525128434906403,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
           },
           {
             "name": "Comments_Listening",
-            "label": "Comments — Listening",
-            "x": 0.3622147410936815,
-            "y": 0.5946825052201913,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
+            "label": "Listening",
+            "x": 0.31917990319896605,
+            "y": 0.3729704422119311,
+            "width": 0.6203439046159667,
+            "height": 0.045136514082480164,
             "multiline": true,
             "maxLength": 2000
-          },
-          {
-            "name": "p1_Listening_Understanding instructions",
-            "label": "Understanding instructions",
-            "x": 0.21261690813992248,
-            "y": 0.5694840918097467,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Listening_Comprehension",
-            "label": "Comprehension",
-            "x": 0.21261690813992248,
-            "y": 0.5963623994475543,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p1_Listening_Needs repetition",
-            "label": "Needs repetition",
-            "x": 0.21261690813992248,
-            "y": 0.623240707085362,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
           },
           {
             "name": "Comments_Reading",
-            "label": "Comments — Reading",
-            "x": 0.8360830540597246,
-            "y": 0.5946825052201913,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
+            "label": "Reading",
+            "x": 0.31917990319896605,
+            "y": 0.42879719189921184,
+            "width": 0.6203439046159667,
+            "height": 0.04513655033138019,
             "multiline": true,
             "maxLength": 2000
-          },
-          {
-            "name": "p2_Reading_Reading speed",
-            "label": "Reading speed",
-            "x": 0.6864852211059655,
-            "y": 0.5694840918097467,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Reading_Accuracy",
-            "label": "Accuracy",
-            "x": 0.6864852211059655,
-            "y": 0.5963623994475543,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Reading_Comprehension",
-            "label": "Comprehension",
-            "x": 0.6864852211059655,
-            "y": 0.623240707085362,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
           },
           {
             "name": "Comments_Writing",
-            "label": "Comments — Writing",
-            "x": 0.3622147410936815,
-            "y": 0.7895502355942969,
-            "width": 0.12353161143325106,
-            "height": 0.1159127529543489,
+            "label": "Writing",
+            "x": 0.31917990319896605,
+            "y": 0.48462397783539257,
+            "width": 0.6203439046159667,
+            "height": 0.04513655033138019,
             "multiline": true,
             "maxLength": 2000
           },
           {
-            "name": "p2_Writing_Sentence structure",
-            "label": "Sentence structure",
-            "x": 0.21261690813992248,
-            "y": 0.7643518221838522,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
+            "name": "Vocabulary",
+            "label": "Vocabulary",
+            "x": 0.31917990319896605,
+            "y": 0.5404507637715733,
+            "width": 0.6203439046159667,
+            "height": 0.04513655033138019,
+            "multiline": true,
+            "maxLength": 2000
           },
           {
-            "name": "p2_Writing_Grammar accuracy",
-            "label": "Grammar accuracy",
-            "x": 0.21261690813992248,
-            "y": 0.7912301298216599,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Writing_Vocabulary use",
-            "label": "Vocabulary use",
-            "x": 0.21261690813992248,
-            "y": 0.8181084374594676,
-            "width": 0.1424710092172253,
-            "height": 0.023518570449385035,
-            "multiline": false,
-            "maxLength": 300
+            "name": "Grammar",
+            "label": "Grammar",
+            "x": 0.31917990319896605,
+            "y": 0.5962775497077542,
+            "width": 0.6203439046159667,
+            "height": 0.04513658658028022,
+            "multiline": true,
+            "maxLength": 2000
           },
           {
             "name": "Comments_Strengths",
-            "label": "Comments — Strengths",
-            "x": 0.8360830540597246,
-            "y": 0.7895502355942969,
-            "width": 0.12353161143325106,
-            "height": 0.1159127529543489,
+            "label": "Progress and strengths",
+            "x": 0.06047619218506725,
+            "y": 0.6889262945315925,
+            "width": 0.8790476156298654,
+            "height": 0.04988776615573601,
             "multiline": true,
             "maxLength": 2000
           },
-          {
-            "name": "p2_Strengths_Strength 1",
-            "label": "Strength 1",
-            "x": 0.6864852211059655,
-            "y": 0.7643518221838522,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Strengths_Strength 2",
-            "label": "Strength 2",
-            "x": 0.6864852211059655,
-            "y": 0.7912301298216599,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Strengths_Strength 3",
-            "label": "Strength 3",
-            "x": 0.6864852211059655,
-            "y": 0.8181084374594676,
-            "width": 0.1424710092172253,
-            "height": 0.023518570449385035,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "Signature_page_1",
-            "label": "Signature — page 1",
-            "x": 0.7529367771334979,
-            "y": 0.9294444424507549,
-            "width": 0.21380471209601146,
-            "height": 0.030238096092533626,
-            "multiline": false,
-            "maxLength": 300
-          }
-        ]
-      },
-      {
-        "width": 841.8897705078125,
-        "height": 595.2755737304688,
-        "fields": [
           {
             "name": "Comments_Areas for improvement",
-            "label": "Comments — Areas for improvement",
-            "x": 0.3622147410936815,
-            "y": 0.20494704447198014,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
+            "label": "Development points",
+            "x": 0.06047619218506725,
+            "y": 0.7708847675017302,
+            "width": 0.8790476156298654,
+            "height": 0.04988776615573601,
             "multiline": true,
             "maxLength": 2000
-          },
-          {
-            "name": "p2_Areas for improvement_Area 1",
-            "label": "Area 1",
-            "x": 0.21261690813992248,
-            "y": 0.17974863106153546,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Areas for improvement_Area 2",
-            "label": "Area 2",
-            "x": 0.21261690813992248,
-            "y": 0.20662693869934312,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Areas for improvement_Area 3",
-            "label": "Area 3",
-            "x": 0.21261690813992248,
-            "y": 0.2335052463371508,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "Comments_Behavior & attitude",
-            "label": "Comments — Behavior & attitude",
-            "x": 0.8360830540597246,
-            "y": 0.20494704447198014,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
-            "multiline": true,
-            "maxLength": 2000
-          },
-          {
-            "name": "p2_Behavior & attitude_Focus",
-            "label": "Focus",
-            "x": 0.6864852211059655,
-            "y": 0.17974863106153546,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Behavior & attitude_Motivation",
-            "label": "Motivation",
-            "x": 0.6864852211059655,
-            "y": 0.20662693869934312,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Behavior & attitude_Attitude",
-            "label": "Attitude",
-            "x": 0.6864852211059655,
-            "y": 0.2335052463371508,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "Comments_Homework & practice",
-            "label": "Comments — Homework & practice",
-            "x": 0.3622147410936815,
-            "y": 0.39981477484608574,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
-            "multiline": true,
-            "maxLength": 2000
-          },
-          {
-            "name": "p2_Homework & practice_Completion rate",
-            "label": "Completion rate",
-            "x": 0.21261690813992248,
-            "y": 0.37461636143564103,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Homework & practice_Quality",
-            "label": "Quality",
-            "x": 0.21261690813992248,
-            "y": 0.4014946690734487,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p2_Homework & practice_Effort",
-            "label": "Effort",
-            "x": 0.21261690813992248,
-            "y": 0.4283729767112564,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "Comments_Progress since start",
-            "label": "Comments — Progress since start",
-            "x": 0.8360830540597246,
-            "y": 0.39981477484608574,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
-            "multiline": true,
-            "maxLength": 2000
-          },
-          {
-            "name": "p3_Progress since start_Improvements",
-            "label": "Improvements",
-            "x": 0.6864852211059655,
-            "y": 0.37461636143564103,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p3_Progress since start_Skills developed",
-            "label": "Skills developed",
-            "x": 0.6864852211059655,
-            "y": 0.4014946690734487,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p3_Progress since start_Remaining gaps",
-            "label": "Remaining gaps",
-            "x": 0.6864852211059655,
-            "y": 0.4283729767112564,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "Comments_Instructor recommendations",
-            "label": "Comments — Instructor recommendations",
-            "x": 0.3622147410936815,
-            "y": 0.5946825052201913,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
-            "multiline": true,
-            "maxLength": 2000
-          },
-          {
-            "name": "p3_Instructor recommendations_Focus areas",
-            "label": "Focus areas",
-            "x": 0.21261690813992248,
-            "y": 0.5694840918097467,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p3_Instructor recommendations_Practice activities",
-            "label": "Practice activities",
-            "x": 0.21261690813992248,
-            "y": 0.5963623994475543,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p3_Instructor recommendations_Study tips",
-            "label": "Study tips",
-            "x": 0.21261690813992248,
-            "y": 0.623240707085362,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "Comments_Overall evaluation",
-            "label": "Comments — Overall evaluation",
-            "x": 0.8360830540597246,
-            "y": 0.5946825052201913,
-            "width": 0.12353161143325106,
-            "height": 0.11591270168804557,
-            "multiline": true,
-            "maxLength": 2000
-          },
-          {
-            "name": "p3_Overall evaluation_Rating",
-            "label": "Rating",
-            "x": 0.6864852211059655,
-            "y": 0.5694840918097467,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p3_Overall evaluation_General comment",
-            "label": "General comment",
-            "x": 0.6864852211059655,
-            "y": 0.5963623994475543,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
           },
           {
             "name": "Comments_Next steps",
-            "label": "Comments — Next steps",
-            "x": 0.3622147410936815,
-            "y": 0.7895502355942969,
-            "width": 0.12353161143325106,
-            "height": 0.1159127529543489,
+            "label": "Next steps",
+            "x": 0.06047619218506725,
+            "y": 0.8528432404718679,
+            "width": 0.8790476156298654,
+            "height": 0.04988776615573601,
             "multiline": true,
             "maxLength": 2000
-          },
-          {
-            "name": "p3_Next steps_Goals",
-            "label": "Goals",
-            "x": 0.21261690813992248,
-            "y": 0.7643518221838522,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "p3_Next steps_Targets",
-            "label": "Targets",
-            "x": 0.21261690813992248,
-            "y": 0.7912301298216599,
-            "width": 0.1424710092172253,
-            "height": 0.02351851918308171,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "Signature_page_2",
-            "label": "Signature — page 2",
-            "x": 0.7529367771334979,
-            "y": 0.9294444424507549,
-            "width": 0.21380471209601146,
-            "height": 0.030238096092533626,
-            "multiline": false,
-            "maxLength": 300
           }
         ]
       }
@@ -764,16 +248,6 @@
             "height": 0.09621212044320515,
             "multiline": true,
             "maxLength": 2000
-          },
-          {
-            "name": "Signature",
-            "label": "Signature",
-            "x": 0.6165211814422134,
-            "y": 0.8647212800327574,
-            "width": 0.2822222301969805,
-            "height": 0.021380471209601144,
-            "multiline": false,
-            "maxLength": 300
           }
         ]
       }
@@ -864,16 +338,6 @@
             "y": 0.6936775103559483,
             "width": 0.7984126927164424,
             "height": 0.029695098902223813,
-            "multiline": false,
-            "maxLength": 300
-          },
-          {
-            "name": "Signature",
-            "label": "Signature",
-            "x": 0.6165211814422134,
-            "y": 0.8647212800327574,
-            "width": 0.2822222301969805,
-            "height": 0.021380471209601144,
             "multiline": false,
             "maxLength": 300
           }
