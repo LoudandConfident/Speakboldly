@@ -255,3 +255,6 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 
 @media(min-width:681px){main #home .hero{padding-top:18px;align-items:start}#home .home-picture-and-reviews{position:relative;padding-top:0}#home .home-speech-links{position:absolute;right:0;bottom:calc(100% + 8px)}main #home .hero-copy{transform:none;padding-top:0}#home .hero-copy .home-slogan{top:0;margin-top:0}}
 @media(max-width:680px){main #home .hero{padding-top:20px}#home .home-picture-and-reviews{gap:8px}#home .hero-copy .home-slogan{top:0;margin-top:0}}
+
+@media(min-width:681px){main #home .hero{padding-top:24px;align-items:center}main #home .hero-copy{padding-top:22px;transform:none}#home .home-speech-links{position:static;right:auto;bottom:auto;margin:0 0 2px;justify-content:flex-end}#home .home-picture-and-reviews{position:static;gap:12px}#home .hero-copy .home-slogan{top:0}}
+@media(max-width:680px){main #home .hero{padding-top:28px}main #home .hero-copy{padding-top:8px}#home .home-speech-links{position:static;margin:0;justify-content:flex-end}}
