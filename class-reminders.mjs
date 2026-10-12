@@ -15,7 +15,7 @@ export function cairoSessionTimestamp(date,time){
 export function reminderMessage({name,number,startsAt,id}){
  const date=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date(startsAt));
  const time=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',hour:'numeric',minute:'2-digit',hour12:true}).format(new Date(startsAt));
- return {subject:`Your class confirmation — Session ${number} — Speak Boldly`,messageId:`<class-${id}@speakboldly.local>`,text:`Hello ${name},\n\nThis is a reminder confirming your upcoming English class.\n\nSession number: ${number}\nDate: ${date}\nTime: ${time} (Cairo time)\n\nJoin on Zoom:\n${ZOOM_URL}\nPasscode: ${ZOOM_PASSCODE}\n\nPlease note: No same-day cancellations are allowed.\n\nSee you in class!\nSpeak Boldly\nMira Nasser Louis`};
+ return {subject:`Your class confirmation — Session ${number} — Speak Boldly`,messageId:`<class-${id}@speakboldly.local>`,text:`Hello ${name},\n\nYour upcoming English class is confirmed.\n\nSession number: ${number}\nDate: ${date}\nTime: ${time} (Cairo time)\n\nJoin on Zoom:\n${ZOOM_URL}\nPasscode: ${ZOOM_PASSCODE}\n\nPlease note: No same-day cancellations are allowed.\n\nSee you in class!\nSpeak Boldly\nMira Nasser Louis`};
 }
 export function createReminderMailer(env){
  if(!env.SMTP_HOST||!env.SMTP_USER||!env.SMTP_PASSWORD)return null;
@@ -24,6 +24,7 @@ export function createReminderMailer(env){
 }
 export function createClassReminders({db,getClient,now=()=>Date.now(),sendEmail=null}){
  db.exec(`CREATE TABLE IF NOT EXISTS class_sessions(id TEXT PRIMARY KEY,client_id TEXT NOT NULL REFERENCES clients(id),number INTEGER NOT NULL,date TEXT NOT NULL,time TEXT NOT NULL,starts_at INTEGER NOT NULL,remind_at INTEGER NOT NULL,status TEXT NOT NULL DEFAULT 'pending',attempts INTEGER NOT NULL DEFAULT 0,retry_at INTEGER NOT NULL DEFAULT 0,sent_at INTEGER);`);
+ if(!db.prepare('PRAGMA table_info(class_sessions)').all().some(c=>c.name==='manual_authorized'))db.exec('ALTER TABLE class_sessions ADD COLUMN manual_authorized INTEGER NOT NULL DEFAULT 0');
  // SMTP cannot prove whether an interrupted delivery was accepted. Do not resend blindly.
  db.prepare("UPDATE class_sessions SET status='delivery_unknown' WHERE status='sending'").run();
  function list(){return db.prepare('SELECT * FROM class_sessions ORDER BY starts_at').all().map(row=>({id:row.id,clientId:row.client_id,name:getClient(row.client_id)?.name||'',number:row.number,date:row.date,time:row.time,reminderStatus:row.status,reminderAt:new Date(row.remind_at).toISOString(),sentAt:row.sent_at?new Date(row.sent_at).toISOString():null}));}
@@ -38,7 +39,7 @@ export function createClassReminders({db,getClient,now=()=>Date.now(),sendEmail=
  function cancel(id){const row=db.prepare('SELECT status FROM class_sessions WHERE id=?').get(id);if(!row)throw new Error('Class not found.');if(row.status==='sending')throw new Error('A reminder is being sent. Try again shortly.');db.prepare("UPDATE class_sessions SET status='cancelled' WHERE id=?").run(id);}
  function queueUpcoming(){
   if(!sendEmail)throw new Error('Email sending is not connected yet.');
-  const result=db.prepare("UPDATE class_sessions SET remind_at=MIN(remind_at,?),retry_at=0 WHERE starts_at>? AND attempts<3 AND status IN ('pending','failed')").run(now(),now());
+  const result=db.prepare("UPDATE class_sessions SET manual_authorized=1,remind_at=MIN(remind_at,?),retry_at=0 WHERE starts_at>? AND attempts<3 AND status IN ('pending','failed')").run(now(),now());
   return {queued:Number(result.changes)};
  }
  let busy=false;
@@ -46,7 +47,7 @@ export function createClassReminders({db,getClient,now=()=>Date.now(),sendEmail=
   if(busy||!sendEmail)return;busy=true;
   try{
    db.prepare("UPDATE class_sessions SET status='expired' WHERE starts_at<=? AND status IN ('pending','failed')").run(now());
-   const rows=db.prepare("SELECT * FROM class_sessions WHERE remind_at<=? AND starts_at>? AND retry_at<=? AND attempts<3 AND status IN ('pending','failed') ORDER BY remind_at LIMIT 20").all(now(),now(),now());
+   const rows=db.prepare("SELECT * FROM class_sessions WHERE manual_authorized=1 AND remind_at<=? AND starts_at>? AND retry_at<=? AND attempts<3 AND status IN ('pending','failed') ORDER BY remind_at LIMIT 20").all(now(),now(),now());
    for(const row of rows){
     const claimed=db.prepare("UPDATE class_sessions SET status='sending',attempts=attempts+1 WHERE id=? AND status IN ('pending','failed')").run(row.id);if(!claimed.changes)continue;
     try{const client=getClient(row.client_id);if(!client?.email)throw new Error('Client email missing.');await sendEmail({to:client.email,name:client.name,number:row.number,startsAt:row.starts_at,id:row.id});db.prepare("UPDATE class_sessions SET status='sent',sent_at=? WHERE id=?").run(now(),row.id);}

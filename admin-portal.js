@@ -87,7 +87,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  const sendConfirmations=root.querySelector('#send-class-confirmations'),emailStatus=root.querySelector('#class-confirmations-status');
  sendConfirmations?.addEventListener('click',async()=>{
   if(!unlocked)return;
-  if(clientSheetConnected()){sendConfirmations.disabled=true;try{await calendar.load();if(unlocked)emailStatus.textContent='Sheet reminder status refreshed. Automatic reminders are sent only when due, 24 hours before class. Run setupSheetReminders in Apps Script once to activate them.';}catch(error){if(unlocked)emailStatus.textContent=error.message;}finally{sendConfirmations.disabled=false;}return;}
+  if(clientSheetConnected()){sendConfirmations.disabled=true;try{await calendar.load();if(unlocked)emailStatus.textContent='Calendar refreshed. Send confirmations manually from each client’s Authorize button.';}catch(error){if(unlocked)emailStatus.textContent=error.message;}finally{sendConfirmations.disabled=false;}return;}
   if(!ownerConnected()){emailStatus.textContent='Email sending is not connected yet. Registered clients and class times need a connected private email service before this button can send.';return;}
   sendConfirmations.disabled=true;emailStatus.textContent='Queuing confirmations for upcoming classes…';
   try{const result=await request('admin/classes/send-confirmations',{role:'admin',method:'POST',data:{}});if(!unlocked)return;emailStatus.textContent=result.queued?result.queued+' class confirmation'+(result.queued===1?'':'s')+' queued for sending. Check the session calendar for delivery status.':'No unsent upcoming classes found. Add a future class with its date, time and session number.';}

@@ -22,3 +22,5 @@ button.calendar-session{border:0;cursor:pointer;text-align:left;min-height:36px}
 .calendar-slot:focus-visible{outline:2px solid #176b3a;outline-offset:2px}
 @media(max-width:680px){.calendar-slot{font-size:10px;padding:4px 2px;min-height:44px}}
 @media(max-width:680px){.calendar-add{min-width:24px;min-height:44px;font-size:20px}.calendar-day-header{flex-wrap:wrap}.calendar-session{min-height:44px!important}}
+
+.calendar-slot-booked{white-space:pre-line;background:#d5ed98;border:0;color:var(--ink);font-weight:600}

@@ -21,25 +21,25 @@ test('reminder contains session details, Zoom credentials, and cancellation poli
  for(const value of ['Session number: 2','11 October 2026','3:00 pm','Cairo time','https://us06web.zoom.us/j/79051707388','Passcode: 7P1NpA','No same-day cancellations are allowed.'])assert.ok(message.text.includes(value),value);
  assert.equal(createReminderMailer({}),null);
 });
-test('reminders wait until 24 hours before class, survive restart, and do not resend',async()=>{
+test('classes send only after explicit authorization, survive restart, and do not resend',async()=>{
  const sent=[],s=setup(async record=>sent.push(record));try{
  const record=s.jobs.save(booking),due=Date.parse(record.reminderAt);
  s.setNow(due-1);await s.jobs.runDue();assert.equal(sent.length,0);
- s.setNow(due);await s.jobs.runDue();assert.equal(sent.length,1);assert.equal(sent[0].to,'learner@example.com');
+ s.setNow(due);await s.jobs.runDue();assert.equal(sent.length,0);s.jobs.queueUpcoming();await s.jobs.runDue();assert.equal(sent.length,1);assert.equal(sent[0].to,'learner@example.com');
  const restarted=createClassReminders(s.options);await restarted.runDue();assert.equal(sent.length,1);assert.equal(restarted.list()[0].reminderStatus,'sent');
  assert.throws(()=>restarted.save(booking));
  }finally{s.db.close();}
 });
-test('cancelled and past classes never send; late bookings send on the next tick',async()=>{
+test('cancelled and past classes never send; late bookings wait for authorization',async()=>{
  const sent=[],s=setup(async record=>sent.push(record));try{
  const cancelled=s.jobs.save(booking);s.jobs.cancel(cancelled.id);s.setNow(Date.parse(cancelled.reminderAt));await s.jobs.runDue();assert.equal(sent.length,0);
- s.jobs.save({...booking,number:3});await s.jobs.runDue();assert.equal(sent.length,1);
+ s.jobs.save({...booking,number:3});await s.jobs.runDue();assert.equal(sent.length,0);s.jobs.queueUpcoming();await s.jobs.runDue();assert.equal(sent.length,1);
  const expired=s.jobs.save({...booking,number:4});s.setNow(cairoSessionTimestamp(booking.date,booking.time));await s.jobs.runDue();assert.equal(sent.length,1);assert.equal(s.jobs.list().find(r=>r.id===expired.id).reminderStatus,'expired');
  }finally{s.db.close();}
 });
 test('failed delivery retries after five minutes; interrupted delivery is flagged without blind resend',async()=>{
  let calls=0;const s=setup(async()=>{calls++;if(calls===1)throw new Error('SMTP unavailable');});try{
- const record=s.jobs.save(booking),due=Date.parse(record.reminderAt);s.setNow(due);await s.jobs.runDue();assert.equal(s.jobs.list()[0].reminderStatus,'failed');
+ const record=s.jobs.save(booking),due=Date.parse(record.reminderAt);s.setNow(due);s.jobs.queueUpcoming();await s.jobs.runDue();assert.equal(s.jobs.list()[0].reminderStatus,'failed');
  await s.jobs.runDue();assert.equal(calls,1);s.setNow(due+5*60000);await s.jobs.runDue();assert.equal(calls,2);assert.equal(s.jobs.list()[0].reminderStatus,'sent');
  const interrupted=s.jobs.save({...booking,number:3});s.db.prepare("UPDATE class_sessions SET status='sending' WHERE id=?").run(interrupted.id);
  const restarted=createClassReminders(s.options);await restarted.runDue();assert.equal(calls,2);assert.equal(restarted.list().find(r=>r.id===interrupted.id).reminderStatus,'delivery_unknown');

@@ -68,3 +68,9 @@ test('branded email signature shows Speak Boldly without an email address',()=>{
   const html=context.sbBrandedEmail('Class confirmation','<p>Class details</p>');assert(html.includes('Speak Boldly</p>'));assert(!html.includes('mailto:'));assert(!html.includes('speakboldly16@gmail.com'));
  }
 });
+
+test('automatic sheet triggers never send and disabling them preserves other triggers',()=>{
+ for(const filename of ['Sessions.gs','UnifiedCode.gs']){
+  const removed=[],properties=[];const auto={getHandlerFunction:()=> 'sendDueSheetReminders'},other={getHandlerFunction:()=> 'otherTask'};const context={MailApp:{sendEmail:()=>{throw new Error('Automatic sends are forbidden.');}},PropertiesService:{getScriptProperties:()=>({setProperty:(k,v)=>properties.push([k,v])})},ScriptApp:{getProjectTriggers:()=>[auto,other],deleteTrigger:t=>removed.push(t)}};vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/'+filename,'utf8'),context);context.sendDueSheetReminders();context.disableAutomaticReminders();assert.deepEqual(removed,[auto]);assert.deepEqual(properties,[['SB_REMINDERS_ENABLED','false']]);
+ }
+});

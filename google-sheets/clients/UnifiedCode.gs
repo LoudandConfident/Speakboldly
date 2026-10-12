@@ -221,7 +221,7 @@ function doPost(event) {
 }
 
 // Add this file to the existing Clients Apps Script project.
-// Run setupSheetReminders once from the Google account that should send reminders.
+// Run setupSheetReminders once to create the calendar; emails are sent only from Authorize.
 const SB_SESSION_HEADERS=['Session ID','Client ID','Session number','Date (Cairo)','Time (Cairo)','Starts at (UTC)','Remind at (UTC)','Status','Sent at (UTC)','Last error'];
 function setupSheetReminders(){
  const props=PropertiesService.getScriptProperties(),id=props.getProperty('CLIENT_SHEET_ID');
@@ -233,8 +233,7 @@ function setupSheetReminders(){
  // Authorization is requested here before any clients are emailed.
  MailApp.getRemainingDailyQuota();
  ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='sendDueSheetReminders').forEach(t=>ScriptApp.deleteTrigger(t));
- ScriptApp.newTrigger('sendDueSheetReminders').timeBased().everyMinutes(5).create();
- props.setProperty('SB_REMINDERS_ENABLED','true');
+ props.setProperty('SB_REMINDERS_ENABLED','false');
 }
 function sbSessionsSheet(){
  const id=PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID');
@@ -286,39 +285,18 @@ function handleSheetSessionAction(p){
    sheet.getRange(index+2,8).setValue('cancelled');
   }
   const props=PropertiesService.getScriptProperties();
-  const ready=props.getProperty('SB_REMINDERS_ENABLED')==='true'&&ScriptApp.getProjectTriggers().some(t=>t.getHandlerFunction()==='sendDueSheetReminders');
+  const ready=typeof handleClientEmail==='function';
   const respond=typeof clientSyncResponse==='function'?clientSyncResponse:response;
   return respond({ok:true,classes:sbListSheetSessions(),emailReady:ready});
  }finally{lock.releaseLock();}
 }
-function sendDueSheetReminders(){
- const props=PropertiesService.getScriptProperties();
- if(props.getProperty('SB_REMINDERS_ENABLED')!=='true')return;
- const lock=LockService.getScriptLock();if(!lock.tryLock(1000))return;
- try{
-  const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
-  const clients=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
-  const people=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,9).getValues():[];
-  let remaining=MailApp.getRemainingDailyQuota(),count=0;
-  for(let i=0;i<rows.length;i++){
-   const r=rows[i],row=i+2,status=String(r[7]),starts=Date.parse(r[5]),due=Date.parse(r[6]);
-   if(status==='sending'){sheet.getRange(row,8).setValue('delivery_unknown');continue;}
-   if(!['pending','failed'].includes(status)||!Number.isFinite(starts)||!Number.isFinite(due))continue;
-   if(starts<=Date.now()){sheet.getRange(row,8).setValue('expired');continue;}
-   if(due>Date.now()||remaining<1||count>=20)continue;
-   const person=people.find(c=>String(c[0])===String(r[1])),email=person?String(person[2]).trim():'';
-   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){sheet.getRange(row,8).setValue('failed');sheet.getRange(row,10).setValue('Client email missing or invalid.');continue;}
-   const when=Utilities.formatDate(new Date(starts),'Africa/Cairo','EEEE, d MMMM yyyy — h:mm a');
-   const text='Hello '+String(person[1])+',\n\nThis is a reminder confirming your upcoming English class.\n\nSession number: '+r[2]+'\nDate and time: '+when+' (Cairo time)\n\nJoin on Zoom:\nhttps://us06web.zoom.us/j/79051707388\nPasscode: 7P1NpA\n\nPlease note: No same-day cancellations are allowed.\n\nSee you in class!\nSpeak Boldly';
-   // Persist a claim first. An interrupted send is not retried blindly.
-   sheet.getRange(row,8).setValue('sending');sheet.getRange(row,10).setValue('');SpreadsheetApp.flush();
-   try{
-    MailApp.sendEmail({to:email,subject:'Your class reminder — Session '+r[2]+' — Speak Boldly',body:text,...(typeof sbCalendarEmail==='function'?{htmlBody:sbCalendarEmail(person,[r],true).htmlBody}:{}),name:'Speak Boldly',replyTo:'speakboldly16@gmail.com'});
-    sheet.getRange(row,8,1,3).setValues([['sent',new Date().toISOString(),'']]);remaining--;count++;
-   }catch(error){sheet.getRange(row,8).setValue('delivery_unknown');sheet.getRange(row,10).setValue(String(error.message||error));}
-  }
- }finally{lock.releaseLock();}
+// Kept as a no-op so old scheduled triggers cannot send emails after this update.
+function sendDueSheetReminders(){return;}
+function disableAutomaticReminders(){
+ PropertiesService.getScriptProperties().setProperty('SB_REMINDERS_ENABLED','false');
+ ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='sendDueSheetReminders').forEach(t=>ScriptApp.deleteTrigger(t));
 }
+
 
 
 // Shared report field data; PDF templates remain on the website.
