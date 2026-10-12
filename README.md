@@ -47,7 +47,7 @@ The dashboard includes a monthly calendar using Cairo dates. Use + on a date, se
 
 ## Level exams
 
-The Exams panel contains separate Level one through Level six exam sections, backed by six student PDFs converted from the supplied Word documents. Teacher listening scripts and answer keys are excluded from these public student versions; original attachments are not published. The bundled exam list works when GitHub listing requests fail and avoids duplicate entries. Admin can assign individual exam file permissions alongside folder access. Like other GitHub Pages files, the PDF URLs are public, and the current browser-only code gate does not provide private storage or prevent saving.
+The Exams panel contains separate Level one through Level six exams transcribed into text, with assessment-style pages, multiple-choice options and written-answer fields. Teacher preview and the unconnected static site display these text exams; static practice answers are not submitted or graded. With private exam storage connected, student exams retain their timed submission and teacher-review workflow. The six student PDFs remain as source documents. Teacher listening scripts and answer keys are excluded from these public student versions; original attachments are not published. The bundled exam list works when GitHub listing requests fail and avoids duplicate entries. Admin can assign individual exam file permissions alongside folder access. Like other GitHub Pages files, the PDF URLs are public, and the current browser-only code gate does not provide private storage or prevent saving.
 
 ## Interactive exams and private review
 

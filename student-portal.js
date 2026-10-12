@@ -2,6 +2,7 @@ import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {takeStudentAttempt} from './student-attempts.js';
 import {showInteractiveExam} from './interactive-exams.js';
+import {showTextExam} from './text-exams.js';
 import {backendBase,loginStudent,clearStudent,fileBytes} from './exam-api.js';
 import {findStudentAccess,canOpenSection,canOpenFile} from './portal-access.js?v=four-digit-restored';
 import {portalResources} from './portal-config.js';
@@ -41,8 +42,7 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
   const close=doc.createElement('button');close.type='button';close.className='button light small';close.textContent='Close document';close.onclick=()=>viewer.remove();
   viewer.append(heading,close);
   const examLevel=panel.dataset.portalPanel==='exams'?url.pathname.match(/Level-([1-6])-Exam\.pdf$/i):null;
-  if(examLevel&&!access?.adminPreview){showInteractiveExam(doc,panel,Number(examLevel[1]),access);return;}
-  if(examLevel){const action=doc.createElement('button');action.type='button';action.className='button';action.textContent='Take interactive exam';action.onclick=()=>showInteractiveExam(doc,panel,Number(examLevel[1]),access);viewer.append(action);}
+  if(examLevel){const open=access?.adminPreview||!backendBase()?showTextExam:showInteractiveExam;open(doc,panel,Number(examLevel[1]),access);return;}
   if(/\.(png|jpe?g|webp|gif|avif|svg)$/i.test(url.pathname)){const img=doc.createElement('img');if(url.pathname.startsWith('/api/files/'))fileBytes(url.href).then(bytes=>{if(viewer.isConnected){const objectUrl=URL.createObjectURL(new Blob([bytes]));img.src=objectUrl;close.addEventListener('click',()=>URL.revokeObjectURL(objectUrl),{once:true});}}).catch(()=>{status.textContent='File could not load.';});else img.src=url.href;img.alt=title;img.className='portal-document-image';viewer.append(img);}
   else if(/\.pdf$/i.test(url.pathname)){renderPdf(doc,viewer,url.href);}
   else if(/\.(mp4|webm|mp3|wav|ogg)$/i.test(url.pathname)){const media=doc.createElement(/\.(mp4|webm)$/i.test(url.pathname)?'video':'audio');if(url.pathname.startsWith('/api/files/'))fileBytes(url.href).then(bytes=>{if(viewer.isConnected){const objectUrl=URL.createObjectURL(new Blob([bytes]));media.src=objectUrl;close.addEventListener('click',()=>URL.revokeObjectURL(objectUrl),{once:true});}}).catch(()=>{status.textContent='File could not load.';});else media.src=url.href;media.controls=true;media.setAttribute('controlsList','nodownload');viewer.append(media);}

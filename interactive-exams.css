@@ -2,6 +2,12 @@
 .interactive-exam-form label,.exam-mark-form label{font-size:15px}
 .interactive-exam-form p,#exam-review-detail p{white-space:pre-line;line-height:1.7;overflow-wrap:anywhere}
 .interactive-exam-form h4{font-size:20px;margin-top:32px}
+.interactive-exam-form{max-width:750px}
+.exam-written-question{display:flex;flex-direction:column;gap:10px;margin:20px 0;line-height:1.7}
+.exam-text-page>p{white-space:pre-line;line-height:1.8}
+.interactive-exam-form .test-pager{gap:10px;flex-wrap:wrap}
+.interactive-exam-form .placement-question label{display:flex;flex-direction:row;align-items:flex-start;gap:10px;line-height:1.6}
+.interactive-exam-form .placement-question input{width:auto;flex:none;margin-top:5px;accent-color:#176b3a}
 .exam-attempt{border-bottom:1px solid var(--line);padding:16px 0}
 .exam-mark-form{max-width:650px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
 .exam-mark-form label:has(textarea),.exam-mark-form>.button{grid-column:1/-1}
