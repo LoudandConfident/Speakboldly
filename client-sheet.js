@@ -83,3 +83,7 @@ export function initializeClientSheet(doc) {
  });
  return {restore,lock(){clearClientSheet();form.reset();form.hidden = false;if(change)change.hidden = true;status.textContent = '';}};
 }
+
+export async function loadSheetSessions(fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'listSessions'},fetcher);}
+export async function saveSheetSession(session,fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'saveSession',session},fetcher);}
+export async function cancelSheetSession(sessionId,fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'cancelSession',sessionId},fetcher);}

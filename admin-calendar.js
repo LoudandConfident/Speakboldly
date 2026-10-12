@@ -1,3 +1,4 @@
+import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession} from './client-sheet.js?v=sheet-class-reminders';
 import {ownerConnected,request} from './exam-api.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 const STORAGE_KEY='speak-boldly-admin-sessions-v1';
@@ -34,7 +35,7 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    const number=doc.createElement('span');number.className='calendar-day-number';number.textContent=day;if(date===today)number.setAttribute('aria-current','date');
    const add=doc.createElement('button');add.type='button';add.className='calendar-add';add.textContent='+';add.setAttribute('aria-label','Add session on '+date);header.append(number,add);cell.append(header);
    const items=sessions.filter(s=>s.date===date&&s.reminderStatus!=='cancelled');
-   for(const item of items){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name;const badge=doc.createElement('button');badge.type='button';badge.className='calendar-session';badge.textContent=sessionInitials(name)+' #'+item.number;badge.title=name+' — session '+item.number+(item.time?' — '+item.time+' Cairo time':'')+(item.reminderStatus?' — Reminder: '+item.reminderStatus:'');badge.setAttribute('aria-label','Open '+name+' client information, session '+item.number);badge.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};cell.append(badge);if(item.id&&item.reminderStatus!=='cancelled'){const cancel=doc.createElement('button');cancel.type='button';cancel.className='calendar-cancel';cancel.textContent='Cancel';cancel.setAttribute('aria-label','Cancel '+name+' session '+item.number);cancel.onclick=async()=>{if(!isUnlocked()||!doc.defaultView.confirm('Cancel this class and stop its pending reminder?'))return;cancel.disabled=true;try{await request('admin/classes/'+item.id+'/cancel',{role:'admin',method:'POST',data:{}});await load();}catch(error){status.textContent=error.message;cancel.disabled=false;}};cell.append(cancel);}}
+   for(const item of items){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name;const badge=doc.createElement('button');badge.type='button';badge.className='calendar-session';badge.textContent=sessionInitials(name)+' #'+item.number;badge.title=name+' — session '+item.number+(item.time?' — '+item.time+' Cairo time':'')+(item.reminderStatus?' — Reminder: '+item.reminderStatus:'');badge.setAttribute('aria-label','Open '+name+' client information, session '+item.number);badge.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};cell.append(badge);if(item.id&&item.reminderStatus!=='cancelled'){const cancel=doc.createElement('button');cancel.type='button';cancel.className='calendar-cancel';cancel.textContent='Cancel';cancel.setAttribute('aria-label','Cancel '+name+' session '+item.number);cancel.onclick=async()=>{if(!isUnlocked()||!doc.defaultView.confirm('Cancel this class and stop its pending reminder?'))return;cancel.disabled=true;try{if(clientSheetConnected())await cancelSheetSession(item.id);else await request('admin/classes/'+item.id+'/cancel',{role:'admin',method:'POST',data:{}});await load();}catch(error){status.textContent=error.message;cancel.disabled=false;}};cell.append(cancel);}}
    add.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};grid.append(cell);
   }
  }
@@ -42,7 +43,18 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
   sessions=[];storageReadable=true;status.textContent='';
   try{const data=JSON.parse(doc.defaultView.localStorage.getItem(STORAGE_KEY)||'[]');if(!Array.isArray(data))throw new Error();sessions=data.map(entry=>validateSession(entry));}
   catch{storageReadable=false;status.textContent='Saved sessions could not be read. No records will be overwritten.';}
-  if(ownerConnected()){try{const response=await request('admin/classes',{role:'admin'});if(!isUnlocked())return;sessions=response.classes;storageReadable=true;status.textContent=response.emailReady?'Private calendar connected. Reminders are sent 24 hours before class.':'Classes are stored privately, but email delivery is not configured yet.';}catch(error){storageReadable=false;status.textContent=error.message;}}
+  if(clientSheetConnected()){
+   try{
+    let response=await loadSheetSessions();
+    const today=cairoToday(),currentTime=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date());
+    const future=sessions.filter(s=>s.time&&(s.date>today||(s.date===today&&s.time>currentTime)));
+    for(const record of future){if(!isUnlocked())return;response=await saveSheetSession(record);}
+    if(!isUnlocked())return;
+    sessions=response.classes;storageReadable=true;
+    status.textContent=response.emailReady?'Sheet calendar connected. Reminders are checked every 5 minutes and sent when due, 24 hours before class.':'Calendar saved to the sheet. Run setupSheetReminders in Apps Script to activate email reminders.';
+   }catch(error){storageReadable=false;status.textContent=error.message;}
+  }
+  else if(ownerConnected()){try{const response=await request('admin/classes',{role:'admin'});if(!isUnlocked())return;sessions=response.classes;storageReadable=true;status.textContent=response.emailReady?'Private calendar connected. Reminders are sent 24 hours before class.':'Classes are stored privately, but email delivery is not configured yet.';}catch(error){storageReadable=false;status.textContent=error.message;}}
   populateClients();form.reset();selected=cairoToday();month=selected.slice(0,7);form.elements.date.value=selected;render();
  }
  function shift(step){if(!isUnlocked())return;const [year,m]=month.split('-').map(Number),date=new Date(Date.UTC(year,m-1+step,1));if(date.getUTCFullYear()<1900||date.getUTCFullYear()>9999)return;month=dateString(date.getUTCFullYear(),date.getUTCMonth(),1).slice(0,7);render();}
@@ -50,11 +62,16 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
  root.querySelector('#calendar-today').onclick=()=>{if(!isUnlocked())return;selected=cairoToday();month=selected.slice(0,7);form.elements.date.value=selected;render();};
  form.onsubmit=async event=>{event.preventDefault();if(!isUnlocked()||!form.reportValidity())return;if(!storageReadable){status.textContent='Browser storage is unavailable or contains unreadable records. Existing sessions have been kept.';return;}
   try{const input=Object.fromEntries(new doc.defaultView.FormData(form)),client=getClients().find(c=>c.id===input.clientId);if(!client)throw new Error('Choose an existing client.');const record=validateSession({...input,name:client.name});if(!record.time)throw new Error('Choose a class time.');
-   if(ownerConnected()){const response=await request('admin/classes',{role:'admin',method:'POST',data:record});if(!isUnlocked())return;await load();status.textContent='Session '+record.number+' saved for '+record.date+' at '+record.time+' Cairo time. '+(response.emailReady?'Reminder scheduled; bookings within 24 hours are reminded shortly.':'Email delivery is not configured yet.');}
+   if(clientSheetConnected()){
+    const response=await saveSheetSession(record);if(!isUnlocked())return;
+    sessions=response.classes;selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();
+    status.textContent='Session '+record.number+' saved to your sheet for '+record.date+' at '+record.time+' Cairo time. '+(response.emailReady?'Reminder scheduled for 24 hours before class; bookings within 24 hours are sent at the next 5-minute check.':'Email reminders are not activated yet. Run setupSheetReminders.');
+   }
+   else if(ownerConnected()){const response=await request('admin/classes',{role:'admin',method:'POST',data:record});if(!isUnlocked())return;await load();status.textContent='Session '+record.number+' saved for '+record.date+' at '+record.time+' Cairo time. '+(response.emailReady?'Reminder scheduled; bookings within 24 hours are reminded shortly.':'Email delivery is not configured yet.');}
    else{const updated=[...sessions,record];doc.defaultView.localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));sessions=updated;selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();status.textContent=sessionInitials(record.name)+' #'+record.number+' saved in this browser. Automatic reminders require the private server and email connection.';}}
 
   catch(error){status.textContent=error.message;return;}
   root.querySelector('#calendar-session-dialog')?.close();
  };
- return{load,refresh(){if(ownerConnected())load();else{populateClients();render();}},lock(){sessions=[];grid.replaceChildren();heading.textContent='';form.reset();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
+ return{load,refresh(){if(clientSheetConnected()||ownerConnected())load();else{populateClients();render();}},lock(){sessions=[];grid.replaceChildren();heading.textContent='';form.reset();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
 }

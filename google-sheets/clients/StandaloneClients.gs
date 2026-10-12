@@ -1,63 +1,212 @@
-// Open your private Google Sheet > Extensions > Apps Script.
-// Paste this into a NEW project, save, and run setupClientSync once.
-const CLIENT_HEADERS = ['Client ID','Name','Email','Student Code','Level / Program','Payment status','Amount paid','Hours taught','Updated at (UTC)'];
+const CLIENT_HEADERS = [
+  'Client ID',
+  'Name',
+  'Email',
+  'Student Code',
+  'Level / Program',
+  'Payment status',
+  'Amount paid',
+  'Hours taught',
+  'Updated at'
+];
+
 function setupClientSync() {
- const ss=SpreadsheetApp.getActiveSpreadsheet();
- if(!ss)throw new Error('Open Apps Script from your Google Sheet.');
- const props=PropertiesService.getScriptProperties();
- props.setProperty('CLIENT_SHEET_ID',ss.getId());
- if(!props.getProperty('CLIENT_SYNC_KEY'))props.setProperty('CLIENT_SYNC_KEY',Utilities.getUuid()+Utilities.getUuid());
- const sheet=ss.getSheetByName('Clients')||ss.insertSheet('Clients');
- if(sheet.getLastRow()===0)sheet.appendRow(CLIENT_HEADERS);
- else if(JSON.stringify(sheet.getRange(1,1,1,CLIENT_HEADERS.length).getValues()[0])!==JSON.stringify(CLIENT_HEADERS))throw new Error('Rename the existing Clients tab; its headers differ. No data was replaced.');
- sheet.setFrozenRows(1);sheet.getRange('A1:I1').setFontWeight('bold');sheet.getRange('D2:D').setNumberFormat('@');sheet.getRange(1,10).setValue('Permissions');sheet.autoResizeColumns(1,10);
- SpreadsheetApp.getUi().alert('Clients sheet ready','Keep your connection key private. Find it under Apps Script > Project Settings > Script Properties > CLIENT_SYNC_KEY. Do not send it in chat. After deploying, share only the web app URL with your website maintainer.',SpreadsheetApp.getUi().ButtonSet.OK);
-}
-function clientSyncResponse(value){return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);}
-function normalizedClientName(value){return String(value||'').normalize('NFKC').trim().replace(/\s+/g,' ').toLowerCase();}
-function safeSheetText(value){const s=String(value??'');return /^[=+\-@]/.test(s)?"'"+s:s;}
-function doPost(e){
- const lock=LockService.getScriptLock();
- try{
-  if(!e?.postData?.contents||e.postData.contents.length>20000)throw new Error('Invalid request.');
-  const p=JSON.parse(e.postData.contents),props=PropertiesService.getScriptProperties();
-  const key=props.getProperty('CLIENT_SYNC_KEY');
-  if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
-  if(p.action==='checkConnection')return clientSyncResponse({ok:true,connected:true});
-  if(p.action==='listClients'){
-   lock.waitLock(20000);
-   const sheet=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
-   if(!sheet)throw new Error('Clients tab not found. Run setupClientSync first.');
-   const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
-   const clients=rows.filter(row=>String(row[0]).trim()).map(row=>{
-    let permissions=[];if(row[9]){permissions=JSON.parse(String(row[9]));if(!Array.isArray(permissions))throw new Error('Invalid Permissions column.');}
-    return {id:String(row[0]),name:String(row[1]),email:String(row[2]),code:String(row[3]).padStart(4,'0'),level:String(row[4]),payment:String(row[5]),amountPaid:Number(row[6]||0),hours:Number(row[7]||0),permissions};
-   });
-   return clientSyncResponse({ok:true,clients});
+  const book = SpreadsheetApp.getActiveSpreadsheet();
+  if (!book) {
+    throw new Error('Open Apps Script from your Google Sheet.');
   }
-  if(p.action!=='upsertClient'||!p.client)throw new Error('Invalid action.');
-  const c=p.client,name=String(c.name||'').trim(),email=String(c.email||'').trim().toLowerCase(),code=String(c.code||'').trim(),id=String(c.id||'');
-  if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!name||name.length>100||!/^\d{4}$/.test(code)||code==='1962'||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Check client details.');
-  const hours=Number(c.hours),amount=Number(c.amountPaid??0);
-  if(!Number.isFinite(hours)||hours<0||hours>100000||!Number.isFinite(amount)||amount<0||amount>100000000)throw new Error('Invalid hours or amount.');
-  if(!['Unpaid','Part paid','Paid'].includes(c.payment)||!String(c.level||'')||String(c.level).length>100)throw new Error('Invalid program or payment status.');
-  lock.waitLock(20000);
-  const sheet=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
-  const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,9).getValues():[];
-  let rowNumber=sheet.getLastRow()+1;
-  rows.forEach((row,i)=>{
-   if(String(row[0])===id){rowNumber=i+2;return;}
-   if(String(row[3]).padStart(4,'0')===code)throw new Error('Student Code is already assigned.');
-   if(normalizedClientName(row[1])===normalizedClientName(name))throw new Error('Client name is already registered.');
-   if(String(row[2]).toLowerCase()===email)throw new Error('Email already belongs to another client.');
+
+  const properties = PropertiesService.getScriptProperties();
+  properties.setProperty('CLIENT_SHEET_ID', book.getId());
+
+  if (!properties.getProperty('CLIENT_SYNC_KEY')) {
+    properties.setProperty(
+      'CLIENT_SYNC_KEY',
+      Utilities.getUuid() + Utilities.getUuid()
+    );
+  }
+
+  const sheet =
+    book.getSheetByName('Clients') || book.insertSheet('Clients');
+
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(CLIENT_HEADERS);
+  } else {
+    const headers = sheet.getRange(1, 1, 1, 9).getValues()[0];
+    if (JSON.stringify(headers) !== JSON.stringify(CLIENT_HEADERS)) {
+      throw new Error('Clients tab must be empty before first setup.');
+    }
+  }
+
+  book.setSpreadsheetTimeZone('Africa/Cairo');
+  sheet.setFrozenRows(1);
+  sheet.getRange('A1:I1').setFontWeight('bold');
+  sheet.getRange('D2:D').setNumberFormat('@');
+  sheet.autoResizeColumns(1, 9);
+}
+
+function response(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet() {
+  const properties = PropertiesService.getScriptProperties();
+  return response({
+    ok: true,
+    service: 'Speak Boldly Clients',
+    configured: Boolean(
+      properties.getProperty('CLIENT_SHEET_ID') &&
+      properties.getProperty('CLIENT_SYNC_KEY')
+    )
   });
-  let permissions=c.permissions;
-  if(permissions!==undefined&&(!Array.isArray(permissions)||permissions.length>500||permissions.some(p=>typeof p!=='string'||p.length>2000||! /^(section:|file:)/.test(p))))throw new Error('Invalid file permissions.');
-  if(permissions===undefined){const previous=rowNumber<=sheet.getLastRow()?sheet.getRange(rowNumber,10).getValue():'';permissions=previous?JSON.parse(String(previous)):[];}
-  sheet.getRange(1,10).setValue('Permissions');
-  const values=[id,name,email,code,String(c.level),c.payment,amount,hours,new Date().toISOString(),JSON.stringify(permissions)].map(v=>typeof v==='string'?safeSheetText(v):v);
-  sheet.getRange(rowNumber,4).setNumberFormat('@');sheet.getRange(rowNumber,1,1,10).setValues([values]);
-  return clientSyncResponse({ok:true,clientId:id});
- }catch(error){return clientSyncResponse({ok:false,error:error.message});}
- finally{if(lock.hasLock())lock.releaseLock();}
+}
+
+function doPost(event) {
+  const lock = LockService.getScriptLock();
+
+  try {
+    if (!event || !event.postData ||
+        event.postData.contents.length > 20000) {
+      throw new Error('Invalid request.');
+    }
+
+    const data = JSON.parse(event.postData.contents);
+    const properties = PropertiesService.getScriptProperties();
+    const key = properties.getProperty('CLIENT_SYNC_KEY');
+
+    if (!key || data.key !== key) {
+      throw new Error('Incorrect connection key.');
+    }
+
+    const sheetId = properties.getProperty('CLIENT_SHEET_ID');
+    if (!sheetId) {
+      throw new Error('Run setupClientSync first.');
+    }
+
+    const sheet = SpreadsheetApp
+      .openById(sheetId)
+      .getSheetByName('Clients');
+
+    if (!sheet) {
+      throw new Error('Clients tab is missing.');
+    }
+
+    if (data.action === 'checkConnection') {
+      return response({ ok: true, connected: true });
+    }
+
+    if (['listSessions', 'saveSession', 'cancelSession'].includes(data.action)) {
+      return handleSheetSessionAction(data);
+    }
+
+    if (data.action !== 'upsertClient' || !data.client) {
+          if (data.action === 'listClients') {
+      const rows = sheet.getLastRow() > 1
+        ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getValues()
+        : [];
+      const clients = rows.filter(row => row[0] && row[1] && row[2]).map(row => ({
+        id: String(row[0]), name: String(row[1]).trim(),
+        email: String(row[2]).trim().toLowerCase(),
+        code: String(row[3]).padStart(4, '0'), level: String(row[4]),
+        payment: String(row[5]), amountPaid: Number(row[6] || 0),
+        hours: Number(row[7] || 0)
+      }));
+      return response({ ok: true, clients });
+    }
+
+
+      throw new Error('Invalid action.');
+    }
+
+    const client = data.client;
+    const text = value => String(value == null ? '' : value).trim();
+
+    const id = text(client.id);
+    const name = text(client.name);
+    const email = text(client.email).toLowerCase();
+    const code = text(client.code);
+    const level = text(client.level);
+    const payment = text(client.payment);
+    const amount = Number(client.amountPaid || 0);
+    const hours = Number(client.hours);
+
+    if (!/^[A-Za-z0-9-]{1,100}$/.test(id)) {
+      throw new Error('Invalid student ID.');
+    }
+    if (!name || name.length > 100) {
+      throw new Error('Check the student name.');
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+        email.length > 254) {
+      throw new Error('Check the student email.');
+    }
+    if (!/^\d{4}$/.test(code) || code === '1962') {
+      throw new Error('Choose a valid four-digit student code.');
+    }
+    if (!level || level.length > 100) {
+      throw new Error('Check the level or program.');
+    }
+    if (!['Unpaid', 'Part paid', 'Paid'].includes(payment)) {
+      throw new Error('Check the payment status.');
+    }
+    if (!Number.isFinite(amount) || amount < 0 ||
+        amount > 100000000 ||
+        !Number.isFinite(hours) || hours < 0 ||
+        hours > 100000) {
+      throw new Error('Check the amount paid and hours.');
+    }
+
+    lock.waitLock(20000);
+
+    const rows = sheet.getLastRow() > 1
+      ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getValues()
+      : [];
+
+    const normalize = value =>
+      text(value).normalize('NFKC').replace(/\s+/g, ' ').toLowerCase();
+
+    let targetRow = sheet.getLastRow() + 1;
+
+    rows.forEach((row, index) => {
+      if (String(row[0]) === id) {
+        targetRow = index + 2;
+        return;
+      }
+
+      if (String(row[3]).padStart(4, '0') === code) {
+        throw new Error('Student code is already assigned.');
+      }
+      if (normalize(row[1]) === normalize(name)) {
+        throw new Error('Student name is already registered.');
+      }
+      if (text(row[2]).toLowerCase() === email) {
+        throw new Error('Email already belongs to another student.');
+      }
+    });
+
+    const safe = value =>
+      /^[=+\-@\t\r]/.test(value) ? "'" + value : value;
+
+    sheet.getRange(targetRow, 4).setNumberFormat('@');
+    sheet.getRange(targetRow, 1, 1, 9).setValues([[
+      id,
+      safe(name),
+      safe(email),
+      code,
+      safe(level),
+      payment,
+      amount,
+      hours,
+      new Date().toISOString()
+    ]]);
+
+    return response({ ok: true, clientId: id });
+
+  } catch (error) {
+    return response({ ok: false, error: error.message });
+  } finally {
+    if (lock.hasLock()) lock.releaseLock();
+  }
 }
