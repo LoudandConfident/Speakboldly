@@ -72,7 +72,7 @@ export const courses = [
   },
   {
     "id": "urgent-session",
-    "title": "1 urgent session",
+    "title": "One Session",
     "level": "Your current English level",
     "duration": "90 minutes",
     "category": "Others",
@@ -178,7 +178,7 @@ export const courses = [
     "id": "different-learners",
     "title": "The different learners",
     "level": "Understanding learning preferences",
-    "duration": "Stay tuned",
+    "duration": "8 sessions",
     "category": "Training",
     "description": "Explore visual, auditory, reading and writing, and hands-on learning preferences, with flexible activities that support different learners.",
     "topics": [
