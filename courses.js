@@ -1,14 +1,14 @@
 export const courses = [
   {
-    "id": "general-4",
-    "title": "General English — 4 sessions",
+    "id": "general-8",
+    "title": "General English — 8 sessions",
     "level": "Beginner, Intermediate, Advanced",
-    "duration": "4 sessions per month",
+    "duration": "8 sessions per month",
     "priceOptions": [
       {
-        "previous": 2500,
-        "amount": 2000,
-        "schedule": "4 sessions per month · once a week"
+        "previous": 3500,
+        "amount": 3000,
+        "schedule": "8 sessions per month · 180 minutes a week"
       }
     ],
     "category": "General English",
@@ -24,15 +24,15 @@ export const courses = [
     "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions."
   },
   {
-    "id": "general-8",
-    "title": "General English — 8 sessions",
+    "id": "general-4",
+    "title": "General English — 4 sessions",
     "level": "Beginner, Intermediate, Advanced",
-    "duration": "8 sessions per month",
+    "duration": "4 sessions per month",
     "priceOptions": [
       {
-        "previous": 3500,
-        "amount": 3000,
-        "schedule": "8 sessions per month · 180 minutes a week"
+        "previous": 2500,
+        "amount": 2000,
+        "schedule": "4 sessions per month · once a week"
       }
     ],
     "category": "General English",
