@@ -51,11 +51,10 @@ export const courses = [
     "id": "urgent-session",
     "title": "One Session",
     "level": "Your current English level",
-    "duration": "90 minutes",
+    "duration": "1 session",
     "category": "Others",
     "description": "Book session by session, with no commitment. A little pricier, but useful when something urgent comes up. Enjoy 90 minutes of interactive conversation about the topic you need, or a topic your instructor chooses based on your previously communicated needs and English level. It can also be your trial session to help you decide what would support you most with your current needs.",
     "price": 500,
-    "priceLabel": "90 minutes · no commitment",
     "showComingSoonPrice": true,
     "topics": [
       "Interactive conversation tailored to your needs",
