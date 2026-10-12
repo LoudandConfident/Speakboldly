@@ -133,7 +133,7 @@ export const courses = [
     "id": "ielts",
     "title": "IELTS preparation",
     "level": "Advanced level",
-    "duration": "Stay tuned",
+    "duration": "8 sessions",
     "category": "IELTS",
     "description": "Prepare for IELTS with focused practice across listening, reading, writing and speaking. Build familiarity with task types, improve your answer structure and time management, and receive personalized feedback on your performance.",
     "topics": [
@@ -151,7 +151,7 @@ export const courses = [
     "id": "pronunciation",
     "title": "Pronunciation workshop",
     "level": "Advanced",
-    "duration": "Stay tuned",
+    "duration": "6 sessions",
     "category": "Workshops",
     "description": "Develop clearer pronunciation through practice with English sounds, word stress, rhythm and intonation.",
     "topics": [
@@ -166,7 +166,7 @@ export const courses = [
     "id": "information-technology",
     "title": "English for Information Technology",
     "level": "Beginner, Intermediate, Advanced",
-    "duration": "Stay tuned",
+    "duration": "8 sessions",
     "category": "Others",
     "description": "Build confidence explaining technical ideas, discussing IT projects and communicating with colleagues in English.",
     "topics": [
