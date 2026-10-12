@@ -21,3 +21,9 @@ That response means the connected deployment does not recognize `sendClientEmail
 5. Return to the teacher dashboard, refresh students and the calendar, and retry **Authorize → Send e-mail confirmation** for a client with a future session saved in the shared calendar.
 
 A calendar slot is availability; a confirmation needs a saved client appointment in `Sessions`. An email accepted by Google is recorded as `sent` in `EmailLog`.
+
+## Retry missing spreadsheet permissions
+
+After replacing the code in the existing Clients Apps Script project, save and run `resetPermissions` once. Then select `retryPermissions` and run it; complete Review permissions and allow spreadsheet and email access. The check reads the spreadsheet name and email quota only. It sends no messages and changes no sheet data.
+
+After the access check succeeds, deploy a New version of the existing web app with Execute as: Me, preserving the same URL. Retry the client confirmation from Authorize. If spreadsheet access is still denied, check for an explicit `oauthScopes` list in appsscript.json and add `https://www.googleapis.com/auth/spreadsheets` without removing the other scopes. Remove any `@OnlyCurrentDoc` annotation because this project accesses the sheet by ID.

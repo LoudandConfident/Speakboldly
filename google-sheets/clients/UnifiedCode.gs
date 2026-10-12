@@ -351,6 +351,16 @@ function handleSheetDocumentAction(p){
 
 // Run once to grant email permission. This does not send an email.
 function authorizeClientEmails(){MailApp.getRemainingDailyQuota();}
+// Run resetPermissions once, then retryPermissions in the Apps Script editor.
+function resetPermissions(){ScriptApp.invalidateAuth();}
+function retryPermissions(){
+ const id=PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID');
+ if(!id)throw new Error('CLIENT_SHEET_ID is missing. Keep your existing script properties.');
+ SpreadsheetApp.openById(id).getName();
+ MailApp.getRemainingDailyQuota();
+ console.log('Spreadsheet and email access confirmed. Deploy a New version with Execute as: Me.');
+}
+
 const SB_EMAIL_LOGO='https://loudandconfident.github.io/Speakboldly/speak-boldly-preview-dark-green.png';
 const SB_ZOOM_URL='https://us06web.zoom.us/j/79051707388';
 const SB_ZOOM_PASSCODE='7P1NpA';

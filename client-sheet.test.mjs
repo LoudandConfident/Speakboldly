@@ -52,3 +52,12 @@ test('email permission setup does not send messages',()=>{
 });
 
 
+
+test('permission retry checks spreadsheet and mail access without sending or changing data',()=>{
+ for(const filename of ['EmailActions.gs','UnifiedCode.gs']){
+  const calls=[];let sheetId='private-sheet-id';const context={ScriptApp:{invalidateAuth:()=>calls.push('reset')},PropertiesService:{getScriptProperties:()=>({getProperty:()=>sheetId})},SpreadsheetApp:{openById:id=>{assert.equal(id,sheetId);calls.push('sheet');return {getName:()=> 'Clients'};}},MailApp:{getRemainingDailyQuota:()=>calls.push('mail'),sendEmail:()=>{throw new Error('Must not send during permission checks.');}},console:{log:()=>{}}};
+  vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/'+filename,'utf8'),context);
+  context.resetPermissions();context.retryPermissions();assert.deepEqual(calls,['reset','sheet','mail']);
+  sheetId='';assert.throws(()=>context.retryPermissions(),/CLIENT_SHEET_ID is missing/);
+ }
+});
