@@ -92,3 +92,5 @@ export async function loadSheetTeacherDocuments(fetcher=globalThis.fetch){if(!cl
 export async function saveSheetTeacherDocument(record,expectedVersion=0,fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'saveTeacherDocument',record,expectedVersion},fetcher);}
 
 export async function sendSheetClientEmail(clientId,kind,{pdfBase64,requestId}={},fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your Clients sheet first.');return sheetRequest(endpoint,key,{action:'sendClientEmail',clientId,kind,pdfBase64,requestId:requestId||crypto.randomUUID()},fetcher);}
+
+export async function sheetLibraryRequest(action,data={},fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your Clients sheet first.');return sheetRequest(endpoint,key,{action,...data},fetcher);}

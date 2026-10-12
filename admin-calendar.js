@@ -1,4 +1,4 @@
-import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession} from './client-sheet.js?v=sheet-class-reminders';
+import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession} from './client-sheet.js?v=full-library';
 import {ownerConnected,request} from './exam-api.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 const STORAGE_KEY='speak-boldly-admin-sessions-v1';

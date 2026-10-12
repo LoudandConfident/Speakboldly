@@ -302,3 +302,5 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 @media(min-width:681px){#home .hero-copy .home-slogan{top:-24px}}@media(max-width:680px){#home .hero-copy .home-slogan{top:-14px}}
 
 .client-authorization-actions{display:grid;gap:10px}.client-authorization-actions .button{justify-content:flex-start;width:fit-content;max-width:100%;min-height:34px;padding:8px 12px;font-size:12px}.admin-client-actions{flex-wrap:wrap}
+
+.teacher-library-folders{display:grid;gap:12px}.teacher-library-folder{border:1px solid var(--line);border-radius:12px;padding:14px}.teacher-library-folder>summary{font-weight:600;cursor:pointer}.teacher-library-controls,.teacher-library-file{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0}.teacher-library-controls input{max-width:100%;width:auto}.teacher-library-controls .button,.teacher-library-file .button{padding:7px 10px;font-size:11px;width:fit-content;min-height:30px}.teacher-library-file{justify-content:space-between}

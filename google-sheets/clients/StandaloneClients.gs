@@ -93,8 +93,9 @@ function doPost(event) {
       throw new Error('Clients tab is missing.');
     }
 
-    if(data.action!=='sendClientEmail'&&event.postData.contents.length>20000)throw new Error('Request too large.');
+    if(!['sendClientEmail','uploadLibraryFile'].includes(data.action)&&event.postData.contents.length>20000)throw new Error('Request too large.');
     if(data.action==='sendClientEmail')return handleClientEmail(data);
+    if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(data.action))return handleLibraryAction(data);
 
     if (data.action === 'checkConnection') {
       return response({ ok: true, connected: true });
