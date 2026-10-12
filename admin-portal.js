@@ -1,5 +1,6 @@
 import {initializeTeacherLibrary} from './teacher-library.js?v=full-library';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=full-library';
+import {openClientReportTab} from './report-tabs.js';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail} from './client-sheet.js?v=full-library';
 import {initializeExamReview} from './exam-review.js';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
@@ -23,7 +24,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  authorization.querySelectorAll('[data-authorize-action]').forEach(button=>button.addEventListener('click',async()=>{
   if(!unlocked)return;const client=clients.find(c=>c.id===authorizationClientId);if(!client)return;const action=button.dataset.authorizeAction,note=authorization.querySelector('[role=status]');
   if(action==='exam'){authorization.close();examAuthorization.querySelector('#client-exam-authorization-name').textContent=client.name+' · Student passcode '+client.code;examAuthorization.querySelector('[role=status]').textContent='Select the exam to make available in this client’s Student portal. Interactive exam delivery must be connected before clients can take this exam on their own devices.';examAuthorization.showModal();return;}
-  if(action!=='confirmation'){authorization.close();await documents.openForClient(action,client);return;}
+  if(action!=='confirmation'){try{openClientReportTab(doc.defaultView,action,client,root.querySelector('#client-sheet-connect')?.elements.endpoint.defaultValue||'');authorization.close();}catch(error){note.textContent=error.message;}return;}
   if(!clientSheetConnected()){note.textContent='Connect your Clients sheet first.';return;}
   if(!doc.defaultView.confirm('Send class confirmation to the client '+client.name+' ('+client.email+')?'))return;button.disabled=true;note.textContent='Sending confirmation…';
   try{confirmationId ||= doc.defaultView.crypto.randomUUID();const result=await sendSheetClientEmail(client.id,'confirmation',{requestId:confirmationId});note.textContent='Email sent to '+result.recipient+'.';}catch(error){note.textContent=error.message;button.disabled=false;}
