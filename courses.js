@@ -8,7 +8,7 @@ export const courses = [
       {
         "previous": 3500,
         "amount": 3000,
-        "schedule": "8 sessions per month · 180 minutes a week"
+        "schedule": "8 sessions per month · twice a week"
       }
     ],
     "category": "General English",
