@@ -27,6 +27,10 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
  const root=doc.querySelector('#admin-calendar');if(!root)return;
  const form=root.querySelector('form'),grid=root.querySelector('.calendar-grid'),status=root.querySelector('[role=status]'),heading=root.querySelector('#calendar-month');
  const chooser=form.elements.clientId;
+ const weekdays=root.querySelector('.calendar-weekdays'),viewport=doc.createElement('div'),hint=doc.createElement('p');
+ viewport.className='calendar-viewport';viewport.tabIndex=0;viewport.setAttribute('role','region');viewport.setAttribute('aria-label','Monthly calendar. Scroll horizontally to see all days.');
+ hint.className='calendar-scroll-hint';hint.textContent='Swipe across the calendar to see all days.';
+ grid.parentNode.insertBefore(hint,weekdays||grid);grid.parentNode.insertBefore(viewport,weekdays||grid);if(weekdays)viewport.append(weekdays);viewport.append(grid);
  function populateClients(){const previous=chooser.value;chooser.replaceChildren();const placeholder=doc.createElement('option');placeholder.value='';placeholder.textContent='Choose a client';chooser.append(placeholder);for(const client of getClients()){const option=doc.createElement('option');option.value=client.id;option.textContent=client.name+' — '+client.level;chooser.append(option);}chooser.value=previous;root.querySelector('.calendar-no-clients').hidden=getClients().length>0;}
  let sessions=[],selected=cairoToday(),month=selected.slice(0,7),storageReadable=true;
  const dateString=(year,m,day)=>String(year).padStart(4,'0')+'-'+String(m+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
