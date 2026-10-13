@@ -48,8 +48,8 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
   try{
    const remote=cleanupRequestedPortalClients(await loadClientsFromSheet(),doc.defaultView.localStorage);
    if(!unlocked||epoch!==sheetGeneration)return false;
-   clients=mergeSheetClients(clients,remote);save();render();documents?.refresh();calendar?.refresh();
-   status.textContent=remote.length+' students loaded from Google Sheets.'+(clients.length>remote.length?' '+(clients.length-remote.length)+' students on this device still need Sync existing students.':'');
+   try{if(clients.some(client=>!remote.some(item=>item.id===client.id)))doc.defaultView.localStorage.setItem('speak-boldly-clients-before-sheet-refresh-v1',JSON.stringify(clients));}catch{}clients=mergeSheetClients(clients,remote);save();render();documents?.refresh();calendar?.refresh();
+   status.textContent=remote.length+' students loaded from Google Sheets.';
    return true;
   }catch(error){if(unlocked&&epoch===sheetGeneration)status.textContent='Students could not load. '+error.message;return false;}
   finally{if(epoch===sheetGeneration){sheetLoading=false;refreshClients.disabled=false;root.querySelector('#admin-add-client').disabled=false;}}

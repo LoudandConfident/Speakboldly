@@ -38,9 +38,8 @@ export async function loadClientsFromSheet(fetcher = globalThis.fetch) {
  return records;
 }
 export function mergeSheetClients(local,remote) {
- // Sheet values take precedence; retain browser records that have never been synced.
- const ids=new Set(remote.map(c=>c.id)),emails=new Set(remote.map(c=>c.email.toLowerCase()));
- return [...remote,...local.filter(c=>!ids.has(c.id)&&!emails.has(c.email.toLowerCase()))];
+ // A connected sheet is authoritative, including deletions.
+ return [...remote];
 }
 
 export function initializeClientSheet(doc) {

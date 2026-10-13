@@ -4,10 +4,11 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import {mergeSheetClients,initializeClientSheet,loadClientsFromSheet,clearClientSheet,sendSheetClientEmail} from './client-sheet.js';
 const client={id:'client-1',name:'Test Learner',email:'test@example.com',code:'0012',level:'2',payment:'Paid',amountPaid:100,hours:3,permissions:['section:reports']};
-test('sheet values win while browser-only clients are preserved',()=>{
+test('sheet refresh removes cached clients missing from the sheet',()=>{
  const other={...client,id:'client-2',email:'other@example.com'};
  const moved={...client,id:'remote-id',hours:5};
- assert.deepEqual(mergeSheetClients([client,other],[moved]),[moved,other]);
+ assert.deepEqual(mergeSheetClients([client,other],[moved]),[moved]);
+ assert.deepEqual(mergeSheetClients([client],[]),[]);
 });
 test('authenticated client loading validates every returned row',async()=>{
  const handlers={},button={},status={},form={elements:{endpoint:{value:'https://script.google.com/macros/s/test/exec',defaultValue:'https://script.google.com/macros/s/test/exec'},key:{value:'private-test-key'}},querySelector:()=>button,addEventListener:(name,fn)=>handlers[name]=fn};
