@@ -73,7 +73,7 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
       for(const record of future){if(!isUnlocked()||epoch!==loadEpoch)return;try{await saveSheetSession(record,undefined,{importPast:true});}catch(error){warnings.push(error.message);}}
       response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes;
      }
-     status.textContent='Shared calendar connected. Send class confirmations manually from each client’s Authorize button.'+(warnings.length?' '+warnings.length+' browser appointment(s) could not upload: '+warnings[0]:'')+(localError?' Some old browser entries could not be read; shared appointments are still shown.':'');
+     status.textContent='Shared calendar connected. Send class confirmations manually from each client’s Actions button.'+(warnings.length?' '+warnings.length+' browser appointment(s) could not upload: '+warnings[0]:'')+(localError?' Some old browser entries could not be read; shared appointments are still shown.':'');
     }catch(error){status.textContent='Calendar could not sync: '+error.message;if(!background&&!sharedLoaded){sessions=local;storageReadable=false;}}
    }else if(ownerConnected()){
     try{const response=await request('admin/classes',{role:'admin'});if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes;storageReadable=true;status.textContent='Private calendar connected. Confirmations are sent only when you authorize sending.';}catch(error){status.textContent=error.message;if(!background)storageReadable=false;}
@@ -99,10 +99,10 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    if(clientSheetConnected()){
     const response=await saveSheetSession(record);if(!isUnlocked())return;
     sessions=response.classes;selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();
-    status.textContent='Session '+record.number+' saved to your sheet for '+record.date+' at '+record.time+' Cairo time. '+'Send the confirmation from this client’s Authorize button.';
+    status.textContent='Session '+record.number+' saved to your sheet for '+record.date+' at '+record.time+' Cairo time. '+'Send the confirmation from this client’s Actions button.';
    }
    else if(ownerConnected()){const response=await request('admin/classes',{role:'admin',method:'POST',data:record});if(!isUnlocked())return;await load();status.textContent='Session '+record.number+' saved for '+record.date+' at '+record.time+' Cairo time. '+'Confirmations are sent only when you authorize sending.';}
-   else{const updated=[...sessions,record];doc.defaultView.localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));sessions=updated;selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();status.textContent=sessionInitials(record.name)+' #'+record.number+' saved in this browser. Send class confirmations manually from Authorize after connecting your Clients sheet.';}}
+   else{const updated=[...sessions,record];doc.defaultView.localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));sessions=updated;selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();status.textContent=sessionInitials(record.name)+' #'+record.number+' saved in this browser. Send class confirmations manually from Actions after connecting your Clients sheet.';}}
 
   catch(error){status.textContent=error.message;return;}
   root.querySelector('#calendar-session-dialog')?.close();
