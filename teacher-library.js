@@ -1,8 +1,9 @@
 import {confirmClientEmail} from './client-email-confirmation.js';
-import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=full-library';
+import {clientSheetConnected as defaultConnected,sheetLibraryRequest as defaultRequest} from './client-sheet.js?v=full-library';
 import {PORTAL_SECTIONS} from './portal-access.js?v=four-digit-restored';
 import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
-export function initializeTeacherLibrary(doc,isUnlocked,getClients,loader){
+export function initializeTeacherLibrary(doc,isUnlocked,getClients,loader,options={}){
+ const clientSheetConnected=options.connected||defaultConnected,sheetLibraryRequest=options.request||defaultRequest,sections=options.sections||PORTAL_SECTIONS;
  const root=doc.querySelector('#teacher-full-library');if(!root)return{refresh(){},lock(){}};
  const list=root.querySelector('.teacher-library-folders');let epoch=0,loading=false;const urls=new Set();
  const send=doc.createElement('dialog');send.className='action-popup';send.setAttribute('aria-label','Send library file to client');send.innerHTML='<button type="button" class="popup-close" aria-label="Close file sending">×</button><h2>Send to client</h2><p class="library-send-title"></p><form><label>Client<select name="clientId" required></select></label><button class="button small" type="submit">Grant viewer access and send email</button></form><p role="status"></p>';doc.body.append(send);send.querySelector('.popup-close').onclick=()=>send.close();let sending=null;
@@ -30,7 +31,7 @@ export function initializeTeacherLibrary(doc,isUnlocked,getClients,loader){
   }catch(error){note.textContent=error.message;}
   try{const publicItems=await loader(section);if(!isUnlocked())return;if(publicItems.length){const heading=doc.createElement('p');heading.textContent='Existing website files';container.append(heading);for(const item of publicItems){const button=doc.createElement('button');button.className='button light small';button.textContent=item.title;button.onclick=()=>preview(section,item,viewer);container.append(button);}}}catch{}
  }
- function renderFolders(){list.replaceChildren();for(const [section,label]of Object.entries(PORTAL_SECTIONS)){
+ function renderFolders(){list.replaceChildren();for(const [section,label]of Object.entries(sections)){
   const folder=doc.createElement('details');folder.className='teacher-library-folder';const summary=doc.createElement('summary');summary.textContent=section==='material'?'Materials':label;folder.append(summary);
   const upload=doc.createElement('input');upload.type='file';upload.multiple=true;upload.setAttribute('aria-label','Upload files to '+label);upload.hidden=true;
   const picker=doc.createElement('div');picker.className='teacher-library-picker';const choose=doc.createElement('button');choose.type='button';choose.className='button light small';choose.textContent='Choose files';choose.setAttribute('aria-label','Choose files for '+label);choose.onclick=()=>upload.click();const selection=doc.createElement('span');selection.className='teacher-library-selection';selection.textContent='No files selected';selection.setAttribute('aria-live','polite');upload.onchange=()=>{selection.textContent=upload.files.length?[...upload.files].map(file=>file.name).join(', '):'No files selected';};picker.append(choose,selection);

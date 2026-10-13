@@ -1,7 +1,6 @@
 import {initializeBookingSettings} from './booking-settings.js';
 import {confirmClientEmail} from './client-email-confirmation.js';
 import {initializePortalSwitches} from './portal-switches.js?v=dim-controls';
-import {initializeTeacherLibrary} from './teacher-library.js?v=popup-email';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=popup-email';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail} from './client-sheet.js?v=full-library';
 import {initializeExamReview} from './sheet-exam-review.js?v=individual-pdfs';
@@ -32,7 +31,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  const syncExisting=root.querySelector('#sync-existing-clients');
  const refreshClients=doc.createElement('button');refreshClients.type='button';refreshClients.className='button light small';refreshClients.textContent='Refresh';refreshClients.id='refresh-sheet-clients';
  root.querySelector('.admin-clients-heading')?.append(refreshClients);
- refreshClients.onclick=async()=>{if(!unlocked||sheetLoading)return;if(clientSheetConnected()){await refreshSheetClients();return;}load();render();await calendar?.load();documents?.refresh();fullLibrary?.refresh();status.textContent='Dashboard refreshed.';};
+ refreshClients.onclick=async()=>{if(!unlocked||sheetLoading)return;if(clientSheetConnected()){await refreshSheetClients();return;}load();render();await calendar?.load();documents?.refresh();status.textContent='Dashboard refreshed.';};
  doc.addEventListener('client-sheet-configured',()=>{if(unlocked)refreshSheetClients();});
  async function refreshSheetClients(){
   if(!unlocked||sheetLoading)return false;
@@ -43,7 +42,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
   try{
    const remote=await loadClientsFromSheet();
    if(!unlocked||epoch!==sheetGeneration)return false;
-   clients=mergeSheetClients(clients,remote);save();render();documents?.refresh();fullLibrary?.refresh();calendar?.refresh();
+   clients=mergeSheetClients(clients,remote);save();render();documents?.refresh();calendar?.refresh();
    status.textContent=remote.length+' students loaded from Google Sheets.'+(clients.length>remote.length?' '+(clients.length-remote.length)+' students on this device still need Sync existing students.':'');
    return true;
   }catch(error){if(unlocked&&epoch===sheetGeneration)status.textContent='Students could not load. '+error.message;return false;}
@@ -76,7 +75,6 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  const review=initializeExamReview(doc,()=>unlocked,records=>{clients=records;clearForm();render();calendar?.refresh();loadAccessOptions();});
  const calendar=initializeAdminCalendar(doc,()=>unlocked,()=>clients,openClientInfo);
  const documents=initializeTeacherDocuments(doc,()=>unlocked,()=>clients,loader);
- const fullLibrary=initializeTeacherLibrary(doc,()=>unlocked,()=>clients,loader);
 
  for(const [name,values]of [['level',CLIENT_LEVELS],['payment',PAYMENT_STATUSES]])for(const value of values){const option=doc.createElement('option');option.value=option.textContent=value;(name==='level'?root.querySelector('#admin-client-level-options'):form.elements[name]).append(option);}
  function renderAccess(selected=[]){
@@ -109,7 +107,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  function openClientInfo(id){const client=clients.find(c=>c.id===id);if(!client)return;if(!unlocked)return;editingId=client.id;for(const key of ['name','email','code','level','payment','amountPaid','hours'])form.elements[key].value=client[key]??(key==='amountPaid'?0:'');root.querySelector('#save-admin-client').textContent='Save changes';root.querySelector('#cancel-admin-edit').hidden=false;renderAccess(client.permissions);openClientPage();status.textContent='Editing '+client.name;form.elements.name.focus();}
  function openClientPage(){root.querySelector('#admin-overview').hidden=true;root.querySelector('#admin-client-page').hidden=false;root.querySelector('#admin-client-page-title').textContent=editingId?'Edit client folder':'Add client';doc.defaultView.location.hash='students-portal/client';}
  function showDashboard(){root.querySelector('#admin-overview').hidden=false;root.querySelector('#admin-client-page').hidden=true;doc.defaultView.location.hash='students-portal/teacher';}
- function lock(){if(authorization.open)authorization.close();authorizationClientId=null;confirmationId=null;sheetGeneration++;sheetLoading=false;refreshClients.disabled=false;root.querySelector('#admin-add-client').disabled=false;const dialog=root.querySelector('#teacher-login-dialog');if(dialog?.open)dialog.close();if(!root.hidden)doc.querySelector('#students-portal').classList.remove('portal-session-active');unlocked=false;documents?.lock();fullLibrary?.lock();switches?.lock();bookingSettings?.lock();clientSheet?.lock();review?.lock();calendar?.lock();gate.hidden=false;dashboard.hidden=true;login.reset();loginError.textContent='';password.removeAttribute('aria-invalid');clearForm();tbody.replaceChildren();clients=[];status.textContent='';}
+ function lock(){if(authorization.open)authorization.close();authorizationClientId=null;confirmationId=null;sheetGeneration++;sheetLoading=false;refreshClients.disabled=false;root.querySelector('#admin-add-client').disabled=false;const dialog=root.querySelector('#teacher-login-dialog');if(dialog?.open)dialog.close();if(!root.hidden)doc.querySelector('#students-portal').classList.remove('portal-session-active');unlocked=false;documents?.lock();switches?.lock();bookingSettings?.lock();clientSheet?.lock();review?.lock();calendar?.lock();gate.hidden=false;dashboard.hidden=true;login.reset();loginError.textContent='';password.removeAttribute('aria-invalid');clearForm();tbody.replaceChildren();clients=[];status.textContent='';}
  login.addEventListener('submit',event=>{event.preventDefault();if(password.value!==ADMIN_CODE){loginError.textContent='Incorrect admin password. Please try again.';password.setAttribute('aria-invalid','true');password.focus();return;}unlocked=true;loginError.textContent='';password.value='';gate.hidden=true;dashboard.hidden=false;root.querySelector('#teacher-login-dialog')?.close();doc.querySelector('#students-portal').classList.add('portal-session-active');doc.defaultView.scrollTo({top:0,left:0,behavior:'instant'});showDashboard();load();clientSheet?.restore();switches?.refresh();documents?.refresh();render();calendar?.load();loadAccessOptions();if(clientSheetConnected())refreshSheetClients();else status.textContent='Connect Google Sheets on this device to load students saved from your other devices.';});
  form.addEventListener('submit',async event=>{event.preventDefault();if(!unlocked||sheetLoading||!form.reportValidity()||form.dataset.saving)return;form.dataset.saving='true';const saveButton=root.querySelector('#save-admin-client');saveButton.disabled=true;try{const data=new doc.defaultView.FormData(form);const input={...Object.fromEntries(data),permissions:data.getAll('permissions')};let client=validateClient(input,clients,editingId);if(ownerConnected())client=await savePrivateClient({...client,...(editingId?{id:editingId}:{})});client={...client,id:editingId||client.id||(pendingClientId ||= doc.defaultView.crypto.randomUUID())};if(clientSheetConnected()){status.textContent='Saving client to Google Sheets…';await syncClientToSheet(client);}if(editingId){const index=clients.findIndex(c=>c.id===editingId);clients[index]=client;}else clients.push(client);const saved=ownerConnected()?true:save();doc.dispatchEvent(new doc.defaultView.CustomEvent('portal-permissions-changed'));clearForm();render();calendar?.refresh();showDashboard();status.textContent=clientSheetConnected()?'Client saved to Google Sheets.':ownerConnected()?'Client saved in private storage.':saved?'Client saved in this browser only — not sent to Google Sheets. Connect the client sheet to sync it.':'Client updated for this visit only. Browser storage is unavailable.';}catch(error){status.textContent=error.message;}finally{delete form.dataset.saving;saveButton.disabled=false;}});
  root.querySelector('#cancel-admin-edit').onclick=()=>{clearForm();showDashboard();status.textContent='';};
