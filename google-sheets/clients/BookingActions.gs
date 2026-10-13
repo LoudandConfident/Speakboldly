@@ -29,7 +29,7 @@ function sbBookingSlots(date){
 }
 function sbBookingRows(sheet,width){return sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,width).getValues():[];}
 function sbBookingAuth(data){
- const props=PropertiesService.getScriptProperties(),passcode=props.getProperty('SB_BOOKING_PASSCODE'),key=props.getProperty('CLIENT_SYNC_KEY');
+ const props=PropertiesService.getScriptProperties(),passcode=sbWeeklyPortalPasswords().passwords.calendar,key=props.getProperty('CLIENT_SYNC_KEY');
  if(!passcode||!key)throw new Error('The instructor needs to run setupStudentPortal first.');
  if(props.getProperty('SB_BOOKING_ENABLED')!=='true')throw new Error('Booking is currently closed. Please contact your instructor.');
  const version=sbExamHash(passcode),sign=payload=>Utilities.base64EncodeWebSafe(Utilities.computeHmacSha256Signature(payload,key));
@@ -116,12 +116,12 @@ function handleOwnerBooking(data){
   const props=PropertiesService.getScriptProperties(),book=sbExamBook();
   if(data.action==='checkStudentPortal')return sbExamResponse({ok:true,examsReady:['Exam attempts','Exam sessions','Portal access'].every(name=>Boolean(book.getSheetByName(name))),bookingReady:['Sessions','Booking requests'].every(name=>Boolean(book.getSheetByName(name)))&&Boolean(props.getProperty('SB_BOOKING_PASSCODE')),notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||'',remainingEmailQuota:MailApp.getRemainingDailyQuota()});
   if(data.action==='saveBookingSettings'){
-   const passcode=String(data.passcode||'').trim(),email=String(data.notificationEmail||'').trim();
-   if(passcode.length<4||passcode.length>64||typeof data.enabled!=='boolean')throw new Error('Use a booking passcode from 4 to 64 characters.');
+   const email=String(data.notificationEmail||'').trim();
+   if(typeof data.enabled!=='boolean')throw new Error('Choose whether booking is open.');
    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Enter your notification email address.');
    if(!book.getSheetByName('Booking requests'))throw new Error('Run setupStudentPortal first.');
-   props.setProperty('SB_BOOKING_PASSCODE',passcode);props.setProperty('SB_BOOKING_ENABLED',String(data.enabled));props.setProperty('SB_EXAM_NOTIFY_EMAIL',email);
+   props.setProperty('SB_BOOKING_ENABLED',String(data.enabled));props.setProperty('SB_EXAM_NOTIFY_EMAIL',email);
   }
-  return sbExamResponse({ok:true,enabled:props.getProperty('SB_BOOKING_ENABLED')==='true',passcode:props.getProperty('SB_BOOKING_PASSCODE')||'',notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||''});
+  return sbExamResponse({ok:true,enabled:props.getProperty('SB_BOOKING_ENABLED')==='true',passcode:sbWeeklyPortalPasswords().passwords.calendar,notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||''});
  }catch(error){return sbExamResponse({ok:false,error:error.message});}
 }

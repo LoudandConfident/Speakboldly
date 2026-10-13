@@ -461,8 +461,8 @@ function handleLibraryAction(p){
 const SB_EXAM_HEADERS = ['Attempt ID','Client ID','Name','Level','Status','Opened at','Submitted at','Answers','Marks','Score','Feedback','Reviewed at','Version','Program','Deadline','Notification status','Notification error','Age'];
 const SB_PORTAL_ACCESS_HEADERS = ['Item ID','Section','Title','URL','Enabled'];
 const SB_EXAM_SESSION_HEADERS = ['Token hash','Visitor ID','Name','Program','Expires at','Age'];
-const SB_STUDENT_EXAM_ACTIONS = ['studentPortalAccess','studentExamLogin','studentExamGet','studentExamDraft','studentExamSubmit'];
-const SB_INSTRUCTOR_EXAM_ACTIONS = ['listExamAttempts','reviewExamAttempt','listPortalAccess','savePortalAccess','retryExamNotification'];
+const SB_STUDENT_EXAM_ACTIONS = ['studentPortalAccess','studentFolderLogin','studentExamLogin','studentExamGet','studentExamDraft','studentExamSubmit'];
+const SB_INSTRUCTOR_EXAM_ACTIONS = ['weeklyPortalPasswords','listExamAttempts','reviewExamAttempt','listPortalAccess','savePortalAccess','retryExamNotification'];
 function setupStudentExams() {
   const id = PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID');
   if (!id) throw new Error('Run setupClientSync first.');
@@ -502,6 +502,27 @@ function sbExamBook() {
 function sbExamSafe(value) { const text=String(value||''); return /^[=+\-@\t\r]/.test(text) ? "'"+text : text; }
 function sbExamHash(value) { return Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,value)).replace(/=+$/,''); }
 function sbPortalItems(book){const sheet=book.getSheetByName('Portal access');if(!sheet)throw new Error('Run setupStudentExams, then deploy a New version.');return sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues().map(row=>({id:String(row[0]),section:String(row[1]),title:String(row[2]).replace(/^'/,''),url:String(row[3]),enabled:row[4]===true||row[4]==='true'})):[];}
+// The four shared passwords rotate every Monday at midnight Cairo time.
+function sbPortalWeek(){
+ const today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd'),date=new Date(today+'T12:00:00Z'),offset=(date.getUTCDay()+6)%7;
+ date.setUTCDate(date.getUTCDate()-offset);const start=date.toISOString().slice(0,10);date.setUTCDate(date.getUTCDate()+7);
+ return {start,next:date.toISOString().slice(0,10)};
+}
+function sbWeeklyPortalPasswords(){
+ const secret=PropertiesService.getScriptProperties().getProperty('CLIENT_SYNC_KEY');if(!secret)throw new Error('Connect your Clients sheet first.');
+ const week=sbPortalWeek(),passwords={};
+ for(const group of ['material','calendar','exercises','assessments']){
+  const bytes=Utilities.computeHmacSha256Signature('Speak Boldly weekly password:'+week.start+':'+group,secret);let number=0;
+  for(const byte of bytes)number=(number*256+(byte&255))%900000;
+  passwords[group]=String(100000+number);
+ }
+ return {weekStart:week.start,nextChange:week.next,passwords};
+}
+function sbPortalFolderGroup(key){
+ if(key==='exercises'||['program:comprehension','program:listening'].includes(key))return 'exercises';
+ if(key==='material'||/^level:[1-8]$/.test(key)||/^program:[a-z][a-z0-9-]{0,60}$/.test(key))return 'material';
+ throw new Error('Choose a valid folder.');
+}
 function sbExamNotify(sheet,index,row){
   if(!row[6]||['sent','sending'].includes(String(row[15])))return;
   const to=PropertiesService.getScriptProperties().getProperty('SB_EXAM_NOTIFY_EMAIL');
@@ -539,9 +560,14 @@ function handleStudentExam(data) {
   const lock=LockService.getScriptLock();
   try {
     const book=sbExamBook(),items=sbPortalItems(book);
-    if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,items:items.map(item=>({...item,url:item.enabled?item.url:''}))});
+    if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,passwordSettings:{revision:sbPortalWeek().start,weekly:true},items:items.map(item=>({...item,url:item.enabled?item.url:''}))});
+    if(data.action==='studentFolderLogin'){
+      const group=sbPortalFolderGroup(data.folder),weekly=sbWeeklyPortalPasswords();
+      if(String(data.passcode||'')!==weekly.passwords[group])throw new Error('Incorrect folder password.');
+      return sbExamResponse({ok:true,revision:weekly.weekStart});
+    }
     if(data.action==='studentExamLogin') {
-      if(String(data.passcode||'')!=='1111')throw new Error('Incorrect assessment password.');
+      if(String(data.passcode||'')!==sbWeeklyPortalPasswords().passwords.assessments)throw new Error('Incorrect assessment password.');
       const name=String(data.name||'').trim(),program=String(data.program||'').trim(),age=data.age===undefined?'':Number(data.age);if(age!==''&&(!Number.isInteger(age)||age<1||age>120))throw new Error('Enter a valid age.');
       if(!name||name.length>100||!program||program.length>100)throw new Error('Enter your name and program.');
       const levels=items.filter(item=>item.section==='tests'&&item.enabled).map(item=>Number(item.id.split(':')[1]));
@@ -586,6 +612,7 @@ function handleInstructorExam(data) {
   const lock=LockService.getScriptLock();
   try {
     lock.waitLock(20000);const book=sbExamBook();
+    if(data.action==='weeklyPortalPasswords')return sbExamResponse({ok:true,...sbWeeklyPortalPasswords()});
     if(data.action==='listPortalAccess')return sbExamResponse({ok:true,items:sbPortalItems(book)});
     if(data.action==='savePortalAccess'){
       const item=data.item;
@@ -647,7 +674,7 @@ function sbBookingSlots(date){
 }
 function sbBookingRows(sheet,width){return sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,width).getValues():[];}
 function sbBookingAuth(data){
- const props=PropertiesService.getScriptProperties(),passcode=props.getProperty('SB_BOOKING_PASSCODE'),key=props.getProperty('CLIENT_SYNC_KEY');
+ const props=PropertiesService.getScriptProperties(),passcode=sbWeeklyPortalPasswords().passwords.calendar,key=props.getProperty('CLIENT_SYNC_KEY');
  if(!passcode||!key)throw new Error('The instructor needs to run setupStudentPortal first.');
  if(props.getProperty('SB_BOOKING_ENABLED')!=='true')throw new Error('Booking is currently closed. Please contact your instructor.');
  const version=sbExamHash(passcode),sign=payload=>Utilities.base64EncodeWebSafe(Utilities.computeHmacSha256Signature(payload,key));
@@ -734,12 +761,12 @@ function handleOwnerBooking(data){
   const props=PropertiesService.getScriptProperties(),book=sbExamBook();
   if(data.action==='checkStudentPortal')return sbExamResponse({ok:true,examsReady:['Exam attempts','Exam sessions','Portal access'].every(name=>Boolean(book.getSheetByName(name))),bookingReady:['Sessions','Booking requests'].every(name=>Boolean(book.getSheetByName(name)))&&Boolean(props.getProperty('SB_BOOKING_PASSCODE')),notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||'',remainingEmailQuota:MailApp.getRemainingDailyQuota()});
   if(data.action==='saveBookingSettings'){
-   const passcode=String(data.passcode||'').trim(),email=String(data.notificationEmail||'').trim();
-   if(passcode.length<4||passcode.length>64||typeof data.enabled!=='boolean')throw new Error('Use a booking passcode from 4 to 64 characters.');
+   const email=String(data.notificationEmail||'').trim();
+   if(typeof data.enabled!=='boolean')throw new Error('Choose whether booking is open.');
    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Enter your notification email address.');
    if(!book.getSheetByName('Booking requests'))throw new Error('Run setupStudentPortal first.');
-   props.setProperty('SB_BOOKING_PASSCODE',passcode);props.setProperty('SB_BOOKING_ENABLED',String(data.enabled));props.setProperty('SB_EXAM_NOTIFY_EMAIL',email);
+   props.setProperty('SB_BOOKING_ENABLED',String(data.enabled));props.setProperty('SB_EXAM_NOTIFY_EMAIL',email);
   }
-  return sbExamResponse({ok:true,enabled:props.getProperty('SB_BOOKING_ENABLED')==='true',passcode:props.getProperty('SB_BOOKING_PASSCODE')||'',notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||''});
+  return sbExamResponse({ok:true,enabled:props.getProperty('SB_BOOKING_ENABLED')==='true',passcode:sbWeeklyPortalPasswords().passwords.calendar,notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||''});
  }catch(error){return sbExamResponse({ok:false,error:error.message});}
 }

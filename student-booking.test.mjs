@@ -32,9 +32,14 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': passcode 
  const unpaid=f.sheets.get('Clients').rows[2];unpaid[5]='Unpaid';assert.equal(request({action:'studentBookSlots',token:otherToken,name:'Other Student',requestId:'unpaid-request',slots:[{date:slots[2].date,time:slots[2].time}]}).ok,false);unpaid[5]='Paid';
  owner({action:'cancelSession',sessionId:instructor.classes[0].id});assert.equal(request({action:'studentBookingCalendar',token}).days.flatMap(day=>day.slots).find(slot=>slot.date===selection[0].date&&slot.time===selection[0].time).status,'available');
  const checks=owner({action:'checkStudentPortal'});assert.equal(checks.examsReady,true);assert.equal(checks.bookingReady,true);assert.equal(checks.notificationEmail,'owner@example.com');
- assert.equal(owner({action:'saveBookingSettings',passcode:'new-shared-pass',enabled:true,notificationEmail:'owner@example.com'}).ok,true);assert.equal(request({action:'studentBookingCalendar',token}).ok,false);
- const updated=request({action:'studentBookingLogin',passcode:'new-shared-pass'}).token;assert(updated);
- owner({action:'saveBookingSettings',passcode:'new-shared-pass',enabled:false,notificationEmail:'owner@example.com'});assert.equal(request({action:'studentBookingCalendar',token:updated}).ok,false);
+ // Passwords rotate automatically, and manual passcode inputs have no effect.
+ assert.equal(owner({action:'saveBookingSettings',passcode:'manual-value',enabled:true,notificationEmail:'owner@example.com'}).ok,true);
+ assert.equal(owner({action:'bookingSettings'}).passcode,settings.passcode);
+ assert.equal(request({action:'studentBookingLogin',passcode:'manual-value'}).ok,false);
+ f.advance(7*24*60*60*1000);assert.equal(request({action:'studentBookingCalendar',token}).ok,false);
+ const newPasscode=owner({action:'bookingSettings'}).passcode;assert.notEqual(newPasscode,settings.passcode);
+ const updated=request({action:'studentBookingLogin',passcode:newPasscode}).token;assert(updated);
+ owner({action:'saveBookingSettings',enabled:false,notificationEmail:'owner@example.com'});assert.equal(request({action:'studentBookingCalendar',token:updated}).ok,false);
 });
 test('an instructor appointment overlapping a recurring slot is shown as taken',()=>{
  const f=createBookingFixture(),request=f.request,settings=request({key:'private-test-key',action:'bookingSettings'}),token=request({action:'studentBookingLogin',passcode:settings.passcode}).token;
