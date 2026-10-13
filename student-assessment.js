@@ -1,7 +1,6 @@
 import {initializeStudentBooking} from './student-booking.js';
 import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js';
 import {createExamForm} from './exam-form.js';
-import {getLevelExamText} from './exam-questions.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 
 const SESSION_KEY='speak-boldly-assessment-session-v1';
@@ -42,7 +41,7 @@ export function initializeStudentAssessment(doc) {
    if(attempt.submittedAt){result(attempt,viewer);return;}
    busy=true;viewer.append(text('h4','Level '+level),text('p','20 minutes. Answers are saved as you work. Your instructor will correct the five sections and save your score out of 100. For listening, use the recording or instructions supplied by your instructor.'));
    const timer=text('p','20:00 remaining');timer.className='student-assessment-timer';timer.setAttribute('role','timer');timer.setAttribute('aria-label','Time remaining');viewer.append(timer);
-   const examForm=createExamForm(doc,getLevelExamText(level));
+   const templateResponse=await doc.defaultView.fetch('./student-files/interactive-assessments/level-'+level+'.json');if(!templateResponse.ok)throw new Error('Assessment file could not load. Please retry.');const template=await templateResponse.json();if(current!==epoch)return;const examForm=createExamForm(doc,template);
    for(const el of examForm.elements){const [section,number]=el.name.split('.'),value=number?attempt.answers?.[section]?.[number]:attempt.answers?.[section];if(value!==undefined){if(el.type==='radio')el.checked=el.value===String(value);else el.value=value;}}
    const note=text('p',''),controls=doc.createElement('div');note.setAttribute('role','status');controls.className='assessment-save-controls';
    const save=text('button','Save answers'),submit=text('button','Submit assessment');save.type='button';submit.type='submit';save.className='button light';submit.className='button';controls.append(save,submit);examForm.append(text('p','Check your answers before submitting. When the timer reaches zero, your saved answers are submitted automatically.'),controls,note);viewer.append(examForm);
@@ -83,7 +82,7 @@ export function initializeStudentAssessment(doc) {
   }
  }
  function showAssessment(items){
-  panel.replaceChildren(text('h3','Assessment'));
+  panel.replaceChildren(text('h3','Assessment'));const files=doc.createElement('div');files.className='interactive-assessment-files';for(let n=1;n<=6;n++){const item=items.find(entry=>entry.id==='test:'+n),button=text('button','Level '+n);button.type='button';button.className='button light assessment-file';button.dataset.assessmentLevel=n;button.disabled=!item?.enabled;button.setAttribute('aria-label','Level '+n+' assessment'+(item?.enabled?'':' — Closed'));button.onclick=()=>{const form=panel.querySelector('#student-assessment-start');form.elements.level.value=n;form.elements.name.focus();};files.append(button);}panel.append(files);
   const selection=doc.createElement('form');selection.className='student-assessment-start';selection.id='student-assessment-start';
   const name=text('label','Name:'),nameInput=doc.createElement('input');nameInput.name='name';nameInput.maxLength=100;nameInput.autocomplete='name';nameInput.required=true;nameInput.value=student?.name||'';name.append(nameInput);
   const program=text('label','Program:'),programInput=doc.createElement('input');programInput.name='program';programInput.maxLength=100;programInput.required=true;programInput.placeholder='e.g. General English';programInput.value=student?.program||'';program.append(programInput);
@@ -104,7 +103,7 @@ export function initializeStudentAssessment(doc) {
    if(saved?.token&&saved?.student){token=saved.token;student=saved.student;}
    renderFiles(response.items);showAssessment(response.items);attachTemporaryPortalUploads(doc);status.textContent='Dimmed items are currently closed. Your instructor controls what is open.';
    if(token&&Number.isInteger(saved.level)&&!doc.defaultView.location.hash.endsWith('/calendar'))await openLevel(saved.level);
-   clearInterval(accessTimer);accessTimer=setInterval(async()=>{if(current!==epoch||doc.hidden)return;try{const updated=await call('studentPortalAccess');if(current!==epoch)return;renderFiles(updated.items);attachTemporaryPortalUploads(doc);const selectLevel=panel.querySelector('[name=level]');if(selectLevel)for(const option of selectLevel.options){if(!option.value)continue;const item=updated.items.find(entry=>entry.id==='test:'+option.value);option.disabled=!item?.enabled;option.textContent='Level '+option.value+(item?.enabled?'':' · Closed');}}catch{}},20000);
+   clearInterval(accessTimer);accessTimer=setInterval(async()=>{if(current!==epoch||doc.hidden)return;try{const updated=await call('studentPortalAccess');if(current!==epoch)return;renderFiles(updated.items);attachTemporaryPortalUploads(doc);panel.querySelectorAll('[data-assessment-level]').forEach(button=>{const item=updated.items.find(entry=>entry.id==='test:'+button.dataset.assessmentLevel);button.disabled=!item?.enabled;button.setAttribute('aria-label','Level '+button.dataset.assessmentLevel+' assessment'+(item?.enabled?'':' — Closed'));});const selectLevel=panel.querySelector('[name=level]');if(selectLevel)for(const option of selectLevel.options){if(!option.value)continue;const item=updated.items.find(entry=>entry.id==='test:'+option.value);option.disabled=!item?.enabled;option.textContent='Level '+option.value+(item?.enabled?'':' · Closed');}}catch{}},20000);
   }catch(error){if(current===epoch)status.textContent=error.message;}
  }
  root.querySelector('#portal-sign-out')?.addEventListener('click',()=>{

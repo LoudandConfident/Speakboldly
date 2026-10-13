@@ -1,0 +1,242 @@
+{
+  "level": 2,
+  "title": "Level 2",
+  "questions": [
+    {
+      "number": 1,
+      "question": "I _____ to Paris next Monday. My ticket is already booked.",
+      "options": [
+        "fly",
+        "am flying",
+        "flew"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "The train _____ every thirty minutes.",
+      "options": [
+        "runs",
+        "is running",
+        "ran"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "How long _____ to get to the airport?",
+      "options": [
+        "does it take",
+        "it takes",
+        "is it taking"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "Don’t worry. I _____ you when I arrive.",
+      "options": [
+        "call",
+        "called",
+        "will call"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "Last month, I _____ a client in Dubai.",
+      "options": [
+        "meet",
+        "met",
+        "meeting"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "Sara is the manager _____ is responsible for training.",
+      "options": [
+        "who",
+        "which",
+        "where"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "Mr. Ali is _____ the Sales Department.",
+      "options": [
+        "in charge of",
+        "charge in",
+        "responsible of"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "We don’t have _____ time to visit another museum.",
+      "options": [
+        "enough",
+        "too many",
+        "many"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "You _____ take a jacket in case it gets cold.",
+      "options": [
+        "should",
+        "may to",
+        "have"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "_____ I carry your bags to your room?",
+      "options": [
+        "Shall",
+        "Do",
+        "Am"
+      ]
+    },
+    {
+      "number": 11,
+      "question": "This is _____ hotel in the city.",
+      "options": [
+        "the most expensive",
+        "more expensive",
+        "most expensive"
+      ]
+    },
+    {
+      "number": 12,
+      "question": "I feel like _____ Italian food tonight.",
+      "options": [
+        "eat",
+        "eating",
+        "to eat"
+      ]
+    },
+    {
+      "number": 13,
+      "question": "This restaurant isn’t _____ the one we visited yesterday.",
+      "options": [
+        "as good as",
+        "good as",
+        "as good"
+      ]
+    },
+    {
+      "number": 14,
+      "question": "I _____ tea to coffee.",
+      "options": [
+        "prefer",
+        "would like",
+        "rather"
+      ]
+    },
+    {
+      "number": 15,
+      "question": "You _____ show your passport at check-in.",
+      "options": [
+        "have to",
+        "don’t have to",
+        "shouldn’t"
+      ]
+    },
+    {
+      "number": 16,
+      "question": "I hurt my leg while I _____ tennis.",
+      "options": [
+        "played",
+        "was playing",
+        "am playing"
+      ]
+    },
+    {
+      "number": 17,
+      "question": "You _____ take antibiotics without a doctor’s advice.",
+      "options": [
+        "shouldn’t",
+        "don’t have to",
+        "shall"
+      ]
+    },
+    {
+      "number": 18,
+      "question": "I _____ reading historical books.",
+      "options": [
+        "enjoy",
+        "enjoy to",
+        "am enjoy"
+      ]
+    },
+    {
+      "number": 19,
+      "question": "I’d rather watch a movie _____ go to a concert.",
+      "options": [
+        "than",
+        "to",
+        "from"
+      ]
+    },
+    {
+      "number": 20,
+      "question": "My grandfather _____ listen to the radio every evening.",
+      "options": [
+        "used to",
+        "use to",
+        "was used"
+      ]
+    }
+  ],
+  "sections": {
+    "B": {
+      "title": "B. Correct the Mistakes",
+      "intro": [
+        "Each sentence has a mistake. Rewrite the whole sentence correctly."
+      ],
+      "questions": [
+        "1. I am usually taking the train to work.",
+        "2. The flight will arrives at 8:30.",
+        "3. How long it takes to get to the hotel?",
+        "4. She is responsible of answering customer complaints.",
+        "5. We didn't went on a business trip last month.",
+        "6. There are too much people in this restaurant.",
+        "7. This hotel is the more comfortable hotel in town.",
+        "8. I feel like to eat something spicy.",
+        "9. I was drive home when the accident happened.",
+        "10. I used to playing tennis when I was younger."
+      ]
+    },
+    "C": {
+      "title": "C. Reading Comprehension",
+      "intro": [
+        "Emma works for a medium-sized international company that sells medical equipment. She is responsible for customer service and often travels to meet clients. Last week, she went to Rome for a two-day business trip. Her flight was delayed, so she arrived at her hotel much later than expected.",
+        "The next morning, Emma met a client at his office. They discussed a new order and had lunch at a small restaurant nearby. Emma thought the restaurant was excellent. It was not as expensive as her hotel restaurant, and the service was much faster.",
+        "Emma is traveling again next month. She is going to Berlin for a conference. Her company has already booked her flight and a three-night stay at a hotel near the conference center. She plans to take a warm coat because the weather may be cold. If she has enough free time, she would also like to visit a museum."
+      ],
+      "questions": [
+        "1. What kind of company does Emma work for?",
+        "2. What is Emma responsible for?",
+        "3. Why did she go to Rome?",
+        "4. What problem did she have with her flight?",
+        "5. What did Emma and the client discuss?",
+        "6. How did the small restaurant compare with the hotel restaurant?",
+        "7. Where is Emma going next month?",
+        "8. How long is she staying at the hotel?",
+        "9. Why does she plan to take a warm coat?",
+        "10. What would she like to do if she has enough free time?"
+      ]
+    },
+    "D": {
+      "title": "D. Listening & Summary",
+      "intro": [
+        "Your teacher will read a short passage aloud twice. Listen carefully, then write a short summary in your own words. Include the main situation, important events, and the final plan or result."
+      ],
+      "questions": []
+    },
+    "E": {
+      "title": "E. Writing Task",
+      "intro": [
+        "Write about a trip you took in the past OR a trip you are planning. Write a connected paragraph. Include:",
+        "• where you went / are going and why\n• how you traveled / are traveling\n• where you stayed / are going to stay\n• what happened on the trip OR what you plan to do\n• one recommendation or piece of advice for someone taking the same trip",
+        "Use a variety of Level 2 grammar and vocabulary."
+      ],
+      "questions": []
+    }
+  }
+}

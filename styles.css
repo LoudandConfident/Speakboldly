@@ -362,3 +362,5 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 .client-email-confirmation h2{font-size:24px}
 .client-email-confirmation p{line-height:1.7;overflow-wrap:anywhere}
 @media(max-width:680px){.booking-passcode-form input,.student-booking-form input,.booking-settings-form input:not([type=checkbox]){font-size:16px}#portal-calendar .calendar-toolbar{flex-wrap:wrap}#portal-calendar .calendar-toolbar h4{min-width:140px}}
+
+.interactive-assessment-files{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}.assessment-file{margin:0!important;min-width:0}.assessment-file:disabled{opacity:.4;cursor:not-allowed}@media(max-width:680px){.interactive-assessment-files{grid-template-columns:repeat(2,minmax(0,1fr))}}

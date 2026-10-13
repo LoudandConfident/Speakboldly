@@ -1,0 +1,242 @@
+{
+  "level": 1,
+  "title": "Level 1",
+  "questions": [
+    {
+      "number": 1,
+      "question": "My sister _____ in a bank.",
+      "options": [
+        "work",
+        "works",
+        "working"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "_____ you from Egypt?",
+      "options": [
+        "Is",
+        "Are",
+        "Am"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "I’d like _____ orange juice, please.",
+      "options": [
+        "a",
+        "an",
+        "some"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "What _____ you like for dinner?",
+      "options": [
+        "would",
+        "do",
+        "are"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "There _____ a pharmacy next to the hotel.",
+      "options": [
+        "are",
+        "is",
+        "be"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "The bank is _____ the post office and the supermarket.",
+      "options": [
+        "between",
+        "under",
+        "at"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "Look! They _____ tennis.",
+      "options": [
+        "play",
+        "are playing",
+        "played"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "We _____ to London last year.",
+      "options": [
+        "go",
+        "went",
+        "are going"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "Where _____ you yesterday afternoon?",
+      "options": [
+        "was",
+        "were",
+        "are"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "She _____ speak English and French.",
+      "options": [
+        "can",
+        "cans",
+        "can to"
+      ]
+    },
+    {
+      "number": 11,
+      "question": "I have a bad headache. You _____ take some aspirin and rest.",
+      "options": [
+        "should",
+        "are",
+        "would"
+      ]
+    },
+    {
+      "number": 12,
+      "question": "My father has two _____.",
+      "options": [
+        "childs",
+        "children",
+        "childrens"
+      ]
+    },
+    {
+      "number": 13,
+      "question": "These shoes are nice. How much _____?",
+      "options": [
+        "are they",
+        "is it",
+        "they are"
+      ]
+    },
+    {
+      "number": 14,
+      "question": "I usually _____ my e-mail in the morning.",
+      "options": [
+        "check",
+        "checks",
+        "am checking"
+      ]
+    },
+    {
+      "number": 15,
+      "question": "We _____ dinner at a restaurant last night.",
+      "options": [
+        "have",
+        "had",
+        "has"
+      ]
+    },
+    {
+      "number": 16,
+      "question": "_____ straight ahead, then turn left.",
+      "options": [
+        "Go",
+        "Goes",
+        "Going"
+      ]
+    },
+    {
+      "number": 17,
+      "question": "He _____ at home last night; he was at the office.",
+      "options": [
+        "wasn't",
+        "weren't",
+        "isn't"
+      ]
+    },
+    {
+      "number": 18,
+      "question": "What _____ your mother look like?",
+      "options": [
+        "do",
+        "does",
+        "is"
+      ]
+    },
+    {
+      "number": 19,
+      "question": "I’m _____ a blue jacket today.",
+      "options": [
+        "wear",
+        "wore",
+        "wearing"
+      ]
+    },
+    {
+      "number": 20,
+      "question": "Would you like _____ with me this weekend?",
+      "options": [
+        "go out",
+        "to go out",
+        "went out"
+      ]
+    }
+  ],
+  "sections": {
+    "B": {
+      "title": "B. Correct the Mistakes",
+      "intro": [
+        "Each sentence has a mistake. Rewrite the whole sentence correctly."
+      ],
+      "questions": [
+        "1. She work in a department store.",
+        "2. Where you are from?",
+        "3. I would like an coffee, please.",
+        "4. There are a bank on Main Street.",
+        "5. He don't speak Japanese.",
+        "6. We was at the restaurant yesterday.",
+        "7. I goed to the movies last Saturday.",
+        "8. She can to use a computer.",
+        "9. Those shirt is very expensive.",
+        "10. What were you do at 8:00 last night?"
+      ]
+    },
+    "C": {
+      "title": "C. Reading Comprehension",
+      "intro": [
+        "Daniel works for a small computer company in Cairo. He is a sales assistant, and he usually starts work at nine o’clock. He speaks to customers, answers e-mails, and sometimes visits other companies. Daniel likes his job because he meets many different people.",
+        "Last Thursday was very busy. Daniel had a meeting in the morning and visited a customer after lunch. He left the office at 5:30. In the evening, he met his sister at a restaurant. They had dinner and talked about their plans for the weekend.",
+        "This weekend, Daniel is going to Alexandria with two friends. They are leaving on Friday morning by car. Daniel wants to swim and relax, but one of his friends wants to visit museums. They are coming back on Sunday evening."
+      ],
+      "questions": [
+        "1. Where does Daniel work?",
+        "2. What does he do at work? Give two examples.",
+        "3. Why does Daniel like his job?",
+        "4. What did Daniel do last Thursday morning?",
+        "5. Where did he go in the evening?",
+        "6. Who is Daniel going to Alexandria with?",
+        "7. When are they leaving?",
+        "8. What does Daniel want to do there?",
+        "9. When are they coming back?",
+        "10. Write one sentence from the passage that talks about the past."
+      ]
+    },
+    "D": {
+      "title": "D. Listening & Summary",
+      "intro": [
+        "Your teacher will read a short passage aloud. Listen carefully. Do not write while the teacher is reading the first time. Then write a short summary in your own words.\n\nYour summary should include the main person, place, important events, and plans."
+      ],
+      "questions": []
+    },
+    "E": {
+      "title": "E. Writing Task",
+      "intro": [
+        "Write a short paragraph about yourself and your life. Include information about:",
+        "• your name and where you are from\n• your work or studies and what you usually do\n• something you did last weekend\n• something you are doing or planning for next weekend\n• one activity you can do well",
+        "Use complete sentences and connect your ideas."
+      ],
+      "questions": []
+    }
+  }
+}

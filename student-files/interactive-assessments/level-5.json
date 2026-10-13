@@ -1,0 +1,243 @@
+{
+  "level": 5,
+  "title": "Level 5",
+  "questions": [
+    {
+      "number": 1,
+      "question": "I _____ travel for work, but I’m staying in Cairo this month.",
+      "options": [
+        "routinely",
+        "right now",
+        "yesterday"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "While I _____ in London, I met one of my closest friends.",
+      "options": [
+        "worked",
+        "was working",
+        "have worked"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "She’s responsible _____ training new employees.",
+      "options": [
+        "to",
+        "for",
+        "with"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "I’m not accustomed to _____ such long hours.",
+      "options": [
+        "work",
+        "working",
+        "worked"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "Our company is one of _____ manufacturers in the region.",
+      "options": [
+        "the leading",
+        "more leading",
+        "most lead"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "I enjoy _____ outdoors when the weather is good.",
+      "options": [
+        "exercise",
+        "exercising",
+        "to exercising"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "We agreed _____ at the station at six.",
+      "options": [
+        "meeting",
+        "meet",
+        "to meet"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "I stopped _____ coffee because it was affecting my sleep.",
+      "options": [
+        "drinking",
+        "to drink",
+        "drink"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "A microwave is an appliance _____ cooks food quickly.",
+      "options": [
+        "who",
+        "that",
+        "where"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "Before _____ a food product, always check the label.",
+      "options": [
+        "buying",
+        "buy",
+        "bought"
+      ]
+    },
+    {
+      "number": 11,
+      "question": "If I _____ you, I’d exercise a little more regularly.",
+      "options": [
+        "am",
+        "were",
+        "would be"
+      ]
+    },
+    {
+      "number": 12,
+      "question": "Reservations _____ online or by phone.",
+      "options": [
+        "can make",
+        "can be made",
+        "can be making"
+      ]
+    },
+    {
+      "number": 13,
+      "question": "The Eiffel Tower _____ by millions of tourists every year.",
+      "options": [
+        "visits",
+        "is visited",
+        "was visiting"
+      ]
+    },
+    {
+      "number": 14,
+      "question": "The monument _____ more than a century ago.",
+      "options": [
+        "was built",
+        "is built",
+        "has build"
+      ]
+    },
+    {
+      "number": 15,
+      "question": "He isn’t answering his phone. He _____ have left it at home.",
+      "options": [
+        "must",
+        "must to",
+        "should"
+      ]
+    },
+    {
+      "number": 16,
+      "question": "The figures are completely different. The report _____ have been correct.",
+      "options": [
+        "can’t",
+        "must",
+        "should"
+      ]
+    },
+    {
+      "number": 17,
+      "question": "If she exercised more, she _____ feel healthier.",
+      "options": [
+        "will",
+        "would",
+        "had"
+      ]
+    },
+    {
+      "number": 18,
+      "question": "A sales clerk is someone _____ helps customers in a store.",
+      "options": [
+        "which",
+        "who",
+        "whose it"
+      ]
+    },
+    {
+      "number": 19,
+      "question": "_____ leaving the hotel, make sure you have your passport.",
+      "options": [
+        "Before",
+        "During",
+        "While to"
+      ]
+    },
+    {
+      "number": 20,
+      "question": "I couldn’t agree _____ you more.",
+      "options": [
+        "to",
+        "with",
+        "for"
+      ]
+    }
+  ],
+  "sections": {
+    "B": {
+      "title": "B. Correct the Mistakes",
+      "intro": [
+        "Each sentence has a mistake. Rewrite the whole sentence correctly."
+      ],
+      "questions": [
+        "1. I am normally going to work by metro.",
+        "2. While I worked in Dubai, I was meeting my husband.",
+        "3. She is responsible to organize the weekly meetings.",
+        "4. He suggested to go to the gym after work.",
+        "5. I stopped to eat fast food because I wanted to be healthier.",
+        "6. A pharmacist is a person which prepares and sells medicine.",
+        "7. Before to buy packaged food, read the nutrition label.",
+        "8. If I would be you, I would speak to a doctor.",
+        "9. The tickets can bought online.",
+        "10. The article mustn't have been true; every fact in it was wrong."
+      ]
+    },
+    "C": {
+      "title": "C. Reading Comprehension",
+      "intro": [
+        "Three years ago, Daniel moved from Brazil to Canada for a new job. At first, he was excited about living abroad. He enjoyed exploring the city, meeting new colleagues, and trying unfamiliar food. After a few months, however, he began to feel homesick. He missed his family, the warm weather, and speaking Portuguese every day.",
+        "Daniel decided that he needed to make some changes. A coworker suggested joining a local sports club, so he started playing volleyball twice a week. He also began cooking Brazilian meals for friends. If he felt lonely at the weekend, he would video-call his family or invite someone out for coffee. Gradually, Canada began to feel more like home.",
+        "Last summer, Daniel’s parents visited him. Before arriving, they had made all their travel arrangements online. Daniel showed them several famous sights, including a historic building that was constructed in the nineteenth century. His parents were impressed by how comfortable he had become in his new country.",
+        "Daniel says that living abroad has taught him to be more independent. He still misses Brazil now and then, but he no longer regrets moving. In fact, if a friend asked him whether they should live abroad for a while, he would recommend trying it."
+      ],
+      "questions": [
+        "1. Why did Daniel move to Canada?",
+        "2. What did he enjoy when he first arrived?",
+        "3. What did he begin to miss after a few months?",
+        "4. What did his coworker suggest?",
+        "5. How often did Daniel play volleyball?",
+        "6. What did he do when he felt lonely at the weekend?",
+        "7. How had Daniel’s parents arranged their trip?",
+        "8. What kind of place did Daniel show his parents?",
+        "9. What has living abroad taught Daniel?",
+        "10. What advice would he give a friend who was considering living abroad?"
+      ]
+    },
+    "D": {
+      "title": "D. Listening & Summary",
+      "intro": [
+        "Your teacher will read a passage aloud twice. Listen carefully, then summarize it in your own words. Include the main topic, important details, any advice or opinions given, and the final result."
+      ],
+      "questions": []
+    },
+    "E": {
+      "title": "E. Writing Task",
+      "intro": [
+        "Write an opinion post about ONE of the topics below:",
+        "• Living abroad is one of the best ways to learn about another culture.\n• People should pay more attention to food labels and healthy habits.\n• Famous tourist attractions are worth visiting even when they are crowded.\n• Social media is a good place to discuss important opinions.",
+        "Clearly state your opinion, give reasons and examples, acknowledge another point of view if possible, and finish with a clear conclusion. Use appropriate Level 5 grammar and vocabulary."
+      ],
+      "questions": []
+    }
+  }
+}

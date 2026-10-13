@@ -1,0 +1,242 @@
+{
+  "level": 3,
+  "title": "Level 3",
+  "questions": [
+    {
+      "number": 1,
+      "question": "Have you _____ been to Italy?",
+      "options": [
+        "ever",
+        "yet",
+        "since"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "I _____ at this company for three years.",
+      "options": [
+        "worked",
+        "have worked",
+        "am working yesterday"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "We _____ the new manager at the conference last week.",
+      "options": [
+        "have met",
+        "met",
+        "meet"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "I’ve _____ finished the report.",
+      "options": [
+        "yet",
+        "just",
+        "since"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "She hasn’t called the client _____.",
+      "options": [
+        "already",
+        "yet",
+        "ever"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "I suggest _____ the museum early in the morning.",
+      "options": [
+        "visit",
+        "visiting",
+        "to visiting"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "The Taj Mahal _____ in the seventeenth century.",
+      "options": [
+        "completed",
+        "was completed",
+        "is completing"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "This painting _____ by a famous French artist.",
+      "options": [
+        "was painted",
+        "painted",
+        "was painting"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "_____ is a great way to see the countryside.",
+      "options": [
+        "Hiking",
+        "Hike",
+        "Hiked"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "That was one of _____ trips I’ve ever taken.",
+      "options": [
+        "the best",
+        "better",
+        "best"
+      ]
+    },
+    {
+      "number": 11,
+      "question": "I looked _____ for my passport, but I couldn’t find it.",
+      "options": [
+        "everywhere",
+        "nowhere",
+        "someone"
+      ]
+    },
+    {
+      "number": 12,
+      "question": "The soup was _____ delicious that we ordered another bowl.",
+      "options": [
+        "such",
+        "so",
+        "too"
+      ]
+    },
+    {
+      "number": 13,
+      "question": "At this time tomorrow, we _____ over the Atlantic.",
+      "options": [
+        "will fly",
+        "will be flying",
+        "flew"
+      ]
+    },
+    {
+      "number": 14,
+      "question": "This suitcase isn’t mine. It’s _____.",
+      "options": [
+        "her",
+        "hers",
+        "she"
+      ]
+    },
+    {
+      "number": 15,
+      "question": "The agent said _____ the flight was delayed.",
+      "options": [
+        "that",
+        "what",
+        "to"
+      ]
+    },
+    {
+      "number": 16,
+      "question": "I need to _____ my car repaired before the trip.",
+      "options": [
+        "have",
+        "make",
+        "do"
+      ]
+    },
+    {
+      "number": 17,
+      "question": "The clerk told me _____ the form before returning the car.",
+      "options": [
+        "sign",
+        "to sign",
+        "signing"
+      ]
+    },
+    {
+      "number": 18,
+      "question": "Don’t use your phone while _____.",
+      "options": [
+        "drive",
+        "driving",
+        "drove"
+      ]
+    },
+    {
+      "number": 19,
+      "question": "I haven’t seen a good movie _____.",
+      "options": [
+        "recently",
+        "tomorrow",
+        "next week"
+      ]
+    },
+    {
+      "number": 20,
+      "question": "The proposal _____ already been submitted.",
+      "options": [
+        "has",
+        "have",
+        "is"
+      ]
+    }
+  ],
+  "sections": {
+    "B": {
+      "title": "B. Correct the Mistakes",
+      "intro": [
+        "Each sentence has a mistake. Rewrite the whole sentence correctly."
+      ],
+      "questions": [
+        "1. Have you ever went to New York?",
+        "2. I have seen him yesterday.",
+        "3. She has worked here since five years.",
+        "4. I suggest to take a taxi.",
+        "5. The museum was build in 1920.",
+        "6. This bag is my. Yours is over there.",
+        "7. The agent told me return the car with a full tank.",
+        "8. I had the mechanic to check the brakes.",
+        "9. I haven't been to the theater lately ago.",
+        "10. The final report have been completed."
+      ]
+    },
+    "C": {
+      "title": "C. Reading Comprehension",
+      "intro": [
+        "Olivia has worked for an international events company for four years. She has organized conferences in several countries, but until this year she had never worked on an event in Japan. Last month, her company sent her to Tokyo to help organize a technology conference.",
+        "Before the conference, Olivia had a very busy schedule. She had the hotel staff prepare two large meeting rooms, and she asked a local printing company to print the programs. The final schedule was changed twice, but everything was ready by Friday afternoon. The conference was attended by more than 600 people.",
+        "After the event, Olivia stayed in Tokyo for two extra days. She visited several famous sights and tried Japanese food. She especially enjoyed visiting an old temple outside the city. She said the trip was so interesting that she would like to return. Next month, however, she will be working on a new project in Madrid. The project plan has already been approved, but the team still has to finish the budget."
+      ],
+      "questions": [
+        "1. How long has Olivia worked for the events company?",
+        "2. Had she worked on an event in Japan before this year?",
+        "3. Why did she go to Tokyo?",
+        "4. What did she have the hotel staff do?",
+        "5. Who printed the conference programs?",
+        "6. How many people attended the conference?",
+        "7. What did Olivia do after the event?",
+        "8. What did she especially enjoy?",
+        "9. Where will she be working next month?",
+        "10. What has already been approved, and what still needs to be finished?"
+      ]
+    },
+    "D": {
+      "title": "D. Listening & Summary",
+      "intro": [
+        "Your teacher will read a passage aloud twice. Listen carefully, then summarize it in your own words. Include the main situation, the problem or important events, and the final result or plan."
+      ],
+      "questions": []
+    },
+    "E": {
+      "title": "E. Writing Task",
+      "intro": [
+        "Write about a memorable experience you have had. It may be a trip, an event, a restaurant experience, a performance, or another important experience.",
+        "Include:\n• what the experience was and when it happened\n• where it took place and who was with you\n• what happened\n• what you liked or disliked and why\n• whether you would do it again",
+        "Use both the present perfect and the simple past where appropriate. Try to use other Level 3 structures and vocabulary."
+      ],
+      "questions": []
+    }
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "level": 6,
+  "title": "Level 6",
+  "questions": [
+    {
+      "number": 1,
+      "question": "Julia is _____ outgoing, but she can be quiet around strangers.",
+      "options": [
+        "quite",
+        "enough",
+        "much"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "The new assistant is not _____ organized as the previous one.",
+      "options": [
+        "more",
+        "as",
+        "so much"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "Would you mind _____ me how long you’ve been studying English?",
+      "options": [
+        "tell",
+        "telling",
+        "to tell"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "If I _____ that job abroad, I would never have met my husband.",
+      "options": [
+        "hadn’t accepted",
+        "didn’t accept",
+        "wouldn’t accept"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "My manager suggested that I _____ for the position.",
+      "options": [
+        "apply",
+        "applied",
+        "to apply"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "You look exhausted. It _____ like you haven’t slept much.",
+      "options": [
+        "sounds",
+        "looks",
+        "feels"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "The doctor advised him _____ strenuous exercise for a week.",
+      "options": [
+        "avoiding",
+        "to avoid",
+        "avoid"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "Sorry to interrupt, but could you _____ what you mean?",
+      "options": [
+        "clarify",
+        "clear",
+        "clarification"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "We’re going to have the kitchen _____.",
+      "options": [
+        "repaint",
+        "repainted",
+        "repainting"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "There was _____ heavy snow that all flights were canceled.",
+      "options": [
+        "so",
+        "such",
+        "such a"
+      ]
+    },
+    {
+      "number": 11,
+      "question": "The temperature is getting _____ every summer.",
+      "options": [
+        "hotter and hotter",
+        "more hot",
+        "hottest"
+      ]
+    },
+    {
+      "number": 12,
+      "question": "It is essential that every country _____ its carbon footprint.",
+      "options": [
+        "reduces",
+        "reduce",
+        "reduced"
+      ]
+    },
+    {
+      "number": 13,
+      "question": "Housing prices have risen _____.",
+      "options": [
+        "significant",
+        "significantly",
+        "significance"
+      ]
+    },
+    {
+      "number": 14,
+      "question": "There has been a significant _____ in food prices.",
+      "options": [
+        "increase",
+        "increased",
+        "increasingly"
+      ]
+    },
+    {
+      "number": 15,
+      "question": "Taking the train is not nearly _____ expensive as flying.",
+      "options": [
+        "more",
+        "as",
+        "so much"
+      ]
+    },
+    {
+      "number": 16,
+      "question": "He is constantly _____ me what to do, and it drives me crazy.",
+      "options": [
+        "tell",
+        "telling",
+        "told"
+      ]
+    },
+    {
+      "number": 17,
+      "question": "_____ failing several times, she refused to give up.",
+      "options": [
+        "Despite",
+        "However",
+        "Although of"
+      ]
+    },
+    {
+      "number": 18,
+      "question": "I hope to start my own business _____ day.",
+      "options": [
+        "some",
+        "someday",
+        "for now"
+      ]
+    },
+    {
+      "number": 19,
+      "question": "Could you please point _____ the error in this email?",
+      "options": [
+        "out",
+        "up",
+        "over"
+      ]
+    },
+    {
+      "number": 20,
+      "question": "If I _____ in your shoes, I’d take the subway during rush hour.",
+      "options": [
+        "am",
+        "were",
+        "had been"
+      ]
+    }
+  ],
+  "sections": {
+    "B": {
+      "title": "B. Correct the Mistakes",
+      "intro": [
+        "Each sentence has a mistake. Rewrite the whole sentence correctly."
+      ],
+      "questions": [
+        "1. He is quite a dependable person, but he isn't as patient than his brother.",
+        "2. Would you mind to tell me why you want to learn Spanish?",
+        "3. If I had stayed at home, I wouldn't met my best friend.",
+        "4. The recruiter recommended me to update my résumé.",
+        "5. She looks like she is feeling much better today.",
+        "6. The doctor advised that he to rest for several days.",
+        "7. We are going to get the roof repair next week.",
+        "8. It was so terrible weather that we stayed indoors.",
+        "9. It is essential that the government reduces pollution immediately.",
+        "10. Riding a bike is nearly as cheaper as taking the bus."
+      ]
+    },
+    "C": {
+      "title": "C. Reading Comprehension",
+      "intro": [
+        "Two years ago, Marcus decided to make a major change in his life. He had been working for the same company for almost ten years, but he no longer found the job meaningful. A friend suggested that he apply for a position with a non-profit organization that helps young people develop job skills. Marcus hesitated at first because the salary was lower. If he had focused only on money, he probably would have stayed in his old job.",
+        "Eventually, Marcus accepted the position. The first few months were fairly challenging, but he gradually became more confident. He now coordinates training programs and regularly gives presentations. He says the work is demanding; however, it is much more rewarding.",
+        "Recently, the organization has been trying to reduce its environmental impact. It has had energy-efficient lights installed and encourages employees to use public transportation. Marcus usually takes the train because driving is not nearly as convenient during rush hour. He believes it is essential that businesses take practical steps to reduce waste and energy use.",
+        "Marcus says changing careers was one of the best decisions he has made. Had he ignored his friend's advice, he says, he might still be wondering whether he should do something different with his life."
+      ],
+      "questions": [
+        "1. Why did Marcus want to change jobs?",
+        "2. What kind of organization did his friend recommend?",
+        "3. Why did Marcus hesitate at first?",
+        "4. What might have happened if he had focused only on money?",
+        "5. What does Marcus do in his current job?",
+        "6. How does he feel about his work now?",
+        "7. What has the organization done to reduce its environmental impact?",
+        "8. Why does Marcus usually take the train?",
+        "9. What does he believe businesses should do?",
+        "10. According to Marcus, what might have happened if he had ignored his friend's advice?"
+      ]
+    },
+    "D": {
+      "title": "D. Listening & Summary",
+      "intro": [
+        "Your teacher will read a passage aloud twice. Listen carefully, then summarize it in your own words. Include the main situation, important details, any problem or change, and the final result or opinion."
+      ],
+      "questions": []
+    },
+    "E": {
+      "title": "E. Writing Task",
+      "intro": [
+        "Write about a major turning point, ambition, or change in your life. It can be real or imaginary.",
+        "Explain what happened, what influenced your decision, and how things might have been different if you had made another choice. Describe your current situation and what you hope to achieve in the future. Use connected paragraphs and appropriate Level 6 grammar and vocabulary."
+      ],
+      "questions": []
+    }
+  }
+}
