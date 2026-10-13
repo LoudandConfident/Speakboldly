@@ -71,7 +71,7 @@ export function initializeStudentAssessment(doc) {
   }catch(error){if(current===epoch){status.textContent=error.message;busy=false;}}
  }
  function renderFiles(items){
-  for(const [section,id,title]of [['exercises','portal-exercises','Exercises'],['levels','portal-material','Levels']]){
+  for(const [section,id,title]of [['exercises','portal-exercises','Exercises'],['levels','portal-material','Material']]){
    const target=root.querySelector('#'+id),uploads=target.querySelector('.temporary-portal-uploads');target.replaceChildren(text('h3',title));if(uploads)target.append(uploads);
    for(const item of items.filter(item=>item.section===section)){
     const row=doc.createElement('div');row.className='student-portal-file';let control;
