@@ -8,6 +8,8 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  const listStatus = doc.querySelector('#review-list-status'), position = doc.querySelector('#review-position');
  const previous = doc.querySelector('#review-previous'), next = doc.querySelector('#review-next');
  let reviews = [], selected = 0, submissionId = null, successTimer = null, loadVersion = 0;
+ const cacheKey='speak-boldly-public-reviews-v1';let loading=false,pendingReload=false,lastLoaded=0;
+ function cacheReviews(){try{doc.defaultView.localStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),reviews}));}catch{}}
  let hovering = false, focused = false, rotationTimer, drag = null;
  const view = doc.querySelector('#reviews');
  const mobileReviews=()=>Boolean(doc.defaultView.matchMedia?.('(max-width: 680px)').matches);
@@ -48,12 +50,15 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   position.textContent = 'Review '+(selected+1)+' of '+reviews.length;
   if(mobileReviews()){const target=cards.children[selected];if(target)cards.scrollLeft=target.offsetLeft-cards.children[0].offsetLeft;}
  }
- async function load() {
-  const version = ++loadVersion, selectedId = reviews[selected]?.id;
-  if (!connected()) {listStatus.textContent = '';album.hidden = true;return;}
-  listStatus.textContent = 'Loading reviews…';
-  try {const result = await api('reviews');if(version !== loadVersion)return;reviews = result.reviews;const index=reviews.findIndex(review=>review.id===selectedId);selected=index<0?0:index;render();listStatus.textContent = reviews.length ? '' : 'Be the first to share your experience.';}
-  catch {if(version===loadVersion)listStatus.textContent = 'Reviews could not be loaded. Please try again later.';}
+ async function load({force=false}={}) {
+  if (!connected()) {listStatus.textContent='';album.hidden=true;return;}
+  if(loading){if(force)pendingReload=true;return;}
+  if(!force&&lastLoaded&&Date.now()-lastLoaded<300000)return;
+  loading=true;const version=++loadVersion,selectedId=reviews[selected]?.id;
+  listStatus.textContent=reviews.length?'':'Loading reviews…';
+  try{const result=await api('reviews');if(version!==loadVersion)return;if(!Array.isArray(result.reviews))throw new Error('Invalid reviews.');reviews=result.reviews;lastLoaded=Date.now();cacheReviews();const index=reviews.findIndex(review=>review.id===selectedId);selected=index<0?0:index;render();listStatus.textContent=reviews.length?'':'Be the first to share your experience.';}
+  catch{if(version===loadVersion)listStatus.textContent=reviews.length?'Showing previously loaded reviews. Updates could not load yet.':'Reviews could not be loaded. Please try again later.';}
+  finally{loading=false;if(pendingReload){pendingReload=false;load({force:true});}}
  }
  function moveReview(direction){
   if(reviews.length<2)return;
@@ -122,7 +127,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
    const data = {submissionId,name:form.elements.name.value.trim(),age:form.elements.age.value,program:form.elements.program.value,level:form.elements.level.value.trim(),message:form.elements.message.value.trim()};
    const result = await api('reviews',{method:'POST',data});
    ++loadVersion;
-   reviews = [result.review,...reviews.filter(review=>review.id!==result.review.id)];selected=0;render();listStatus.textContent='';
+   reviews = [result.review,...reviews.filter(review=>review.id!==result.review.id)];lastLoaded=Date.now();cacheReviews();selected=0;render();listStatus.textContent='';
    status.textContent = 'Thank you for submitting your review!';form.reset();submissionId = null;
    doc.defaultView.clearTimeout(successTimer);
    successTimer=doc.defaultView.setTimeout(()=>{
@@ -134,8 +139,9 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   } catch (error) {status.textContent = error.message || 'Your review could not be shared. Please try again.';}
   finally {button.disabled = false;}
  });
- doc.addEventListener('reviews-changed',load);
+ doc.addEventListener('reviews-changed',()=>load({force:true}));
  doc.defaultView.addEventListener('hashchange',()=>{if(doc.defaultView.location.hash === '#reviews')load();});
+ try{const cached=JSON.parse(doc.defaultView.localStorage.getItem(cacheKey)||'null');if(connected()&&Array.isArray(cached?.reviews)&&cached.reviews.every(review=>review&&typeof review.id==='string'&&typeof review.message==='string')){reviews=cached.reviews;lastLoaded=Number(cached.savedAt)||0;if(lastLoaded>Date.now())lastLoaded=0;render();listStatus.textContent=reviews.length?'':'Be the first to share your experience.';}}catch{}
  load();
  return {load};
 }

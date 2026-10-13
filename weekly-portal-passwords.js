@@ -1,3 +1,4 @@
+import {resetPortalAttempts} from './student-portal-attempts.js?v=weekly-passwords';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 export function initializeWeeklyPortalPasswords(doc,isUnlocked){
  const root=doc.querySelector('#weekly-portal-passwords'),status=root.querySelector('[role=status]');let generation=0,timer,loading=false;
@@ -10,6 +11,7 @@ export function initializeWeeklyPortalPasswords(doc,isUnlocked){
   finally{if(current===generation)loading=false;}
  }
  root.querySelector('button').onclick=refresh;
+ root.querySelector('[data-reset-password-attempts]').onclick=()=>{if(!isUnlocked())return;try{resetPortalAttempts(doc);status.textContent='Password attempts reset on this browser.';}catch{status.textContent='Enable browser storage before resetting attempts.';}};
  root.addEventListener('toggle',()=>{clearInterval(timer);timer=null;if(root.open){refresh();timer=setInterval(refresh,60000);}});
  doc.addEventListener('client-sheet-configured',()=>{if(root.open)refresh();});doc.addEventListener('visibilitychange',()=>{if(root.open&&!doc.hidden)refresh();});
  return{refresh,lock(){generation++;loading=false;clearInterval(timer);timer=null;root.querySelectorAll('[data-weekly-password]').forEach(value=>value.textContent='—');root.querySelector('[data-week-range]').textContent='';status.textContent='';}};
