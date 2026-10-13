@@ -11,7 +11,7 @@ export async function buildAssessmentPdf(attempt,fontBytes){
    let output='';for(const char of part){if(output&&font.widthOfTextAtSize(output+char,size)>width){line(output);output='';}output+=char;}line(output);
   }y-=7;
  }
- paragraph(attempt.name+' — Level '+attempt.level+' — Assessment');paragraph('Program: '+attempt.program);paragraph('Status: '+attempt.status+' | Score: '+(attempt.score===null?'Awaiting correction':attempt.score+' / 100'));
+ paragraph(attempt.name+' — Level '+attempt.level+' — Assessment');paragraph('Program: '+attempt.program);if(attempt.age)paragraph('Age: '+attempt.age);paragraph('Status: '+attempt.status+' | Score: '+(attempt.score===null?'Awaiting correction':attempt.score+' / 100'));
  paragraph('A. Choose the Correct Answer'+(attempt.marks?' — '+attempt.marks.A+' / 20':''));
  for(const q of exam.questions){paragraph(q.number+'. '+q.question);const answer=attempt.answers.A[q.number];paragraph('Answer: '+(Number.isInteger(answer)?String.fromCharCode(97+answer)+') '+q.options[answer]:'(No answer)'));}
  for(const section of ['B','C','D','E']){const data=exam.sections[section];paragraph(data.title+(attempt.marks?' — '+attempt.marks[section]+' / 20':''));for(const intro of data.intro)paragraph(intro);if(data.questions.length)data.questions.forEach((question,i)=>{paragraph(question);paragraph('Answer: '+(attempt.answers[section]?.[i+1]||'(No answer)'));});else paragraph('Answer: '+(attempt.answers[section]||'(No answer)'));}

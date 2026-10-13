@@ -458,9 +458,9 @@ function handleLibraryAction(p){
 }
 
 // Add this file only for a multi-file project. UnifiedCode.gs already includes it.
-const SB_EXAM_HEADERS = ['Attempt ID','Client ID','Name','Level','Status','Opened at','Submitted at','Answers','Marks','Score','Feedback','Reviewed at','Version','Program','Deadline','Notification status','Notification error'];
+const SB_EXAM_HEADERS = ['Attempt ID','Client ID','Name','Level','Status','Opened at','Submitted at','Answers','Marks','Score','Feedback','Reviewed at','Version','Program','Deadline','Notification status','Notification error','Age'];
 const SB_PORTAL_ACCESS_HEADERS = ['Item ID','Section','Title','URL','Enabled'];
-const SB_EXAM_SESSION_HEADERS = ['Token hash','Visitor ID','Name','Program','Expires at'];
+const SB_EXAM_SESSION_HEADERS = ['Token hash','Visitor ID','Name','Program','Expires at','Age'];
 const SB_STUDENT_EXAM_ACTIONS = ['studentPortalAccess','studentExamLogin','studentExamGet','studentExamDraft','studentExamSubmit'];
 const SB_INSTRUCTOR_EXAM_ACTIONS = ['listExamAttempts','reviewExamAttempt','listPortalAccess','savePortalAccess','retryExamNotification'];
 function setupStudentExams() {
@@ -471,9 +471,10 @@ function setupStudentExams() {
   let sheet = book.getSheetByName('Exam attempts');
   if (!sheet) sheet = book.insertSheet('Exam attempts');
   if (!sheet.getLastRow()) sheet.appendRow(SB_EXAM_HEADERS);
-  else if (JSON.stringify(sheet.getRange(1,1,1,17).getValues()[0]) !== JSON.stringify(SB_EXAM_HEADERS)) throw new Error('Exam attempts headers differ. Existing data has not been changed.');
+  else {if(sheet.getRange(1,18).getValues()[0][0]===''&&JSON.stringify(sheet.getRange(1,1,1,17).getValues()[0])===JSON.stringify(SB_EXAM_HEADERS.slice(0,17)))sheet.getRange(1,18).setValue('Age');}
+  if (JSON.stringify(sheet.getRange(1,1,1,18).getValues()[0]) !== JSON.stringify(SB_EXAM_HEADERS)) throw new Error('Exam attempts headers differ. Existing data has not been changed.');
   sheet.setFrozenRows(1);
-  sheet.getRange('A1:Q1').setFontWeight('bold');
+  sheet.getRange('A1:R1').setFontWeight('bold');
   let access=book.getSheetByName('Portal access');
   if(!access)access=book.insertSheet('Portal access');
   if(!access.getLastRow()){access.appendRow(SB_PORTAL_ACCESS_HEADERS);for(let level=1;level<=6;level++)access.appendRow(['test:'+level,'tests','Level '+level,'',false]);}
@@ -482,7 +483,8 @@ function setupStudentExams() {
   let sessions=book.getSheetByName('Exam sessions');
   if(!sessions)sessions=book.insertSheet('Exam sessions');
   if(!sessions.getLastRow())sessions.appendRow(SB_EXAM_SESSION_HEADERS);
-  else if(JSON.stringify(sessions.getRange(1,1,1,5).getValues()[0])!==JSON.stringify(SB_EXAM_SESSION_HEADERS))throw new Error('Exam sessions headers differ. Existing data has not been changed.');
+  else {if(sessions.getRange(1,6).getValues()[0][0]===''&&JSON.stringify(sessions.getRange(1,1,1,5).getValues()[0])===JSON.stringify(SB_EXAM_SESSION_HEADERS.slice(0,5)))sessions.getRange(1,6).setValue('Age');}
+  if(JSON.stringify(sessions.getRange(1,1,1,6).getValues()[0])!==JSON.stringify(SB_EXAM_SESSION_HEADERS))throw new Error('Exam sessions headers differ. Existing data has not been changed.');
   const props=PropertiesService.getScriptProperties();
   if(!props.getProperty('SB_EXAM_NOTIFY_EMAIL')){
     const email=Session.getEffectiveUser().getEmail();
@@ -506,15 +508,15 @@ function sbExamNotify(sheet,index,row){
   try{
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_EXAM_NOTIFY_EMAIL in Script Properties.');
     if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
-    row[15]='sending';row[16]='';sheet.getRange(index+2,1,1,17).setValues([row]);
+    row[15]='sending';row[16]='';sheet.getRange(index+2,1,1,18).setValues([row]);
     MailApp.sendEmail({to,subject:'Assessment submitted — '+String(row[2]).replace(/^'/,'')+' — Level '+row[3],body:'An interactive test has been submitted.\n\nName: '+String(row[2]).replace(/^'/,'')+'\nLevel: '+row[3]+'\nProgram: '+String(row[13]).replace(/^'/,'')+'\n\nOpen Instructor Portal → Exam Review to correct the answers and save the score.\n\nSpeak Boldly',name:'Speak Boldly'});
     row[15]='sent';
   }catch(error){row[15]='failed';row[16]=sbExamSafe(error.message);}
-  sheet.getRange(index+2,1,1,17).setValues([row]);
+  sheet.getRange(index+2,1,1,18).setValues([row]);
 }
-function sbExamExpire(sheet,index,row){if(!row[6]&&Date.now()>=Number(row[14])){row[4]='Awaiting review';row[6]=new Date().toISOString();row[12]=Number(row[12])+1;sheet.getRange(index+2,1,1,17).setValues([row]);sbExamNotify(sheet,index,row);}}
+function sbExamExpire(sheet,index,row){if(!row[6]&&Date.now()>=Number(row[14])){row[4]='Awaiting review';row[6]=new Date().toISOString();row[12]=Number(row[12])+1;sheet.getRange(index+2,1,1,18).setValues([row]);sbExamNotify(sheet,index,row);}}
 function sbExamAttempt(row) {
-  return {id:String(row[0]),clientId:String(row[1]),name:String(row[2]).replace(/^'/,''),level:Number(row[3]),status:String(row[4]),openedAt:String(row[5]),submittedAt:String(row[6]),answers:row[7]?JSON.parse(String(row[7])):{A:{},B:{},C:{},D:'',E:''},marks:row[8]?JSON.parse(String(row[8])):null,score:row[9]===''?null:Number(row[9]),feedback:String(row[10]).replace(/^'/,''),reviewedAt:String(row[11]),version:Number(row[12]||1),program:String(row[13]).replace(/^'/,''),deadline:Number(row[14]),serverNow:Date.now(),notificationStatus:String(row[15]),notificationError:String(row[16])};
+  return {id:String(row[0]),clientId:String(row[1]),name:String(row[2]).replace(/^'/,''),level:Number(row[3]),status:String(row[4]),openedAt:String(row[5]),submittedAt:String(row[6]),answers:row[7]?JSON.parse(String(row[7])):{A:{},B:{},C:{},D:'',E:''},marks:row[8]?JSON.parse(String(row[8])):null,score:row[9]===''?null:Number(row[9]),feedback:String(row[10]).replace(/^'/,''),reviewedAt:String(row[11]),version:Number(row[12]||1),program:String(row[13]).replace(/^'/,''),deadline:Number(row[14]),serverNow:Date.now(),notificationStatus:String(row[15]),notificationError:String(row[16]),age:row[17]?Number(row[17]):null};
 }
 function sbExamAnswers(value) {
   if (!value || typeof value!=='object' || Array.isArray(value)) throw new Error('Invalid answers.');
@@ -539,28 +541,29 @@ function handleStudentExam(data) {
     const book=sbExamBook(),items=sbPortalItems(book);
     if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,items:items.map(item=>({...item,url:item.enabled?item.url:''}))});
     if(data.action==='studentExamLogin') {
-      const name=String(data.name||'').trim(),program=String(data.program||'').trim();
+      if(String(data.passcode||'')!=='1111')throw new Error('Incorrect assessment password.');
+      const name=String(data.name||'').trim(),program=String(data.program||'').trim(),age=data.age===undefined?'':Number(data.age);if(age!==''&&(!Number.isInteger(age)||age<1||age>120))throw new Error('Enter a valid age.');
       if(!name||name.length>100||!program||program.length>100)throw new Error('Enter your name and program.');
       const levels=items.filter(item=>item.section==='tests'&&item.enabled).map(item=>Number(item.id.split(':')[1]));
       if(!levels.length)throw new Error('Interactive tests are currently closed. Please wait for your instructor to open your level.');
       const token=Utilities.getUuid()+Utilities.getUuid();
       const sessions=book.getSheetByName('Exam sessions');if(!sessions)throw new Error('Run setupStudentExams first.');
-      lock.waitLock(20000);sessions.appendRow([sbExamHash(token),Utilities.getUuid(),sbExamSafe(name),sbExamSafe(program),Date.now()+6*60*60*1000]);
-      return sbExamResponse({ok:true,token,student:{name,program,levels}});
+      lock.waitLock(20000);sessions.appendRow([sbExamHash(token),Utilities.getUuid(),sbExamSafe(name),sbExamSafe(program),Date.now()+6*60*60*1000,age]);
+      return sbExamResponse({ok:true,token,student:{name,program,levels,...(age!==''?{age}:{})}});
     }
     const sessions=book.getSheetByName('Exam sessions'),hash=sbExamHash(String(data.token||''));
-    const saved=sessions&&sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,5).getValues().find(row=>String(row[0])===hash&&Number(row[4])>Date.now()):null;
+    const saved=sessions&&sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,6).getValues().find(row=>String(row[0])===hash&&Number(row[4])>Date.now()):null;
     if(!saved)throw new Error('Your session expired. Ask your instructor to check your saved assessment.');
-    const session={clientId:String(saved[1]),name:String(saved[2]).replace(/^'/,''),program:String(saved[3]).replace(/^'/,'')},level=Number(data.level);
+    const session={clientId:String(saved[1]),name:String(saved[2]).replace(/^'/,''),program:String(saved[3]).replace(/^'/,''),age:saved[5]||''},level=Number(data.level);
     if(!Number.isInteger(level)||level<1||level>6)throw new Error('Choose a valid level.');
     lock.waitLock(20000);
     const sheet=book.getSheetByName('Exam attempts');if(!sheet)throw new Error('The instructor needs to run setupStudentExams first.');
-    const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,17).getValues():[];
+    const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,18).getValues():[];
     let index=rows.findIndex(row=>String(row[1])===session.clientId&&Number(row[3])===level),row=index<0?null:rows[index];
     if(!row) {
       if(data.action!=='studentExamGet')throw new Error('Open your assessment before saving it.');
       if(!items.some(item=>item.id==='test:'+level&&item.enabled))throw new Error('This level is currently dimmed. Please wait for your instructor to open it.');
-      const now=Date.now();row=[Utilities.getUuid(),session.clientId,sbExamSafe(session.name),level,'In progress',new Date(now).toISOString(),'','','','','','',1,sbExamSafe(session.program),now+20*60*1000,'',''];
+      const now=Date.now();row=[Utilities.getUuid(),session.clientId,sbExamSafe(session.name),level,'In progress',new Date(now).toISOString(),'','','','','','',1,sbExamSafe(session.program),now+20*60*1000,'','',session.age];
       sheet.appendRow(row);index=sheet.getLastRow()-2;
     }
     // A switch closes new starts; students already taking an exam can finish it.
@@ -571,7 +574,7 @@ function handleStudentExam(data) {
         if(Number(data.version)!==Number(row[12]))throw new Error('Answers were changed in another tab. Reopen the assessment to load the saved version.');
         row[7]=JSON.stringify(sbExamAnswers(data.answers));row[12]=Number(row[12])+1;
         if(data.action==='studentExamSubmit'){row[4]='Awaiting review';row[6]=new Date().toISOString();}
-        sheet.getRange(index+2,1,1,17).setValues([row]);
+        sheet.getRange(index+2,1,1,18).setValues([row]);
       }
       if(row[6])sbExamNotify(sheet,index,row);
     }
@@ -596,7 +599,7 @@ function handleInstructorExam(data) {
       return sbExamResponse({ok:true,item:{id,section:item.section,title:item.title.trim(),url,enabled:item.enabled}});
     }
     const sheet=book.getSheetByName('Exam attempts');if(!sheet)throw new Error('Run setupStudentExams, then deploy a New version.');
-    const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,17).getValues():[];
+    const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,18).getValues():[];
     if(data.action==='listExamAttempts'){
       rows.forEach((row,index)=>sbExamExpire(sheet,index,row));
       return sbExamResponse({ok:true,attempts:rows.map(sbExamAttempt).reverse()});
@@ -608,7 +611,7 @@ function handleInstructorExam(data) {
     const marks={};for(const section of ['A','B','C','D','E']){const mark=data.marks?.[section];if(typeof mark!=='number'||!Number.isFinite(mark)||mark<0||mark>20)throw new Error('Enter a mark from 0 to 20 for every section.');marks[section]=mark;}
     const feedback=String(data.feedback||'');if(feedback.length>10000)throw new Error('Feedback too long.');
     row[4]='Reviewed';row[8]=JSON.stringify(marks);row[9]=Object.values(marks).reduce((a,b)=>a+b,0);row[10]=sbExamSafe(feedback);row[11]=new Date().toISOString();row[12]=Number(row[12])+1;
-    sheet.getRange(index+2,1,1,17).setValues([row]);return sbExamResponse({ok:true,attempt:sbExamAttempt(row)});
+    sheet.getRange(index+2,1,1,18).setValues([row]);return sbExamResponse({ok:true,attempt:sbExamAttempt(row)});
   }catch(error){return sbExamResponse({ok:false,error:error.message});}
   finally{if(lock.hasLock())lock.releaseLock();}
 }

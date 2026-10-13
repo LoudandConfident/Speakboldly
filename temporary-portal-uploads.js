@@ -1,3 +1,4 @@
+import {MATERIAL_PROGRAM_FOLDERS} from './material-program-folders.js';
 // Temporary instructor upload controls. Remove this module when setup is finished.
 export function attachTemporaryPortalUploads(doc) {
  const root=doc.querySelector('#students-portal'),expected=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
@@ -7,6 +8,7 @@ export function attachTemporaryPortalUploads(doc) {
   const controls=doc.createElement('div');controls.className='temporary-portal-uploads teacher-library-controls';
   const input=doc.createElement('input');input.type='file';input.multiple=true;input.hidden=true;input.setAttribute('aria-label','Choose uploads for '+section);
   const choose=text('button','Choose files'),upload=text('button','Upload files');choose.type=upload.type='button';choose.className=upload.className='button light small';
+  const level=doc.createElement('select');level.setAttribute('aria-label','Material folder');level.append(Object.assign(text('option','Choose folder'),{value:''}));for(let n=1;n<=8;n++)level.append(Object.assign(text('option','Level '+n),{value:String(n)}));for(const program of MATERIAL_PROGRAM_FOLDERS)level.append(Object.assign(text('option',program.title),{value:program.id}));if(section==='material')controls.append(level);
   const selection=text('span','No files selected');selection.className='teacher-library-selection';selection.setAttribute('aria-live','polite');
   const note=text('p','Temporary instructor upload');note.setAttribute('role','status');
   choose.onclick=()=>input.click();input.onchange=()=>{selection.textContent=input.files.length?[...input.files].map(file=>file.name).join(', '):'No files selected';};
@@ -18,13 +20,14 @@ export function attachTemporaryPortalUploads(doc) {
   upload.onclick=async()=>{
    let connection;try{connection=JSON.parse(doc.defaultView.localStorage.getItem('speak-boldly-client-sheet-connection-v1')||'null');}catch{}
    if(!connection||connection.endpoint!==expected||typeof connection.key!=='string'||!connection.key){note.textContent='Sign in to Instructor Portal and connect Google Sheets first, then return here to upload.';return;}
+   if(section==='material'&&!level.value){note.textContent='Choose a material folder first.';return;}
    if(!input.files.length){note.textContent='Choose your files first.';return;}
    upload.disabled=choose.disabled=true;let count=0;
    try{
     for(const file of input.files){
      if(file.size>5000000)throw new Error('For files above 5 MB, upload directly to the matching Google Drive folder.');
      note.textContent='Uploading '+file.name+'…';const bytes=new Uint8Array(await file.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));
-     const result=await request(connection,'uploadLibraryFile',{section,name:file.name,mimeType:file.type,base64:doc.defaultView.btoa(binary)});count++;
+     const result=await request(connection,'uploadLibraryFile',{section,name:section==='material'?(/^\d+$/.test(level.value)?'Level '+level.value:MATERIAL_PROGRAM_FOLDERS.find(program=>program.id===level.value).title)+' — '+file.name:file.name,mimeType:file.type,base64:doc.defaultView.btoa(binary)});count++;
      try{await request(connection,'savePortalAccess',{item:{section:group,title:result.item.title,url:result.item.url,enabled:false}});}
      catch(error){throw new Error('File saved to Drive. Portal listing could not be updated: '+error.message+' Refresh files in Instructor Portal after deploying the latest script.');}
     }

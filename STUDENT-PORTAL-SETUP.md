@@ -50,3 +50,11 @@ File and test access still uses shared Dim/Undim switches, without student passw
 Progress reports, final reports and registration/payment confirmations are sent by email and do not appear as Student Portal documents. Their PDF filenames use **Name — Level/Program — Document type — Date.pdf**, with Cairo dates. Editable report downloads use the same format.
 
 Exam Review includes **Download assessment PDF** for each submitted attempt. This is an instructor download of that student's questions, submitted answers, correction marks and feedback, named **Name — Level — Assessment — Date.pdf**. It does not add assessment PDFs to the student material library.
+
+## Assessment details and material folders
+
+Assessment opens a popup requesting **Password, Name, Level, Age and Program**. The shared assessment password is **1111**. Student codes are not used. Age is saved with the attempt. Updating the script and running setupStudentPortal adds Age columns to existing exam tabs without replacing saved answers.
+
+Material contains separate **Level 1–8** folders plus a folder for each other program. There are no General English or Instructor Training folders. Material uploads include a folder selector; uploaded filenames are prefixed with the selected level or program so they appear in that folder. Existing files are grouped by their names. These are folders in the Student Portal; uploads still use the configured Materials Drive library.
+
+Instructor Portal opens the **Dim / Undim — Student Portal** section automatically. Each file or assessment has a **Dim** or **Undim** button. Controls become active after the connected Google service loads the current access state.

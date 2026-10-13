@@ -3,6 +3,23 @@ export function initializePortalSwitches(doc,isUnlocked,loader) {
  const root=doc.querySelector('#portal-switches');if(!root)return;
  const list=root.querySelector('.portal-switch-list'),status=root.querySelector('[role=status]');let generation=0,loading=false;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
+ function render(catalog,preview=false){const current=generation;list.replaceChildren();
+  for(const [section,title]of [['exercises','Exercises'],['levels','Material'],['tests','Assessments']]) {
+    const group=doc.createElement('details'),summary=text('summary',title);group.append(summary);group.open=true;
+    for(const item of catalog.filter(item=>item.section===section)) {
+     const row=doc.createElement('div');row.className='portal-access-switch';const name=text('span',item.title),button=doc.createElement('button');button.type='button';button.className='button light small';button.disabled=preview;
+     function update(){row.classList.toggle('portal-item-dimmed',!item.enabled);button.textContent=item.enabled?'Dim':'Undim';button.setAttribute('aria-pressed',String(item.enabled));button.setAttribute('aria-label',(item.enabled?'Dim ':'Undim ')+item.title);}
+     update();button.onclick=async()=>{
+      if(!isUnlocked())return;button.disabled=true;status.textContent='Saving access…';
+      try{const result=await sheetLibraryRequest('savePortalAccess',{item:{...item,enabled:!item.enabled}});if(current!==generation||!isUnlocked())return;Object.assign(item,result.item);update();status.textContent=item.title+' is now '+(item.enabled?'open':'dimmed')+' for everyone.';}
+      catch(error){if(current===generation)status.textContent=error.message;}finally{button.disabled=false;}
+     };row.append(name,button);group.append(row);
+    }
+    if(group.children.length===1)group.append(text('p','No files found. Upload files in Full library, then refresh.'));list.append(group);
+   }
+ }
+ const defaults=Array.from({length:6},(_,i)=>({id:'test:'+(i+1),section:'tests',title:'Level '+(i+1),url:'',enabled:false}));
+ render(defaults,true);
  async function refresh() {
   if(!isUnlocked()||loading)return;const current=generation;loading=true;
   if(!clientSheetConnected()){status.textContent='Connect your Clients sheet first.';loading=false;return;}
@@ -15,25 +32,13 @@ export function initializePortalSwitches(doc,isUnlocked,loader) {
     try{const result=await sheetLibraryRequest('listLibrary',{section});for(const item of result.items)if(!catalog.some(entry=>entry.section===group&&entry.url===item.url))catalog.push({section:group,title:item.title,url:item.url,enabled:false});}catch{notes.push('Drive '+section+' folder is not connected.');}
    }
    if(current!==generation||!isUnlocked())return;list.replaceChildren();
-   for(const [section,title]of [['exercises','Exercises'],['levels','Level files'],['tests','Interactive tests']]) {
-    const group=doc.createElement('details'),summary=text('summary',title);group.append(summary);group.open=section==='tests';
-    for(const item of catalog.filter(item=>item.section===section)) {
-     const row=doc.createElement('div');row.className='portal-access-switch';const name=text('span',item.title),button=doc.createElement('button');button.type='button';button.className='button light small';
-     function update(){row.classList.toggle('portal-item-dimmed',!item.enabled);button.textContent=item.enabled?'On · Dim':'Off · Undim';button.setAttribute('aria-pressed',String(item.enabled));button.setAttribute('aria-label',(item.enabled?'Dim ':'Undim ')+item.title);}
-     update();button.onclick=async()=>{
-      if(!isUnlocked())return;button.disabled=true;status.textContent='Saving access…';
-      try{const result=await sheetLibraryRequest('savePortalAccess',{item:{...item,enabled:!item.enabled}});if(current!==generation||!isUnlocked())return;Object.assign(item,result.item);update();status.textContent=item.title+' is now '+(item.enabled?'open':'dimmed')+' for everyone.';}
-      catch(error){if(current===generation)status.textContent=error.message;}finally{button.disabled=false;}
-     };row.append(name,button);group.append(row);
-    }
-    if(group.children.length===1)group.append(text('p','No files found. Upload files in Full library, then refresh.'));list.append(group);
-   }
+   render(catalog);
    status.textContent=[...new Set(notes)].join(' ');
   }catch(error){if(current===generation)status.textContent=error.message;}
-  finally{loading=false;}
+  finally{if(current===generation)loading=false;}
  }
  root.querySelector('button[data-refresh-access]').onclick=refresh;
  root.addEventListener('toggle',()=>{if(root.open)refresh();});
  doc.addEventListener('client-sheet-configured',()=>{if(root.open)refresh();});
- return{refresh,lock(){generation++;list.replaceChildren();status.textContent='';}};
+ return{refresh,lock(){generation++;loading=false;render(defaults,true);status.textContent='';}};
 }
