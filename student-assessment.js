@@ -1,6 +1,6 @@
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=all-inline';
 import {MATERIAL_PROGRAM_FOLDERS,materialProgram} from './material-program-folders.js?v=comprehension-listening';
-import {initializeStudentBooking} from './student-booking.js?v=all-inline';
+import {initializeStudentBooking} from './student-booking.js?v=customer-calendar';
 import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=clean-material';
 import {createExamForm} from './exam-form.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';

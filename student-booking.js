@@ -9,8 +9,8 @@ export function initializeStudentBooking(doc){
  const gate=doc.createElement('form');gate.className='booking-passcode-form';const passLabel=text('label','Booking passcode'),pass=doc.createElement('input');pass.type='password';pass.name='passcode';pass.autocomplete='off';pass.maxLength=64;pass.required=true;passLabel.append(pass);const unlock=text('button','Open calendar');unlock.type='submit';unlock.className='button';gate.append(passLabel,unlock);
  const status=text('p','');status.setAttribute('role','status');status.setAttribute('aria-live','polite');
  const content=doc.createElement('div');content.hidden=true;
- const toolbar=doc.createElement('div');toolbar.className='calendar-toolbar';const previous=text('button','‹'),next=text('button','›'),heading=text('h4',''),refresh=text('button','Refresh'),close=text('button','Lock calendar');
- for(const b of [previous,next,refresh,close]){b.type='button';b.className='button light small';}previous.setAttribute('aria-label','Previous booking month');next.setAttribute('aria-label','Next booking month');toolbar.append(previous,heading,next,refresh,close);
+ const toolbar=doc.createElement('div');toolbar.className='calendar-toolbar';const previous=text('button','‹'),next=text('button','›'),heading=text('h4',''),refresh=text('button','Refresh');
+ for(const b of [previous,next,refresh]){b.type='button';b.className='button light small';}previous.setAttribute('aria-label','Previous booking month');next.setAttribute('aria-label','Next booking month');toolbar.append(previous,heading,next,refresh);
  const hint=text('p','Swipe across the calendar to see all days.');hint.className='calendar-scroll-hint';
  const viewport=doc.createElement('div');viewport.className='calendar-viewport';viewport.tabIndex=0;viewport.setAttribute('role','region');viewport.setAttribute('aria-label','Client booking calendar. Scroll horizontally to see all days.');
  const weekdays=doc.createElement('div'),grid=doc.createElement('div');weekdays.className='calendar-weekdays';grid.className='calendar-grid';for(const day of ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'])weekdays.append(text('span',day));viewport.append(weekdays,grid);
@@ -45,5 +45,5 @@ export function initializeStudentBooking(doc){
   catch(error){if(current===generation){submitting=false;if(/taken|no longer available/.test(error.message)){await load(true);requestId=null;}else grid.querySelectorAll('button[data-status]').forEach(button=>button.disabled=button.dataset.status!=='available');status.textContent=error.message;}}finally{if(current===generation){submitting=false;name.disabled=false;selections();}}
  };
  function lock(){generation++;token='';selected.clear();requestId=null;submitting=false;gate.reset();gate.hidden=false;content.hidden=true;status.textContent='';grid.replaceChildren();selections();}
- close.onclick=lock;return{lock};
+ return{lock};
 }
