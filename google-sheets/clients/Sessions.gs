@@ -80,3 +80,23 @@ function disableAutomaticReminders(){
  PropertiesService.getScriptProperties().setProperty('SB_REMINDERS_ENABLED','false');
  ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='sendDueSheetReminders').forEach(t=>ScriptApp.deleteTrigger(t));
 }
+
+function sbCountedSessionHours(book,id){const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return 0;const rows=sheet.getRange(2,1,sheet.getLastRow()-1,13).getValues(),ids=new Set();for(const row of rows)if(String(row[1])===id&&String(row[7])!=='cancelled'&&row[12]==='counted')ids.add(String(row[0]));return ids.size*1.5;}
+function sbApplySessionHours(book){
+ const sessions=book.getSheetByName('Sessions'),clients=book.getSheetByName('Clients');if(!sessions||!clients)return;
+ const props=PropertiesService.getScriptProperties(),first=props.getProperty('SB_SESSION_HOURS_READY')!=='1',today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');
+ sessions.getRange(1,13).setValue('Hours counted');clients.getRange(1,13,1,2).setValues([['Hours baseline','Hours baseline set at (UTC)']]);
+ const people=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,14).getValues():[];
+ for(let i=0;i<people.length;i++)if(people[i][0]&&people[i][12]===''){people[i][12]=Number(people[i][7])||0;clients.getRange(i+2,13,1,2).setValues([[people[i][12],new Date().toISOString()]]);}
+ const rows=sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,13).getValues():[];
+ for(let i=0;i<rows.length;i++){const row=rows[i];if(row[0]&&/^\d{4}-\d{2}-\d{2}$/.test(String(row[3]))&&String(row[3])<today&&!row[12]){row[12]=String(row[3])<'2026-10-14'?'baseline':'counted';sessions.getRange(i+2,13).setValue(row[12]);}}
+ props.setProperty('SB_SESSION_HOURS_READY','1');
+ for(let i=0;i<people.length;i++){const person=people[i];if(!person[0])continue;const ids=new Set(rows.filter(row=>String(row[1])===String(person[0])&&row[7]!=='cancelled'&&row[12]==='counted').map(row=>String(row[0])));const total=Math.round((Number(person[12])+ids.size*1.5)*100)/100;if(Number(person[7])!==total)clients.getRange(i+2,8).setValue(total);}
+}
+function sbSetClientHours(book,sheet,row,input){
+ if(row>sheet.getLastRow())return Number(input.hours);
+ const previous=sheet.getRange(row,1,1,14).getValues()[0];if(input.hoursChanged===false)return Number(previous[7]);
+ const baseline=Number(input.hours)-sbCountedSessionHours(book,String(previous[0]));if(baseline<0)throw new Error('Hours include completed sessions. Cancel an incorrect session before reducing its counted hours.');sheet.getRange(row,13,1,2).setValues([[baseline,new Date().toISOString()]]);return Number(input.hours);
+}
+function updateSessionHours(){const lock=LockService.getScriptLock();lock.waitLock(20000);try{sbApplySessionHours(SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')));}finally{lock.releaseLock();}}
+function enableAutomaticSessionHours(){updateSessionHours();if(!ScriptApp.getProjectTriggers().some(trigger=>trigger.getHandlerFunction()==='updateSessionHours'))ScriptApp.newTrigger('updateSessionHours').timeBased().everyDays(1).atHour(0).nearMinute(15).inTimezone('Africa/Cairo').create();}

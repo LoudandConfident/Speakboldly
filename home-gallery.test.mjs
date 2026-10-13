@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {existsSync} from 'node:fs';
-import {cairoDayNumber, dailyQuotes, quoteDetails, quoteForDate} from './home-gallery.js';
+import {existsSync,readFileSync} from 'node:fs';
+import {cairoDayNumber, dailyQuotes, quoteDetails, quoteForDate,motivationShareUrl} from './home-gallery.js';
 test('daily motivation changes at Cairo midnight and stays consistent for each day', () => {
  const before = new Date('2026-10-09T20:59:59Z');
  const after = new Date('2026-10-09T21:00:00Z');
@@ -20,3 +20,5 @@ test('every daily picture has supporting content and an existing image', () => {
   assert.ok(Array.isArray(quoteDetails[index].support));
  }
 });
+
+test('every rotating motivation has its own static picture preview and stable share link',()=>{for(const entry of dailyQuotes){const link=motivationShareUrl(entry),file=new URL('./motivation/'+entry.image.split('/').pop().replace(/\.png$/,'.html'),import.meta.url),html=readFileSync(file,'utf8');assert(link.includes('/motivation/'));assert(!link.includes('#'));assert(html.includes('property="og:image" content="'+new URL(entry.image,'https://loudandconfident.github.io/Speakboldly/').href+'"'));assert(html.includes('summary_large_image'));assert(html.includes('property="og:url" content="'+link+'"'));}});

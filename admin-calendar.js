@@ -1,3 +1,5 @@
+import {removedPortalClientIds} from './requested-client-cleanup.js';
+import {confirmClientEmail} from './client-email-confirmation.js?v=calendar-popup';
 import {SESSION_PROGRAMS,nextSessionNumber,suggestedSessionProgram} from './session-programs.js';
 import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession} from './client-sheet.js?v=level-history';
 import {ownerConnected,request} from './exam-api.js';
@@ -43,7 +45,7 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
  const dateString=(year,m,day)=>String(year).padStart(4,'0')+'-'+String(m+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
  function appendAppointment(cell,button,item,name){
   const row=doc.createElement('div');row.className='calendar-appointment';row.append(button);
-  if(item.id){const cancel=doc.createElement('button');cancel.type='button';cancel.className='calendar-cancel';cancel.textContent='×';cancel.title='Cancel appointment';cancel.setAttribute('aria-label','Cancel '+name+' session '+item.number);cancel.onclick=async()=>{if(!isUnlocked()||!doc.defaultView.confirm('Cancel this class?'))return;cancel.disabled=true;try{if(clientSheetConnected())await cancelSheetSession(item.id);else await request('admin/classes/'+item.id+'/cancel',{role:'admin',method:'POST',data:{}});await load();}catch(error){status.textContent=error.message;cancel.disabled=false;}};row.append(cancel);}
+  if(item.id){const cancel=doc.createElement('button');cancel.type='button';cancel.className='calendar-cancel';cancel.textContent='×';cancel.title='Cancel appointment';cancel.setAttribute('aria-label','Cancel '+name+' session '+item.number);cancel.onclick=async()=>{if(!isUnlocked()||!await confirmClientEmail(doc,'Cancel '+(item.program||'this class')+' — Session '+item.number+' for '+name+' on '+item.date+' at '+item.time+' Cairo time?',{title:'Cancel class',ariaLabel:'Confirm class cancellation',className:'calendar-cancel-confirmation'})||!isUnlocked())return;cancel.disabled=true;try{if(clientSheetConnected())await cancelSheetSession(item.id);else await request('admin/classes/'+item.id+'/cancel',{role:'admin',method:'POST',data:{}});await load();}catch(error){status.textContent=error.message;cancel.disabled=false;}};row.append(cancel);}
   cell.append(row);
  }
  function render(){
@@ -80,19 +82,19 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
     let sharedLoaded=false;
     try{
      let response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;
-     sessions=response.classes;storageReadable=true;sharedLoaded=true;
+     sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));storageReadable=true;sharedLoaded=true;
      const warnings=[];
      if(!background){
       const today=cairoToday(),currentTime=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date());
       const future=local.filter(s=>s.time);
       const untimed=local.filter(s=>!s.time);if(untimed.length)warnings.push(untimed.length+' old appointment(s) need a class time before they can sync.');
       for(const record of future){if(!isUnlocked()||epoch!==loadEpoch)return;try{await saveSheetSession(record,undefined,{importPast:true});}catch(error){warnings.push(error.message);}}
-      response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes;
+      response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));
      }
      status.textContent='Shared calendar connected. Send class confirmations manually from each client’s Actions button.'+(warnings.length?' '+warnings.length+' browser appointment(s) could not upload: '+warnings[0]:'')+(localError?' Some old browser entries could not be read; shared appointments are still shown.':'');
     }catch(error){status.textContent='Calendar could not sync: '+error.message;if(!background&&!sharedLoaded){sessions=local;storageReadable=false;}}
    }else if(ownerConnected()){
-    try{const response=await request('admin/classes',{role:'admin'});if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes;storageReadable=true;status.textContent='Private calendar connected. Confirmations are sent only when you authorize sending.';}catch(error){status.textContent=error.message;if(!background)storageReadable=false;}
+    try{const response=await request('admin/classes',{role:'admin'});if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));storageReadable=true;status.textContent='Private calendar connected. Confirmations are sent only when you authorize sending.';}catch(error){status.textContent=error.message;if(!background)storageReadable=false;}
    }else{sessions=local;status.textContent=localError?'Saved browser sessions could not all be read. Connect your sheet to view shared appointments.':'Calendar is on this device only. Connect the Clients sheet to sync appointments.';}
    if(!isUnlocked()||epoch!==loadEpoch)return;
    if(background&&root.querySelector('#calendar-session-dialog')?.open)return;
@@ -114,7 +116,7 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
   try{loadEpoch++;const input=Object.fromEntries(new doc.defaultView.FormData(form)),client=getClients().find(c=>c.id===input.clientId);if(!client)throw new Error('Choose an existing client.');const record=validateSession({...input,name:client.name});if(!record.time)throw new Error('Choose a class time.');
    if(clientSheetConnected()){
     const response=await saveSheetSession(record);if(!isUnlocked())return;
-    sessions=response.classes;selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();
+    sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();
     status.textContent='Session '+record.number+' saved to your sheet for '+record.date+' at '+record.time+' Cairo time. '+'Send the confirmation from this client’s Actions button.';
    }
    else if(ownerConnected()){const response=await request('admin/classes',{role:'admin',method:'POST',data:record});if(!isUnlocked())return;await load();status.textContent='Session '+record.number+' saved for '+record.date+' at '+record.time+' Cairo time. '+'Confirmations are sent only when you authorize sending.';}

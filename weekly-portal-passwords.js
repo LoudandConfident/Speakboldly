@@ -1,4 +1,4 @@
-import {resetPortalAttempts} from './student-portal-attempts.js?v=weekly-passwords';
+import {resetPortalAttempts} from './student-portal-attempts.js?v=all-inline';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 export function initializeWeeklyPortalPasswords(doc,isUnlocked){
  const root=doc.querySelector('#weekly-portal-passwords'),status=root.querySelector('[role=status]');let generation=0,timer,loading=false;

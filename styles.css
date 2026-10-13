@@ -372,3 +372,12 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 .temporary-portal-uploads select{max-width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px}
 
 .admin-client-history td:not(.admin-client-actions){opacity:.48}.admin-client-history .admin-client-actions{opacity:1}
+
+#daily-quote .motivation-page-heading{margin-top:24px;font-size:11px;font-weight:600;line-height:1.5;letter-spacing:2px;text-transform:uppercase}.motivation-sharing{margin-top:24px}.motivation-sharing [role=status]{font-size:13px;overflow-wrap:anywhere}
+
+[data-password-locked="true"]>:not(h3):not(summary):not(.portal-password-entry){display:none!important}.portal-password-entry{margin:16px 0;max-width:650px}.portal-password-entry input{width:100%;box-sizing:border-box;padding:12px;font:inherit;border:1px solid #c9cebf;border-radius:6px}.portal-password-entry .detail-actions{margin-top:16px}
+
+#how>.eyebrow,#join-team .eyebrow{font-size:10px;line-height:1.5;letter-spacing:1.8px;font-weight:700}
+
+main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .hero-copy{padding-top:0}#home .home-pricing-note{font-size:18px;line-height:1.6;max-width:540px;margin:16px 0}main #home>.home-bottom-row{margin-top:10px;padding-top:4px;padding-bottom:8px}#home .home-picture-and-reviews .coaching-photo{top:-20px}#home .hero-copy .home-slogan{top:-30px}
+@media(max-width:680px){main #home{min-height:0}main #home .hero{padding-top:12px;padding-bottom:8px;gap:12px}main #home .hero-copy .home-slogan{font-size:32px;line-height:1.12;letter-spacing:-1px;margin:0 0 8px;top:-8px}#home .home-pricing-note{font-size:15px;line-height:1.5;margin:10px 0}#home .hero-copy>.button{margin-top:4px;padding:12px 18px}#home .home-picture-and-reviews .coaching-photo{top:-14px}#home .benefits{padding-top:10px;padding-bottom:10px;gap:10px}main #home>.home-bottom-row{margin-top:6px;padding-top:2px;padding-bottom:6px}}

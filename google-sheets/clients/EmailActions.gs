@@ -44,13 +44,19 @@ function handleClientEmail(p){
  if(!client||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(client[2])))throw new Error('Client email missing or invalid.');
  let attachment=null;
  if(kind!=='confirmation'){
-  if(typeof p.pdfBase64!=='string'||p.pdfBase64.length>7500000||! /^[A-Za-z0-9+/]*={0,2}$/.test(p.pdfBase64))throw new Error('A valid completed PDF is required.');
-  const bytes=Utilities.base64Decode(p.pdfBase64);
-  if(bytes.length>5500000||String.fromCharCode(...bytes.slice(0,4).map(b=>b&255))!=='%PDF')throw new Error('Invalid PDF attachment.');
+  const word=kind==='notes',encoded=word?p.docxBase64:p.pdfBase64;
+  if(typeof encoded!=='string'||encoded.length>7500000||! /^[A-Za-z0-9+/]*={0,2}$/.test(encoded))throw new Error(word?'A valid Word attachment is required.':'A valid completed PDF is required.');
+  const bytes=Utilities.base64Decode(encoded);
+  if(bytes.length>5500000)throw new Error('Attachment is too large.');
+  if(word){
+   if(bytes.length<4||(bytes[0]&255)!==80||(bytes[1]&255)!==75)throw new Error('Invalid Word attachment.');
+   let parts;try{parts=Utilities.unzip(Utilities.newBlob(bytes,'application/zip'));}catch{throw new Error('Invalid Word attachment.');}
+   const names=parts.map(part=>part.getName());if(!names.includes('[Content_Types].xml')||!names.includes('word/document.xml')||names.some(name=>/vbaProject|\.bin$/i.test(name)))throw new Error('Invalid Word attachment.');
+  }else if(String.fromCharCode(...bytes.slice(0,4).map(byte=>byte&255))!=='%PDF')throw new Error('Invalid PDF attachment.');
   const safeName=value=>String(value||'').normalize('NFKC').replace(/[\\/:*?"<>|\u0000-\u001f\u007f]/g,'-').replace(/\s+/g,' ').trim().replace(/[. ]+$/,'').slice(0,90);
   const level=safeName(client[4]),levelLabel=level?(/^\d+$/.test(level)?'Level '+level:level):'',title={progress:'Progress report',final:'Final exam report',registration:'Registration & payment confirmation',notes:'Notes'}[kind];
-  const filename=[safeName(client[1])||'Student',levelLabel,title,Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')].filter(Boolean).join(' — ')+'.pdf';
-  attachment=Utilities.newBlob(bytes,'application/pdf',filename);
+  const filename=[safeName(client[1])||'Student',levelLabel,title,Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')].filter(Boolean).join(' — ')+(word?'.docx':'.pdf');
+  attachment=Utilities.newBlob(bytes,word?'application/vnd.openxmlformats-officedocument.wordprocessingml.document':'application/pdf',filename);
  }
  const lock=LockService.getScriptLock();lock.waitLock(20000);
  try{

@@ -1,4 +1,4 @@
-const TYPES=new Set(['progress','final','registration']);
+const TYPES=new Set(['progress','final','registration','notes']);
 export const REPORT_TAB_PREFIX='speak-boldly-report-tab-';
 export function openClientReportTab(win,type,client,endpointDefault=''){
  if(!TYPES.has(type)||!client?.id)throw new Error('Choose a client and report first.');

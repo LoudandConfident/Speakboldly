@@ -1,4 +1,4 @@
-import {assertPortalAllowed,noteWrongPassword} from './student-portal-attempts.js?v=weekly-passwords';
+import {assertPortalAllowed,noteWrongPassword} from './student-portal-attempts.js?v=all-inline';
 import {cairoToday} from './admin-calendar.js?v=appointment-x';
 export function initializeStudentBooking(doc){
  const root=doc.querySelector('#portal-calendar');if(!root)return{lock(){}};

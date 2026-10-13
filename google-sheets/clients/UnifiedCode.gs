@@ -51,11 +51,45 @@ function response(data) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+function sbDeleteClientRecord(data){
+ const id=String(data.clientId||'');if(!/^[a-zA-Z0-9-]{1,100}$/.test(id))throw new Error('Choose a valid client.');
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{
+  const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')),sheet=book.getSheetByName('Clients');
+  const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,14).getValues():[],index=rows.findIndex(row=>String(row[0])===id);
+  if(index>=0){let archive=book.getSheetByName('DeletedClients');if(!archive){archive=book.insertSheet('DeletedClients');archive.appendRow(['Deleted at (UTC)','Client ID','Client record JSON']);}const saved=archive.getLastRow()>1?archive.getRange(2,1,archive.getLastRow()-1,3).getValues():[];if(!saved.some(row=>String(row[1])===id))archive.appendRow([new Date().toISOString(),id,JSON.stringify(rows[index])]);}
+  const sessions=book.getSheetByName('Sessions');if(sessions&&sessions.getLastRow()>1){const booked=sessions.getRange(2,1,sessions.getLastRow()-1,2).getValues();for(let i=booked.length-1;i>=0;i--)if(String(booked[i][1])===id)sessions.deleteRow(i+2);}
+  if(index>=0)sheet.deleteRow(index+2);
+  return {ok:true,deleted:true,clientId:id};
+ }finally{lock.releaseLock();}
+}
+// Run once to remove the three clients specifically requested by the instructor.
+function removeRequestedClients(){
+ const sheet=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
+ const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,2).getValues():[];
+ const targets=['mira nasser','mira louis','martina'].map(name=>{const matches=rows.filter(row=>normalizedClientName(String(row[1]).replace(/^'/,''))===name);if(matches.length>1)throw new Error('More than one client named '+name+'. Select the correct client in the portal.');return matches[0];}).filter(Boolean);
+ for(const row of targets)sbDeleteClientRecord({clientId:String(row[0])});
+ console.log('Requested client records removed: '+targets.length+'. Backups are in DeletedClients.');
+}
+// Run manually once to remove only Caroline's previous-level history line.
+function removeCarolinePreviousLevel(){
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{const sheet=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients'),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues():[];
+  const matches=rows.map((row,index)=>({row,index})).filter(({row})=>/^caroline(?:\s|$)/i.test(String(row[1]).replace(/^'/,'').trim()));if(matches.length!==1)throw new Error('Caroline could not be identified uniquely. Open her Edit page to select the correct line.');
+  const {row,index}=matches[0],history=row[10]?JSON.parse(String(row[10])):[],dimmed=history.filter(entry=>String(entry.id).startsWith('advanced-')||entry.reason==='advanced'||entry.level!==String(row[4]));if(dimmed.length!==1)throw new Error('There is not exactly one previous-level line. Open Caroline’s Edit page to choose the correct line.');
+  sheet.getRange(index+2,11).setValue(JSON.stringify(history.filter(entry=>entry.id!==dimmed[0].id)));console.log('Caroline’s previous-level line removed. Refresh Instructor Portal.');
+ }finally{lock.releaseLock();}
+}
 function sbClientEnrollmentChange(previous,input){
  const program=input.program===undefined?String(previous?.[11]||'').replace(/^'/,''):String(input.program||'').trim();if(program.length>150)throw new Error('Check the program.');
  const history=previous?.[10]?JSON.parse(String(previous[10])):[];if(!Array.isArray(history))throw new Error('Check client level history. Existing data was kept.');
  if(input.historyEdit){const edit=input.historyEdit,entry=history.find(item=>item.id===edit.id);if(!entry||typeof edit.level!=='string'||!edit.level||edit.level.length>100||typeof edit.program!=='string'||edit.program.length>150)throw new Error('Check the previous level.');entry.level=edit.level;entry.program=edit.program.trim();}
- if(previous&&(String(previous[4])!==String(input.level)||String(previous[11]||'').replace(/^'/,'')!==program))history.push({id:Utilities.getUuid(),level:String(previous[4]),program:String(previous[11]||'').replace(/^'/,''),closedAt:new Date().toISOString()});
+ if(input.deleteHistoryId){const index=history.findIndex(entry=>entry.id===input.deleteHistoryId);if(index<0)throw new Error('Previous level not found. Refresh clients.');history.splice(index,1);}
+ if(input.advanceLevel===true){
+  if(!previous||input.historyEdit||input.deleteHistoryId)throw new Error('Choose the current client to move to the next level.');
+  if(String(previous[4])===String(input.level)){const last=history[history.length-1];if(!last||last.reason!=='advanced'||last.level!==input.advanceFromLevel)throw new Error('Choose a different level to move this client.');}
+  else{if(input.advanceFromLevel!==String(previous[4]))throw new Error('This client’s level changed on another device. Refresh clients first.');history.push({id:'advanced-'+Utilities.getUuid(),level:String(previous[4]),program:String(previous[11]||'').replace(/^'/,''),closedAt:new Date().toISOString(),reason:'advanced'});}
+ }
  if(history.length>500)throw new Error('Ask your instructor to archive older level history.');return {program,enrollmentHistory:history};
 }
 
@@ -112,6 +146,7 @@ function doPost(event) {
     if(data.action==='sendClientEmail')return handleClientEmail(data);
     if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(data.action))return handleLibraryAction(data);
 
+    if(data.action==='deleteClient')return response(sbDeleteClientRecord(data));
     if (data.action === 'checkConnection') {
       return response({ ok: true, connected: true });
     }
@@ -124,6 +159,7 @@ function doPost(event) {
 
     if (data.action !== 'upsertClient' || !data.client) {
           if (data.action === 'listClients') {
+      lock.waitLock(20000);sbApplySessionHours(SpreadsheetApp.openById(sheetId));
       const rows = sheet.getLastRow() > 1
         ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 12).getValues()
         : [];
@@ -153,7 +189,7 @@ function doPost(event) {
     const level = text(client.level);
     const payment = text(client.payment);
     const amount = Number(client.amountPaid || 0);
-    const hours = Number(client.hours);
+    let hours = Number(client.hours);
 
     if (!/^[A-Za-z0-9-]{1,100}$/.test(id)) {
       throw new Error('Invalid student ID.');
@@ -181,7 +217,7 @@ function doPost(event) {
       throw new Error('Check the amount paid and hours.');
     }
 
-    lock.waitLock(20000);
+    lock.waitLock(20000);sbApplySessionHours(SpreadsheetApp.openById(sheetId));
 
     const rows = sheet.getLastRow() > 1
       ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getValues()
@@ -212,6 +248,7 @@ function doPost(event) {
     const safe = value =>
       /^[=+\-@\t\r]/.test(value) ? "'" + value : value;
 
+    hours=sbSetClientHours(SpreadsheetApp.openById(sheetId),sheet,targetRow,client);
     const previous=targetRow<=sheet.getLastRow()?sheet.getRange(targetRow,1,1,12).getValues()[0]:null;
     const {program,enrollmentHistory}=sbClientEnrollmentChange(previous,client);
     sheet.getRange(targetRow, 4).setNumberFormat('@');
@@ -229,7 +266,7 @@ function doPost(event) {
 
     if(client.permissions!==undefined){sheet.getRange(1,10).setValue('Permissions');sheet.getRange(targetRow,10).setValue(JSON.stringify(client.permissions));}
     sheet.getRange(1,11,1,2).setValues([['Level history','Program']]);sheet.getRange(targetRow,11,1,2).setValues([[JSON.stringify(enrollmentHistory),safe(program)]]);
-    return response({ ok: true, clientId: id,program,enrollmentHistory });
+    return response({ ok: true, clientId: id,program,enrollmentHistory,hours });
 
   } catch (error) {
     return response({ ok: false, error: error.message });
@@ -397,13 +434,19 @@ function handleClientEmail(p){
  if(!client||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(client[2])))throw new Error('Client email missing or invalid.');
  let attachment=null;
  if(kind!=='confirmation'){
-  if(typeof p.pdfBase64!=='string'||p.pdfBase64.length>7500000||! /^[A-Za-z0-9+/]*={0,2}$/.test(p.pdfBase64))throw new Error('A valid completed PDF is required.');
-  const bytes=Utilities.base64Decode(p.pdfBase64);
-  if(bytes.length>5500000||String.fromCharCode(...bytes.slice(0,4).map(b=>b&255))!=='%PDF')throw new Error('Invalid PDF attachment.');
+  const word=kind==='notes',encoded=word?p.docxBase64:p.pdfBase64;
+  if(typeof encoded!=='string'||encoded.length>7500000||! /^[A-Za-z0-9+/]*={0,2}$/.test(encoded))throw new Error(word?'A valid Word attachment is required.':'A valid completed PDF is required.');
+  const bytes=Utilities.base64Decode(encoded);
+  if(bytes.length>5500000)throw new Error('Attachment is too large.');
+  if(word){
+   if(bytes.length<4||(bytes[0]&255)!==80||(bytes[1]&255)!==75)throw new Error('Invalid Word attachment.');
+   let parts;try{parts=Utilities.unzip(Utilities.newBlob(bytes,'application/zip'));}catch{throw new Error('Invalid Word attachment.');}
+   const names=parts.map(part=>part.getName());if(!names.includes('[Content_Types].xml')||!names.includes('word/document.xml')||names.some(name=>/vbaProject|\.bin$/i.test(name)))throw new Error('Invalid Word attachment.');
+  }else if(String.fromCharCode(...bytes.slice(0,4).map(byte=>byte&255))!=='%PDF')throw new Error('Invalid PDF attachment.');
   const safeName=value=>String(value||'').normalize('NFKC').replace(/[\\/:*?"<>|\u0000-\u001f\u007f]/g,'-').replace(/\s+/g,' ').trim().replace(/[. ]+$/,'').slice(0,90);
   const level=safeName(client[4]),levelLabel=level?(/^\d+$/.test(level)?'Level '+level:level):'',title={progress:'Progress report',final:'Final exam report',registration:'Registration & payment confirmation',notes:'Notes'}[kind];
-  const filename=[safeName(client[1])||'Student',levelLabel,title,Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')].filter(Boolean).join(' — ')+'.pdf';
-  attachment=Utilities.newBlob(bytes,'application/pdf',filename);
+  const filename=[safeName(client[1])||'Student',levelLabel,title,Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')].filter(Boolean).join(' — ')+(word?'.docx':'.pdf');
+  attachment=Utilities.newBlob(bytes,word?'application/vnd.openxmlformats-officedocument.wordprocessingml.document':'application/pdf',filename);
  }
  const lock=LockService.getScriptLock();lock.waitLock(20000);
  try{
@@ -791,3 +834,23 @@ function handleOwnerBooking(data){
   return sbExamResponse({ok:true,enabled:props.getProperty('SB_BOOKING_ENABLED')==='true',passcode:sbWeeklyPortalPasswords().passwords.calendar,notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||''});
  }catch(error){return sbExamResponse({ok:false,error:error.message});}
 }
+
+function sbCountedSessionHours(book,id){const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return 0;const rows=sheet.getRange(2,1,sheet.getLastRow()-1,13).getValues(),ids=new Set();for(const row of rows)if(String(row[1])===id&&String(row[7])!=='cancelled'&&row[12]==='counted')ids.add(String(row[0]));return ids.size*1.5;}
+function sbApplySessionHours(book){
+ const sessions=book.getSheetByName('Sessions'),clients=book.getSheetByName('Clients');if(!sessions||!clients)return;
+ const props=PropertiesService.getScriptProperties(),first=props.getProperty('SB_SESSION_HOURS_READY')!=='1',today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');
+ sessions.getRange(1,13).setValue('Hours counted');clients.getRange(1,13,1,2).setValues([['Hours baseline','Hours baseline set at (UTC)']]);
+ const people=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,14).getValues():[];
+ for(let i=0;i<people.length;i++)if(people[i][0]&&people[i][12]===''){people[i][12]=Number(people[i][7])||0;clients.getRange(i+2,13,1,2).setValues([[people[i][12],new Date().toISOString()]]);}
+ const rows=sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,13).getValues():[];
+ for(let i=0;i<rows.length;i++){const row=rows[i];if(row[0]&&/^\d{4}-\d{2}-\d{2}$/.test(String(row[3]))&&String(row[3])<today&&!row[12]){row[12]=String(row[3])<'2026-10-14'?'baseline':'counted';sessions.getRange(i+2,13).setValue(row[12]);}}
+ props.setProperty('SB_SESSION_HOURS_READY','1');
+ for(let i=0;i<people.length;i++){const person=people[i];if(!person[0])continue;const ids=new Set(rows.filter(row=>String(row[1])===String(person[0])&&row[7]!=='cancelled'&&row[12]==='counted').map(row=>String(row[0])));const total=Math.round((Number(person[12])+ids.size*1.5)*100)/100;if(Number(person[7])!==total)clients.getRange(i+2,8).setValue(total);}
+}
+function sbSetClientHours(book,sheet,row,input){
+ if(row>sheet.getLastRow())return Number(input.hours);
+ const previous=sheet.getRange(row,1,1,14).getValues()[0];if(input.hoursChanged===false)return Number(previous[7]);
+ const baseline=Number(input.hours)-sbCountedSessionHours(book,String(previous[0]));if(baseline<0)throw new Error('Hours include completed sessions. Cancel an incorrect session before reducing its counted hours.');sheet.getRange(row,13,1,2).setValues([[baseline,new Date().toISOString()]]);return Number(input.hours);
+}
+function updateSessionHours(){const lock=LockService.getScriptLock();lock.waitLock(20000);try{sbApplySessionHours(SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')));}finally{lock.releaseLock();}}
+function enableAutomaticSessionHours(){updateSessionHours();if(!ScriptApp.getProjectTriggers().some(trigger=>trigger.getHandlerFunction()==='updateSessionHours'))ScriptApp.newTrigger('updateSessionHours').timeBased().everyDays(1).atHour(0).nearMinute(15).inTimezone('Africa/Cairo').create();}

@@ -19,13 +19,19 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': session c
  programs[1]=SESSION_PROGRAMS.find(program=>program.id==='writing').title;
  for(const [index,program]of programs.entries()){const saved=owner({action:'saveSession',session:{clientId:'student-1',number:[5,2,1][index],date:slots[index].date,time:slots[index].time,program,level:'1'}});assert.equal(saved.ok,true,saved.error);}
  const move={id:'student-1',name:'Test Student',email:'private@example.com',code:'1234',level:'2',program:programs[0],payment:'Paid',amountPaid:100,hours:0,permissions:[]};
- const advanced=owner({action:'upsertClient',client:move});assert.equal(advanced.ok,true,advanced.error);assert.equal(advanced.enrollmentHistory.length,1);assert.equal(advanced.enrollmentHistory[0].level,'1');
+ const advanced=owner({action:'upsertClient',client:{...move,advanceLevel:true,advanceFromLevel:'1'}});assert.equal(advanced.ok,true,advanced.error);assert.equal(advanced.enrollmentHistory.length,1);assert.equal(advanced.enrollmentHistory[0].level,'1');
  assert.equal(owner({action:'upsertClient',client:move}).enrollmentHistory.length,1);
  const current=owner({action:'listClients'}).clients.find(item=>item.id==='student-1');assert.equal(current.level,'2');assert.equal(current.enrollmentHistory[0].level,'1');
  const sessions=owner({action:'listSessions'}).classes;assert(sessions.every(item=>item.level==='1'));assert.equal(sessions[0].program,programs[0]);
+ const changedProgram={...move,program:programs[1]};assert.equal(owner({action:'upsertClient',client:changedProgram}).enrollmentHistory.length,1);assert.equal(owner({action:'upsertClient',client:move}).enrollmentHistory.length,1);
+ const corrected={...move,level:'3'};assert.equal(owner({action:'upsertClient',client:corrected}).enrollmentHistory.length,1);assert.equal(owner({action:'upsertClient',client:move}).enrollmentHistory.length,1);
+ assert.equal(owner({action:'upsertClient',client:{...move,advanceLevel:true,advanceFromLevel:'2'}}).ok,false);
  const edited=owner({action:'upsertClient',client:{...move,historyEdit:{id:advanced.enrollmentHistory[0].id,level:'A1',program:programs[0]}}});assert.equal(edited.ok,true);assert.equal(edited.enrollmentHistory[0].level,'A1');assert.equal(owner({action:'listClients'}).clients.find(item=>item.id==='student-1').level,'2');
  // Immutable session snapshots retain Level 1 even after editing the history line.
  assert(owner({action:'listSessions'}).classes.every(item=>item.level==='1'));
  const rows=f.sheets.get('Sessions').rows.slice(1),email=f.context.sbCalendarEmail(client,rows);assert.match(email.body,/Conversation-based General English — Session 5/);assert(email.body.includes(programs[1]+' — Session 2'));assert.match(email.body,/Conversation-based General English — Trial session/);assert.match(email.body,/Level 1/);assert.doesNotMatch(email.body,/Level 2/);assert.match(email.htmlBody,/Level 1/);
- assert.equal(f.sheets.get('Clients').rows.length,3);
+ const deleted=owner({action:'upsertClient',client:{...move,deleteHistoryId:advanced.enrollmentHistory[0].id}});assert.equal(deleted.ok,true);assert.equal(deleted.enrollmentHistory.length,0);assert.equal(owner({action:'listClients'}).clients.find(item=>item.id==='student-1').level,'2');assert.equal(owner({action:'listSessions'}).classes.length,3);
+ assert.equal(request({action:'deleteClient',clientId:'student-1',key:'wrong'}).ok,false);
+ const removed=owner({action:'deleteClient',clientId:'student-1'});assert.equal(removed.deleted,true);assert.equal(f.sheets.get('Sessions').rows.length,1);assert.equal(f.sheets.get('Clients').rows.length,2);assert.equal(f.sheets.get('DeletedClients').rows.length,2);assert.equal(owner({action:'deleteClient',clientId:'student-1'}).deleted,true);assert.equal(f.sheets.get('DeletedClients').rows.length,2);
+ assert.equal(f.sheets.get('Clients').rows.length,2);
 });
