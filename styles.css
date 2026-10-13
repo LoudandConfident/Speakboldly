@@ -321,3 +321,25 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 #admin-dashboard,#admin-overview{min-width:0;max-width:100%}#teacher-full-library .teacher-library-folders{width:100%;max-width:100%;min-width:0}#teacher-full-library .teacher-library-folder{width:100%;max-width:100%;min-width:0;box-sizing:border-box}#teacher-full-library .teacher-library-controls{width:100%;min-width:0;max-width:100%}.teacher-library-picker{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);align-items:center;gap:10px;flex:1 1 100%;width:100%;min-width:0;max-width:100%}.teacher-library-picker>.button{flex:none;width:auto;justify-self:start}.teacher-library-selection{min-width:0;max-width:100%;overflow-wrap:anywhere;font-size:12px;line-height:1.5}@media(max-width:680px){#teacher-full-library{width:100%;max-width:100%}.teacher-library-picker{gap:8px}.teacher-library-picker>.button{font-size:12px;padding:9px 10px;min-height:40px}}
 
 #students-portal[data-instructor-only] [data-portal-area="client"],#students-portal[data-instructor-only] #client-portal{display:none!important}#students-portal[data-instructor-only] .portal-area-choices{grid-template-columns:minmax(0,1fr);max-width:420px}
+
+/* Student Portal contains only authorized level assessments. */
+#students-portal[data-global-portal] [data-portal-tab]:not([data-portal-tab="exams"]):not([data-portal-tab="exercises"]):not([data-portal-tab="material"]),
+#students-portal[data-global-portal] [data-portal-panel]:not([data-portal-panel="exams"]):not([data-portal-panel="exercises"]):not([data-portal-panel="material"]){display:none!important}
+.student-assessment-start{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:650px;margin:24px 0}
+.student-assessment-start label{display:flex;flex-direction:column;gap:8px;min-width:0}
+.student-assessment-start input,.student-assessment-start select{width:100%;min-width:0;box-sizing:border-box;font:inherit;padding:12px;border:1px solid var(--line);border-radius:6px;background:var(--paper,#fff)}
+.student-assessment-start>.button{grid-column:1/-1;justify-self:start}
+.assessment-save-controls{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}
+#portal-exams .portal-document-viewer{min-width:0;max-width:100%}
+@media(max-width:680px){.student-assessment-start{grid-template-columns:minmax(0,1fr)}.student-assessment-start input,.student-assessment-start select{font-size:16px}.assessment-save-controls>.button{flex:1;min-width:0}}
+
+.portal-access-switch{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.portal-access-switch>span{min-width:0;overflow-wrap:anywhere}
+.portal-access-switch>button{flex:none;margin:0!important;min-width:112px}
+.portal-item-dimmed>span{opacity:.45}
+.portal-switch-list>details{margin:18px 0;min-width:0}
+.student-portal-file{display:flex;align-items:center;gap:12px;margin:12px 0;min-width:0}
+.student-portal-file>a,.student-portal-file>button{max-width:100%;white-space:normal;text-align:left;overflow-wrap:anywhere}
+.student-portal-file>button:disabled{opacity:.4;cursor:not-allowed}
+.student-assessment-timer{font-size:20px;font-weight:700;padding:12px 0;position:sticky;top:0;background:var(--paper,#fff);z-index:1}
+.student-assessment-start>label:last-of-type{grid-column:1/-1}

@@ -21,9 +21,11 @@ function handleClientSync(e){
  try{
   if(!e?.postData?.contents||e.postData.contents.length>8000000)throw new Error('Invalid request.');
   const p=JSON.parse(e.postData.contents),props=PropertiesService.getScriptProperties();
+  if(typeof SB_STUDENT_EXAM_ACTIONS!=='undefined'&&SB_STUDENT_EXAM_ACTIONS.includes(p.action)){if(e.postData.contents.length>65000)throw new Error('Request too large.');return handleStudentExam(p);}
   const key=props.getProperty('CLIENT_SYNC_KEY');
   if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
   if(!['sendClientEmail','uploadLibraryFile'].includes(p.action)&&e.postData.contents.length>20000)throw new Error('Request too large.');
+  if(typeof SB_INSTRUCTOR_EXAM_ACTIONS!=='undefined'&&SB_INSTRUCTOR_EXAM_ACTIONS.includes(p.action))return handleInstructorExam(p);
   if(p.action==='sendClientEmail'){if(typeof handleClientEmail!=='function')throw new Error('Add EmailActions.gs and authorizeClientEmails, then deploy a New version to enable email sending.');return handleClientEmail(p);}
   if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(p.action)){if(typeof handleLibraryAction!=='function')throw new Error('Add LibraryActions.gs to enable library sharing.');return handleLibraryAction(p);}
   if(p.action==='checkConnection')return clientSyncResponse({ok:true,connected:true});

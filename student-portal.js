@@ -1,3 +1,4 @@
+import {initializeStudentAssessment} from './student-assessment.js?v=global-tests';
 import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {takeStudentAttempt} from './student-attempts.js';
@@ -9,6 +10,7 @@ import {portalResources} from './portal-config.js';
 import {loadPortalMaterials} from './portal-materials.js';
 export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMaterials){
  const root=doc.querySelector('#students-portal');if(!root)return;
+ if(root.hasAttribute('data-global-portal'))return initializeStudentAssessment(doc);
  const instructorOnly=root.hasAttribute('data-instructor-only');
  const areaButtons=[...root.querySelectorAll('[data-portal-area]')];
  root.querySelector('#portal-sign-out')?.addEventListener('click',()=>{lock(false);doc.dispatchEvent(new doc.defaultView.Event('portal-sign-out'));root.querySelector('#client-portal').hidden=true;root.querySelector('#admin-portal').hidden=true;doc.defaultView.location.hash='students-portal';});
