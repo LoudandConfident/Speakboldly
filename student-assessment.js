@@ -1,3 +1,4 @@
+import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js';
 import {createExamForm} from './exam-form.js';
 import {getLevelExamText} from './exam-questions.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
@@ -95,11 +96,11 @@ export function initializeStudentAssessment(doc) {
   };
  }
  async function openStudent(){
-  const current=epoch;content.hidden=false;root.classList.add('portal-session-active');root.querySelector('#student-folder-title').textContent='Student portal';select('exams');status.textContent='Loading available files and assessments…';
+  const current=epoch;content.hidden=false;root.classList.add('portal-session-active');root.querySelector('#student-folder-title').textContent='Student portal';select('exams');status.textContent='Loading available files and assessments…';renderFiles([]);showAssessment([]);attachTemporaryPortalUploads(doc);
   try{const response=await call('studentPortalAccess');if(current!==epoch)return;
    let saved;try{saved=JSON.parse(doc.defaultView.sessionStorage.getItem(SESSION_KEY)||'null');}catch{}
    if(saved?.token&&saved?.student){token=saved.token;student=saved.student;}
-   renderFiles(response.items);showAssessment(response.items);status.textContent='Dimmed items are currently closed. Your instructor controls what is open.';
+   renderFiles(response.items);showAssessment(response.items);attachTemporaryPortalUploads(doc);status.textContent='Dimmed items are currently closed. Your instructor controls what is open.';
    if(token&&Number.isInteger(saved.level))await openLevel(saved.level);
   }catch(error){if(current===epoch)status.textContent=error.message;}
  }

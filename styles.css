@@ -343,3 +343,7 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 .student-portal-file>button:disabled{opacity:.4;cursor:not-allowed}
 .student-assessment-timer{font-size:20px;font-weight:700;padding:12px 0;position:sticky;top:0;background:var(--paper,#fff);z-index:1}
 .student-assessment-start>label:last-of-type{grid-column:1/-1}
+
+#students-portal.portal-session-active>#portal-sign-out{font-size:12px;padding:6px 10px;min-height:30px;margin-bottom:14px}
+.temporary-portal-uploads{max-width:100%;min-width:0;margin:18px 0 24px;gap:10px}
+.temporary-portal-uploads>[role=status]{flex-basis:100%;margin:0;font-size:13px;overflow-wrap:anywhere}

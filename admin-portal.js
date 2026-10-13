@@ -5,7 +5,7 @@ import {openClientReportTab} from './report-tabs.js';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail} from './client-sheet.js?v=full-library';
 import {initializeExamReview} from './sheet-exam-review.js?v=sheet-assessment';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=full-library';
+import {initializeAdminCalendar} from './admin-calendar.js?v=appointment-x';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=four-digit-restored';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=four-digit-restored';
 import {loadPortalMaterials} from './portal-materials.js';
