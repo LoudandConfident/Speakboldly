@@ -68,6 +68,7 @@ function handleSheetSessionAction(p){
    if(rows[index][7]==='sending')throw new Error('A reminder is being sent. Try again shortly.');
    sheet.getRange(index+2,8).setValue('cancelled');
   }
+  sbApplySessionHours(SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')));
   const props=PropertiesService.getScriptProperties();
   const ready=typeof handleClientEmail==='function';
   const respond=typeof clientSyncResponse==='function'?clientSyncResponse:response;
