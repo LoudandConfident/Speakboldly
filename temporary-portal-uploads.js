@@ -2,6 +2,8 @@ import {MATERIAL_PROGRAM_FOLDERS} from './material-program-folders.js?v=comprehe
 // Temporary instructor upload controls. Remove this module when setup is finished.
 export function attachTemporaryPortalUploads(doc) {
  const root=doc.querySelector('#students-portal'),expected=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
+ let owner;try{owner=JSON.parse(doc.defaultView.localStorage.getItem('speak-boldly-client-sheet-connection-v1')||'null');}catch{}
+ if(!owner||owner.endpoint!==expected||typeof owner.key!=='string'||!owner.key)return;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
  const targets=[['portal-exercises','exercises','exercises'],...[...root.querySelectorAll('[data-material-level],[data-material-program]')].map(folder=>[folder,'material','levels',folder.dataset.materialLevel||folder.dataset.materialProgram])];
  for(const [id,section,group,folderKey]of targets) {
@@ -11,7 +13,7 @@ export function attachTemporaryPortalUploads(doc) {
   const choose=text('button','Choose files'),upload=text('button','Upload files');choose.type=upload.type='button';choose.className=upload.className='button light small';
   const level=doc.createElement('select');level.setAttribute('aria-label','Material folder');level.append(Object.assign(text('option','Choose folder'),{value:''}));for(let n=1;n<=8;n++)level.append(Object.assign(text('option','Level '+n),{value:String(n)}));for(const program of MATERIAL_PROGRAM_FOLDERS)level.append(Object.assign(text('option',program.title),{value:program.id}));if(folderKey)level.value=folderKey;else if(section==='material')controls.append(level);
   const selection=text('span','No files selected');selection.className='teacher-library-selection';selection.setAttribute('aria-live','polite');
-  const note=text('p','Temporary instructor upload');note.setAttribute('role','status');
+  const note=text('p','');note.setAttribute('role','status');
   choose.onclick=()=>input.click();input.onchange=()=>{selection.textContent=input.files.length?[...input.files].map(file=>file.name).join(', '):'No files selected';};
   async function request(connection,action,data) {
    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45000);

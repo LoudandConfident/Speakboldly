@@ -96,6 +96,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
   const displayed=new Set([...options.querySelectorAll('input')].map(input=>input.value));for(const value of allowed){if(displayed.has(value))continue;const input=doc.createElement('input');input.type='hidden';input.name='permissions';input.value=value;options.append(input);}
  }
  async function loadAccessOptions(){
+  if(root.querySelector('.admin-access-detail')?.hidden){materialCatalog={};return;}
   const status=root.querySelector('#admin-access-status');status.textContent='Loading file permissions…';let failed=false;
   await Promise.all(Object.keys(PORTAL_SECTIONS).map(async section=>{try{materialCatalog[section]=await loader(section);}catch{failed=true;}}));
   const selected=editingId?clients.find(c=>c.id===editingId)?.permissions||[]:[...new doc.defaultView.FormData(form).getAll('permissions')];renderAccess(selected);status.textContent=failed?'Some files could not be listed. Existing permissions are kept; reopen the dashboard to retry.':'';

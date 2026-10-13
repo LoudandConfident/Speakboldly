@@ -1,8 +1,7 @@
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=all-inline';
-import {initializeMaterialOwnerLibrary} from './material-owner-library.js';
 import {MATERIAL_PROGRAM_FOLDERS,materialProgram} from './material-program-folders.js?v=comprehension-listening';
 import {initializeStudentBooking} from './student-booking.js?v=all-inline';
-import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=assessment-locked';
+import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=clean-material';
 import {createExamForm} from './exam-form.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 
@@ -11,7 +10,6 @@ export function initializeStudentAssessment(doc) {
  const root=doc.querySelector('#students-portal'),content=root.querySelector('#portal-content'),status=root.querySelector('#portal-access-status'),panel=root.querySelector('#portal-exams');
  const blocked=doc.createElement('p');blocked.id='student-portal-lockout';blocked.hidden=true;blocked.setAttribute('role','alert');content.before(blocked);
  const booking=initializeStudentBooking(doc);
- const ownerLibrary=initializeMaterialOwnerLibrary(doc);
  const profile=doc.createElement('section');profile.id='student-assessment-profile';profile.className='assessment-entry';profile.hidden=true;profile.setAttribute('aria-label','Assessment details');
  const endpoint=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
  const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['exercises','material','comprehension','listening','exams','calendar'].includes(el.dataset.portalTab));
@@ -31,8 +29,8 @@ export function initializeStudentAssessment(doc) {
  }
  const collect=form=>{const answers={A:{},B:{},C:{},D:'',E:''};for(const [name,value]of new doc.defaultView.FormData(form)){const [section,number]=name.split('.');if(number)answers[section][number]=section==='A'?Number(value):value;else answers[section]=value;}return answers;};
  function remember(level){try{doc.defaultView.sessionStorage.setItem(SESSION_KEY,JSON.stringify({token,student,level}));}catch{}}
- function lock(){epoch++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));clearFolderPasswords(doc);clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);profile.hidden=true;booking.lock();ownerLibrary.lock();token='';student=null;assessmentUnlocked=false;resumableSession=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
- function select(id){assertPortalAllowed(doc.defaultView.localStorage);if(id==='material')ownerLibrary.refresh();tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);}
+ function lock(){epoch++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));clearFolderPasswords(doc);clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);profile.hidden=true;booking.lock();token='';student=null;assessmentUnlocked=false;resumableSession=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
+ function select(id){assertPortalAllowed(doc.defaultView.localStorage);tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);}
  function updatePasswordMetadata(response){
   const next=response.passwordSettings||null;
   if(passwordMetadata&&next?.revision!==passwordMetadata.revision){clearFolderPasswords(doc);root.querySelectorAll('#portal-material details').forEach(folder=>folder.open=false);if(tabs.some(tab=>['material','exercises','comprehension','listening'].includes(tab.dataset.portalTab)&&tab.getAttribute('aria-selected')==='true'))select(null);status.textContent='The weekly passwords have changed. Please ask your instructor for this week’s password.';}
@@ -94,7 +92,7 @@ export function initializeStudentAssessment(doc) {
  }
  function renderFiles(items){
   for(const [section,id,title]of [['exercises','portal-exercises','Exercises'],['levels','portal-material','Material'],['levels','portal-comprehension','Comprehension'],['levels','portal-listening','Listening']]){
-   const target=root.querySelector('#'+id),previousFolders=new Map([...target.querySelectorAll('[data-material-level],[data-material-program]')].map(folder=>[folder.dataset.materialLevel||folder.dataset.materialProgram,{open:folder.open,uploads:folder.querySelector(':scope>.temporary-portal-uploads'),password:folder.querySelector(':scope>.portal-password-entry'),locked:folder.dataset.passwordLocked}])),uploads=target.querySelector(':scope>.temporary-portal-uploads'),library=target.querySelector('#teacher-full-library'),passwordForm=target.querySelector(':scope>.portal-password-entry');target.replaceChildren(text('h3',title));if(passwordForm)target.append(passwordForm);if(uploads)target.append(uploads);if(library)target.append(library);
+   const target=root.querySelector('#'+id),previousFolders=new Map([...target.querySelectorAll('[data-material-level],[data-material-program]')].map(folder=>[folder.dataset.materialLevel||folder.dataset.materialProgram,{open:folder.open,uploads:folder.querySelector(':scope>.temporary-portal-uploads'),password:folder.querySelector(':scope>.portal-password-entry'),locked:folder.dataset.passwordLocked}])),uploads=target.querySelector(':scope>.temporary-portal-uploads'),passwordForm=target.querySelector(':scope>.portal-password-entry');target.replaceChildren(text('h3',title));if(passwordForm)target.append(passwordForm);if(uploads)target.append(uploads);
    const skill=target.dataset.materialProgram,folders=new Map();if(section==='levels'&&!skill){for(let n=1;n<=8;n++){const folder=doc.createElement('details');folder.className='material-level-folder';folder.dataset.materialLevel=n;folder.append(text('summary','Level '+n));const previous=previousFolders.get(String(n));if(previous){folder.open=previous.open;if(previous.locked)folder.dataset.passwordLocked=previous.locked;if(previous.password)folder.append(previous.password);if(previous.uploads)folder.append(previous.uploads);}target.append(folder);folders.set(n,folder);}for(const program of MATERIAL_PROGRAM_FOLDERS.filter(program=>!['comprehension','listening'].includes(program.id))){const folder=doc.createElement('details');folder.className='material-level-folder';folder.dataset.materialProgram=program.id;folder.append(text('summary',program.title));const previous=previousFolders.get(program.id);if(previous){folder.open=previous.open;if(previous.locked)folder.dataset.passwordLocked=previous.locked;if(previous.password)folder.append(previous.password);if(previous.uploads)folder.append(previous.uploads);}target.append(folder);folders.set(program.id,folder);}}
    for(const item of items.filter(item=>item.section===section&&(section!=='levels'||(skill?materialProgram(item)?.id===skill:!['comprehension','listening'].includes(materialProgram(item)?.id))))){
     const row=doc.createElement('div');row.className='student-portal-file';let control;
@@ -102,7 +100,7 @@ export function initializeStudentAssessment(doc) {
     else{control=text('button',item.title+' · Closed');control.type='button';control.disabled=true;}
     control.className='button light';row.append(control);if(section==='levels'&&!skill){let source=item.title+' '+item.url;try{source=decodeURIComponent(source);}catch{}const match=source.match(/\blevel[ _-]*([1-8])\b/i);const program=materialProgram(item);if(program)folders.get(program.id).append(row);else if(match)folders.get(Number(match[1])).append(row);else{let other=folders.get(0);if(!other){other=doc.createElement('details');other.className='material-level-folder';other.append(text('summary','Other material'));target.append(other);folders.set(0,other);}other.append(row);}}else target.append(row);
    }
-   for(const folder of folders.values())if(!folder.querySelector('.student-portal-file'))folder.append(text('p','Material will be added here.'));
+   for(const folder of folders.values())if(!folder.querySelector('.student-portal-file'))folder.append(text('p','No files yet.'));
    if((section!=='levels'||skill)&&!target.querySelector('.student-portal-file'))target.append(text('p','Your instructor will add files here.'));
   }
  }
