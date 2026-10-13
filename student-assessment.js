@@ -18,7 +18,7 @@ export function initializeStudentAssessment(doc) {
   try {
    const response=await doc.defaultView.fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action,token,...data}),signal:controller.signal});
    const result=await response.json();
-   if(!response.ok||!result.ok)throw new Error(/Incorrect connection key|Not authorized|Invalid action/.test(result.error||'')?'Your instructor needs to deploy the updated portal script first.':result.error||'The assessment could not be saved.');
+   if(!response.ok||!result.ok)throw new Error(/Incorrect connection key|Not authorized|Invalid action/.test(result.error||'')?'This part of the portal is not ready yet. Please contact your instructor.':result.error||'The assessment could not be saved.');
    return result;
   }catch(error){if(error.name==='AbortError')throw new Error('Google Sheets took too long to respond. Retry; submitted answers will not be duplicated.');if(error instanceof TypeError)throw new Error('Could not reach the portal. Please check your connection and try again.');throw error;}
   finally{clearTimeout(timer);}
@@ -27,7 +27,7 @@ export function initializeStudentAssessment(doc) {
  function remember(level){try{doc.defaultView.sessionStorage.setItem(SESSION_KEY,JSON.stringify({token,student,level}));}catch{}}
  function lock(){epoch++;clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);if(profile.open)profile.close();booking.lock();token='';student=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
  function select(id){tabs.forEach(tab=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);}
- tabs.forEach(tab=>tab.onclick=()=>{select(tab.dataset.portalTab);if(tab.dataset.portalTab==='exams'&&!busy&&!profile.open)profile.showModal();});
+ tabs.forEach(tab=>tab.onclick=()=>select(tab.dataset.portalTab));
  function result(attempt,viewer){
   clearInterval(tick);busy=false;viewer.replaceChildren(text('h4','Level '+attempt.level),text('p',attempt.status==='Reviewed'?'Score: '+attempt.score+' / 100':'Assessment submitted — awaiting your instructor’s correction.'));
   if(attempt.feedback)viewer.append(text('p',attempt.feedback));
@@ -95,7 +95,7 @@ export function initializeStudentAssessment(doc) {
   const level=text('label','Level:'),selectLevel=doc.createElement('select');selectLevel.name='level';selectLevel.required=true;
   selectLevel.append(Object.assign(text('option','Choose your level'),{value:''}));
   for(const item of items.filter(item=>item.section==='tests')){const option=text('option',item.title+(item.enabled?'':' · Closed'));option.value=item.id.split(':')[1];option.disabled=!item.enabled;selectLevel.append(option);}level.append(selectLevel);
-  const start=text('button','Start assessment');start.className='button';start.type='submit';selection.append(password,name,level,age,program,start);const close=text('button','×');close.type='button';close.className='popup-close';close.setAttribute('aria-label','Close assessment details');close.onclick=()=>profile.close();profile.replaceChildren(close,text('h2','Assessment details'),selection);if(open&&!profile.open&&!doc.defaultView.location.hash.endsWith('/calendar'))profile.showModal();
+  const start=text('button','Start assessment');start.className='button';start.type='submit';selection.append(password,name,level,age,program,start);const close=text('button','×');close.type='button';close.className='popup-close';close.setAttribute('aria-label','Close assessment details');close.onclick=()=>profile.close();profile.replaceChildren(close,text('h2','Assessment details'),selection);
   selection.onsubmit=async event=>{
    event.preventDefault();if(busy){status.textContent='Finish the current assessment before starting another.';return;}if(passwordInput.value!=='1111'){status.textContent='Incorrect assessment password.';passwordInput.setCustomValidity('Incorrect assessment password.');passwordInput.reportValidity();passwordInput.oninput=()=>passwordInput.setCustomValidity('');return;}const current=epoch;start.disabled=true;
    try{const response=await call('studentExamLogin',{passcode:passwordInput.value,name:nameInput.value.trim(),program:programInput.value.trim(),age:Number(ageInput.value)});if(current!==epoch)return;token=response.token;student=response.student;profile.close();await openLevel(Number(selectLevel.value));}
