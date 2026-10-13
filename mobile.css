@@ -78,3 +78,5 @@
  #admin-students-list .admin-clients-table td:last-child::before{display:none}
  #admin-students-list .admin-client-actions .button{flex:1;font-size:13px;padding:10px 14px}
 }
+
+@media(max-width:680px){#admin-portal{padding:0;background:transparent;border:0}#admin-students-list .admin-clients-heading{flex-wrap:nowrap;gap:12px}#admin-students-list .admin-clients-heading h3{width:auto;margin:0}#admin-students-list .admin-clients-heading #refresh-sheet-clients{flex:none;margin-left:auto;min-height:44px;padding:10px 14px}#admin-students-list .admin-clients-table tr{background:transparent;border-radius:0;box-shadow:none;border-bottom:1px solid var(--line);padding:16px 0;margin:0}#admin-dashboard .admin-detail{padding:16px 0;background:transparent;border-radius:0}}
