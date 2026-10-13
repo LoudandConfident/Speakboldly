@@ -288,7 +288,7 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 }
 @media(max-width:680px){
  #home .home-picture-and-reviews{top:0;gap:12px}
- #home .home-speech-links{position:relative;top:0;margin:0;z-index:1}
+ #home .home-speech-links{position:relative;top:-10px;margin:0;z-index:1}
  #home .home-picture-and-reviews .coaching-photo{position:relative;top:-6px}
 }
 
