@@ -1,4 +1,4 @@
-import {initializeBookingSettings} from './booking-settings.js';
+import {initializeBookingSettings} from './booking-settings.js?v=shared-attempts';
 import {confirmClientEmail} from './client-email-confirmation.js';
 import {initializePortalSwitches} from './portal-switches.js?v=comprehension-listening';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=popup-email';

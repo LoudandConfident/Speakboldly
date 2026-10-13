@@ -1,6 +1,7 @@
+import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js';
 import {initializeMaterialOwnerLibrary} from './material-owner-library.js';
 import {MATERIAL_PROGRAM_FOLDERS,materialProgram} from './material-program-folders.js?v=comprehension-listening';
-import {initializeStudentBooking} from './student-booking.js';
+import {initializeStudentBooking} from './student-booking.js?v=shared-attempts';
 import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=comprehension-listening';
 import {createExamForm} from './exam-form.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
@@ -8,6 +9,7 @@ import {openPopup} from './popups.js?v=mobile-assessment-page';
 const SESSION_KEY='speak-boldly-assessment-session-v1';
 export function initializeStudentAssessment(doc) {
  const root=doc.querySelector('#students-portal'),content=root.querySelector('#portal-content'),status=root.querySelector('#portal-access-status'),panel=root.querySelector('#portal-exams');
+ const blocked=doc.createElement('p');blocked.id='student-portal-lockout';blocked.hidden=true;blocked.setAttribute('role','alert');content.before(blocked);
  const booking=initializeStudentBooking(doc);
  const ownerLibrary=initializeMaterialOwnerLibrary(doc);
  const profile=doc.createElement('dialog');profile.id='student-assessment-profile';profile.className='action-popup';profile.setAttribute('aria-label','Assessment details');doc.body.append(profile);
@@ -16,6 +18,7 @@ export function initializeStudentAssessment(doc) {
  let token='',student=null,epoch=0,saveTimer,tick,accessTimer,queue=Promise.resolve(),busy=false;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
  async function call(action,data={}) {
+  assertPortalAllowed(doc.defaultView.localStorage);
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
   try {
    const response=await doc.defaultView.fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action,token,...data}),signal:controller.signal});
@@ -27,9 +30,10 @@ export function initializeStudentAssessment(doc) {
  }
  const collect=form=>{const answers={A:{},B:{},C:{},D:'',E:''};for(const [name,value]of new doc.defaultView.FormData(form)){const [section,number]=name.split('.');if(number)answers[section][number]=section==='A'?Number(value):value;else answers[section]=value;}return answers;};
  function remember(level){try{doc.defaultView.sessionStorage.setItem(SESSION_KEY,JSON.stringify({token,student,level}));}catch{}}
- function lock(){epoch++;clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);if(profile.open)profile.close();booking.lock();ownerLibrary.lock();token='';student=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
- function select(id){if(id==='material')ownerLibrary.refresh();tabs.forEach(tab=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);}
- tabs.forEach(tab=>tab.onclick=()=>select(tab.dataset.portalTab));
+ function lock(){epoch++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));clearFolderPasswords(doc);clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);if(profile.open)profile.close();booking.lock();ownerLibrary.lock();token='';student=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
+ function select(id){assertPortalAllowed(doc.defaultView.localStorage);if(id==='material')ownerLibrary.refresh();tabs.forEach(tab=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);}
+ tabs.forEach(tab=>tab.onclick=async()=>{try{assertPortalAllowed(doc.defaultView.localStorage);if(tab.dataset.portalTab==='exercises'&&!await unlockStudentFolder(doc,'exercises','Exercises','16219'))return;select(tab.dataset.portalTab);}catch(error){showBlocked(error.message);}});
+ root.querySelector('#portal-material').addEventListener('click',async event=>{const summary=event.target.closest('[data-material-program=comprehension]>summary');if(!summary)return;const folder=summary.parentElement;if(folder.open)return;event.preventDefault();try{if(await unlockStudentFolder(doc,'comprehension','Comprehension','16219'))folder.open=true;}catch(error){showBlocked(error.message);}});
  function result(attempt,viewer){
   clearInterval(tick);busy=false;viewer.replaceChildren(text('h4','Level '+attempt.level),text('p',attempt.status==='Reviewed'?'Score: '+attempt.score+' / 100':'Assessment submitted — awaiting your instructor’s correction.'));
   if(attempt.feedback)viewer.append(text('p',attempt.feedback));
@@ -99,12 +103,13 @@ export function initializeStudentAssessment(doc) {
   for(const item of items.filter(item=>item.section==='tests')){const option=text('option',item.title+(item.enabled?'':' · Closed'));option.value=item.id.split(':')[1];option.disabled=!item.enabled;selectLevel.append(option);}level.append(selectLevel);
   const start=text('button','Start assessment');start.className='button';start.type='submit';selection.append(password,name,level,age,program,start);const close=text('button','×');close.type='button';close.className='popup-close';close.setAttribute('aria-label','Close assessment details');close.onclick=()=>profile.close();profile.replaceChildren(close,text('h2','Assessment details'),selection);
   selection.onsubmit=async event=>{
-   event.preventDefault();if(busy){status.textContent='Finish the current assessment before starting another.';return;}if(passwordInput.value!=='1111'){status.textContent='Incorrect assessment password.';passwordInput.setCustomValidity('Incorrect assessment password.');passwordInput.reportValidity();passwordInput.oninput=()=>passwordInput.setCustomValidity('');return;}const current=epoch;start.disabled=true;
+   event.preventDefault();if(busy){status.textContent='Finish the current assessment before starting another.';return;}try{assertPortalAllowed(doc.defaultView.localStorage);}catch(error){showBlocked(error.message);return;}if(passwordInput.value!=='1111'){const remaining=noteWrongPassword(doc);status.textContent='Incorrect assessment password. '+remaining+' attempts remaining.';passwordInput.setCustomValidity('Incorrect assessment password.');passwordInput.reportValidity();passwordInput.oninput=()=>passwordInput.setCustomValidity('');return;}const current=epoch;start.disabled=true;
    try{const response=await call('studentExamLogin',{passcode:passwordInput.value,name:nameInput.value.trim(),program:programInput.value.trim(),age:Number(ageInput.value)});if(current!==epoch)return;token=response.token;student=response.student;profile.close();await openLevel(Number(selectLevel.value));}
    catch(error){if(current===epoch)status.textContent=error.message;}finally{start.disabled=false;}
   };
  }
  async function openStudent(){
+  try{assertPortalAllowed(doc.defaultView.localStorage);}catch(error){showBlocked(error.message);return;}blocked.hidden=true;
   const current=epoch;content.hidden=false;root.classList.add('portal-session-active');root.querySelector('#student-folder-title').textContent='Student portal';select(doc.defaultView.location.hash.endsWith('/calendar')?'calendar':'exams');status.textContent='Loading available files and assessments…';renderFiles([]);showAssessment([],false);attachTemporaryPortalUploads(doc);
   try{const response=await call('studentPortalAccess');if(current!==epoch)return;
    let saved;try{saved=JSON.parse(doc.defaultView.sessionStorage.getItem(SESSION_KEY)||'null');}catch{}
@@ -114,6 +119,9 @@ export function initializeStudentAssessment(doc) {
    clearInterval(accessTimer);accessTimer=setInterval(async()=>{if(current!==epoch||doc.hidden)return;try{const updated=await call('studentPortalAccess');if(current!==epoch)return;renderFiles(updated.items);attachTemporaryPortalUploads(doc);panel.querySelectorAll('[data-assessment-level]').forEach(button=>{const item=updated.items.find(entry=>entry.id==='test:'+button.dataset.assessmentLevel);button.disabled=!item?.enabled;button.setAttribute('aria-label','Level '+button.dataset.assessmentLevel+' assessment'+(item?.enabled?'':' — Closed'));});const selectLevel=profile.querySelector('[name=level]');if(selectLevel)for(const option of selectLevel.options){if(!option.value)continue;const item=updated.items.find(entry=>entry.id==='test:'+option.value);option.disabled=!item?.enabled;option.textContent='Level '+option.value+(item?.enabled?'':' · Closed');}}catch{}},20000);
   }catch(error){if(current===epoch)status.textContent=error.message;}
  }
+ function showBlocked(message=PORTAL_LOCK_MESSAGE){lock();blocked.textContent=message;blocked.hidden=false;root.classList.add('portal-session-active');}
+ function checkAttempts(){try{assertPortalAllowed(doc.defaultView.localStorage);if(!blocked.hidden){blocked.hidden=true;if(!root.querySelector('#client-portal').hidden)openStudent();}}catch(error){if(!root.querySelector('#client-portal').hidden)showBlocked(error.message);}}
+ doc.defaultView.addEventListener('student-password-attempts-changed',checkAttempts);doc.defaultView.addEventListener('storage',event=>{if(event.key===PORTAL_ATTEMPT_KEY)checkAttempts();});
  root.querySelector('#portal-sign-out')?.addEventListener('click',()=>{
   if(busy&&!doc.defaultView.confirm('Leave this assessment? The 20-minute timer will keep running. Saved answers will still be submitted.'))return;
   lock();doc.dispatchEvent(new doc.defaultView.Event('portal-sign-out'));root.querySelector('#client-portal').hidden=true;root.querySelector('#admin-portal').hidden=true;doc.defaultView.location.hash='students-portal';
