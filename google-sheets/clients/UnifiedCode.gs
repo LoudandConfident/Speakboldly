@@ -627,7 +627,7 @@ function setupBookingCalendar(){
  if(!requests.getLastRow())requests.appendRow(SB_BOOKING_HEADERS);
  else if(JSON.stringify(requests.getRange(1,1,1,9).getValues()[0])!==JSON.stringify(SB_BOOKING_HEADERS))throw new Error('Booking requests headers differ. Existing data was not changed.');
  requests.setFrozenRows(1);requests.getRange('A1:I1').setFontWeight('bold');
- if(!props.getProperty('SB_BOOKING_PASSCODE'))props.setProperty('SB_BOOKING_PASSCODE',Utilities.getUuid().replace(/-/g,'').slice(0,12));
+ if(!props.getProperty('SB_BOOKING_PASSCODE'))props.setProperty('SB_BOOKING_PASSCODE','19962');
  if(!props.getProperty('SB_BOOKING_ENABLED'))props.setProperty('SB_BOOKING_ENABLED','true');
 }
 function setupStudentPortal(){setupStudentExams();setupBookingCalendar();
