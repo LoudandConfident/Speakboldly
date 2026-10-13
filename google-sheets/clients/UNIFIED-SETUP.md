@@ -1,6 +1,6 @@
 # One Apps Script project for Speak Boldly
 
-Use [UnifiedCode.gs](UnifiedCode.gs) as the entire contents of Code.gs in the existing Clients Apps Script project. It combines client sync, shared calendar, manually authorized class confirmations, shared report fields, individual PDF emails, Google Drive Full library and viewer-link emails, shared Student Portal switches, timed interactive tests, saved answers and instructor correction. Do not paste separate copies of these functions alongside it.
+Use [UnifiedCode.gs](UnifiedCode.gs) as the entire contents of Code.gs in the existing Clients Apps Script project. It combines client sync, shared calendar, manually authorized class confirmations, shared report fields, individual PDF emails, Google Drive Full library and viewer-link emails, shared Student Portal switches, timed interactive tests, saved answers, instructor correction and shared-passcode calendar bookings. Do not paste separate copies of these functions alongside it.
 
 Keep Script Properties (CLIENT_SHEET_ID, CLIENT_SYNC_KEY, library folder IDs) unchanged. Save, then deploy a New version of the existing Web app; its /exec URL remains unchanged. If setupFullLibrary or setupSheetReminders has never been run, run the missing setup once and authorize Google access. Replacing the code does not erase the spreadsheet rows or Drive folders. Run disableAutomaticReminders to remove the old automatic-email trigger.
 
@@ -8,7 +8,7 @@ Confirmation emails read the client's upcoming meetings from Sessions, ordered b
 
 Progress report, Final report and Registration/payment confirmation use the already-built editable PDF templates and send the completed PDF attachment to the current client email in Clients. Library material sharing emails restricted Drive viewer links. EmailLog and LibrarySendLog record individual sends. An accepted send still needs a real test inbox check. Logo display can depend on the recipient's email image settings.
 
-For shared portal switches and 20-minute interactive tests, follow [STUDENT-PORTAL-SETUP.md](../../STUDENT-PORTAL-SETUP.md). Run setupStudentExams once, review spreadsheet/email permissions, check SB_EXAM_NOTIFY_EMAIL, then deploy a New version. This adds no automatic class reminders.
+For shared portal switches and 20-minute interactive tests, follow [STUDENT-PORTAL-SETUP.md](../../STUDENT-PORTAL-SETUP.md). Run setupStudentPortal once, review spreadsheet/email permissions, check SB_EXAM_NOTIFY_EMAIL, then deploy a New version. This adds no automatic class reminders.
 
 ## Fix “Invalid action” when sending a confirmation
 

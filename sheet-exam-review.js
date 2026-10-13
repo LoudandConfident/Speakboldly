@@ -1,3 +1,5 @@
+import {buildAssessmentPdf} from './assessment-pdf.js';
+import {studentDocumentFilename,documentDate} from './student-document-filenames.js';
 import {clientSheetConnected,sheetLibraryRequest as sheetExamRequest} from './client-sheet.js?v=full-library';
 import {getLevelExamText} from './exam-questions.js';
 
@@ -35,6 +37,7 @@ export function initializeExamReview(doc,isUnlocked) {
    for(const item of result.attempts){
     const row=doc.createElement('article');row.className='exam-attempt';row.append(text('h4',item.name+' — Level '+item.level),text('p','Program: '+item.program),text('p',item.status+' · '+(item.score===null?'Score pending correction':item.score+' / 100')),text('p','Opened: '+time(item.openedAt)+' · Submitted: '+time(item.submittedAt)));
     if(item.submittedAt){
+     const download=text('button','Download assessment PDF');download.type='button';download.className='button light small';download.onclick=async()=>{if(!isUnlocked())return;const current=generation;download.disabled=true;try{const response=await doc.defaultView.fetch('./document-templates/DejaVuSans.ttf');if(!response.ok)throw new Error('Assessment font could not load.');const bytes=await buildAssessmentPdf(item,new Uint8Array(await response.arrayBuffer()));if(current!==generation||!isUnlocked())return;const url=doc.defaultView.URL.createObjectURL(new Blob([bytes],{type:'application/pdf'})),link=doc.createElement('a');link.href=url;link.download=studentDocumentFilename(item.name,'Assessment',{level:item.level,date:documentDate(new Date(item.submittedAt))});doc.body.append(link);link.click();link.remove();doc.defaultView.setTimeout(()=>doc.defaultView.URL.revokeObjectURL(url),60000);}catch(error){if(current===generation)status.textContent=error.message;}finally{download.disabled=false;}};row.append(download);
      row.append(text('p','Notification email: '+(item.notificationStatus||'Pending')+(item.notificationError?' — '+item.notificationError:'')));
      if(item.notificationStatus==='failed'){const retry=text('button','Retry notification email');retry.type='button';retry.className='button light small';retry.onclick=async()=>{retry.disabled=true;try{await sheetExamRequest('retryExamNotification',{attemptId:item.id});await refresh();}catch(error){status.textContent=error.message;retry.disabled=false;}};row.append(retry);}
      const button=text('button',item.status==='Reviewed'?'Edit correction':'Correct assessment');button.type='button';button.className='button light small';button.onclick=()=>review(item);row.append(button);

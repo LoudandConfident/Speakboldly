@@ -1,3 +1,4 @@
+import {initializeStudentBooking} from './student-booking.js';
 import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js';
 import {createExamForm} from './exam-form.js';
 import {getLevelExamText} from './exam-questions.js';
@@ -6,9 +7,10 @@ import {openPopup} from './popups.js?v=mobile-assessment-page';
 const SESSION_KEY='speak-boldly-assessment-session-v1';
 export function initializeStudentAssessment(doc) {
  const root=doc.querySelector('#students-portal'),content=root.querySelector('#portal-content'),status=root.querySelector('#portal-access-status'),panel=root.querySelector('#portal-exams');
+ const booking=initializeStudentBooking(doc);
  const endpoint=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
- const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['exercises','material','exams'].includes(el.dataset.portalTab));
- let token='',student=null,epoch=0,saveTimer,tick,queue=Promise.resolve(),busy=false;
+ const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['exercises','material','exams','calendar'].includes(el.dataset.portalTab));
+ let token='',student=null,epoch=0,saveTimer,tick,accessTimer,queue=Promise.resolve(),busy=false;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
  async function call(action,data={}) {
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
@@ -22,7 +24,7 @@ export function initializeStudentAssessment(doc) {
  }
  const collect=form=>{const answers={A:{},B:{},C:{},D:'',E:''};for(const [name,value]of new doc.defaultView.FormData(form)){const [section,number]=name.split('.');if(number)answers[section][number]=section==='A'?Number(value):value;else answers[section]=value;}return answers;};
  function remember(level){try{doc.defaultView.sessionStorage.setItem(SESSION_KEY,JSON.stringify({token,student,level}));}catch{}}
- function lock(){epoch++;clearTimeout(saveTimer);clearInterval(tick);token='';student=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
+ function lock(){epoch++;clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);booking.lock();token='';student=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
  function select(id){tabs.forEach(tab=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);}
  tabs.forEach(tab=>tab.onclick=()=>select(tab.dataset.portalTab));
  function result(attempt,viewer){
@@ -70,14 +72,14 @@ export function initializeStudentAssessment(doc) {
  }
  function renderFiles(items){
   for(const [section,id,title]of [['exercises','portal-exercises','Exercises'],['levels','portal-material','Levels']]){
-   const target=root.querySelector('#'+id);target.replaceChildren(text('h3',title));
+   const target=root.querySelector('#'+id),uploads=target.querySelector('.temporary-portal-uploads');target.replaceChildren(text('h3',title));if(uploads)target.append(uploads);
    for(const item of items.filter(item=>item.section===section)){
     const row=doc.createElement('div');row.className='student-portal-file';let control;
-    if(item.enabled&&/^https:\/\//.test(item.url)){control=text('a',item.title);control.href=item.url;control.target='_blank';control.rel='noopener noreferrer';}
+    if(item.enabled&&/^https:\/\//.test(item.url)){control=text('a',item.title);control.href=item.url;control.target='_blank';control.rel='noopener noreferrer';control.onclick=async event=>{event.preventDefault();const current=epoch,tab=doc.defaultView.open('about:blank','_blank');if(tab)tab.document.body.textContent='Checking access…';try{const data=await call('studentPortalAccess'),fresh=data.items.find(entry=>entry.id===item.id);if(current!==epoch||!fresh?.enabled){tab?.close();status.textContent='This file is currently dimmed by your instructor.';return;}if(tab)tab.location.href=fresh.url;else status.textContent='Allow popups to open this file.';}catch(error){tab?.close();if(current===epoch)status.textContent=error.message;}};}
     else{control=text('button',item.title+' · Closed');control.type='button';control.disabled=true;}
     control.className='button light';row.append(control);target.append(row);
    }
-   if(target.children.length===1)target.append(text('p','Your instructor will add files here.'));
+   if(!target.querySelector('.student-portal-file'))target.append(text('p','Your instructor will add files here.'));
   }
  }
  function showAssessment(items){
@@ -96,12 +98,13 @@ export function initializeStudentAssessment(doc) {
   };
  }
  async function openStudent(){
-  const current=epoch;content.hidden=false;root.classList.add('portal-session-active');root.querySelector('#student-folder-title').textContent='Student portal';select('exams');status.textContent='Loading available files and assessments…';renderFiles([]);showAssessment([]);attachTemporaryPortalUploads(doc);
+  const current=epoch;content.hidden=false;root.classList.add('portal-session-active');root.querySelector('#student-folder-title').textContent='Student portal';select(doc.defaultView.location.hash.endsWith('/calendar')?'calendar':'exams');status.textContent='Loading available files and assessments…';renderFiles([]);showAssessment([]);attachTemporaryPortalUploads(doc);
   try{const response=await call('studentPortalAccess');if(current!==epoch)return;
    let saved;try{saved=JSON.parse(doc.defaultView.sessionStorage.getItem(SESSION_KEY)||'null');}catch{}
    if(saved?.token&&saved?.student){token=saved.token;student=saved.student;}
    renderFiles(response.items);showAssessment(response.items);attachTemporaryPortalUploads(doc);status.textContent='Dimmed items are currently closed. Your instructor controls what is open.';
-   if(token&&Number.isInteger(saved.level))await openLevel(saved.level);
+   if(token&&Number.isInteger(saved.level)&&!doc.defaultView.location.hash.endsWith('/calendar'))await openLevel(saved.level);
+   clearInterval(accessTimer);accessTimer=setInterval(async()=>{if(current!==epoch||doc.hidden)return;try{const updated=await call('studentPortalAccess');if(current!==epoch)return;renderFiles(updated.items);attachTemporaryPortalUploads(doc);const selectLevel=panel.querySelector('[name=level]');if(selectLevel)for(const option of selectLevel.options){if(!option.value)continue;const item=updated.items.find(entry=>entry.id==='test:'+option.value);option.disabled=!item?.enabled;option.textContent='Level '+option.value+(item?.enabled?'':' · Closed');}}catch{}},20000);
   }catch(error){if(current===epoch)status.textContent=error.message;}
  }
  root.querySelector('#portal-sign-out')?.addEventListener('click',()=>{
@@ -111,10 +114,11 @@ export function initializeStudentAssessment(doc) {
  root.querySelectorAll('[data-portal-area]').forEach(button=>button.addEventListener('click',()=>{
   const client=button.dataset.portalArea==='client';if(busy&&!client&&!doc.defaultView.confirm('Leave the assessment? The timer will keep running.'))return;
   lock();root.querySelectorAll('[data-portal-area]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));root.querySelector('#client-portal').hidden=!client;root.querySelector('#admin-portal').hidden=client;
-  if(client){doc.defaultView.location.hash='students-portal/student';Promise.resolve().then(openStudent);}
+  if(client){doc.defaultView.location.hash=doc.defaultView.location.hash.endsWith('/calendar')?'students-portal/calendar':'students-portal/student';Promise.resolve().then(openStudent);}
   else if(root.querySelector('#admin-dashboard').hidden)openPopup(root.querySelector('#teacher-login-dialog'));
  }));
  doc.defaultView.addEventListener('hashchange',()=>{if(!doc.defaultView.location.hash.startsWith('#students-portal'))lock();});
  doc.defaultView.addEventListener('pagehide',lock);
  lock();
+ if(doc.defaultView.location.hash.endsWith('/calendar'))Promise.resolve().then(()=>root.querySelector('[data-portal-area=client]').click());
 }

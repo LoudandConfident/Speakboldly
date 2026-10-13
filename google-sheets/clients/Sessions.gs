@@ -45,6 +45,7 @@ function sbSaveSheetSession(input,allowPast=false){
  const existing=rows.find(r=>String(r[0])===id);
  if(existing)return id; // Retries never create duplicate reminders or restore cancelled classes.
  if(starts<=Date.now()&&!allowPast)throw new Error('Choose a future session.');
+ if(starts>Date.now()&&rows.some(row=>String(row[7])!=='cancelled'&&starts<Date.parse(row[5])+90*60000&&starts+90*60000>Date.parse(row[5])))throw new Error('This time overlaps an existing appointment.');
  const clients=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
  const ids=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,1).getValues():[];
  if(!ids.some(r=>String(r[0])===c.clientId))throw new Error('Save this client to the Clients sheet first.');

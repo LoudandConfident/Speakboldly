@@ -323,8 +323,8 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 #students-portal[data-instructor-only] [data-portal-area="client"],#students-portal[data-instructor-only] #client-portal{display:none!important}#students-portal[data-instructor-only] .portal-area-choices{grid-template-columns:minmax(0,1fr);max-width:420px}
 
 /* Student Portal contains only authorized level assessments. */
-#students-portal[data-global-portal] [data-portal-tab]:not([data-portal-tab="exams"]):not([data-portal-tab="exercises"]):not([data-portal-tab="material"]),
-#students-portal[data-global-portal] [data-portal-panel]:not([data-portal-panel="exams"]):not([data-portal-panel="exercises"]):not([data-portal-panel="material"]){display:none!important}
+#students-portal[data-global-portal] [data-portal-tab]:not([data-portal-tab="exams"]):not([data-portal-tab="exercises"]):not([data-portal-tab="material"]):not([data-portal-tab="calendar"]),
+#students-portal[data-global-portal] [data-portal-panel]:not([data-portal-panel="exams"]):not([data-portal-panel="exercises"]):not([data-portal-panel="material"]):not([data-portal-panel="calendar"]){display:none!important}
 .student-assessment-start{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:650px;margin:24px 0}
 .student-assessment-start label{display:flex;flex-direction:column;gap:8px;min-width:0}
 .student-assessment-start input,.student-assessment-start select{width:100%;min-width:0;box-sizing:border-box;font:inherit;padding:12px;border:1px solid var(--line);border-radius:6px;background:var(--paper,#fff)}
@@ -347,3 +347,18 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 #students-portal.portal-session-active>#portal-sign-out{font-size:12px;padding:6px 10px;min-height:30px;margin-bottom:14px}
 .temporary-portal-uploads{max-width:100%;min-width:0;margin:18px 0 24px;gap:10px}
 .temporary-portal-uploads>[role=status]{flex-basis:100%;margin:0;font-size:13px;overflow-wrap:anywhere}
+
+.booking-passcode-form,.student-booking-form,.booking-settings-form{max-width:650px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;margin:20px 0}
+.booking-passcode-form label,.student-booking-form label,.booking-settings-form label{display:flex;flex-direction:column;gap:8px;max-width:100%;width:100%}
+.booking-passcode-form input,.student-booking-form input,.booking-settings-form input:not([type=checkbox]){width:100%;box-sizing:border-box;padding:12px;border:1px solid var(--line);border-radius:6px;font:inherit;min-width:0}
+.booking-settings-form .booking-enabled{flex-direction:row;align-items:center;gap:10px}
+#portal-calendar .calendar-slot{white-space:pre-line}
+#portal-calendar .calendar-slot[aria-pressed=true]{background:#193c32;color:#fff;border-color:#193c32}
+#portal-calendar .calendar-slot:disabled{cursor:default}
+.booking-selected-slots{width:100%;max-width:100%}
+.booking-selected-slot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line)}
+.booking-selected-slot>span{overflow-wrap:anywhere;min-width:0}
+.booking-selected-slot>button{margin:0!important;flex:none;padding:6px 10px;font-size:20px}
+.client-email-confirmation h2{font-size:24px}
+.client-email-confirmation p{line-height:1.7;overflow-wrap:anywhere}
+@media(max-width:680px){.booking-passcode-form input,.student-booking-form input,.booking-settings-form input:not([type=checkbox]){font-size:16px}#portal-calendar .calendar-toolbar{flex-wrap:wrap}#portal-calendar .calendar-toolbar h4{min-width:140px}}
