@@ -370,3 +370,5 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 .material-level-folder>p{font-size:14px;line-height:1.6}
 #student-assessment-profile .student-assessment-start{grid-template-columns:minmax(0,1fr);margin:18px 0}
 .temporary-portal-uploads select{max-width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px}
+
+.admin-client-history td:not(.admin-client-actions){opacity:.48}.admin-client-history .admin-client-actions{opacity:1}

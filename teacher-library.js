@@ -1,5 +1,5 @@
 import {confirmClientEmail} from './client-email-confirmation.js';
-import {clientSheetConnected as defaultConnected,sheetLibraryRequest as defaultRequest} from './client-sheet.js?v=full-library';
+import {clientSheetConnected as defaultConnected,sheetLibraryRequest as defaultRequest} from './client-sheet.js?v=level-history';
 import {PORTAL_SECTIONS} from './portal-access.js?v=four-digit-restored';
 import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
 export function initializeTeacherLibrary(doc,isUnlocked,getClients,loader,options={}){

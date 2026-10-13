@@ -80,7 +80,7 @@ function handlePublicBooking(data){
   }
   const name=String(data.name||'').trim(),requestId=String(data.requestId||'');
   if(!name||name.length>100||! /^[A-Za-z0-9-]{1,100}$/.test(requestId)||!Array.isArray(data.slots)||!data.slots.length||data.slots.length>16)throw new Error('Enter your registered name and select between 1 and 16 slots.');
-  const clients=sbBookingRows(book.getSheetByName('Clients'),10),normalized=value=>String(value||'').replace(/^'/,'').normalize('NFKC').trim().replace(/\s+/g,' ').toLowerCase();
+  const clients=sbBookingRows(book.getSheetByName('Clients'),12),normalized=value=>String(value||'').replace(/^'/,'').normalize('NFKC').trim().replace(/\s+/g,' ').toLowerCase();
   const matches=clients.filter(row=>normalized(row[1])===normalized(name));if(matches.length!==1)throw new Error('Use your registered name. Ask your instructor to check your client record.');
   const client=matches[0];if(String(client[5])!=='Paid')throw new Error('Your instructor needs to finalize your payment status before you can book.');
   const slots=data.slots.map(item=>({date:String(item.date||''),time:String(item.time||'')})).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
@@ -95,7 +95,7 @@ function handlePublicBooking(data){
     const starts=sbCairoTimestamp(slot.date,slot.time);if(starts<=Date.now()||starts>Date.now()+90*86400000)throw new Error('Choose a future slot within the next three months.');
     if(sbBookingOverlap(starts,busy)||sbBookingOverlap(starts,plans))throw new Error('One of your selected slots has just been taken. Refresh the calendar and choose another slot.');
     number++;if(number>9999)throw new Error('Ask your instructor to check your session numbers.');
-    const item={clientId:String(client[0]),number,date:slot.date,time:slot.time};plans.push({...item,id:sbSessionId(item),starts,start:starts});
+    const item={clientId:String(client[0]),number,date:slot.date,time:slot.time,program:String(client[11]||''),level:String(client[4]||'')};plans.push({...item,id:sbSessionId(item),starts,start:starts});
    }
    row=[requestId,String(client[0]),sbExamSafe(client[1]),JSON.stringify(plans),JSON.stringify(plans.map(item=>item.id)),new Date().toISOString(),'pending','',''];sheet.appendRow(row);index=sheet.getLastRow()-2;
   }
@@ -103,7 +103,7 @@ function handlePublicBooking(data){
    const sessions=book.getSheetByName('Sessions'),existing=sbBookingRows(sessions,10),ownIds=plans.map(item=>item.id);
    const missing=plans.filter(item=>!existing.some(entry=>String(entry[0])===item.id));
    if(missing.some(item=>sbBookingOverlap(item.starts,busy,ownIds)))throw new Error('A selected slot is no longer available. Contact your instructor.');
-   if(missing.length){const first=sessions.getLastRow()+1;sessions.getRange(first,4,missing.length,2).setNumberFormat('@');sessions.getRange(first,1,missing.length,10).setValues(missing.map(item=>[item.id,item.clientId,item.number,item.date,item.time,new Date(item.starts).toISOString(),new Date(item.starts-86400000).toISOString(),'pending','','']));}
+   if(missing.length){const first=sessions.getLastRow()+1;sessions.getRange(first,4,missing.length,2).setNumberFormat('@');sessions.getRange(first,1,missing.length,12).setValues(missing.map(item=>[item.id,item.clientId,item.number,item.date,item.time,new Date(item.starts).toISOString(),new Date(item.starts-86400000).toISOString(),'pending','','',item.program||'',item.level||'']));}
    row[6]='complete';sheet.getRange(index+2,1,1,9).setValues([row]);
   }
   sbBookingNotify(sheet,index,row);

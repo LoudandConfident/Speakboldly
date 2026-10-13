@@ -16,6 +16,13 @@ function setupClientSync() {
 function clientSyncResponse(value){return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);}
 function normalizedClientName(value){return String(value||'').normalize('NFKC').trim().replace(/\s+/g,' ').toLowerCase();}
 function safeSheetText(value){const s=String(value??'');return /^[=+\-@]/.test(s)?"'"+s:s;}
+function sbClientEnrollmentChange(previous,input){
+ const program=input.program===undefined?String(previous?.[11]||'').replace(/^'/,''):String(input.program||'').trim();if(program.length>150)throw new Error('Check the program.');
+ const history=previous?.[10]?JSON.parse(String(previous[10])):[];if(!Array.isArray(history))throw new Error('Check client level history. Existing data was kept.');
+ if(input.historyEdit){const edit=input.historyEdit,entry=history.find(item=>item.id===edit.id);if(!entry||typeof edit.level!=='string'||!edit.level||edit.level.length>100||typeof edit.program!=='string'||edit.program.length>150)throw new Error('Check the previous level.');entry.level=edit.level;entry.program=edit.program.trim();}
+ if(previous&&(String(previous[4])!==String(input.level)||String(previous[11]||'').replace(/^'/,'')!==program))history.push({id:Utilities.getUuid(),level:String(previous[4]),program:String(previous[11]||'').replace(/^'/,''),closedAt:new Date().toISOString()});
+ if(history.length>500)throw new Error('Ask your instructor to archive older level history.');return {program,enrollmentHistory:history};
+}
 function handleClientSync(e){
  const lock=LockService.getScriptLock();
  try{
@@ -37,10 +44,10 @@ function handleClientSync(e){
    lock.waitLock(20000);
    const sheet=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
    if(!sheet)throw new Error('Clients tab not found. Run setupClientSync first.');
-   const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
+   const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues():[];
    const clients=rows.filter(row=>String(row[0]).trim()).map(row=>{
     let permissions=[];if(row[9]){permissions=JSON.parse(String(row[9]));if(!Array.isArray(permissions))throw new Error('Invalid Permissions column.');}
-    return {id:String(row[0]),name:String(row[1]),email:String(row[2]),code:String(row[3]).padStart(4,'0'),level:String(row[4]),payment:String(row[5]),amountPaid:Number(row[6]||0),hours:Number(row[7]||0),permissions};
+    return {id:String(row[0]),name:String(row[1]),email:String(row[2]),code:String(row[3]).padStart(4,'0'),level:String(row[4]),payment:String(row[5]),amountPaid:Number(row[6]||0),hours:Number(row[7]||0),permissions,...(row[11]?{program:String(row[11]).replace(/^'/,'')}:{}),...(row[10]?{enrollmentHistory:JSON.parse(String(row[10]))}:{})};
    });
    return clientSyncResponse({ok:true,clients});
   }
@@ -64,9 +71,12 @@ function handleClientSync(e){
   if(permissions!==undefined&&(!Array.isArray(permissions)||permissions.length>500||permissions.some(p=>typeof p!=='string'||p.length>2000||! /^(section:|file:)/.test(p))))throw new Error('Invalid file permissions.');
   if(permissions===undefined){const previous=rowNumber<=sheet.getLastRow()?sheet.getRange(rowNumber,10).getValue():'';permissions=previous?JSON.parse(String(previous)):[];}
   sheet.getRange(1,10).setValue('Permissions');
-  const values=[id,name,email,code,String(c.level),c.payment,amount,hours,new Date().toISOString(),JSON.stringify(permissions)].map(v=>typeof v==='string'?safeSheetText(v):v);
-  sheet.getRange(rowNumber,4).setNumberFormat('@');sheet.getRange(rowNumber,1,1,10).setValues([values]);
-  return clientSyncResponse({ok:true,clientId:id});
+  const previous=rowNumber<=sheet.getLastRow()?sheet.getRange(rowNumber,1,1,12).getValues()[0]:null;
+  const {program,enrollmentHistory}=sbClientEnrollmentChange(previous,c);
+  sheet.getRange(1,11,1,2).setValues([['Level history','Program']]);
+  const values=[id,name,email,code,String(c.level),c.payment,amount,hours,new Date().toISOString(),JSON.stringify(permissions),JSON.stringify(enrollmentHistory),program].map(v=>typeof v==='string'?safeSheetText(v):v);
+  sheet.getRange(rowNumber,4).setNumberFormat('@');sheet.getRange(rowNumber,1,1,12).setValues([values]);
+  return clientSyncResponse({ok:true,clientId:id,program,enrollmentHistory});
  }catch(error){return clientSyncResponse({ok:false,error:error.message});}
  finally{if(lock.hasLock())lock.releaseLock();}
 }

@@ -1,6 +1,6 @@
 import {studentDocumentFilename} from './student-document-filenames.js';
 import {confirmClientEmail} from './client-email-confirmation.js';
-import {clientSheetConnected,loadSheetTeacherDocuments,saveSheetTeacherDocument,sendSheetClientEmail} from './client-sheet.js?v=full-library';
+import {clientSheetConnected,loadSheetTeacherDocuments,saveSheetTeacherDocument,sendSheetClientEmail} from './client-sheet.js?v=level-history';
 import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
 import {fillTeacherPdf} from './teacher-pdf.js?v=editable-pdf-templates';
 export const DOCUMENT_TEMPLATES={progress:{title:'Progress report'},final:{title:'Final exam report'},registration:{title:'Registration & payment confirmation'}};

@@ -51,6 +51,14 @@ function response(data) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+function sbClientEnrollmentChange(previous,input){
+ const program=input.program===undefined?String(previous?.[11]||'').replace(/^'/,''):String(input.program||'').trim();if(program.length>150)throw new Error('Check the program.');
+ const history=previous?.[10]?JSON.parse(String(previous[10])):[];if(!Array.isArray(history))throw new Error('Check client level history. Existing data was kept.');
+ if(input.historyEdit){const edit=input.historyEdit,entry=history.find(item=>item.id===edit.id);if(!entry||typeof edit.level!=='string'||!edit.level||edit.level.length>100||typeof edit.program!=='string'||edit.program.length>150)throw new Error('Check the previous level.');entry.level=edit.level;entry.program=edit.program.trim();}
+ if(previous&&(String(previous[4])!==String(input.level)||String(previous[11]||'').replace(/^'/,'')!==program))history.push({id:Utilities.getUuid(),level:String(previous[4]),program:String(previous[11]||'').replace(/^'/,''),closedAt:new Date().toISOString()});
+ if(history.length>500)throw new Error('Ask your instructor to archive older level history.');return {program,enrollmentHistory:history};
+}
+
 function doGet() {
   const properties = PropertiesService.getScriptProperties();
   return response({
@@ -117,7 +125,7 @@ function doPost(event) {
     if (data.action !== 'upsertClient' || !data.client) {
           if (data.action === 'listClients') {
       const rows = sheet.getLastRow() > 1
-        ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 10).getValues()
+        ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 12).getValues()
         : [];
       const clients = rows.filter(row => row[0] && row[1] && row[2]).map(row => ({
         id: String(row[0]), name: String(row[1]).trim(),
@@ -125,7 +133,7 @@ function doPost(event) {
         code: String(row[3]).padStart(4, '0'), level: String(row[4]),
         payment: String(row[5]), amountPaid: Number(row[6] || 0),
         hours: Number(row[7] || 0),
-        permissions: row[9] ? JSON.parse(String(row[9])) : []
+        permissions: row[9] ? JSON.parse(String(row[9])) : [],...(row[11]?{program:String(row[11]).replace(/^'/,'')}:{}),...(row[10]?{enrollmentHistory:JSON.parse(String(row[10]))}:{})
       }));
       return response({ ok: true, clients });
     }
@@ -204,6 +212,8 @@ function doPost(event) {
     const safe = value =>
       /^[=+\-@\t\r]/.test(value) ? "'" + value : value;
 
+    const previous=targetRow<=sheet.getLastRow()?sheet.getRange(targetRow,1,1,12).getValues()[0]:null;
+    const {program,enrollmentHistory}=sbClientEnrollmentChange(previous,client);
     sheet.getRange(targetRow, 4).setNumberFormat('@');
     sheet.getRange(targetRow, 1, 1, 9).setValues([[
       id,
@@ -218,7 +228,8 @@ function doPost(event) {
     ]]);
 
     if(client.permissions!==undefined){sheet.getRange(1,10).setValue('Permissions');sheet.getRange(targetRow,10).setValue(JSON.stringify(client.permissions));}
-    return response({ ok: true, clientId: id });
+    sheet.getRange(1,11,1,2).setValues([['Level history','Program']]);sheet.getRange(targetRow,11,1,2).setValues([[JSON.stringify(enrollmentHistory),safe(program)]]);
+    return response({ ok: true, clientId: id,program,enrollmentHistory });
 
   } catch (error) {
     return response({ ok: false, error: error.message });
@@ -229,13 +240,15 @@ function doPost(event) {
 
 // Add this file to the existing Clients Apps Script project.
 // Run setupSheetReminders once to create the calendar; emails are sent only from Authorize.
-const SB_SESSION_HEADERS=['Session ID','Client ID','Session number','Date (Cairo)','Time (Cairo)','Starts at (UTC)','Remind at (UTC)','Status','Sent at (UTC)','Last error'];
+const SB_SESSION_HEADERS=['Session ID','Client ID','Session number','Date (Cairo)','Time (Cairo)','Starts at (UTC)','Remind at (UTC)','Status','Sent at (UTC)','Last error','Program','Level'];
+const SB_SESSION_PROGRAMS=["Trial session", "General English — 8 sessions", "General English — 4 sessions", "One Session", "Interview preparation workshop", "E-mail and business writing workshop", "Meetings, presentation and public speaking workshop", "IELTS preparation", "Pronunciation workshop", "English for Information Technology", "Let the kids speak!", "The different learners", "Instructor training"];
 function setupSheetReminders(){
  const props=PropertiesService.getScriptProperties(),id=props.getProperty('CLIENT_SHEET_ID');
  if(!id)throw new Error('Run setupClientSync first.');
  const sheet=SpreadsheetApp.openById(id).getSheetByName('Sessions')||SpreadsheetApp.openById(id).insertSheet('Sessions');
  if(!sheet.getLastRow())sheet.appendRow(SB_SESSION_HEADERS);
- else if(JSON.stringify(sheet.getRange(1,1,1,10).getValues()[0])!==JSON.stringify(SB_SESSION_HEADERS))throw new Error('Sessions headers differ. Existing data has not been replaced.');
+ else if(JSON.stringify(sheet.getRange(1,1,1,10).getValues()[0])!==JSON.stringify(SB_SESSION_HEADERS.slice(0,10)))throw new Error('Sessions headers differ. Existing data has not been replaced.');
+ sheet.getRange(1,11,1,2).setValues([['Program','Level']]);
  sheet.setFrozenRows(1);sheet.getRange('A1:J1').setFontWeight('bold');
  // Authorization is requested here before any clients are emailed.
  MailApp.getRemainingDailyQuota();
@@ -246,6 +259,7 @@ function sbSessionsSheet(){
  const id=PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID');
  const sheet=SpreadsheetApp.openById(id).getSheetByName('Sessions');
  if(!sheet)throw new Error('Add Sessions.gs and run setupSheetReminders first.');
+ sheet.getRange(1,11,1,2).setValues([['Program','Level']]);
  return sheet;
 }
 function sbCairoTimestamp(date,time){
@@ -259,18 +273,20 @@ function sbCairoTimestamp(date,time){
  return matches[0];
 }
 function sbSessionId(c){
- const bytes=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,[c.clientId,c.number,c.date,c.time].join('|'));
+ const bytes=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,[c.clientId,c.number,c.date,c.time,...(c.program?[c.program]:[])].join('|'));
  return bytes.map(b=>(b&255).toString(16).padStart(2,'0')).join('');
 }
 function sbListSheetSessions(){
- const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
- return rows.filter(r=>r[0]).map(r=>({id:String(r[0]),clientId:String(r[1]),number:Number(r[2]),date:String(r[3]),time:String(r[4]),name:'',reminderStatus:String(r[7]),reminderAt:new Date(r[6]).toISOString(),sentAt:r[8]?new Date(r[8]).toISOString():null}));
+ const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues():[];
+ return rows.filter(r=>r[0]).map(r=>({id:String(r[0]),clientId:String(r[1]),number:Number(r[2]),date:String(r[3]),time:String(r[4]),name:'',program:String(r[10]||'').replace(/^'/,''),level:String(r[11]||'').replace(/^'/,''),reminderStatus:String(r[7]),reminderAt:new Date(r[6]).toISOString(),sentAt:r[8]?new Date(r[8]).toISOString():null}));
 }
 function sbSaveSheetSession(input,allowPast=false){
- const c={clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||'')};
+ const c={clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||'').trim(),level:String(input.level||'').trim()};
+ if(c.program&&!SB_SESSION_PROGRAMS.includes(c.program))throw new Error('Choose a valid program.');
+ if(c.level&&!/^[1-9]\d{0,3}$/.test(c.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(c.level))throw new Error('Choose a valid session level.');
  if(!/^[a-zA-Z0-9-]{1,100}$/.test(c.clientId)||!Number.isInteger(c.number)||c.number<1||c.number>9999)throw new Error('Choose an existing client and valid session number.');
  const starts=sbCairoTimestamp(c.date,c.time),id=sbSessionId(c),sheet=sbSessionsSheet();
- const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[];
+ const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues():[];
  const existing=rows.find(r=>String(r[0])===id);
  if(existing)return id; // Retries never create duplicate reminders or restore cancelled classes.
  if(starts<=Date.now()&&!allowPast)throw new Error('Choose a future session.');
@@ -279,7 +295,7 @@ function sbSaveSheetSession(input,allowPast=false){
  const ids=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,1).getValues():[];
  if(!ids.some(r=>String(r[0])===c.clientId))throw new Error('Save this client to the Clients sheet first.');
  const row=sheet.getLastRow()+1;sheet.getRange(row,4,1,2).setNumberFormat('@');
- sheet.getRange(row,1,1,10).setValues([[id,c.clientId,c.number,c.date,c.time,new Date(starts).toISOString(),new Date(starts-86400000).toISOString(),starts<=Date.now()?'expired':'pending','','']]);
+ sheet.getRange(row,1,1,12).setValues([[id,c.clientId,c.number,c.date,c.time,new Date(starts).toISOString(),new Date(starts-86400000).toISOString(),starts<=Date.now()?'expired':'pending','','',c.program,c.level]]);
  return id;
 }
 function handleSheetSessionAction(p){
@@ -287,7 +303,7 @@ function handleSheetSessionAction(p){
  try{
   if(p.action==='saveSession'){if(!p.session)throw new Error('Session missing.');sbSaveSheetSession(p.session,p.importPast===true);}
   if(p.action==='cancelSession'){
-   const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues():[],index=rows.findIndex(r=>String(r[0])===String(p.sessionId));
+   const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues():[],index=rows.findIndex(r=>String(r[0])===String(p.sessionId));
    if(index<0)throw new Error('Session not found.');
    if(rows[index][7]==='sending')throw new Error('A reminder is being sent. Try again shortly.');
    sheet.getRange(index+2,8).setValue('cancelled');
@@ -356,14 +372,17 @@ function sbBrandedEmail(title,content){
 }
 function sbUpcomingClientMeetings(book,clientId){
  const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return [];
- return sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues().filter(r=>String(r[1])===String(clientId)&&String(r[7])!=='cancelled'&&Number.isFinite(Date.parse(r[5]))&&Date.parse(r[5])>Date.now()).sort((a,b)=>Date.parse(a[5])-Date.parse(b[5]));
+ return sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues().filter(r=>String(r[1])===String(clientId)&&String(r[7])!=='cancelled'&&Number.isFinite(Date.parse(r[5]))&&Date.parse(r[5])>Date.now()).sort((a,b)=>Date.parse(a[5])-Date.parse(b[5]));
 }
+function sbEmailProgramName(value){return value==='Trial session'?'Conversation-based General English — Trial session':String(value||'').replace(/^General English/,'Conversation-based General English');}
+function sbSessionEmailLabel(row){const program=String(row[10]||'').replace(/^'/,'');if(program==='Trial session')return 'Conversation-based General English — Trial session';return (program?sbEmailProgramName(program.replace(/^General English — [48] sessions$/,'General English')):'English class')+' — Session '+row[2];}
+function sbSessionEmailDetails(row){const program=String(row[10]||'').replace(/^'/,''),level=String(row[11]||'').replace(/^'/,'');return [program&&program!=='Trial session'?sbEmailProgramName(program):'',level&&level!=='Not assessed'?'Level '+level:''].filter(Boolean).join(' · ');}
 function sbCalendarEmail(client,meetings,reminder=false){
- const heading=reminder?'Your upcoming class reminder':'Your class confirmation',name=String(client[1]),program=String(client[4]||'');
- const lines=meetings.map(r=>'Session '+r[2]+' — '+Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy — h:mm a')+' (Cairo time)');
+ const heading=reminder?'Your upcoming class reminder':'Your class confirmation',name=String(client[1]),program=sbEmailProgramName(client[11]||'');
+ const lines=meetings.map(r=>sbSessionEmailLabel(r)+(sbSessionEmailDetails(r)?' ('+sbSessionEmailDetails(r)+')':'')+' — '+Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy — h:mm a')+' (Cairo time)');
  const intro=reminder?'This is a reminder for your upcoming English class.':'Your upcoming English sessions are confirmed below.';
  const body='Hello '+name+',\n\n'+intro+(program?'\n\nProgram / Level: '+program:'')+'\n\n'+lines.join('\n')+'\n\nJoin on Zoom:\n'+SB_ZOOM_URL+'\nPasscode: '+SB_ZOOM_PASSCODE+'\n\nPlease note: No same-day cancellations are allowed.\n\nIf you have any questions, reply to this email.\n\nSee you in class!\nSpeak Boldly';
- const rows=meetings.map(r=>'<tr><td style="padding:10px;border-bottom:1px solid #dedfd5;vertical-align:top">Session '+sbEmailEscape(r[2])+'</td><td style="padding:10px;border-bottom:1px solid #dedfd5">'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy'))+'<br><strong>'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','h:mm a'))+'</strong> · Cairo time</td></tr>').join('');
+ const rows=meetings.map(r=>'<tr><td style="padding:10px;border-bottom:1px solid #dedfd5;vertical-align:top">'+sbEmailEscape(sbSessionEmailLabel(r))+(sbSessionEmailDetails(r)?'<br>'+sbEmailEscape(sbSessionEmailDetails(r)):'')+'</td><td style="padding:10px;border-bottom:1px solid #dedfd5">'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy'))+'<br><strong>'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','h:mm a'))+'</strong> · Cairo time</td></tr>').join('');
  const content='<p>Hello '+sbEmailEscape(name)+',</p><p>'+intro+'</p>'+(program?'<p><strong>Program / Level:</strong> '+sbEmailEscape(program)+'</p>':'')+'<table style="width:100%;border-collapse:collapse;background:#edf0e6;font-size:14px">'+rows+'</table>'+'<p><a href="'+SB_ZOOM_URL+'" style="display:inline-block;padding:10px 16px;background:#193c32;color:#fffef9;text-decoration:none;border-radius:6px">Join on Zoom</a><br><strong>Zoom passcode:</strong> '+SB_ZOOM_PASSCODE+'</p><p><strong>No same-day cancellations are allowed.</strong></p><p>If you have any questions, reply to this email.</p><p>See you in class!</p>';
  return {body,htmlBody:sbBrandedEmail(heading,content)};
 }
@@ -374,7 +393,7 @@ function handleClientEmail(p){
  const id=String(p.clientId||''),kind=String(p.kind||''),requestId=String(p.requestId||'');
  if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!['confirmation','progress','final','registration'].includes(kind)||! /^[a-zA-Z0-9-]{1,100}$/.test(requestId))throw new Error('Invalid email request.');
  const props=PropertiesService.getScriptProperties(),book=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')),clients=book.getSheetByName('Clients');
- const rows=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,9).getValues():[],client=rows.find(r=>String(r[0])===id);
+ const rows=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,12).getValues():[],client=rows.find(r=>String(r[0])===id);
  if(!client||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(client[2])))throw new Error('Client email missing or invalid.');
  let attachment=null;
  if(kind!=='confirmation'){
@@ -398,8 +417,10 @@ function handleClientEmail(p){
    const meetings=sbUpcomingClientMeetings(book,id);if(!meetings.length)throw new Error('No upcoming calendar sessions are saved for this client. Add or sync their appointments first.');
    message=sbCalendarEmail(client,meetings);
   }else{
-   const body='Hello '+client[1]+',\n\nPlease find your '+labels[kind].toLowerCase()+' attached.\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
-   message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p><p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p><p>If you have any questions, reply to this email.</p>')};
+   const course=sbEmailProgramName(client[11]||''),level=String(client[4]||'');
+   const details=kind==='registration'?[course,level?'Level / Program: '+level:''].filter(Boolean).join('\n'):'';
+   const body='Hello '+client[1]+',\n\n'+(details?details+'\n\n':'')+'Please find your '+labels[kind].toLowerCase()+' attached.\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
+   message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p>'+(details?'<p>'+sbEmailEscape(details).replace(/\n/g,'<br>')+'</p>':'')+'<p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p><p>If you have any questions, reply to this email.</p>')};
   }
   const row=log.getLastRow()+1;log.getRange(row,1,1,7).setValues([[requestId,id,kind,String(client[2]),'sending','','']]);SpreadsheetApp.flush();
   try{MailApp.sendEmail({to:String(client[2]),subject:(kind==='confirmation'?'Your class confirmation':labels[kind])+' — Speak Boldly',...message,name:'Speak Boldly',replyTo:'speakboldly16@gmail.com',...(attachment?{attachments:[attachment]}:{})});log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}
@@ -725,7 +746,7 @@ function handlePublicBooking(data){
   }
   const name=String(data.name||'').trim(),requestId=String(data.requestId||'');
   if(!name||name.length>100||! /^[A-Za-z0-9-]{1,100}$/.test(requestId)||!Array.isArray(data.slots)||!data.slots.length||data.slots.length>16)throw new Error('Enter your registered name and select between 1 and 16 slots.');
-  const clients=sbBookingRows(book.getSheetByName('Clients'),10),normalized=value=>String(value||'').replace(/^'/,'').normalize('NFKC').trim().replace(/\s+/g,' ').toLowerCase();
+  const clients=sbBookingRows(book.getSheetByName('Clients'),12),normalized=value=>String(value||'').replace(/^'/,'').normalize('NFKC').trim().replace(/\s+/g,' ').toLowerCase();
   const matches=clients.filter(row=>normalized(row[1])===normalized(name));if(matches.length!==1)throw new Error('Use your registered name. Ask your instructor to check your client record.');
   const client=matches[0];if(String(client[5])!=='Paid')throw new Error('Your instructor needs to finalize your payment status before you can book.');
   const slots=data.slots.map(item=>({date:String(item.date||''),time:String(item.time||'')})).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
@@ -740,7 +761,7 @@ function handlePublicBooking(data){
     const starts=sbCairoTimestamp(slot.date,slot.time);if(starts<=Date.now()||starts>Date.now()+90*86400000)throw new Error('Choose a future slot within the next three months.');
     if(sbBookingOverlap(starts,busy)||sbBookingOverlap(starts,plans))throw new Error('One of your selected slots has just been taken. Refresh the calendar and choose another slot.');
     number++;if(number>9999)throw new Error('Ask your instructor to check your session numbers.');
-    const item={clientId:String(client[0]),number,date:slot.date,time:slot.time};plans.push({...item,id:sbSessionId(item),starts,start:starts});
+    const item={clientId:String(client[0]),number,date:slot.date,time:slot.time,program:String(client[11]||''),level:String(client[4]||'')};plans.push({...item,id:sbSessionId(item),starts,start:starts});
    }
    row=[requestId,String(client[0]),sbExamSafe(client[1]),JSON.stringify(plans),JSON.stringify(plans.map(item=>item.id)),new Date().toISOString(),'pending','',''];sheet.appendRow(row);index=sheet.getLastRow()-2;
   }
@@ -748,7 +769,7 @@ function handlePublicBooking(data){
    const sessions=book.getSheetByName('Sessions'),existing=sbBookingRows(sessions,10),ownIds=plans.map(item=>item.id);
    const missing=plans.filter(item=>!existing.some(entry=>String(entry[0])===item.id));
    if(missing.some(item=>sbBookingOverlap(item.starts,busy,ownIds)))throw new Error('A selected slot is no longer available. Contact your instructor.');
-   if(missing.length){const first=sessions.getLastRow()+1;sessions.getRange(first,4,missing.length,2).setNumberFormat('@');sessions.getRange(first,1,missing.length,10).setValues(missing.map(item=>[item.id,item.clientId,item.number,item.date,item.time,new Date(item.starts).toISOString(),new Date(item.starts-86400000).toISOString(),'pending','','']));}
+   if(missing.length){const first=sessions.getLastRow()+1;sessions.getRange(first,4,missing.length,2).setNumberFormat('@');sessions.getRange(first,1,missing.length,12).setValues(missing.map(item=>[item.id,item.clientId,item.number,item.date,item.time,new Date(item.starts).toISOString(),new Date(item.starts-86400000).toISOString(),'pending','','',item.program||'',item.level||'']));}
    row[6]='complete';sheet.getRange(index+2,1,1,9).setValues([row]);
   }
   sbBookingNotify(sheet,index,row);

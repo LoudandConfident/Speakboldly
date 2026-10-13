@@ -1,4 +1,5 @@
-import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession} from './client-sheet.js?v=full-library';
+import {SESSION_PROGRAMS,nextSessionNumber,suggestedSessionProgram} from './session-programs.js';
+import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession} from './client-sheet.js?v=level-history';
 import {ownerConnected,request} from './exam-api.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 const STORAGE_KEY='speak-boldly-admin-sessions-v1';
@@ -17,7 +18,8 @@ export function validateSession(input){
  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==date||date<'1900-01-01'||date>'9999-12-31')throw new Error('Choose a valid session date.');
  const clientId=String(input.clientId||'');if(!clientId||clientId.length>100)throw new Error('Choose an existing client.');
  const time=String(input.time||'');if(time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(time))throw new Error('Choose a valid class time.');
- return{name,date,number,clientId,...(time?{time}:{})};
+ const program=String(input.program||'').trim(),level=String(input.level||'').trim();if(program&&!SESSION_PROGRAMS.some(item=>item.title===program))throw new Error('Choose a valid program.');if(level&&(!/^[1-9]\d{0,3}$/.test(level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(level)))throw new Error('Choose a valid session level.');
+ return{name,date,number,clientId,...(time?{time}:{}),...(program?{program}:{}),...(level?{level}:{})};
 }
 export function cairoToday(now=new Date()){
  const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);
@@ -27,6 +29,11 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
  const root=doc.querySelector('#admin-calendar');if(!root)return;
  const form=root.querySelector('form'),grid=root.querySelector('.calendar-grid'),status=root.querySelector('[role=status]'),heading=root.querySelector('#calendar-month');
  const chooser=form.elements.clientId;
+ const programLabel=doc.createElement('label');programLabel.textContent='Program';const program=doc.createElement('select');program.name='program';program.required=true;program.append(new doc.defaultView.Option('Choose a program',''));for(const item of SESSION_PROGRAMS)program.append(new doc.defaultView.Option(item.title,item.title));programLabel.append(program);chooser.closest('label').after(programLabel);
+ const levelLabel=doc.createElement('label');levelLabel.textContent='Level for this session';const level=doc.createElement('select');level.name='level';level.required=true;for(const item of ['Not assessed',...Array.from({length:12},(_,i)=>String(i+1)),'A1','A2','B1','B2','C1','C2'])level.append(new doc.defaultView.Option(/^\d+$/.test(item)?'Level '+item:item,item));levelLabel.append(level);programLabel.after(levelLabel);
+ const count=doc.createElement('p');count.setAttribute('role','status');form.elements.number.closest('label').after(count);
+ function suggestNumber(){if(!chooser.value||!program.value){count.textContent='';return;}form.elements.number.value=nextSessionNumber(sessions,chooser.value,program.value);const scheduled=sessions.filter(item=>item.clientId===chooser.value&&item.reminderStatus!=='cancelled'&&(!item.program||item.program===program.value)).length;count.textContent=scheduled+' session'+(scheduled===1?'':'s')+' scheduled for this program. Session numbers can be adjusted.';}
+ chooser.addEventListener('change',()=>{const client=getClients().find(item=>item.id===chooser.value);program.value=suggestedSessionProgram(client)||'';level.value=/^[1-9]\d{0,3}$/.test(client?.level||'')||['A1','A2','B1','B2','C1','C2'].includes(client?.level)?client.level:'Not assessed';if(client?.level&&!level.value){level.append(new doc.defaultView.Option('Level '+client.level,client.level));level.value=client.level;}suggestNumber();});program.addEventListener('change',suggestNumber);
  const weekdays=root.querySelector('.calendar-weekdays'),viewport=doc.createElement('div'),hint=doc.createElement('p');
  viewport.className='calendar-viewport';viewport.tabIndex=0;viewport.setAttribute('role','region');viewport.setAttribute('aria-label','Monthly calendar. Scroll horizontally to see all days.');
  hint.className='calendar-scroll-hint';hint.textContent='Swipe across the calendar to see all days.';
@@ -52,11 +59,11 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    const items=sessions.filter(s=>s.date===date&&s.reminderStatus!=='cancelled');
    for(const slot of calendarSlots(date)){
     const bookings=items.filter(item=>item.time===slot.time);
-    if(bookings.length){for(const item of bookings){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name,button=doc.createElement('button');button.type='button';button.className='calendar-slot calendar-slot-booked';button.textContent=sessionInitials(name)+' #'+item.number+'\n'+slot.label;button.setAttribute('aria-label','Open '+name+' client information, session '+item.number+' on '+date+' at '+slot.label+' Cairo time');button.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};appendAppointment(cell,button,item,name);}continue;}
+    if(bookings.length){for(const item of bookings){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name,button=doc.createElement('button');button.type='button';button.className='calendar-slot calendar-slot-booked';button.textContent=sessionInitials(name)+' #'+item.number+'\n'+slot.label;button.title=(item.program||'Program not recorded')+' — '+(item.level?'Level '+item.level:'Level not recorded');button.setAttribute('aria-label','Open '+name+' client information, session '+item.number+' on '+date+' at '+slot.label+' Cairo time');button.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};appendAppointment(cell,button,item,name);}continue;}
     const button=doc.createElement('button');button.type='button';button.className='calendar-slot';button.textContent=slot.label;button.setAttribute('aria-label','Add session on '+date+' at '+slot.label+' Cairo time');
     button.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;form.elements.time.value=slot.time;populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};cell.append(button);
    }
-   for(const item of items){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name;const badge=doc.createElement('button');badge.type='button';badge.className='calendar-session';badge.textContent=sessionInitials(name)+' #'+item.number;badge.title=name+' — session '+item.number+(item.time?' — '+item.time+' Cairo time':'')+(item.reminderStatus?' — Email status: '+item.reminderStatus:'');badge.setAttribute('aria-label','Open '+name+' client information, session '+item.number);badge.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};if(!calendarSlots(date).some(slot=>slot.time===item.time))appendAppointment(cell,badge,item,name);}
+   for(const item of items){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name;const badge=doc.createElement('button');badge.type='button';badge.className='calendar-session';badge.textContent=sessionInitials(name)+' #'+item.number;badge.title=name+' — '+(item.program||'Program not recorded')+' — '+(item.level?'Level '+item.level:'Level not recorded')+' — session '+item.number+(item.time?' — '+item.time+' Cairo time':'')+(item.reminderStatus?' — Email status: '+item.reminderStatus:'');badge.setAttribute('aria-label','Open '+name+' client information, session '+item.number);badge.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};if(!calendarSlots(date).some(slot=>slot.time===item.time))appendAppointment(cell,badge,item,name);}
    add.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;form.elements.time.value='';populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};grid.append(cell);
   }
  }

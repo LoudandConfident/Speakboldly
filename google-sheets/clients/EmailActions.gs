@@ -19,14 +19,17 @@ function sbBrandedEmail(title,content){
 }
 function sbUpcomingClientMeetings(book,clientId){
  const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return [];
- return sheet.getRange(2,1,sheet.getLastRow()-1,10).getValues().filter(r=>String(r[1])===String(clientId)&&String(r[7])!=='cancelled'&&Number.isFinite(Date.parse(r[5]))&&Date.parse(r[5])>Date.now()).sort((a,b)=>Date.parse(a[5])-Date.parse(b[5]));
+ return sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues().filter(r=>String(r[1])===String(clientId)&&String(r[7])!=='cancelled'&&Number.isFinite(Date.parse(r[5]))&&Date.parse(r[5])>Date.now()).sort((a,b)=>Date.parse(a[5])-Date.parse(b[5]));
 }
+function sbEmailProgramName(value){return value==='Trial session'?'Conversation-based General English — Trial session':String(value||'').replace(/^General English/,'Conversation-based General English');}
+function sbSessionEmailLabel(row){const program=String(row[10]||'').replace(/^'/,'');if(program==='Trial session')return 'Conversation-based General English — Trial session';return (program?sbEmailProgramName(program.replace(/^General English — [48] sessions$/,'General English')):'English class')+' — Session '+row[2];}
+function sbSessionEmailDetails(row){const program=String(row[10]||'').replace(/^'/,''),level=String(row[11]||'').replace(/^'/,'');return [program&&program!=='Trial session'?sbEmailProgramName(program):'',level&&level!=='Not assessed'?'Level '+level:''].filter(Boolean).join(' · ');}
 function sbCalendarEmail(client,meetings,reminder=false){
- const heading=reminder?'Your upcoming class reminder':'Your class confirmation',name=String(client[1]),program=String(client[4]||'');
- const lines=meetings.map(r=>'Session '+r[2]+' — '+Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy — h:mm a')+' (Cairo time)');
+ const heading=reminder?'Your upcoming class reminder':'Your class confirmation',name=String(client[1]),program=sbEmailProgramName(client[11]||'');
+ const lines=meetings.map(r=>sbSessionEmailLabel(r)+(sbSessionEmailDetails(r)?' ('+sbSessionEmailDetails(r)+')':'')+' — '+Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy — h:mm a')+' (Cairo time)');
  const intro=reminder?'This is a reminder for your upcoming English class.':'Your upcoming English sessions are confirmed below.';
  const body='Hello '+name+',\n\n'+intro+(program?'\n\nProgram / Level: '+program:'')+'\n\n'+lines.join('\n')+'\n\nJoin on Zoom:\n'+SB_ZOOM_URL+'\nPasscode: '+SB_ZOOM_PASSCODE+'\n\nPlease note: No same-day cancellations are allowed.\n\nIf you have any questions, reply to this email.\n\nSee you in class!\nSpeak Boldly';
- const rows=meetings.map(r=>'<tr><td style="padding:10px;border-bottom:1px solid #dedfd5;vertical-align:top">Session '+sbEmailEscape(r[2])+'</td><td style="padding:10px;border-bottom:1px solid #dedfd5">'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy'))+'<br><strong>'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','h:mm a'))+'</strong> · Cairo time</td></tr>').join('');
+ const rows=meetings.map(r=>'<tr><td style="padding:10px;border-bottom:1px solid #dedfd5;vertical-align:top">'+sbEmailEscape(sbSessionEmailLabel(r))+(sbSessionEmailDetails(r)?'<br>'+sbEmailEscape(sbSessionEmailDetails(r)):'')+'</td><td style="padding:10px;border-bottom:1px solid #dedfd5">'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy'))+'<br><strong>'+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','h:mm a'))+'</strong> · Cairo time</td></tr>').join('');
  const content='<p>Hello '+sbEmailEscape(name)+',</p><p>'+intro+'</p>'+(program?'<p><strong>Program / Level:</strong> '+sbEmailEscape(program)+'</p>':'')+'<table style="width:100%;border-collapse:collapse;background:#edf0e6;font-size:14px">'+rows+'</table>'+'<p><a href="'+SB_ZOOM_URL+'" style="display:inline-block;padding:10px 16px;background:#193c32;color:#fffef9;text-decoration:none;border-radius:6px">Join on Zoom</a><br><strong>Zoom passcode:</strong> '+SB_ZOOM_PASSCODE+'</p><p><strong>No same-day cancellations are allowed.</strong></p><p>If you have any questions, reply to this email.</p><p>See you in class!</p>';
  return {body,htmlBody:sbBrandedEmail(heading,content)};
 }
@@ -37,7 +40,7 @@ function handleClientEmail(p){
  const id=String(p.clientId||''),kind=String(p.kind||''),requestId=String(p.requestId||'');
  if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!['confirmation','progress','final','registration'].includes(kind)||! /^[a-zA-Z0-9-]{1,100}$/.test(requestId))throw new Error('Invalid email request.');
  const props=PropertiesService.getScriptProperties(),book=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')),clients=book.getSheetByName('Clients');
- const rows=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,9).getValues():[],client=rows.find(r=>String(r[0])===id);
+ const rows=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,12).getValues():[],client=rows.find(r=>String(r[0])===id);
  if(!client||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(client[2])))throw new Error('Client email missing or invalid.');
  let attachment=null;
  if(kind!=='confirmation'){
@@ -61,8 +64,10 @@ function handleClientEmail(p){
    const meetings=sbUpcomingClientMeetings(book,id);if(!meetings.length)throw new Error('No upcoming calendar sessions are saved for this client. Add or sync their appointments first.');
    message=sbCalendarEmail(client,meetings);
   }else{
-   const body='Hello '+client[1]+',\n\nPlease find your '+labels[kind].toLowerCase()+' attached.\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
-   message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p><p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p><p>If you have any questions, reply to this email.</p>')};
+   const course=sbEmailProgramName(client[11]||''),level=String(client[4]||'');
+   const details=kind==='registration'?[course,level?'Level / Program: '+level:''].filter(Boolean).join('\n'):'';
+   const body='Hello '+client[1]+',\n\n'+(details?details+'\n\n':'')+'Please find your '+labels[kind].toLowerCase()+' attached.\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
+   message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p>'+(details?'<p>'+sbEmailEscape(details).replace(/\n/g,'<br>')+'</p>':'')+'<p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p><p>If you have any questions, reply to this email.</p>')};
   }
   const row=log.getLastRow()+1;log.getRange(row,1,1,7).setValues([[requestId,id,kind,String(client[2]),'sending','','']]);SpreadsheetApp.flush();
   try{MailApp.sendEmail({to:String(client[2]),subject:(kind==='confirmation'?'Your class confirmation':labels[kind])+' — Speak Boldly',...message,name:'Speak Boldly',replyTo:'speakboldly16@gmail.com',...(attachment?{attachments:[attachment]}:{})});log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}

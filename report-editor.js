@@ -1,6 +1,6 @@
 import {readReportTab} from './report-tabs.js';
 import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=full-library';
-import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=full-library';
+import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=level-history';
 const status=document.querySelector('#report-tab-status'),back=document.querySelector('#report-tab-return');
 const payload=readReportTab(window);
 if(!payload){status.textContent='Open a client’s report from Authorize in the teacher dashboard.';back.hidden=false;}
