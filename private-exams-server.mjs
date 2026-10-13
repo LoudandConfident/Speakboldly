@@ -59,11 +59,11 @@ export function createExamBackend({dbPath,adminPassword,exams,origins=[],now=()=
   const send=(value,status=200)=>{res.writeHead(status,headers);res.end(JSON.stringify(value));};
   try{
    const path=url.pathname,method=req.method;
-   if(path==='/api/status'&&method==='GET'){send({ready:Boolean(adminPassword)&&catalog.size>0,emailReady:!!sendScoreEmail,remindersReady:!!adminPassword&&reminders.emailReady});return true;}
+   if(path==='/api/status'&&method==='GET'){send({ready:Boolean(adminPassword)&&catalog.size>0,studentLoginReady:Boolean(adminPassword),examsReady:catalog.size>0,emailReady:!!sendScoreEmail,remindersReady:!!adminPassword&&reminders.emailReady});return true;}
    if(!adminPassword)throw error('Private storage is not configured.',503);
    if(path==='/api/reviews'&&method==='GET'){send({reviews:publicReviews.list()});return true;}
    if(path==='/api/reviews'&&method==='POST'){const result=publicReviews.save(await body(req),req.socket.remoteAddress||'unknown');send(result,result.duplicate?200:201);return true;}
-   if(!catalog.size&&!(path.startsWith('/api/admin/')&&!/\/(attempts|exams)(\/|$)/.test(path)))throw error('Private exam storage is not configured.',503);
+   if(!catalog.size&&/^\/api\/(student|admin)\/(attempts|exams)(\/|$)/.test(path))throw error('Private exam storage is not configured.',503);
    if(await uploads(req,res,url,headers))return true;
    if(path==='/api/admin/login'&&method==='POST'){login(req,'admin');const input=await body(req);if(typeof input.password!=='string'||!safeEqual(input.password,adminPassword))throw error('Incorrect owner password.',401);send({token:issue('admin')});return true;}
    if(path==='/api/student/login'&&method==='POST'){login(req,'student');const ip='ip:'+(req.socket.remoteAddress||'unknown');studentLimit(ip);const input=await body(req);if(!/^\d{4}$/.test(input.code||'')||input.code==='1962'){studentLimit(ip,true);throw error('Use your individual client code for an interactive exam.',401);}await refreshSheetClients();const client=allClients().find(c=>!c.sheetDisabled&&safeEqual(c.code,input.code));if(!client){studentLimit(ip,true);throw error('Incorrect student code.',401);}studentLimit('client:'+client.id,true);send({token:issue('student',client.id),access:{code:client.code,clientId:client.id,number:allClients().findIndex(c=>c.id===client.id)+1,level:client.level,permissions:client.permissions}});return true;}

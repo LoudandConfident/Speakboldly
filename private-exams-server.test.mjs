@@ -164,3 +164,13 @@ test('private client storage rejects duplicate names and codes and allows editin
   assert.equal((await app.api('admin/clients',owner,{...saved,hours:2})).status,200);
  }finally{await app.close();}
 });
+
+test('students can log in and list assigned materials before private exam content is installed',async()=>{
+ const app=await start(':memory:',{exams:[]});try{
+  const owner=(await app.api('admin/login',null,{password:'test-owner-password'})).data.token;
+  await app.api('admin/clients',owner,client('Materials','4821'));
+  const login=await app.api('student/login',null,{code:'4821'});assert.equal(login.status,200);assert(login.data.access.permissions.includes('section:exams'));assert.equal((await app.api('student/files?section=exams',login.data.token)).status,200);
+  const status=await app.api('status');assert.equal(status.data.studentLoginReady,true);assert.equal(status.data.examsReady,false);
+  assert.equal((await app.api('student/exams/1',login.data.token)).status,503);
+ }finally{await app.close();}
+});
