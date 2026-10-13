@@ -39,7 +39,7 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': global sw
  assert.equal(request({action:'studentExamSubmit',token:impostor.token,level:2,attemptId:attempt.id,version:attempt.version,answers}).ok,false);
  assert.equal(toggle(2,false).ok,true);
  assert.equal(request({action:'studentExamGet',token:impostor.token,level:2}).ok,false);
- result=request({action:'studentExamSubmit',token,level:2,attemptId:attempt.id,version:attempt.version,answers,score:100,to:'attacker@example.com'});assert.equal(result.ok,true);attempt=result.attempt;assert.equal(attempt.score,null);assert.equal(attempt.status,'Awaiting review');
+ result=request({action:'studentExamSubmit',token,level:2,attemptId:attempt.id,version:attempt.version,answers,score:100,to:'attacker@example.com'});assert.equal(result.ok,true);attempt=result.attempt;assert.equal(attempt.score,undefined);assert.equal(attempt.status,'Submitted');
  assert.deepEqual(request({action:'studentExamDraft',token,level:2,attemptId:attempt.id,version:attempt.version,answers:{A:{},B:{},C:{},D:'changed',E:''}}).attempt.answers,answers);
  assert.equal(f.emails.length,1);assert.equal(f.emails[0].to,'owner@example.com');assert.match(f.emails[0].body,/Name: Test Student\nLevel: 2\nProgram: General English/);
  assert.equal(request({action:'reviewExamAttempt',token,attemptId:attempt.id,version:attempt.version,marks:{A:20,B:20,C:20,D:20,E:20}}).ok,false);
@@ -47,14 +47,15 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': global sw
  assert.equal(request({...admin,marks:{...admin.marks,E:21}}).ok,false);
  result=request(admin);assert.equal(result.ok,true);assert.equal(result.attempt.score,85);assert.equal(result.attempt.status,'Reviewed');
  assert.equal(request(admin).ok,false);
- assert.equal(request({action:'studentExamGet',token,level:2}).attempt.score,85);
+ const studentResult=request({action:'studentExamGet',token,level:2}).attempt;for(const field of ['score','marks','feedback','automatic','reviewedAt','notificationError'])assert.equal(field in studentResult,false);
+ assert.equal(studentResult.status,'Submitted');
  assert.equal(request({action:'listExamAttempts',key:'private-test-key'}).attempts.length,1);
  toggle(3,true);const second=request({action:'studentExamLogin',passcode:f.context.sbWeeklyPortalPasswords().passwords.assessments,name:'Timed Student',program:'IELTS'});
  let timed=request({action:'studentExamGet',token:second.token,level:3}).attempt;
  timed=request({action:'studentExamDraft',token:second.token,level:3,attemptId:timed.id,version:timed.version,answers}).attempt;
  f.advance(20*60*1000+1);
  const expired=request({action:'studentExamSubmit',token:second.token,level:3,attemptId:timed.id,version:timed.version,answers:{...answers,E:'late edit'}}).attempt;
- assert.equal(expired.status,'Awaiting review');assert.equal(expired.answers.E,'Written response');assert.equal(f.emails.length,2);
+ assert.equal(expired.status,'Submitted');assert.equal(expired.answers.E,'Written response');assert.equal(f.emails.length,2);
  const access=request({action:'studentPortalAccess'});assert.equal(access.items.find(i=>i.id==='test:2').enabled,false);
  assert.equal(request({action:'savePortalAccess',item:{id:'test:2',enabled:true}}).ok,false);
  const file=request({key:'private-test-key',action:'savePortalAccess',item:{title:'Exercise',section:'exercises',url:'https://example.com/worksheet.pdf',enabled:true}});assert.equal(file.ok,true);

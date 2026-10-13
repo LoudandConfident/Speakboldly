@@ -48,10 +48,7 @@ export function initializeStudentAssessment(doc) {
  tabs.forEach(tab=>tab.onclick=async()=>{try{assertPortalAllowed(doc.defaultView.localStorage);const id=tab.dataset.portalTab;if(['exercises','material','comprehension','listening'].includes(id)){root.querySelector('#portal-'+id).dataset.passwordLocked='true';select(id);if(!await unlockFolder(['comprehension','listening'].includes(id)?'program:'+id:id,{exercises:'Exercises',material:'Material',comprehension:'Comprehension',listening:'Listening'}[id]))return;}select(id);if(id==='exams'&&!assessmentUnlocked)openAssessmentGate();}catch(error){status.textContent=error.message;}});
  root.querySelector('#portal-material').addEventListener('click',async event=>{const summary=event.target.closest('[data-material-program]>summary,[data-material-level]>summary');if(!summary)return;const folder=summary.parentElement;if(folder.open)return;event.preventDefault();folder.open=true;const key=folder.dataset.materialLevel?'level:'+folder.dataset.materialLevel:'program:'+folder.dataset.materialProgram;try{if(await unlockFolder(key,summary.textContent))folder.open=true;}catch(error){status.textContent=error.message;}});
  function result(attempt,viewer){
-  clearInterval(tick);busy=false;viewer.replaceChildren(text('h4','Level '+attempt.level),text('p',attempt.status==='Reviewed'?'Score: '+attempt.score+' / 100':'Assessment submitted — awaiting your instructor’s correction.'));
-  if(attempt.feedback)viewer.append(text('p',attempt.feedback));
-  const refresh=text('button','Refresh result');refresh.type='button';refresh.className='button light small';viewer.append(refresh);
-  refresh.onclick=async()=>{const current=epoch;refresh.disabled=true;try{const updated=await call('studentExamGet',{level:attempt.level});if(current===epoch&&viewer.isConnected)result(updated.attempt,viewer);}catch(error){if(current===epoch)status.textContent=error.message;}finally{refresh.disabled=false;}};
+  clearInterval(tick);busy=false;viewer.replaceChildren(text('h4','Level '+attempt.level),text('p','Assessment submitted. Your instructor will review it and send your final report separately.'));
  }
  async function openLevel(level){
   const current=epoch;status.textContent='Loading Level '+level+'…';
@@ -60,7 +57,7 @@ export function initializeStudentAssessment(doc) {
    let attempt=response.attempt;remember(level);panel.querySelector('.portal-document-viewer')?.remove();
    const viewer=doc.createElement('section');viewer.className='portal-document-viewer interactive-exam';panel.append(viewer);status.textContent='';
    if(attempt.submittedAt){result(attempt,viewer);return;}
-   busy=true;viewer.append(text('h4','Level '+level),text('p','20 minutes. Answers are saved as you work. Your instructor will correct the five sections and save your score out of 100. For listening, use the recording or instructions supplied by your instructor.'));
+   busy=true;viewer.append(text('h4','Level '+level),text('p','20 minutes. Answers are saved as you work. Your instructor will review your answers and prepare your final report. For listening, use the recording or instructions supplied by your instructor.'));
    const timer=text('p','20:00 remaining');timer.className='student-assessment-timer';timer.setAttribute('role','timer');timer.setAttribute('aria-label','Time remaining');viewer.append(timer);
    const templateResponse=await doc.defaultView.fetch('./student-files/interactive-assessments/level-'+level+'.json');if(!templateResponse.ok)throw new Error('Assessment file could not load. Please retry.');const template=await templateResponse.json();if(current!==epoch)return;const examForm=createExamForm(doc,template);
    for(const el of examForm.elements){const [section,number]=el.name.split('.'),value=number?attempt.answers?.[section]?.[number]:attempt.answers?.[section];if(value!==undefined){if(el.type==='radio')el.checked=el.value===String(value);else el.value=value;}}

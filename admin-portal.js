@@ -6,7 +6,7 @@ import {confirmClientEmail} from './client-email-confirmation.js';
 import {initializePortalSwitches} from './portal-switches.js?v=level-history';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=level-history';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,sheetLibraryRequest} from './client-sheet.js?v=level-history';
-import {initializeExamReview} from './sheet-exam-review.js?v=level-history';
+import {initializeExamReview} from './sheet-exam-review.js?v=private-marking';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
 import {initializeAdminCalendar} from './admin-calendar.js?v=calendar-popup';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=client-levels-eight';
