@@ -1,6 +1,6 @@
 import {MATERIAL_PROGRAM_FOLDERS,materialProgram} from './material-program-folders.js';
 import {initializeStudentBooking} from './student-booking.js';
-import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=program-folders';
+import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=direct-folder-uploads';
 import {createExamForm} from './exam-form.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 
@@ -73,8 +73,8 @@ export function initializeStudentAssessment(doc) {
  }
  function renderFiles(items){
   for(const [section,id,title]of [['exercises','portal-exercises','Exercises'],['levels','portal-material','Material']]){
-   const target=root.querySelector('#'+id),uploads=target.querySelector('.temporary-portal-uploads');target.replaceChildren(text('h3',title));if(uploads)target.append(uploads);
-   const folders=new Map();if(section==='levels'){for(let n=1;n<=8;n++){const folder=doc.createElement('details');folder.className='material-level-folder';folder.dataset.materialLevel=n;folder.append(text('summary','Level '+n));target.append(folder);folders.set(n,folder);}for(const program of MATERIAL_PROGRAM_FOLDERS){const folder=doc.createElement('details');folder.className='material-level-folder';folder.dataset.materialProgram=program.id;folder.append(text('summary',program.title));target.append(folder);folders.set(program.id,folder);}}
+   const target=root.querySelector('#'+id),previousFolders=new Map([...target.querySelectorAll('[data-material-level],[data-material-program]')].map(folder=>[folder.dataset.materialLevel||folder.dataset.materialProgram,{open:folder.open,uploads:folder.querySelector(':scope>.temporary-portal-uploads')}])),uploads=target.querySelector(':scope>.temporary-portal-uploads');target.replaceChildren(text('h3',title));if(uploads)target.append(uploads);
+   const folders=new Map();if(section==='levels'){for(let n=1;n<=8;n++){const folder=doc.createElement('details');folder.className='material-level-folder';folder.dataset.materialLevel=n;folder.append(text('summary','Level '+n));const previous=previousFolders.get(String(n));if(previous){folder.open=previous.open;if(previous.uploads)folder.append(previous.uploads);}target.append(folder);folders.set(n,folder);}for(const program of MATERIAL_PROGRAM_FOLDERS){const folder=doc.createElement('details');folder.className='material-level-folder';folder.dataset.materialProgram=program.id;folder.append(text('summary',program.title));const previous=previousFolders.get(program.id);if(previous){folder.open=previous.open;if(previous.uploads)folder.append(previous.uploads);}target.append(folder);folders.set(program.id,folder);}}
    for(const item of items.filter(item=>item.section===section)){
     const row=doc.createElement('div');row.className='student-portal-file';let control;
     if(item.enabled&&/^https:\/\//.test(item.url)){control=text('a',item.title);control.href=item.url;control.target='_blank';control.rel='noopener noreferrer';control.onclick=async event=>{event.preventDefault();const current=epoch,tab=doc.defaultView.open('about:blank','_blank');if(tab)tab.document.body.textContent='Checking access…';try{const data=await call('studentPortalAccess'),fresh=data.items.find(entry=>entry.id===item.id);if(current!==epoch||!fresh?.enabled){tab?.close();status.textContent='This file is currently dimmed by your instructor.';return;}if(tab)tab.location.href=fresh.url;else status.textContent='Allow popups to open this file.';}catch(error){tab?.close();if(current===epoch)status.textContent=error.message;}};}
