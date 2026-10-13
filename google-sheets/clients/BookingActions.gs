@@ -12,7 +12,14 @@ function setupBookingCalendar(){
  if(!props.getProperty('SB_BOOKING_PASSCODE'))props.setProperty('SB_BOOKING_PASSCODE',Utilities.getUuid().replace(/-/g,'').slice(0,12));
  if(!props.getProperty('SB_BOOKING_ENABLED'))props.setProperty('SB_BOOKING_ENABLED','true');
 }
-function setupStudentPortal(){setupStudentExams();setupBookingCalendar();}
+function setupStudentPortal(){setupStudentExams();setupBookingCalendar();
+ const props=PropertiesService.getScriptProperties();
+ if(props.getProperty('SB_SIX_ASSESSMENT_FILES')!=='1'){
+  const sheet=sbExamBook().getSheetByName('Portal access');const rows=sbBookingRows(sheet,5);
+  rows.forEach((row,index)=>{if(row[1]==='tests'){row[4]=false;sheet.getRange(index+2,1,1,5).setValues([row]);}});
+  props.setProperty('SB_SIX_ASSESSMENT_FILES','1');
+ }
+}
 function sbBookingToday(){return Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');}
 function sbBookingSlots(date){
  const day=new Date(date+'T12:00:00Z').getUTCDay();
