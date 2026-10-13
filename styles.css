@@ -312,3 +312,5 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 #course-detail .detail-actions{display:flex;flex-direction:column;align-items:flex-end;gap:12px}#course-detail .course-book-button{width:140px;min-height:48px;padding:12px 20px;background:var(--ink);color:#fff;opacity:1;pointer-events:auto;font-size:14px}#course-detail .course-book-button:hover{background:#2b5547}#course-detail .course-trial-button{font-size:13px;max-width:100%;white-space:normal;text-align:center}
 
 #admin-portal{padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}#admin-dashboard .admin-detail{padding:16px 0;border:0;border-top:1px solid var(--line);border-radius:0;background:transparent;box-shadow:none}#admin-dashboard .admin-clients-heading{display:flex;flex-wrap:nowrap;align-items:center;gap:12px}#admin-dashboard .admin-clients-heading h3{margin:0}#admin-dashboard #refresh-sheet-clients{margin-left:auto;flex:none;min-height:44px}#admin-dashboard .admin-dashboard-heading{margin-bottom:16px}
+
+.motivation-reflection p{white-space:pre-line}
