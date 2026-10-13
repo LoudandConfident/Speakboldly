@@ -3,7 +3,7 @@ import {MATERIAL_PROGRAM_FOLDERS} from './material-program-folders.js?v=comprehe
 export function attachTemporaryPortalUploads(doc) {
  const root=doc.querySelector('#students-portal'),expected=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
- const targets=[['portal-exercises','exercises','exercises'],['portal-exams','exams','levels'],...[...root.querySelectorAll('[data-material-level],[data-material-program]')].map(folder=>[folder,'material','levels',folder.dataset.materialLevel||folder.dataset.materialProgram])];
+ const targets=[['portal-exercises','exercises','exercises'],...[...root.querySelectorAll('[data-material-level],[data-material-program]')].map(folder=>[folder,'material','levels',folder.dataset.materialLevel||folder.dataset.materialProgram])];
  for(const [id,section,group,folderKey]of targets) {
   const panel=typeof id==='string'?root.querySelector('#'+id):id;if(!panel||panel.querySelector(':scope>.temporary-portal-uploads'))continue;
   const controls=doc.createElement('div');controls.className='temporary-portal-uploads teacher-library-controls';
