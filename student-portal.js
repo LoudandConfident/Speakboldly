@@ -9,10 +9,11 @@ import {portalResources} from './portal-config.js';
 import {loadPortalMaterials} from './portal-materials.js';
 export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMaterials){
  const root=doc.querySelector('#students-portal');if(!root)return;
+ const instructorOnly=root.hasAttribute('data-instructor-only');
  const areaButtons=[...root.querySelectorAll('[data-portal-area]')];
  root.querySelector('#portal-sign-out')?.addEventListener('click',()=>{lock(false);doc.dispatchEvent(new doc.defaultView.Event('portal-sign-out'));root.querySelector('#client-portal').hidden=true;root.querySelector('#admin-portal').hidden=true;doc.defaultView.location.hash='students-portal';});
  areaButtons.forEach(button=>button.addEventListener('click',()=>{
-  const area=button.dataset.portalArea;
+  const area=button.dataset.portalArea;if(instructorOnly&&area==='client')return;
   areaButtons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
   root.querySelector('#client-portal').hidden=area!=='client';
   root.querySelector('#admin-portal').hidden=area!=='admin';
@@ -79,7 +80,7 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
   unlocked=false;root.classList.remove('portal-session-active');access=null;clearStudent();panels.forEach(panel=>panel.querySelector('.portal-document-viewer')?.remove());gate.hidden=false;content.hidden=true;panels.forEach(panel=>panel.hidden=true);form.reset();error.textContent='';input.removeAttribute('aria-invalid');if(focus)input.focus();
  }
  form.addEventListener('submit',async event=>{
-  event.preventDefault();const epoch=generation;let found;const code=input.value.trim();try{if(code==='1962'){found={adminPreview:true};}else{if(!backendBase())takeStudentAttempt(doc.defaultView.localStorage);found=backendBase()?await loginStudent(code):lookup(code);}}catch(message){error.textContent=message.message;return;}if(!found){error.textContent='That Student Code is incorrect. Please ask your teacher for your code.';input.setAttribute('aria-invalid','true');input.focus();return;}
+  event.preventDefault();if(instructorOnly)return;const epoch=generation;let found;const code=input.value.trim();try{if(code==='1962'){found={adminPreview:true};}else{if(!backendBase())takeStudentAttempt(doc.defaultView.localStorage);found=backendBase()?await loginStudent(code):lookup(code);}}catch(message){error.textContent=message.message;return;}if(!found){error.textContent='That Student Code is incorrect. Please ask your teacher for your code.';input.setAttribute('aria-invalid','true');input.focus();return;}
   if(epoch!==generation){clearStudent();return;}access=found;unlocked=true;error.textContent='';input.removeAttribute('aria-invalid');input.value='';gate.hidden=true;content.hidden=false;root.querySelector('#student-login-dialog')?.close();root.classList.add('portal-session-active');doc.defaultView.location.hash='students-portal/student';doc.defaultView.scrollTo({top:0,left:0,behavior:'instant'});updateAccess();refreshMaterials();
  });
  tabs.forEach((tab,i)=>{
