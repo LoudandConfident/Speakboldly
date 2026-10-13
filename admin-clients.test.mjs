@@ -9,9 +9,9 @@ test('dashboard totals count clients and sum taught hours without floating-point
  assert.deepEqual(clientTotals([]),{clients:0,hours:0});assert.deepEqual(clientTotals([{hours:0.1},{hours:0.2},{hours:1.5}]),{clients:3,hours:1.8});
 });
 
-test('client levels accept numbers and named programs while preserving saved legacy records',()=>{
- for(const level of ['1','2','20','E-mail and business writing','Public speaking','Interview training','IELTS'])assert.equal(validateClient({...sample,level}).level,level);
- assert.throws(()=>validateClient({...sample,level:'0'}));
+test('client levels accept 1–8 and preserve older records when loading',()=>{
+ for(const level of ['1','2','3','4','5','6','7','8'])assert.equal(validateClient({...sample,level}).level,level);
+ for(const level of ['0','9','20','IELTS','Public speaking'])assert.throws(()=>validateClient({...sample,level}));
  assert.equal(validateClient({...sample,level:'B1'},[],null,{allowLegacy:true}).level,'B1');
 });
 test('repeated client names and previously assigned codes are rejected while edits remain valid',()=>{
