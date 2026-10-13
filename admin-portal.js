@@ -1,6 +1,6 @@
 import {initializeBookingSettings} from './booking-settings.js';
 import {confirmClientEmail} from './client-email-confirmation.js';
-import {initializePortalSwitches} from './portal-switches.js?v=dim-controls';
+import {initializePortalSwitches} from './portal-switches.js?v=comprehension-listening';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=popup-email';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail} from './client-sheet.js?v=full-library';
 import {initializeExamReview} from './sheet-exam-review.js?v=individual-pdfs';

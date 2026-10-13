@@ -1,7 +1,7 @@
 import {initializeMaterialOwnerLibrary} from './material-owner-library.js';
-import {MATERIAL_PROGRAM_FOLDERS,materialProgram} from './material-program-folders.js';
+import {MATERIAL_PROGRAM_FOLDERS,materialProgram} from './material-program-folders.js?v=comprehension-listening';
 import {initializeStudentBooking} from './student-booking.js';
-import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=direct-folder-uploads';
+import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=comprehension-listening';
 import {createExamForm} from './exam-form.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 

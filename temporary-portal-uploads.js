@@ -1,4 +1,4 @@
-import {MATERIAL_PROGRAM_FOLDERS} from './material-program-folders.js';
+import {MATERIAL_PROGRAM_FOLDERS} from './material-program-folders.js?v=comprehension-listening';
 // Temporary instructor upload controls. Remove this module when setup is finished.
 export function attachTemporaryPortalUploads(doc) {
  const root=doc.querySelector('#students-portal'),expected=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;

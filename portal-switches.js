@@ -27,9 +27,9 @@ export function initializePortalSwitches(doc,isUnlocked,loader) {
   try {
    const saved=await sheetLibraryRequest('listPortalAccess');if(current!==generation||!isUnlocked())return;
    const catalog=[...saved.items],notes=[];
-   for(const [section,group]of [['exercises','exercises'],['material','levels'],['exams','levels']]) {
-    try{const items=await loader(section);for(const item of items)if(!catalog.some(entry=>entry.section===group&&entry.url===item.url))catalog.push({section:group,title:item.title,url:item.url,enabled:false});}catch{notes.push('Website '+section+' files could not load.');}
-    try{const result=await sheetLibraryRequest('listLibrary',{section});for(const item of result.items)if(!catalog.some(entry=>entry.section===group&&entry.url===item.url))catalog.push({section:group,title:item.title,url:item.url,enabled:false});}catch{notes.push('Drive '+section+' folder is not connected.');}
+   for(const [section,group]of [['exercises','exercises'],['material','levels'],['exams','levels'],['listening','levels']]) {
+    try{const items=await loader(section);for(let item of items){if(section==='listening')item={...item,title:'Listening — '+item.title};if(!catalog.some(entry=>entry.section===group&&entry.url===item.url))catalog.push({section:group,title:item.title,url:item.url,enabled:false});}}catch{notes.push('Website '+section+' files could not load.');}
+    try{const result=await sheetLibraryRequest('listLibrary',{section});for(let item of result.items){if(section==='listening')item={...item,title:'Listening — '+item.title};if(!catalog.some(entry=>entry.section===group&&entry.url===item.url))catalog.push({section:group,title:item.title,url:item.url,enabled:false});}}catch{notes.push('Drive '+section+' folder is not connected.');}
    }
    if(current!==generation||!isUnlocked())return;list.replaceChildren();
    render(catalog);
