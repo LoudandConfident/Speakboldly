@@ -1,4 +1,4 @@
-import {initializeTeacherLibrary} from './teacher-library.js?v=full-library';
+import {initializeTeacherLibrary} from './teacher-library.js?v=library-phone-fit';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=full-library';
 import {openClientReportTab} from './report-tabs.js';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail} from './client-sheet.js?v=full-library';
