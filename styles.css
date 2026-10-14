@@ -399,3 +399,16 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 
 #admin-dashboard .phone-install-row{display:flex;justify-content:flex-end;margin-bottom:8px}
 #admin-dashboard #phone-install-button{flex:none;width:auto;font-family:inherit;font-size:13px;font-weight:500;padding:8px 14px;min-height:36px;line-height:1.4}
+
+@media(display-mode:standalone){#admin-dashboard .phone-install-row,#phone-install-button,#app-install,[data-instructor-app-link]{display:none!important}}
+@media(max-width:680px){
+ #admin-calendar .calendar-viewport{max-height:calc(100dvh - 270px);overflow:auto;overscroll-behavior:contain;padding:2px}
+ #admin-calendar .calendar-viewport .calendar-grid,#admin-calendar .calendar-viewport .calendar-weekdays{min-width:0;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+ #admin-calendar .calendar-viewport .calendar-day{min-height:80px;padding:3px 2px;gap:3px;overflow:hidden}
+ #admin-calendar .calendar-viewport .calendar-day-header{flex-wrap:wrap;gap:1px}
+ #admin-calendar .calendar-viewport .calendar-add{min-width:22px;min-height:30px;padding:0;font-size:18px}
+ #admin-calendar .calendar-viewport .calendar-weekdays{font-size:10px;margin-bottom:4px}
+ #admin-calendar .calendar-viewport .calendar-slot,#admin-calendar .calendar-viewport .calendar-session{font-size:10px;padding:4px 1px;min-height:44px;white-space:pre-line;overflow-wrap:anywhere}
+ #admin-calendar .calendar-appointment{flex-wrap:wrap}
+ #admin-calendar .calendar-scroll-hint{display:none}
+}
