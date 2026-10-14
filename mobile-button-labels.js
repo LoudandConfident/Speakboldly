@@ -1,4 +1,4 @@
-// Keep navigation controls intact; hide decorative arrows in text buttons on phones.
+// Mark decorative arrows in text buttons; shared styles hide them on every screen.
 function prepareButtonLabels(root=document){
  const buttons=[];
  if(root.nodeType===1&&root.matches('button,a.button,a.course-link'))buttons.push(root);

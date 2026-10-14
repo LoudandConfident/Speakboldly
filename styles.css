@@ -415,3 +415,5 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 
 #placement .assessment-option-title{font-family:Manrope,"DM Sans",sans-serif;font-size:clamp(24px,3vw,32px);font-weight:500;line-height:1.4;letter-spacing:-.5px;margin:16px 0}
 #placement .assessment-options>article>p:not(.eyebrow){font-family:inherit;font-size:15px;line-height:1.8}
+
+.mobile-button-arrow{display:none!important}
