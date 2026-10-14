@@ -436,3 +436,12 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 #placement .assessment-options>article>.assessment-description{font-size:15px;font-weight:400;line-height:1.7;margin:0 0 12px}
 #placement .assessment-options>article>.assessment-details{font-family:inherit;font-size:14px;font-weight:400;line-height:1.6;letter-spacing:0;color:var(--muted);margin:0 0 20px}
 #placement .assessment-options>article>.button{align-self:flex-start;margin:0;width:250px;max-width:100%;min-height:44px;padding:10px 16px;font-size:13px;font-weight:500}
+
+#placement-result.assessment-result,#learner-profile .learner-result.assessment-result{font-family:"DM Sans",system-ui,sans-serif;font-size:15px;line-height:1.7;color:var(--ink)}
+#placement-result.assessment-result :is(h2,h3,h4,p,li,th,td,caption),#learner-profile .learner-result.assessment-result :is(h2,h3,h4,p,li,th,td,caption){font-family:inherit;color:var(--ink);letter-spacing:0}
+#placement-result.assessment-result :is(h2,h3),#learner-profile .learner-result.assessment-result :is(h2,h3){font-size:20px;font-weight:600;line-height:1.4;margin:22px 0 12px}
+#placement-result.assessment-result h4,#learner-profile .learner-result.assessment-result h4{font-size:15px;font-weight:600;margin:18px 0 8px}
+#placement-result.assessment-result :is(p,li),#learner-profile .learner-result.assessment-result :is(p,li){font-size:15px;font-weight:400;line-height:1.7}
+#placement-result.assessment-result .placement-score{font-size:15px}
+.result-image-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:20px 0}
+.result-image-actions p{flex-basis:100%;margin:0}

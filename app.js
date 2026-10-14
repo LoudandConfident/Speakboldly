@@ -1,3 +1,5 @@
+import {practiceForLevel} from './assessment-guidance.js';
+import {addResultImageButton} from './result-image.js';
 import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } from './assessment-time.js';
 import { questions, TEST_VERSION } from './placement-questions.js';
 import { scoreAnswers } from './placement-scoring.js';
@@ -73,8 +75,14 @@ function finish(record){
  locked=true;clearInterval(timerInterval);timerInterval=null;form.querySelectorAll('input,button').forEach(e=>{if(!['test-prev','test-next'].includes(e.id))e.disabled=true;});renderPage();
  const resultScore=scoreAnswers(record.answers);
  const result=$('#placement-result');result.hidden=false;
- result.innerHTML='<h3>Your result: '+escape(resultScore.level)+'</h3><p class="placement-score"><strong>'+resultScore.score+' / '+resultScore.total+'</strong> · '+resultScore.percentage+'%</p>';
+ result.classList.add('assessment-result');
+ result.innerHTML='<h3>Estimated level range: '+escape(resultScore.level)+'</h3><p class="placement-score"><strong>'+resultScore.score+' / '+resultScore.total+'</strong> · '+resultScore.percentage+'%</p>';
  const chart=document.createElement('section');chart.className='cefr-chart';chart.innerHTML='<h4>CEFR chart</h4><div class="cefr-level-chart">'+[['A1','Beginner'],['A2','Elementary'],['B1','Intermediate'],['B2','Upper intermediate'],['C1','Advanced'],['C2','Proficient']].map(([level,label])=>'<div class="cefr-level'+(resultScore.level.includes(level)?' is-result':'')+'"><strong>'+level+'</strong><span>'+label+'</span></div>').join('')+'</div>';result.append(chart);
+ const guidance=practiceForLevel(resultScore.level);
+ const priorities=document.createElement('section');priorities.className='result-practice';
+ priorities.innerHTML='<h3>What to work on next</h3><p>Suggested priorities for your estimated range. Your teacher can refine these after speaking and listening assessment.</p>'+[['Structure of language',guidance.structure],['Vocabulary and meaning',guidance.vocabulary],['Using English',guidance.use],['On your own',guidance.routine]].map(([heading,text])=>'<h4>'+escape(heading)+'</h4><p>'+escape(text)+'</p>').join('');result.append(priorities);
+ const estimate=document.createElement('p');estimate.textContent='This shortened test gives a provisional estimate, not a certified CEFR level.';result.append(estimate);
+ addResultImageButton(document,window,result,'Speak Boldly — English assessment');
  const note=document.createElement('p');note.textContent='Send a voice note for your speaking assessment before starting your course.';result.append(note);
  const contact=document.createElement('a');contact.className='button';contact.href='#contact';contact.textContent='Contact us';result.append(contact);
  return record;
