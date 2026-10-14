@@ -456,3 +456,5 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 #programs>.program-course-actions{grid-column:2;grid-row:1;display:flex;justify-content:flex-end;align-self:center;justify-self:end;margin:0;transform:none}
 #programs>.page-signature{grid-column:1/-1}
 @media(max-width:680px){#programs{column-gap:14px}#programs .program-course-actions>.button{padding:9px 12px;white-space:nowrap}}
+
+.course-card.course-coming-soon,.course-card.course-dimmed{position:relative;isolation:isolate}.course-card .upcoming-watermark{font-size:clamp(26px,3vw,44px);padding:18px}
