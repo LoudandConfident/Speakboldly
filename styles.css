@@ -428,3 +428,11 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 #programs .program-course-actions>.button{flex:none;width:auto;min-height:40px;padding:9px 14px;font-size:13px;line-height:1.4;gap:0}
 
 #students-portal .portal-area-choices{margin-top:36px}
+
+#placement .assessment-options>article{max-width:760px;display:flex;flex-direction:column;align-items:flex-start}
+#placement .assessment-options .assessment-option-title{font-size:24px;line-height:1.35;margin:12px 0 16px}
+#placement .assessment-options>article>.assessment-notice{font-family:inherit;font-size:15px;line-height:1.6;margin:0 0 14px}
+#placement .assessment-notice strong{font-family:inherit;font-size:inherit;font-weight:600}
+#placement .assessment-options>article>.assessment-description{font-size:15px;font-weight:400;line-height:1.7;margin:0 0 12px}
+#placement .assessment-options>article>.assessment-details{font-family:inherit;font-size:14px;font-weight:400;line-height:1.6;letter-spacing:0;color:var(--muted);margin:0 0 20px}
+#placement .assessment-options>article>.button{align-self:flex-start;margin:0;width:250px;max-width:100%;min-height:44px;padding:10px 16px;font-size:13px;font-weight:500}
