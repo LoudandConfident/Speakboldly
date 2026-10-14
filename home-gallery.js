@@ -75,12 +75,13 @@ export function motivationShareUrl(entry,base='https://loudandconfident.github.i
 export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
  if (!page) return;
- let day = null,currentEntry;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,shareStatus);page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationShareUrl(currentEntry,doc.baseURI);try{if(win.navigator.share)await win.navigator.share({title:currentEntry.quote,url});else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
+ let day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,shareStatus);page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationShareUrl(currentEntry,doc.baseURI);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
  function refresh() {
   const now = new win.Date(), nextDay = cairoDayNumber(now);
   if (day === nextDay) return;
   day = nextDay;
-  const index = nextDay % dailyQuotes.length, entry = dailyQuotes[index], details = quoteDetails[index];currentEntry=entry;shareStatus.textContent='';
+  const index = nextDay % dailyQuotes.length, entry = dailyQuotes[index], details = quoteDetails[index];currentEntry=entry;shareFile=null;shareStatus.textContent='';
+  if(win.navigator.canShare&&win.File&&win.fetch)win.fetch(new URL(entry.image,doc.baseURI)).then(response=>{if(!response.ok)throw Error('Image unavailable');return response.blob();}).then(blob=>{if(currentEntry===entry)shareFile=new win.File([blob],entry.image.split('/').pop(),{type:blob.type||'image/png'});}).catch(()=>{});
   page.querySelector('#daily-quote-image').src = entry.image;
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');
   const headline = doc.createElement('strong');

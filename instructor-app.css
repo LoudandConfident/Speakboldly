@@ -22,3 +22,5 @@
 .personal-calendar-connect{margin-top:18px}.personal-calendar-connect>div p{font-size:14px;line-height:1.6}.personal-calendar-connect>div .button{margin:4px 8px 4px 0;min-height:44px}
 
 .instructor-app .admin-client-actions .button{min-height:44px}
+
+.app-website-menu{position:relative;margin-left:auto;font-size:13px}.app-website-menu summary{cursor:pointer;min-height:44px;display:flex;align-items:center;padding:8px}.app-website-menu nav{position:absolute;right:0;top:100%;min-width:180px;display:flex;flex-direction:column;gap:0;background:var(--cream);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px #0002;padding:6px;z-index:20}.app-website-menu nav a{display:block;padding:12px;text-decoration:none;font-size:14px}.app-header #app-lock{margin-left:0}
