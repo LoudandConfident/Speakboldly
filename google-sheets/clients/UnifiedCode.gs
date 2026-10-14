@@ -108,173 +108,206 @@ function doGet(event) {
 
 function doPost(event) {
   const lock = LockService.getScriptLock();
-
   try {
-    if (!event || !event.postData ||
-        event.postData.contents.length > 8000000) {
-      throw new Error('Invalid request.');
+    const request = sbParseWebRequest(event);
+    const data = request.data;
+    if (SB_PUBLIC_BOOKING_ACTIONS.includes(data.action)) {
+      if (request.size > 20000) throw new Error('Request too large.');
+      return handlePublicBooking(data);
     }
-
-    const data = JSON.parse(event.postData.contents);
-    if (SB_PUBLIC_BOOKING_ACTIONS.includes(data.action)) {if(event.postData.contents.length>20000)throw new Error('Request too large.');return handlePublicBooking(data);}
     if (SB_STUDENT_EXAM_ACTIONS.includes(data.action)) {
-      if (event.postData.contents.length > 65000) throw new Error('Request too large.');
+      if (request.size > 65000) throw new Error('Request too large.');
       return handleStudentExam(data);
     }
-    const properties = PropertiesService.getScriptProperties();
-    const key = properties.getProperty('CLIENT_SYNC_KEY');
-
-    if (!key || data.key !== key) {
-      throw new Error('Incorrect connection key.');
+    const connection = sbRequireClientConnection(data);
+    if (!['sendClientEmail', 'uploadLibraryFile'].includes(data.action) && request.size > 20000) {
+      throw new Error('Request too large.');
     }
-
-    const sheetId = properties.getProperty('CLIENT_SHEET_ID');
-    if (!sheetId) {
-      throw new Error('Run setupClientSync first.');
-    }
-
-    const sheet = SpreadsheetApp
-      .openById(sheetId)
-      .getSheetByName('Clients');
-
-    if (!sheet) {
-      throw new Error('Clients tab is missing.');
-    }
-
-    if(!['sendClientEmail','uploadLibraryFile'].includes(data.action)&&event.postData.contents.length>20000)throw new Error('Request too large.');
-    if (SB_OWNER_BOOKING_ACTIONS.includes(data.action)) return handleOwnerBooking(data);
-    if (SB_INSTRUCTOR_EXAM_ACTIONS.includes(data.action)) return handleInstructorExam(data);
-    if(['personalCalendarSettings','resetPersonalCalendarLink'].includes(data.action))return response(sbPersonalCalendarSettings(data));
-    if(data.action==='sendClientEmail')return handleClientEmail(data);
-    if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(data.action))return handleLibraryAction(data);
-
-    if(data.action==='deleteClient')return response(sbDeleteClientRecord(data));
-    if (data.action === 'checkConnection') {
-      return response({ ok: true, connected: true });
-    }
-
-    if(['listTeacherDocuments','saveTeacherDocument'].includes(data.action)){if(typeof handleSheetDocumentAction!=='function')throw new Error('Update your Clients Apps Script to enable shared reports.');return handleSheetDocumentAction(data);}
-
-    if (['listSessions', 'saveSession', 'cancelSession'].includes(data.action)) {
-      return handleSheetSessionAction(data);
-    }
-
-    if (data.action !== 'upsertClient' || !data.client) {
-          if (data.action === 'listClients') {
-      lock.waitLock(20000);sbApplySessionHours(SpreadsheetApp.openById(sheetId));
-      const rows = sheet.getLastRow() > 1
-        ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 12).getValues()
-        : [];
-      const clients = rows.filter(row => row[0] && row[1] && row[2]).map(row => ({
-        id: String(row[0]), name: String(row[1]).trim(),
-        email: String(row[2]).trim().toLowerCase(),
-        code: String(row[3]).padStart(4, '0'), level: String(row[4]),
-        payment: String(row[5]), amountPaid: Number(row[6] || 0),
-        hours: Number(row[7] || 0),
-        permissions: row[9] ? JSON.parse(String(row[9])) : [],...(row[11]?{program:String(row[11]).replace(/^'/,'')}:{}),...(row[10]?{enrollmentHistory:JSON.parse(String(row[10]))}:{})
-      }));
-      return response({ ok: true, clients });
-    }
-
-
-      throw new Error('Invalid action.');
-    }
-
-    const client = data.client;
-    if(client.permissions!==undefined&&(!Array.isArray(client.permissions)||client.permissions.length>500||client.permissions.some(p=>typeof p!=='string'||p.length>2000||!/^(section:|file:)/.test(p))))throw new Error('Invalid client access selections.');
-    const text = value => String(value == null ? '' : value).trim();
-
-    const id = text(client.id);
-    const name = text(client.name);
-    const email = text(client.email).toLowerCase();
-    const code = text(client.code);
-    const level = text(client.level);
-    const payment = text(client.payment);
-    const amount = Number(client.amountPaid || 0);
-    let hours = Number(client.hours);
-
-    if (!/^[A-Za-z0-9-]{1,100}$/.test(id)) {
-      throw new Error('Invalid student ID.');
-    }
-    if (!name || name.length > 100) {
-      throw new Error('Check the student name.');
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
-        email.length > 254) {
-      throw new Error('Check the student email.');
-    }
-    if (!/^\d{4}$/.test(code) || code === '1962') {
-      throw new Error('Choose a valid four-digit student code.');
-    }
-    if (!level || level.length > 100) {
-      throw new Error('Check the level or program.');
-    }
-    if (!['Unpaid', 'Part paid', 'Paid'].includes(payment)) {
-      throw new Error('Check the payment status.');
-    }
-    if (!Number.isFinite(amount) || amount < 0 ||
-        amount > 100000000 ||
-        !Number.isFinite(hours) || hours < 0 ||
-        hours > 100000) {
-      throw new Error('Check the amount paid and hours.');
-    }
-
-    lock.waitLock(20000);sbApplySessionHours(SpreadsheetApp.openById(sheetId));
-
-    const rows = sheet.getLastRow() > 1
-      ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getValues()
-      : [];
-
-    const normalize = value =>
-      text(value).normalize('NFKC').replace(/\s+/g, ' ').toLowerCase();
-
-    let targetRow = sheet.getLastRow() + 1;
-
-    rows.forEach((row, index) => {
-      if (String(row[0]) === id) {
-        targetRow = index + 2;
-        return;
-      }
-
-      if (String(row[3]).padStart(4, '0') === code) {
-        throw new Error('Student code is already assigned.');
-      }
-      if (normalize(row[1]) === normalize(name)) {
-        throw new Error('Student name is already registered.');
-      }
-      if (text(row[2]).toLowerCase() === email) {
-        throw new Error('Email already belongs to another student.');
-      }
-    });
-
-    const safe = value =>
-      /^[=+\-@\t\r]/.test(value) ? "'" + value : value;
-
-    hours=sbSetClientHours(SpreadsheetApp.openById(sheetId),sheet,targetRow,client);
-    const previous=targetRow<=sheet.getLastRow()?sheet.getRange(targetRow,1,1,12).getValues()[0]:null;
-    const {program,enrollmentHistory}=sbClientEnrollmentChange(previous,client);
-    sheet.getRange(targetRow, 4).setNumberFormat('@');
-    sheet.getRange(targetRow, 1, 1, 9).setValues([[
-      id,
-      safe(name),
-      safe(email),
-      code,
-      safe(level),
-      payment,
-      amount,
-      hours,
-      new Date().toISOString()
-    ]]);
-
-    if(client.permissions!==undefined){sheet.getRange(1,10).setValue('Permissions');sheet.getRange(targetRow,10).setValue(JSON.stringify(client.permissions));}
-    sheet.getRange(1,11,1,2).setValues([['Level history','Program']]);sheet.getRange(targetRow,11,1,2).setValues([[JSON.stringify(enrollmentHistory),safe(program)]]);
-    return response({ ok: true, clientId: id,program,enrollmentHistory,hours });
-
+    return sbRouteInstructorRequest(data, connection, lock);
   } catch (error) {
-    return response({ ok: false, error: error.message });
+    return response({ ok: false, error: String(error.message || error) });
   } finally {
     if (lock.hasLock()) lock.releaseLock();
   }
+}
+
+function sbParseWebRequest(event) {
+  if (!event || !event.postData || typeof event.postData.contents !== 'string') {
+    throw new Error('Invalid request.');
+  }
+  const contents = event.postData.contents;
+  if (contents.length > 8000000) throw new Error('Invalid request.');
+  const data = JSON.parse(contents);
+  if (!data || typeof data !== 'object' || Array.isArray(data) || typeof data.action !== 'string') {
+    throw new Error('Invalid action.');
+  }
+  return { data: data, size: contents.length };
+}
+
+function sbRequireClientConnection(data) {
+  const properties = PropertiesService.getScriptProperties();
+  const key = properties.getProperty('CLIENT_SYNC_KEY');
+  if (!key || data.key !== key) throw new Error('Incorrect connection key.');
+  const sheetId = properties.getProperty('CLIENT_SHEET_ID');
+  if (!sheetId) throw new Error('Run setupClientSync first.');
+  const book = SpreadsheetApp.openById(sheetId);
+  const sheet = book.getSheetByName('Clients');
+  if (!sheet) throw new Error('Clients tab is missing.');
+  return { book: book, sheet: sheet, sheetId: sheetId };
+}
+
+function sbRouteInstructorRequest(data, connection, lock) {
+  if (SB_OWNER_BOOKING_ACTIONS.includes(data.action)) return handleOwnerBooking(data);
+  if (SB_INSTRUCTOR_EXAM_ACTIONS.includes(data.action)) return handleInstructorExam(data);
+  if (['personalCalendarSettings', 'resetPersonalCalendarLink'].includes(data.action)) {
+    return response(sbPersonalCalendarSettings(data));
+  }
+  if (data.action === 'sendClientEmail') return handleClientEmail(data);
+  if (['listLibrary', 'uploadLibraryFile', 'readLibraryFile', 'sendLibraryFile'].includes(data.action)) {
+    return handleLibraryAction(data);
+  }
+  if (data.action === 'deleteClient') return response(sbDeleteClientRecord(data));
+  if (data.action === 'checkConnection') return response({ ok: true, connected: true });
+  if (['listTeacherDocuments', 'saveTeacherDocument'].includes(data.action)) {
+    return handleSheetDocumentAction(data);
+  }
+  if (['listSessions', 'saveSession', 'cancelSession'].includes(data.action)) {
+    return handleSheetSessionAction(data);
+  }
+  if (data.action === 'listClients') {
+    return sbListConnectedClients(connection.sheetId, connection.sheet, lock);
+  }
+  if (data.action === 'upsertClient' && data.client) {
+    return sbUpsertConnectedClient(data, connection.sheetId, connection.sheet, lock);
+  }
+  throw new Error('Invalid action.');
+}
+
+function sbListConnectedClients(sheetId, sheet, lock) {
+  lock.waitLock(20000);
+  sbApplySessionHours(SpreadsheetApp.openById(sheetId));
+  const rows = sheet.getLastRow() > 1
+    ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 12).getValues()
+    : [];
+  const clients = rows.filter(row => row[0] && row[1] && row[2]).map(row => ({
+    id: String(row[0]), name: String(row[1]).trim(),
+    email: String(row[2]).trim().toLowerCase(),
+    code: String(row[3]).padStart(4, '0'), level: String(row[4]),
+    payment: String(row[5]), amountPaid: Number(row[6] || 0),
+    hours: Number(row[7] || 0),
+    permissions: row[9] ? JSON.parse(String(row[9])) : [],...(row[11]?{program:String(row[11]).replace(/^'/,'')}:{}),...(row[10]?{enrollmentHistory:JSON.parse(String(row[10]))}:{})
+  }));
+  return response({ ok: true, clients });
+}
+
+function sbUpsertConnectedClient(data, sheetId, sheet, lock) {
+  const client = data.client;
+  if(client.permissions!==undefined&&(!Array.isArray(client.permissions)||client.permissions.length>500||client.permissions.some(p=>typeof p!=='string'||p.length>2000||!/^(section:|file:)/.test(p))))throw new Error('Invalid client access selections.');
+  const text = value => String(value == null ? '' : value).trim();
+
+  const id = text(client.id);
+  const name = text(client.name);
+  const email = text(client.email).toLowerCase();
+  const code = text(client.code);
+  const level = text(client.level);
+  const payment = text(client.payment);
+  const amount = Number(client.amountPaid || 0);
+  let hours = Number(client.hours);
+
+  if (!/^[A-Za-z0-9-]{1,100}$/.test(id)) {
+    throw new Error('Invalid student ID.');
+  }
+  if (!name || name.length > 100) {
+    throw new Error('Check the student name.');
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+      email.length > 254) {
+    throw new Error('Check the student email.');
+  }
+  if (!/^\d{4}$/.test(code) || code === '1962') {
+    throw new Error('Choose a valid four-digit student code.');
+  }
+  if (!level || level.length > 100) {
+    throw new Error('Check the level or program.');
+  }
+  if (!['Unpaid', 'Part paid', 'Paid'].includes(payment)) {
+    throw new Error('Check the payment status.');
+  }
+  if (!Number.isFinite(amount) || amount < 0 ||
+      amount > 100000000 ||
+      !Number.isFinite(hours) || hours < 0 ||
+      hours > 100000) {
+    throw new Error('Check the amount paid and hours.');
+  }
+
+  lock.waitLock(20000);sbApplySessionHours(SpreadsheetApp.openById(sheetId));
+
+  const rows = sheet.getLastRow() > 1
+    ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 9).getValues()
+    : [];
+
+  const normalize = value =>
+    text(value).normalize('NFKC').replace(/\s+/g, ' ').toLowerCase();
+
+  let targetRow = sheet.getLastRow() + 1;
+
+  rows.forEach((row, index) => {
+    if (String(row[0]) === id) {
+      targetRow = index + 2;
+      return;
+    }
+
+    if (String(row[3]).padStart(4, '0') === code) {
+      throw new Error('Student code is already assigned.');
+    }
+    if (normalize(row[1]) === normalize(name)) {
+      throw new Error('Student name is already registered.');
+    }
+    if (text(row[2]).toLowerCase() === email) {
+      throw new Error('Email already belongs to another student.');
+    }
+  });
+
+  const safe = value =>
+    /^[=+\-@\t\r]/.test(value) ? "'" + value : value;
+
+  hours=sbSetClientHours(SpreadsheetApp.openById(sheetId),sheet,targetRow,client);
+  const previous=targetRow<=sheet.getLastRow()?sheet.getRange(targetRow,1,1,12).getValues()[0]:null;
+  const {program,enrollmentHistory}=sbClientEnrollmentChange(previous,client);
+  sheet.getRange(targetRow, 4).setNumberFormat('@');
+  sheet.getRange(targetRow, 1, 1, 9).setValues([[
+    id,
+    safe(name),
+    safe(email),
+    code,
+    safe(level),
+    payment,
+    amount,
+    hours,
+    new Date().toISOString()
+  ]]);
+
+  if(client.permissions!==undefined){sheet.getRange(1,10).setValue('Permissions');sheet.getRange(targetRow,10).setValue(JSON.stringify(client.permissions));}
+  sheet.getRange(1,11,1,2).setValues([['Level history','Program']]);sheet.getRange(targetRow,11,1,2).setValues([[JSON.stringify(enrollmentHistory),safe(program)]]);
+  return response({ ok: true, clientId: id,program,enrollmentHistory,hours });
+
+}
+
+function verifySpeakBoldlyInstall() {
+  const checks = {
+    requests: typeof doPost === 'function',
+    clients: typeof sbUpsertConnectedClient === 'function',
+    calendar: typeof handleSheetSessionAction === 'function',
+    emails: typeof handleClientEmail === 'function',
+    examinations: typeof handleStudentExam === 'function',
+    levelAccess: typeof sbLearningLevelAccess === 'function',
+    bookings: typeof handlePublicBooking === 'function',
+    personalCalendar: typeof sbPersonalCalendarFeed === 'function'
+  };
+  const missing = Object.keys(checks).filter(name => !checks[name]);
+  if (missing.length) throw new Error('The copied script is incomplete: ' + missing.join(', '));
+  console.log('Complete Speak Boldly script verified. Save and deploy a New version using the existing deployment URL.');
+  return checks;
 }
 
 // Add this file to the existing Clients Apps Script project.
