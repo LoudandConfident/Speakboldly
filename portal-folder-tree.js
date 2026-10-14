@@ -2,10 +2,11 @@ export const PORTAL_SUBFOLDERS=[...Array.from({length:8},(_,i)=>({key:'level:'+(
 export function portalItemFolder(item){
  if(!['levels','exercises'].includes(item.section))return null;
  const title=String(item.title||'');
+ const explicitLevel=title.match(/^Level[\s_-]*([1-8])\s*[—:-]/i);if(item.section==='levels'&&explicitLevel)return 'level:'+explicitLevel[1];
  if(/\bcomprehension\b/i.test(title))return 'exercise:comprehension';
  if(/\blistening\b/i.test(title))return 'exercise:listening';
  if(item.section==='exercises')return 'exercise:resources';
- const level=title.match(/\blevel[\s_-]*([1-8])\b/i);return level?'level:'+level[1]:null;
+ const level=title.match(/(?:^|[^a-z0-9])level[\s_-]*([1-8])(?:[^0-9]|$)/i);return level?'level:'+level[1]:null;
 }
 export function ensurePortalFolderTree(doc){
  for(const parent of ['material','exercises']){
