@@ -458,3 +458,12 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 @media(max-width:680px){#programs{column-gap:14px}#programs .program-course-actions>.button{padding:9px 12px;white-space:nowrap}}
 
 .course-card.course-coming-soon,.course-card.course-dimmed{position:relative;isolation:isolate}.course-card .upcoming-watermark{font-size:clamp(26px,3vw,44px);padding:18px}
+
+#courses .courses-introduction{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,350px);align-items:start;gap:32px;margin-bottom:28px}
+#courses .courses-heading h2{margin-bottom:12px}
+#courses .courses-subtitle{max-width:560px;margin:0;font-size:15px;line-height:1.65;color:var(--muted)}
+#courses .courses-introduction .course-booking-note{max-width:350px;justify-self:end;margin:0;font-family:inherit;font-size:12px;line-height:1.65;color:var(--ink)}
+#courses .course-booking-note ul{padding-left:18px;margin:0}
+#courses .course-booking-note li{margin:0 0 7px}
+#courses .course-booking-note strong{font-size:inherit;font-weight:600}
+@media(max-width:760px){#courses .courses-introduction{grid-template-columns:minmax(0,1fr);gap:20px}#courses .courses-introduction .course-booking-note{width:min(100%,350px);max-width:100%;justify-self:end}}
