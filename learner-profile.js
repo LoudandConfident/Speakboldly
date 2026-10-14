@@ -1,0 +1,22 @@
+import {learnerProfiles,learnerQuestions,scoreLearnerProfile} from './learner-profile-data.js';
+export function initializeLearnerProfile(doc,win){
+ const root=doc.querySelector('#learner-profile');if(!root)return;
+ const form=root.querySelector('form'),questions=root.querySelector('.learner-questions'),progress=root.querySelector('.learner-progress'),result=root.querySelector('.learner-result'),previous=root.querySelector('[data-learner-previous]'),next=root.querySelector('[data-learner-next]'),submit=root.querySelector('[type=submit]'),error=root.querySelector('.learner-error');
+ let page=0;const pageSize=4;const fields=[];
+ const el=(tag,text,className)=>{const node=doc.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
+ learnerQuestions.forEach((question,index)=>{const field=el('fieldset');field.append(el('legend',(index+1)+'. '+question.prompt));question.options.forEach(option=>{const label=el('label'),input=el('input');input.type='radio';input.name='learner-'+index;input.value=option.profile;input.required=true;label.append(input,el('span',option.text));field.append(label);});questions.append(field);fields.push(field);});
+ function showPage(){fields.forEach((field,index)=>{const active=Math.floor(index/pageSize)===page;field.hidden=!active;field.disabled=!active;});progress.textContent='Page '+(page+1)+' of 3 · Questions '+(page*pageSize+1)+'–'+Math.min((page+1)*pageSize,fields.length);previous.disabled=page===0;next.hidden=page===2;submit.hidden=page!==2;error.textContent='';}
+ const pageValid=()=>fields.filter(field=>!field.disabled).every(field=>{const input=field.querySelector('input');return input.reportValidity();});
+ previous.onclick=()=>{if(page>0){page--;showPage();progress.focus();}};
+ next.onclick=()=>{if(pageValid()){page++;showPage();progress.focus();}};
+ function renderResult(score){result.replaceChildren(el('h2','Your English learner profile'));
+ const title=score.strongest.length===1?learnerProfiles[score.strongest[0]].name:'Your preferences are a blend';result.append(el('h3',title),el('p','This reflects the activities you chose today, not your ability or a fixed personality type. There are no right or wrong answers.'));
+ const table=el('table');table.append(el('caption','Your choices across 12 questions'));for(const key of Object.keys(learnerProfiles)){const row=el('tr');const name=el('th',learnerProfiles[key].name);name.scope='row';row.append(name,el('td',score.counts[key]+' of '+score.total+' choices'));table.append(row);}result.append(table);
+ for(const key of score.strongest){const profile=learnerProfiles[key],section=el('section');section.append(el('h3',profile.name),el('p',profile.summary),el('h4','How to practise English'));const list=el('ul');profile.tips.forEach(tip=>list.append(el('li',tip)));section.append(list,el('h4','A short routine to try'),el('p',profile.routine));result.append(section);}
+ result.append(el('h3','Whatever your preferences'),el('p','Mix listening, reading, speaking, and writing. Try to recall useful language without looking, use it in real situations, review feedback, and return to it over several days. Choose a routine you can repeat, then adjust it based on your progress.'));
+ const restart=el('button','Retake the learner test','button light');restart.type='button';restart.onclick=()=>{form.reset();page=0;form.hidden=false;result.hidden=true;showPage();progress.focus();};result.append(restart);form.hidden=true;result.hidden=false;result.focus();result.scrollIntoView({block:'start',behavior:'auto'});
+ }
+ form.onsubmit=event=>{event.preventDefault();if(page!==2){next.click();return;}if(!pageValid())return;const answers=learnerQuestions.map((_,index)=>form.querySelector('[name="learner-'+index+'"]:checked')?.value);try{renderResult(scoreLearnerProfile(answers));}catch(e){error.textContent=e.message;const missing=answers.findIndex(answer=>!answer);if(missing>=0){page=Math.floor(missing/pageSize);showPage();error.textContent=e.message;progress.focus();}}};
+ showPage();
+}
+if(typeof document!=='undefined')initializeLearnerProfile(document,window);

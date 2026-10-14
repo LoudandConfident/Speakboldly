@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {learnerQuestions,scoreLearnerProfile} from './learner-profile-data.js';
+test('all valid preferences produce the appropriate leading profile',()=>{for(const key of ['visual','listening','reflective','practical']){const score=scoreLearnerProfile(Array(12).fill(key));assert.deepEqual(score.strongest,[key]);assert.equal(score.counts[key],12);assert.equal(Object.values(score.counts).reduce((a,b)=>a+b),12);}});
+test('equal and partial ties stay blended rather than choosing the first profile',()=>{assert.equal(scoreLearnerProfile(Array.from({length:12},(_,i)=>['visual','listening','reflective','practical'][i%4])).strongest.length,4);assert.deepEqual(scoreLearnerProfile([...Array(6).fill('visual'),...Array(6).fill('listening')]).strongest,['visual','listening']);});
+test('missing or invalid answers cannot produce a result',()=>{assert.throws(()=>scoreLearnerProfile([]));assert.throws(()=>scoreLearnerProfile(Array(12).fill('unknown')));assert.throws(()=>scoreLearnerProfile(Array(12).fill(undefined)));assert.equal(learnerQuestions.length,12);learnerQuestions.forEach(q=>assert.equal(new Set(q.options.map(o=>o.profile)).size,4));});
