@@ -323,8 +323,8 @@ main #daily-quote>.page-signature{margin-top:auto;padding-top:10px}
 #students-portal[data-instructor-only] [data-portal-area="client"],#students-portal[data-instructor-only] #client-portal{display:none!important}#students-portal[data-instructor-only] .portal-area-choices{grid-template-columns:minmax(0,1fr);max-width:420px}
 
 /* Student Portal contains only authorized level assessments. */
-#students-portal[data-global-portal] [data-portal-tab]:not([data-portal-tab="exams"]):not([data-portal-tab="exercises"]):not([data-portal-tab="material"]):not([data-portal-tab="calendar"]):not([data-portal-tab="comprehension"]):not([data-portal-tab="listening"]),
-#students-portal[data-global-portal] [data-portal-panel]:not([data-portal-panel="exams"]):not([data-portal-panel="exercises"]):not([data-portal-panel="material"]):not([data-portal-panel="calendar"]):not([data-portal-panel="comprehension"]):not([data-portal-panel="listening"]){display:none!important}
+#students-portal[data-global-portal] [data-portal-tab]:not([data-portal-tab="exams"]):not([data-portal-tab="exercises"]):not([data-portal-tab="material"]):not([data-portal-tab="calendar"]):not([data-portal-tab="comprehension"]):not([data-portal-tab="listening"]):not([data-portal-tab="contact"]):not([data-portal-tab="practice"]),
+#students-portal[data-global-portal] [data-portal-panel]:not([data-portal-panel="exams"]):not([data-portal-panel="exercises"]):not([data-portal-panel="material"]):not([data-portal-panel="calendar"]):not([data-portal-panel="comprehension"]):not([data-portal-panel="listening"]):not([data-portal-panel="contact"]):not([data-portal-panel="practice"]){display:none!important}
 .student-assessment-start{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:650px;margin:24px 0}
 .student-assessment-start label{display:flex;flex-direction:column;gap:8px;min-width:0}
 .student-assessment-start input,.student-assessment-start select{width:100%;min-width:0;box-sizing:border-box;font:inherit;padding:12px;border:1px solid var(--line);border-radius:6px;background:var(--paper,#fff)}

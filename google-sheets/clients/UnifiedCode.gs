@@ -437,7 +437,7 @@ function handleClientEmail(p){
  if(!client||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(client[2])))throw new Error('Client email missing or invalid.');
  let attachment=null;
  if(kind!=='confirmation'){
-  const word=kind==='notes',encoded=word?p.docxBase64:p.pdfBase64;
+  const word=kind==='notes'&&typeof p.pdfBase64!=='string',encoded=word?p.docxBase64:p.pdfBase64;
   if(typeof encoded!=='string'||encoded.length>7500000||! /^[A-Za-z0-9+/]*={0,2}$/.test(encoded))throw new Error(word?'A valid Word attachment is required.':'A valid completed PDF is required.');
   const bytes=Utilities.base64Decode(encoded);
   if(bytes.length>5500000)throw new Error('Attachment is too large.');
@@ -578,7 +578,7 @@ function sbPortalWeek(){
 function sbWeeklyPortalPasswords(){
  const secret=PropertiesService.getScriptProperties().getProperty('CLIENT_SYNC_KEY');if(!secret)throw new Error('Connect your Clients sheet first.');
  const week=sbPortalWeek(),passwords={};
- for(const group of ['material','calendar','exercises','assessments']){
+ for(const group of ['material','calendar','exercises','assessments',...Array.from({length:8},(_,i)=>'level:'+(i+1)),'exercise:comprehension','exercise:listening','exercise:resources','contact','practice']){
   const bytes=Utilities.computeHmacSha256Signature('Speak Boldly weekly password:'+week.start+':'+group,secret);let number=0;
   for(const byte of bytes)number=(number*256+(byte&255))%900000;
   passwords[group]=String(100000+number);
@@ -586,8 +586,9 @@ function sbWeeklyPortalPasswords(){
  return {weekStart:week.start,nextChange:week.next,passwords};
 }
 function sbPortalFolderGroup(key){
+ if(/^level:[1-8]$/.test(key)||['exercise:comprehension','exercise:listening','exercise:resources','contact','practice'].includes(key))return key;
  if(key==='exercises'||['program:comprehension','program:listening'].includes(key))return 'exercises';
- if(key==='material'||/^level:[1-8]$/.test(key)||/^program:[a-z][a-z0-9-]{0,60}$/.test(key))return 'material';
+ if(key==='material'||/^program:[a-z][a-z0-9-]{0,60}$/.test(key))return 'material';
  throw new Error('Choose a valid folder.');
 }
 function sbExamNotify(sheet,index,row){
@@ -641,11 +642,11 @@ function handleStudentExam(data) {
   const lock=LockService.getScriptLock();
   try {
     const book=sbExamBook(),items=sbPortalItems(book);
-    if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,passwordSettings:{revision:sbPortalWeek().start,weekly:true},items:items.map(item=>({...item,url:item.enabled?item.url:''}))});
+    if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,passwordSettings:{revision:sbPortalWeek().start+':folders-v2',weekly:true},items:items.map(item=>({...item,url:item.enabled?item.url:''}))});
     if(data.action==='studentFolderLogin'){
       const group=sbPortalFolderGroup(data.folder),weekly=sbWeeklyPortalPasswords();
       if(String(data.passcode||'')!==weekly.passwords[group])throw new Error('Incorrect folder password.');
-      return sbExamResponse({ok:true,revision:weekly.weekStart});
+      return sbExamResponse({ok:true,revision:weekly.weekStart+':folders-v2'});
     }
     if(data.action==='studentExamLogin') {
       if(String(data.passcode||'')!==sbWeeklyPortalPasswords().passwords.assessments)throw new Error('Incorrect assessment password.');

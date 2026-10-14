@@ -10,7 +10,8 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': weekly pa
  for(const password of Object.values(weekly.passwords))assert.match(password,/^\d{6}$/);
  const metadata=request({action:'studentPortalAccess'});for(const password of Object.values(weekly.passwords))assert.equal(JSON.stringify(metadata).includes(password),false);
  for(const folder of ['exercises','program:comprehension','program:listening']){assert.equal(request({action:'studentFolderLogin',folder,passcode:weekly.passwords.exercises}).ok,true);assert.equal(request({action:'studentFolderLogin',folder,passcode:'wrong'}).ok,false);}
- for(const folder of ['material','level:1','level:8','program:pronunciation'])assert.equal(request({action:'studentFolderLogin',folder,passcode:weekly.passwords.material}).ok,true);
+ for(const folder of ['material','program:pronunciation'])assert.equal(request({action:'studentFolderLogin',folder,passcode:weekly.passwords.material}).ok,true);
+ for(const folder of ['level:1','level:8','exercise:comprehension','exercise:listening','exercise:resources','contact','practice']){assert.equal(request({action:'studentFolderLogin',folder,passcode:weekly.passwords[folder]}).ok,true);assert.equal(request({action:'studentFolderLogin',folder,passcode:'wrong'}).ok,false);}
  assert.equal(request({action:'studentFolderLogin',folder:'invalid',passcode:weekly.passwords.material}).ok,false);
  assert.equal(request({key,action:'savePortalPasswordSettings',settings:{learning:'new'}}).ok,false);
  request({key,action:'savePortalAccess',item:{id:'test:2',section:'tests',title:'Level 2',enabled:true}});

@@ -44,7 +44,7 @@ function handleClientEmail(p){
  if(!client||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(client[2])))throw new Error('Client email missing or invalid.');
  let attachment=null;
  if(kind!=='confirmation'){
-  const word=kind==='notes',encoded=word?p.docxBase64:p.pdfBase64;
+  const word=kind==='notes'&&typeof p.pdfBase64!=='string',encoded=word?p.docxBase64:p.pdfBase64;
   if(typeof encoded!=='string'||encoded.length>7500000||! /^[A-Za-z0-9+/]*={0,2}$/.test(encoded))throw new Error(word?'A valid Word attachment is required.':'A valid completed PDF is required.');
   const bytes=Utilities.base64Decode(encoded);
   if(bytes.length>5500000)throw new Error('Attachment is too large.');

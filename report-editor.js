@@ -1,4 +1,4 @@
-import {initializeClientNotes} from './client-notes.js?v=instructor-app';
+import {initializeClientNotes} from './client-notes.js?v=final-notes-pdf';
 import {readReportTab} from './report-tabs.js?v=instructor-app';
 import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=instructor-app';
 import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=level-history';
