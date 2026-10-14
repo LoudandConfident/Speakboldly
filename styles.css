@@ -423,3 +423,6 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 .upcoming-watermark{position:absolute;inset:0;z-index:1;display:grid;place-items:center;margin:0;padding:24px;text-align:center;font-family:Manrope,"DM Sans",sans-serif;font-size:clamp(36px,7vw,80px);font-weight:800;line-height:1.2;letter-spacing:1px;color:#193c32c9;transform:rotate(-8deg);pointer-events:none}
 #home .hero-copy>.home-book-slot{margin-top:28px}
 @media(max-width:680px){#home .hero-copy>.home-book-slot{margin-top:24px}}
+
+#programs .program-course-actions{display:flex;justify-content:flex-end;max-width:760px;margin:12px 0 24px}
+#programs .program-course-actions>.button{flex:none;width:auto;min-height:40px;padding:9px 14px;font-size:13px;line-height:1.4;gap:0}
