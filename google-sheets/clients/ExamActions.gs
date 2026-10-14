@@ -3,7 +3,7 @@ const SB_EXAM_HEADERS = ['Attempt ID','Client ID','Name','Level','Status','Opene
 const SB_PORTAL_ACCESS_HEADERS = ['Item ID','Section','Title','URL','Enabled'];
 const SB_EXAM_SESSION_HEADERS = ['Token hash','Visitor ID','Name','Program','Expires at','Age'];
 const SB_STUDENT_EXAM_ACTIONS = ['studentPortalAccess','studentFolderLogin','studentExamLogin','studentExamGet','studentExamDraft','studentExamSubmit'];
-const SB_INSTRUCTOR_EXAM_ACTIONS = ['weeklyPortalPasswords','listExamAttempts','reviewExamAttempt','listPortalAccess','savePortalAccess','retryExamNotification'];
+const SB_INSTRUCTOR_EXAM_ACTIONS = ['learningLevelAccess','saveLearningLevelAccess','weeklyPortalPasswords','listExamAttempts','reviewExamAttempt','listPortalAccess','savePortalAccess','retryExamNotification'];
 function setupStudentExams() {
   const id = PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID');
   if (!id) throw new Error('Run setupClientSync first.');
@@ -59,6 +59,8 @@ function sbWeeklyPortalPasswords(){
  }
  return {weekStart:week.start,nextChange:week.next,passwords};
 }
+function sbLearningLevelAccess(){const raw=PropertiesService.getScriptProperties().getProperty('SB_LEARNING_LEVEL_ACCESS');let saved={};try{saved=JSON.parse(raw||'{}');}catch{}return Object.fromEntries(Array.from({length:8},(_,i)=>[String(i+1),saved[String(i+1)]!==false]));}
+function sbLearningItemLevel(item){const match=String(item.title||'').match(/(?:^|[^a-z0-9])level[\s_-]*([1-8])(?:[^0-9]|$)/i);return match?Number(match[1]):null;}
 function sbPortalFolderGroup(key){
  if(/^level:[1-8]$/.test(key)||['exercise:comprehension','exercise:listening','exercise:resources','contact','practice'].includes(key))return key;
  if(key==='exercises'||['program:comprehension','program:listening'].includes(key))return 'exercises';
@@ -116,28 +118,32 @@ function handleStudentExam(data) {
   const lock=LockService.getScriptLock();
   try {
     const book=sbExamBook(),items=sbPortalItems(book);
-    if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,passwordSettings:{revision:sbPortalWeek().start+':folders-v2',weekly:true},items:items.map(item=>({...item,url:item.enabled?item.url:''}))});
+    if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,passwordSettings:{revision:sbPortalWeek().start+':folders-v2',weekly:true},levelAccess:sbLearningLevelAccess(),items:items.map(item=>{const level=sbLearningItemLevel(item),enabled=item.enabled&&(!level||sbLearningLevelAccess()[String(level)]);return {...item,enabled,url:enabled?item.url:''};})});
     if(data.action==='studentFolderLogin'){
       const group=sbPortalFolderGroup(data.folder),weekly=sbWeeklyPortalPasswords();
+      if(/^level:[1-8]$/.test(group)&&!sbLearningLevelAccess()[group.split(':')[1]])throw new Error('This level is currently closed by your instructor.');
       if(String(data.passcode||'')!==weekly.passwords[group])throw new Error('Incorrect folder password.');
       return sbExamResponse({ok:true,revision:weekly.weekStart+':folders-v2'});
     }
     if(data.action==='studentExamLogin') {
-      if(String(data.passcode||'')!==sbWeeklyPortalPasswords().passwords.assessments)throw new Error('Incorrect assessment password.');
+      const requestedLevel=data.level===undefined?null:Number(data.level);if(requestedLevel!==null&&(!Number.isInteger(requestedLevel)||requestedLevel<1||requestedLevel>8))throw new Error('Choose a valid level.');
+      if(requestedLevel&&!sbLearningLevelAccess()[String(requestedLevel)])throw new Error('This level is currently closed by your instructor.');
+      const passcode=sbWeeklyPortalPasswords().passwords[requestedLevel?'level:'+requestedLevel:'assessments'];if(String(data.passcode||'')!==passcode)throw new Error('Incorrect assessment password.');
       const name=String(data.name||'').trim(),program=String(data.program||'').trim(),age=data.age===undefined?'':Number(data.age);if(age!==''&&(!Number.isInteger(age)||age<1||age>120))throw new Error('Enter a valid age.');
       if(!name||name.length>100||!program||program.length>100)throw new Error('Enter your name and program.');
-      const levels=items.filter(item=>item.section==='tests'&&item.enabled).map(item=>Number(item.id.split(':')[1]));
+      const levels=items.filter(item=>item.section==='tests'&&item.enabled&&(!requestedLevel||item.id==='test:'+requestedLevel)).map(item=>Number(item.id.split(':')[1]));
       if(!levels.length)throw new Error('Interactive tests are currently closed. Please wait for your instructor to open your level.');
       const token=Utilities.getUuid()+Utilities.getUuid();
       const sessions=book.getSheetByName('Exam sessions');if(!sessions)throw new Error('Run setupStudentExams first.');
-      lock.waitLock(20000);sessions.appendRow([sbExamHash(token),Utilities.getUuid(),sbExamSafe(name),sbExamSafe(program),Date.now()+6*60*60*1000,age]);
+      sessions.getRange(1,7).setValue('Allowed level');lock.waitLock(20000);sessions.appendRow([sbExamHash(token),Utilities.getUuid(),sbExamSafe(name),sbExamSafe(program),Date.now()+6*60*60*1000,age,requestedLevel||'']);
       return sbExamResponse({ok:true,token,student:{name,program,levels,...(age!==''?{age}:{})}});
     }
     const sessions=book.getSheetByName('Exam sessions'),hash=sbExamHash(String(data.token||''));
-    const saved=sessions&&sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,6).getValues().find(row=>String(row[0])===hash&&Number(row[4])>Date.now()):null;
+    const saved=sessions&&sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,7).getValues().find(row=>String(row[0])===hash&&Number(row[4])>Date.now()):null;
     if(!saved)throw new Error('Your session expired. Ask your instructor to check your saved assessment.');
     const session={clientId:String(saved[1]),name:String(saved[2]).replace(/^'/,''),program:String(saved[3]).replace(/^'/,''),age:saved[5]||''},level=Number(data.level);
     if(!Number.isInteger(level)||level<1||level>6)throw new Error('Choose a valid level.');
+    if(saved[6]&&Number(saved[6])!==level)throw new Error('Your passcode allows only your selected level.');
     lock.waitLock(20000);
     const sheet=book.getSheetByName('Exam attempts');if(!sheet)throw new Error('The instructor needs to run setupStudentExams first.');
     const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,18).getValues():[];
@@ -168,6 +174,8 @@ function handleInstructorExam(data) {
   const lock=LockService.getScriptLock();
   try {
     lock.waitLock(20000);const book=sbExamBook();
+    if(data.action==='learningLevelAccess')return sbExamResponse({ok:true,levels:sbLearningLevelAccess()});
+    if(data.action==='saveLearningLevelAccess'){const level=Number(data.level);if(!Number.isInteger(level)||level<1||level>8||typeof data.enabled!=='boolean')throw new Error('Choose a valid level and access setting.');const levels=sbLearningLevelAccess();levels[String(level)]=data.enabled;PropertiesService.getScriptProperties().setProperty('SB_LEARNING_LEVEL_ACCESS',JSON.stringify(levels));return sbExamResponse({ok:true,levels});}
     if(data.action==='weeklyPortalPasswords')return sbExamResponse({ok:true,...sbWeeklyPortalPasswords()});
     if(data.action==='listPortalAccess')return sbExamResponse({ok:true,items:sbPortalItems(book)});
     if(data.action==='savePortalAccess'){

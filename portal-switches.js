@@ -1,5 +1,7 @@
+import {initializeLearningLevelSwitches} from './learning-level-switches.js';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 export function initializePortalSwitches(doc,isUnlocked,loader) {
+ initializeLearningLevelSwitches(doc,isUnlocked);
  const root=doc.querySelector('#portal-switches');if(!root)return;
  const list=root.querySelector('.portal-switch-list'),status=root.querySelector('[role=status]');let generation=0,loading=false;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};

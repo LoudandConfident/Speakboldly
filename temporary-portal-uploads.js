@@ -5,7 +5,7 @@ export function attachTemporaryPortalUploads(doc) {
  let owner;try{owner=JSON.parse(doc.defaultView.localStorage.getItem('speak-boldly-client-sheet-connection-v1')||'null');}catch{}
  if(!owner||owner.endpoint!==expected||typeof owner.key!=='string'||!owner.key)return;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
- const targets=[...[...root.querySelectorAll('[data-material-level]')].map(folder=>[folder,'material','levels',folder.dataset.materialLevel]),...[...root.querySelectorAll('[data-exercise-folder]')].map(folder=>[folder,'exercises','exercises','exercise:'+folder.dataset.exerciseFolder])];
+ const targets=[...root.querySelectorAll('[data-learning-level]')].map(panel=>[panel,panel.dataset.learningCategory==='material'?'material':'exercises',panel.dataset.learningCategory==='material'?'levels':'exercises',panel.dataset.learningLevel+':'+panel.dataset.learningCategory]);
  for(const [id,section,group,folderKey]of targets) {
   const panel=typeof id==='string'?root.querySelector('#'+id):id;if(!panel||panel.querySelector(':scope>.temporary-portal-uploads'))continue;
   const controls=doc.createElement('div');controls.className='temporary-portal-uploads teacher-library-controls';
@@ -28,7 +28,7 @@ export function attachTemporaryPortalUploads(doc) {
     for(const file of input.files){
      if(file.size>5000000)throw new Error('For files above 5 MB, upload directly to the matching Google Drive folder.');
      note.textContent='Uploading '+file.name+'…';const bytes=new Uint8Array(await file.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));
-     const result=await request(connection,'uploadLibraryFile',{section,name:folderKey?(folderKey.startsWith('exercise:')?({comprehension:'Comprehension',listening:'Listening',resources:'Resources'}[folderKey.split(':')[1]]):'Level '+folderKey)+' — '+file.name:file.name,mimeType:file.type,base64:doc.defaultView.btoa(binary)});count++;
+     const result=await request(connection,'uploadLibraryFile',{section,name:folderKey?'Level '+folderKey.split(':')[0]+' — '+({material:'Book',exercises:'Exercises',listening:'Listening',practice:'Activity'}[folderKey.split(':')[1]])+' — '+file.name:file.name,mimeType:file.type,base64:doc.defaultView.btoa(binary)});count++;
      try{await request(connection,'savePortalAccess',{item:{section:group,title:result.item.title,url:result.item.url,enabled:false}});}
      catch(error){throw new Error('File saved to Drive. Portal listing could not be updated: '+error.message+' Refresh files in Instructor Portal after deploying the latest script.');}
     }

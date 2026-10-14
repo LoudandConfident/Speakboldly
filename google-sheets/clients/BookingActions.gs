@@ -34,7 +34,7 @@ function sbBookingAuth(data){
  if(props.getProperty('SB_BOOKING_ENABLED')!=='true')throw new Error('Booking is currently closed. Please contact your instructor.');
  const version=sbExamHash(passcode),sign=payload=>Utilities.base64EncodeWebSafe(Utilities.computeHmacSha256Signature(payload,key));
  if(data.action==='studentBookingLogin'){
-  if(String(data.passcode||'')!==passcode)throw new Error('Incorrect booking passcode. Please ask your instructor for the current passcode.');
+  if(data.public!==true&&String(data.passcode||'')!==passcode)throw new Error('Incorrect booking passcode. Please ask your instructor for the current passcode.');
   const payload=Utilities.base64EncodeWebSafe(JSON.stringify({version,expires:Date.now()+8*60*60*1000,nonce:Utilities.getUuid()}));
   return {token:payload+'.'+sign(payload)};
  }
