@@ -420,7 +420,7 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 
 .upcoming-view{position:relative;min-height:360px;isolation:isolate}
 .upcoming-view-content{opacity:.25;filter:grayscale(1);user-select:none;pointer-events:none}
-.upcoming-watermark{position:absolute;inset:0;z-index:1;display:grid;place-items:center;margin:0;padding:24px;text-align:center;font-family:Manrope,"DM Sans",sans-serif;font-size:clamp(36px,7vw,80px);font-weight:800;line-height:1.2;letter-spacing:1px;color:#193c32c9;transform:rotate(-8deg);pointer-events:none}
+.upcoming-watermark{position:absolute;inset:0;z-index:1;display:grid;place-items:center;margin:0;padding:24px;text-align:center;font-family:Manrope,"DM Sans",sans-serif;font-size:clamp(28px,5.5vw,64px);font-weight:800;line-height:1.2;letter-spacing:1px;color:#193c32c9;transform:rotate(-8deg);pointer-events:none}
 #home .hero-copy>.home-book-slot{margin-top:28px}
 @media(max-width:680px){#home .hero-copy>.home-book-slot{margin-top:24px}}
 
@@ -457,7 +457,7 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 #programs>.page-signature{grid-column:1/-1}
 @media(max-width:680px){#programs{column-gap:14px}#programs .program-course-actions>.button{padding:9px 12px;white-space:nowrap}}
 
-.course-card.course-coming-soon,.course-card.course-dimmed{position:relative;isolation:isolate}.course-card .upcoming-watermark{font-size:clamp(26px,3vw,44px);padding:18px}
+.course-card.course-coming-soon,.course-card.course-dimmed{position:relative;isolation:isolate}.course-card .upcoming-watermark{font-size:clamp(21px,2.4vw,35px);padding:18px}
 
 #courses .courses-introduction{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,350px);align-items:start;gap:32px;margin-bottom:28px}
 #courses .courses-heading h2{margin-bottom:12px}

@@ -4,7 +4,7 @@ import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } f
 import { questions, TEST_VERSION } from './placement-questions.js';
 import { scoreAnswers } from './placement-scoring.js';
 
-import {courses,matches} from './courses.js?v=course-copy';
+import {courses,matches} from './courses.js?v=session-550';
 const $=s=>document.querySelector(s);
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const chat=message=>'https://wa.me/201050226476?text='+encodeURIComponent(message);
