@@ -1,3 +1,4 @@
+import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=all-inline';
 import {materialProgram} from './material-program-folders.js?v=comprehension-listening';
 import {initializeStudentBooking} from './student-booking.js?v=customer-calendar';
@@ -12,7 +13,8 @@ export function initializeStudentAssessment(doc) {
  const booking=initializeStudentBooking(doc);
  const profile=doc.createElement('section');profile.id='student-assessment-profile';profile.className='assessment-entry';profile.hidden=true;profile.setAttribute('aria-label','Assessment details');
  const endpoint=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
- const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['exercises','material','comprehension','listening','exams','calendar'].includes(el.dataset.portalTab));
+ initializePractice(doc);
+ const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['exercises','material','comprehension','listening','exams','calendar','practice'].includes(el.dataset.portalTab));
  let passwordMetadata=null,assessmentUnlocked=false,resumableSession=null;
  let token='',student=null,epoch=0,saveTimer,tick,accessTimer,queue=Promise.resolve(),busy=false;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
