@@ -1,0 +1,15 @@
+{
+  "id": "./?app=owner",
+  "name": "Speak Boldly",
+  "short_name": "Speak Boldly",
+  "description": "Your Speak Boldly instructor workspace.",
+  "start_url": "./?app=owner#students-portal",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf9f4",
+  "theme_color": "#193c32",
+  "icons": [
+    {"src": "./app-icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "./app-icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+  ]
+}

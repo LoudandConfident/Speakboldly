@@ -84,3 +84,11 @@ Teacher Portal → Reports and Confirmation Documents uses the three supplied PD
 PDF view supports editable field overlays; Edit fields provides larger mobile inputs. Download editable PDF preserves AcroForm fields. Preview final PDF flattens entered values into the document. Prepared documents can be reopened and edited for a selected client.
 
 Rebuild templates with `python scripts/build-teacher-templates.py /path/to/the/three/source/pdfs` (PyMuPDF and reportlab). Source PDFs are not overwritten. Rebuild the browser PDF libraries after dependency changes with `node scripts/build-pdf-vendors.mjs`.
+
+## Installable instructor phone app
+
+Speak Boldly includes a web app manifest, 192/512px app icons, an iPhone home-screen icon and a service worker. After publication on HTTPS, open Instructor portal and choose **Install on my phone**. Android Chrome supports the install prompt; iPhone Safari uses Share → Add to Home Screen → Add (enable Open as Web App when shown). The app launches at the instructor entry; installation does not bypass the instructor code. It is a home-screen web app, not an App Store or Play Store listing.
+
+Only a connection-help page is cached offline. Pages, uploaded documents and backend responses are fetched live. Internet is required for the instructor workspace. Local browser data and connection settings may need to be entered again in the installed app, especially on iPhone; installation does not migrate them automatically. The installable app does not change the website's audience or make its public files private.
+
+Phone-app files are prepared locally; GitHub Pages publication and testing on a physical phone remain required before installation can be confirmed.
