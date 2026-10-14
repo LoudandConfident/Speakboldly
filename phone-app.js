@@ -30,7 +30,7 @@ button.addEventListener('click', async () => {
     dialog.id = 'phone-install-help';
     dialog.className = 'action-popup';
     dialog.setAttribute('aria-labelledby', 'phone-install-title');
-    dialog.innerHTML = '<button type="button" class="popup-close" aria-label="Close install instructions">×</button><h2 id="phone-install-title">Speak Boldly on your phone</h2><p><strong>iPhone:</strong> Open this website in Safari, tap Share, then Add to Home Screen. Turn on Open as Web App if shown, then tap Add.</p><p><strong>Android:</strong> Open this website in Chrome, tap the ⋮ menu, then Install app or Add to Home screen.</p><p>Open the Speak Boldly icon to reach your instructor portal. Your usual instructor code is still required. Internet access is needed.</p><p>If you do not see the installation option, open the website directly in Safari or Chrome instead of inside another app.</p>';
+    dialog.innerHTML = '<button type="button" class="popup-close" aria-label="Close install instructions">×</button><h2 id="phone-install-title">Speak Boldly on your phone</h2><p><strong>iPhone:</strong> Open this website in Safari, tap Share, then Add to Home Screen. Turn on Open as Web App if shown, then tap Add.</p><p><strong>Android:</strong> Open this website in Chrome, tap the ⋮ menu, then Install app or Add to Home screen.</p><p>Open the Speak Boldly icon to reach your instructor portal. Your usual instructor code is still required. Internet access is needed.</p>';
     dialog.querySelector('button').onclick = () => dialog.close();
     document.body.append(dialog);
   }
