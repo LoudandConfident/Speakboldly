@@ -9,12 +9,12 @@ export function initializePractice(doc){
  const panel=doc.querySelector('#portal-practice');if(!panel||panel.dataset.initialized)return;
  panel.dataset.initialized='true';
  let key='',state={};const storage=()=>doc.defaultView.localStorage;
- function load(){const next=practiceWeekKey();if(next===key)return;key=next;try{state=JSON.parse(storage().getItem(key)||'{}')||{};}catch{state={};}
+ function load(){const next='speak-boldly-practice-v1';if(next===key)return;key=next;try{state=JSON.parse(storage().getItem(key)||storage().getItem(practiceWeekKey())||'{}')||{};storage().setItem(key,JSON.stringify(state));}catch{state={};}
  panel.querySelectorAll('[data-practice-task]').forEach(input=>input.checked=state[input.dataset.practiceTask]===true);
  panel.querySelectorAll('[name=practice-days]').forEach(input=>input.checked=Number(input.value)===(Number(state.goal)||4));}
  load();
  panel.addEventListener('change',event=>{const input=event.target;if(!input.matches('[data-practice-task],[name=practice-days]'))return;
- const next=practiceWeekKey();if(next!==key){key='';load();}
+ load();
  if(input.dataset.practiceTask)state[input.dataset.practiceTask]=input.checked;else state.goal=Number(input.value);
  try{storage().setItem(key,JSON.stringify(state));panel.querySelector('[role=status]').textContent='Saved on this device.';}catch{panel.querySelector('[role=status]').textContent='Your browser could not save these choices.';}
  });
