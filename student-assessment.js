@@ -142,7 +142,7 @@ export function initializeStudentAssessment(doc) {
   try{const response=await call('studentPortalAccess');if(current!==epoch)return;updatePasswordMetadata(response);
    let saved;try{saved=JSON.parse(doc.defaultView.sessionStorage.getItem(SESSION_KEY)||'null');}catch{}
    if(saved?.token&&saved?.student){resumableSession=saved;student=saved.student;}
-   renderFiles(response.items);showAssessment(response.items);attachTemporaryPortalUploads(doc);status.textContent='Choose a folder above. Dimmed items are currently closed.';
+   renderFiles(response.items);showAssessment(response.items);attachTemporaryPortalUploads(doc);status.textContent='';
    clearInterval(accessTimer);accessTimer=setInterval(async()=>{if(current!==epoch||doc.hidden)return;try{const updated=await call('studentPortalAccess');if(current!==epoch)return;updatePasswordMetadata(updated);renderFiles(updated.items);attachTemporaryPortalUploads(doc);panel.querySelectorAll('[data-assessment-level]').forEach(button=>{const item=updated.items.find(entry=>entry.id==='test:'+button.dataset.assessmentLevel);button.disabled=!item?.enabled;button.setAttribute('aria-label','Level '+button.dataset.assessmentLevel+' assessment'+(item?.enabled?'':' — Closed'));});const selectLevel=profile.querySelector('[name=level]');if(selectLevel)for(const option of selectLevel.options){if(!option.value)continue;const item=updated.items.find(entry=>entry.id==='test:'+option.value);option.disabled=!item?.enabled;option.textContent='Level '+option.value+(item?.enabled?'':' · Closed');}}catch{}},20000);
   }catch(error){if(current===epoch)status.textContent=error.message;}
  }
