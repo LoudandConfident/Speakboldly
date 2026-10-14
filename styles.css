@@ -450,3 +450,9 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 .result-brand{display:flex;align-items:center;gap:12px;margin:0 0 18px;color:var(--ink);font-family:inherit;font-weight:600}
 .result-logo{display:block;width:64px;height:64px;object-fit:contain}
 .assessment-result .result-contact a{text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+
+#programs{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:32px;row-gap:24px}
+#programs>.coaching-independence{grid-column:1;grid-row:1}
+#programs>.program-course-actions{grid-column:2;grid-row:1;display:flex;justify-content:flex-end;align-self:center;justify-self:end;margin:0;transform:none}
+#programs>.page-signature{grid-column:1/-1}
+@media(max-width:680px){#programs{column-gap:14px}#programs .program-course-actions>.button{padding:9px 12px;white-space:nowrap}}
