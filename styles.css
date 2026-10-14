@@ -426,3 +426,5 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 
 #programs .program-course-actions{display:flex;justify-content:flex-end;max-width:760px;margin:12px 0 24px}
 #programs .program-course-actions>.button{flex:none;width:auto;min-height:40px;padding:9px 14px;font-size:13px;line-height:1.4;gap:0}
+
+#students-portal .portal-area-choices{margin-top:36px}
