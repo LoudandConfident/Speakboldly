@@ -1,14 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync,readFileSync} from 'node:fs';
-import {cairoDayNumber, dailyQuotes, quoteDetails, quoteForDate,motivationShareUrl} from './home-gallery.js';
-test('daily motivation changes at Cairo midnight and stays consistent for each day', () => {
- const before = new Date('2026-10-09T20:59:59Z');
- const after = new Date('2026-10-09T21:00:00Z');
+import {cairoDayNumber, cairoWeekNumber, dailyQuotes, quoteDetails, quoteForDate,motivationShareUrl} from './home-gallery.js';
+test('weekly motivation changes on Monday in Cairo and stays consistent throughout the week', () => {
+ const before = new Date('2026-10-18T20:59:59Z');
+ const after = new Date('2026-10-18T21:00:00Z');
  assert.equal(cairoDayNumber(after), cairoDayNumber(before) + 1);
+ assert.equal(cairoWeekNumber(after), cairoWeekNumber(before) + 1);
+ assert.equal(quoteForDate(before), quoteForDate(new Date("2026-10-12T12:00:00Z")));
  assert.notEqual(quoteForDate(before), quoteForDate(after));
- assert.equal(quoteForDate(after), quoteForDate(new Date('2026-10-10T12:00:00Z')));
- assert.equal(quoteForDate(after), quoteForDate(new Date(after.getTime() + dailyQuotes.length * 86400000)));
+ assert.equal(quoteForDate(after), quoteForDate(new Date('2026-10-24T12:00:00Z')));
+ assert.equal(quoteForDate(after), quoteForDate(new Date(after.getTime() + dailyQuotes.length * 7 * 86400000 + 3600000)));
 });
 
 test('every daily picture has supporting content and an existing image', () => {

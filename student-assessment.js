@@ -1,3 +1,4 @@
+import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=monthly-passwords';
 import {initializeStudentContact} from './student-contact.js';
 import {chooseLearningLevel} from './learning-level-dialog.js';
 import {learningDocumentLevel,learningDocumentCategory,createLearningDocumentCard} from './learning-document-cards.js?v=activities';
@@ -44,7 +45,7 @@ export function initializeStudentAssessment(doc) {
  root.querySelectorAll('[data-learning-open]').forEach(button=>button.onclick=()=>root.querySelector('[data-portal-tab="'+button.dataset.learningOpen+'"]')?.click());
  function updatePasswordMetadata(response){
   const next=response.passwordSettings||null;
-  if(passwordMetadata&&next?.revision!==passwordMetadata.revision){clearFolderPasswords(doc);learningLevel=null;learningPasscode='';if(!busy){select(null);assessmentUnlocked=false;token='';profile.hidden=true;}status.textContent='The weekly passcode changed. Ask your instructor for this week’s level passcode.';}
+  if(passwordMetadata&&next?.revision!==passwordMetadata.revision){clearFolderPasswords(doc);learningLevel=null;learningPasscode='';if(!busy){select(null);assessmentUnlocked=false;token='';profile.hidden=true;}status.textContent='The folder passwords changed. Ask your instructor for the current password.';}
   passwordMetadata=next;
  }
  tabs.forEach(tab=>tab.onclick=async()=>{
@@ -55,7 +56,7 @@ export function initializeStudentAssessment(doc) {
    const chosen=await chooseLearningLevel(doc,labels[id],async(level,passcode)=>{
     const response=await call('studentPortalAccess');latestItems=response.items;updatePasswordMetadata(response);
     if(response.levelAccess?.[String(level)]===false)throw new Error('Level '+level+' is currently closed by your instructor.');
-    try{await call('studentFolderLogin',{folder:'level:'+level,passcode});return true;}catch(error){if(/Incorrect folder password/.test(error.message)){const remaining=noteWrongPassword(doc);throw new Error('Incorrect passcode. '+remaining+' attempts remaining.');}throw error;}
+    try{await call('studentFolderLogin',{folder:learningFolderPasswordGroup(id,level),passcode});return true;}catch(error){if(/Incorrect folder password/.test(error.message)){const remaining=noteWrongPassword(doc);throw new Error('Incorrect passcode. '+remaining+' attempts remaining.');}throw error;}
    });
    if(!chosen)return;if(learningLevel!==chosen.level)root.querySelectorAll('.temporary-portal-uploads').forEach(controls=>controls.remove());learningLevel=chosen.level;learningPasscode=chosen.passcode;assessmentUnlocked=false;select(id);renderFiles(latestItems);attachTemporaryPortalUploads(doc);
    if(id==='exams')showAssessment(latestItems);

@@ -92,3 +92,8 @@ Speak Boldly includes a web app manifest, 192/512px app icons, an iPhone home-sc
 Only a connection-help page is cached offline. Pages, uploaded documents and backend responses are fetched live. Internet is required for the instructor workspace. Local browser data and connection settings may need to be entered again in the installed app, especially on iPhone; installation does not migrate them automatically. The installable app does not change the website's audience or make its public files private.
 
 Phone-app files are prepared locally; GitHub Pages publication and testing on a physical phone remain required before installation can be confirmed.
+
+### Monthly learning-folder passwords
+Material and Examinations each have a separate password per level (1–8). Activities and Listening each have one password shared across all levels. Calendar and Contact Instructor need no password. Instructor Dashboard → Passwords for this month shows all 18 codes and allows edits for the current month. Automatic rotation happens on the first day of each month at midnight Cairo time. Deploy the updated google-sheets/clients/UnifiedCode.gs as a new version in your existing Apps Script project, preserving Script Properties and the web app URL.
+
+Motivation changes weekly on Monday in Cairo. Each copied motivation link has a static picture preview; the receiving app controls its display.

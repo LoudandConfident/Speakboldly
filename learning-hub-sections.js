@@ -8,3 +8,11 @@ export const LEARNING_HUB_SECTIONS=[
  {id:'calendar',title:'Calendar'}
 ];
 export function learningHubItemSection(item){return item.section==='tests'?'exams':learningDocumentCategory(item);}
+
+export function learningFolderPasswordGroup(section,level){
+ if(!Number.isInteger(level)||level<1||level>8)throw new Error('Choose a valid level.');
+ if(['material','exams'].includes(section))return section+':'+level;
+ if(section==='practice')return 'activities';
+ if(section==='listening')return 'listening';
+ throw new Error('Choose a protected folder.');
+}

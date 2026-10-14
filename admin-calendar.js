@@ -11,6 +11,11 @@ export function calendarSlots(date){
  if(weekday===6)return[{time:'10:00',label:'10–11:30am'},{time:'11:30',label:'11:30am–1pm'}];
  return[];
 }
+export function orderedCalendarSlots(date,appointments=[]){
+ const slots=new Map(calendarSlots(date).map(slot=>[slot.time,slot]));
+ for(const item of appointments){if(item.date!==date||item.reminderStatus==='cancelled'||!item.time||slots.has(item.time))continue;const [hour,minute]=item.time.split(':').map(Number);slots.set(item.time,{time:item.time,label:(hour%12||12)+':'+String(minute).padStart(2,'0')+(hour<12?'am':'pm')});}
+ return [...slots.values()].sort((a,b)=>a.time.localeCompare(b.time));
+}
 export function sessionInitials(name){const words=name.trim().split(/\s+/u).filter(Boolean);return words.map(w=>Array.from(w)[0]).join('').toLocaleUpperCase();}
 export function validateSession(input){
  const name=String(input.name||'').trim(),date=String(input.date||''),number=Number(input.number);
@@ -34,9 +39,8 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
  const typeLabel=doc.createElement('label');typeLabel.textContent='Appointment type';const type=doc.createElement('select');type.name='appointmentType';type.required=true;for(const item of SESSION_TYPES)type.append(new doc.defaultView.Option(item.title,item.id));typeLabel.append(type);chooser.closest('label').after(typeLabel);
  const programLabel=doc.createElement('label');programLabel.textContent='Program';const program=doc.createElement('select');program.name='program';program.required=true;program.append(new doc.defaultView.Option('Choose a program',''));for(const item of SESSION_PROGRAMS.filter(item=>item.id!=='trial'))program.append(new doc.defaultView.Option(item.title,item.title));programLabel.append(program);typeLabel.after(programLabel);
  const levelLabel=doc.createElement('label');levelLabel.textContent='Level for this session';const level=doc.createElement('select');level.name='level';level.required=true;for(const item of ['Not assessed',...Array.from({length:12},(_,i)=>String(i+1)),'A1','A2','B1','B2','C1','C2'])level.append(new doc.defaultView.Option(/^\d+$/.test(item)?'Level '+item:item,item));levelLabel.append(level);programLabel.after(levelLabel);
- const count=doc.createElement('p');count.setAttribute('role','status');form.elements.number.closest('label').after(count);
  function selectedProgram(){return type.value==='session'?program.value:type.value==='trial'?'Trial session':'Assessment';}
- function suggestNumber(){const selectedProgramValue=selectedProgram();if(!chooser.value||!selectedProgramValue){count.textContent='';return;}form.elements.number.value=nextSessionNumber(sessions,chooser.value,selectedProgramValue);const scheduled=sessions.filter(item=>item.clientId===chooser.value&&item.reminderStatus!=='cancelled'&&(!item.program||item.program===selectedProgramValue)).length;count.textContent=scheduled+' appointment'+(scheduled===1?'':'s')+' scheduled for '+(type.value==='session'?'this program':selectedProgramValue.toLowerCase())+'. Numbers can be adjusted.';}
+ function suggestNumber(){const selectedProgramValue=selectedProgram();if(!chooser.value||!selectedProgramValue)return;form.elements.number.value=nextSessionNumber(sessions,chooser.value,selectedProgramValue);}
  function updateType(){programLabel.hidden=type.value!=='session';program.disabled=type.value!=='session';program.required=type.value==='session';suggestNumber();}
  type.addEventListener('change',updateType);
  chooser.addEventListener('change',()=>{const client=getClients().find(item=>item.id===chooser.value);const suggested=suggestedSessionProgram(client)||'';program.value=suggested==='Trial session'?'':suggested;level.value=/^[1-9]\d{0,3}$/.test(client?.level||'')||['A1','A2','B1','B2','C1','C2'].includes(client?.level)?client.level:'Not assessed';if(client?.level&&!level.value){level.append(new doc.defaultView.Option('Level '+client.level,client.level));level.value=client.level;}suggestNumber();});program.addEventListener('change',suggestNumber);
@@ -63,13 +67,13 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    const number=doc.createElement('span');number.className='calendar-day-number';number.textContent=day;if(date===today)number.setAttribute('aria-current','date');
    const add=doc.createElement('button');add.type='button';add.className='calendar-add';add.textContent='+';add.setAttribute('aria-label','Add session on '+date);header.append(number,add);cell.append(header);
    const items=sessions.filter(s=>s.date===date&&s.reminderStatus!=='cancelled');
-   for(const slot of calendarSlots(date)){
+   for(const slot of orderedCalendarSlots(date,items)){
     const bookings=items.filter(item=>item.time===slot.time);
     if(bookings.length){for(const item of bookings){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name,button=doc.createElement('button');button.type='button';button.className='calendar-slot calendar-slot-booked';button.textContent=sessionInitials(name)+' #'+item.number+'\n'+slot.label;button.title=(item.program||'Program not recorded')+' — '+(item.level?'Level '+item.level:'Level not recorded');button.setAttribute('aria-label','Open '+name+' client information, session '+item.number+' on '+date+' at '+slot.label+' Cairo time');button.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};appendAppointment(cell,button,item,name);}continue;}
     const button=doc.createElement('button');button.type='button';button.className='calendar-slot';button.textContent=slot.label;button.setAttribute('aria-label','Add session on '+date+' at '+slot.label+' Cairo time');
     button.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;form.elements.time.value=slot.time;populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};cell.append(button);
    }
-   for(const item of items){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name;const badge=doc.createElement('button');badge.type='button';badge.className='calendar-session';badge.textContent=sessionInitials(name)+' #'+item.number;badge.title=name+' — '+(item.program||'Program not recorded')+' — '+(item.level?'Level '+item.level:'Level not recorded')+' — session '+item.number+(item.time?' — '+item.time+' Cairo time':'')+(item.reminderStatus?' — Email status: '+item.reminderStatus:'');badge.setAttribute('aria-label','Open '+name+' client information, session '+item.number);badge.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};if(!calendarSlots(date).some(slot=>slot.time===item.time))appendAppointment(cell,badge,item,name);}
+   for(const item of items){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name;const badge=doc.createElement('button');badge.type='button';badge.className='calendar-session';badge.textContent=sessionInitials(name)+' #'+item.number;badge.title=name+' — '+(item.program||'Program not recorded')+' — '+(item.level?'Level '+item.level:'Level not recorded')+' — session '+item.number+(item.time?' — '+item.time+' Cairo time':'')+(item.reminderStatus?' — Email status: '+item.reminderStatus:'');badge.setAttribute('aria-label','Open '+name+' client information, session '+item.number);badge.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};if(!item.time)appendAppointment(cell,badge,item,name);}
    add.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;form.elements.time.value='';populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};grid.append(cell);
   }
  }

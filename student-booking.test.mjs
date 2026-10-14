@@ -36,7 +36,7 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': passcode 
  assert.equal(owner({action:'saveBookingSettings',passcode:'manual-value',enabled:true,notificationEmail:'owner@example.com'}).ok,true);
  assert.equal(owner({action:'bookingSettings'}).passcode,settings.passcode);
  assert.equal(request({action:'studentBookingLogin',passcode:'manual-value'}).ok,false);
- f.advance(7*24*60*60*1000);assert.equal(request({action:'studentBookingCalendar',token}).ok,false);
+ f.advance(32*24*60*60*1000);assert.equal(request({action:'studentBookingCalendar',token}).ok,false);
  const newPasscode=owner({action:'bookingSettings'}).passcode;assert.notEqual(newPasscode,settings.passcode);
  const updated=request({action:'studentBookingLogin',passcode:newPasscode}).token;assert(updated);
  owner({action:'saveBookingSettings',enabled:false,notificationEmail:'owner@example.com'});assert.equal(request({action:'studentBookingCalendar',token:updated}).ok,false);

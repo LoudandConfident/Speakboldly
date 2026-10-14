@@ -23,9 +23,9 @@ export function createSheetExamFixture(filename='UnifiedCode.gs') {
 for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': global switches, private attempts, server timer, owner notification and corrected score',()=>{
  const f=createSheetExamFixture(filename),request=f.request;
  const toggle=(level,enabled)=>request({key:'private-test-key',action:'savePortalAccess',item:{id:'test:'+level,section:'tests',title:'Level '+level,url:'',enabled}});
- assert.equal(request({action:'studentExamLogin',passcode:f.context.sbWeeklyPortalPasswords().passwords.assessments,name:'Test Student',program:'General English'}).ok,false);
+ assert.equal(request({action:'studentExamLogin',level:2,passcode:f.context.sbMonthlyPortalPasswords().passwords['exams:2'],name:'Test Student',program:'General English'}).ok,false);
  assert.equal(toggle(2,true).ok,true);
- const login=request({action:'studentExamLogin',passcode:f.context.sbWeeklyPortalPasswords().passwords.assessments,name:'Test Student',program:'General English'});assert.equal(login.ok,true);assert.deepEqual(login.student,{name:'Test Student',program:'General English',levels:[2]});
+ const login=request({action:'studentExamLogin',level:2,passcode:f.context.sbMonthlyPortalPasswords().passwords['exams:2'],name:'Test Student',program:'General English'});assert.equal(login.ok,true);assert.deepEqual(login.student,{name:'Test Student',program:'General English',levels:[2]});
  const token=login.token;
  assert.equal(request({action:'studentExamGet',token,level:1}).ok,false);
  assert.equal(request({action:'listExamAttempts',token}).ok,false);
@@ -35,7 +35,7 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': global sw
  let result=request({action:'studentExamDraft',token,level:2,attemptId:attempt.id,version:attempt.version,answers});assert.equal(result.ok,true);attempt=result.attempt;
  assert.equal(request({action:'studentExamDraft',token,level:2,attemptId:attempt.id,version:1,answers}).ok,false);
  assert.deepEqual(request({action:'studentExamGet',token,level:2}).attempt.answers,answers);
- const impostor=request({action:'studentExamLogin',passcode:f.context.sbWeeklyPortalPasswords().passwords.assessments,name:'Test Student',program:'General English'});
+ const impostor=request({action:'studentExamLogin',level:2,passcode:f.context.sbMonthlyPortalPasswords().passwords['exams:2'],name:'Test Student',program:'General English'});
  assert.equal(request({action:'studentExamSubmit',token:impostor.token,level:2,attemptId:attempt.id,version:attempt.version,answers}).ok,false);
  assert.equal(toggle(2,false).ok,true);
  assert.equal(request({action:'studentExamGet',token:impostor.token,level:2}).ok,false);
@@ -50,7 +50,7 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': global sw
  const studentResult=request({action:'studentExamGet',token,level:2}).attempt;for(const field of ['score','marks','feedback','automatic','reviewedAt','notificationError'])assert.equal(field in studentResult,false);
  assert.equal(studentResult.status,'Submitted');
  assert.equal(request({action:'listExamAttempts',key:'private-test-key'}).attempts.length,1);
- toggle(3,true);const second=request({action:'studentExamLogin',passcode:f.context.sbWeeklyPortalPasswords().passwords.assessments,name:'Timed Student',program:'IELTS'});
+ toggle(3,true);const second=request({action:'studentExamLogin',level:3,passcode:f.context.sbMonthlyPortalPasswords().passwords['exams:3'],name:'Timed Student',program:'IELTS'});
  let timed=request({action:'studentExamGet',token:second.token,level:3}).attempt;
  timed=request({action:'studentExamDraft',token:second.token,level:3,attemptId:timed.id,version:timed.version,answers}).attempt;
  f.advance(20*60*1000+1);
