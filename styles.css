@@ -385,3 +385,14 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 #admin-add-client{font-size:12px;padding:9px 14px;gap:0;min-height:0;width:auto}
 
 #students-portal.catalog{padding-top:18px;padding-bottom:24px}#students-portal #student-folder-title{margin-top:0}#students-portal .portal-area-choices{margin-top:14px;margin-bottom:20px}#students-portal #portal-content>.portal-tabs{margin-bottom:12px}
+
+/* Give the phone homepage a more comfortable reading rhythm. */
+@media(max-width:680px){
+ main #home .hero{padding-top:20px;padding-bottom:16px;gap:22px}
+ main #home .hero-copy .home-slogan{font-size:34px;line-height:1.22;margin:0 0 16px;top:0}
+ #home .home-pricing-note{font-size:16px;line-height:1.65;margin:14px 0 18px}
+ #home .hero-copy>.button{margin-top:8px;padding:14px 20px;min-height:48px}
+ #home .home-picture-and-reviews .coaching-photo{top:0}
+ #home .benefits{padding-top:16px;padding-bottom:16px;gap:14px}
+ main #home>.home-bottom-row{margin-top:12px;padding-top:6px;padding-bottom:10px}
+}

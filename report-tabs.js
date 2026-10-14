@@ -3,9 +3,12 @@ export const REPORT_TAB_PREFIX='speak-boldly-report-tab-';
 export function openClientReportTab(win,type,client,endpointDefault=''){
  if(!TYPES.has(type)||!client?.id)throw new Error('Choose a client and report first.');
  const token=win.crypto.randomUUID(),key=REPORT_TAB_PREFIX+token;
+ const appMode=new URL(win.location.href).pathname.endsWith('/instructor.html');
  const payload={type,client:{id:client.id,name:client.name,email:client.email},endpointDefault,createdAt:Date.now()};
+ if(appMode)payload.appMode=true;
  win.sessionStorage.setItem(key,JSON.stringify(payload));
  const url=new URL('./report-editor.html',win.location.href);url.hash=token;
+ if(appMode){win.location.assign(url.href);return win;}
  const tab=win.open(url.href,'_blank');
  if(!tab){win.sessionStorage.removeItem(key);throw new Error('Allow pop-ups for Speak Boldly, then select the report again to open a new tab.');}
  // The new same-origin tab receives its own copy of sessionStorage when opened.

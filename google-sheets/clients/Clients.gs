@@ -69,6 +69,7 @@ function handleClientSync(e){
   if(!['sendClientEmail','uploadLibraryFile'].includes(p.action)&&e.postData.contents.length>20000)throw new Error('Request too large.');
   if(typeof SB_OWNER_BOOKING_ACTIONS!=='undefined'&&SB_OWNER_BOOKING_ACTIONS.includes(p.action))return handleOwnerBooking(p);
   if(typeof SB_INSTRUCTOR_EXAM_ACTIONS!=='undefined'&&SB_INSTRUCTOR_EXAM_ACTIONS.includes(p.action))return handleInstructorExam(p);
+  if(['personalCalendarSettings','resetPersonalCalendarLink'].includes(p.action)){if(typeof sbPersonalCalendarSettings!=='function')throw new Error('Add PersonalCalendar.gs for calendar subscriptions.');return clientSyncResponse(sbPersonalCalendarSettings(p));}
   if(p.action==='sendClientEmail'){if(typeof handleClientEmail!=='function')throw new Error('Add EmailActions.gs and authorizeClientEmails, then deploy a New version to enable email sending.');return handleClientEmail(p);}
   if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(p.action)){if(typeof handleLibraryAction!=='function')throw new Error('Add LibraryActions.gs to enable library sharing.');return handleLibraryAction(p);}
   if(p.action==='deleteClient')return clientSyncResponse(sbDeleteClientRecord(p));
@@ -125,3 +126,5 @@ function doPost(e) {
  if (['deleteClient','upsertClient','checkConnection','listClients','listSessions','saveSession','cancelSession','listTeacherDocuments','saveTeacherDocument','sendClientEmail','listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(data.action)) return handleClientSync(e);
  return handleReviewPost(e);
 }
+
+function doGet(event){if(event?.parameter?.calendarFeed&&typeof sbPersonalCalendarFeed==='function')return sbPersonalCalendarFeed(event.parameter.calendarFeed);return clientSyncResponse({ok:true,service:'Speak Boldly Clients'});}
