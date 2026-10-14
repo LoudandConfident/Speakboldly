@@ -417,3 +417,9 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 #placement .assessment-options>article>p:not(.eyebrow){font-family:inherit;font-size:15px;line-height:1.8}
 
 .mobile-button-arrow{display:none!important}
+
+.upcoming-view{position:relative;min-height:360px;isolation:isolate}
+.upcoming-view-content{opacity:.25;filter:grayscale(1);user-select:none;pointer-events:none}
+.upcoming-watermark{position:absolute;inset:0;z-index:1;display:grid;place-items:center;margin:0;padding:24px;text-align:center;font-family:Manrope,"DM Sans",sans-serif;font-size:clamp(36px,7vw,80px);font-weight:800;line-height:1.2;letter-spacing:1px;color:#193c32c9;transform:rotate(-8deg);pointer-events:none}
+#home .hero-copy>.home-book-slot{margin-top:28px}
+@media(max-width:680px){#home .hero-copy>.home-book-slot{margin-top:24px}}
