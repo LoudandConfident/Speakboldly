@@ -402,7 +402,7 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 
 @media(display-mode:standalone){#admin-dashboard .phone-install-row,#phone-install-button,#app-install,[data-instructor-app-link]{display:none!important}}
 @media(max-width:680px){
- #admin-calendar .calendar-viewport{max-height:calc(100dvh - 270px);overflow:auto;overscroll-behavior:contain;padding:2px}
+ #admin-calendar .calendar-viewport{max-height:none;overflow:visible;padding:2px}
  #admin-calendar .calendar-viewport .calendar-grid,#admin-calendar .calendar-viewport .calendar-weekdays{min-width:0;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
  #admin-calendar .calendar-viewport .calendar-day{min-height:80px;padding:3px 2px;gap:3px;overflow:hidden}
  #admin-calendar .calendar-viewport .calendar-day-header{flex-wrap:wrap;gap:1px}
