@@ -1,10 +1,19 @@
+export function addResultBranding(doc,result) {
+ const brand=doc.createElement('div');brand.className='result-brand';
+ const logo=doc.createElement('img');logo.className='result-logo';logo.src=new URL('./app-icons/icon-192.png',doc.baseURI).href;logo.alt='Speak Boldly logo';logo.width=64;logo.height=64;
+ const name=doc.createElement('span');name.textContent='Speak Boldly';brand.append(logo,name);result.prepend(brand);
+ const contact=doc.createElement('p');contact.className='result-contact';contact.append(doc.createTextNode('If you need any guidance, contact us through: '));
+ const email=doc.createElement('a');email.href='mailto:speakboldly16@gmail.com';email.textContent='speakboldly16@gmail.com';contact.append(email);result.append(contact);
+}
 export function resultImageBlocks(result) {
  return [...result.querySelectorAll('h2,h3,h4,p,li,tr')]
   .filter(node=>!node.closest('.result-image-actions'))
   .map(node=>({heading:/^H[234]$/.test(node.tagName),text:node.tagName==='TR'?[...node.children].map(cell=>cell.textContent.trim()).join(' — '):(node.tagName==='LI'?'• ':'')+node.textContent.trim()}))
   .filter(block=>block.text);
 }
-function createImage(doc,result,title) {
+async function createImage(doc,result,title) {
+ const logo=result.querySelector?.('.result-logo');
+ if(logo){try{await logo.decode();}catch{throw new Error('The logo could not load. Connect to the internet and try saving again.');}}
  const canvas=doc.createElement('canvas'),ctx=canvas.getContext('2d');
  if(!ctx)throw new Error('Please use your phone’s screenshot controls to save this result.');
  const width=1080,padding=64,lines=[];
@@ -19,10 +28,11 @@ function createImage(doc,result,title) {
   if(line)lines.push({text:line,heading:block.heading});
   lines.push({space:true});
  }
- canvas.width=width;canvas.height=padding*2+lines.reduce((height,line)=>height+(line.space?20:line.heading?48:42),0);
+ canvas.width=width;canvas.height=padding*2+(logo?128:0)+lines.reduce((height,line)=>height+(line.space?20:line.heading?48:42),0);
  ctx.fillStyle='#faf9f4';ctx.fillRect(0,0,canvas.width,canvas.height);
  ctx.fillStyle='#193c32';ctx.textBaseline='top';
- let y=padding;
+ if(logo)ctx.drawImage(logo,padding,padding,96,96);
+ let y=padding+(logo?128:0);
  for(const line of lines){if(line.space){y+=20;continue;}ctx.font=(line.heading?'600 34px':'28px')+' system-ui, sans-serif';ctx.fillText(line.text,padding,y);y+=line.heading?48:42;}
  return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('The picture could not be created. Please try again.')),'image/png'));
 }

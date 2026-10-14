@@ -445,3 +445,8 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 #placement-result.assessment-result .placement-score{font-size:15px}
 .result-image-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:20px 0}
 .result-image-actions p{flex-basis:100%;margin:0}
+
+#programs .program-course-actions{margin-top:0;transform:translateY(-12px)}
+.result-brand{display:flex;align-items:center;gap:12px;margin:0 0 18px;color:var(--ink);font-family:inherit;font-weight:600}
+.result-logo{display:block;width:64px;height:64px;object-fit:contain}
+.assessment-result .result-contact a{text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
