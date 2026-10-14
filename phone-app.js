@@ -39,8 +39,3 @@ button.addEventListener('click', async () => {
 if ('serviceWorker' in navigator && window.isSecureContext) {
   navigator.serviceWorker.register(new URL('./service-worker.js', import.meta.url), {updateViaCache: 'none'}).catch(error => console.warn('Phone app setup unavailable:', error.message));
 }
-// Open the instructor entry on app launch while preserving normal website links.
-if ((installed() || new URL(window.location.href).searchParams.get('app') === 'owner') && (!window.location.hash || window.location.hash.startsWith('#students-portal'))) {
-  window.location.hash = 'students-portal';
-  document.querySelector('[data-portal-area="admin"]')?.click();
-}

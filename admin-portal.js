@@ -8,7 +8,7 @@ import {initializeTeacherDocuments} from './teacher-documents.js?v=instructor-ap
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {initializeExamReview} from './sheet-exam-review.js?v=private-marking';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=calendar-popup';
+import {initializeAdminCalendar} from './admin-calendar.js?v=app-resume';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=client-levels-eight';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=four-digit-restored';
 import {loadPortalMaterials} from './portal-materials.js';
@@ -39,7 +39,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  root.querySelector('.admin-clients-heading')?.append(refreshClients);
  refreshClients.onclick=async()=>{if(!unlocked||sheetLoading)return;if(clientSheetConnected()){await refreshSheetClients();return;}load();render();await calendar?.load();documents?.refresh();status.textContent='Dashboard refreshed.';};
  doc.addEventListener('client-sheet-configured',()=>{if(unlocked)refreshSheetClients();});
- async function refreshSheetClients(){
+ async function refreshSheetClients(background=false){
   if(!unlocked||sheetLoading)return false;
   if(!clientSheetConnected()){status.textContent='Connect Google Sheets on this device using your private connection key to load your students.';return false;}
   if(editingId||form.dataset.saving){status.textContent='Finish editing this client before refreshing students.';return false;}
@@ -48,14 +48,20 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
   try{
    const remote=cleanupRequestedPortalClients(await loadClientsFromSheet(),doc.defaultView.localStorage);
    if(!unlocked||epoch!==sheetGeneration)return false;
-   try{if(clients.some(client=>!remote.some(item=>item.id===client.id)))doc.defaultView.localStorage.setItem('speak-boldly-clients-before-sheet-refresh-v1',JSON.stringify(clients));}catch{}clients=mergeSheetClients(clients,remote);save();render();documents?.refresh();calendar?.refresh();
+   try{if(clients.some(client=>!remote.some(item=>item.id===client.id)))doc.defaultView.localStorage.setItem('speak-boldly-clients-before-sheet-refresh-v1',JSON.stringify(clients));}catch{}clients=mergeSheetClients(clients,remote);save();render();documents?.refresh();calendar?.refresh(background);
    status.textContent=remote.length+' students loaded from Google Sheets.';
    return true;
   }catch(error){if(unlocked&&epoch===sheetGeneration)status.textContent='Students could not load. '+error.message;return false;}
   finally{if(epoch===sheetGeneration){sheetLoading=false;refreshClients.disabled=false;root.querySelector('#admin-add-client').disabled=false;}}
  }
  let syncTimer;
- function refreshConnected(){if(unlocked&&!doc.hidden&&clientSheetConnected()&&!editingId&&!form.dataset.saving&&!doc.querySelector('dialog[open]'))refreshSheetClients();}
+ function refreshConnected(){if(unlocked&&!doc.hidden&&clientSheetConnected()&&!editingId&&!form.dataset.saving&&!doc.querySelector('dialog[open]'))refreshSheetClients(true);}
+ doc.addEventListener('speak-boldly-app-resume',()=>{
+  if(!unlocked||doc.hidden||editingId||form.dataset.saving||doc.querySelector('dialog[open]')||doc.querySelector('#exam-review-detail form'))return;
+  refreshConnected();
+  if(root.querySelector('#weekly-portal-passwords')?.open)weeklyPasswords?.refresh();
+  if(root.querySelector('#exam-review')?.open)review?.refresh?.();
+ });
  function startSyncTimer(){doc.defaultView.clearInterval(syncTimer);syncTimer=doc.defaultView.setInterval(refreshConnected,60000);}
  startSyncTimer();doc.defaultView.addEventListener('focus',refreshConnected);doc.addEventListener('visibilitychange',()=>{if(!doc.hidden)refreshConnected();});doc.defaultView.addEventListener('pagehide',()=>doc.defaultView.clearInterval(syncTimer));doc.defaultView.addEventListener('pageshow',startSyncTimer);
  syncExisting?.addEventListener('click',async()=>{

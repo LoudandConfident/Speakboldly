@@ -125,5 +125,5 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
   catch(error){status.textContent=error.message;return;}
   root.querySelector('#calendar-session-dialog')?.close();
  };
- return{load,refresh(){if(clientSheetConnected()||ownerConnected())load();else{populateClients();render();}},lock(){loadEpoch++;sessions=[];grid.replaceChildren();heading.textContent='';form.reset();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
+ return{load,refresh(background=false){if(clientSheetConnected()||ownerConnected())load(background);else{populateClients();render();}},lock(){loadEpoch++;sessions=[];grid.replaceChildren();heading.textContent='';form.reset();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
 }
