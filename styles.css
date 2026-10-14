@@ -467,3 +467,5 @@ main #home .hero{padding-top:16px;padding-bottom:12px;min-height:0}main #home .h
 #courses .course-booking-note li{margin:0 0 7px}
 #courses .course-booking-note strong{font-size:inherit;font-weight:600}
 @media(max-width:760px){#courses .courses-introduction{grid-template-columns:minmax(0,1fr);gap:20px}#courses .courses-introduction .course-booking-note{width:min(100%,350px);max-width:100%;justify-self:end}}
+
+#home>.benefits{position:relative;margin-top:-14px}@media(max-width:680px){#home>.benefits{margin-top:-8px}}
