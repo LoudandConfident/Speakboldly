@@ -21,7 +21,9 @@ export const courses = [
     ],
     "art": "general",
     "summary": "Private English coaching tailored to your level and everyday needs.",
-    "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions. This is an ongoing program; how long you continue depends on your English level."
+    "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions. This is an ongoing program; how long you continue depends on your English level.",
+    "viewDescription": "Build everyday English through two private sessions a week, with practice tailored to your level and goals. Work on speaking, listening, vocabulary, and sentence structure using real situations and personal feedback.",
+    "outcomes": "You’ll develop clearer ways to express your ideas and take part in everyday conversations. You’ll also build a practical routine for recognising mistakes and continuing your progress between sessions."
   },
   {
     "id": "general-4",
@@ -45,7 +47,9 @@ export const courses = [
     ],
     "art": "general",
     "summary": "Private English coaching tailored to your level and everyday needs.",
-    "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions. This is an ongoing program; how long you continue depends on your English level."
+    "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions. This is an ongoing program; how long you continue depends on your English level.",
+    "viewDescription": "Develop everyday English through one private session a week, with practice shaped around your level and priorities. Each session combines useful language, conversation, and feedback you can apply during the week.",
+    "outcomes": "You’ll strengthen the language you need to explain yourself and respond more comfortably. You’ll leave with practical activities that help you keep improving independently between sessions."
   },
   {
     "id": "urgent-session",
@@ -63,7 +67,9 @@ export const courses = [
     ],
     "art": "urgent",
     "summary": "One 90-minute conversation session tailored to your immediate needs.",
-    "detailDescription": "Before the session, tell your instructor your topic, current English level and what you need help with. Use the conversation to rehearse an upcoming situation, work through an immediate communication need or explore what kind of coaching would help you next. Each session stands on its own, with no ongoing commitment."
+    "detailDescription": "Before the session, tell your instructor your topic, current English level and what you need help with. Use the conversation to rehearse an upcoming situation, work through an immediate communication need or explore what kind of coaching would help you next. Each session stands on its own, with no ongoing commitment.",
+    "viewDescription": "Use one 90-minute session to focus on an immediate English need, rehearse a situation, or try private coaching. Share your topic and goals beforehand so your instructor can shape the conversation around you.",
+    "outcomes": "You’ll practise useful wording for your chosen situation and receive feedback on what to improve. You’ll finish with clearer next steps for preparing on your own, without committing to an ongoing course."
   },
   {
     "id": "interview",
@@ -87,7 +93,9 @@ export const courses = [
     ],
     "art": "interview",
     "summary": "Prepare clear answers and practise for your next interview.",
-    "detailDescription": "Practise describing your experience, strengths and achievements in your own words. Work on focused answers, follow-up questions and the questions you want to ask an employer, using mock interviews and feedback to prepare."
+    "detailDescription": "Practise describing your experience, strengths and achievements in your own words. Work on focused answers, follow-up questions and the questions you want to ask an employer, using mock interviews and feedback to prepare.",
+    "viewDescription": "Prepare for English-language interviews through two focused sessions of practice and personal feedback. Rehearse your introduction, common questions, and examples that show your experience.",
+    "outcomes": "You’ll develop more focused answers and clearer ways to explain your strengths and achievements. You’ll also learn how to rehearse independently and handle follow-up questions with greater confidence."
   },
   {
     "id": "writing",
@@ -105,7 +113,9 @@ export const courses = [
     ],
     "art": "writing",
     "summary": "Write clear, professional emails and business messages.",
-    "detailDescription": "Bring examples of the kinds of messages you need to write, such as requests, updates or follow-ups. Practise adapting your tone to the reader, arranging key information clearly and revising drafts with instructor feedback."
+    "detailDescription": "Bring examples of the kinds of messages you need to write, such as requests, updates or follow-ups. Practise adapting your tone to the reader, arranging key information clearly and revising drafts with instructor feedback.",
+    "viewDescription": "Practise professional emails and business messages across five sessions using situations relevant to your work. Explore tone, structure, requests, and follow-ups while revising drafts with instructor feedback.",
+    "outcomes": "You’ll develop clearer messages that suit your reader and make the next action easy to understand. You’ll also build an editing checklist to review your writing before sending it."
   },
   {
     "id": "speaking",
@@ -124,7 +134,9 @@ export const courses = [
     "art": "speaking",
     "comingSoon": true,
     "summary": "Speak confidently in meetings, presentations and public settings.",
-    "detailDescription": "Practise introducing a topic, linking ideas and making your point without losing your audience. Work through meeting contributions, presentation openings and question-and-answer situations, with feedback on clarity, delivery and pronunciation."
+    "detailDescription": "Practise introducing a topic, linking ideas and making your point without losing your audience. Work through meeting contributions, presentation openings and question-and-answer situations, with feedback on clarity, delivery and pronunciation.",
+    "viewDescription": "Develop your English for meetings, presentations, and public speaking through five practical sessions. Rehearse contributions, organise your message, and handle questions with feedback on clarity and delivery.",
+    "outcomes": "You’ll practise making your point clearly and supporting it with useful examples. You’ll also develop a repeatable preparation routine for presenting ideas and responding to an audience."
   },
   {
     "id": "ielts",
@@ -142,7 +154,9 @@ export const courses = [
     "art": "ielts",
     "comingSoon": true,
     "summary": "Focused IELTS practice across all four language skills.",
-    "detailDescription": "Work through typical task formats and timed practice while identifying which skills need the most attention. Sessions cover organising written answers, explaining opinions in speaking tasks and approaching listening and reading questions."
+    "detailDescription": "Work through typical task formats and timed practice while identifying which skills need the most attention. Sessions cover organising written answers, explaining opinions in speaking tasks and approaching listening and reading questions.",
+    "viewDescription": "Prepare for IELTS through focused practice in listening, reading, writing, and speaking. Explore typical task formats, timed activities, and strategies shaped around the areas you need to strengthen.",
+    "outcomes": "You’ll build familiarity with exam tasks and practise organising answers within the available time. You’ll also learn how to review your performance and plan more focused independent preparation."
   },
   {
     "id": "pronunciation",
@@ -157,7 +171,9 @@ export const courses = [
     "art": "pronunciation",
     "comingSoon": true,
     "summary": "Develop clearer sounds, stress, rhythm and intonation.",
-    "detailDescription": "Practise individual sounds alongside connected speech, word stress and sentence rhythm. The goal is clearer, more confident communication; your instructor helps you notice patterns and practise them in meaningful conversation."
+    "detailDescription": "Practise individual sounds alongside connected speech, word stress and sentence rhythm. The goal is clearer, more confident communication; your instructor helps you notice patterns and practise them in meaningful conversation.",
+    "viewDescription": "Explore English sounds, word stress, rhythm, and intonation through six practical sessions. Apply pronunciation feedback to short exchanges and connected speech.",
+    "outcomes": "You’ll develop greater awareness of the patterns that help make your speech clearer. You’ll also learn a listening-and-recording routine for reviewing and refining your pronunciation independently."
   },
   {
     "id": "information-technology",
@@ -172,7 +188,9 @@ export const courses = [
     "art": "technology",
     "comingSoon": true,
     "summary": "Explain technical ideas and communicate confidently in IT.",
-    "detailDescription": "Practise explaining a technical issue, describing how a system works and sharing progress with colleagues. Sessions can focus on troubleshooting conversations, project updates and technical vocabulary relevant to your work."
+    "detailDescription": "Practise explaining a technical issue, describing how a system works and sharing progress with colleagues. Sessions can focus on troubleshooting conversations, project updates and technical vocabulary relevant to your work.",
+    "viewDescription": "Practise English for technical explanations, troubleshooting, and project discussions across eight sessions. Use situations and vocabulary relevant to your work in information technology.",
+    "outcomes": "You’ll develop clearer ways to explain problems, describe systems, and share progress with colleagues. You’ll also practise checking understanding and organising technical information for different listeners."
   },
   {
     "id": "kids",
@@ -189,7 +207,9 @@ export const courses = [
     "summary": "Playful English speaking activities for children aged 6–14.",
     "price": 4000,
     "priceLabel": "8 sessions",
-    "detailDescription": "Speaking practice uses stories, picture prompts, games and short conversations suited to the child’s age and English level. Activities encourage children to ask questions, express ideas and participate with confidence."
+    "detailDescription": "Speaking practice uses stories, picture prompts, games and short conversations suited to the child’s age and English level. Activities encourage children to ask questions, express ideas and participate with confidence.",
+    "viewDescription": "Children aged 6–14 explore English through stories, games, picture prompts, and playful conversations. Activities are adapted to the child’s age and level across eight sessions.",
+    "outcomes": "Children will practise asking questions, sharing ideas, and responding in familiar situations. They’ll also discover enjoyable activities they can repeat outside lessons with age-appropriate support."
   },
   {
     "id": "different-learners",
@@ -204,7 +224,9 @@ export const courses = [
     "art": "learners",
     "comingSoon": true,
     "summary": "Explore learning preferences and ways to support different learners.",
-    "detailDescription": "Explore how pictures, spoken explanations, written examples and practical activities can support learning. The course encourages flexible teaching rather than limiting a learner to one fixed type, with ideas for presenting and practising the same topic in different ways."
+    "detailDescription": "Explore how pictures, spoken explanations, written examples and practical activities can support learning. The course encourages flexible teaching rather than limiting a learner to one fixed type, with ideas for presenting and practising the same topic in different ways.",
+    "viewDescription": "Explore how visual examples, conversation, reading, and hands-on activities can support different learners. Across eight sessions, practise adapting the same topic in several ways while keeping learning preferences flexible.",
+    "outcomes": "You’ll develop a wider range of activities and clearer ways to respond to learners’ needs. You’ll also learn to observe what helps, gather feedback, and adjust your approach as learners progress."
   },
   {
     "id": "instructor-training",
@@ -222,7 +244,9 @@ export const courses = [
     "previewDetails": true,
     "summary": "Practical training for instructors with 0–2 years of experience.",
     "price": 6000,
-    "priceLabel": "8 sessions"
+    "priceLabel": "8 sessions",
+    "viewDescription": "Build practical teaching skills through eight sessions on lesson planning, classroom communication, and learner participation. Designed for instructors with 0–2 years of experience, admission requires an interview and an English exam score of at least 93%.",
+    "outcomes": "You’ll practise planning purposeful lessons, giving clear instructions, and helping learners take part. You’ll also develop ways to review your teaching, use feedback, and continue improving independently."
   }
 ];
 export function matches(c,category,query){return(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
