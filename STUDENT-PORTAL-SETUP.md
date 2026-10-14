@@ -58,3 +58,15 @@ Assessment opens a popup requesting **Password, Name, Level, Age and Program**. 
 Material contains separate **Level 1–8** folders plus a folder for each other program. There are no General English or Instructor Training folders. Material uploads include a folder selector; uploaded filenames are prefixed with the selected level or program so they appear in that folder. Existing files are grouped by their names. These are folders in the Student Portal; uploads still use the configured Materials Drive library.
 
 Instructor Portal opens the **Dim / Undim — Student Portal** section automatically. Each file or assessment has a **Dim** or **Undim** button. Controls become active after the connected Google service loads the current access state.
+
+## Contact Instructor and the six-icon Learning Hub
+
+The Learning Hub shows Examinations, Listening, Material, Activities, Contact Instructor and Calendar. Exercise and comprehension documents appear under Activities. Contact Instructor and Calendar require no student or folder password, including when password-protected level access is temporarily locked. Material, Listening, Activities and Examinations ask for a level and the weekly password before opening. Booking still checks the registered client and payment status.
+
+Contact Instructor opens **How can I help you?** with Name, Email and Note fields. Submit emails the request to **speakboldly16@gmail.com**, with the visitor's email as Reply-To. There is no WhatsApp link or mail-app handoff. Requests are recorded in the private **Instructor requests** sheet. Matching retries do not send a previously accepted email twice; uncertain delivery is retained for instructor review.
+
+**Activation:** replace the existing Apps Script code with the updated complete `google-sheets/clients/UnifiedCode.gs`. Keep existing Script Properties and spreadsheet data, run `authorizeClientEmails` to grant email permission, then **Deploy → Manage deployments → Edit → New version → Deploy**. Keep the same `/exec` URL. Website publishing alone does not update Apps Script. Test a request using your own email and confirm it arrives. Modular projects also need `StudentContact.gs`; the complete script already includes it.
+
+Instructor **Dim / Undim** controls individual files inside Activities, Listening, Material and Examinations. There are no folder-wide switches. Empty groups display “No files uploaded yet.” Contact Instructor and Calendar are password-free; the other four folders retain their password entry.
+
+The instructor calendar offers **Session**, **Trial session** and **Assessment**. A regular Session keeps its course selection; Trial session and Assessment are saved as distinct appointment types. The client Program dropdown no longer offers One Session, Instructor training or The different learners; those courses remain in the public catalogue.

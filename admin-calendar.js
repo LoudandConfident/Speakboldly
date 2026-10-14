@@ -1,6 +1,6 @@
 import {removedPortalClientIds} from './requested-client-cleanup.js';
 import {confirmClientEmail} from './client-email-confirmation.js?v=calendar-popup';
-import {SESSION_PROGRAMS,nextSessionNumber,suggestedSessionProgram} from './session-programs.js';
+import {SESSION_PROGRAMS,SESSION_TYPES,calendarProgramForType,nextSessionNumber,suggestedSessionProgram} from './session-programs.js?v=appointment-types';
 import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession} from './client-sheet.js?v=level-history';
 import {ownerConnected,request} from './exam-api.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
@@ -20,7 +20,7 @@ export function validateSession(input){
  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==date||date<'1900-01-01'||date>'9999-12-31')throw new Error('Choose a valid session date.');
  const clientId=String(input.clientId||'');if(!clientId||clientId.length>100)throw new Error('Choose an existing client.');
  const time=String(input.time||'');if(time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(time))throw new Error('Choose a valid class time.');
- const program=String(input.program||'').trim(),level=String(input.level||'').trim();if(program&&!SESSION_PROGRAMS.some(item=>item.title===program))throw new Error('Choose a valid program.');if(level&&(!/^[1-9]\d{0,3}$/.test(level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(level)))throw new Error('Choose a valid session level.');
+ const program=String(input.program||'').trim(),level=String(input.level||'').trim();if(program&&program!=='Assessment'&&!SESSION_PROGRAMS.some(item=>item.title===program))throw new Error('Choose a valid program.');if(level&&(!/^[1-9]\d{0,3}$/.test(level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(level)))throw new Error('Choose a valid session level.');
  return{name,date,number,clientId,...(time?{time}:{}),...(program?{program}:{}),...(level?{level}:{})};
 }
 export function cairoToday(now=new Date()){
@@ -31,11 +31,15 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
  const root=doc.querySelector('#admin-calendar');if(!root)return;
  const form=root.querySelector('form'),grid=root.querySelector('.calendar-grid'),status=root.querySelector('[role=status]'),heading=root.querySelector('#calendar-month');
  const chooser=form.elements.clientId;
- const programLabel=doc.createElement('label');programLabel.textContent='Program';const program=doc.createElement('select');program.name='program';program.required=true;program.append(new doc.defaultView.Option('Choose a program',''));for(const item of SESSION_PROGRAMS)program.append(new doc.defaultView.Option(item.title,item.title));programLabel.append(program);chooser.closest('label').after(programLabel);
+ const typeLabel=doc.createElement('label');typeLabel.textContent='Appointment type';const type=doc.createElement('select');type.name='appointmentType';type.required=true;for(const item of SESSION_TYPES)type.append(new doc.defaultView.Option(item.title,item.id));typeLabel.append(type);chooser.closest('label').after(typeLabel);
+ const programLabel=doc.createElement('label');programLabel.textContent='Program';const program=doc.createElement('select');program.name='program';program.required=true;program.append(new doc.defaultView.Option('Choose a program',''));for(const item of SESSION_PROGRAMS.filter(item=>item.id!=='trial'))program.append(new doc.defaultView.Option(item.title,item.title));programLabel.append(program);typeLabel.after(programLabel);
  const levelLabel=doc.createElement('label');levelLabel.textContent='Level for this session';const level=doc.createElement('select');level.name='level';level.required=true;for(const item of ['Not assessed',...Array.from({length:12},(_,i)=>String(i+1)),'A1','A2','B1','B2','C1','C2'])level.append(new doc.defaultView.Option(/^\d+$/.test(item)?'Level '+item:item,item));levelLabel.append(level);programLabel.after(levelLabel);
  const count=doc.createElement('p');count.setAttribute('role','status');form.elements.number.closest('label').after(count);
- function suggestNumber(){if(!chooser.value||!program.value){count.textContent='';return;}form.elements.number.value=nextSessionNumber(sessions,chooser.value,program.value);const scheduled=sessions.filter(item=>item.clientId===chooser.value&&item.reminderStatus!=='cancelled'&&(!item.program||item.program===program.value)).length;count.textContent=scheduled+' session'+(scheduled===1?'':'s')+' scheduled for this program. Session numbers can be adjusted.';}
- chooser.addEventListener('change',()=>{const client=getClients().find(item=>item.id===chooser.value);program.value=suggestedSessionProgram(client)||'';level.value=/^[1-9]\d{0,3}$/.test(client?.level||'')||['A1','A2','B1','B2','C1','C2'].includes(client?.level)?client.level:'Not assessed';if(client?.level&&!level.value){level.append(new doc.defaultView.Option('Level '+client.level,client.level));level.value=client.level;}suggestNumber();});program.addEventListener('change',suggestNumber);
+ function selectedProgram(){return type.value==='session'?program.value:type.value==='trial'?'Trial session':'Assessment';}
+ function suggestNumber(){const selectedProgramValue=selectedProgram();if(!chooser.value||!selectedProgramValue){count.textContent='';return;}form.elements.number.value=nextSessionNumber(sessions,chooser.value,selectedProgramValue);const scheduled=sessions.filter(item=>item.clientId===chooser.value&&item.reminderStatus!=='cancelled'&&(!item.program||item.program===selectedProgramValue)).length;count.textContent=scheduled+' appointment'+(scheduled===1?'':'s')+' scheduled for '+(type.value==='session'?'this program':selectedProgramValue.toLowerCase())+'. Numbers can be adjusted.';}
+ function updateType(){programLabel.hidden=type.value!=='session';program.disabled=type.value!=='session';program.required=type.value==='session';suggestNumber();}
+ type.addEventListener('change',updateType);
+ chooser.addEventListener('change',()=>{const client=getClients().find(item=>item.id===chooser.value);const suggested=suggestedSessionProgram(client)||'';program.value=suggested==='Trial session'?'':suggested;level.value=/^[1-9]\d{0,3}$/.test(client?.level||'')||['A1','A2','B1','B2','C1','C2'].includes(client?.level)?client.level:'Not assessed';if(client?.level&&!level.value){level.append(new doc.defaultView.Option('Level '+client.level,client.level));level.value=client.level;}suggestNumber();});program.addEventListener('change',suggestNumber);
  const weekdays=root.querySelector('.calendar-weekdays'),viewport=doc.createElement('div'),hint=doc.createElement('p');
  viewport.className='calendar-viewport';viewport.tabIndex=0;viewport.setAttribute('role','region');viewport.setAttribute('aria-label','Monthly calendar. Scroll horizontally to see all days.');
  hint.className='calendar-scroll-hint';hint.textContent='Swipe across the calendar to see all days.';
@@ -99,7 +103,7 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    if(!isUnlocked()||epoch!==loadEpoch)return;
    if(background&&root.querySelector('#calendar-session-dialog')?.open)return;
    populateClients();
-   if(background){month=oldMonth;selected=oldSelected;}else{form.reset();selected=cairoToday();month=selected.slice(0,7);form.elements.date.value=selected;}
+   if(background){month=oldMonth;selected=oldSelected;}else{form.reset();updateType();selected=cairoToday();month=selected.slice(0,7);form.elements.date.value=selected;}
    render();
   }finally{loading=false;}
  }
@@ -113,17 +117,17 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
  root.querySelector('#calendar-previous').onclick=()=>shift(-1);root.querySelector('#calendar-next').onclick=()=>shift(1);
  root.querySelector('#calendar-today').onclick=()=>{if(!isUnlocked())return;selected=cairoToday();month=selected.slice(0,7);form.elements.date.value=selected;render();};
  form.onsubmit=async event=>{event.preventDefault();if(!isUnlocked()||!form.reportValidity())return;if(!storageReadable){status.textContent='Browser storage is unavailable or contains unreadable records. Existing sessions have been kept.';return;}
-  try{loadEpoch++;const input=Object.fromEntries(new doc.defaultView.FormData(form)),client=getClients().find(c=>c.id===input.clientId);if(!client)throw new Error('Choose an existing client.');const record=validateSession({...input,name:client.name});if(!record.time)throw new Error('Choose a class time.');
+  try{loadEpoch++;const input=Object.fromEntries(new doc.defaultView.FormData(form)),client=getClients().find(c=>c.id===input.clientId);if(!client)throw new Error('Choose an existing client.');const record=validateSession({...input,program:calendarProgramForType(input.appointmentType,input.program),name:client.name});if(!record.time)throw new Error('Choose a class time.');
    if(clientSheetConnected()){
     const response=await saveSheetSession(record);if(!isUnlocked())return;
-    sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();
+    sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));selected=record.date;month=record.date.slice(0,7);form.reset();updateType();form.elements.date.value=selected;render();
     status.textContent='Session '+record.number+' saved to your sheet for '+record.date+' at '+record.time+' Cairo time. '+'Send the confirmation from this client’s Actions button.';
    }
    else if(ownerConnected()){const response=await request('admin/classes',{role:'admin',method:'POST',data:record});if(!isUnlocked())return;await load();status.textContent='Session '+record.number+' saved for '+record.date+' at '+record.time+' Cairo time. '+'Confirmations are sent only when you authorize sending.';}
-   else{const updated=[...sessions,record];doc.defaultView.localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));sessions=updated;selected=record.date;month=record.date.slice(0,7);form.reset();form.elements.date.value=selected;render();status.textContent=sessionInitials(record.name)+' #'+record.number+' saved in this browser. Send class confirmations manually from Actions after connecting your Clients sheet.';}}
+   else{const updated=[...sessions,record];doc.defaultView.localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));sessions=updated;selected=record.date;month=record.date.slice(0,7);form.reset();updateType();form.elements.date.value=selected;render();status.textContent=sessionInitials(record.name)+' #'+record.number+' saved in this browser. Send class confirmations manually from Actions after connecting your Clients sheet.';}}
 
   catch(error){status.textContent=error.message;return;}
   root.querySelector('#calendar-session-dialog')?.close();
  };
- return{load,refresh(background=false){if(clientSheetConnected()||ownerConnected())load(background);else{populateClients();render();}},lock(){loadEpoch++;sessions=[];grid.replaceChildren();heading.textContent='';form.reset();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
+ return{load,refresh(background=false){if(clientSheetConnected()||ownerConnected())load(background);else{populateClients();render();}},lock(){loadEpoch++;sessions=[];grid.replaceChildren();heading.textContent='';form.reset();updateType();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
 }

@@ -1,10 +1,11 @@
+import {initializeStudentContact} from './student-contact.js';
 import {chooseLearningLevel} from './learning-level-dialog.js';
-import {learningDocumentLevel,learningDocumentCategory,createLearningDocumentCard} from './learning-document-cards.js';
+import {learningDocumentLevel,learningDocumentCategory,createLearningDocumentCard} from './learning-document-cards.js?v=activities';
 import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v=learning-space';
 import {initializePractice} from './student-practice.js';
-import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=all-inline';
+import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=six-sections';
 import {materialProgram} from './material-program-folders.js?v=comprehension-listening';
-import {initializeStudentBooking} from './student-booking.js?v=level-preview';
+import {initializeStudentBooking} from './student-booking.js?v=password-free';
 import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=level-preview';
 import {createExamForm} from './exam-form.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
@@ -14,11 +15,12 @@ export function initializeStudentAssessment(doc) {
  const root=doc.querySelector('#students-portal'),content=root.querySelector('#portal-content'),status=root.querySelector('#portal-access-status'),panel=root.querySelector('#portal-exams');
  const blocked=doc.createElement('p');blocked.id='student-portal-lockout';blocked.hidden=true;blocked.setAttribute('role','alert');content.before(blocked);
  const booking=initializeStudentBooking(doc);
+ const contact=initializeStudentContact(doc);
  const profile=doc.createElement('section');profile.id='student-assessment-profile';profile.className='assessment-entry';profile.hidden=true;profile.setAttribute('aria-label','Assessment details');
  const endpoint=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
  initializePractice(doc);
 
- const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['exercises','material','exams','contact','calendar','practice','listening'].includes(el.dataset.portalTab));
+ const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['material','exams','contact','calendar','practice','listening'].includes(el.dataset.portalTab));
  let learningLevel=null,learningPasscode='',latestItems=[];
  let passwordMetadata=null,assessmentUnlocked=false,resumableSession=null;
  let token='',student=null,epoch=0,saveTimer,tick,accessTimer,queue=Promise.resolve(),busy=false;
@@ -36,8 +38,8 @@ export function initializeStudentAssessment(doc) {
  }
  const collect=form=>{const answers={A:{},B:{},C:{},D:'',E:''};for(const [name,value]of new doc.defaultView.FormData(form)){const [section,number]=name.split('.');if(number)answers[section][number]=section==='A'?Number(value):value;else answers[section]=value;}return answers;};
  function remember(level){try{doc.defaultView.sessionStorage.setItem(SESSION_KEY,JSON.stringify({token,student,level}));}catch{}}
- function lock(){epoch++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));clearFolderPasswords(doc);learningLevel=null;learningPasscode='';delete root.querySelector('#portal-contact').dataset.passwordLocked;clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);profile.hidden=true;booking.lock();token='';student=null;assessmentUnlocked=false;resumableSession=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
- function select(id){assertPortalAllowed(doc.defaultView.localStorage);tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);const back=root.querySelector('[data-learning-back]');if(back)back.hidden=!id;if(id)root.querySelector('[data-portal-panel="'+id+'"]')?.scrollIntoView({block:'start',behavior:'auto'});}
+ function lock(){epoch++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));clearFolderPasswords(doc);learningLevel=null;learningPasscode='';delete root.querySelector('#portal-contact').dataset.passwordLocked;clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);profile.hidden=true;booking.lock();contact.lock();token='';student=null;assessmentUnlocked=false;resumableSession=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
+ function select(id){if(id&&!['contact','calendar'].includes(id))assertPortalAllowed(doc.defaultView.localStorage);tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);const back=root.querySelector('[data-learning-back]');if(back)back.hidden=!id;if(id)root.querySelector('[data-portal-panel="'+id+'"]')?.scrollIntoView({block:'start',behavior:'auto'});}
  root.querySelector('[data-learning-back]')?.addEventListener('click',()=>{select(null);root.querySelector('.learning-space-heading')?.scrollIntoView({block:'start',behavior:'auto'});});
  root.querySelectorAll('[data-learning-open]').forEach(button=>button.onclick=()=>root.querySelector('[data-portal-tab="'+button.dataset.learningOpen+'"]')?.click());
  function updatePasswordMetadata(response){
@@ -46,10 +48,10 @@ export function initializeStudentAssessment(doc) {
   passwordMetadata=next;
  }
  tabs.forEach(tab=>tab.onclick=async()=>{
-  try{assertPortalAllowed(doc.defaultView.localStorage);const id=tab.dataset.portalTab;if(busy&&id==='exams'){select(id);return;}if(busy&&!['contact','calendar'].includes(id)){status.textContent='Finish your current examination before opening another section.';return;}
-   if(id==='contact'){delete root.querySelector('#portal-contact').dataset.passwordLocked;select(id);return;}
-   if(id==='calendar'){select(id);await booking.open();return;}
-   const labels={material:'Material',exercises:'Exercises',listening:'Listening',practice:'Activities',exams:'Examinations'};
+  try{const id=tab.dataset.portalTab;if(!['contact','calendar'].includes(id))assertPortalAllowed(doc.defaultView.localStorage);if(busy&&id==='exams'){select(id);return;}if(busy&&!['contact','calendar'].includes(id)){status.textContent='Finish your current examination before opening another section.';return;}
+   if(id==='contact'){status.textContent='';delete root.querySelector('#portal-contact').dataset.passwordLocked;select(id);contact.open();return;}
+   if(id==='calendar'){status.textContent='';select(id);await booking.open();return;}
+   const labels={material:'Material',listening:'Listening',practice:'Activities',exams:'Examinations'};
    const chosen=await chooseLearningLevel(doc,labels[id],async(level,passcode)=>{
     const response=await call('studentPortalAccess');latestItems=response.items;updatePasswordMetadata(response);
     if(response.levelAccess?.[String(level)]===false)throw new Error('Level '+level+' is currently closed by your instructor.');
@@ -102,10 +104,10 @@ export function initializeStudentAssessment(doc) {
  }
  function renderFiles(items){
   latestItems=items;
-  for(const id of ['material','exercises','listening','practice']){
+  for(const id of ['material','listening','practice']){
    const target=root.querySelector('#portal-'+id);delete target.dataset.passwordLocked;
    const existing=target.querySelector(':scope>.temporary-portal-uploads'),oldGrid=target.querySelector('.learning-document-grid');oldGrid?.remove();
-   if(id!=='practice'){target.replaceChildren(text('h3',{material:'Material',exercises:'Exercises',listening:'Listening'}[id]),text('p',learningLevel?'Level '+learningLevel:'Choose your level to view documents.'));if(existing)target.append(existing);}
+   if(id!=='practice'){target.replaceChildren(text('h3',{material:'Material',listening:'Listening'}[id]),text('p',learningLevel?'Level '+learningLevel:'Choose your level to view documents.'));if(existing)target.append(existing);}
    if(!learningLevel){delete target.dataset.learningLevel;continue;}target.dataset.learningLevel=learningLevel;target.dataset.learningCategory=id;
    const grid=doc.createElement('div');grid.className='learning-document-grid';
    for(const item of items.filter(item=>learningDocumentLevel(item)===learningLevel&&learningDocumentCategory(item)===id)){
@@ -137,7 +139,7 @@ export function initializeStudentAssessment(doc) {
   };
  }
  async function openStudent(){
-  try{assertPortalAllowed(doc.defaultView.localStorage);}catch(error){showBlocked(error.message);return;}blocked.hidden=true;
+  blocked.hidden=true;
   const current=epoch;content.hidden=false;root.classList.add('portal-session-active');root.querySelector('#student-folder-title').textContent='Welcome back!';select(doc.defaultView.location.hash.endsWith('/calendar')?'calendar':null);status.textContent='Loading available files and assessments…';renderFiles([]);showAssessment([],false);attachTemporaryPortalUploads(doc);
   try{const response=await call('studentPortalAccess');if(current!==epoch)return;updatePasswordMetadata(response);
    let saved;try{saved=JSON.parse(doc.defaultView.sessionStorage.getItem(SESSION_KEY)||'null');}catch{}
@@ -146,8 +148,8 @@ export function initializeStudentAssessment(doc) {
    clearInterval(accessTimer);accessTimer=setInterval(async()=>{if(current!==epoch||doc.hidden)return;try{const updated=await call('studentPortalAccess');if(current!==epoch)return;updatePasswordMetadata(updated);renderFiles(updated.items);attachTemporaryPortalUploads(doc);panel.querySelectorAll('[data-assessment-level]').forEach(button=>{const item=updated.items.find(entry=>entry.id==='test:'+button.dataset.assessmentLevel);button.disabled=!item?.enabled;button.setAttribute('aria-label','Level '+button.dataset.assessmentLevel+' assessment'+(item?.enabled?'':' — Closed'));});const selectLevel=profile.querySelector('[name=level]');if(selectLevel)for(const option of selectLevel.options){if(!option.value)continue;const item=updated.items.find(entry=>entry.id==='test:'+option.value);option.disabled=!item?.enabled;option.textContent='Level '+option.value+(item?.enabled?'':' · Closed');}}catch{}},20000);
   }catch(error){if(current===epoch)status.textContent=error.message;}
  }
- function showBlocked(message=PORTAL_LOCK_MESSAGE){lock();blocked.textContent=message;blocked.hidden=false;root.classList.add('portal-session-active');}
- function checkAttempts(){try{assertPortalAllowed(doc.defaultView.localStorage);if(!blocked.hidden){blocked.hidden=true;if(!root.querySelector('#client-portal').hidden)openStudent();}}catch(error){if(!root.querySelector('#client-portal').hidden)showBlocked(error.message);}}
+ function showBlocked(message=PORTAL_LOCK_MESSAGE){lock();content.hidden=false;blocked.textContent=message;blocked.hidden=false;root.classList.add('portal-session-active');}
+ function checkAttempts(){try{assertPortalAllowed(doc.defaultView.localStorage);if(!blocked.hidden){blocked.hidden=true;if(!root.querySelector('#client-portal').hidden)openStudent();}}catch(error){if(!root.querySelector('#client-portal').hidden&&!tabs.some(tab=>['contact','calendar'].includes(tab.dataset.portalTab)&&tab.getAttribute('aria-selected')==='true'))showBlocked(error.message);}}
  doc.defaultView.addEventListener('student-password-attempts-changed',checkAttempts);doc.defaultView.addEventListener('storage',event=>{if(event.key===PORTAL_ATTEMPT_KEY)checkAttempts();});
  root.querySelector('#portal-sign-out')?.addEventListener('click',()=>{
   if(busy&&!doc.defaultView.confirm('Leave this assessment? The 20-minute timer will keep running. Saved answers will still be submitted.'))return;

@@ -111,6 +111,10 @@ function doPost(event) {
   try {
     const request = sbParseWebRequest(event);
     const data = request.data;
+    if (data.action === 'studentInstructorContact') {
+      if (request.size > 16000) throw new Error('Request too large.');
+      return handleStudentInstructorContact(data);
+    }
     if (SB_PUBLIC_BOOKING_ACTIONS.includes(data.action)) {
       if (request.size > 20000) throw new Error('Request too large.');
       return handlePublicBooking(data);
@@ -313,7 +317,7 @@ function verifySpeakBoldlyInstall() {
 // Add this file to the existing Clients Apps Script project.
 // Run setupSheetReminders once to create the calendar; emails are sent only from Authorize.
 const SB_SESSION_HEADERS=['Session ID','Client ID','Session number','Date (Cairo)','Time (Cairo)','Starts at (UTC)','Remind at (UTC)','Status','Sent at (UTC)','Last error','Program','Level'];
-const SB_SESSION_PROGRAMS=["Trial session", "General English — 8 sessions", "General English — 4 sessions", "One Session", "Interview preparation workshop", "E-mail and business writing workshop", "Meetings, presentation and public speaking workshop", "IELTS preparation", "Pronunciation workshop", "English for Information Technology", "Let the kids speak!", "The different learners", "Instructor training"];
+const SB_SESSION_PROGRAMS=["Assessment", "Trial session", "General English — 8 sessions", "General English — 4 sessions", "One Session", "Interview preparation workshop", "E-mail and business writing workshop", "Meetings, presentation and public speaking workshop", "IELTS preparation", "Pronunciation workshop", "English for Information Technology", "Let the kids speak!", "The different learners", "Instructor training"];
 function setupSheetReminders(){
  const props=PropertiesService.getScriptProperties(),id=props.getProperty('CLIENT_SHEET_ID');
  if(!id)throw new Error('Run setupClientSync first.');
@@ -448,7 +452,7 @@ function sbUpcomingClientMeetings(book,clientId){
  return sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues().filter(r=>String(r[1])===String(clientId)&&String(r[7])!=='cancelled'&&Number.isFinite(Date.parse(r[5]))&&Date.parse(r[5])>Date.now()).sort((a,b)=>Date.parse(a[5])-Date.parse(b[5]));
 }
 function sbEmailProgramName(value){return value==='Trial session'?'Conversation-based General English — Trial session':String(value||'').replace(/^General English/,'Conversation-based General English');}
-function sbSessionEmailLabel(row){const program=String(row[10]||'').replace(/^'/,'');if(program==='Trial session')return 'Conversation-based General English — Trial session';return (program?sbEmailProgramName(program.replace(/^General English — [48] sessions$/,'General English')):'English class')+' — Session '+row[2];}
+function sbSessionEmailLabel(row){const program=String(row[10]||'').replace(/^'/,'');if(program==='Trial session')return 'Conversation-based General English — Trial session';if(program==='Assessment')return 'English assessment';return (program?sbEmailProgramName(program.replace(/^General English — [48] sessions$/,'General English')):'English class')+' — Session '+row[2];}
 function sbSessionEmailDetails(row){const program=String(row[10]||'').replace(/^'/,''),level=String(row[11]||'').replace(/^'/,'');return [program&&program!=='Trial session'?sbEmailProgramName(program):'',level&&level!=='Not assessed'?'Level '+level:''].filter(Boolean).join(' · ');}
 function sbCalendarEmail(client,meetings,reminder=false){
  const heading=reminder?'Your upcoming class reminder':'Your class confirmation',name=String(client[1]),program=sbEmailProgramName(client[11]||'');
@@ -803,11 +807,11 @@ function sbBookingAuth(data){
  const version=sbExamHash(passcode),sign=payload=>Utilities.base64EncodeWebSafe(Utilities.computeHmacSha256Signature(payload,key));
  if(data.action==='studentBookingLogin'){
   if(data.public!==true&&String(data.passcode||'')!==passcode)throw new Error('Incorrect booking passcode. Please ask your instructor for the current passcode.');
-  const payload=Utilities.base64EncodeWebSafe(JSON.stringify({version,expires:Date.now()+8*60*60*1000,nonce:Utilities.getUuid()}));
+  const payload=Utilities.base64EncodeWebSafe(JSON.stringify({version:data.public===true?'public-calendar-v1':version,public:data.public===true,expires:Date.now()+8*60*60*1000,nonce:Utilities.getUuid()}));
   return {token:payload+'.'+sign(payload)};
  }
- try{const parts=String(data.token||'').split('.');if(parts.length!==2||parts[1]!==sign(parts[0]))throw new Error();const claims=JSON.parse(Utilities.newBlob(Utilities.base64DecodeWebSafe(parts[0])).getDataAsString());if(claims.version!==version||!Number.isFinite(claims.expires)||claims.expires<=Date.now())throw new Error();}
- catch(error){throw new Error('Booking access expired or the passcode changed. Enter the current passcode again.');}
+ try{const parts=String(data.token||'').split('.');if(parts.length!==2||parts[1]!==sign(parts[0]))throw new Error();const claims=JSON.parse(Utilities.newBlob(Utilities.base64DecodeWebSafe(parts[0])).getDataAsString());if(claims.version!==(claims.public===true?'public-calendar-v1':version)||!Number.isFinite(claims.expires)||claims.expires<=Date.now())throw new Error();}
+ catch(error){throw new Error('Calendar access expired. Reopen the calendar to continue.');}
  return {};
 }
 function sbBookingBusy(book){
@@ -938,4 +942,36 @@ function sbPersonalCalendarFeed(token){
  if(!expected||typeof token!=='string'||token!==expected)return ContentService.createTextOutput('Invalid calendar subscription link.').setMimeType(ContentService.MimeType.TEXT);
  const book=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID'));
  return ContentService.createTextOutput(sbPersonalCalendarText(book)).setMimeType(ContentService.MimeType.ICAL);
+}
+
+// Public Learning Hub requests. The recipient is fixed; visitors supply only a reply address.
+function handleStudentInstructorContact(data) {
+ const respond=typeof response==='function'?response:clientSyncResponse;
+ const requestId=String(data.requestId||''),name=String(data.name||'').trim(),email=String(data.email||'').trim().toLowerCase(),message=String(data.message||'').trim();
+ if(String(data.website||'')||! /^[a-zA-Z0-9-]{1,100}$/.test(requestId)||!name||name.length>100||/[\r\n]/.test(name)||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254||!message||message.length>4000)throw new Error('Check your name, email, and note before sending.');
+ const props=PropertiesService.getScriptProperties(),sheetId=props.getProperty('CLIENT_SHEET_ID');if(!sheetId)throw new Error('Your instructor needs to finish the contact setup.');
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{
+  const book=SpreadsheetApp.openById(sheetId);let sheet=book.getSheetByName('Instructor requests');
+  if(!sheet){sheet=book.insertSheet('Instructor requests');sheet.appendRow(['Request ID','Name','Reply email','Note','Received at (UTC)','Email status','Error']);sheet.setFrozenRows(1);}
+  const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,7).getValues():[],plain=value=>String(value).replace(/^'/,'');
+  const existing=rows.find(row=>String(row[0])===requestId);
+  if(existing){
+   if(plain(existing[1])!==name||plain(existing[2])!==email||plain(existing[3])!==message)throw new Error('This request changed. Start a new note.');
+   if(existing[5]==='sent')return respond({ok:true,status:'sent'});
+   throw new Error('Your note is saved, but email delivery could not be confirmed. Please wait for your instructor to check it before sending again.');
+  }
+  const today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');
+  const daily=rows.filter(row=>Utilities.formatDate(new Date(row[4]),'Africa/Cairo','yyyy-MM-dd')===today);
+  if(daily.length>=50||daily.filter(row=>plain(row[2])===email).length>=3)throw new Error('The daily request limit has been reached. Please try again tomorrow.');
+  if(MailApp.getRemainingDailyQuota()<1)throw new Error('Email is temporarily unavailable. Please try again later.');
+  const rowNumber=sheet.getLastRow()+1;sheet.appendRow([requestId,"'"+name,"'"+email,"'"+message,new Date().toISOString(),'sending','']);SpreadsheetApp.flush();
+  const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const content='<p><strong>Name:</strong> '+escape(name)+'<br><strong>Reply email:</strong> '+escape(email)+'</p><p style="white-space:pre-wrap">'+escape(message)+'</p>';
+  const htmlBody=typeof sbBrandedEmail==='function'?sbBrandedEmail('Learning Hub request',content):'<html><body style="font-family:Arial,sans-serif;color:#193c32"><h2>Learning Hub request</h2>'+content+'<p>Speak Boldly</p></body></html>';
+  try{
+   MailApp.sendEmail({to:'speakboldly16@gmail.com',replyTo:email,name:'Speak Boldly',subject:'Learning Hub request — '+name,body:'How can I help you?\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
+   sheet.getRange(rowNumber,6,1,2).setValues([['sent','']]);return respond({ok:true,status:'sent'});
+  }catch(error){sheet.getRange(rowNumber,6,1,2).setValues([['delivery_unknown',String(error.message||error)]]);throw new Error('Your note is saved, but email delivery could not be confirmed. Please wait for your instructor to check it before sending again.');}
+ }finally{lock.releaseLock();}
 }

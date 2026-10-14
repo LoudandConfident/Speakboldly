@@ -1,7 +1,7 @@
 // Add this file to the existing Clients Apps Script project.
 // Run setupSheetReminders once to create the calendar; emails are sent only from Authorize.
 const SB_SESSION_HEADERS=['Session ID','Client ID','Session number','Date (Cairo)','Time (Cairo)','Starts at (UTC)','Remind at (UTC)','Status','Sent at (UTC)','Last error','Program','Level'];
-const SB_SESSION_PROGRAMS=["Trial session", "General English — 8 sessions", "General English — 4 sessions", "One Session", "Interview preparation workshop", "E-mail and business writing workshop", "Meetings, presentation and public speaking workshop", "IELTS preparation", "Pronunciation workshop", "English for Information Technology", "Let the kids speak!", "The different learners", "Instructor training"];
+const SB_SESSION_PROGRAMS=["Assessment", "Trial session", "General English — 8 sessions", "General English — 4 sessions", "One Session", "Interview preparation workshop", "E-mail and business writing workshop", "Meetings, presentation and public speaking workshop", "IELTS preparation", "Pronunciation workshop", "English for Information Technology", "Let the kids speak!", "The different learners", "Instructor training"];
 function setupSheetReminders(){
  const props=PropertiesService.getScriptProperties(),id=props.getProperty('CLIENT_SHEET_ID');
  if(!id)throw new Error('Run setupClientSync first.');

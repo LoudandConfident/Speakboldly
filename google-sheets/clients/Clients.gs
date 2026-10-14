@@ -62,6 +62,7 @@ function handleClientSync(e){
  try{
   if(!e?.postData?.contents||e.postData.contents.length>8000000)throw new Error('Invalid request.');
   const p=JSON.parse(e.postData.contents),props=PropertiesService.getScriptProperties();
+  if(p.action==='studentInstructorContact'){if(e.postData.contents.length>16000)throw new Error('Request too large.');if(typeof handleStudentInstructorContact!=='function')throw new Error('Add StudentContact.gs and deploy a New version.');return handleStudentInstructorContact(p);}
   if(typeof SB_PUBLIC_BOOKING_ACTIONS!=='undefined'&&SB_PUBLIC_BOOKING_ACTIONS.includes(p.action)){if(e.postData.contents.length>20000)throw new Error('Request too large.');return handlePublicBooking(p);}
   if(typeof SB_STUDENT_EXAM_ACTIONS!=='undefined'&&SB_STUDENT_EXAM_ACTIONS.includes(p.action)){if(e.postData.contents.length>65000)throw new Error('Request too large.');return handleStudentExam(p);}
   const key=props.getProperty('CLIENT_SYNC_KEY');

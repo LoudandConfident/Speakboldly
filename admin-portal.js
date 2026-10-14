@@ -1,6 +1,6 @@
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
 import {openClientReportTab} from './report-tabs.js?v=instructor-app';
-import {SESSION_PROGRAMS,suggestedSessionProgram} from './session-programs.js';
+import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=appointment-types';
 import {initializeWeeklyPortalPasswords} from './weekly-portal-passwords.js?v=level-preview';
 import {confirmClientEmail} from './client-email-confirmation.js';
 import {initializePortalSwitches} from './portal-switches.js?v=level-preview';
@@ -20,7 +20,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  const gate=root.querySelector('#admin-gate'),login=root.querySelector('#admin-login-form'),dashboard=root.querySelector('#admin-dashboard'),password=root.querySelector('#admin-code'),loginError=root.querySelector('#admin-login-error'),form=root.querySelector('#admin-client-form'),status=root.querySelector('#admin-client-status'),tbody=root.querySelector('#admin-client-rows');
  let sheetGeneration=0,sheetLoading=false;
  let unlocked=false,clients=[],editingId=null,editingHistoryId=null,isAdvancing=false,pendingClientId=null;let materialCatalog={};
- const programLabel=doc.createElement('label');programLabel.textContent='Program';const programChooser=doc.createElement('select');programChooser.name='program';programChooser.append(new doc.defaultView.Option('Choose a program',''));for(const program of SESSION_PROGRAMS)programChooser.append(new doc.defaultView.Option(program.title,program.title));programLabel.append(programChooser);form.elements.level.closest('label').after(programLabel);
+ const programLabel=doc.createElement('label');programLabel.textContent='Program';const programChooser=doc.createElement('select');programChooser.name='program';programChooser.append(new doc.defaultView.Option('Choose a program',''));for(const program of CLIENT_PROGRAMS)programChooser.append(new doc.defaultView.Option(program.title,program.title));programLabel.append(programChooser);form.elements.level.closest('label').after(programLabel);
  const advance=doc.createElement('button');advance.type='button';advance.className='button light small';advance.textContent='Move to next level';advance.hidden=true;root.querySelector('#save-admin-client').before(advance);
  advance.onclick=()=>{if(!unlocked||!editingId||editingHistoryId)return;const client=clients.find(item=>item.id===editingId);if(Number(client.level)>=8){status.textContent='This client is already at Level 8.';return;}isAdvancing=true;const next=/^\d+$/.test(client.level)?String(Number(client.level)+1):'1';form.elements.level.value=next;programChooser.value=client.program||suggestedSessionProgram(client)||'';status.textContent='Choose the next level and program, then Save changes. The previous line will stay dimmed and editable.';form.elements.level.focus();};
  const clientSheet=initializeClientSheet(doc);

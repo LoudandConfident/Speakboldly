@@ -31,3 +31,11 @@ After the access check succeeds, deploy a New version of the existing web app wi
 ## Manual-only class emails
 
 Automatic 24-hour emails are disabled in this version. After updating the script, run `disableAutomaticReminders` once to remove existing `sendDueSheetReminders` triggers, then deploy a New version. Existing calendar rows remain unchanged. Send a class confirmation from the client’s Actions button.
+
+## Learning Hub contact notes
+
+The complete script includes the public `studentInstructorContact` endpoint. Requests go only to `speakboldly16@gmail.com`; the supplied email is used as Reply-To. The private `Instructor requests` sheet records notes and email status. Contact Instructor and Calendar do not require student passwords. Calendar sessions renew automatically after expiry.
+
+Replace the existing single complete script, preserve your Script Properties, run `authorizeClientEmails`, and deploy a New version of the existing Web app. For the modular combined Reviews/Clients setup, include `StudentContact.gs` alongside the updated `Clients.gs` and `BookingActions.gs`. Do not add those modules beside the complete unified script.
+
+Dim / Undim uses the existing `savePortalAccess` file controls inside Activities, Listening, Material and Examinations. Material, Listening, Activities and Examinations remain password-protected; Calendar and Contact Instructor are password-free. The Sessions sheet accepts **Assessment** alongside regular course sessions and Trial session, with no schema change. Existing client rows, session records, keys, and folder properties are preserved.

@@ -1,14 +1,13 @@
-import {initializeLearningLevelSwitches} from './learning-level-switches.js';
+import {learningHubItemSection} from './learning-hub-sections.js';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 export function initializePortalSwitches(doc,isUnlocked,loader) {
- initializeLearningLevelSwitches(doc,isUnlocked);
  const root=doc.querySelector('#portal-switches');if(!root)return;
  const list=root.querySelector('.portal-switch-list'),status=root.querySelector('[role=status]');let generation=0,loading=false;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
  function render(catalog,preview=false){const current=generation;list.replaceChildren();
-  for(const [section,title]of [['exercises','Exercises'],['levels','Material'],['tests','Assessments']]) {
+  for(const [section,title]of [['practice','Activities'],['listening','Listening'],['material','Material'],['exams','Examinations']]) {
     const group=doc.createElement('details'),summary=text('summary',title);group.append(summary);
-    for(const item of catalog.filter(item=>item.section===section)) {
+    for(const item of catalog.filter(item=>learningHubItemSection(item)===section)) {
      const row=doc.createElement('div');row.className='portal-access-switch';const name=text('span',item.title),button=doc.createElement('button');button.type='button';button.className='button light small';button.disabled=preview;
      function update(){row.classList.toggle('portal-item-dimmed',!item.enabled);button.textContent=item.enabled?'Dim':'Undim';button.setAttribute('aria-pressed',String(item.enabled));button.setAttribute('aria-label',(item.enabled?'Dim ':'Undim ')+item.title);}
      update();button.onclick=async()=>{
@@ -17,7 +16,7 @@ export function initializePortalSwitches(doc,isUnlocked,loader) {
       catch(error){if(current===generation)status.textContent=error.message;}finally{button.disabled=false;}
      };row.append(name,button);group.append(row);
     }
-    if(group.children.length===1)group.append(text('p','No files found. Upload files in Full library, then refresh.'));list.append(group);
+    if(group.children.length===1)group.append(text('p','No files uploaded yet.'));list.append(group);
    }
  }
  const defaults=Array.from({length:6},(_,i)=>({id:'test:'+(i+1),section:'tests',title:'Level '+(i+1),url:'',enabled:false}));

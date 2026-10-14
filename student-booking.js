@@ -1,4 +1,3 @@
-import {assertPortalAllowed,noteWrongPassword} from './student-portal-attempts.js?v=all-inline';
 import {cairoToday} from './admin-calendar.js?v=appointment-x';
 export function initializeStudentBooking(doc){
  const root=doc.querySelector('#portal-calendar');if(!root)return{lock(){}};
@@ -6,7 +5,6 @@ export function initializeStudentBooking(doc){
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
  let token='',month=cairoToday().slice(0,7),today=cairoToday(),generation=0,requestId=null,submitting=false;const selected=new Map();
  const intro=text('p','View available and taken slots in Cairo time. Confirmed session details and your Zoom link are sent by email.');
- const gate=doc.createElement('form');gate.className='booking-passcode-form';const passLabel=text('label','Booking passcode'),pass=doc.createElement('input');pass.type='password';pass.name='passcode';pass.autocomplete='off';pass.maxLength=64;pass.required=true;passLabel.append(pass);const unlock=text('button','Open calendar');unlock.type='submit';unlock.className='button';gate.append(passLabel,unlock);
  const status=text('p','');status.setAttribute('role','status');status.setAttribute('aria-live','polite');
  const content=doc.createElement('div');content.hidden=true;
  const toolbar=doc.createElement('div');toolbar.className='calendar-toolbar';const previous=text('button','‹'),next=text('button','›'),heading=text('h4',''),refresh=text('button','Refresh');
@@ -16,7 +14,7 @@ export function initializeStudentBooking(doc){
  const weekdays=doc.createElement('div'),grid=doc.createElement('div');weekdays.className='calendar-weekdays';grid.className='calendar-grid';for(const day of ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'])weekdays.append(text('span',day));viewport.append(weekdays,grid);
  const form=doc.createElement('form');form.className='student-booking-form';const nameLabel=text('label','Your registered name'),name=doc.createElement('input');name.name='name';name.autocomplete='name';name.maxLength=100;name.required=true;nameLabel.append(name);const chosen=doc.createElement('div');chosen.className='booking-selected-slots';const book=text('button','Book selected slots');book.className='button';book.type='submit';book.disabled=true;form.append(nameLabel,chosen,book);
  content.append(toolbar,hint,viewport,form);root.replaceChildren(text('h3','Calendar'),intro,status,content);
- async function call(action,data={}){assertPortalAllowed(doc.defaultView.localStorage);
+ async function call(action,data={}){
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45000);
   try{const response=await doc.defaultView.fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action,token,...data}),signal:controller.signal});const result=await response.json();if(!response.ok||!result.ok)throw new Error(/Incorrect connection key|Not authorized|Invalid action/.test(result.error||'')?'Your instructor needs to deploy the updated booking script.':result.error||'Booking failed.');return result;}
   catch(error){if(error.name==='AbortError')throw new Error('Google Sheets took too long to respond. Retry the same selection; bookings will not be duplicated.');throw error;}finally{clearTimeout(timer);}
@@ -34,8 +32,8 @@ export function initializeStudentBooking(doc){
    }grid.append(cell);
   }selections();
  }
- async function load(quiet=false){const current=generation;refresh.disabled=true;if(!quiet)status.textContent='Loading calendar…';try{const data=await call('studentBookingCalendar',{month});if(current!==generation)return;draw(data);if(!quiet)status.textContent='Choose your available slots. Taken slots do not show client names.';}catch(error){if(current===generation)status.textContent=error.message;}finally{refresh.disabled=false;}}
- async function open(){if(token){await load(true);return;}const current=generation;status.textContent='Loading calendar…';try{const result=await call('studentBookingLogin',{public:true});if(current!==generation)return;token=result.token;gate.hidden=true;content.hidden=false;month=cairoToday().slice(0,7);await load();}catch(error){if(current===generation)status.textContent=error.message;}}
+ async function load(quiet=false){const current=generation;refresh.disabled=true;if(!quiet)status.textContent='Loading calendar…';try{const data=await call('studentBookingCalendar',{month});if(current!==generation)return;draw(data);if(!quiet)status.textContent='Choose your available slots. Taken slots do not show client names.';}catch(error){if(current===generation){if(token&&/Booking access expired|Calendar access expired/.test(error.message)){token='';await open();}else status.textContent=error.message;}}finally{refresh.disabled=false;}}
+ async function open(){if(token){await load(true);return;}const current=generation;status.textContent='Loading calendar…';try{const result=await call('studentBookingLogin',{public:true});if(current!==generation)return;token=result.token;content.hidden=false;month=cairoToday().slice(0,7);await load();}catch(error){if(current===generation)status.textContent=error.message;}}
  function shift(amount){const [year,m]=month.split('-').map(Number),date=new Date(Date.UTC(year,m-1+amount,1));month=date.toISOString().slice(0,7);load();}
  previous.onclick=()=>{if(!submitting)shift(-1);};next.onclick=()=>{if(!submitting)shift(1);};refresh.onclick=()=>{if(!submitting)load();};name.oninput=()=>{requestId=null;};
  form.onsubmit=async event=>{
@@ -44,6 +42,6 @@ export function initializeStudentBooking(doc){
   try{const result=await call('studentBookSlots',{name:name.value.trim(),requestId,slots:[...selected.values()].map(item=>({date:item.date,time:item.time}))});if(current!==generation)return;selected.clear();requestId=null;submitting=false;await load(true);status.textContent=result.booked.length+' slot'+(result.booked.length===1?'':'s')+' booked. Your instructor will send the class confirmation after review.';}
   catch(error){if(current===generation){submitting=false;if(/taken|no longer available/.test(error.message)){await load(true);requestId=null;}else grid.querySelectorAll('button[data-status]').forEach(button=>button.disabled=button.dataset.status!=='available');status.textContent=error.message;}}finally{if(current===generation){submitting=false;name.disabled=false;selections();}}
  };
- function lock(){generation++;token='';selected.clear();requestId=null;submitting=false;gate.reset();gate.hidden=false;content.hidden=true;status.textContent='';grid.replaceChildren();selections();}
+ function lock(){generation++;token='';selected.clear();requestId=null;submitting=false;content.hidden=true;status.textContent='';grid.replaceChildren();selections();}
  return{lock,open};
 }

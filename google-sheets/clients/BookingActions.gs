@@ -35,11 +35,11 @@ function sbBookingAuth(data){
  const version=sbExamHash(passcode),sign=payload=>Utilities.base64EncodeWebSafe(Utilities.computeHmacSha256Signature(payload,key));
  if(data.action==='studentBookingLogin'){
   if(data.public!==true&&String(data.passcode||'')!==passcode)throw new Error('Incorrect booking passcode. Please ask your instructor for the current passcode.');
-  const payload=Utilities.base64EncodeWebSafe(JSON.stringify({version,expires:Date.now()+8*60*60*1000,nonce:Utilities.getUuid()}));
+  const payload=Utilities.base64EncodeWebSafe(JSON.stringify({version:data.public===true?'public-calendar-v1':version,public:data.public===true,expires:Date.now()+8*60*60*1000,nonce:Utilities.getUuid()}));
   return {token:payload+'.'+sign(payload)};
  }
- try{const parts=String(data.token||'').split('.');if(parts.length!==2||parts[1]!==sign(parts[0]))throw new Error();const claims=JSON.parse(Utilities.newBlob(Utilities.base64DecodeWebSafe(parts[0])).getDataAsString());if(claims.version!==version||!Number.isFinite(claims.expires)||claims.expires<=Date.now())throw new Error();}
- catch(error){throw new Error('Booking access expired or the passcode changed. Enter the current passcode again.');}
+ try{const parts=String(data.token||'').split('.');if(parts.length!==2||parts[1]!==sign(parts[0]))throw new Error();const claims=JSON.parse(Utilities.newBlob(Utilities.base64DecodeWebSafe(parts[0])).getDataAsString());if(claims.version!==(claims.public===true?'public-calendar-v1':version)||!Number.isFinite(claims.expires)||claims.expires<=Date.now())throw new Error();}
+ catch(error){throw new Error('Calendar access expired. Reopen the calendar to continue.');}
  return {};
 }
 function sbBookingBusy(book){
