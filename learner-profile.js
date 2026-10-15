@@ -1,5 +1,5 @@
 import {learnerCourseGuidance} from './assessment-guidance.js';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=branded-results';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=green-result-card';
 import {learnerProfiles,learnerQuestions,scoreLearnerProfile} from './learner-profile-data.js?v=30-scenarios';
 export function initializeLearnerProfile(doc,win){
  const root=doc.querySelector('#learner-profile');if(!root)return;
@@ -17,7 +17,7 @@ export function initializeLearnerProfile(doc,win){
  for(const key of score.strongest){const profile=learnerProfiles[key],section=el('section');section.append(el('h3',profile.name),el('p',profile.summary),el('h4','What helps you practise English'),el('p',profile.routine),el('h4','What to look for in a course'));const courseList=el('ul');learnerCourseGuidance[key].forEach(tip=>courseList.append(el('li',tip)));section.append(courseList,el('h4','On your own'));const list=el('ul');profile.tips.forEach(tip=>list.append(el('li',tip)));section.append(list);result.append(section);}
  result.append(el('h3','Whatever your preferences'),el('p','Mix listening, reading, speaking, and writing. Try to recall useful language without looking, use it in real situations, review feedback, and return to it over several days. Choose a routine you can repeat, then adjust it based on your progress.'));
  addResultBranding(doc,result);
- addResultImageButton(doc,win,result,'Speak Boldly — Learner assessment');
+ addResultImageButton(doc,win,result,'Your English learner profile',{learnerCard:true});
  const restart=el('button','Retake the learner test','button light');restart.type='button';restart.onclick=()=>{form.reset();page=0;form.hidden=false;result.hidden=true;showPage();progress.focus();};result.append(restart);form.hidden=true;result.hidden=false;result.focus();result.scrollIntoView({block:'start',behavior:'auto'});
  }
  form.onsubmit=event=>{event.preventDefault();if(page!==pageCount-1){next.click();return;}if(!pageValid())return;const answers=learnerQuestions.map((_,index)=>form.querySelector('[name="learner-'+index+'"]:checked')?.value);try{renderResult(scoreLearnerProfile(answers));}catch(e){error.textContent=e.message;const missing=answers.findIndex(answer=>!answer);if(missing>=0){page=Math.floor(missing/pageSize);showPage();error.textContent=e.message;progress.focus();}}};
