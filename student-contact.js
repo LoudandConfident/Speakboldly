@@ -7,7 +7,7 @@ export function initializeStudentContact(doc) {
  dialog.querySelector('.popup-close').onclick=()=>dialog.close();
  form.addEventListener('input',()=>{if(!busy){requestId=null;sent=false;send.disabled=false;status.textContent='';}});
  root.querySelector('[data-contact-note]')?.addEventListener('click',open);
- function open(){if(!dialog.open)dialog.showModal();form.elements.name.focus();}
+ function open(message){if(typeof message==='string'&&!busy){const field=form.elements.message;if(!field.value.startsWith(message.trim()))field.value=(message+field.value).slice(0,4000);requestId=null;sent=false;send.disabled=false;status.textContent='';}if(!dialog.open)dialog.showModal();form.elements.name.focus();}
  form.onsubmit=async event=>{
   event.preventDefault();if(busy||sent||!form.reportValidity())return;
   busy=true;send.disabled=true;form.querySelectorAll('input,textarea').forEach(input=>input.disabled=true);const current=generation;requestId ||= win.crypto.randomUUID();status.textContent='Sending your request…';
