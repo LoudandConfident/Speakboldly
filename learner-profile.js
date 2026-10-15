@@ -3,7 +3,7 @@ import {addResultImageButton,addResultBranding} from './result-image.js?v=green-
 import {learnerProfiles,learnerQuestions,scoreLearnerProfile} from './learner-profile-data.js?v=general-learning-30';
 export function initializeLearnerProfile(doc,win){
  const root=doc.querySelector('#learner-profile');if(!root)return;
- const form=root.querySelector('form'),questions=root.querySelector('.learner-questions'),progress=root.querySelector('.learner-progress'),result=root.querySelector('.learner-result'),previous=root.querySelector('[data-learner-previous]'),next=root.querySelector('[data-learner-next]'),submit=root.querySelector('[type=submit]'),error=root.querySelector('.learner-error');
+ const form=root.querySelector('form'),questions=root.querySelector('.learner-questions'),progress=root.querySelector('.learner-progress'),result=doc.querySelector('#learner-results .learner-result'),previous=root.querySelector('[data-learner-previous]'),next=root.querySelector('[data-learner-next]'),submit=root.querySelector('[type=submit]'),error=root.querySelector('.learner-error');
  let page=0;const pageSize=5;const pageCount=Math.ceil(learnerQuestions.length/pageSize);const fields=[];
  const el=(tag,text,className)=>{const node=doc.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
  learnerQuestions.forEach((question,index)=>{const field=el('fieldset');field.append(el('legend',(index+1)+'. '+question.prompt));question.options.forEach(option=>{const label=el('label'),input=el('input');input.type='radio';input.name='learner-'+index;input.value=option.profile;input.required=true;label.append(input,el('span',option.text));field.append(label);});questions.append(field);fields.push(field);});
@@ -18,7 +18,7 @@ export function initializeLearnerProfile(doc,win){
  result.append(el('h3','Whatever your preferences'),el('p','Mix listening, reading, speaking, and writing. Try to recall useful language without looking, use it in real situations, review feedback, and return to it over several days. Choose a routine you can repeat, then adjust it based on your progress.'));
  addResultBranding(doc,result);
  addResultImageButton(doc,win,result,'Your learning profile',{learnerCard:true});
- const restart=el('button','Retake the learner test','button light');restart.type='button';restart.onclick=()=>{form.reset();page=0;form.hidden=false;result.hidden=true;showPage();progress.focus();};result.append(restart);form.hidden=true;result.hidden=false;result.focus();result.scrollIntoView({block:'start',behavior:'auto'});
+ const restart=el('button','Retake the learner test','button light');restart.type='button';restart.onclick=()=>{form.reset();page=0;form.hidden=false;result.hidden=true;doc.querySelector('.learner-results-empty').hidden=false;showPage();win.location.hash='learner-profile';};result.append(restart);form.hidden=false;result.hidden=false;doc.querySelector('.learner-results-empty').hidden=true;win.location.hash='learner-results';
  }
  form.onsubmit=event=>{event.preventDefault();if(page!==pageCount-1){next.click();return;}if(!pageValid())return;const answers=learnerQuestions.map((_,index)=>form.querySelector('[name="learner-'+index+'"]:checked')?.value);try{renderResult(scoreLearnerProfile(answers));}catch(e){error.textContent=e.message;const missing=answers.findIndex(answer=>!answer);if(missing>=0){page=Math.floor(missing/pageSize);showPage();error.textContent=e.message;progress.focus();}}};
  showPage();
