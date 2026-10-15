@@ -22,7 +22,7 @@ export function initializeStudentAssessment(doc) {
  const endpoint=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
  initializePractice(doc);
 
- const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['material','exams','contact','calendar','practice','listening'].includes(el.dataset.portalTab));
+ const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['material','exams','contact','calendar','practice','listening','mission'].includes(el.dataset.portalTab));
  let learningLevel=null,learningPasscode='',latestItems=[];
  let passwordMetadata=null,assessmentUnlocked=false,resumableSession=null;
  let token='',student=null,epoch=0,saveTimer,tick,accessTimer,queue=Promise.resolve(),busy=false;
@@ -42,7 +42,8 @@ export function initializeStudentAssessment(doc) {
  function remember(level){try{doc.defaultView.sessionStorage.setItem(SESSION_KEY,JSON.stringify({token,student,level}));}catch{}}
  function lock(){crumbs.hidden=true;crumbs.replaceChildren();epoch++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));clearFolderPasswords(doc);learningLevel=null;learningPasscode='';delete root.querySelector('#portal-contact').dataset.passwordLocked;clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);profile.hidden=true;booking.lock();contact.lock();token='';student=null;assessmentUnlocked=false;resumableSession=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
  const crumbs=doc.createElement('nav');crumbs.className='learning-breadcrumbs';crumbs.setAttribute('aria-label','Learning Hub breadcrumb');crumbs.hidden=true;root.querySelector('[data-learning-back]')?.after(crumbs);
- function select(id){const daily=doc.querySelector('#daily-mission');if(daily)daily.hidden=!!id;if(id)doc.dispatchEvent(new doc.defaultView.Event('daily-mission-pause'));closeLearningDocument(doc);crumbs.replaceChildren();crumbs.hidden=!id;if(id){const home=text('button','Learning Hub');home.type='button';home.onclick=()=>select(null);crumbs.append(home,text('span',' → '+({material:'Material',exams:'Examinations',practice:'Activities',listening:'Listening',calendar:'Calendar',contact:'Contact Instructor'}[id]||id)+(learningLevel&&!['calendar','contact'].includes(id)?' → Level '+learningLevel:'')));}if(id&&!['contact','calendar'].includes(id)&&!getTemporaryOwnerConnection(doc))assertPortalAllowed(doc.defaultView.localStorage);tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);const back=root.querySelector('[data-learning-back]');if(back)back.hidden=!id;if(id)root.querySelector('[data-portal-panel="'+id+'"]')?.scrollIntoView({block:'start',behavior:'auto'});}
+ function select(id){if(id!=='mission')doc.dispatchEvent(new doc.defaultView.Event('daily-mission-pause'));closeLearningDocument(doc);crumbs.replaceChildren();crumbs.hidden=!id;if(id){const home=text('button','Learning Hub');home.type='button';home.onclick=()=>select(null);crumbs.append(home,text('span',' → '+({material:'Material',exams:'Examinations',practice:'Activities',listening:'Listening',calendar:'Calendar',contact:'Contact Instructor',mission:'Daily Mission'}[id]||id)+(learningLevel&&!['calendar','contact','mission'].includes(id)?' → Level '+learningLevel:'')));}if(id&&!['contact','calendar','mission'].includes(id)&&!getTemporaryOwnerConnection(doc))assertPortalAllowed(doc.defaultView.localStorage);tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);const back=root.querySelector('[data-learning-back]');if(back)back.hidden=!id;if(id)root.querySelector('[data-portal-panel="'+id+'"]')?.scrollIntoView({block:'start',behavior:'auto'});}
+ doc.addEventListener('daily-mission-home',()=>{select(null);root.querySelector('.learning-space-heading')?.scrollIntoView({block:'start',behavior:'auto'});});
  root.querySelector('[data-learning-back]')?.addEventListener('click',()=>{select(null);root.querySelector('.learning-space-heading')?.scrollIntoView({block:'start',behavior:'auto'});});
  root.querySelectorAll('[data-learning-open]').forEach(button=>button.onclick=()=>root.querySelector('[data-portal-tab="'+button.dataset.learningOpen+'"]')?.click());
  function updatePasswordMetadata(response){
@@ -51,7 +52,8 @@ export function initializeStudentAssessment(doc) {
   passwordMetadata=next;
  }
  tabs.forEach(tab=>tab.onclick=async()=>{
-  try{const id=tab.dataset.portalTab;if(!['contact','calendar'].includes(id)&&!getTemporaryOwnerConnection(doc))assertPortalAllowed(doc.defaultView.localStorage);if(busy&&id==='exams'){select(id);return;}if(busy&&!['contact','calendar'].includes(id)){status.textContent='Finish your current examination before opening another section.';return;}
+  try{const id=tab.dataset.portalTab;if(!['contact','calendar','mission'].includes(id)&&!getTemporaryOwnerConnection(doc))assertPortalAllowed(doc.defaultView.localStorage);if(busy&&id==='exams'){select(id);return;}if(busy&&!['contact','calendar','mission'].includes(id)){status.textContent='Finish your current examination before opening another section.';return;}
+   if(id==='mission'){blocked.hidden=true;status.textContent='';select(id);doc.dispatchEvent(new doc.defaultView.Event('daily-mission-open'));return;}
    if(id==='contact'){status.textContent='';delete root.querySelector('#portal-contact').dataset.passwordLocked;select(id);contact.open();return;}
    if(id==='calendar'){status.textContent='';select(id);await booking.open();return;}
    const labels={material:'Material',listening:'Listening',practice:'Activities',exams:'Examinations'};
@@ -157,7 +159,7 @@ export function initializeStudentAssessment(doc) {
  }
  doc.addEventListener('portal-files-uploaded',async()=>{const current=epoch;try{const response=await call('studentPortalAccess');if(current!==epoch)return;renderFiles(response.items);if(!busy)showAssessment(response.items);attachTemporaryPortalUploads(doc);}catch(error){if(current===epoch)status.textContent=error.message;}});
  function showBlocked(message=PORTAL_LOCK_MESSAGE){lock();content.hidden=false;blocked.textContent=message;blocked.hidden=false;root.classList.add('portal-session-active');}
- function checkAttempts(){if(getTemporaryOwnerConnection(doc))return;try{assertPortalAllowed(doc.defaultView.localStorage);if(!blocked.hidden){blocked.hidden=true;if(!root.querySelector('#client-portal').hidden)openStudent();}}catch(error){if(!root.querySelector('#client-portal').hidden&&!tabs.some(tab=>['contact','calendar'].includes(tab.dataset.portalTab)&&tab.getAttribute('aria-selected')==='true'))showBlocked(error.message);}}
+ function checkAttempts(){if(getTemporaryOwnerConnection(doc))return;try{assertPortalAllowed(doc.defaultView.localStorage);if(!blocked.hidden){blocked.hidden=true;if(!root.querySelector('#client-portal').hidden)openStudent();}}catch(error){if(!root.querySelector('#client-portal').hidden&&!tabs.some(tab=>['contact','calendar','mission'].includes(tab.dataset.portalTab)&&tab.getAttribute('aria-selected')==='true'))showBlocked(error.message);}}
  doc.defaultView.addEventListener('student-password-attempts-changed',checkAttempts);doc.defaultView.addEventListener('storage',event=>{if(event.key===PORTAL_ATTEMPT_KEY)checkAttempts();});
  root.querySelector('#portal-sign-out')?.addEventListener('click',()=>{
   if(busy&&!doc.defaultView.confirm('Leave this assessment? The 20-minute timer will keep running. Saved answers will still be submitted.'))return;
@@ -178,4 +180,5 @@ export function initializeStudentAssessment(doc) {
  doc.defaultView.addEventListener('pagehide',lock);
  lock();
  if(doc.defaultView.location.hash.endsWith('/calendar'))Promise.resolve().then(openCalendarRoute);
+ else if(new URL(doc.defaultView.location.href).searchParams.get('app')==='learner'&&(!doc.defaultView.location.hash||doc.defaultView.location.hash.startsWith('#students-portal')))Promise.resolve().then(()=>root.querySelector('[data-portal-area=client]').click());
 }

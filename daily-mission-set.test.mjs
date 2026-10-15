@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {dailyPassages} from './daily-mission-passages.js';import {dailyMissionSet} from './daily-mission-set.js';
+test('every daily reading has three short paragraphs and level-specific vocabulary, question and answer',()=>{
+ for(let i=0;i<dailyPassages.length;i++){const date=new Date(Date.UTC(2026,0,1+i)).toISOString().slice(0,10),sets=['foundation','developing','stretching'].map(level=>dailyMissionSet(date,level));assert.equal(new Set(sets.map(m=>m.transcript)).size,3);for(const mission of sets){assert.equal(mission.paragraphs.length,3);assert(mission.paragraphs.every(p=>p.trim()));assert.equal(mission.vocabulary.length,3);for(const word of mission.vocabulary)assert(mission.transcript.toLowerCase().includes(word.word.toLowerCase()));assert(mission.transcript.toLowerCase().includes(mission.phrase.toLowerCase()));assert(mission.question&&mission.answer&&mission.mistake&&mission.correction&&mission.say&&mission.use&&mission.recall);}}
+});
+test('each following day has a different passage and reading levels stay on the same topic',()=>{const first=dailyMissionSet('2026-10-15'),second=dailyMissionSet('2026-10-16');assert.notEqual(first.transcript,second.transcript);assert.equal(first.title,dailyMissionSet('2026-10-15','stretching').title);});
