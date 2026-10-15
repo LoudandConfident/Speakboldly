@@ -86,12 +86,7 @@
 /* Phone layouts for Programs, courses, and learner reviews. */
 .mobile-menu-extra{display:none}
 #courses .courses-introduction .course-booking-note{width:100%;padding:14px 16px;background:#edf0e6;border:1px solid var(--line);border-radius:12px}
-.course-session-details>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:24px;cursor:pointer;font-weight:600;list-style:none;font-size:14px}
-.course-session-details>summary::-webkit-details-marker{display:none}
-.course-session-details>summary::after{content:'+';font-size:20px;font-weight:400}
-.course-session-details[open]>summary::after{content:'−'}
-#courses .course-session-details[open]>ul{margin-top:14px}
-#courses .course-funding-note{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:13px;line-height:1.7}
+#course-fees-dialog .course-funding-note{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:13px;line-height:1.7}
 @media(max-width:680px){
  header #main-navigation .mobile-menu-extra{display:block}
  #programs,#courses,#reviews{padding:28px 5% 20px}
@@ -108,11 +103,6 @@
  #courses .courses-heading{width:100%}
  #courses .courses-subtitle{font-size:15px;line-height:1.65}
  #courses .courses-introduction .course-booking-note{width:100%;max-width:none;margin:0;padding:14px 16px;background:#edf0e6;border:1px solid var(--line);border-radius:12px;font-size:13px;line-height:1.65}
- .course-session-details>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:24px;cursor:pointer;font-weight:600;list-style:none;font-size:14px}
- .course-session-details>summary::-webkit-details-marker{display:none}
- .course-session-details>summary::after{content:'+';font-size:20px;font-weight:400}
- .course-session-details[open]>summary::after{content:'−'}
- #courses .course-session-details[open]>ul{margin-top:14px}
  #courses .catalog-controls{display:flex;flex-direction:column;gap:14px;margin-bottom:20px;align-items:stretch}
  #courses .filters{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;width:100%;padding:0 0 8px;scrollbar-width:thin}
  #courses .filter{flex:none;min-height:40px;white-space:nowrap;font-size:13px;padding:9px 13px}
@@ -160,3 +150,5 @@ html.app-pull-refresh-enabled,html.app-pull-refresh-enabled body{overscroll-beha
 .app-refresh-indicator[hidden]{display:none}
 
 @media(max-width:680px){#home .home-speech-links{display:none}}
+.course-fees-open{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:30px;padding:0;border:0;background:transparent;color:var(--ink);text-align:left;font:600 14px/1.5 'DM Sans',sans-serif;cursor:pointer}.course-fees-open>span{font-size:20px;font-weight:400}
+#course-fees-dialog{width:min(620px,calc(100vw - 32px))}#course-fees-dialog h2{font-size:23px;line-height:1.4}#course-fees-dialog ul{padding-left:20px;margin:20px 0}#course-fees-dialog li{margin:0 0 12px;font-size:15px;line-height:1.7}
