@@ -28,6 +28,8 @@ export function cairoDayNumber(now = new Date()) {
 export function motivationIndexForDate(now = new Date()) {
  const day=cairoDayNumber(now),start=Math.floor(Date.UTC(2026,9,15)/86400000),end=Math.floor(Date.UTC(2026,9,19)/86400000);
  if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
+ if(day===Math.floor(Date.UTC(2026,9,19)/86400000))return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-consistency.png');
+ if(day===Math.floor(Date.UTC(2026,9,20)/86400000))return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-safe-learning.png');
  return day%dailyQuotes.length;
 }
 export function quoteForDate(now = new Date()) {
@@ -75,6 +77,13 @@ quoteDetails.push({support:[],reflection:"Your value is not by any means tied to
 dailyPractice.push("It's just a skill, like any other skill that is sometimes required and sometimes not.\nIt's not by any means related to your identity. Remember that!");
 quoteDetails.push({"support": [], "reflection": "Here's a joke. I started learning Ballet as a 27-year-adult.", "paragraphs": ["Here's a joke. I started learning Ballet as a 27-year-adult.", "Not only was I too old to begin, but also I was a bit overweight, with torn cruciate knee ligament and hurt ankles. I was the chubbiest in class.. ", "But guess what? I was the best in class with the moves and the dances!", "My body memorized the music and moves so well that I felt like I wanted to do this since I was a kid! Why didn't I start younger? I don't know and I don't care.", "All I know is today. And today I choose to do what I love, free as a bird as if the word \"Obstacles\" never existed in my dictionary.", "Choose to do the same. The word \"late\" doesn’t apply to all people.\nDon’t let people frustrate you on when you’ve started..what matters is that you’re brave enough to have started.", "There’s grace in those journeys where we begin from where we are, and exert all the effort we could."]});
 dailyPractice.push("All I know is today. And today I choose to do what I love, free as a bird as if the word \"Obstacles\" never existed in my dictionary.");
+
+dailyQuotes.push({"image": "./images/daily-motivation-consistency.png", "alt": "A work in progress sign in a sunny street", "quote": "Even I need consistency!", "embedded": false});
+quoteDetails.push({"support": [], "reflection": "I’m at my most fluent when I’m teaching the most classes. Why? Because practice is a rule none of us is exempt from—not even your instructor.", "paragraphs": ["I’m at my most fluent when I’m teaching the most classes. Why? Because practice is a rule none of us is exempt from—not even your instructor.", "Being fluent doesn’t mean finding every word instantly or knowing the vocabulary for every topic. We all pause, forget, and learn something new.", "So don’t worry when the words take a moment. Keep giving yourself reasons to use them."]});
+dailyPractice.push("So don’t worry when the words take a moment. Keep giving yourself reasons to use them.");
+dailyQuotes.push({"image": "./images/daily-motivation-safe-learning.png", "alt": "Headphones and an open book on a sunlit desk", "quote": "I hated my second-grade teacher, too!", "embedded": false});
+quoteDetails.push({"support": [], "reflection": "I struggled with maths. It wasn’t just the numbers—it was how I felt in her classroom. She would shout at me in front of everyone. Once, my hand shook as I tried to answer a question on the board.", "paragraphs": ["I struggled with maths. It wasn’t just the numbers—it was how I felt in her classroom. She would shout at me in front of everyone. Once, my hand shook as I tried to answer a question on the board.", "Those experiences stayed with me. I grew up avoiding maths because trying brought back feelings I didn’t want to revisit.", "Maybe you have similar memories of learning English. If you do, start small: choose something you enjoy, practise with someone patient, and give yourself room to make mistakes without embarrassment.", "Learning is for you. You deserve to experience it with support, patience, and respect."]});
+dailyPractice.push("Learning is for you. You deserve to experience it with support, patience, and respect.");
 export function motivationShareUrl(entry,base='https://loudandconfident.github.io/Speakboldly/'){
  const name=entry.image.split('/').pop().replace(/\.png$/,'.html');return new URL('./motivation/'+name,base).href;
 }
