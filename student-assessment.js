@@ -1,12 +1,12 @@
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=monthly-passwords';
 import {initializeStudentContact} from './student-contact.js';
 import {chooseLearningLevel} from './learning-level-dialog.js';
-import {learningDocumentLevel,learningDocumentCategory,createLearningDocumentCard} from './learning-document-cards.js?v=activities';
+import {learningDocumentLevel,learningDocumentCategory,createLearningDocumentCard} from './learning-document-cards.js?v=registration-approval';
 import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v=learning-space';
 import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=six-sections';
 import {materialProgram} from './material-program-folders.js?v=comprehension-listening';
-import {initializeStudentBooking} from './student-booking.js?v=available-slots-only';
+import {initializeStudentBooking} from './student-booking.js?v=registration-approval';
 import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=level-preview';
 import {createExamForm} from './exam-form.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
@@ -39,8 +39,9 @@ export function initializeStudentAssessment(doc) {
  }
  const collect=form=>{const answers={A:{},B:{},C:{},D:'',E:''};for(const [name,value]of new doc.defaultView.FormData(form)){const [section,number]=name.split('.');if(number)answers[section][number]=section==='A'?Number(value):value;else answers[section]=value;}return answers;};
  function remember(level){try{doc.defaultView.sessionStorage.setItem(SESSION_KEY,JSON.stringify({token,student,level}));}catch{}}
- function lock(){epoch++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));clearFolderPasswords(doc);learningLevel=null;learningPasscode='';delete root.querySelector('#portal-contact').dataset.passwordLocked;clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);profile.hidden=true;booking.lock();contact.lock();token='';student=null;assessmentUnlocked=false;resumableSession=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
- function select(id){if(id&&!['contact','calendar'].includes(id))assertPortalAllowed(doc.defaultView.localStorage);tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);const back=root.querySelector('[data-learning-back]');if(back)back.hidden=!id;if(id)root.querySelector('[data-portal-panel="'+id+'"]')?.scrollIntoView({block:'start',behavior:'auto'});}
+ function lock(){crumbs.hidden=true;crumbs.replaceChildren();epoch++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));clearFolderPasswords(doc);learningLevel=null;learningPasscode='';delete root.querySelector('#portal-contact').dataset.passwordLocked;clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);profile.hidden=true;booking.lock();contact.lock();token='';student=null;assessmentUnlocked=false;resumableSession=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
+ const crumbs=doc.createElement('nav');crumbs.className='learning-breadcrumbs';crumbs.setAttribute('aria-label','Learning Hub breadcrumb');crumbs.hidden=true;root.querySelector('[data-learning-back]')?.after(crumbs);
+ function select(id){crumbs.replaceChildren();crumbs.hidden=!id;if(id){const home=text('button','Learning Hub');home.type='button';home.onclick=()=>select(null);crumbs.append(home,text('span',' → '+({material:'Material',exams:'Examinations',practice:'Activities',listening:'Listening',calendar:'Calendar',contact:'Contact Instructor'}[id]||id)+(learningLevel&&!['calendar','contact'].includes(id)?' → Level '+learningLevel:'')));}if(id&&!['contact','calendar'].includes(id))assertPortalAllowed(doc.defaultView.localStorage);tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);const back=root.querySelector('[data-learning-back]');if(back)back.hidden=!id;if(id)root.querySelector('[data-portal-panel="'+id+'"]')?.scrollIntoView({block:'start',behavior:'auto'});}
  root.querySelector('[data-learning-back]')?.addEventListener('click',()=>{select(null);root.querySelector('.learning-space-heading')?.scrollIntoView({block:'start',behavior:'auto'});});
  root.querySelectorAll('[data-learning-open]').forEach(button=>button.onclick=()=>root.querySelector('[data-portal-tab="'+button.dataset.learningOpen+'"]')?.click());
  function updatePasswordMetadata(response){

@@ -1,6 +1,6 @@
 // Included in UnifiedCode.gs. Add separately only in a multi-file project.
-const SB_PUBLIC_BOOKING_ACTIONS=['studentBookingLogin','studentBookingCalendar','studentBookSlots'];
-const SB_OWNER_BOOKING_ACTIONS=['bookingSettings','saveBookingSettings','checkStudentPortal'];
+const SB_PUBLIC_BOOKING_ACTIONS=['studentBookingLogin','studentBookingCalendar','studentBookSlots','studentRegisterSlot'];
+const SB_OWNER_BOOKING_ACTIONS=['listRegistrationRequests','reviewRegistration','retryRegistrationNotification','instructorOverview','calendarAvailability','saveCalendarDay','bookingSettings','saveBookingSettings','checkStudentPortal'];
 const SB_BOOKING_HEADERS=['Request ID','Client ID','Name','Planned sessions','Session IDs','Created at','Status','Notification status','Notification error'];
 function setupBookingCalendar(){
  const props=PropertiesService.getScriptProperties(),book=sbExamBook();
@@ -9,7 +9,6 @@ function setupBookingCalendar(){
  if(!requests.getLastRow())requests.appendRow(SB_BOOKING_HEADERS);
  else if(JSON.stringify(requests.getRange(1,1,1,9).getValues()[0])!==JSON.stringify(SB_BOOKING_HEADERS))throw new Error('Booking requests headers differ. Existing data was not changed.');
  requests.setFrozenRows(1);requests.getRange('A1:I1').setFontWeight('bold');
- if(!props.getProperty('SB_BOOKING_PASSCODE'))props.setProperty('SB_BOOKING_PASSCODE','19962');
  if(!props.getProperty('SB_BOOKING_ENABLED'))props.setProperty('SB_BOOKING_ENABLED','true');
 }
 function setupStudentPortal(){setupStudentExams();setupBookingCalendar();
@@ -43,12 +42,12 @@ function sbBookingAuth(data){
  return {};
 }
 function sbBookingBusy(book){
- const sessions=sbBookingRows(book.getSheetByName('Sessions'),10).filter(row=>row[0]&&String(row[7])!=='cancelled').map(row=>({start:Date.parse(row[5]),id:String(row[0])}));
- const pending=sbBookingRows(book.getSheetByName('Booking requests'),9).filter(row=>row[6]==='pending');
- for(const row of pending)for(const item of JSON.parse(String(row[3])))if(!sessions.some(entry=>entry.id===item.id))sessions.push({start:item.starts,id:item.id});
+ const sessions=sbBookingRows(book.getSheetByName('Sessions'),14).filter(row=>row[0]&&String(row[7])!=='cancelled').map(row=>({start:Date.parse(row[5]),id:String(row[0]),duration:sbSessionDuration(row)}));
+ const pending=book.getSheetByName('Booking requests')?sbBookingRows(book.getSheetByName('Booking requests'),9):[];const legacyPending=pending.filter(row=>row[6]==='pending');
+ for(const row of legacyPending)for(const item of JSON.parse(String(row[3])))if(!sessions.some(entry=>entry.id===item.id))sessions.push({start:item.starts,id:item.id});
  return sessions.filter(item=>Number.isFinite(item.start));
 }
-function sbBookingOverlap(start,busy,ownIds=[]){return busy.some(item=>!ownIds.includes(item.id)&&start<item.start+90*60000&&start+90*60000>item.start);}
+function sbBookingOverlap(start,busy,ownIds=[],duration=90){return busy.some(item=>!ownIds.includes(item.id)&&start<item.start+(item.duration||90)*60000&&start+duration*60000>item.start);}
 function sbBookingNotify(sheet,index,row){
  if(['sent','sending'].includes(String(row[7])))return;
  try{
@@ -60,61 +59,61 @@ function sbBookingNotify(sheet,index,row){
  }catch(error){row[7]='failed';row[8]=sbExamSafe(error.message);}
  sheet.getRange(index+2,1,1,9).setValues([row]);
 }
+function sbBookingWindow(){const today=sbBookingToday(),end=new Date(today+'T12:00:00Z');end.setUTCDate(end.getUTCDate()+42);return {start:today,end:end.toISOString().slice(0,10)};}
 function handlePublicBooking(data){
  const lock=LockService.getScriptLock();
  try{
-  const auth=sbBookingAuth(data);if(data.action==='studentBookingLogin')return sbExamResponse({ok:true,...auth});
-  lock.waitLock(20000);const book=sbExamBook();if(!book.getSheetByName('Sessions')||!book.getSheetByName('Booking requests'))throw new Error('The instructor needs to run setupStudentPortal first.');
-  const busy=sbBookingBusy(book),today=sbBookingToday();
-  if(data.action==='studentBookingCalendar'){
-   const month=String(data.month||today.slice(0,7));if(!/^\d{4}-\d{2}$/.test(month))throw new Error('Choose a valid month.');
-   const [year,m]=month.split('-').map(Number),[cy,cm]=today.slice(0,7).split('-').map(Number),difference=(year-cy)*12+m-cm;
-   if(m<1||m>12||difference<0||difference>2)throw new Error('Booking is available for the current month and the next two months.');
-   const count=new Date(Date.UTC(year,m,0)).getUTCDate(),days=[];
-   for(let n=1;n<=count;n++){
-    const date=month+'-'+String(n).padStart(2,'0'),slots=[];
-    for(const slot of sbBookingSlots(date)){const start=sbCairoTimestamp(date,slot.time),status=start<=Date.now()?'past':sbBookingOverlap(start,busy)?'taken':'available';slots.push({...slot,date,status});}
-    days.push({date,slots});
-   }
-   return sbExamResponse({ok:true,month,today,timeZone:'Africa/Cairo',days});
-  }
-  const name=String(data.name||'').trim(),requestId=String(data.requestId||'');
-  if(!name||name.length>100||! /^[A-Za-z0-9-]{1,100}$/.test(requestId)||!Array.isArray(data.slots)||!data.slots.length||data.slots.length>16)throw new Error('Enter your registered name and select between 1 and 16 slots.');
-  const clients=sbBookingRows(book.getSheetByName('Clients'),12),normalized=value=>String(value||'').replace(/^'/,'').normalize('NFKC').trim().replace(/\s+/g,' ').toLowerCase();
-  const matches=clients.filter(row=>normalized(row[1])===normalized(name));if(matches.length!==1)throw new Error('Use your registered name. Ask your instructor to check your client record.');
-  const client=matches[0];if(String(client[5])!=='Paid')throw new Error('Your instructor needs to finalize your payment status before you can book.');
-  const slots=data.slots.map(item=>({date:String(item.date||''),time:String(item.time||'')})).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
-  if(new Set(slots.map(item=>item.date+' '+item.time)).size!==slots.length)throw new Error('Select each slot only once.');
-  const sheet=book.getSheetByName('Booking requests'),rows=sbBookingRows(sheet,9);let index=rows.findIndex(row=>String(row[0])===requestId),row=index<0?null:rows[index];
-  if(row){const previous=JSON.parse(String(row[3])).map(item=>({date:item.date,time:item.time}));if(String(row[1])!==String(client[0])||JSON.stringify(previous)!==JSON.stringify(slots))throw new Error('Booking request changed. Start a new selection.');}
-  let plans=row?JSON.parse(String(row[3])):[];
-  if(!row){
-   const sessionRows=sbBookingRows(book.getSheetByName('Sessions'),10);let number=sessionRows.filter(item=>String(item[1])===String(client[0])).reduce((maximum,item)=>Math.max(maximum,Number(item[2])||0),0);for(const pending of rows.filter(entry=>String(entry[1])===String(client[0])&&entry[6]==='pending'))for(const item of JSON.parse(String(pending[3])))number=Math.max(number,Number(item.number)||0);
-   for(const slot of slots){
-    if(!sbBookingSlots(slot.date).some(item=>item.time===slot.time))throw new Error('Choose one of the available calendar slots.');
-    const starts=sbCairoTimestamp(slot.date,slot.time);if(starts<=Date.now()||starts>Date.now()+90*86400000)throw new Error('Choose a future slot within the next three months.');
-    if(sbBookingOverlap(starts,busy)||sbBookingOverlap(starts,plans))throw new Error('One of your selected slots has just been taken. Refresh the calendar and choose another slot.');
-    number++;if(number>9999)throw new Error('Ask your instructor to check your session numbers.');
-    const item={clientId:String(client[0]),number,date:slot.date,time:slot.time,program:String(client[11]||''),level:String(client[4]||'')};plans.push({...item,id:sbSessionId(item),starts,start:starts});
-   }
-   row=[requestId,String(client[0]),sbExamSafe(client[1]),JSON.stringify(plans),JSON.stringify(plans.map(item=>item.id)),new Date().toISOString(),'pending','',''];sheet.appendRow(row);index=sheet.getLastRow()-2;
-  }
-  if(row[6]!=='complete'){
-   const sessions=book.getSheetByName('Sessions'),existing=sbBookingRows(sessions,10),ownIds=plans.map(item=>item.id);
-   const missing=plans.filter(item=>!existing.some(entry=>String(entry[0])===item.id));
-   if(missing.some(item=>sbBookingOverlap(item.starts,busy,ownIds)))throw new Error('A selected slot is no longer available. Contact your instructor.');
-   if(missing.length){const first=sessions.getLastRow()+1;sessions.getRange(first,4,missing.length,2).setNumberFormat('@');sessions.getRange(first,1,missing.length,12).setValues(missing.map(item=>[item.id,item.clientId,item.number,item.date,item.time,new Date(item.starts).toISOString(),new Date(item.starts-86400000).toISOString(),'pending','','',item.program||'',item.level||'']));}
-   row[6]='complete';sheet.getRange(index+2,1,1,9).setValues([row]);
-  }
-  sbBookingNotify(sheet,index,row);
-  return sbExamResponse({ok:true,booked:plans.map(item=>({date:item.date,time:item.time,number:item.number})),notificationStatus:String(row[7])});
+  const auth=sbBookingAuth(data);
+  if(data.action==='studentBookingLogin')return sbExamResponse({ok:true,...auth,registrationVersion:1,paymentEmail:SB_PAYMENT_EMAIL,programs:SB_SESSION_PROGRAMS.filter(program=>!['Assessment','Trial session'].includes(program))});
+  lock.waitLock(20000);const book=sbExamBook();if(!book.getSheetByName('Sessions'))throw new Error('The instructor needs to set up the calendar first.');
+  if(data.action==='studentBookingCalendar')return sbExamResponse(sbRegistrationCalendar(data,book));
+  if(data.action==='studentRegisterSlot')return sbExamResponse(sbSubmitRegistration(data,book));
+  throw new Error('Booking now requires instructor approval. Refresh the calendar to send a registration request.');
  }catch(error){return sbExamResponse({ok:false,error:error.message});}
  finally{if(lock.hasLock())lock.releaseLock();}
+}
+function sbCalendarAvailability(book) {
+ const sheet=book.getSheetByName('Calendar availability');
+ if(!sheet||sheet.getLastRow()<2)return [];
+ return sheet.getRange(2,1,sheet.getLastRow()-1,3).getValues().filter(row=>row[0]&&(row[1]===false||String(row[1]).toLowerCase()==='false')).map(row=>row[0] instanceof Date?Utilities.formatDate(row[0],'Africa/Cairo','yyyy-MM-dd'):String(row[0])).filter(date=>/^\d{4}-\d{2}-\d{2}$/.test(date));
+}
+function sbCalendarDateBlocked(date,book){return sbCalendarAvailability(book||sbExamBook()).includes(String(date));}
+function sbSaveCalendarDay(book,data) {
+ const date=String(data.date||''),parsed=new Date(date+'T12:00:00Z');
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==date||typeof data.available!=='boolean')throw new Error('Choose a valid date and availability.');
+ if(date<sbBookingToday())throw new Error('Only today and future dates can be changed.');
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{
+  let sheet=book.getSheetByName('Calendar availability');
+  if(!sheet){sheet=book.insertSheet('Calendar availability');sheet.appendRow(['Date','Available','Updated at (UTC)']);sheet.setFrozenRows(1);}
+  const headers=sheet.getRange(1,1,1,3).getValues()[0];if(JSON.stringify(headers)!==JSON.stringify(['Date','Available','Updated at (UTC)']))throw new Error('Calendar availability headers differ. Existing data was not changed.');
+  const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,3).getValues():[],index=rows.findIndex(row=>(row[0] instanceof Date?Utilities.formatDate(row[0],'Africa/Cairo','yyyy-MM-dd'):String(row[0]))===date),target=index<0?sheet.getLastRow()+1:index+2;
+  sheet.getRange(target,1).setNumberFormat('@');sheet.getRange(target,1,1,3).setValues([[date,data.available,new Date().toISOString()]]);
+  return {ok:true,blockedDates:sbCalendarAvailability(book),calendarAvailabilityReady:true};
+ }finally{lock.releaseLock();}
+}
+function sbInstructorOverview(book) {
+ const clientSheet=book.getSheetByName('Clients'),clients=clientSheet&&clientSheet.getLastRow()>1?clientSheet.getRange(2,1,clientSheet.getLastRow()-1,12).getValues():[],people=new Map(clients.filter(row=>row[0]).map(row=>[String(row[0]),row]));
+ const sessionSheet=book.getSheetByName('Sessions'),sessions=sessionSheet&&sessionSheet.getLastRow()>1?sessionSheet.getRange(2,1,sessionSheet.getLastRow()-1,12).getValues():[],today=sbBookingToday(),now=Date.now();
+ const classes=sessions.filter(row=>row[0]&&String(row[7])!=='cancelled'&&people.has(String(row[1]))).map(row=>({id:String(row[0]),clientId:String(row[1]),name:String(people.get(String(row[1]))[1]).replace(/^'/,''),date:String(row[3]),time:String(row[4]),startsAt:String(row[5]),number:Number(row[2]),program:String(row[10]||'').replace(/^'/,''),level:String(row[11]||'').replace(/^'/,'')})).filter(item=>Number.isFinite(Date.parse(item.startsAt))).sort((a,b)=>Date.parse(a.startsAt)-Date.parse(b.startsAt));
+ const logSheet=book.getSheetByName('EmailLog'),logs=logSheet&&logSheet.getLastRow()>1?logSheet.getRange(2,1,logSheet.getLastRow()-1,7).getValues():[],sent=new Map();
+ for(const row of logs){if(row[4]!=='sent'||!row[5])continue;const key=String(row[1])+':'+String(row[2]),time=Date.parse(row[5]);if(Number.isFinite(time))sent.set(key,Math.max(sent.get(key)||0,time));}
+ const attemptSheet=book.getSheetByName('Exam attempts'),attempts=attemptSheet&&attemptSheet.getLastRow()>1?attemptSheet.getRange(2,1,attemptSheet.getLastRow()-1,18).getValues():[],pendingReviews=[],reportsToPrepare=[];
+ const normalize=value=>String(value||'').replace(/^'/,'').normalize('NFKC').trim().toLowerCase();
+ for(const row of attempts){if(!row[0]||!row[6])continue;if(!row[11])pendingReviews.push({id:String(row[0]),name:String(row[2]).replace(/^'/,''),level:Number(row[3]),program:String(row[13]||'').replace(/^'/,''),submittedAt:String(row[6])});else{const client=clients.find(person=>normalize(person[1])===normalize(row[2]));if(!client||(sent.get(String(client[0])+':final')||0)<Date.parse(row[11]))reportsToPrepare.push({id:String(row[0]),clientId:client?String(client[0]):'',name:String(row[2]).replace(/^'/,''),level:Number(row[3]),reviewedAt:String(row[11])});}}
+ const documentSheet=book.getSheetByName('TeacherDocuments'),documents=documentSheet&&documentSheet.getLastRow()>1?documentSheet.getRange(2,1,documentSheet.getLastRow()-1,4).getValues():[],latest=new Map(),drafts=[];
+ for(const row of documents){let record;try{record=JSON.parse(String(row[3]));}catch{continue;}if(String(row[0]).startsWith('draft:')){if(record.values&&Object.values(record.values).some(value=>String(value).trim()))drafts.push({type:record.type,updatedAt:String(row[2])});continue;}if(!record.client?.id||!record.type)continue;const key=String(record.client.id)+':'+String(record.type),stamp=Date.parse(record.preparedAt||row[2]);if(!latest.has(key)||stamp>latest.get(key).stamp)latest.set(key,{record,stamp});}
+ const preparedReports=[];for(const [key,entry]of latest){const record=entry.record;if(record.status==='sent'||record.sentAt||(sent.get(key)||0)>=entry.stamp)continue;preparedReports.push({id:record.id,clientId:record.client.id,name:record.client.name,type:record.type,title:record.title,preparedAt:record.preparedAt||''});}
+ return {ok:true,today,refreshedAt:new Date().toISOString(),classes:classes.filter(item=>item.date===today),nextClass:classes.find(item=>Date.parse(item.startsAt)>=now)||null,zoomUrl:typeof SB_ZOOM_URL==='string'?SB_ZOOM_URL:'',pendingReviews,reportsToPrepare,preparedReports,drafts,registrationRequests:sbRegistrationRows(book).filter(row=>['awaiting','accepting'].includes(String(row[9]))).map(sbRegistrationView)};
 }
 function handleOwnerBooking(data){
  try{
   const props=PropertiesService.getScriptProperties(),book=sbExamBook();
-  if(data.action==='checkStudentPortal')return sbExamResponse({ok:true,examsReady:['Exam attempts','Exam sessions','Portal access'].every(name=>Boolean(book.getSheetByName(name))),bookingReady:['Sessions','Booking requests'].every(name=>Boolean(book.getSheetByName(name)))&&Boolean(props.getProperty('SB_BOOKING_PASSCODE')),notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||'',remainingEmailQuota:MailApp.getRemainingDailyQuota()});
+  if(['listRegistrationRequests','reviewRegistration','retryRegistrationNotification'].includes(data.action))return sbExamResponse(handleRegistrationOwner(data,book));
+  if(data.action==='instructorOverview')return sbExamResponse(sbInstructorOverview(book));
+  if(data.action==='calendarAvailability')return sbExamResponse({ok:true,blockedDates:sbCalendarAvailability(book),calendarAvailabilityReady:true});
+  if(data.action==='saveCalendarDay')return sbExamResponse(sbSaveCalendarDay(book,data));
+  if(data.action==='checkStudentPortal')return sbExamResponse({ok:true,examsReady:['Exam attempts','Exam sessions','Portal access'].every(name=>Boolean(book.getSheetByName(name))),bookingReady:['Sessions','Booking requests'].every(name=>Boolean(book.getSheetByName(name))),notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||'',remainingEmailQuota:MailApp.getRemainingDailyQuota()});
   if(data.action==='saveBookingSettings'){
    const email=String(data.notificationEmail||'').trim();
    if(typeof data.enabled!=='boolean')throw new Error('Choose whether booking is open.');

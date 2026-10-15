@@ -1,7 +1,7 @@
 import {removedPortalClientIds} from './requested-client-cleanup.js';
 import {confirmClientEmail} from './client-email-confirmation.js?v=calendar-popup';
 import {SESSION_PROGRAMS,SESSION_TYPES,calendarProgramForType,nextSessionNumber,suggestedSessionProgram} from './session-programs.js?v=appointment-types';
-import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession} from './client-sheet.js?v=level-history';
+import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {ownerConnected,request} from './exam-api.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 const STORAGE_KEY='speak-boldly-admin-sessions-v1';
@@ -47,8 +47,9 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
  const weekdays=root.querySelector('.calendar-weekdays'),viewport=doc.createElement('div'),hint=doc.createElement('p');
  viewport.className='calendar-viewport';viewport.tabIndex=0;viewport.setAttribute('role','region');viewport.setAttribute('aria-label','Monthly calendar. Scroll horizontally to see all days.');
  hint.className='calendar-scroll-hint';hint.textContent='Swipe across the calendar to see all days.';
- grid.parentNode.insertBefore(hint,weekdays||grid);grid.parentNode.insertBefore(viewport,weekdays||grid);if(weekdays)viewport.append(weekdays);viewport.append(grid);
+ const availabilityNote=doc.createElement('p');availabilityNote.className='calendar-availability-note';availabilityNote.textContent='Tap Dim beside a date to close new bookings for that day. Existing appointments stay saved.';grid.parentNode.insertBefore(availabilityNote,weekdays||grid);grid.parentNode.insertBefore(hint,weekdays||grid);grid.parentNode.insertBefore(viewport,weekdays||grid);if(weekdays)viewport.append(weekdays);viewport.append(grid);
  function populateClients(){const previous=chooser.value;chooser.replaceChildren();const placeholder=doc.createElement('option');placeholder.value='';placeholder.textContent='Choose a client';chooser.append(placeholder);for(const client of getClients()){const option=doc.createElement('option');option.value=client.id;option.textContent=client.name+' — '+client.level;chooser.append(option);}chooser.value=previous;root.querySelector('.calendar-no-clients').hidden=getClients().length>0;}
+ let blockedDates=new Set(),availabilityReady=false,availabilitySaving=false;
  let sessions=[],selected=cairoToday(),month=selected.slice(0,7),storageReadable=true;
  const dateString=(year,m,day)=>String(year).padStart(4,'0')+'-'+String(m+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
  function appendAppointment(cell,button,item,name){
@@ -62,24 +63,25 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
   for(let i=0;i<offset;i++){const blank=doc.createElement('div');blank.className='calendar-blank';blank.setAttribute('aria-hidden','true');grid.append(blank);}
   const today=cairoToday();
   for(let day=1;day<=count;day++){
-   const date=dateString(year,m-1,day),cell=doc.createElement('div');cell.className='calendar-day';cell.dataset.date=date;if(selected===date)cell.classList.add('calendar-selected');
+   const date=dateString(year,m-1,day),cell=doc.createElement('div');cell.className='calendar-day';cell.dataset.date=date;if(selected===date)cell.classList.add('calendar-selected');const blocked=blockedDates.has(date);if(blocked)cell.classList.add('calendar-day-blocked');
    const header=doc.createElement('div');header.className='calendar-day-header';
    const number=doc.createElement('span');number.className='calendar-day-number';number.textContent=day;if(date===today)number.setAttribute('aria-current','date');
-   const add=doc.createElement('button');add.type='button';add.className='calendar-add';add.textContent='+';add.setAttribute('aria-label','Add session on '+date);header.append(number,add);cell.append(header);
+   const add=doc.createElement('button');add.type='button';add.className='calendar-add';add.textContent='+';add.setAttribute('aria-label','Add session on '+date);add.disabled=blocked;header.append(number,add);cell.append(header);const availability=doc.createElement('button');availability.type='button';availability.className='calendar-day-toggle';availability.textContent=blocked?'Undim':'Dim';availability.setAttribute('aria-label',(blocked?'Undim ':'Dim ')+date);availability.setAttribute('aria-pressed',String(blocked));availability.disabled=date<today||!clientSheetConnected()||!availabilityReady||availabilitySaving;availability.title=!clientSheetConnected()?'Connect your Clients sheet to change shared availability.':!availabilityReady?'Deploy the updated Apps Script to activate day availability.':blocked?'Make this date available':'Close new bookings on this date';availability.onclick=async()=>{if(!isUnlocked()||loading||availabilitySaving||form.dataset.saving)return;const current=loadEpoch;availabilitySaving=true;render();status.textContent='Saving day availability…';try{const result=await sheetLibraryRequest('saveCalendarDay',{date,available:blocked});if(!isUnlocked()||current!==loadEpoch)return;blockedDates=new Set(result.blockedDates);status.textContent=date+' is now '+(blocked?'available':'dimmed')+'. Existing appointments stay saved.';doc.dispatchEvent(new doc.defaultView.Event('calendar-availability-changed'));}catch(error){if(current===loadEpoch)status.textContent=error.message;}finally{if(current===loadEpoch){availabilitySaving=false;render();}}};cell.append(availability);
    const items=sessions.filter(s=>s.date===date&&s.reminderStatus!=='cancelled');
    for(const slot of orderedCalendarSlots(date,items)){
     const bookings=items.filter(item=>item.time===slot.time);
-    if(bookings.length){for(const item of bookings){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name,button=doc.createElement('button');button.type='button';button.className='calendar-slot calendar-slot-booked';button.textContent=sessionInitials(name)+' #'+item.number+'\n'+slot.label;button.title=(item.program||'Program not recorded')+' — '+(item.level?'Level '+item.level:'Level not recorded');button.setAttribute('aria-label','Open '+name+' client information, session '+item.number+' on '+date+' at '+slot.label+' Cairo time');button.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};appendAppointment(cell,button,item,name);}continue;}
-    const button=doc.createElement('button');button.type='button';button.className='calendar-slot';button.textContent=slot.label;button.setAttribute('aria-label','Add session on '+date+' at '+slot.label+' Cairo time');
+    if(bookings.length){for(const item of bookings){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name,button=doc.createElement('button');button.type='button';button.className='calendar-slot calendar-slot-booked';button.textContent=sessionInitials(name)+' #'+item.number+'\n'+(item.duration===30?item.time+' (30m)':slot.label);button.title=(item.duration||90)+' minutes — '+(item.program||'Program not recorded')+' — '+(item.level?'Level '+item.level:'Level not recorded');button.setAttribute('aria-label','Open '+name+' client information, session '+item.number+' on '+date+' at '+slot.label+' Cairo time');button.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};appendAppointment(cell,button,item,name);}continue;}
+    const button=doc.createElement('button');button.type='button';button.className='calendar-slot';button.disabled=blocked;button.textContent=slot.label;button.setAttribute('aria-label','Add session on '+date+' at '+slot.label+' Cairo time');
     button.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;form.elements.time.value=slot.time;populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};cell.append(button);
    }
    for(const item of items){const client=getClients().find(c=>c.id===item.clientId),name=client?.name||item.name;const badge=doc.createElement('button');badge.type='button';badge.className='calendar-session';badge.textContent=sessionInitials(name)+' #'+item.number;badge.title=name+' — '+(item.program||'Program not recorded')+' — '+(item.level?'Level '+item.level:'Level not recorded')+' — session '+item.number+(item.time?' — '+item.time+' Cairo time':'')+(item.reminderStatus?' — Email status: '+item.reminderStatus:'');badge.setAttribute('aria-label','Open '+name+' client information, session '+item.number);badge.onclick=()=>{if(isUnlocked()&&client)openClient(client.id);};if(!item.time)appendAppointment(cell,badge,item,name);}
-   add.onclick=()=>{if(!isUnlocked())return;selected=date;form.elements.date.value=date;form.elements.time.value='';populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};grid.append(cell);
+   add.onclick=()=>{if(!isUnlocked()||blocked)return;selected=date;form.elements.date.value=date;form.elements.time.value='';populateClients();render();openPopup(root.querySelector('#calendar-session-dialog'));chooser.focus();};grid.append(cell);
   }
  }
  let loading=false,loadEpoch=0;
- async function load({background=false}={}){
-  if(loading||!isUnlocked())return;
+ async function load(options={}){
+  const background=typeof options==='boolean'?options:options.background===true;
+  if(loading||availabilitySaving||form.dataset.saving||!isUnlocked())return;
   if(background&&(root.querySelector('#calendar-session-dialog')?.open))return;
   loading=true;const epoch=loadEpoch,oldMonth=month,oldSelected=selected;
   try{
@@ -89,7 +91,7 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    if(clientSheetConnected()){
     let sharedLoaded=false;
     try{
-     let response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;
+     let response=await loadSheetSessions();blockedDates=new Set(response.blockedDates||[]);availabilityReady=response.calendarAvailabilityReady===true;if(!isUnlocked()||epoch!==loadEpoch)return;
      sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));storageReadable=true;sharedLoaded=true;
      const warnings=[];
      if(!background){
@@ -97,7 +99,7 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
       const future=local.filter(s=>s.time);
       const untimed=local.filter(s=>!s.time);if(untimed.length)warnings.push(untimed.length+' old appointment(s) need a class time before they can sync.');
       for(const record of future){if(!isUnlocked()||epoch!==loadEpoch)return;try{await saveSheetSession(record,undefined,{importPast:true});}catch(error){warnings.push(error.message);}}
-      response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));
+      response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));blockedDates=new Set(response.blockedDates||[]);availabilityReady=response.calendarAvailabilityReady===true;
      }
      status.textContent='Shared calendar connected. Send class confirmations manually from each client’s Actions button.'+(warnings.length?' '+warnings.length+' browser appointment(s) could not upload: '+warnings[0]:'')+(localError?' Some old browser entries could not be read; shared appointments are still shown.':'');
     }catch(error){status.textContent='Calendar could not sync: '+error.message;if(!background&&!sharedLoaded){sessions=local;storageReadable=false;}}
@@ -120,7 +122,8 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
  function shift(step){if(!isUnlocked())return;const [year,m]=month.split('-').map(Number),date=new Date(Date.UTC(year,m-1+step,1));if(date.getUTCFullYear()<1900||date.getUTCFullYear()>9999)return;month=dateString(date.getUTCFullYear(),date.getUTCMonth(),1).slice(0,7);render();}
  root.querySelector('#calendar-previous').onclick=()=>shift(-1);root.querySelector('#calendar-next').onclick=()=>shift(1);
  root.querySelector('#calendar-today').onclick=()=>{if(!isUnlocked())return;selected=cairoToday();month=selected.slice(0,7);form.elements.date.value=selected;render();};
- form.onsubmit=async event=>{event.preventDefault();if(!isUnlocked()||!form.reportValidity())return;if(!storageReadable){status.textContent='Browser storage is unavailable or contains unreadable records. Existing sessions have been kept.';return;}
+ form.onsubmit=async event=>{event.preventDefault();if(!isUnlocked()||form.dataset.saving||!form.reportValidity())return;if(!storageReadable){status.textContent='Browser storage is unavailable or contains unreadable records. Existing sessions have been kept.';return;}
+  form.dataset.saving='true';const submit=form.querySelector('[type=submit]');if(submit)submit.disabled=true;status.textContent='Saving session…';
   try{loadEpoch++;const input=Object.fromEntries(new doc.defaultView.FormData(form)),client=getClients().find(c=>c.id===input.clientId);if(!client)throw new Error('Choose an existing client.');const record=validateSession({...input,program:calendarProgramForType(input.appointmentType,input.program),name:client.name});if(!record.time)throw new Error('Choose a class time.');
    if(clientSheetConnected()){
     const response=await saveSheetSession(record);if(!isUnlocked())return;
@@ -131,7 +134,9 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    else{const updated=[...sessions,record];doc.defaultView.localStorage.setItem(STORAGE_KEY,JSON.stringify(updated));sessions=updated;selected=record.date;month=record.date.slice(0,7);form.reset();updateType();form.elements.date.value=selected;render();status.textContent=sessionInitials(record.name)+' #'+record.number+' saved in this browser. Send class confirmations manually from Actions after connecting your Clients sheet.';}}
 
   catch(error){status.textContent=error.message;return;}
+  finally{delete form.dataset.saving;if(submit)submit.disabled=false;}
+  doc.dispatchEvent(new doc.defaultView.Event('instructor-data-changed'));
   root.querySelector('#calendar-session-dialog')?.close();
  };
- return{load,refresh(background=false){if(clientSheetConnected()||ownerConnected())load(background);else{populateClients();render();}},lock(){loadEpoch++;sessions=[];grid.replaceChildren();heading.textContent='';form.reset();updateType();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
+ return{load,refresh(background=false){if(clientSheetConnected()||ownerConnected())load(background);else{populateClients();render();}},lock(){loadEpoch++;sessions=[];blockedDates.clear();availabilityReady=false;availabilitySaving=false;grid.replaceChildren();heading.textContent='';form.reset();updateType();status.textContent='';const dialog=root.querySelector('#calendar-session-dialog');if(dialog?.open)dialog.close();}};
 }

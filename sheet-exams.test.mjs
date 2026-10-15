@@ -5,7 +5,7 @@ import {readFileSync} from 'node:fs';
 import {randomUUID,createHash,createHmac} from 'node:crypto';
 
 export function createSheetExamFixture(filename='UnifiedCode.gs') {
- const sheets=new Map(),cache=new Map(),emails=[],props={CLIENT_SHEET_ID:'test-sheet',CLIENT_SYNC_KEY:'private-test-key',SB_EXAM_NOTIFY_EMAIL:'owner@example.com'};
+ const sheets=new Map(),cache=new Map(),emails=[],props={CLIENT_SHEET_ID:'test-sheet',CLIENT_SYNC_KEY:'private-test-key',SB_EXAM_NOTIFY_EMAIL:'owner@example.com',SB_ZOOM_URL:'https://zoom.example.test/meeting',SB_ZOOM_PASSCODE:'mock-meeting-passcode'};
  function makeSheet(rows=[]) {
   return {rows,deleteRow(row){rows.splice(row-1,1);},getLastRow:()=>rows.length,setFrozenRows(){},appendRow(row){rows.push([...row]);},getRange(r,c,h=1,w=1){return {getValues:()=>Array.from({length:h},(_,i)=>Array.from({length:w},(_,j)=>rows[r-1+i]?.[c-1+j]??'')),setValues(values){values.forEach((row,i)=>{rows[r-1+i]??=[];row.forEach((v,j)=>rows[r-1+i][c-1+j]=v);});},setFontWeight(){},setNumberFormat(){},setValue(value){rows[r-1]??=[];rows[r-1][c-1]=value;}};}};
  }

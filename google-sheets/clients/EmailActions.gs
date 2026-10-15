@@ -11,21 +11,22 @@ function retryPermissions(){
 }
 
 const SB_EMAIL_LOGO='https://loudandconfident.github.io/Speakboldly/speak-boldly-preview-dark-green.png';
-const SB_ZOOM_URL='https://us06web.zoom.us/j/79051707388';
-const SB_ZOOM_PASSCODE='7P1NpA';
+const SB_ZOOM_URL=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_URL')||'';
+const SB_ZOOM_PASSCODE=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_PASSCODE')||'';
 function sbEmailEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function sbBrandedEmail(title,content){
  return '<!doctype html><html><body style="margin:0;background:#faf9f4;font-family:Arial,sans-serif;color:#193c32"><table role="presentation" style="width:100%;max-width:600px;margin:auto;background:#fffef9;border-collapse:collapse"><tr><td style="padding:28px 28px 12px"><img src="'+SB_EMAIL_LOGO+'" width="58" height="58" alt="Speak Boldly logo" style="display:block;border-radius:10px"><h1 style="font-size:24px;margin:18px 0">'+sbEmailEscape(title)+'</h1></td></tr><tr><td style="padding:0 28px 28px;font-size:15px;line-height:1.7">'+content+'<p style="margin-top:28px">Speak Boldly</p></td></tr></table></body></html>';
 }
 function sbUpcomingClientMeetings(book,clientId){
  const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return [];
- return sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues().filter(r=>String(r[1])===String(clientId)&&String(r[7])!=='cancelled'&&Number.isFinite(Date.parse(r[5]))&&Date.parse(r[5])>Date.now()).sort((a,b)=>Date.parse(a[5])-Date.parse(b[5]));
+ return sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues().filter(r=>String(r[1])===String(clientId)&&String(r[7])!=='cancelled'&&Number.isFinite(Date.parse(r[5]))&&Date.parse(r[5])>Date.now()).sort((a,b)=>Date.parse(a[5])-Date.parse(b[5]));
 }
 function sbEmailProgramName(value){return value==='Trial session'?'Conversation-based General English — Trial session':String(value||'').replace(/^General English/,'Conversation-based General English');}
 function sbSessionEmailLabel(row){const program=String(row[10]||'').replace(/^'/,'');if(program==='Trial session')return 'Conversation-based General English — Trial session';if(program==='Assessment')return 'English assessment';return (program?sbEmailProgramName(program.replace(/^General English — [48] sessions$/,'General English')):'English class')+' — Session '+row[2];}
-function sbSessionEmailDetails(row){const program=String(row[10]||'').replace(/^'/,''),level=String(row[11]||'').replace(/^'/,'');return [program&&program!=='Trial session'?sbEmailProgramName(program):'',level&&level!=='Not assessed'?'Level '+level:''].filter(Boolean).join(' · ');}
+function sbSessionEmailDetails(row){const program=String(row[10]||'').replace(/^'/,''),level=String(row[11]||'').replace(/^'/,'');return [String(sbSessionDuration(row))+' minutes',row[14]?sbEmailProgramName(String(row[14]).replace(/^'/,'')):'',program&&program!=='Trial session'?sbEmailProgramName(program):'',level&&level!=='Not assessed'?'Level '+level:''].filter(Boolean).join(' · ');}
 function sbCalendarEmail(client,meetings,reminder=false){
- const heading=reminder?'Your upcoming class reminder':'Your class confirmation',name=String(client[1]),program=sbEmailProgramName(client[11]||'');
+ if(!/^https:\/\//.test(SB_ZOOM_URL)||!SB_ZOOM_PASSCODE)throw new Error('Set SB_ZOOM_URL and SB_ZOOM_PASSCODE in Apps Script project settings before sending confirmations.');
+ const heading=reminder?'Your upcoming class reminder':'Your class confirmation',name=String(client[1]),first=meetings[0]||[],course=first[14]||(!['Assessment','Trial session'].includes(String(first[10]))?first[10]:'')||client[11]||'',program=sbEmailProgramName(course);
  const lines=meetings.map(r=>sbSessionEmailLabel(r)+(sbSessionEmailDetails(r)?' ('+sbSessionEmailDetails(r)+')':'')+' — '+Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy — h:mm a')+' (Cairo time)');
  const intro=reminder?'This is a reminder for your upcoming English class.':'Your next upcoming English session is confirmed below.';
  const body='Hello '+name+',\n\n'+intro+(program?'\n\nProgram / Level: '+program:'')+'\n\n'+lines.join('\n')+'\n\nJoin on Zoom:\n'+SB_ZOOM_URL+'\nPasscode: '+SB_ZOOM_PASSCODE+'\n\nPlease note: No same-day cancellations are allowed.\n\nIf you have any questions, reply to this email.\n\nSee you in class!\nSpeak Boldly';
@@ -68,6 +69,7 @@ function handleClientEmail(p){
   let message;
   if(kind==='confirmation'){
    const meetings=sbUpcomingClientMeetings(book,id).slice(0,1);if(!meetings.length)throw new Error('No upcoming calendar sessions are saved for this client. Add or sync their appointments first.');
+   if(p.sessionId&&String(meetings[0][0])!==String(p.sessionId))throw new Error('The next session changed. Reopen the confirmation preview before sending.');
    message=sbCalendarEmail(client,meetings);
   }else{
    const course=sbEmailProgramName(client[11]||''),level=String(client[4]||'');

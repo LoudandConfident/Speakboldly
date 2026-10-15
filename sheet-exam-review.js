@@ -25,7 +25,7 @@ export function initializeExamReview(doc,isUnlocked) {
   const button=text('button','Save private review');button.type='submit';button.className='button';form.append(button);detail.append(form);
   form.onsubmit=async event=>{
    event.preventDefault();if(!isUnlocked()||!form.reportValidity())return;const current=generation;button.disabled=true;
-   try{const data=new doc.defaultView.FormData(form),marks=Object.fromEntries(['A','B','C','D','E'].map(key=>[key,Number(data.get(key))]));const result=await sheetExamRequest('reviewExamAttempt',{attemptId:item.id,version:item.version,marks,feedback:data.get('feedback')});if(current!==generation||!isUnlocked())return;detail.replaceChildren();await refresh();status.textContent='Score saved: '+result.attempt.score+' / 100. Saved privately. Send the final report manually when ready.';}
+   try{const data=new doc.defaultView.FormData(form),marks=Object.fromEntries(['A','B','C','D','E'].map(key=>[key,Number(data.get(key))]));const result=await sheetExamRequest('reviewExamAttempt',{attemptId:item.id,version:item.version,marks,feedback:data.get('feedback')});if(current!==generation||!isUnlocked())return;detail.replaceChildren();doc.dispatchEvent(new doc.defaultView.Event('instructor-data-changed'));await refresh();status.textContent='Score saved: '+result.attempt.score+' / 100. Saved privately. Send the final report manually when ready.';}
    catch(error){if(current===generation)status.textContent=error.message;}finally{button.disabled=false;}
   };
  }

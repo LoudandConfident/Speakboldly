@@ -36,26 +36,31 @@ function sbSessionId(c){
  const bytes=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,[c.clientId,c.number,c.date,c.time,...(c.program?[c.program]:[])].join('|'));
  return bytes.map(b=>(b&255).toString(16).padStart(2,'0')).join('');
 }
+function sbSessionDuration(row){const explicit=Number(row[13]);return explicit===30||explicit===90?explicit:90;}
 function sbListSheetSessions(){
- const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues():[];
- return rows.filter(r=>r[0]).map(r=>({id:String(r[0]),clientId:String(r[1]),number:Number(r[2]),date:String(r[3]),time:String(r[4]),name:'',program:String(r[10]||'').replace(/^'/,''),level:String(r[11]||'').replace(/^'/,''),reminderStatus:String(r[7]),reminderAt:new Date(r[6]).toISOString(),sentAt:r[8]?new Date(r[8]).toISOString():null}));
+ const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[];
+ return rows.filter(r=>r[0]).map(r=>({id:String(r[0]),clientId:String(r[1]),number:Number(r[2]),date:String(r[3]),time:String(r[4]),name:'',program:String(r[10]||'').replace(/^'/,''),level:String(r[11]||'').replace(/^'/,''),startsAt:String(r[5]),duration:sbSessionDuration(r),course:String(r[14]||'').replace(/^'/,''),endsAt:new Date(Date.parse(r[5])+sbSessionDuration(r)*60000).toISOString(),reminderStatus:String(r[7]),reminderAt:new Date(r[6]).toISOString(),sentAt:r[8]?new Date(r[8]).toISOString():null}));
 }
 function sbSaveSheetSession(input,allowPast=false){
- const c={clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||'').trim(),level:String(input.level||'').trim()};
+ const c={clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||'').trim(),course:String(input.course||'').trim(),level:String(input.level||'').trim()};
+ const duration=c.program==='Assessment'?30:90;
+ if(c.course&&(!SB_SESSION_PROGRAMS.includes(c.course)||['Assessment','Trial session'].includes(c.course)))throw new Error('Choose a valid registered course.');
  if(c.program&&!SB_SESSION_PROGRAMS.includes(c.program))throw new Error('Choose a valid program.');
  if(c.level&&!/^[1-9]\d{0,3}$/.test(c.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(c.level))throw new Error('Choose a valid session level.');
  if(!/^[a-zA-Z0-9-]{1,100}$/.test(c.clientId)||!Number.isInteger(c.number)||c.number<1||c.number>9999)throw new Error('Choose an existing client and valid session number.');
  const starts=sbCairoTimestamp(c.date,c.time),id=sbSessionId(c),sheet=sbSessionsSheet();
- const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues():[];
+ const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[];
  const existing=rows.find(r=>String(r[0])===id);
  if(existing)return id; // Retries never create duplicate reminders or restore cancelled classes.
+ if(starts>Date.now()&&typeof sbCalendarDateBlocked==='function'&&sbCalendarDateBlocked(c.date))throw new Error('This day is dimmed. Undim the date before adding a new appointment.');
  if(starts<=Date.now()&&!allowPast)throw new Error('Choose a future session.');
- if(starts>Date.now()&&rows.some(row=>String(row[7])!=='cancelled'&&starts<Date.parse(row[5])+90*60000&&starts+90*60000>Date.parse(row[5])))throw new Error('This time overlaps an existing appointment.');
+ if(starts>Date.now()&&rows.some(row=>String(row[7])!=='cancelled'&&starts<Date.parse(row[5])+sbSessionDuration(row)*60000&&starts+duration*60000>Date.parse(row[5])))throw new Error('This time overlaps an existing appointment.');
  const clients=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
  const ids=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,1).getValues():[];
  if(!ids.some(r=>String(r[0])===c.clientId))throw new Error('Save this client to the Clients sheet first.');
  const row=sheet.getLastRow()+1;sheet.getRange(row,4,1,2).setNumberFormat('@');
- sheet.getRange(row,1,1,12).setValues([[id,c.clientId,c.number,c.date,c.time,new Date(starts).toISOString(),new Date(starts-86400000).toISOString(),starts<=Date.now()?'expired':'pending','','',c.program,c.level]]);
+ sheet.getRange(1,14,1,2).setValues([['Duration (minutes)','Registered course']]);
+ sheet.getRange(row,1,1,15).setValues([[id,c.clientId,c.number,c.date,c.time,new Date(starts).toISOString(),new Date(starts-86400000).toISOString(),starts<=Date.now()?'expired':'pending','','',c.program,c.level,'',duration,c.course]]);
  return id;
 }
 function handleSheetSessionAction(p){
@@ -63,7 +68,7 @@ function handleSheetSessionAction(p){
  try{
   if(p.action==='saveSession'){if(!p.session)throw new Error('Session missing.');sbSaveSheetSession(p.session,p.importPast===true);}
   if(p.action==='cancelSession'){
-   const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues():[],index=rows.findIndex(r=>String(r[0])===String(p.sessionId));
+   const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[],index=rows.findIndex(r=>String(r[0])===String(p.sessionId));
    if(index<0)throw new Error('Session not found.');
    if(rows[index][7]==='sending')throw new Error('A reminder is being sent. Try again shortly.');
    sheet.getRange(index+2,8).setValue('cancelled');
@@ -72,7 +77,7 @@ function handleSheetSessionAction(p){
   const props=PropertiesService.getScriptProperties();
   const ready=typeof handleClientEmail==='function';
   const respond=typeof clientSyncResponse==='function'?clientSyncResponse:response;
-  return respond({ok:true,classes:sbListSheetSessions(),emailReady:ready});
+  return respond({ok:true,classes:sbListSheetSessions(),blockedDates:typeof sbCalendarAvailability==='function'?sbCalendarAvailability(sbExamBook()):[],calendarAvailabilityReady:typeof sbCalendarAvailability==='function',emailReady:ready});
  }finally{lock.releaseLock();}
 }
 // Kept as a no-op so old scheduled triggers cannot send emails after this update.
@@ -82,17 +87,17 @@ function disableAutomaticReminders(){
  ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='sendDueSheetReminders').forEach(t=>ScriptApp.deleteTrigger(t));
 }
 
-function sbCountedSessionHours(book,id){const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return 0;const rows=sheet.getRange(2,1,sheet.getLastRow()-1,13).getValues(),ids=new Set();for(const row of rows)if(String(row[1])===id&&String(row[7])!=='cancelled'&&row[12]==='counted')ids.add(String(row[0]));return ids.size*1.5;}
+function sbCountedSessionHours(book,id){const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return 0;const rows=sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues(),ids=new Map();for(const row of rows)if(String(row[1])===id&&String(row[7])!=='cancelled'&&row[12]==='counted')ids.set(String(row[0]),sbSessionDuration(row)/60);return [...ids.values()].reduce((sum,value)=>sum+value,0);}
 function sbApplySessionHours(book){
  const sessions=book.getSheetByName('Sessions'),clients=book.getSheetByName('Clients');if(!sessions||!clients)return;
  const props=PropertiesService.getScriptProperties(),first=props.getProperty('SB_SESSION_HOURS_READY')!=='1',today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');
  sessions.getRange(1,13).setValue('Hours counted');clients.getRange(1,13,1,2).setValues([['Hours baseline','Hours baseline set at (UTC)']]);
  const people=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,14).getValues():[];
  for(let i=0;i<people.length;i++)if(people[i][0]&&people[i][12]===''){people[i][12]=Number(people[i][7])||0;clients.getRange(i+2,13,1,2).setValues([[people[i][12],new Date().toISOString()]]);}
- const rows=sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,13).getValues():[];
+ const rows=sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,14).getValues():[];
  for(let i=0;i<rows.length;i++){const row=rows[i];if(row[0]&&/^\d{4}-\d{2}-\d{2}$/.test(String(row[3]))&&String(row[3])<today&&!row[12]){row[12]=String(row[3])<'2026-10-14'?'baseline':'counted';sessions.getRange(i+2,13).setValue(row[12]);}}
  props.setProperty('SB_SESSION_HOURS_READY','1');
- for(let i=0;i<people.length;i++){const person=people[i];if(!person[0])continue;const ids=new Set(rows.filter(row=>String(row[1])===String(person[0])&&row[7]!=='cancelled'&&row[12]==='counted').map(row=>String(row[0])));const total=Math.round((Number(person[12])+ids.size*1.5)*100)/100;if(Number(person[7])!==total)clients.getRange(i+2,8).setValue(total);}
+ for(let i=0;i<people.length;i++){const person=people[i];if(!person[0])continue;const hours=sbCountedSessionHours(book,String(person[0]));const total=Math.round((Number(person[12])+hours)*100)/100;if(Number(person[7])!==total)clients.getRange(i+2,8).setValue(total);}
 }
 function sbSetClientHours(book,sheet,row,input){
  if(row>sheet.getLastRow())return Number(input.hours);

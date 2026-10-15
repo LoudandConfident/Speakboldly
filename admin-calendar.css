@@ -32,3 +32,7 @@ button.calendar-session{border:0;cursor:pointer;text-align:left;min-height:36px}
 .calendar-appointment>.calendar-slot,.calendar-appointment>.calendar-session{flex:1;min-width:0}
 .calendar-appointment>.calendar-cancel{flex:none;width:26px;min-height:36px;padding:0;margin:0!important;font-size:22px;line-height:1;border:0;border-radius:4px;color:var(--ink);background:#e9eddc;cursor:pointer}
 @media(max-width:680px){.calendar-appointment>.calendar-cancel{width:28px;min-height:44px}}
+
+.calendar-day-toggle{align-self:flex-start;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--ink);font:inherit;font-size:11px;padding:5px 8px;min-height:32px;cursor:pointer}.calendar-day-toggle:disabled{opacity:.45;cursor:default}.calendar-day-blocked{background:#edf0e6!important}.calendar-day-blocked>.calendar-slot:not(.calendar-slot-booked){opacity:.35}.calendar-day-blocked .calendar-day-toggle{background:var(--ink);color:#fff}.calendar-availability-note{font-size:13px;line-height:1.6;color:var(--muted)}@media(max-width:680px){.calendar-day-toggle{font-size:10px;padding:4px 2px;min-height:44px;width:100%}}
+
+@media(max-width:680px){.calendar-appointment{flex-direction:column;gap:2px}.calendar-appointment>.calendar-slot{width:100%;overflow:hidden;overflow-wrap:normal;font-size:9px}.calendar-appointment>.calendar-cancel{align-self:flex-end;width:100%;min-height:28px}.calendar-day-toggle{min-width:0;overflow:hidden}}
