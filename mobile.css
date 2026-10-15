@@ -85,7 +85,13 @@
 
 /* Phone layouts for Programs, courses, and learner reviews. */
 .mobile-menu-extra{display:none}
-.course-session-details>summary{display:none}
+#courses .courses-introduction .course-booking-note{width:100%;padding:14px 16px;background:#edf0e6;border:1px solid var(--line);border-radius:12px}
+.course-session-details>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:24px;cursor:pointer;font-weight:600;list-style:none;font-size:14px}
+.course-session-details>summary::-webkit-details-marker{display:none}
+.course-session-details>summary::after{content:'+';font-size:20px;font-weight:400}
+.course-session-details[open]>summary::after{content:'−'}
+#courses .course-session-details[open]>ul{margin-top:14px}
+#courses .course-funding-note{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:13px;line-height:1.7}
 @media(max-width:680px){
  header #main-navigation .mobile-menu-extra{display:block}
  #programs,#courses,#reviews{padding:28px 5% 20px}

@@ -5,10 +5,6 @@ export function initializeNavigation(doc,win){
  doc.addEventListener('keydown',event=>{if(event.key==='Escape'&&menu?.getAttribute('aria-expanded')==='true'){closeMenu();menu.focus();}});
  doc.addEventListener('click',event=>{if(menu?.getAttribute('aria-expanded')==='true'&&!event.target.closest('header'))closeMenu();});
  win.addEventListener('hashchange',closeMenu);
- const sessionDetails=doc.querySelector('.course-session-details');
- const phoneLayout=win.matchMedia?.('(max-width: 680px)');
- const adaptCourseDetails=()=>{if(sessionDetails)sessionDetails.open=!phoneLayout?.matches;};
- adaptCourseDetails();phoneLayout?.addEventListener?.('change',adaptCourseDetails);
  const reducedMotion=win.matchMedia?.('(prefers-reduced-motion: reduce)');
  const down=doc.querySelector('#page-down-arrow');
  function updateDownArrow(){if(down)down.hidden=doc.documentElement.scrollHeight-win.innerHeight-win.scrollY<=12;}
