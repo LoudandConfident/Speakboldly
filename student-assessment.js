@@ -6,7 +6,7 @@ import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v
 import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=six-sections';
 import {materialProgram} from './material-program-folders.js?v=comprehension-listening';
-import {initializeStudentBooking} from './student-booking.js?v=password-free';
+import {initializeStudentBooking} from './student-booking.js?v=available-slots-only';
 import {attachTemporaryPortalUploads} from './temporary-portal-uploads.js?v=level-preview';
 import {createExamForm} from './exam-form.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
@@ -141,7 +141,7 @@ export function initializeStudentAssessment(doc) {
  }
  async function openStudent(){
   blocked.hidden=true;
-  const current=epoch;content.hidden=false;root.classList.add('portal-session-active');root.querySelector('#student-folder-title').textContent='Welcome back!';select(doc.defaultView.location.hash.endsWith('/calendar')?'calendar':null);status.textContent='Loading available files and assessments…';renderFiles([]);showAssessment([],false);attachTemporaryPortalUploads(doc);
+  const current=epoch;content.hidden=false;root.classList.add('portal-session-active');root.querySelector('#student-folder-title').textContent='Welcome back!';select(doc.defaultView.location.hash.endsWith('/calendar')?'calendar':null);if(doc.defaultView.location.hash.endsWith('/calendar'))booking.open();status.textContent='Loading available files and assessments…';renderFiles([]);showAssessment([],false);attachTemporaryPortalUploads(doc);
   try{const response=await call('studentPortalAccess');if(current!==epoch)return;updatePasswordMetadata(response);
    let saved;try{saved=JSON.parse(doc.defaultView.sessionStorage.getItem(SESSION_KEY)||'null');}catch{}
    if(saved?.token&&saved?.student){resumableSession=saved;student=saved.student;}
@@ -162,8 +162,13 @@ export function initializeStudentAssessment(doc) {
   if(client){doc.defaultView.location.hash=doc.defaultView.location.hash.endsWith('/calendar')?'students-portal/calendar':'students-portal/student';Promise.resolve().then(openStudent);}
   else if(root.querySelector('#admin-dashboard').hidden)openPopup(root.querySelector('#teacher-login-dialog'));
  }));
- doc.defaultView.addEventListener('hashchange',()=>{if(!doc.defaultView.location.hash.startsWith('#students-portal'))lock();});
+ function openCalendarRoute(){
+  if(doc.defaultView.location.hash!=='#students-portal/calendar')return;
+  if(root.querySelector('#client-portal').hidden||content.hidden){root.querySelector('[data-portal-area=client]').click();return;}
+  select('calendar');booking.open();
+ }
+ doc.defaultView.addEventListener('hashchange',()=>{if(!doc.defaultView.location.hash.startsWith('#students-portal'))lock();else openCalendarRoute();});
  doc.defaultView.addEventListener('pagehide',lock);
  lock();
- if(doc.defaultView.location.hash.endsWith('/calendar'))Promise.resolve().then(()=>root.querySelector('[data-portal-area=client]').click());
+ if(doc.defaultView.location.hash.endsWith('/calendar'))Promise.resolve().then(openCalendarRoute);
 }
