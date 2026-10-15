@@ -22,3 +22,9 @@ test('two-way and three-way ties stay blended',()=>{
 test('incomplete, old-length and invalid answers cannot produce a result',()=>{
  for(const answers of [[],Array(12).fill('visual'),Array(count).fill('unknown'),Array(count).fill(undefined)])assert.throws(()=>scoreLearnerProfile(answers));
 });
+
+test('24 questions cover general learning and exactly six concern English',()=>{
+ assert.equal(learnerQuestions.filter(q=>q.scope==='general').length,24);
+ assert.equal(learnerQuestions.filter(q=>q.scope==='english').length,6);
+ for(const question of learnerQuestions){const text=[question.prompt,...question.options.map(o=>o.text)].join(' ');if(question.scope==='general')assert(!/\b(English|grammar|pronunciation|language)\b/i.test(text));else assert(/\bEnglish\b/.test(question.prompt));}
+});
