@@ -24,11 +24,8 @@ export function cairoDayNumber(now = new Date()) {
  const part = type => Number(parts.find(p => p.type === type).value);
  return Math.floor(Date.UTC(part('year'), part('month') - 1, part('day')) / 86400000);
 }
-export function cairoWeekNumber(now = new Date()) {
- return Math.floor((cairoDayNumber(now) + 3) / 7);
-}
 export function quoteForDate(now = new Date()) {
- return dailyQuotes[cairoWeekNumber(now) % dailyQuotes.length];
+ return dailyQuotes[cairoDayNumber(now) % dailyQuotes.length];
 }
 export const quoteDetails = [
  {support:['Better opportunities','Real conversations','More confidence','A brighter you','Freedom to be you','English for real life'],reflection:'Make a little room for English today. One real conversation, one question, or one voice note can be a step towards the things that matter to you. You don’t need a perfect study routine to begin. Try describing your day, asking someone a question, or listening closely to a short conversation. Choose something that fits your life and give it a few minutes of your attention. Small moments of practice can make English feel more useful and more familiar.'},
@@ -78,9 +75,9 @@ export function motivationShareUrl(entry,base='https://loudandconfident.github.i
 export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
  if (!page) return;
- let day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share this week’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,shareStatus);page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationShareUrl(currentEntry,doc.baseURI);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with this week’s picture and motivation.';}}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
+ let day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,shareStatus);page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationShareUrl(currentEntry,doc.baseURI);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
  function refresh() {
-  const now = new win.Date(), nextDay = cairoWeekNumber(now);
+  const now = new win.Date(), nextDay = cairoDayNumber(now);
   if (day === nextDay) return;
   day = nextDay;
   const index = nextDay % dailyQuotes.length, entry = dailyQuotes[index], details = quoteDetails[index];currentEntry=entry;shareFile=null;shareStatus.textContent='';
