@@ -28,9 +28,14 @@ export function cairoDayNumber(now = new Date()) {
 export function motivationIndexForDate(now = new Date()) {
  const day=cairoDayNumber(now),start=Math.floor(Date.UTC(2026,9,15)/86400000),end=Math.floor(Date.UTC(2026,9,19)/86400000);
  if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
- if(day===Math.floor(Date.UTC(2026,9,19)/86400000))return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-consistency.png');
- if(day===Math.floor(Date.UTC(2026,9,20)/86400000))return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-safe-learning.png');
- if(day===Math.floor(Date.UTC(2026,9,21)/86400000))return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-live-to-learn.png');
+ if(day>=end){
+  // A fixed seed gives every device the same shuffled daily schedule.
+  const order=Array.from({length:dailyQuotes.length},(_,index)=>index);let seed=20261019;
+  for(let i=order.length-1;i>0;i--){seed=(Math.imul(1664525,seed)+1013904223)>>>0;const j=seed%(i+1);[order[i],order[j]]=[order[j],order[i]];}
+  const held=dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
+  if(order[0]===held)[order[0],order[1]]=[order[1],order[0]];
+  return order[(day-end)%order.length];
+ }
  return day%dailyQuotes.length;
 }
 export function quoteForDate(now = new Date()) {
