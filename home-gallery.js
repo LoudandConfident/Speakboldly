@@ -24,8 +24,14 @@ export function cairoDayNumber(now = new Date()) {
  const part = type => Number(parts.find(p => p.type === type).value);
  return Math.floor(Date.UTC(part('year'), part('month') - 1, part('day')) / 86400000);
 }
+// One-time exception: keep 15 October's message through Sunday in Cairo.
+export function motivationIndexForDate(now = new Date()) {
+ const day=cairoDayNumber(now),start=Math.floor(Date.UTC(2026,9,15)/86400000),end=Math.floor(Date.UTC(2026,9,19)/86400000);
+ if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
+ return day%dailyQuotes.length;
+}
 export function quoteForDate(now = new Date()) {
- return dailyQuotes[cairoDayNumber(now) % dailyQuotes.length];
+ return dailyQuotes[motivationIndexForDate(now)];
 }
 export const quoteDetails = [
  {support:['Better opportunities','Real conversations','More confidence','A brighter you','Freedom to be you','English for real life'],reflection:'Make a little room for English today. One real conversation, one question, or one voice note can be a step towards the things that matter to you. You don’t need a perfect study routine to begin. Try describing your day, asking someone a question, or listening closely to a short conversation. Choose something that fits your life and give it a few minutes of your attention. Small moments of practice can make English feel more useful and more familiar.'},
@@ -80,7 +86,7 @@ export function initializeGallery(doc, win) {
   const now = new win.Date(), nextDay = cairoDayNumber(now);
   if (day === nextDay) return;
   day = nextDay;
-  const index = nextDay % dailyQuotes.length, entry = dailyQuotes[index], details = quoteDetails[index];currentEntry=entry;shareFile=null;shareStatus.textContent='';
+  const index = motivationIndexForDate(now), entry = dailyQuotes[index], details = quoteDetails[index];currentEntry=entry;shareFile=null;shareStatus.textContent='';
   if(win.navigator.canShare&&win.File&&win.fetch)win.fetch(new URL(entry.image,doc.baseURI)).then(response=>{if(!response.ok)throw Error('Image unavailable');return response.blob();}).then(blob=>{if(currentEntry===entry)shareFile=new win.File([blob],entry.image.split('/').pop(),{type:blob.type||'image/png'});}).catch(()=>{});
   page.querySelector('#daily-quote-image').src = entry.image;
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');

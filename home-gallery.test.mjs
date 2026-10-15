@@ -21,3 +21,9 @@ test('every daily picture has supporting content and an existing image', () => {
 });
 
 test('every rotating motivation has its own static picture preview and stable share link',()=>{for(const entry of dailyQuotes){const link=motivationShareUrl(entry),file=new URL('./motivation/'+entry.image.split('/').pop().replace(/\.png$/,'.html'),import.meta.url),html=readFileSync(file,'utf8');assert(link.includes('/motivation/'));assert(!link.includes('#'));assert(html.includes('property="og:image" content="'+new URL(entry.image,'https://loudandconfident.github.io/Speakboldly/').href+'"'));assert(html.includes('summary_large_image'));assert(html.includes('property="og:url" content="'+link+'"'));}});
+
+test('15 October message stays through Sunday and the daily schedule resumes Monday in Cairo',()=>{
+ const held=quoteForDate(new Date('2026-10-15T12:00:00Z'));assert.equal(held.image,'./images/daily-motivation-2.png');
+ for(const instant of ['2026-10-14T21:00:00Z','2026-10-16T12:00:00Z','2026-10-17T12:00:00Z','2026-10-18T20:59:59Z'])assert.equal(quoteForDate(new Date(instant)),held);
+ for(const instant of ['2026-10-14T20:59:59Z','2026-10-18T21:00:00Z','2026-10-19T21:00:00Z']){const date=new Date(instant);assert.equal(quoteForDate(date),dailyQuotes[cairoDayNumber(date)%dailyQuotes.length]);}
+});

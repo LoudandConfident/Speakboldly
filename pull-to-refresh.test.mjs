@@ -18,3 +18,6 @@ test('ordinary scrolling, short pulls, horizontal swipes and cancelled gestures 
 test('offline refresh keeps the page and gives connection feedback',()=>{const f=fixture();f.win.navigator.onLine=false;f.touch('touchstart',100,100);f.touch('touchmove',100,220);f.end();assert.equal(f.indicator.textContent,'Reconnect to refresh');f.flush();assert.equal(f.reloads,0);});
 
 test('phone website has the same pull-to-refresh gesture as the installed app',()=>{const f=fixture(false,true);f.touch('touchstart',100,100);f.touch('touchmove',100,210);assert.equal(f.indicator.textContent,'Release to refresh');f.end();f.flush();assert.equal(f.reloads,1);});
+
+test('the first small downward movement is captured before native scrolling starts',()=>{const f=fixture();f.touch('touchstart',100,100);assert.equal(f.touch('touchmove',100,104),true);assert.equal(f.indicator.hidden,true);f.touch('touchmove',100,170);f.end();f.flush();assert.equal(f.reloads,1);});
+test('a pull beginning on a header link or menu button can refresh',()=>{const f=fixture();f.target.closest=selector=>selector.includes('button')?{}:null;f.touch('touchstart',100,100);f.touch('touchmove',100,180);f.end();f.flush();assert.equal(f.reloads,1);});
