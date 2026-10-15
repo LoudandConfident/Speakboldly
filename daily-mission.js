@@ -1,4 +1,4 @@
-import {dailyMissionSet} from './daily-mission-set.js?v=half-year-library';
+import {dailyMissionSet} from './daily-mission-set.js?v=grammar-practices';
 import {cairoMissionDate,missionLevels,readMissionState,writeMissionState} from './daily-mission-data.js?v=five-practices';
 export function initializeDailyMission(doc,win=doc.defaultView){
  const host=doc.querySelector('#daily-mission');if(!host||host.dataset.initialized)return;host.dataset.initialized='true';
@@ -17,14 +17,13 @@ export function initializeDailyMission(doc,win=doc.defaultView){
   catch(error){if(ticket!==renderTicket)return;status.textContent='Today’s mission could not load. Check your connection and try again.';const retry=el('button','Try again','button small');retry.type='button';retry.onclick=render;content.append(retry);return;}
   dateLabel.textContent=new Intl.DateTimeFormat('en-GB',{weekday:'long',day:'numeric',month:'long',timeZone:'UTC'}).format(new Date(day+'T12:00:00Z'))+' · New mission every day';
   const title=el('h4',mission.title),reading=el('section',null,'mission-reading'),readingTitle=el('h4','Today’s reading'),paragraphs=el('div',null,'mission-paragraphs');mission.paragraphs.forEach(text=>paragraphs.append(el('p',text)));const toggle=el('button','Hide the reading','mission-text-toggle');toggle.type='button';const setReading=visible=>{paragraphs.hidden=!visible;toggle.textContent=visible?'Hide the reading':'Show the reading';};toggle.onclick=()=>setReading(paragraphs.hidden);const controls=el('div',null,'mission-audio-controls');controls.append(audioButton('Read it aloud',mission.transcript,()=>setReading(true)),toggle);reading.append(readingTitle,paragraphs,controls);content.append(title,reading);
-  const vocabulary=el('section',null,'mission-vocabulary'),definitions=el('dl');vocabulary.append(el('h4','Vocabulary'));for(const item of mission.vocabulary)definitions.append(el('dt',item.word),el('dd',item.definition));vocabulary.append(definitions);content.append(vocabulary);
   const practices=el('div',null,'mission-practices');
   const activity=(number,name)=>{const section=el('section',null,'mission-practice');section.append(el('h4',number+'. '+name));practices.append(section);return section;};
   const say=activity(1,'Say it');say.append(el('p',mission.say),el('p','Listen to the model, then repeat one sentence at a time. Notice stressed words, pauses, and final sounds.'),audioButton('Listen and repeat',mission.transcript,()=>setReading(true)));
   const hear=activity(2,'Hear it');hear.append(el('p','Hide the reading and listen to the short passage. Then answer this question aloud:'),el('p',mission.question,'mission-question'),audioButton('Listen without reading',mission.transcript,()=>setReading(false)),check('Reveal the answer',mission.answer));
-  const use=activity(3,'Use it');use.append(el('p','Useful expression: “'+mission.phrase+'”','mission-expression'),el('p',mission.use));
-  const fix=activity(4,'Fix it');fix.append(el('p','Find the mistake and say the corrected sentence aloud:'),el('blockquote',mission.mistake),check('Reveal the correction and explanation',mission.correction));
-  const recall=activity(5,'Recall it');recall.append(el('p',mission.recall));const hide=el('button','Hide the reading and recall','button light small');hide.type='button';hide.onclick=()=>{setReading(false);status.textContent='The reading is hidden. Recall the main ideas, then use Show the reading to check.';};recall.append(hide);
+  const use=activity(3,'Use it');for(const [index,item] of mission.useItems.entries()){use.append(el('p',(index+1)+'. “'+item.expression+'”','mission-expression'),el('p',item.instruction));}
+  const build=activity(4,'Build it');for(const rule of mission.build.rules){build.append(el('p',rule.structure,'mission-expression'),el('blockquote',rule.example));}
+  const fix=activity(5,'Fix it');fix.append(el('p','Correct both sentences before revealing the answers. Say or write each corrected sentence:'));for(const [index,item] of mission.fixItems.entries()){fix.append(el('blockquote',(index+1)+'. '+item.mistake),check('Reveal answer '+(index+1)+' and explanation',item.answer+' '+item.explanation));}
   content.append(practices);const tomorrow=el('button','Come back tomorrow','button small mission-tomorrow');tomorrow.type='button';tomorrow.onclick=()=>{stop();doc.dispatchEvent(new win.Event('daily-mission-home'));};content.append(tomorrow);
  }
  function rollover(){const today=cairoMissionDate(new win.Date());if(today===day)return false;day=today;status.textContent='';render();return true;}

@@ -14,8 +14,11 @@ test('549 complete materials preserve the original 24 per level',async()=>{
   assert.equal(missions.filter(m=>m.source==='original-24').length,24);
   for(const [i,m] of missions.entries()){
    assert.equal(m.number,i+1);assert.equal(m.level,level);assert.equal(m.paragraphs.length,3);assert.ok(m.paragraphs.every(p=>p.trim()));
-   for(const key of ['title','transcript','phrase','question','answer','mistake','correction','say','use','recall'])assert.ok(m[key]?.trim(),key);
-   assert.equal(m.vocabulary.length,3);for(const v of m.vocabulary){assert.ok(v.definition);assert.ok(m.transcript.toLowerCase().includes(v.word.toLowerCase()),v.word);}
+   for(const key of ['title','transcript','phrase','question','answer','say'])assert.ok(m[key]?.trim(),key);
+   assert.equal(m.useItems.length,2);for(const item of m.useItems)assert.ok(m.transcript.toLowerCase().includes(item.expression.toLowerCase()));
+   assert.equal(m.build.rules.length,2);for(const rule of m.build.rules){assert.ok(rule.structure.includes('+'));assert.ok(rule.example);assert.equal(rule.explanation,undefined);}
+   assert.equal(m.fixItems.length,2);assert.notEqual(m.fixItems[0].mistake,m.fixItems[1].mistake);for(const item of m.fixItems){assert.ok(item.answer);assert.notEqual(item.mistake,item.answer);assert.ok(item.explanation);}
+   assert.equal(m.vocabulary,undefined);
    assert.ok(m.transcript.toLowerCase().includes(m.phrase.toLowerCase()));
    if(i<24)assert.equal(m.transcript,dailyPassages[i].levels[li][0]);
    all.add(m.transcript);total++;

@@ -1,4 +1,4 @@
-export const MISSION_DAYS=183, MISSION_CHUNK_SIZE=31, MISSION_VERSION='half-year-2026-v1';
+export const MISSION_DAYS=183, MISSION_CHUNK_SIZE=31, MISSION_VERSION='half-year-2026-v2';
 const levels=['foundation','developing','stretching'], caches=new WeakMap();
 export function missionPositionForDate(day){
  const stamp=Date.parse(day+'T00:00:00Z');
