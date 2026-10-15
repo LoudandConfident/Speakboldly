@@ -96,7 +96,7 @@
  #programs .coaching-independence p{margin:0 0 16px}
  #programs .coaching-independence ul{padding-left:20px;margin:0 0 20px}
  #programs .coaching-independence li{padding-left:3px;margin:0 0 10px}
- #programs>.program-course-actions{align-self:flex-end;margin:8px 0 28px;transform:none}
+ #programs>.program-course-actions{align-self:flex-start;margin:8px 0 28px;transform:none}
  #programs .program-course-actions>.button{min-height:44px;padding:11px 18px;font-size:14px}
  #courses h2,#reviews h2{font-size:28px;line-height:1.25;letter-spacing:-.6px;margin:10px 0 14px}
  #courses .courses-introduction{display:flex;flex-direction:column;gap:20px;margin:0 0 20px;align-items:stretch}
