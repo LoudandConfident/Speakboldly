@@ -154,3 +154,10 @@ html.app-pull-refresh-enabled,html.app-pull-refresh-enabled body{overscroll-beha
 #course-fees-dialog{width:min(620px,calc(100vw - 32px))}#course-fees-dialog h2{font-size:23px;line-height:1.4}#course-fees-dialog ul{padding-left:20px;margin:20px 0}#course-fees-dialog li{margin:0 0 12px;font-size:15px;line-height:1.7}
 
 #vision .vision-photos{max-width:340px;gap:16px;margin:22px 0 26px}#vision .vision-photos img{height:auto;aspect-ratio:auto}#vision .vision-photos figcaption{padding:10px 12px;font-size:13px;line-height:1.6}@media(max-width:420px){#vision .vision-photos{max-width:280px}}
+
+/* Keep both assessments opposite each other, with matching text and button rows. */
+#placement .assessment-options{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px;row-gap:0;align-items:stretch}
+#placement .assessment-options>article{display:grid;grid-template-rows:subgrid;grid-row:span 5;align-items:start;justify-items:start;min-width:0;margin:0;padding:0;border:0}
+#placement .assessment-options>article>.eyebrow{align-self:end}
+#placement .assessment-options>article>.button{align-self:end;width:250px;max-width:100%;margin:0}
+@media(max-width:680px){#placement .assessment-options{column-gap:16px}#placement .assessment-options .assessment-option-title{font-size:21px;line-height:1.35}#placement .assessment-options>article>.eyebrow{font-size:9px;letter-spacing:1px;line-height:1.6}#placement .assessment-options>article>.assessment-description{font-size:14px;line-height:1.7}#placement .assessment-options>article>.assessment-details{font-size:13px;line-height:1.65}#placement .assessment-options>article>.button{width:100%;min-height:48px;padding:10px 8px;font-size:12px;line-height:1.4}}
