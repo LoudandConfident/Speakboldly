@@ -30,6 +30,7 @@ export function motivationIndexForDate(now = new Date()) {
  if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
  if(day===Math.floor(Date.UTC(2026,9,19)/86400000))return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-consistency.png');
  if(day===Math.floor(Date.UTC(2026,9,20)/86400000))return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-safe-learning.png');
+ if(day===Math.floor(Date.UTC(2026,9,21)/86400000))return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-live-to-learn.png');
  return day%dailyQuotes.length;
 }
 export function quoteForDate(now = new Date()) {
@@ -84,6 +85,9 @@ dailyPractice.push("So don’t worry when the words take a moment. Keep giving y
 dailyQuotes.push({"image": "./images/daily-motivation-safe-learning.png", "alt": "Headphones and an open book on a sunlit desk", "quote": "I hated my second-grade teacher, too!", "embedded": false});
 quoteDetails.push({"support": [], "reflection": "I struggled with maths. It wasn’t just the numbers—it was how I felt in her classroom. She would shout at me in front of everyone. Once, my hand shook as I tried to answer a question on the board.", "paragraphs": ["I struggled with maths. It wasn’t just the numbers—it was how I felt in her classroom. She would shout at me in front of everyone. Once, my hand shook as I tried to answer a question on the board.", "Those experiences stayed with me. I grew up avoiding maths because trying brought back feelings I didn’t want to revisit.", "Maybe you have similar memories of learning English. If you do, start small: choose something you enjoy, practise with someone patient, and give yourself room to make mistakes without embarrassment.", "Learning is for you. You deserve to experience it with support, patience, and respect."]});
 dailyPractice.push("Learning is for you. You deserve to experience it with support, patience, and respect.");
+dailyQuotes.push({"image": "./images/daily-motivation-live-to-learn.png", "alt": "An open green door leading to a flower-lined street", "quote": "We live to learn!", "embedded": false});
+quoteDetails.push({"support": [], "reflection": "We learn languages and how to drive. We learn how to work, build relationships, become partners, and raise children.", "paragraphs": ["We learn languages and how to drive. We learn how to work, build relationships, become partners, and raise children.", "We learn how to treat people with care, understand different cultures, and see things from another perspective.", "Learning keeps us curious and gives us room to grow. What a gift—to keep discovering, for as long as we can."]});
+dailyPractice.push("Learning keeps us curious and gives us room to grow. What a gift—to keep discovering, for as long as we can.");
 export function motivationShareUrl(entry,base='https://loudandconfident.github.io/Speakboldly/'){
  const name=entry.image.split('/').pop().replace(/\.png$/,'.html');return new URL('./motivation/'+name,base).href;
 }
