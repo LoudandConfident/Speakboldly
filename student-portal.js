@@ -1,4 +1,4 @@
-import {initializeStudentAssessment} from './student-assessment.js?v=registration-approval';
+import {initializeStudentAssessment} from './student-assessment.js?v=momentum-and-uploads';
 import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {takeStudentAttempt} from './student-attempts.js';

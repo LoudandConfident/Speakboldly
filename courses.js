@@ -52,11 +52,37 @@ export const courses = [
     "outcomes": "You’ll strengthen the language you need to explain yourself and respond more comfortably. You’ll leave with practical activities that help you keep improving independently between sessions."
   },
   {
+    "id": "english-momentum",
+    "title": "English Momentum",
+    "level": "Beginner, Intermediate, Advanced",
+    "duration": "16 sessions · 4 weeks",
+    "category": "General English",
+    "sessionMinutes": 60,
+    "priceOptions": [
+      {
+        "previous": 4000,
+        "amount": 3500,
+        "schedule": "16 sessions · 4 days a week · 1 hour each · 4 weeks"
+      }
+    ],
+    "description": "Build your English routine with focused, one-hour sessions four days a week for four weeks. Practise speaking, listening, vocabulary and grammar through conversation and personalised feedback.",
+    "summary": "Four days a week, one hour each, for four weeks.",
+    "viewDescription": "Make English a regular part of your week with 16 private, one-hour sessions over four weeks. Your instructor adapts the practice to your level, goals, and the English you need in everyday life.",
+    "outcomes": "You’ll practise more frequently, review useful language regularly, and build habits that help you keep improving between sessions.",
+    "topics": [
+      "Frequent speaking and listening practice",
+      "Useful vocabulary and grammar in conversation",
+      "Focused feedback and revision",
+      "Independent practice between sessions"
+    ],
+    "art": "general"
+  },
+  {
     "id": "urgent-session",
     "title": "One Session",
     "level": "Your current English level",
     "duration": "1 session",
-    "category": "Others",
+    "category": "Session",
     "description": "Book session by session, with no commitment. A little pricier, but useful when something urgent comes up. Enjoy 90 minutes of interactive conversation about the topic you need, or a topic your instructor chooses based on your previously communicated needs and English level. It can also be your trial session to help you decide what would support you most with your current needs.",
     "price": 550,
     "showComingSoonPrice": true,
@@ -70,6 +96,24 @@ export const courses = [
     "detailDescription": "Before the session, tell your instructor your topic, current English level and what you need help with. Use the conversation to rehearse an upcoming situation, work through an immediate communication need or explore what kind of coaching would help you next. Each session stands on its own, with no ongoing commitment.",
     "viewDescription": "Use one 90-minute session to focus on an immediate English need, rehearse a situation, or try private coaching. Share your topic and goals beforehand so your instructor can shape the conversation around you.",
     "outcomes": "You’ll practise useful wording for your chosen situation and receive feedback on what to improve. You’ll finish with clearer next steps for preparing on your own, without committing to an ongoing course."
+  },
+  {
+    "id": "make-up-revision",
+    "title": "Make-up / revision session",
+    "level": "Already enrolled clients",
+    "duration": "1 session · 90 minutes",
+    "category": "Session",
+    "price": 350,
+    "description": "An additional 90-minute session for already enrolled clients who want to revise previous lessons or add extra practice to their current program.",
+    "summary": "Extra revision and practice for already enrolled clients.",
+    "viewDescription": "Add a 90-minute session to your current coaching program. Revisit lessons, practise areas you find challenging, and clarify questions with your instructor.",
+    "outcomes": "You’ll consolidate what you have learned and leave with clearer next steps for your ongoing practice.",
+    "topics": [
+      "Revision of previous lessons",
+      "Extra practice with your current program",
+      "Questions and personalised feedback"
+    ],
+    "art": "general"
   },
   {
     "id": "interview",

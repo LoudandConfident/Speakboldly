@@ -1,4 +1,4 @@
-import {learningHubItemSection} from './learning-hub-sections.js';
+import {learningHubItemSection} from './learning-hub-sections.js?v=momentum-and-uploads';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 export function initializePortalSwitches(doc,isUnlocked,loader) {
  const root=doc.querySelector('#portal-switches');if(!root)return;

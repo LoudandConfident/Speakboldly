@@ -1,7 +1,7 @@
 // Add this file to the existing Clients Apps Script project.
 // Run setupSheetReminders once to create the calendar; emails are sent only from Authorize.
 const SB_SESSION_HEADERS=['Session ID','Client ID','Session number','Date (Cairo)','Time (Cairo)','Starts at (UTC)','Remind at (UTC)','Status','Sent at (UTC)','Last error','Program','Level'];
-const SB_SESSION_PROGRAMS=["Assessment", "Trial session", "General English — 8 sessions", "General English — 4 sessions", "One Session", "Interview preparation workshop", "E-mail and business writing workshop", "Meetings, presentation and public speaking workshop", "IELTS preparation", "Pronunciation workshop", "English for Information Technology", "Let the kids speak!", "The different learners", "Instructor training"];
+const SB_SESSION_PROGRAMS=["Assessment", "Trial session", "General English — 8 sessions", "General English — 4 sessions", "One Session", "Make-up / revision session", "English Momentum", "Interview preparation workshop", "E-mail and business writing workshop", "Meetings, presentation and public speaking workshop", "IELTS preparation", "Pronunciation workshop", "English for Information Technology", "Let the kids speak!", "The different learners", "Instructor training"];
 function setupSheetReminders(){
  const props=PropertiesService.getScriptProperties(),id=props.getProperty('CLIENT_SHEET_ID');
  if(!id)throw new Error('Run setupClientSync first.');
@@ -36,14 +36,14 @@ function sbSessionId(c){
  const bytes=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,[c.clientId,c.number,c.date,c.time,...(c.program?[c.program]:[])].join('|'));
  return bytes.map(b=>(b&255).toString(16).padStart(2,'0')).join('');
 }
-function sbSessionDuration(row){const explicit=Number(row[13]);return explicit===30||explicit===90?explicit:90;}
+function sbSessionDuration(row){const explicit=Number(row[13]);return explicit===30||explicit===60||explicit===90?explicit:90;}
 function sbListSheetSessions(){
  const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[];
  return rows.filter(r=>r[0]).map(r=>({id:String(r[0]),clientId:String(r[1]),number:Number(r[2]),date:String(r[3]),time:String(r[4]),name:'',program:String(r[10]||'').replace(/^'/,''),level:String(r[11]||'').replace(/^'/,''),startsAt:String(r[5]),duration:sbSessionDuration(r),course:String(r[14]||'').replace(/^'/,''),endsAt:new Date(Date.parse(r[5])+sbSessionDuration(r)*60000).toISOString(),reminderStatus:String(r[7]),reminderAt:new Date(r[6]).toISOString(),sentAt:r[8]?new Date(r[8]).toISOString():null}));
 }
 function sbSaveSheetSession(input,allowPast=false){
  const c={clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||'').trim(),course:String(input.course||'').trim(),level:String(input.level||'').trim()};
- const duration=c.program==='Assessment'?30:90;
+ const duration=c.program==='Assessment'?30:c.program==='English Momentum'?60:90;
  if(c.course&&(!SB_SESSION_PROGRAMS.includes(c.course)||['Assessment','Trial session'].includes(c.course)))throw new Error('Choose a valid registered course.');
  if(c.program&&!SB_SESSION_PROGRAMS.includes(c.program))throw new Error('Choose a valid program.');
  if(c.level&&!/^[1-9]\d{0,3}$/.test(c.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(c.level))throw new Error('Choose a valid session level.');

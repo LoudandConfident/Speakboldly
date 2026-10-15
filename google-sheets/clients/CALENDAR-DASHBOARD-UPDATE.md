@@ -3,7 +3,7 @@
 ## What students do
 
 1. Open Learning Hub → Calendar. No calendar password is required.
-2. Choose Placement test (30 minutes), Session (90 minutes), or Trial session (90 minutes).
+2. Choose Placement test (30 minutes), Session (90 minutes, or 60 minutes for English Momentum), or Trial session (90 minutes).
 3. Choose a date and start time within the rolling six-week window. Placement start times are 30 minutes apart inside your existing available hours.
 4. Enter their name, email, program and payment status.
 5. Send the payment screenshot separately to **speakboldly16@gmail.com**, including name, program, date and time. If payment is not required, they can select that answer.
@@ -27,3 +27,11 @@ Students see available and taken times without names. Accepted appointments also
 6. Refresh the website or reopen the installed app. Submit a test request with your own email, then accept or decline it in the instructor dashboard.
 
 No setup rerun is needed for an already connected calendar. **Registration requests** and **Calendar availability** are created automatically when first used. Dimming a day blocks new requests and approvals without deleting existing appointments. The six-week boundary is checked by the server. Reports and examination scores remain private, and sending final reports is still manual.
+
+## Temporary uploads and new programs
+
+On a device already connected to your private Google Sheet, open Learning Hub, choose Material, Listening, Activities, or Examinations, and choose the level. You can upload without entering the student passcode. Choose files, then Upload files. Uploaded documents start dimmed; use Instructor Portal → Dim / Undim to open them for students. Students do not receive upload controls.
+
+Multiple files upload one at a time. The limit is 5 MB per file; use Upload large files in Drive for larger documents. These controls are temporary and can be removed when your uploads are finished.
+
+The new Session filter contains One Session and Make-up / revision session. Make-up / revision is for enrolled clients only: 90 minutes, EGP 350. English Momentum has 16 one-hour sessions over four weeks, four days a week, for EGP 3,500 instead of EGP 4,000. Deploy the updated complete script to add these programs to booking and instructor calendars and count English Momentum appointments as one hour.

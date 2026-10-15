@@ -64,7 +64,7 @@ function handlePublicBooking(data){
  const lock=LockService.getScriptLock();
  try{
   const auth=sbBookingAuth(data);
-  if(data.action==='studentBookingLogin')return sbExamResponse({ok:true,...auth,registrationVersion:1,paymentEmail:SB_PAYMENT_EMAIL,programs:SB_SESSION_PROGRAMS.filter(program=>!['Assessment','Trial session'].includes(program))});
+  if(data.action==='studentBookingLogin')return sbExamResponse({ok:true,...auth,registrationVersion:1,paymentEmail:SB_PAYMENT_EMAIL,programDurations:{'English Momentum':60},programs:SB_SESSION_PROGRAMS.filter(program=>!['Assessment','Trial session'].includes(program))});
   lock.waitLock(20000);const book=sbExamBook();if(!book.getSheetByName('Sessions'))throw new Error('The instructor needs to set up the calendar first.');
   if(data.action==='studentBookingCalendar')return sbExamResponse(sbRegistrationCalendar(data,book));
   if(data.action==='studentRegisterSlot')return sbExamResponse(sbSubmitRegistration(data,book));

@@ -1,4 +1,4 @@
-import {learningDocumentCategory} from './learning-document-cards.js?v=activities';
+import {learningDocumentCategory} from './learning-document-cards.js?v=momentum-and-uploads';
 export const LEARNING_HUB_SECTIONS=[
  {id:'exams',title:'Examinations'},
  {id:'listening',title:'Listening'},

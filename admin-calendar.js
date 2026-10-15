@@ -1,6 +1,6 @@
 import {removedPortalClientIds} from './requested-client-cleanup.js';
 import {confirmClientEmail} from './client-email-confirmation.js?v=calendar-popup';
-import {SESSION_PROGRAMS,SESSION_TYPES,calendarProgramForType,nextSessionNumber,suggestedSessionProgram} from './session-programs.js?v=appointment-types';
+import {SESSION_PROGRAMS,SESSION_TYPES,calendarProgramForType,nextSessionNumber,suggestedSessionProgram} from './session-programs.js?v=momentum-and-uploads';
 import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {ownerConnected,request} from './exam-api.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
