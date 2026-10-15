@@ -1,0 +1,196 @@
+{
+  "level": 8,
+  "title": "Level 8",
+  "version": 2,
+  "totalMarks": 40,
+  "questions": [
+    {
+      "number": 1,
+      "question": "Were the policy ___ without consultation, opposition would be likely.",
+      "options": [
+        "introduced",
+        "introducing",
+        "introduce"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "The report is valuable, ___ its limitations.",
+      "options": [
+        "although",
+        "despite",
+        "however"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "He spoke as though he ___ the outcome in advance.",
+      "options": [
+        "knows",
+        "would know",
+        "had known"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "Little ___ that the decision would change the entire project.",
+      "options": [
+        "did they realise",
+        "they realised",
+        "they had realised"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "The recommendation is contingent ___ independent verification.",
+      "options": [
+        "to",
+        "on",
+        "at"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "The committee demanded that every source ___ disclosed.",
+      "options": [
+        "was",
+        "is",
+        "be"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "Scarcely had the discussion ended ___ a new objection arose.",
+      "options": [
+        "when",
+        "than",
+        "that"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "What matters is not speed ___ the reliability of the result.",
+      "options": [
+        "and",
+        "but",
+        "nor"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "The claim cannot be accepted without ___ evidence.",
+      "options": [
+        "corroborate",
+        "corroboration",
+        "corroborating"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "Should further evidence emerge, the conclusion ___ revised.",
+      "options": [
+        "may need to be",
+        "needed being",
+        "has needing to be"
+      ]
+    }
+  ],
+  "sections": {
+    "D": {
+      "title": "B. Complete the sentences",
+      "intro": [
+        "Complete each sentence with one word."
+      ],
+      "questions": [
+        "1. The conclusion is subject ___ independent review.",
+        "2. Were it not ___ the additional data, the claim would be convincing.",
+        "3. The board insisted that the decision ___ postponed. (be)",
+        "4. Hardly had we finished ___ another question arose.",
+        "5. The evidence is insufficient to ___ a firm conclusion. (draw)"
+      ]
+    },
+    "B": {
+      "title": "C. Correct the mistake",
+      "intro": [
+        "Rewrite each sentence correctly."
+      ],
+      "questions": [
+        "1. Were the results be different, we would reconsider.",
+        "2. The committee demanded that the source was disclosed.",
+        "3. Scarcely had she arrived than the meeting began.",
+        "4. The claim, that lacks supporting evidence, is misleading.",
+        "5. He spoke as if he has known the answer all along."
+      ]
+    },
+    "C": {
+      "title": "D. Reading comprehension",
+      "intro": [
+        "A university library tested an automated tool that produced short answers to students’ research questions. In the first demonstration, the answers sounded confident and included detailed references. Some staff initially assumed that the presence of references made the answers dependable.",
+        "A later audit found that several references were inaccurate and two did not exist. Other answers were correct but omitted evidence that challenged the conclusion. The auditors argued that fluency and apparent precision were poor substitutes for checking sources and representing uncertainty. They did not conclude that the tool had no value; rather, they questioned the conditions under which its output should be trusted.",
+        "The library kept the tool for suggesting search terms and outlining possible questions. However, it required students to open original sources, verify quotations and distinguish a source’s findings from their own interpretations. Staff also recorded the tool’s recurring errors so that future evaluations could assess reliability across different subjects instead of relying on a persuasive demonstration."
+      ],
+      "questions": [
+        {
+          "question": "What initially encouraged some staff to trust the answers?",
+          "options": [
+            "The students’ final grades",
+            "The detailed-looking references",
+            "An independent audit"
+          ]
+        },
+        {
+          "question": "What did the audit discover?",
+          "options": [
+            "Every answer was false",
+            "The tool could not produce fluent language",
+            "Some references were inaccurate or nonexistent"
+          ]
+        },
+        {
+          "question": "What did the auditors question?",
+          "options": [
+            "The conditions under which the output could be trusted",
+            "Whether students should ever ask questions",
+            "Whether libraries should have staff"
+          ]
+        },
+        {
+          "question": "Why did the library record recurring errors?",
+          "options": [
+            "To avoid future evaluations",
+            "To assess reliability across different subjects",
+            "To replace original sources"
+          ]
+        },
+        {
+          "question": "Which principle best reflects the library’s final approach?",
+          "options": [
+            "Confident language guarantees accuracy",
+            "A convincing demonstration is enough",
+            "Use the tool selectively and verify its output"
+          ]
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Paragraph writing",
+      "intro": [
+        "Write a reasoned paragraph responding to this claim: “Convenient information is not always reliable information.” State your position, discuss a counterargument, and explain how a learner or professional can make a responsible decision. Use precise language and examples. Aim for 150–180 words."
+      ],
+      "questions": []
+    },
+    "F": {
+      "title": "F. Punctuation",
+      "intro": [
+        "Rewrite each sentence with correct capitals and punctuation."
+      ],
+      "questions": [
+        "1. nevertheless the evidence is not conclusive",
+        "2. the researchers findings were published on monday",
+        "3. the report asks can we verify this claim",
+        "4. the tool has one major limitation it cannot verify its own sources",
+        "5. although the answer sounded convincing it was incorrect"
+      ]
+    }
+  }
+}

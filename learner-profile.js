@@ -1,5 +1,5 @@
 import {learnerCourseGuidance} from './assessment-guidance.js';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=green-result-card';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=result-footer';
 import {learnerProfiles,learnerQuestions,scoreLearnerProfile} from './learner-profile-data.js?v=general-learning-30';
 export function initializeLearnerProfile(doc,win){
  const root=doc.querySelector('#learner-profile');if(!root)return;

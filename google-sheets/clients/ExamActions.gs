@@ -18,7 +18,7 @@ function setupStudentExams() {
   sheet.getRange('A1:R1').setFontWeight('bold');
   let access=book.getSheetByName('Portal access');
   if(!access)access=book.insertSheet('Portal access');
-  if(!access.getLastRow()){access.appendRow(SB_PORTAL_ACCESS_HEADERS);for(let level=1;level<=6;level++)access.appendRow(['test:'+level,'tests','Level '+level,'',false]);}
+  if(!access.getLastRow()){access.appendRow(SB_PORTAL_ACCESS_HEADERS);for(let level=1;level<=8;level++)access.appendRow(['test:'+level,'tests','Level '+level,'',false]);}
   else if(JSON.stringify(access.getRange(1,1,1,5).getValues()[0])!==JSON.stringify(SB_PORTAL_ACCESS_HEADERS))throw new Error('Portal access headers differ. Existing data has not been changed.');
   access.setFrozenRows(1);access.getRange('A1:E1').setFontWeight('bold');
   let sessions=book.getSheetByName('Exam sessions');
@@ -49,24 +49,25 @@ function sbPortalWeek(){
 }
 function sbMonthlyPortalPasswords(){
  const props=PropertiesService.getScriptProperties(),secret=props.getProperty('CLIENT_SYNC_KEY');if(!secret)throw new Error('Connect your Clients sheet first.');
- const month=sbPortalWeek(),groups=[...Array.from({length:8},(_,i)=>'material:'+(i+1)),...Array.from({length:8},(_,i)=>'exams:'+(i+1)),'activities','listening'],passwords={};let saved={};try{saved=JSON.parse(props.getProperty('SB_MONTHLY_PASSWORD_OVERRIDES')||'{}');}catch{}
+ const month=sbPortalWeek(),groups=[...Array.from({length:8},(_,i)=>'material:'+(i+1)),'exams','exercises','activities','listening'],passwords={};let saved={};try{saved=JSON.parse(props.getProperty('SB_MONTHLY_PASSWORD_OVERRIDES')||'{}');}catch{}
  const overrides=saved.monthStart===month.start?saved.values||{}:{},used=new Set(Object.values(overrides));
  for(const group of groups){if(overrides[group]){passwords[group]=overrides[group];continue;}const bytes=Utilities.computeHmacSha256Signature('Speak Boldly monthly password:'+month.start+':'+group,secret);let number=0;for(const byte of bytes)number=(number*256+(byte&255))%900000;while(used.has(String(100000+number)))number=(number+1)%900000;passwords[group]=String(100000+number);used.add(passwords[group]);}
  return {monthStart:month.start,nextChange:month.next,passwords};
 }
-function sbPortalPasswordRevision(){let saved={};try{saved=JSON.parse(PropertiesService.getScriptProperties().getProperty('SB_MONTHLY_PASSWORD_OVERRIDES')||'{}');}catch{}const month=sbPortalWeek().start;return month+':monthly-v3:'+(saved.monthStart===month?saved.revision||'':'');}
+function sbPortalPasswordRevision(){let saved={};try{saved=JSON.parse(PropertiesService.getScriptProperties().getProperty('SB_MONTHLY_PASSWORD_OVERRIDES')||'{}');}catch{}const month=sbPortalWeek().start;return month+':monthly-v4:'+(saved.monthStart===month?saved.revision||'':'');}
 function sbSaveMonthlyPortalPassword(data){
  const current=sbMonthlyPortalPasswords(),group=String(data.group||''),password=String(data.password||'');if(data.monthStart!==current.monthStart)throw new Error('The month changed. Refresh the passwords first.');if(!Object.prototype.hasOwnProperty.call(current.passwords,group)||!/^\d{6}$/.test(password))throw new Error('Choose a folder and enter a six-digit password.');if(Object.entries(current.passwords).some(([key,value])=>key!==group&&value===password))throw new Error('Use a different password from the other folders.');
  const props=PropertiesService.getScriptProperties();let saved={};try{saved=JSON.parse(props.getProperty('SB_MONTHLY_PASSWORD_OVERRIDES')||'{}');}catch{}const values=saved.monthStart===current.monthStart?saved.values||{}:{};values[group]=password;props.setProperty('SB_MONTHLY_PASSWORD_OVERRIDES',JSON.stringify({monthStart:current.monthStart,values,revision:Utilities.getUuid()}));return sbMonthlyPortalPasswords();
 }
-function sbWeeklyPortalPasswords(){const monthly=sbMonthlyPortalPasswords(),passwords={...monthly.passwords};for(let level=1;level<=8;level++)passwords['level:'+level]=passwords['material:'+level];for(const group of ['exercises','practice','exercise:comprehension','exercise:resources'])passwords[group]=passwords.activities;passwords['exercise:listening']=passwords.listening;passwords.material=passwords['material:1'];passwords.assessments=passwords['exams:1'];passwords.calendar=passwords.activities;return {...monthly,weekStart:monthly.monthStart,passwords};}
+function sbWeeklyPortalPasswords(){const monthly=sbMonthlyPortalPasswords(),passwords={...monthly.passwords};for(let level=1;level<=8;level++)passwords['level:'+level]=passwords['material:'+level];for(const group of ['practice','exercise:comprehension','exercise:resources'])passwords[group]=passwords.activities;passwords['exercise:listening']=passwords.listening;passwords.material=passwords['material:1'];passwords.assessments=passwords.exams;passwords.calendar=passwords.activities;return {...monthly,weekStart:monthly.monthStart,passwords};}
 function sbLearningLevelAccess(){const raw=PropertiesService.getScriptProperties().getProperty('SB_LEARNING_LEVEL_ACCESS');let saved={};try{saved=JSON.parse(raw||'{}');}catch{}return Object.fromEntries(Array.from({length:8},(_,i)=>[String(i+1),saved[String(i+1)]!==false]));}
 function sbLearningItemLevel(item){const match=String(item.title||'').match(/(?:^|[^a-z0-9])level[\s_-]*([1-8])(?:[^0-9]|$)/i);return match?Number(match[1]):null;}
 function sbPortalFolderGroup(key){
- if(/^(material|exams):[1-8]$/.test(key)||['activities','listening'].includes(key))return key;
+ if(key==='exams'||/^exams:[1-8]$/.test(key))return 'exams';
+ if(/^(material|exams):[1-8]$/.test(key)||['exercises','activities','listening'].includes(key))return key;
  if(/^level:[1-8]$/.test(key))return 'material:'+key.split(':')[1];
  if(['exercise:listening','program:listening'].includes(key))return 'listening';
- if(['exercises','practice','exercise:comprehension','exercise:resources','program:comprehension'].includes(key))return 'activities';
+ if(['practice','exercise:comprehension','exercise:resources','program:comprehension'].includes(key))return 'activities';
  if(key==='material'||/^program:[a-z][a-z0-9-]{0,60}$/.test(key))return 'material:1';
  throw new Error('Choose a valid folder.');
 }
@@ -77,7 +78,8 @@ function sbExamNotify(sheet,index,row){
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_EXAM_NOTIFY_EMAIL in Script Properties.');
     if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
     row[15]='sending';row[16]='';sheet.getRange(index+2,1,1,18).setValues([row]);
-    MailApp.sendEmail({to,subject:'Assessment submitted — '+String(row[2]).replace(/^'/,'')+' — Level '+row[3],body:'An interactive test has been submitted.\n\nName: '+String(row[2]).replace(/^'/,'')+'\nLevel: '+row[3]+'\nProgram: '+String(row[13]).replace(/^'/,'')+'\n\nOpen Instructor Portal → Exam Review to correct the answers and save the score.\n\nSpeak Boldly',name:'Speak Boldly'});
+    const attempt=sbExamAttempt(row),automatic=attempt.automatic;const summary=automatic?Object.entries(automatic).map(([section,mark])=>({A:'Choose',B:'Correct the mistake',C:'Comprehension',D:'Complete the sentences',F:'Punctuation'}[section]||section)+': '+mark.score+' / '+mark.outOf+(mark.complete===false?' (review needed)':'')).join('\n'):'';
+    MailApp.sendEmail({to,subject:'Assessment submitted — '+String(row[2]).replace(/^'/,'')+' — Level '+row[3],body:'An interactive test has been submitted.\n\nName: '+String(row[2]).replace(/^'/,'')+'\nLevel: '+row[3]+'\nProgram: '+String(row[13]).replace(/^'/,'')+'\n\nAutomatic section scores:\n'+summary+'\n\nWriting: awaiting your mark (out of 10). Automatic scores are provisional where review is needed.\n\nWriting response:\n'+(attempt.answers.E||'(No response)')+'\n\nAll submitted answers:\n'+JSON.stringify(attempt.answers,null,2)+'\n\nOpen Instructor Portal → Exam Review to correct the answers and save the score.\n\nSpeak Boldly',name:'Speak Boldly'});
     row[15]='sent';
   }catch(error){row[15]='failed';row[16]=sbExamSafe(error.message);}
   sheet.getRange(index+2,1,1,18).setValues([row]);
@@ -90,6 +92,7 @@ function sbExamAttempt(row) {
 const SB_EXAM_OBJECTIVE_KEYS = {"1": {"A": [1, 1, 2, [0, 1], 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 2, 1], "B": ["She works in a department store.", "Where are you from?", "I would like a coffee, please.", "There is a bank on Main Street.", "He doesn't speak Japanese.", "We were at the restaurant yesterday.", "I went to the movies last Saturday.", "She can use a computer.", "Those shirts are very expensive.", "What were you doing at 8:00 last night?"]}, "2": {"A": [1, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0], "B": ["I usually take the train to work.", "The flight will arrive at 8:30.", "How long does it take to get to the hotel?", "She is responsible for answering customer complaints.", "We didn't go on a business trip last month.", "There are too many people in this restaurant.", "This hotel is the most comfortable hotel in town.", "I feel like eating something spicy.", "I was driving home when the accident happened.", "I used to play tennis when I was younger."]}, "3": {"A": [0, [0, 1], 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0], "B": ["Have you ever gone to New York?", "I saw him yesterday.", "She has worked here for five years.", "I suggest taking a taxi.", "The museum was built in 1920.", "This bag is mine. Yours is over there.", "The agent told me to return the car with a full tank.", "I had the mechanic check the brakes.", "I haven't been to the theater lately.", "The final report has been completed."]}, "4": {"A": [1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 2, 0, 0, 1, 0, 1, 1, 0, 1], "B": ["The invitations will be sent out tomorrow.", "He said he couldn't come because he had other plans.", "If I have time, I will help you.", "She asked me if she could borrow my phone.", "I apologize for arriving late.", "The airline should have given us a refund.", "I have been working here since 2021.", "If I had more money, I would travel more.", "I wish I could save more every month.", "By the time we arrived, the meeting had already started."]}, "5": {"A": [0, [0, 1], 1, 1, 0, 1, 2, 0, 1, 0, 1, 1, 1, 0, [0, 2], 0, 1, 1, 0, 1], "B": ["I normally go to work by metro.", "While I was working in Dubai, I met my husband.", "She is responsible for organizing the weekly meetings.", "He suggested going to the gym after work.", "I stopped eating fast food because I wanted to be healthier.", "A pharmacist is a person who prepares and sells medicine.", "Before buying packaged food, read the nutrition label.", "If I were you, I would speak to a doctor.", "The tickets can be bought online.", "The article can't have been true; every fact in it was wrong."]}, "6": {"A": [0, 1, 1, 0, 0, [0, 1, 2], 1, 0, 1, 1, 0, [0, 1], 1, 0, 1, 1, 0, 0, 0, 1], "B": ["He is quite a dependable person, but he isn't as patient as his brother.", "Would you mind telling me why you want to learn Spanish?", "If I had stayed at home, I wouldn't have met my best friend.", "The recruiter recommended that I update my résumé.", "She looks like she is feeling much better today.", "The doctor advised that he rest for several days.", "We are going to get the roof repaired next week.", "It was such terrible weather that we stayed indoors.", "It is essential that the government reduce pollution immediately.", "Riding a bike is nearly as cheap as taking the bus."]}};
 function sbExamNormalizeCorrection(value){return String(value||'').normalize('NFKC').toLowerCase().replace(/[’‘]/g,"'").replace(/\bdoesn't\b/g,'does not').replace(/\bdidn't\b/g,'did not').replace(/\bcouldn't\b/g,'could not').replace(/\bwouldn't\b/g,'would not').replace(/\bisn't\b/g,'is not').replace(/\bhaven't\b/g,'have not').replace(/\bcan't\b/g,'cannot').replace(/[.,;?!]/g,'').replace(/\s+/g,' ').trim();}
 function sbExamObjectiveMarks(level,answers){
+ if(answers.examVersion===2)return sbExamV2Marks(level,answers);
  const key=SB_EXAM_OBJECTIVE_KEYS[level];if(!key)return null;
  const A=key.A.map((expected,i)=>{const accepted=Array.isArray(expected)?expected:[expected],answer=answers.A?.[i+1];return {number:i+1,accepted,answer:answer===undefined?null:answer,correct:accepted.includes(answer)};});
  const B=key.B.map((expected,i)=>{const answer=String(answers.B?.[i+1]||'');return {number:i+1,expected,answer,status:!answer.trim()?'unanswered':sbExamNormalizeCorrection(answer)===sbExamNormalizeCorrection(expected)?'correct':'review'};});
@@ -101,6 +104,7 @@ function sbStudentExamAttempt(row){
  return {id:attempt.id,clientId:attempt.clientId,name:attempt.name,level:attempt.level,status:attempt.submittedAt?'Submitted':'In progress',openedAt:attempt.openedAt,submittedAt:attempt.submittedAt,answers:attempt.answers,version:attempt.version,program:attempt.program,deadline:attempt.deadline,serverNow:attempt.serverNow,age:attempt.age};
 }
 function sbExamAnswers(value) {
+  if(value?.examVersion===2)return sbExamV2Answers(value);
   if (!value || typeof value!=='object' || Array.isArray(value)) throw new Error('Invalid answers.');
   const answers={A:{},B:{},C:{},D:'',E:''};
   for (const section of ['A','B','C']) {
@@ -130,11 +134,12 @@ function handleStudentExam(data) {
     }
     if(data.action==='studentExamLogin') {
       const requestedLevel=Number(data.level);if(!Number.isInteger(requestedLevel)||requestedLevel<1||requestedLevel>8)throw new Error('Choose a valid level.');
-      if(requestedLevel&&!sbLearningLevelAccess()[String(requestedLevel)])throw new Error('This level is currently closed by your instructor.');
-      const passcode=sbMonthlyPortalPasswords().passwords['exams:'+requestedLevel];if(String(data.passcode||'')!==passcode)throw new Error('Incorrect assessment password.');
+      
+      const passcode=sbMonthlyPortalPasswords().passwords.exams;if(String(data.passcode||'')!==passcode)throw new Error('Incorrect assessment password.');
       const name=String(data.name||'').trim(),program=String(data.program||'').trim(),age=data.age===undefined?'':Number(data.age);if(age!==''&&(!Number.isInteger(age)||age<1||age>120))throw new Error('Enter a valid age.');
-      if(!name||name.length>100||!program||program.length>100)throw new Error('Enter your name and program.');
-      const levels=items.filter(item=>item.section==='tests'&&item.enabled&&(!requestedLevel||item.id==='test:'+requestedLevel)).map(item=>Number(item.id.split(':')[1]));
+      if(!name||name.length>100||program.length>100)throw new Error('Enter your name.');
+      if(requestedLevel>8)throw new Error('Choose an available examination level (1–8).');
+      const levels=[requestedLevel];
       if(!levels.length)throw new Error('Interactive tests are currently closed. Please wait for your instructor to open your level.');
       const token=Utilities.getUuid()+Utilities.getUuid();
       const sessions=book.getSheetByName('Exam sessions');if(!sessions)throw new Error('Run setupStudentExams first.');
@@ -145,7 +150,7 @@ function handleStudentExam(data) {
     const saved=sessions&&sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,7).getValues().find(row=>String(row[0])===hash&&Number(row[4])>Date.now()):null;
     if(!saved)throw new Error('Your session expired. Ask your instructor to check your saved assessment.');
     const session={clientId:String(saved[1]),name:String(saved[2]).replace(/^'/,''),program:String(saved[3]).replace(/^'/,''),age:saved[5]||''},level=Number(data.level);
-    if(!Number.isInteger(level)||level<1||level>6)throw new Error('Choose a valid level.');
+    if(!Number.isInteger(level)||level<1||level>8)throw new Error('Choose a valid level.');
     if(saved[6]&&Number(saved[6])!==level)throw new Error('Your passcode allows only your selected level.');
     lock.waitLock(20000);
     const sheet=book.getSheetByName('Exam attempts');if(!sheet)throw new Error('The instructor needs to run setupStudentExams first.');
@@ -153,8 +158,8 @@ function handleStudentExam(data) {
     let index=rows.findIndex(row=>String(row[1])===session.clientId&&Number(row[3])===level),row=index<0?null:rows[index];
     if(!row) {
       if(data.action!=='studentExamGet')throw new Error('Open your assessment before saving it.');
-      if(!items.some(item=>item.id==='test:'+level&&item.enabled))throw new Error('This level is currently dimmed. Please wait for your instructor to open it.');
-      const now=Date.now();row=[Utilities.getUuid(),session.clientId,sbExamSafe(session.name),level,'In progress',new Date(now).toISOString(),'','','','','','',1,sbExamSafe(session.program),now+20*60*1000,'','',session.age];
+      
+      const now=Date.now();row=[Utilities.getUuid(),session.clientId,sbExamSafe(session.name),level,'In progress',new Date(now).toISOString(),'',data.examVersion===2?JSON.stringify({examVersion:2,A:{},B:{},C:{},D:{},E:'',F:{}}):'','','','','',1,sbExamSafe(session.program),now+20*60*1000,'','',session.age];
       sheet.appendRow(row);index=sheet.getLastRow()-2;
     }
     // A switch closes new starts; students already taking an exam can finish it.
@@ -187,7 +192,7 @@ function handleInstructorExam(data) {
       const item=data.item;
       if(!item||!['tests','exercises','levels'].includes(item.section)||typeof item.enabled!=='boolean'||typeof item.title!=='string'||!item.title.trim()||item.title.length>250)throw new Error('Check the portal item.');
       let id,url=String(item.url||'');
-      if(item.section==='tests'){if(!/^test:[1-6]$/.test(item.id))throw new Error('Check the test level.');id=item.id;url='';}
+      if(item.section==='tests'){if(!/^test:[1-8]$/.test(item.id))throw new Error('Check the test level.');id=item.id;url='';}
       else {if(!/^https:\/\//.test(url)||url.length>2000)throw new Error('Use a valid HTTPS file URL.');id='file:'+sbExamHash(item.section+':'+url);}
       const sheet=book.getSheetByName('Portal access');if(!sheet)throw new Error('Run setupStudentExams first.');
       const items=sbPortalItems(book),index=items.findIndex(entry=>entry.id===id),row=[id,item.section,sbExamSafe(item.title.trim()),url,item.enabled];
@@ -204,10 +209,24 @@ function handleInstructorExam(data) {
     if(!row||!row[6])throw new Error('No submitted assessment found.');
     if(data.action==='retryExamNotification'){if(row[15]==='sending')throw new Error('Email delivery is uncertain. Check your sent mail before retrying.');sbExamNotify(sheet,index,row);return sbExamResponse({ok:true,attempt:sbExamAttempt(row)});}
     if(Number(data.version)!==Number(row[12]))throw new Error('This review changed in another tab. Refresh before marking it again.');
-    const marks={};for(const section of ['A','B','C','D','E']){const mark=data.marks?.[section];if(typeof mark!=='number'||!Number.isFinite(mark)||mark<0||mark>20)throw new Error('Enter a mark from 0 to 20 for every section.');marks[section]=mark;}
+    const limits=row[7]&&JSON.parse(String(row[7])).examVersion===2?{A:10,B:5,C:5,D:5,E:10,F:5}:{A:20,B:20,C:20,D:20,E:20};const marks={};for(const [section,max]of Object.entries(limits)){const mark=data.marks?.[section];if(typeof mark!=='number'||!Number.isFinite(mark)||mark<0||mark>max)throw new Error('Enter a mark from 0 to '+max+' for section '+section+'.');marks[section]=mark;}
     const feedback=String(data.feedback||'');if(feedback.length>10000)throw new Error('Feedback too long.');
     row[4]='Reviewed';row[8]=JSON.stringify(marks);row[9]=Object.values(marks).reduce((a,b)=>a+b,0);row[10]=sbExamSafe(feedback);row[11]=new Date().toISOString();row[12]=Number(row[12])+1;
     sheet.getRange(index+2,1,1,18).setValues([row]);return sbExamResponse({ok:true,attempt:sbExamAttempt(row)});
   }catch(error){return sbExamResponse({ok:false,error:error.message});}
   finally{if(lock.hasLock())lock.releaseLock();}
+}
+
+
+const SB_EXAM_V2_KEYS = {"1": {"C": [0, 1, 2, 0, 1], "D": ["has", "went", "are", "studying", "swim"], "F": ["I live in Cairo.", "Where are you going?", "I don’t know.", "Mira said, “Hello.”", "We bought bread, milk and eggs."]}, "2": {"C": [1, 0, 2, 1, 0], "D": ["heavier", "already", "will", "for", "to"], "F": ["I live in Cairo.", "Where are you going?", "I don’t know.", "Mira said, “Hello.”", "We bought bread, milk and eggs."]}, "3": {"C": [1, 0, 2, 1, 1], "D": ["since", "built", "if", "check", "begun"], "F": ["I live in Cairo.", "Where are you going?", "I don’t know.", "Mira said, “Hello.”", "We bought bread, milk and eggs."]}, "4": {"C": [0, 1, 2, 0, 1], "D": ["would", "have", "for", "lived", "be"], "F": ["I live in Cairo.", "Where are you going?", "I don’t know.", "Mira said, “Hello.”", "We bought bread, milk and eggs."]}, "5": {"C": [0, 1, 1, 2, 0], "D": ["meeting", "breaking", "would", "be", "in"], "F": ["I live in Cairo.", "Where are you going?", "I don’t know.", "Mira said, “Hello.”", "We bought bread, milk and eggs."]}, "6": {"C": [1, 0, 2, 1, 0], "D": ["would", "be", "than", "reconsider", "being"], "F": ["I live in Cairo.", "Where are you going?", "I don’t know.", "Mira said, “Hello.”", "We bought bread, milk and eggs."]}, "7": {"A": [1, 0, 2, 0, 1, 2, 0, 1, 2, 0], "B": ["Not only was the plan expensive, but it was also impractical.", "I would rather you had told me yesterday.", "Although the evidence was limited, they made a decision.", "She objected to being excluded.", "Had I known about the delay, I would have called."], "C": [1, 0, 2, 1, 0], "D": ["than", "on", "verified", "took", "stay"], "F": ["However, the results remain uncertain.", "The manager’s decision surprised us.", "Mira asked, “Have you checked the source?”", "We need three things: time, funding and support.", "If the figures change, we will review the plan."]}, "8": {"A": [0, 1, 2, 0, 1, 2, 0, 1, 2, 0], "B": ["Were the results different, we would reconsider.", "The committee demanded that the source be disclosed.", "Scarcely had she arrived when the meeting began.", "The claim, which lacks supporting evidence, is misleading.", "He spoke as if he had known the answer all along."], "C": [1, 2, 0, 1, 2], "D": ["to", "for", "be", "when", "draw"], "F": ["Nevertheless, the evidence is not conclusive.", "The researcher’s findings were published on Monday.", "The report asks, “Can we verify this claim?”", "The tool has one major limitation: it cannot verify its own sources.", "Although the answer sounded convincing, it was incorrect."]}};
+function sbExamV2Marks(level,answers){
+ const old=SB_EXAM_OBJECTIVE_KEYS[level]||SB_EXAM_V2_KEYS[level],key=SB_EXAM_V2_KEYS[level];if(!old||!key)return null;
+ const choice=(values,section)=>{const items=values.map((expected,i)=>{const accepted=Array.isArray(expected)?expected:[expected],answer=answers[section]?.[i+1];return {number:i+1,accepted,answer:answer===undefined?null:answer,correct:accepted.includes(Number(answer))&&answer!==undefined&&answer!==''};});return {score:items.filter(x=>x.correct).length,outOf:items.length,complete:true,items};};
+ const written=(values,section,strict=false)=>{const normalize=value=>strict?String(value||'').normalize('NFKC').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/, and /g,' and ').replace(/\s+/g,' ').trim():sbExamNormalizeCorrection(value);const items=values.map((expected,i)=>{const answer=String(answers[section]?.[i+1]||'');return {number:i+1,expected,answer,status:!answer.trim()?'unanswered':normalize(answer)===normalize(expected)?'correct':section==='D'?'incorrect':'review'};});return {score:items.filter(x=>x.status==='correct').length,outOf:items.length,complete:!items.some(x=>x.status==='review'),items};};
+ return {A:choice(old.A.slice(0,10),'A'),B:written(old.B.slice(0,5),'B'),C:choice(key.C,'C'),D:written(key.D,'D'),F:written(key.F,'F',true)};
+}
+function sbExamV2Answers(value){
+ const answers={examVersion:2,A:{},B:{},C:{},D:{},E:'',F:{}};
+ for(const section of ['A','B','C','D','F']){const entries=value[section]||{};if(typeof entries!=='object'||Array.isArray(entries))throw new Error('Invalid answers.');for(const key of Object.keys(entries)){if(!/^[1-9]\d?$/.test(key)||Number(key)>(section==='A'?10:5))throw new Error('Invalid question number.');const answer=entries[key];if(section==='A'||section==='C'){if(!Number.isInteger(Number(answer))||String(answer)===''||Number(answer)<0||Number(answer)>2)throw new Error('Invalid multiple-choice answer.');answers[section][key]=Number(answer);}else{if(typeof answer!=='string'||answer.length>5000)throw new Error('Answer too long.');answers[section][key]=answer;}}}
+ if(value.E!==undefined&&(typeof value.E!=='string'||value.E.length>15000))throw new Error('Writing answer too long.');answers.E=value.E||'';if(JSON.stringify(answers).length>40000)throw new Error('Your answers are too long to save.');return answers;
 }

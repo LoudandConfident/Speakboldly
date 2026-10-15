@@ -1,0 +1,198 @@
+{
+  "level": 1,
+  "title": "Level 1",
+  "questions": [
+    {
+      "number": 1,
+      "question": "My sister _____ in a bank.",
+      "options": [
+        "work",
+        "works",
+        "working"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "_____ you from Egypt?",
+      "options": [
+        "Is",
+        "Are",
+        "Am"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "I’d like _____ orange juice, please.",
+      "options": [
+        "a",
+        "an",
+        "some"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "What _____ you like for dinner?",
+      "options": [
+        "would",
+        "do",
+        "are"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "There _____ a pharmacy next to the hotel.",
+      "options": [
+        "are",
+        "is",
+        "be"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "The bank is _____ the post office and the supermarket.",
+      "options": [
+        "between",
+        "under",
+        "at"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "Look! They _____ tennis.",
+      "options": [
+        "play",
+        "are playing",
+        "played"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "We _____ to London last year.",
+      "options": [
+        "go",
+        "went",
+        "are going"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "Where _____ you yesterday afternoon?",
+      "options": [
+        "was",
+        "were",
+        "are"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "She _____ speak English and French.",
+      "options": [
+        "can",
+        "cans",
+        "can to"
+      ]
+    }
+  ],
+  "sections": {
+    "D": {
+      "title": "B. Complete the sentences",
+      "intro": [
+        "Complete each sentence with one word."
+      ],
+      "questions": [
+        "1. She ___ breakfast at seven every day. (have)",
+        "2. Yesterday we ___ to the park. (go)",
+        "3. There ___ two chairs in the room. (be)",
+        "4. I am ___ English now. (study)",
+        "5. They can ___ very well. (swim)"
+      ]
+    },
+    "B": {
+      "title": "C. Correct the mistake",
+      "intro": [
+        "Rewrite each sentence correctly."
+      ],
+      "questions": [
+        "1. She work in a department store.",
+        "2. Where you are from?",
+        "3. I would like an coffee, please.",
+        "4. There are a bank on Main Street.",
+        "5. He don't speak Japanese."
+      ]
+    },
+    "C": {
+      "title": "D. Reading comprehension",
+      "intro": [
+        "Daniel works for a small computer company in Cairo. He is a sales assistant, and he usually starts work at nine o’clock. He speaks to customers, answers e-mails, and sometimes visits other companies. Daniel likes his job because he meets many different people.",
+        "Last Thursday was very busy. Daniel had a meeting in the morning and visited a customer after lunch. He left the office at 5:30. In the evening, he met his sister at a restaurant. They had dinner and talked about their plans for the weekend.",
+        "This weekend, Daniel is going to Alexandria with two friends. They are leaving on Friday morning by car. Daniel wants to swim and relax, but one of his friends wants to visit museums. They are coming back on Sunday evening."
+      ],
+      "questions": [
+        {
+          "question": "Where does Daniel work?",
+          "options": [
+            "A computer company in Cairo",
+            "A museum in Alexandria",
+            "A restaurant in London"
+          ]
+        },
+        {
+          "question": "Why does he like his job?",
+          "options": [
+            "He finishes at noon",
+            "He meets different people",
+            "He works alone"
+          ]
+        },
+        {
+          "question": "What did he do on Thursday morning?",
+          "options": [
+            "He went swimming",
+            "He drove to Alexandria",
+            "He had a meeting"
+          ]
+        },
+        {
+          "question": "Who is travelling with him?",
+          "options": [
+            "Two friends",
+            "His sister",
+            "His customers"
+          ]
+        },
+        {
+          "question": "When will they return?",
+          "options": [
+            "Friday morning",
+            "Sunday evening",
+            "Thursday afternoon"
+          ]
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Paragraph writing",
+      "intro": [
+        "Write a short paragraph about yourself and your life. Include information about:",
+        "• your name and where you are from\n• your work or studies and what you usually do\n• something you did last weekend\n• something you are doing or planning for next weekend\n• one activity you can do well",
+        "Use complete sentences and connect your ideas."
+      ],
+      "questions": []
+    },
+    "F": {
+      "title": "F. Punctuation",
+      "intro": [
+        "Rewrite each sentence with correct capitals and punctuation."
+      ],
+      "questions": [
+        "1. i live in cairo",
+        "2. where are you going",
+        "3. i dont know",
+        "4. mira said hello",
+        "5. we bought bread milk and eggs"
+      ]
+    }
+  },
+  "version": 2,
+  "totalMarks": 40
+}

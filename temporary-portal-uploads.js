@@ -9,7 +9,7 @@ export function attachTemporaryPortalUploads(doc) {
  const owner=getTemporaryOwnerConnection(doc);
  if(!owner||owner.endpoint!==expected||typeof owner.key!=='string'||!owner.key)return;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
- const targets=[...root.querySelectorAll('[data-learning-level]')].map(panel=>[panel,panel.dataset.learningCategory==='exams'?'exams':panel.dataset.learningCategory==='material'?'material':panel.dataset.learningCategory==='listening'?'listening':'exercises',['material','exams'].includes(panel.dataset.learningCategory)?'levels':'exercises',panel.dataset.learningLevel+':'+panel.dataset.learningCategory]);
+ const targets=[...root.querySelectorAll('[data-learning-level]')].filter(panel=>panel.dataset.learningCategory!=='exams').map(panel=>[panel,panel.dataset.learningCategory==='exams'?'exams':panel.dataset.learningCategory==='material'?'material':panel.dataset.learningCategory==='listening'?'listening':'exercises',['material','exams'].includes(panel.dataset.learningCategory)?'levels':'exercises',panel.dataset.learningLevel+':'+panel.dataset.learningCategory]);
  for(const [id,section,group,folderKey]of targets) {
   const panel=typeof id==='string'?root.querySelector('#'+id):id;if(!panel||panel.querySelector(':scope>.temporary-portal-uploads'))continue;
   const controls=doc.createElement('div');controls.className='temporary-portal-uploads teacher-library-controls';

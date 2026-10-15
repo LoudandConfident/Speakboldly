@@ -1,4 +1,4 @@
-import {renderBookingRequestCards} from './booking-request-cards.js?v=registration-approval';
+import {renderBookingRequestCards} from './booking-request-cards.js?v=booking-pages';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 export function initializeInstructorOverview(doc,isUnlocked,actions={}){
  const host=doc.querySelector('#admin-overview');if(!host)return;
@@ -14,7 +14,7 @@ export function initializeInstructorOverview(doc,isUnlocked,actions={}){
   try{const url=new URL(data.zoomUrl);if(url.protocol==='https:'){const zoom=el('a','Open Zoom');zoom.href=url.href;zoom.target='_blank';zoom.rel='noopener noreferrer';zoom.className='button light small';root.append(zoom);}}catch{}
   renderBookingRequestCards(doc,root,data.registrationRequests||[],isUnlocked,actions.getClients?.()||[]);
   root.append(el('h3','Pending work'));
-  const reviews=data.pendingReviews||[],reports=data.reportsToPrepare||[],prepared=data.preparedReports||[];
+  const reviews=[],reports=data.reportsToPrepare||[],prepared=data.preparedReports||[];
   if(!reviews.length&&!reports.length&&!prepared.length&&!data.drafts?.length)root.append(el('p','No pending work.'));
   if(reviews.length)root.append(button(reviews.length+' examination'+(reviews.length===1?'':'s')+' to review',()=>actions.openReview?.()));
   for(const item of reports)root.append(item.clientId?button('Prepare final report · '+item.name+' · Level '+item.level,()=>actions.openReport?.(item.clientId,'final')):el('p','Final report to prepare: '+item.name+' · Level '+item.level+' — add or select their client record.'));

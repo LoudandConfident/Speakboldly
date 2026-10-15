@@ -1,0 +1,196 @@
+{
+  "level": 7,
+  "title": "Level 7",
+  "version": 2,
+  "totalMarks": 40,
+  "questions": [
+    {
+      "number": 1,
+      "question": "Not until the figures were checked ___ the error.",
+      "options": [
+        "we noticed",
+        "did we notice",
+        "we had noticed"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "The proposal, ___ merits are still being debated, needs further work.",
+      "options": [
+        "whose",
+        "which",
+        "that"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "I would rather you ___ the client before making a promise.",
+      "options": [
+        "consult",
+        "will consult",
+        "consulted"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "Had the warning been ignored, the outcome ___ worse.",
+      "options": [
+        "would have been",
+        "will be",
+        "was"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "The evidence is inconclusive; ___, further research is necessary.",
+      "options": [
+        "however",
+        "therefore",
+        "instead"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "She is believed ___ the documents before the meeting began.",
+      "options": [
+        "reviewing",
+        "to review",
+        "to have reviewed"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "No matter how persuasive the argument ___, we should check the facts.",
+      "options": [
+        "is",
+        "will",
+        "being"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "The manager objected to ___ excluded from the decision.",
+      "options": [
+        "be",
+        "being",
+        "have"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "What the team needs ___ a clearer set of priorities.",
+      "options": [
+        "are",
+        "have",
+        "is"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "If only we ___ the risks before signing the contract.",
+      "options": [
+        "had assessed",
+        "assess",
+        "would assess"
+      ]
+    }
+  ],
+  "sections": {
+    "D": {
+      "title": "B. Complete the sentences",
+      "intro": [
+        "Complete each sentence with one word."
+      ],
+      "questions": [
+        "1. No sooner had the meeting begun ___ the alarm rang.",
+        "2. He insisted ___ checking the original source.",
+        "3. The results need to be ___ independently. (verify)",
+        "4. It is high time we ___ action. (take)",
+        "5. She would rather ___ at home tonight. (stay)"
+      ]
+    },
+    "B": {
+      "title": "C. Correct the mistake",
+      "intro": [
+        "Rewrite each sentence correctly."
+      ],
+      "questions": [
+        "1. Not only the plan was expensive, but it was also impractical.",
+        "2. I would rather you tell me yesterday.",
+        "3. Despite the evidence was limited, they made a decision.",
+        "4. She objected to be excluded.",
+        "5. Had I knew about the delay, I would have called."
+      ]
+    },
+    "C": {
+      "title": "D. Reading comprehension",
+      "intro": [
+        "A company introduced a four-day working week as a six-month experiment. Employees kept their existing salaries, but teams had to redesign meetings and agree on service cover. The aim was to reduce unnecessary work rather than compress five unchanged days into four.",
+        "At the end of the trial, staff reported lower stress and fewer interruptions. Sales remained stable, although customer waiting times increased during two unusually busy weeks. The managers acknowledged that the trial coincided with a quieter season, so stable sales alone could not prove that the new schedule was more productive.",
+        "Instead of announcing a permanent change immediately, the company extended the trial into its busiest quarter. It also collected customer feedback and compared results with a similar team that had kept the old schedule. The managers hoped that these additional comparisons would help distinguish the effects of the schedule from other influences."
+      ],
+      "questions": [
+        {
+          "question": "What was the experiment intended to reduce?",
+          "options": [
+            "Employees’ salaries",
+            "Unnecessary work",
+            "Customer demand"
+          ]
+        },
+        {
+          "question": "Why did the managers treat the sales figures cautiously?",
+          "options": [
+            "The trial took place in a quieter season",
+            "Sales had doubled",
+            "No figures were available"
+          ]
+        },
+        {
+          "question": "Which problem occurred during two busy weeks?",
+          "options": [
+            "Employees lost their salaries",
+            "The office closed",
+            "Customers waited longer"
+          ]
+        },
+        {
+          "question": "Why compare results with a team on the old schedule?",
+          "options": [
+            "To remove the need for customer feedback",
+            "To help separate the schedule’s effects from other factors",
+            "To prove all teams are identical"
+          ]
+        },
+        {
+          "question": "Which description best fits the managers’ approach?",
+          "options": [
+            "Cautious and evidence-seeking",
+            "Certain that the experiment had failed",
+            "Uninterested in customer experience"
+          ]
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Paragraph writing",
+      "intro": [
+        "Write a connected paragraph evaluating a change at work or in education. Explain its intended benefit, one possible disadvantage, what evidence you would collect, and the conditions under which you would recommend it. Use a clear position and supporting reasons. Aim for 120–160 words."
+      ],
+      "questions": []
+    },
+    "F": {
+      "title": "F. Punctuation",
+      "intro": [
+        "Rewrite each sentence with correct capitals and punctuation."
+      ],
+      "questions": [
+        "1. however the results remain uncertain",
+        "2. the managers decision surprised us",
+        "3. mira asked have you checked the source",
+        "4. we need three things time funding and support",
+        "5. if the figures change we will review the plan"
+      ]
+    }
+  }
+}

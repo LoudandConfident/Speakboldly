@@ -1,0 +1,200 @@
+{
+  "level": 4,
+  "title": "Level 4",
+  "questions": [
+    {
+      "number": 1,
+      "question": "The company anniversary party _____ at the Grand Hotel next Friday.",
+      "options": [
+        "will hold",
+        "will be held",
+        "is holding"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "“Would you care to join us for dinner?” is a _____ invitation.",
+      "options": [
+        "formal",
+        "careless",
+        "negative"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "Laura said she _____ a previous engagement and couldn’t attend.",
+      "options": [
+        "has",
+        "had",
+        "will have"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "If the invitation says “black tie,” you _____ wear formal clothes.",
+      "options": [
+        "should",
+        "would have",
+        "used to"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "If I finish the report early, I _____ you with the presentation.",
+      "options": [
+        "helped",
+        "will help",
+        "would help"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "He asked if he _____ borrow my laptop for the afternoon.",
+      "options": [
+        "could",
+        "can",
+        "will"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "I promise I’ll send you the documents _____ 24 hours.",
+      "options": [
+        "within",
+        "since",
+        "during"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "I’m sorry _____ missing your call yesterday.",
+      "options": [
+        "for",
+        "about to",
+        "of"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "Online prices are getting _____ competitive.",
+      "options": [
+        "more and more",
+        "most and most",
+        "much and much"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "The replacement product is very similar _____ the original one.",
+      "options": [
+        "with",
+        "to",
+        "from"
+      ]
+    }
+  ],
+  "sections": {
+    "D": {
+      "title": "B. Complete the sentences",
+      "intro": [
+        "Complete each sentence with one word."
+      ],
+      "questions": [
+        "1. If I had more time, I ___ travel more.",
+        "2. You should ___ told me earlier.",
+        "3. She apologised ___ arriving late.",
+        "4. I wish I ___ closer to work. (live)",
+        "5. The report will ___ sent tomorrow."
+      ]
+    },
+    "B": {
+      "title": "C. Correct the mistake",
+      "intro": [
+        "Rewrite each sentence correctly."
+      ],
+      "questions": [
+        "1. The invitations will send out tomorrow.",
+        "2. He said he can't come because he had other plans.",
+        "3. If I will have time, I will help you.",
+        "4. She asked me if she can borrow my phone.",
+        "5. I apologize about arriving late."
+      ]
+    },
+    "C": {
+      "title": "D. Reading comprehension",
+      "intro": [
+        "Last month, Maya traveled to Vancouver for an international conference on renewable energy. She had been looking forward to the trip because she has been working on environmental projects for several years. Unfortunately, her journey did not begin well. The flight she was booked on was canceled because of bad weather, and the airline could not offer another flight until the following morning.",
+        "Maya was disappointed with the way the situation was handled. She felt the airline should have provided clearer information and accommodation for passengers who had been delayed overnight. She submitted a complaint online and was later offered a travel voucher.",
+        "By the time Maya arrived in Vancouver, the opening session had already finished. However, she attended the rest of the conference and met several experts in solar and wind energy. One speaker explained that although renewable energy systems can be expensive at first, costs have been falling thanks to improvements in technology.",
+        "After returning home, Maya gave her manager an update. She said the conference had been useful and suggested that her company invest more in energy-saving equipment. If the company had a larger environmental budget, she said, it could make several changes immediately."
+      ],
+      "questions": [
+        {
+          "question": "Why was Maya’s flight cancelled?",
+          "options": [
+            "Bad weather",
+            "A booking error",
+            "A strike"
+          ]
+        },
+        {
+          "question": "What did she receive after complaining?",
+          "options": [
+            "A cash payment",
+            "A travel voucher",
+            "A new passport"
+          ]
+        },
+        {
+          "question": "What had finished when she arrived?",
+          "options": [
+            "The entire conference",
+            "Her meeting at home",
+            "The opening session"
+          ]
+        },
+        {
+          "question": "Why have renewable-energy costs fallen?",
+          "options": [
+            "Improved technology",
+            "Reduced interest in energy",
+            "A ban on wind farms"
+          ]
+        },
+        {
+          "question": "What did Maya recommend?",
+          "options": [
+            "Cancel all projects",
+            "Invest in energy-saving equipment",
+            "Move the company abroad"
+          ]
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Paragraph writing",
+      "intro": [
+        "Write about ONE of the following situations:",
+        "Option 1: Describe a problem you had with a product, hotel, airline, service, or purchase. Explain what happened, how you felt, what the company should have done, and how the problem was solved.",
+        "Option 2: Imagine you want to make an important change in your life, career, finances, or environment. Explain what you would change, why, and what you would do if you had the opportunity.",
+        "Use connected paragraphs and appropriate Level 4 grammar and vocabulary."
+      ],
+      "questions": []
+    },
+    "F": {
+      "title": "F. Punctuation",
+      "intro": [
+        "Rewrite each sentence with correct capitals and punctuation."
+      ],
+      "questions": [
+        "1. i live in cairo",
+        "2. where are you going",
+        "3. i dont know",
+        "4. mira said hello",
+        "5. we bought bread milk and eggs"
+      ]
+    }
+  },
+  "version": 2,
+  "totalMarks": 40
+}

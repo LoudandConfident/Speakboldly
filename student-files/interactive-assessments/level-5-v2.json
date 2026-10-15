@@ -1,0 +1,199 @@
+{
+  "level": 5,
+  "title": "Level 5",
+  "questions": [
+    {
+      "number": 1,
+      "question": "I _____ travel for work, but I’m staying in Cairo this month.",
+      "options": [
+        "routinely",
+        "right now",
+        "yesterday"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "While I _____ in London, I met one of my closest friends.",
+      "options": [
+        "worked",
+        "was working",
+        "have worked"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "She’s responsible _____ training new employees.",
+      "options": [
+        "to",
+        "for",
+        "with"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "I’m not accustomed to _____ such long hours.",
+      "options": [
+        "work",
+        "working",
+        "worked"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "Our company is one of _____ manufacturers in the region.",
+      "options": [
+        "the leading",
+        "more leading",
+        "most lead"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "I enjoy _____ outdoors when the weather is good.",
+      "options": [
+        "exercise",
+        "exercising",
+        "to exercising"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "We agreed _____ at the station at six.",
+      "options": [
+        "meeting",
+        "meet",
+        "to meet"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "I stopped _____ coffee because it was affecting my sleep.",
+      "options": [
+        "drinking",
+        "to drink",
+        "drink"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "A microwave is an appliance _____ cooks food quickly.",
+      "options": [
+        "who",
+        "that",
+        "where"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "Before _____ a food product, always check the label.",
+      "options": [
+        "buying",
+        "buy",
+        "bought"
+      ]
+    }
+  ],
+  "sections": {
+    "D": {
+      "title": "B. Complete the sentences",
+      "intro": [
+        "Complete each sentence with one word."
+      ],
+      "questions": [
+        "1. I look forward to ___ you. (meet)",
+        "2. He denied ___ the window. (break)",
+        "3. If I were you, I ___ accept the offer.",
+        "4. The tickets can ___ bought online.",
+        "5. She is interested ___ learning about nutrition."
+      ]
+    },
+    "B": {
+      "title": "C. Correct the mistake",
+      "intro": [
+        "Rewrite each sentence correctly."
+      ],
+      "questions": [
+        "1. I am normally going to work by metro.",
+        "2. While I worked in Dubai, I was meeting my husband.",
+        "3. She is responsible to organize the weekly meetings.",
+        "4. He suggested to go to the gym after work.",
+        "5. I stopped to eat fast food because I wanted to be healthier."
+      ]
+    },
+    "C": {
+      "title": "D. Reading comprehension",
+      "intro": [
+        "Three years ago, Daniel moved from Brazil to Canada for a new job. At first, he was excited about living abroad. He enjoyed exploring the city, meeting new colleagues, and trying unfamiliar food. After a few months, however, he began to feel homesick. He missed his family, the warm weather, and speaking Portuguese every day.",
+        "Daniel decided that he needed to make some changes. A coworker suggested joining a local sports club, so he started playing volleyball twice a week. He also began cooking Brazilian meals for friends. If he felt lonely at the weekend, he would video-call his family or invite someone out for coffee. Gradually, Canada began to feel more like home.",
+        "Last summer, Daniel’s parents visited him. Before arriving, they had made all their travel arrangements online. Daniel showed them several famous sights, including a historic building that was constructed in the nineteenth century. His parents were impressed by how comfortable he had become in his new country.",
+        "Daniel says that living abroad has taught him to be more independent. He still misses Brazil now and then, but he no longer regrets moving. In fact, if a friend asked him whether they should live abroad for a while, he would recommend trying it."
+      ],
+      "questions": [
+        {
+          "question": "What did Daniel’s coworker suggest?",
+          "options": [
+            "Joining a sports club",
+            "Returning to Brazil",
+            "Changing his job"
+          ]
+        },
+        {
+          "question": "How did his parents arrange their trip?",
+          "options": [
+            "Through a neighbour",
+            "Online",
+            "At the airport"
+          ]
+        },
+        {
+          "question": "What did he show his parents?",
+          "options": [
+            "A newly built stadium",
+            "A nineteenth-century building",
+            "A factory"
+          ]
+        },
+        {
+          "question": "What has living abroad taught him?",
+          "options": [
+            "To avoid new people",
+            "To stop travelling",
+            "To be more independent"
+          ]
+        },
+        {
+          "question": "What advice would he give?",
+          "options": [
+            "Try living abroad",
+            "Never leave home",
+            "Only travel for work"
+          ]
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Paragraph writing",
+      "intro": [
+        "Write an opinion post about ONE of the topics below:",
+        "• Living abroad is one of the best ways to learn about another culture.\n• People should pay more attention to food labels and healthy habits.\n• Famous tourist attractions are worth visiting even when they are crowded.\n• Social media is a good place to discuss important opinions.",
+        "Clearly state your opinion, give reasons and examples, acknowledge another point of view if possible, and finish with a clear conclusion. Use appropriate Level 5 grammar and vocabulary."
+      ],
+      "questions": []
+    },
+    "F": {
+      "title": "F. Punctuation",
+      "intro": [
+        "Rewrite each sentence with correct capitals and punctuation."
+      ],
+      "questions": [
+        "1. i live in cairo",
+        "2. where are you going",
+        "3. i dont know",
+        "4. mira said hello",
+        "5. we bought bread milk and eggs"
+      ]
+    }
+  },
+  "version": 2,
+  "totalMarks": 40
+}

@@ -5,7 +5,7 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': objective
  const f=createSheetExamFixture(filename),request=f.request,owner=data=>request({key:'private-test-key',...data});
  for(const exam of LEVEL_EXAM_TEXT){const keys=f.context.SB_EXAM_OBJECTIVE_KEYS;const result=f.context.sbExamObjectiveMarks(exam.level,{A:{},B:{}});assert.equal(result.A.items.length,exam.questions.length);assert.equal(result.B.items.length,exam.sections.B.questions.length);assert.equal(result.A.score,0);assert.equal(result.B.score,0);for(const mark of result.A.items)for(const index of mark.accepted)assert(index>=0&&index<exam.questions[mark.number-1].options.length);}
  assert.equal(owner({action:'savePortalAccess',item:{id:'test:1',title:'Level 1',section:'tests',enabled:true}}).ok,true);
- const token=request({action:'studentExamLogin',level:1,passcode:f.context.sbMonthlyPortalPasswords().passwords['exams:1'],name:'Student',program:'General English'}).token;
+ const token=request({action:'studentExamLogin',level:1,passcode:f.context.sbMonthlyPortalPasswords().passwords.exams,name:'Student',program:'General English'}).token;
  let attempt=request({action:'studentExamGet',token,level:1}).attempt;
  const answers={A:{1:1,2:0,4:1},B:{1:' SHE WORKS IN A DEPARTMENT STORE! ',2:'Where do you come from?',5:'He does not speak Japanese.'},C:{1:'Reading answer'},D:'Summary',E:'Writing'};
  const receipt=request({action:'studentExamSubmit',token,level:1,attemptId:attempt.id,version:attempt.version,answers}).attempt;

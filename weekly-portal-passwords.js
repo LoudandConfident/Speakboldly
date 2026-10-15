@@ -7,7 +7,7 @@ export function initializeWeeklyPortalPasswords(doc,isUnlocked){
   const list=root.querySelector('dl');list.replaceChildren();
   for(const [group,password]of Object.entries(result.passwords)){
    const title=doc.createElement('dt'),entry=doc.createElement('dd'),form=doc.createElement('form'),input=doc.createElement('input'),save=doc.createElement('button');
-   title.textContent=group.startsWith('material:')?'Material — Level '+group.split(':')[1]:group.startsWith('exams:')?'Examinations — Level '+group.split(':')[1]:group==='activities'?'Activities — all levels':'Listening — all levels';
+   title.textContent=group.startsWith('material:')?'Material — Level '+group.split(':')[1]:group==='exams'?'Examinations — all levels':group==='exercises'?'Exercises — all levels':group==='activities'?'Activities — all levels':'Listening — all levels';
    form.className='monthly-password-form';input.value=password;input.required=true;input.pattern='[0-9]{6}';input.inputMode='numeric';input.maxLength=6;input.setAttribute('aria-label',title.textContent+' password');save.type='submit';save.className='button light small';save.textContent='Save';form.append(input,save);entry.append(form);list.append(title,entry);
    form.onsubmit=async event=>{event.preventDefault();if(!isUnlocked()||!form.reportValidity())return;save.disabled=true;const epoch=generation;try{const updated=await sheetLibraryRequest('saveMonthlyPortalPassword',{monthStart:result.monthStart,group,password:input.value});if(epoch!==generation||!isUnlocked())return;render(updated);status.textContent='Password saved for this month.';}catch(error){if(epoch===generation)status.textContent=error.message;}finally{save.disabled=false;}};
   }

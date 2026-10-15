@@ -1,5 +1,5 @@
 import {practiceForLevel} from './assessment-guidance.js';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=branded-results';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=result-footer';
 import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } from './assessment-time.js';
 import { questions, TEST_VERSION } from './placement-questions.js';
 import { scoreAnswers } from './placement-scoring.js';
@@ -107,3 +107,6 @@ function updateOffer(){document.querySelectorAll('.home-pricing-note').forEach(n
 updateOffer();setInterval(updateOffer,1000);
 startAssessment();
 renderPage();$('#year').textContent=new Date().getFullYear();render();
+
+function openRequestedPlacement(){if(location.hash!=='#placement')return;try{if(sessionStorage.getItem('speak-boldly-open-placement')!=='yes')return;sessionStorage.removeItem('speak-boldly-open-placement');}catch{return;}document.querySelector('#assessment-start')?.click();}
+window.addEventListener('hashchange',openRequestedPlacement);openRequestedPlacement();

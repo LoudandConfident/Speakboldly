@@ -1,0 +1,198 @@
+{
+  "level": 3,
+  "title": "Level 3",
+  "questions": [
+    {
+      "number": 1,
+      "question": "Have you _____ been to Italy?",
+      "options": [
+        "ever",
+        "yet",
+        "since"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "I _____ at this company for three years.",
+      "options": [
+        "worked",
+        "have worked",
+        "am working yesterday"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "We _____ the new manager at the conference last week.",
+      "options": [
+        "have met",
+        "met",
+        "meet"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "I’ve _____ finished the report.",
+      "options": [
+        "yet",
+        "just",
+        "since"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "She hasn’t called the client _____.",
+      "options": [
+        "already",
+        "yet",
+        "ever"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "I suggest _____ the museum early in the morning.",
+      "options": [
+        "visit",
+        "visiting",
+        "to visiting"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "The Taj Mahal _____ in the seventeenth century.",
+      "options": [
+        "completed",
+        "was completed",
+        "is completing"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "This painting _____ by a famous French artist.",
+      "options": [
+        "was painted",
+        "painted",
+        "was painting"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "_____ is a great way to see the countryside.",
+      "options": [
+        "Hiking",
+        "Hike",
+        "Hiked"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "That was one of _____ trips I’ve ever taken.",
+      "options": [
+        "the best",
+        "better",
+        "best"
+      ]
+    }
+  ],
+  "sections": {
+    "D": {
+      "title": "B. Complete the sentences",
+      "intro": [
+        "Complete each sentence with one word."
+      ],
+      "questions": [
+        "1. I have lived here ___ 2020.",
+        "2. The bridge was ___ in 1990. (build)",
+        "3. She asked me ___ I was ready. (if / that)",
+        "4. We had the mechanic ___ the car. (check / checked)",
+        "5. By the time we arrived, the film had ___. (begin)"
+      ]
+    },
+    "B": {
+      "title": "C. Correct the mistake",
+      "intro": [
+        "Rewrite each sentence correctly."
+      ],
+      "questions": [
+        "1. Have you ever went to New York?",
+        "2. I have seen him yesterday.",
+        "3. She has worked here since five years.",
+        "4. I suggest to take a taxi.",
+        "5. The museum was build in 1920."
+      ]
+    },
+    "C": {
+      "title": "D. Reading comprehension",
+      "intro": [
+        "Olivia has worked for an international events company for four years. She has organized conferences in several countries, but until this year she had never worked on an event in Japan. Last month, her company sent her to Tokyo to help organize a technology conference.",
+        "Before the conference, Olivia had a very busy schedule. She had the hotel staff prepare two large meeting rooms, and she asked a local printing company to print the programs. The final schedule was changed twice, but everything was ready by Friday afternoon. The conference was attended by more than 600 people.",
+        "After the event, Olivia stayed in Tokyo for two extra days. She visited several famous sights and tried Japanese food. She especially enjoyed visiting an old temple outside the city. She said the trip was so interesting that she would like to return. Next month, however, she will be working on a new project in Madrid. The project plan has already been approved, but the team still has to finish the budget."
+      ],
+      "questions": [
+        {
+          "question": "How long has Olivia worked for the company?",
+          "options": [
+            "Two months",
+            "Four years",
+            "Six years"
+          ]
+        },
+        {
+          "question": "Why did she travel to Tokyo?",
+          "options": [
+            "To help organise a technology conference",
+            "To attend a wedding",
+            "To study Japanese"
+          ]
+        },
+        {
+          "question": "Who printed the programmes?",
+          "options": [
+            "The hotel staff",
+            "Olivia’s manager",
+            "A local printing company"
+          ]
+        },
+        {
+          "question": "How many people attended?",
+          "options": [
+            "Fewer than sixty",
+            "More than six hundred",
+            "Exactly two hundred"
+          ]
+        },
+        {
+          "question": "What still needs to be finished for Madrid?",
+          "options": [
+            "The project plan",
+            "The budget",
+            "The travel diary"
+          ]
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Paragraph writing",
+      "intro": [
+        "Write about a memorable experience you have had. It may be a trip, an event, a restaurant experience, a performance, or another important experience.",
+        "Include:\n• what the experience was and when it happened\n• where it took place and who was with you\n• what happened\n• what you liked or disliked and why\n• whether you would do it again",
+        "Use both the present perfect and the simple past where appropriate. Try to use other Level 3 structures and vocabulary."
+      ],
+      "questions": []
+    },
+    "F": {
+      "title": "F. Punctuation",
+      "intro": [
+        "Rewrite each sentence with correct capitals and punctuation."
+      ],
+      "questions": [
+        "1. i live in cairo",
+        "2. where are you going",
+        "3. i dont know",
+        "4. mira said hello",
+        "5. we bought bread milk and eggs"
+      ]
+    }
+  },
+  "version": 2,
+  "totalMarks": 40
+}

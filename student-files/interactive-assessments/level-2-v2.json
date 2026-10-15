@@ -1,0 +1,198 @@
+{
+  "level": 2,
+  "title": "Level 2",
+  "questions": [
+    {
+      "number": 1,
+      "question": "I _____ to Paris next Monday. My ticket is already booked.",
+      "options": [
+        "fly",
+        "am flying",
+        "flew"
+      ]
+    },
+    {
+      "number": 2,
+      "question": "The train _____ every thirty minutes.",
+      "options": [
+        "runs",
+        "is running",
+        "ran"
+      ]
+    },
+    {
+      "number": 3,
+      "question": "How long _____ to get to the airport?",
+      "options": [
+        "does it take",
+        "it takes",
+        "is it taking"
+      ]
+    },
+    {
+      "number": 4,
+      "question": "Don’t worry. I _____ you when I arrive.",
+      "options": [
+        "call",
+        "called",
+        "will call"
+      ]
+    },
+    {
+      "number": 5,
+      "question": "Last month, I _____ a client in Dubai.",
+      "options": [
+        "meet",
+        "met",
+        "meeting"
+      ]
+    },
+    {
+      "number": 6,
+      "question": "Sara is the manager _____ is responsible for training.",
+      "options": [
+        "who",
+        "which",
+        "where"
+      ]
+    },
+    {
+      "number": 7,
+      "question": "Mr. Ali is _____ the Sales Department.",
+      "options": [
+        "in charge of",
+        "charge in",
+        "responsible of"
+      ]
+    },
+    {
+      "number": 8,
+      "question": "We don’t have _____ time to visit another museum.",
+      "options": [
+        "enough",
+        "too many",
+        "many"
+      ]
+    },
+    {
+      "number": 9,
+      "question": "You _____ take a jacket in case it gets cold.",
+      "options": [
+        "should",
+        "may to",
+        "have"
+      ]
+    },
+    {
+      "number": 10,
+      "question": "_____ I carry your bags to your room?",
+      "options": [
+        "Shall",
+        "Do",
+        "Am"
+      ]
+    }
+  ],
+  "sections": {
+    "D": {
+      "title": "B. Complete the sentences",
+      "intro": [
+        "Complete each sentence with one word."
+      ],
+      "questions": [
+        "1. This bag is ___ than that one. (heavy)",
+        "2. We have ___ booked our tickets. (already / yet)",
+        "3. If it rains, we ___ stay inside.",
+        "4. She is responsible ___ customer service.",
+        "5. I used ___ live near the station."
+      ]
+    },
+    "B": {
+      "title": "C. Correct the mistake",
+      "intro": [
+        "Rewrite each sentence correctly."
+      ],
+      "questions": [
+        "1. I am usually taking the train to work.",
+        "2. The flight will arrives at 8:30.",
+        "3. How long it takes to get to the hotel?",
+        "4. She is responsible of answering customer complaints.",
+        "5. We didn't went on a business trip last month."
+      ]
+    },
+    "C": {
+      "title": "D. Reading comprehension",
+      "intro": [
+        "Emma works for a medium-sized international company that sells medical equipment. She is responsible for customer service and often travels to meet clients. Last week, she went to Rome for a two-day business trip. Her flight was delayed, so she arrived at her hotel much later than expected.",
+        "The next morning, Emma met a client at his office. They discussed a new order and had lunch at a small restaurant nearby. Emma thought the restaurant was excellent. It was not as expensive as her hotel restaurant, and the service was much faster.",
+        "Emma is traveling again next month. She is going to Berlin for a conference. Her company has already booked her flight and a three-night stay at a hotel near the conference center. She plans to take a warm coat because the weather may be cold. If she has enough free time, she would also like to visit a museum."
+      ],
+      "questions": [
+        {
+          "question": "What does Emma’s company sell?",
+          "options": [
+            "Hotel rooms",
+            "Medical equipment",
+            "Train tickets"
+          ]
+        },
+        {
+          "question": "Why did Emma arrive late?",
+          "options": [
+            "Her flight was delayed",
+            "She missed a train",
+            "She lost her passport"
+          ]
+        },
+        {
+          "question": "What did she discuss with the client?",
+          "options": [
+            "A holiday",
+            "A job interview",
+            "A new order"
+          ]
+        },
+        {
+          "question": "Where is her next conference?",
+          "options": [
+            "Rome",
+            "Berlin",
+            "Cairo"
+          ]
+        },
+        {
+          "question": "How long is her hotel booking?",
+          "options": [
+            "Three nights",
+            "Two weeks",
+            "One night"
+          ]
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Paragraph writing",
+      "intro": [
+        "Write about a trip you took in the past OR a trip you are planning. Write a connected paragraph. Include:",
+        "• where you went / are going and why\n• how you traveled / are traveling\n• where you stayed / are going to stay\n• what happened on the trip OR what you plan to do\n• one recommendation or piece of advice for someone taking the same trip",
+        "Use a variety of Level 2 grammar and vocabulary."
+      ],
+      "questions": []
+    },
+    "F": {
+      "title": "F. Punctuation",
+      "intro": [
+        "Rewrite each sentence with correct capitals and punctuation."
+      ],
+      "questions": [
+        "1. i live in cairo",
+        "2. where are you going",
+        "3. i dont know",
+        "4. mira said hello",
+        "5. we bought bread milk and eggs"
+      ]
+    }
+  },
+  "version": 2,
+  "totalMarks": 40
+}
