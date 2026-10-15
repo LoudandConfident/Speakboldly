@@ -1,0 +1,186 @@
+# Appointments
+A later appointment|The appointment is at nine in the morning|The visitor cannot arrive before ten|ask for a later appointment|The visitor can attend without rushing
+A missing booking number|A customer calls about an appointment|The confirmation does not include a booking number|request the missing booking number|The booking can be found more easily
+Two appointments on one day|Two appointments are planned for Thursday|The first appointment may finish after the second begins|move one appointment to another day|Both appointments can receive enough time
+An interpreter request|A visitor asks for help with communication|The interpreter is only available on Monday|choose a Monday appointment|The visitor can understand the conversation more clearly
+A changed appointment location|The appointment moves to a different building|Some visitors still have the old address|send the new address to every visitor|Visitors can reach the correct building
+An appointment cancellation|A visitor no longer needs an appointment|Another person is waiting for an available time|cancel the unused appointment promptly|The time can be offered to someone else
+# Meetings
+An unclear meeting purpose|A team has a meeting every Wednesday|Nobody knows which decision is needed this week|state the decision in the invitation|Participants can prepare relevant information
+The wrong meeting link|A colleague sends an online meeting invitation|The link opens an old meeting room|replace the link and resend the invitation|Participants can join the correct meeting
+A meeting without a decision|A discussion ends after forty minutes|The group has not agreed on a next step|record the open question and assign an owner|The discussion can continue with a clear purpose
+A shorter meeting|A team reserves an hour for a small update|The update only needs fifteen minutes|shorten the meeting and share the update first|The team can use the remaining time for other work
+A missing participant|A decision is due at an afternoon meeting|The person who can approve it is unavailable|ask for approval before the meeting|The meeting can reach a useful decision
+A clear meeting summary|Six people discuss a new plan|They remember different versions of the agreement|send a short summary for everyone to check|The team can work from the same understanding
+# Transport
+A cancelled bus|A visitor plans to take the eight o'clock bus|The bus service is cancelled for the morning|compare the available travel options|The visitor can choose a practical alternative
+A ticket with the wrong date|A traveller buys a train ticket online|The ticket shows Friday instead of Saturday|check the conditions for changing the ticket|The traveller can understand the available options
+A longer walking route|A group plans to walk to a venue|The shortest route includes steps|find a route that avoids the steps|More members of the group can use the route
+A station entrance change|Work starts at the main station entrance|The usual entrance is temporarily closed|share a map of the alternative entrance|Travellers can find the station more easily
+A shared transport plan|Four colleagues attend the same event|They are making four separate travel bookings|check whether a shared booking would work|The group can compare convenience and cost
+An uncertain arrival time|A driver is delayed by heavy traffic|The person waiting has another appointment|send a realistic arrival update|The waiting person can adjust their plans
+# Hotels
+A quiet hotel room|A guest has an early interview|The assigned room is next to a noisy lift|ask whether a quieter room is available|The guest can rest before the interview
+A late hotel arrival|A train arrives after the usual check-in time|The hotel does not know when the guest will arrive|confirm the late arrival with reception|The hotel can prepare for the guest
+A hotel invoice error|A guest receives the final invoice|Breakfast appears twice on the invoice|request a review of the duplicated charge|The invoice can reflect the correct total
+A meeting space in a hotel|A small group needs a room for a discussion|The available room has fewer chairs than expected|confirm the seating arrangement before booking|The group can choose a room that fits
+An accessible hotel entrance|A guest asks about access to the hotel|The website only shows photographs of the front steps|request specific information about step-free access|The guest can make an informed booking choice
+An early checkout|A guest needs to leave before reception opens|The usual checkout process requires an in-person visit|arrange checkout in advance|The guest can leave at the required time
+# Restaurants
+A menu question|A customer chooses a dish from a menu|The description does not list all the ingredients|ask for the ingredient information|The customer can decide whether the dish is suitable
+A changed group booking|A group reserves a table for eight|Two more guests want to join|check whether the restaurant can seat ten people|The booking can reflect the correct group size
+A delayed restaurant order|Customers order before a theatre visit|The meal is taking longer than expected|ask for a realistic waiting time|The customers can decide whether to change their order
+A quieter table|Two friends want to have a conversation|Their table is beside a loud speaker|ask whether another table is available|The friends can hear each other more easily
+A separate bill request|Colleagues have lunch together|They need separate receipts for their expenses|request separate receipts before paying|Each colleague can keep the correct record
+A takeaway collection time|A customer orders food for collection|The confirmation gives no collection time|confirm when the order will be ready|The customer can plan the journey to collect it
+# Online orders
+A different product colour|A customer orders a blue folder|A green folder arrives instead|compare the delivery with the order confirmation|The customer can describe the difference accurately
+An incomplete delivery|A parcel should contain three items|Only two items are inside|report the missing item with the order reference|The seller can investigate the incomplete order
+An unclear product size|A website describes a storage box as large|The customer needs an exact width|request the measurements before ordering|The customer can check whether the box will fit
+A duplicate order|A slow website leads to two order confirmations|The customer only intended to buy one item|contact the seller about the duplicate order|The seller can explain the cancellation options
+A delivery notification error|A customer receives a delivered notification|The parcel has not arrived at the stated address|check the delivery details with the courier|The parcel can be traced using the right information
+A product review decision|A customer reads several online reviews|Some reviews discuss a different version of the product|separate reviews by product version|The customer can compare more relevant evidence
+# Shopping
+A missing price label|A shopper finds a useful notebook|The shelf does not show its price|ask for the price before choosing it|The shopper can compare the options fairly
+A suitable clothing size|A customer wants to buy a jacket as a gift|The correct size is uncertain|check the exchange conditions before buying|The customer can understand the options if the jacket does not fit
+A damaged display item|A shop has only one desk lamp left|The display lamp has a visible scratch|ask about its condition and any available alternative|The customer can decide with complete information
+A useful warranty|A customer compares two small appliances|The warranty descriptions are different|ask what each warranty covers|The customer can compare more than the purchase price
+A reserved item|A customer asks a shop to keep an item|The shop can only reserve it until closing time|confirm the collection deadline|The customer can decide whether collection is possible
+A reusable bag choice|A customer buys several heavy items|The available paper bag may not hold them securely|choose a bag that can carry the items safely|The customer can take the shopping home more reliably
+# Housing
+An apartment viewing time|A renter wants to see an apartment|The suggested viewing overlaps with work|suggest two alternative viewing times|The agent can choose an available time
+An unclear rental cost|An apartment advertisement lists a monthly price|It does not say whether building fees are included|ask for a breakdown of the monthly costs|The renter can compare the full cost
+A repair appointment|A tap needs a repair in a rented home|The repair person has no confirmed arrival window|request a clear arrival window|Someone can be available to provide access
+A shared entrance message|A building entrance will be painted|Residents have not received the access instructions|share the temporary access arrangements|Residents can enter the building with less confusion
+A property inventory|A renter receives keys to a furnished room|The written inventory leaves out a damaged chair|record the chair's condition before confirming the inventory|The record can reflect the room's actual condition
+A moving-day plan|A family books a lift for moving furniture|Another family has booked the same time|agree on separate time windows|Both families can organise the move more smoothly
+# Home services
+A clearer repair request|A customer reports a problem with a washing machine|The first message only says that it does not work|describe what happens when the machine is switched on|The repair service can understand the reported problem
+A service quotation|A customer asks for a cleaning service|The quotation does not describe which rooms are included|request a written description of the service|The customer can compare the offer with their needs
+An appointment reminder|A service visit is scheduled next week|The customer has not saved the date|send a short reminder with the agreed details|Both sides can prepare for the visit
+A replacement part|A repair needs a new part|The part number on the quotation is difficult to read|confirm the part number before approval|The correct part can be requested
+A service completion check|A technician finishes a small repair|The customer has not seen the item working|ask for a demonstration of the repaired function|The customer can check the result before the visit ends
+A key handover|A contractor needs access to a shared room|Nobody is clearly responsible for providing the key|name one person to manage access|The contractor can reach the room at the agreed time
+# Learning
+A smaller study plan|A learner plans to study for an hour each evening|The plan is difficult to maintain after work|choose a shorter activity linked to an existing routine|The learner can practise more consistently
+A useful example|A learner reads an unfamiliar explanation|The written rule does not make the meaning clear|ask for an example in a familiar situation|The learner can connect the rule with a practical use
+A better revision method|A student reads the same page many times|The ideas are still difficult to recall without looking|try recalling the ideas before checking the page|The student can notice which points need more practice
+A group study agreement|Three learners want to practise together|They have different ideas about how to use the time|agree on a short plan before starting|Everyone can contribute to the session
+A feedback priority|A learner receives several corrections|Trying to change everything at once feels confusing|choose one recurring issue for the next practice|The learner can focus on a manageable improvement
+A source for practice|A learner finds an interesting video|The speech is too fast to follow comfortably|choose a shorter section and use the transcript|The learner can work with a manageable amount of language
+# Job applications
+A clearer job application|An applicant prepares a short introduction|The first draft does not mention the skills requested in the advertisement|connect the introduction to the role requirements|The employer can see why the application is relevant
+An interview invitation|An applicant receives an interview message|The message gives a time but no time zone|confirm the time zone before accepting|Both sides can attend at the intended time
+A missing application document|An employer asks for three documents|One document is not attached to the application|send the missing document with a clear explanation|The employer can review a complete application
+A question about working hours|A candidate likes the description of a job|The advertisement does not explain the usual working hours|ask about the expected working pattern|The candidate can assess whether the role fits
+An interview example|A candidate wants to describe a useful achievement|The story includes many details but no clear result|organise the example around the action and result|The interviewer can understand the candidate's contribution
+A professional follow-up|An applicant attends an interview|The expected decision date has passed without an update|send a brief polite request for an update|The applicant can understand the current position
+# Handovers
+A missing handover owner|A colleague starts a new task during a handover|Nobody has agreed who will answer later questions|name a contact for follow-up questions|The colleague can get clarification when needed
+An unfinished task list|An employee prepares for a week away|Several tasks are only recorded in personal notes|share a list of unfinished tasks and their next steps|Other team members can continue the work
+A handover with old information|A handover document includes last month's procedure|The procedure changed earlier this week|replace the outdated instructions before sharing|The next person can follow the current process
+A shift-change update|Two shifts use the same equipment|The second shift does not know about a temporary limit|include the temporary limit in the handover|The next shift can plan around the restriction
+A project transfer|A project moves to another team|The new team has the files but not the reasons behind earlier decisions|explain the main decisions and their reasons|The new team can continue with better context
+A clear handover checklist|A team uses a long handover email|Important actions are difficult to find|separate required actions from background information|The recipient can see what needs attention first
+# Deadlines
+A realistic delivery date|A team promises a report by Friday|One required source will not be ready until Monday|explain the dependency before confirming a final date|The recipient can plan with a realistic expectation
+An early draft|A colleague needs to review a document|The complete version will arrive too close to the deadline|share an early draft with the unresolved points marked|The colleague can start a useful review sooner
+A small deadline change|A customer asks for a one-day extension|The change may affect another team's schedule|check the effect before agreeing to the extension|The teams can understand the full consequence
+A missing approval deadline|A team is ready to begin a purchase|The approval request gives no date for a response|state when the approval is needed and why|The decision-maker can judge its urgency
+A deadline reminder|A group must submit information next week|Some members have not seen the original request|send a reminder with the requirements and deadline|The group can complete the submission more reliably
+A partial delivery|A team can finish most of an order on time|A small part will be delayed|offer a partial delivery with a clear date for the rest|The customer can decide whether the arrangement is useful
+# Feedback
+Specific feedback on a presentation|A colleague asks how a presentation went|The first response only says that it was good|describe one effective part and one useful improvement|The colleague can act on the feedback
+Feedback at the right time|A team finishes a trial of a new process|The next trial is scheduled for tomorrow|share the main observations before the next trial|The team can use the feedback while it is relevant
+A confusing correction|A writer receives a note saying that a paragraph is unclear|The note does not identify the confusing point|ask which part needs a clearer explanation|The writer can make a targeted revision
+A balanced review|A manager reviews a piece of work|The discussion focuses only on mistakes|include the strengths that should be retained|The next version can preserve what already works
+A feedback disagreement|Two reviewers recommend different changes|The writer does not know which requirement has priority|compare the recommendations with the agreed purpose|The writer can choose a change for a clear reason
+Checking a revision|A colleague revises a document after feedback|Nobody has checked whether the main concern was addressed|review the changed section against the original concern|The team can evaluate the effect of the revision
+# Teamwork
+A duplicated task|Two colleagues prepare the same information|Neither knows that the other is working on it|clarify task ownership before more work is repeated|The team can use its time more effectively
+A missing contribution|A group is preparing a shared document|One section has no assigned writer|agree who will prepare the missing section|The group can complete the document
+A useful check-in|A team works separately on a joint task|Small questions are delaying several people|arrange a short check-in focused on the open questions|The team can remove shared obstacles
+A new team member's question|A new colleague notices an unfamiliar abbreviation|Everyone else assumes that its meaning is obvious|explain the abbreviation in plain language|The new colleague can take part more confidently
+A shared working agreement|A team receives messages at many different times|People have different expectations about response speed|agree on reasonable response times for different requests|The team can communicate with clearer expectations
+A contribution that was missed|A group presents the result of its work|One person's contribution is not acknowledged|update the summary to reflect everyone's contribution|The record can represent the shared work more fairly
+# Projects
+A project with a broad goal|A group agrees to improve a service|The goal is too general to guide the first task|define a small observable outcome for the first stage|The group can begin with a shared direction
+A project dependency|A design task is ready to start|The team is still waiting for the final measurements|confirm when the measurements will be available|The team can plan the start of the design work
+An expanding project request|A project has an agreed scope|A new request adds work without changing the deadline|review the effect on scope and delivery before agreeing|The team can make the trade-off explicit
+A project checkpoint|A trial project is halfway through its schedule|The group has not compared results with the original aim|hold a checkpoint using the agreed success criteria|The group can decide whether to adjust the plan
+A project assumption|A plan assumes that a room is available every week|The room booking has not been confirmed|verify the room booking before finalising the schedule|The schedule can be based on confirmed information
+A project closeout|A short project is complete|The useful lessons are still only in people's memories|record the main lessons and remaining responsibilities|The next project can use what the team learned
+# Reports
+A report for the wrong audience|A report contains detailed technical language|Its main readers are not technical specialists|explain the key findings in accessible language|More readers can understand the report's purpose
+A conclusion without support|A report recommends a major change|The supporting evidence is difficult to find|link each main recommendation to its evidence|The reader can assess the reasoning
+A report with two totals|Two sections of a report show different totals|The difference has not been explained|check the sources and explain the discrepancy|The report can present a consistent account
+A useful executive summary|A long report is ready for review|The decision-maker has limited reading time|summarise the finding and required decision at the beginning|The reader can identify the main point quickly
+An uncertain finding|A small survey suggests a possible improvement|The report describes the result as certain|state the limitations alongside the finding|The reader can judge the strength of the conclusion
+A corrected report|A published report contains a small factual error|Some recipients may continue using the original version|send a correction that clearly identifies the changed point|Recipients can update their understanding
+# Data
+A missing unit|A chart shows a sharp increase|The values do not say whether they are counts or percentages|add the correct unit to the chart|Readers can interpret the values accurately
+A changed data definition|Two teams collect information about active users|They use different definitions of active|agree on a shared definition before comparing the figures|The comparison can be more meaningful
+A small sample|A team receives positive comments from four participants|The team wants to claim that everyone prefers the change|describe the sample size when sharing the result|Readers can recognise the limits of the evidence
+A copied spreadsheet value|A spreadsheet contains an unusual total|One cell may have been copied from the wrong row|trace the value back to its source|The team can correct the record using evidence
+A missing date range|A summary gives a monthly total|It does not specify which month the total covers|label the reporting period clearly|Readers can compare the right time periods
+A chart that hides variation|An average result looks steady|The results differ widely between groups|show the relevant variation alongside the average|Readers can understand more than the single overall figure
+# Presentations
+A clearer presentation opening|A speaker begins with several background slides|The audience does not yet know why the topic matters|state the purpose and main question at the start|The audience can follow the presentation with context
+A crowded slide|A slide contains a long paragraph and several numbers|The audience cannot read it while listening|reduce the slide to the essential information|The speaker and slide can support each other
+A presentation question|An audience member asks a complicated question|The speaker is uncertain which part matters most|check the main concern before answering|The response can address the intended question
+A presentation time limit|A speaker has fifteen minutes|The prepared material would take twice as long|choose the points most relevant to the audience|The presentation can fit the available time
+An unfamiliar term|A presentation uses a specialist expression|Some listeners may not know its meaning|define the expression with a short example|More listeners can follow the next point
+A clear presentation ending|A speaker reaches the final slide|The audience has not been told what to do next|end with the main message and a specific next step|The audience can act on the presentation
+# Email
+A missing email action|A message includes a long description of a problem|It does not say what response is needed|state the requested action in a separate sentence|The recipient can respond more usefully
+An email subject line|A team sends a time-sensitive request|The subject line only says hello|write a subject that names the request and deadline|The recipient can recognise the message's purpose
+A reply to the wrong person|An email conversation includes several departments|It is unclear who should answer the latest question|name the person or team responsible for the response|The question can reach the right owner
+An attachment version|A message refers to an updated document|Two similarly named attachments are included|identify the correct file and remove the outdated copy|The recipient can use the intended version
+A calmer email tone|A draft reply is written immediately after a frustrating exchange|Its wording may make the disagreement worse|review the message for facts and a practical next step|The reply can support a more useful conversation
+A shorter email|A message repeats the same request in several paragraphs|The main action is difficult to locate|remove repetition while keeping the necessary details|The recipient can read and act more easily
+# Customer questions
+A question about a service|A customer asks what a subscription includes|The description uses general language without examples|explain the main features with a practical example|The customer can judge whether the service fits
+A customer waiting for an answer|A customer sends a question to a shared inbox|Several employees assume that someone else has replied|assign one person to answer the question|The customer can receive a clear response
+A promise that needs checking|A customer asks whether an item will arrive tomorrow|The delivery date has not been confirmed|check the date before making a promise|The customer can plan from reliable information
+A question with two meanings|A customer asks whether a booking is flexible|The word flexible could refer to time or cancellation|ask which part of the booking the customer wants to change|The answer can address the actual need
+A useful service explanation|An employee explains a new service to a customer|The explanation focuses on internal steps rather than the customer's goal|connect the service features to the customer's stated need|The customer can understand the service's relevance
+A request outside the service|A customer asks for an option the business does not provide|A direct refusal would leave the next step unclear|explain the limit and suggest an available alternative|The customer can consider a practical next option
+# Technical support
+A precise error message|A user reports that a page will not open|The support team has not seen the error message|request the exact wording of the error|The team can investigate a more specific problem
+A device difference|A page works on a laptop but not a phone|The report does not identify the phone browser|ask which device and browser were used|The support team can try the same conditions
+A repeatable problem|A user describes an occasional software error|The team does not know what happens immediately before it|record the steps leading to the error|The team can attempt to reproduce the problem
+An unavailable feature|A user cannot find a feature described in a guide|The guide refers to an older screen layout|check the current layout and update the guide|The user can follow instructions that match the screen
+An honest support update|A technical issue is taking longer to resolve|The affected users have received no recent information|share the known status and the next update time|Users can understand the current position
+A support case closure|A support team applies a possible fix|The user has not confirmed that the problem is resolved|ask the user to test the affected action|The team can check the result before closing the case
+# Events
+An event with unclear access|A community event is planned in a large building|The invitation does not identify the entrance|add clear entrance details to the invitation|Guests can reach the event with less uncertainty
+A changed event capacity|More people register for an event than expected|The room may not have enough seats|review the capacity before accepting more registrations|The organiser can plan for the confirmed audience
+An event equipment check|A speaker needs to play a short audio clip|The room's sound connection has not been tested|test the audio setup before guests arrive|The organiser can address problems before the session
+A weather-dependent event|An outdoor activity is planned for the weekend|The weather forecast is uncertain|prepare an indoor alternative and explain when a decision will be made|Participants can understand the possible change
+A missing event role|An event has volunteers for several tasks|Nobody is assigned to welcome arriving guests|assign a person to manage the welcome desk|Guests can receive useful information when they arrive
+A useful event review|An event receives several positive comments|The team has not checked which parts guests found difficult|collect feedback about both strengths and obstacles|The next event can build on a fuller picture
+# Community projects
+A shared notice|Residents need information about a planned water interruption|The notice uses small text and unclear times|rewrite the notice with readable text and exact times|More residents can understand the arrangements
+A neighbourhood suggestion|Residents propose a new shared seating area|People have different views about its location|collect the main needs before choosing a location|The group can compare the options more fairly
+A community task list|Volunteers agree to clean a shared space|The materials and responsibilities are not yet organised|list the tasks and assign the required materials|The group can begin with a workable plan
+A public discussion|A group meets to discuss a local issue|A few people speak while others cannot contribute|offer more than one way to share an opinion|The discussion can include a wider range of views
+A community update|A local project receives a small donation|Supporters do not know how the money will be used|share the planned use and how updates will be provided|Supporters can follow the project's next steps
+A shared-space agreement|Two groups use the same community room|Their bookings overlap on one evening|agree on a booking process both groups can check|The room can be shared with fewer scheduling disputes
+# Environmental choices
+A reusable container trial|An office wants to reduce disposable cups|Nobody knows whether enough reusable cups are available|check the supply before starting the trial|The team can choose a workable starting point
+A clearer recycling sign|A shared kitchen has several waste bins|The labels do not show which items belong in each bin|add examples to the bin labels|People can sort common items with more confidence
+An energy-use question|A team proposes a change to reduce electricity use|The current level of use has not been measured|record a starting point before testing the change|The team can compare the result with a clear baseline
+A repair or replacement choice|A small appliance stops working|The owner has not compared repair and replacement options|request enough information to compare both options|The decision can consider cost and expected use
+A water-use reminder|A community wants to avoid wasting water|The suggested message sounds blaming and unclear|write a practical reminder with one specific action|Readers can understand a useful step they can take
+A smaller printing habit|A team prints every meeting document|Many printed copies are not used|ask which documents people actually need on paper|The team can reduce unnecessary printing
+# Accessibility
+A readable document|A team shares an information sheet|The text is small and the contrast is weak|prepare a more readable version|More readers can access the information comfortably
+An audio transcript|A training session includes an audio example|Some participants cannot use the audio|provide a written transcript of the example|Participants can access the content in another format
+A step-free route|A venue offers a room on an upper floor|The invitation gives no information about lift access|confirm the access arrangements before inviting guests|Guests can decide whether the venue meets their needs
+A clearer form|A sign-up form asks several questions in one field|Some users are unsure which information is required|separate the questions and label each field clearly|Users can complete the form more accurately
+A choice of participation|A workshop asks everyone to answer aloud|Some participants need more time to prepare a response|offer a short preparation period and another response option|More participants can contribute meaningfully
+A captioned recording|A team records an important announcement|The video has no captions|add checked captions before sharing the recording|More viewers can understand the announcement
+# Professional boundaries
+A realistic extra task|A colleague asks for extra work before the end of the day|The requested deadline conflicts with an existing commitment|explain the conflict and offer a realistic alternative|Both colleagues can plan around an honest commitment
+An after-hours message|A team sends routine messages late at night|Some members believe that an immediate reply is expected|agree when routine messages need a response|The team can separate urgent needs from normal working time
+A clearer responsibility limit|A customer asks an employee to approve an exception|The employee does not have authority to approve it|explain who can make the decision and pass on the request|The customer can reach the appropriate decision-maker

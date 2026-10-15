@@ -1,0 +1,97 @@
+{
+  "version": "half-year-2026-v1",
+  "startDate": "2026-10-15",
+  "totalDays": 183,
+  "originalDays": 24,
+  "newDays": 159,
+  "chunkSize": 31,
+  "levels": {
+    "foundation": {
+      "count": 183,
+      "chunks": [
+        {
+          "file": "01.json",
+          "count": 31
+        },
+        {
+          "file": "02.json",
+          "count": 31
+        },
+        {
+          "file": "03.json",
+          "count": 31
+        },
+        {
+          "file": "04.json",
+          "count": 31
+        },
+        {
+          "file": "05.json",
+          "count": 31
+        },
+        {
+          "file": "06.json",
+          "count": 28
+        }
+      ]
+    },
+    "developing": {
+      "count": 183,
+      "chunks": [
+        {
+          "file": "01.json",
+          "count": 31
+        },
+        {
+          "file": "02.json",
+          "count": 31
+        },
+        {
+          "file": "03.json",
+          "count": 31
+        },
+        {
+          "file": "04.json",
+          "count": 31
+        },
+        {
+          "file": "05.json",
+          "count": 31
+        },
+        {
+          "file": "06.json",
+          "count": 28
+        }
+      ]
+    },
+    "stretching": {
+      "count": 183,
+      "chunks": [
+        {
+          "file": "01.json",
+          "count": 31
+        },
+        {
+          "file": "02.json",
+          "count": 31
+        },
+        {
+          "file": "03.json",
+          "count": 31
+        },
+        {
+          "file": "04.json",
+          "count": 31
+        },
+        {
+          "file": "05.json",
+          "count": 31
+        },
+        {
+          "file": "06.json",
+          "count": 28
+        }
+      ]
+    }
+  }
+}

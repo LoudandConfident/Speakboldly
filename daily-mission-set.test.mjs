@@ -1,6 +1,40 @@
-import test from 'node:test';import assert from 'node:assert/strict';
-import {dailyPassages} from './daily-mission-passages.js';import {dailyMissionSet} from './daily-mission-set.js';
-test('every daily reading has three short paragraphs and level-specific vocabulary, question and answer',()=>{
- for(let i=0;i<dailyPassages.length;i++){const date=new Date(Date.UTC(2026,0,1+i)).toISOString().slice(0,10),sets=['foundation','developing','stretching'].map(level=>dailyMissionSet(date,level));assert.equal(new Set(sets.map(m=>m.transcript)).size,3);for(const mission of sets){assert.equal(mission.paragraphs.length,3);assert(mission.paragraphs.every(p=>p.trim()));assert.equal(mission.vocabulary.length,3);for(const word of mission.vocabulary)assert(mission.transcript.toLowerCase().includes(word.word.toLowerCase()));assert(mission.transcript.toLowerCase().includes(mission.phrase.toLowerCase()));assert(mission.question&&mission.answer&&mission.mistake&&mission.correction&&mission.say&&mission.use&&mission.recall);}}
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {dailyMissionSet,missionPositionForDate,MISSION_DAYS} from './daily-mission-set.js';
+import {dailyPassages} from './daily-mission-passages.js';
+const manifest=JSON.parse(await readFile(new URL('./daily-missions/index.json',import.meta.url)));
+const levels=['foundation','developing','stretching'];
+const fileFetch=async url=>({ok:true,json:async()=>JSON.parse(await readFile(new URL(url.pathname,url)))});
+test('549 complete materials preserve the original 24 per level',async()=>{
+ let total=0;const all=new Set(),averages=[];
+ for(const [li,level] of levels.entries()){
+  const missions=[];for(const chunk of manifest.levels[level].chunks){const data=JSON.parse(await readFile(new URL('./daily-missions/'+level+'/'+chunk.file,import.meta.url)));assert.equal(data.missions.length,chunk.count);missions.push(...data.missions);}
+  assert.equal(missions.length,183);assert.equal(new Set(missions.map(m=>m.transcript)).size,183);
+  assert.equal(missions.filter(m=>m.source==='original-24').length,24);
+  for(const [i,m] of missions.entries()){
+   assert.equal(m.number,i+1);assert.equal(m.level,level);assert.equal(m.paragraphs.length,3);assert.ok(m.paragraphs.every(p=>p.trim()));
+   for(const key of ['title','transcript','phrase','question','answer','mistake','correction','say','use','recall'])assert.ok(m[key]?.trim(),key);
+   assert.equal(m.vocabulary.length,3);for(const v of m.vocabulary){assert.ok(v.definition);assert.ok(m.transcript.toLowerCase().includes(v.word.toLowerCase()),v.word);}
+   assert.ok(m.transcript.toLowerCase().includes(m.phrase.toLowerCase()));
+   if(i<24)assert.equal(m.transcript,dailyPassages[i].levels[li][0]);
+   all.add(m.transcript);total++;
+  }
+  averages.push(missions.reduce((n,m)=>n+m.transcript.split(/\s+/).length,0)/183);
+ }
+ assert.equal(total,549);assert.equal(all.size,549);assert.ok(averages[0]<averages[1]&&averages[1]<averages[2]);
 });
-test('each following day has a different passage and reading levels stay on the same topic',()=>{const first=dailyMissionSet('2026-10-15'),second=dailyMissionSet('2026-10-16');assert.notEqual(first.transcript,second.transcript);assert.equal(first.title,dailyMissionSet('2026-10-15','stretching').title);});
+test('183-day cycle, leap dates and invalid dates',()=>{
+ const indices=[];for(let i=0;i<183;i++){const d=new Date(Date.UTC(2026,9,15+i));indices.push(missionPositionForDate(d.toISOString().slice(0,10)).index);}
+ assert.equal(new Set(indices).size,MISSION_DAYS);assert.equal(missionPositionForDate('2027-04-16').index,0);
+ assert.doesNotThrow(()=>missionPositionForDate('2028-02-29'));assert.throws(()=>missionPositionForDate('2027-02-29'));assert.throws(()=>missionPositionForDate('bad'));
+});
+test('loads one small chunk, caches it, switches levels and retries failures',async()=>{
+ const requests=[];const fetcher=async url=>{requests.push(url.pathname);return fileFetch(url);};
+ const first=await dailyMissionSet('2026-10-15','foundation',fetcher);assert.equal(first.number,1);
+ await dailyMissionSet('2026-10-16','foundation',fetcher);assert.equal(requests.length,1);
+ await dailyMissionSet('2026-10-15','developing',fetcher);assert.equal(requests.length,2);
+ const last=await dailyMissionSet('2027-04-15','stretching',fetcher);assert.equal(last.number,183);assert.equal(requests.length,3);
+ let count=0;const flaky=async url=>{if(++count===1)throw Error('offline');return fileFetch(url);};
+ await assert.rejects(dailyMissionSet('2026-10-15','foundation',flaky));assert.equal((await dailyMissionSet('2026-10-15','foundation',flaky)).number,1);
+});
