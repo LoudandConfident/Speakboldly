@@ -56,7 +56,7 @@ function sbBookingNotify(sheet,index,row){
   const to=PropertiesService.getScriptProperties().getProperty('SB_EXAM_NOTIFY_EMAIL');if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_EXAM_NOTIFY_EMAIL to your notification address.');
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
   row[7]='sending';row[8]='';sheet.getRange(index+2,1,1,9).setValues([row]);
-  const lines=JSON.parse(String(row[3])).map(item=>'Session '+item.number+' — '+item.date+' — '+item.time+' (Cairo time)');
+  const lines=JSON.parse(String(row[3])).map(item=>'Session '+item.number+' — '+item.date+' — '+sbDisplayTime(item.time)+' (Cairo time)');
   MailApp.sendEmail({to,subject:'New slot booking — '+String(row[2]).replace(/^'/,''),body:'Name: '+String(row[2]).replace(/^'/,'')+'\n\n'+lines.join('\n')+'\n\nReview the instructor calendar and send class confirmation manually through Actions.\n\nSpeak Boldly',name:'Speak Boldly'});row[7]='sent';
  }catch(error){row[7]='failed';row[8]=sbExamSafe(error.message);}
  sheet.getRange(index+2,1,1,9).setValues([row]);

@@ -1,4 +1,4 @@
-import {renderBookingRequestCards} from './booking-request-cards.js?v=booking-pages';
+import {renderBookingRequestCards} from './booking-request-cards.js?v=weekly-requests';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 export function initializeInstructorOverview(doc,isUnlocked,actions={}){
  const host=doc.querySelector('#admin-overview');if(!host)return;

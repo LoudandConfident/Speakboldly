@@ -1,4 +1,4 @@
-import {initializeInstructorOverview} from './instructor-overview.js?v=exam-rebuild';
+import {initializeInstructorOverview} from './instructor-overview.js?v=weekly-requests';
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
 import {openClientReportTab} from './report-tabs.js?v=instructor-app';
 import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=momentum-and-uploads';
@@ -8,7 +8,7 @@ import {initializePortalSwitches} from './portal-switches.js?v=horizontal-cards'
 import {initializeTeacherDocuments} from './teacher-documents.js?v=instructor-app';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=shared-slots';
+import {initializeAdminCalendar} from './admin-calendar.js?v=session-series';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=client-levels-eight';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=four-digit-restored';
 import {loadPortalMaterials} from './portal-materials.js';
@@ -18,8 +18,9 @@ const STORAGE_KEY='speak-boldly-admin-clients-v1';
 export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  const root=doc.querySelector('#admin-portal');if(!root)return;
  const gate=root.querySelector('#admin-gate'),login=root.querySelector('#admin-login-form'),dashboard=root.querySelector('#admin-dashboard'),password=root.querySelector('#admin-code'),loginError=root.querySelector('#admin-login-error'),form=root.querySelector('#admin-client-form'),status=root.querySelector('#admin-client-status'),tbody=root.querySelector('#admin-client-rows');
+ const clientsList=root.querySelector('#admin-students-list'),clientsHeading=clientsList?.querySelector('.admin-clients-heading');const clientsToggle=doc.createElement('button');clientsToggle.type='button';clientsToggle.className='button light small mobile-clients-toggle';clientsToggle.id='show-clients-toggle';clientsToggle.setAttribute('aria-expanded','false');const updateClientsToggle=()=>{const expanded=clientsList.classList.contains('clients-expanded');clientsToggle.textContent=(expanded?'Hide clients':'Show clients')+(clients.length?' ('+clients.length+')':'');clientsToggle.setAttribute('aria-expanded',String(expanded));};clientsToggle.onclick=()=>{clientsList.classList.toggle('clients-expanded');updateClientsToggle();};clientsHeading?.append(clientsToggle);
  let sheetGeneration=0,sheetLoading=false;
- let unlocked=false,clients=[],editingId=null,editingHistoryId=null,isAdvancing=false,pendingClientId=null;let materialCatalog={};
+ let unlocked=false,clients=[],editingId=null,editingHistoryId=null,isAdvancing=false,pendingClientId=null;let materialCatalog={};updateClientsToggle();
  const programLabel=doc.createElement('label');programLabel.textContent='Program';const programChooser=doc.createElement('select');programChooser.name='program';programChooser.append(new doc.defaultView.Option('Choose a program',''));for(const program of CLIENT_PROGRAMS)programChooser.append(new doc.defaultView.Option(program.title,program.title));programLabel.append(programChooser);form.elements.level.closest('label').after(programLabel);
  const advance=doc.createElement('button');advance.type='button';advance.className='button light small';advance.textContent='Move to next level';advance.hidden=true;root.querySelector('#save-admin-client').before(advance);
  advance.onclick=()=>{if(!unlocked||!editingId||editingHistoryId)return;const client=clients.find(item=>item.id===editingId);if(Number(client.level)>=8){status.textContent='This client is already at Level 8.';return;}isAdvancing=true;const next=/^\d+$/.test(client.level)?String(Number(client.level)+1):'1';form.elements.level.value=next;programChooser.value=client.program||suggestedSessionProgram(client)||'';status.textContent='Choose the next level and program, then Save changes. The previous line will stay dimmed and editable.';form.elements.level.focus();};
@@ -121,7 +122,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  }
  function save(){try{doc.defaultView.localStorage.setItem(STORAGE_KEY,JSON.stringify(clients));return true;}catch{return false;}}
  function clearForm(){editingId=null;editingHistoryId=null;isAdvancing=false;advance.hidden=true;pendingClientId=null;form.reset();form.elements.hours.value='0';form.elements.amountPaid.value='0';root.querySelector('#save-admin-client').textContent='Add client';root.querySelector('#cancel-admin-edit').hidden=true;renderAccess();}
- function render(){
+ function render(){updateClientsToggle();
   const target=root.querySelector('#upload-client');if(target){const selected=target.value;target.replaceChildren();const all=doc.createElement('option');all.value='';all.textContent='Full library';target.append(all);for(const c of clients){const option=doc.createElement('option');option.value=c.id;option.textContent=c.name;target.append(option);}target.value=selected;}
   const total=clientTotals(clients);root.querySelector('#admin-total-hours').textContent=new Intl.NumberFormat('en',{maximumFractionDigits:2}).format(total.hours);root.querySelector('#admin-total-clients').textContent=total.clients;tbody.replaceChildren();root.querySelector('#admin-no-clients').hidden=clients.length>0;
   for(const client of clients){const row=doc.createElement('tr');for(const value of [client.name,client.code||'Not assigned',client.level+(client.program?' · '+client.program:''),client.payment,new Intl.NumberFormat('en',{minimumFractionDigits:2,maximumFractionDigits:2}).format(client.amountPaid??0),client.email,client.hours]){const cell=doc.createElement('td');cell.dataset.label=['Name','Student Code','Level / Program','Payment status','Amount paid','Email address','Hours taught'][row.children.length];cell.textContent=value;row.append(cell);}const cell=doc.createElement('td'),edit=doc.createElement('button');cell.dataset.label='Action';edit.type='button';edit.className='button light small';edit.textContent='Edit';edit.setAttribute('aria-label','Edit '+client.name);edit.onclick=()=>{if(!sheetLoading)openClientInfo(client.id);};cell.className='admin-client-actions';const authorize=doc.createElement('button');authorize.type='button';authorize.className='button light small';authorize.textContent='Actions';authorize.setAttribute('aria-label','Actions for '+client.name);authorize.onclick=()=>{if(unlocked)openAuthorization(clients.find(current=>current.id===client.id)||client);};cell.append(edit,authorize);row.append(cell);tbody.append(row);

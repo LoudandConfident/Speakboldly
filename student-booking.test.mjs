@@ -37,9 +37,9 @@ for(const filename of ['UnifiedCode.gs','Clients.gs']){
   for(const [index,slot]of available.slice(0,2).entries()){assert.equal(f.submit({date:slot.date,time:slot.time,requestId:'adjacent-'+index,email:'adjacent'+index+'@example.com',name:'Adjacent '+index}).ok,true);assert.equal(f.owner({action:'reviewRegistration',requestId:'adjacent-'+index,decision:'accept',payment:'Unpaid',level:'Not assessed'}).ok,true);}
   const current=f.calendar().days.find(d=>d.date===day.date);assert.equal(current.slots[0].status,'taken');assert.equal(current.slots[1].status,'taken');assert.equal(current.slots[2].status,'available');
   assert.equal(f.calendar('session').days.find(d=>d.date===day.date).slots[0].status,'taken');
-  const trial=f.calendar('trial').days.flatMap(d=>d.slots).find(s=>s.status==='available');assert.equal(trial.duration,90);
+  const trial=f.calendar('trial').days.flatMap(d=>d.slots).find(s=>s.status==='available');assert.equal(trial.duration,60);
   assert.equal(f.submit({kind:'trial',date:trial.date,time:trial.time,requestId:'trial-one',name:'Trial Student',email:'trial@example.com'}).ok,true);assert.equal(f.owner({action:'reviewRegistration',requestId:'trial-one',decision:'accept',payment:'Unpaid',level:'1'}).ok,true);
-  const session=f.owner({action:'listSessions'}).classes.find(c=>c.program==='Trial session');assert.equal(session.duration,90);
+  const session=f.owner({action:'listSessions'}).classes.find(c=>c.program==='Trial session');assert.equal(session.duration,60);
  });
 }
 test('requests can be declined and competing requests cannot double-book a slot',()=>{

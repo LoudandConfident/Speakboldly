@@ -76,7 +76,7 @@ function handleClientSync(e){
   if(p.action==='deleteClient')return clientSyncResponse(sbDeleteClientRecord(p));
   if(p.action==='checkConnection')return clientSyncResponse({ok:true,connected:true});
   if(['listTeacherDocuments','saveTeacherDocument'].includes(p.action)){if(typeof handleSheetDocumentAction!=='function')throw new Error('Add TeacherDocuments.gs to enable shared reports.');return handleSheetDocumentAction(p);}
-  if(['listSessions','saveSession','cancelSession'].includes(p.action)){if(typeof handleSheetSessionAction!=='function')throw new Error('Add Sessions.gs and run setupSheetReminders first.');return handleSheetSessionAction(p);}
+  if(['listSessions','saveSession','saveSessionSeries','cancelSession'].includes(p.action)){if(typeof handleSheetSessionAction!=='function')throw new Error('Add Sessions.gs and run setupSheetReminders first.');return handleSheetSessionAction(p);}
   if(p.action==='listClients'){
    lock.waitLock(20000);if(typeof sbApplySessionHours==='function')sbApplySessionHours(SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')));
    const sheet=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
@@ -124,7 +124,7 @@ function handleClientSync(e){
 function doPost(e) {
  let data;
  try {data = JSON.parse(e.postData.contents);} catch {return clientSyncResponse({ok:false,error:'Invalid request.'});}
- if (['deleteClient','upsertClient','checkConnection','listClients','listSessions','saveSession','cancelSession','listTeacherDocuments','saveTeacherDocument','sendClientEmail','listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(data.action)) return handleClientSync(e);
+ if (['deleteClient','upsertClient','checkConnection','listClients','listSessions','saveSession','saveSessionSeries','cancelSession','listTeacherDocuments','saveTeacherDocument','sendClientEmail','listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(data.action)) return handleClientSync(e);
  return handleReviewPost(e);
 }
 

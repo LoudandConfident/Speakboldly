@@ -40,3 +40,11 @@ No separate server or new hosting service is needed. Existing Google Apps Script
 After deploying this version, Instructor Calendar → **Slots** beside a date lets you add start/end windows and dim, undim or remove individual windows. The existing date Dim/Undim button closes or opens the whole day. Changes are shared through the existing Apps Script; students can request only times inside enabled windows. Placement tests use 30-minute starts within those windows. Removing a window does not cancel an existing class. Accepting a booking rechecks that its window still exists and is enabled.
 
 The former Exercises card is now **Activity**, and the separate Activities card is removed. Cards have horizontal icon/text layouts. Protected folders show a password popup before opening their section page. The back control is a green arrow. Native English now uses the supplied BBC course page for the current month.
+
+## Weekly scheduling and AM/PM update
+
+Replace your project code with the complete **UnifiedCode.gs**, save, then **Deploy → Manage deployments → Edit (pencil) → New version → Deploy**. Keep the existing deployment URL and script properties. You do not need to rerun setup for these scheduling changes.
+
+Instructor scheduling now offers **This session only**, **Weekly for 6 weeks** (six appointments including the first), or **Until the program’s sessions are complete**. Enter the current session number; an eight-session program starting at session 5 schedules sessions 5–8 at the same weekday and time. Review the confirmation before saving. Existing conflicts or dimmed dates prevent the series from being saved. No client confirmation email is sent automatically.
+
+New trial appointments last **60 minutes**; placement tests **30 minutes**; regular sessions and workshops **90 minutes** (English Momentum remains 60). Existing saved appointments retain their saved durations. Times and time selectors use **12-hour AM/PM** display. On phones, **Show clients** expands the client list; desktop clients stay visible.

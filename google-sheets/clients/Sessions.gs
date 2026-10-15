@@ -43,7 +43,7 @@ function sbListSheetSessions(){
 }
 function sbSaveSheetSession(input,allowPast=false){
  const c={clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||'').trim(),course:String(input.course||'').trim(),level:String(input.level||'').trim()};
- const duration=c.program==='Assessment'?30:c.program==='English Momentum'?60:90;
+ const duration=c.program==='Assessment'?30:['English Momentum','Trial session'].includes(c.program)?60:90;
  if(c.course&&(!SB_SESSION_PROGRAMS.includes(c.course)||['Assessment','Trial session'].includes(c.course)))throw new Error('Choose a valid registered course.');
  if(c.program&&!SB_SESSION_PROGRAMS.includes(c.program))throw new Error('Choose a valid program.');
  if(c.level&&!/^[1-9]\d{0,3}$/.test(c.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(c.level))throw new Error('Choose a valid session level.');
@@ -66,6 +66,7 @@ function sbSaveSheetSession(input,allowPast=false){
 function handleSheetSessionAction(p){
  const lock=LockService.getScriptLock();lock.waitLock(20000);
  try{
+  if(p.action==='saveSessionSeries')sbSaveSessionSeries(p);
   if(p.action==='saveSession'){if(!p.session)throw new Error('Session missing.');sbSaveSheetSession(p.session,p.importPast===true);}
   if(p.action==='cancelSession'){
    const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[],index=rows.findIndex(r=>String(r[0])===String(p.sessionId));
@@ -106,3 +107,13 @@ function sbSetClientHours(book,sheet,row,input){
 }
 function updateSessionHours(){const lock=LockService.getScriptLock();lock.waitLock(20000);try{sbApplySessionHours(SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')));}finally{lock.releaseLock();}}
 function enableAutomaticSessionHours(){updateSessionHours();if(!ScriptApp.getProjectTriggers().some(trigger=>trigger.getHandlerFunction()==='updateSessionHours'))ScriptApp.newTrigger('updateSessionHours').timeBased().everyDays(1).atHour(0).nearMinute(15).inTimezone('Africa/Cairo').create();}
+
+
+function sbDisplayTime(value){const match=String(value||'').match(/^(\d{1,2}):(\d{2})$/);if(!match)return String(value||'');const hour=Number(match[1]);return (hour%12||12)+':'+match[2]+' '+(hour<12?'AM':'PM');}
+function sbSaveSessionSeries(p){
+ if(!Array.isArray(p.sessions)||p.sessions.length<1||p.sessions.length>52)throw new Error('Choose between 1 and 52 weekly appointments.');
+ const sheet=sbSessionsSheet(),existing=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[],clients=sbExamBook().getSheetByName('Clients'),ids=clients&&clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,1).getValues().map(row=>String(row[0])):[],seen=new Set();
+ const first=p.sessions[0],planned=p.sessions.map((input,index)=>{const record={...input,clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||''),level:String(input.level||'')};const date=new Date(String(first.date)+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+index*7);if(record.clientId!==first.clientId||record.program!==first.program||record.time!==first.time||record.level!==String(first.level||'')||record.number!==Number(first.number)+index||record.date!==date.toISOString().slice(0,10))throw new Error('Use the same client, program, weekday and time with consecutive session numbers.');if(!ids.includes(record.clientId)||!Number.isInteger(record.number)||record.number<1||record.number>9999||!SB_SESSION_PROGRAMS.includes(record.program))throw new Error('Check the client, program and session numbers.');if(record.level&&!/^[1-9]\d{0,3}$/.test(record.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(record.level))throw new Error('Choose a valid session level.');if(record.course&&(!SB_SESSION_PROGRAMS.includes(record.course)||['Assessment','Trial session'].includes(record.course)))throw new Error('Choose a valid course.');const id=sbSessionId(record),start=sbCairoTimestamp(record.date,record.time),duration=record.program==='Assessment'?30:['Trial session','English Momentum'].includes(record.program)?60:90;if(seen.has(id))throw new Error('Duplicate appointment.');seen.add(id);const saved=existing.find(row=>String(row[0])===id);if(saved){if(String(saved[7])==='cancelled')throw new Error('A planned appointment was cancelled. Refresh before booking this series.');return record;}if(start<=Date.now()||sbCalendarDateBlocked(record.date))throw new Error(record.date+' is past or dimmed. No new appointments were added.');if(existing.some(row=>String(row[7])!=='cancelled'&&start<Date.parse(row[5])+sbSessionDuration(row)*60000&&start+duration*60000>Date.parse(row[5])))throw new Error('An appointment overlaps on '+record.date+'. No new appointments were added.');if(existing.some(row=>String(row[1])===record.clientId&&Number(row[2])===record.number&&String(row[10])===record.program&&String(row[0])!==id&&String(row[7])!=='cancelled'))throw new Error('Session '+record.number+' already exists for this client and program.');return record;});
+ // Complete validation happens before any write. Stable IDs make a retry safe after a partial Sheets failure.
+ for(const record of planned)sbSaveSheetSession(record);return planned.length;
+}

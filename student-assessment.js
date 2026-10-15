@@ -9,7 +9,7 @@ import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v
 import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=folder-popups';
 import {materialProgram} from './material-program-folders.js?v=comprehension-listening';
-import {initializeStudentBooking} from './student-booking.js?v=booking-pages';
+import {initializeStudentBooking} from './student-booking.js?v=weekly-requests';
 import {attachTemporaryPortalUploads,getTemporaryOwnerConnection} from './temporary-portal-uploads.js?v=exam-rebuild';
 import {createExamForm} from './exam-form.js?v=exam-rebuild';
 import {openPopup} from './popups.js?v=mobile-assessment-page';

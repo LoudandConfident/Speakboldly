@@ -175,7 +175,7 @@ function sbRouteInstructorRequest(data, connection, lock) {
   if (['listTeacherDocuments', 'saveTeacherDocument'].includes(data.action)) {
     return handleSheetDocumentAction(data);
   }
-  if (['listSessions', 'saveSession', 'cancelSession'].includes(data.action)) {
+  if (['listSessions', 'saveSession', 'saveSessionSeries', 'cancelSession'].includes(data.action)) {
     return handleSheetSessionAction(data);
   }
   if (data.action === 'listClients') {
@@ -361,7 +361,7 @@ function sbListSheetSessions(){
 }
 function sbSaveSheetSession(input,allowPast=false){
  const c={clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||'').trim(),course:String(input.course||'').trim(),level:String(input.level||'').trim()};
- const duration=c.program==='Assessment'?30:c.program==='English Momentum'?60:90;
+ const duration=c.program==='Assessment'?30:['English Momentum','Trial session'].includes(c.program)?60:90;
  if(c.course&&(!SB_SESSION_PROGRAMS.includes(c.course)||['Assessment','Trial session'].includes(c.course)))throw new Error('Choose a valid registered course.');
  if(c.program&&!SB_SESSION_PROGRAMS.includes(c.program))throw new Error('Choose a valid program.');
  if(c.level&&!/^[1-9]\d{0,3}$/.test(c.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(c.level))throw new Error('Choose a valid session level.');
@@ -384,6 +384,7 @@ function sbSaveSheetSession(input,allowPast=false){
 function handleSheetSessionAction(p){
  const lock=LockService.getScriptLock();lock.waitLock(20000);
  try{
+  if(p.action==='saveSessionSeries')sbSaveSessionSeries(p);
   if(p.action==='saveSession'){if(!p.session)throw new Error('Session missing.');sbSaveSheetSession(p.session,p.importPast===true);}
   if(p.action==='cancelSession'){
    const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[],index=rows.findIndex(r=>String(r[0])===String(p.sessionId));
@@ -846,7 +847,7 @@ function sbBookingNotify(sheet,index,row){
   const to=PropertiesService.getScriptProperties().getProperty('SB_EXAM_NOTIFY_EMAIL');if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_EXAM_NOTIFY_EMAIL to your notification address.');
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
   row[7]='sending';row[8]='';sheet.getRange(index+2,1,1,9).setValues([row]);
-  const lines=JSON.parse(String(row[3])).map(item=>'Session '+item.number+' — '+item.date+' — '+item.time+' (Cairo time)');
+  const lines=JSON.parse(String(row[3])).map(item=>'Session '+item.number+' — '+item.date+' — '+sbDisplayTime(item.time)+' (Cairo time)');
   MailApp.sendEmail({to,subject:'New slot booking — '+String(row[2]).replace(/^'/,''),body:'Name: '+String(row[2]).replace(/^'/,'')+'\n\n'+lines.join('\n')+'\n\nReview the instructor calendar and send class confirmation manually through Actions.\n\nSpeak Boldly',name:'Speak Boldly'});row[7]='sent';
  }catch(error){row[7]='failed';row[8]=sbExamSafe(error.message);}
  sheet.getRange(index+2,1,1,9).setValues([row]);
@@ -1001,8 +1002,8 @@ function handleStudentInstructorContact(data) {
 const SB_REGISTRATION_HEADERS=['Request ID','Name','Email','Program','Payment claimed','Appointment type','Date (Cairo)','Time (Cairo)','Duration (minutes)','Status','Created at (UTC)','Client ID','Session ID','Decided at (UTC)','Notification status','Notification error'];
 const SB_PAYMENT_EMAIL='speakboldly16@gmail.com';
 function sbRegistrationType(kind,program){
- const types={placement:{title:'Placement test',duration:30,program:'Assessment'},session:{title:'Session',duration:90},trial:{title:'Trial session',duration:90,program:'Trial session'}};
- if(!Object.prototype.hasOwnProperty.call(types,String(kind)))throw new Error('Choose Placement test, Session, or Trial session.');
+ const types={placement:{title:'Placement test',duration:30,program:'Assessment'},session:{title:'Session',duration:90},workshop:{title:'Workshop',duration:90},trial:{title:'Trial session',duration:60,program:'Trial session'}};
+ if(!Object.prototype.hasOwnProperty.call(types,String(kind)))throw new Error('Choose Session, Workshop, Placement test, or Trial session.');
  return {...types[kind],...(kind==='session'&&program==='English Momentum'?{duration:60}:{})};
 }
 function sbRegistrationSlots(date,kind,program){
@@ -1031,7 +1032,7 @@ function sbRegistrationNotify(sheet,index,row){
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
   const item=sbRegistrationView(row),type=sbRegistrationType(item.kind,item.program),slot=sbRegistrationSlots(item.date,item.kind,item.program).find(slot=>slot.time===item.time);
   const url='https://loudandconfident.github.io/Speakboldly/instructor.html?bookingRequest='+encodeURIComponent(item.id);
-  const lines=['Name: '+item.name,'Email: '+item.email,'Program: '+item.program,'Appointment: '+type.title,'Date: '+item.date,'Time: '+item.time+'–'+(slot?.endTime||'')+' (Cairo time)','Duration: '+type.duration+' minutes','Payment reported by student: '+item.paid,'',item.kind==='trial'?'Trial session: no payment screenshot required.':'Payment screenshots are sent separately to '+SB_PAYMENT_EMAIL+'. Check payment before approving.','','Accept: '+url+'&decision=accept','Decline: '+url+'&decision=decline','','Sign in to the Instructor Portal and confirm your decision. The slot is not reserved until accepted.','','Speak Boldly'];
+  const lines=['Name: '+item.name,'Email: '+item.email,'Program: '+item.program,'Appointment: '+type.title,'Date: '+item.date,'Time: '+sbDisplayTime(item.time)+'–'+sbDisplayTime(slot?.endTime||'')+' (Cairo time)','Duration: '+type.duration+' minutes','Payment reported by student: '+item.paid,'',item.kind==='trial'?'Trial session: no payment screenshot required.':'Payment screenshots are sent separately to '+SB_PAYMENT_EMAIL+'. Check payment before approving.','','Accept: '+url+'&decision=accept','Decline: '+url+'&decision=decline','','Sign in to the Instructor Portal and confirm your decision. The slot is not reserved until accepted.','','Speak Boldly'];
   row[14]='sending';row[15]='';sheet.getRange(index+2,1,1,16).setValues([row]);
   MailApp.sendEmail({to,subject:'Registration request — '+type.title+' — '+item.name,body:lines.join('\n'),name:'Speak Boldly'});row[14]='sent';
  }catch(error){row[14]=row[14]==='sending'?'delivery_unknown':'failed';row[15]=sbExamSafe(error.message);}
@@ -1048,9 +1049,9 @@ function sbRegistrationCalendar(data,book){
  return {ok:true,registrationVersion:1,month,today,kind,duration:type.duration,timeZone:'Africa/Cairo',windowStart:today,windowEnd:window.end,days};
 }
 function sbSubmitRegistration(data,book){
- const name=String(data.name||'').normalize('NFKC').trim().replace(/\s+/g,' '),email=String(data.email||'').trim().toLowerCase(),kind=String(data.kind||''),type=sbRegistrationType(kind,String(data.program||'').trim()),program=String(data.program||(kind==='placement'?'Assessment':kind==='trial'?'Trial session':'Session')).trim(),paid=String(data.paid||''),id=String(data.requestId||''),date=String(data.date||''),time=String(data.time||'');
+ const name=String(data.name||'').normalize('NFKC').trim().replace(/\s+/g,' '),email=String(data.email||'').trim().toLowerCase(),kind=String(data.kind||''),type=sbRegistrationType(kind,String(data.program||'').trim()),program=String(data.program||(kind==='placement'?'Assessment':kind==='trial'?'Trial session':kind==='workshop'?'Workshop':'Session')).trim(),paid=String(data.paid||''),id=String(data.requestId||''),date=String(data.date||''),time=String(data.time||'');
  if(!name||name.length>100||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Enter your name and a valid email address.');
- if((!SB_SESSION_PROGRAMS.includes(program)&&program!=='Session')||(kind==='session'&&['Assessment','Trial session'].includes(program)))throw new Error('Choose the course you are registering for.');
+ if((!SB_SESSION_PROGRAMS.includes(program)&&!['Session','Workshop'].includes(program))||(['session','workshop'].includes(kind)&&['Assessment','Trial session'].includes(program)))throw new Error('Choose the course you are registering for.');if(kind==='workshop'&&program!=='Workshop'&&!/workshop/i.test(program))throw new Error('Choose a workshop program.');
  if(!['yes','no','not-required'].includes(paid)||! /^[A-Za-z0-9-]{1,100}$/.test(id))throw new Error('Choose your payment status and retry.');
  if(program==='Make-up / revision session'&&(kind!=='session'||sbBookingRows(book.getSheetByName('Clients'),3).filter(person=>String(person[2]).replace(/^'/,'').trim().toLowerCase()===email).length!==1))throw new Error('Make-up / revision sessions are for already enrolled clients. Use your registered email and choose Session.');
  const sheet=sbRegistrationSheet(book,true),rows=sbBookingRows(sheet,16),fingerprint=row=>[String(row[1]).replace(/^'/,''),String(row[2]).replace(/^'/,''),String(row[3]).replace(/^'/,''),String(row[4]),String(row[5]),String(row[6]),String(row[7])].join('|'),values=[name,email,program,paid,kind,date,time].join('|');
@@ -1087,7 +1088,7 @@ function handleRegistrationOwner(data,book){
   if(row[9]==='accepted'||row[9]==='declined'){if(row[9]!==({accept:'accepted',decline:'declined'}[data.decision]))throw new Error('This request was already decided.');return {ok:true,request:sbRegistrationView(row)};}
   if(data.decision==='decline'){if(row[9]==='accepting')throw new Error('Acceptance is in progress. Retry Accept to finish safely.');row[9]='declined';row[13]=new Date().toISOString();sheet.getRange(index+2,1,1,16).setValues([row]);return {ok:true,request:sbRegistrationView(row)};}
   const payment=String(data.payment||''),level=String(data.level||'Not assessed');if(!['Paid','Part paid','Unpaid'].includes(payment)||!(/^[1-9]\d{0,3}$/.test(level)||['Not assessed','A1','A2','B1','B2','C1','C2'].includes(level)))throw new Error('Choose the verified payment status and level.');
-  const requestedCourse=String(row[3]).replace(/^'/,''),course=requestedCourse==='Session'?String(data.program||''):requestedCourse;if(String(row[5])==='session'&&(!SB_SESSION_PROGRAMS.includes(course)||['Assessment','Trial session'].includes(course)))throw new Error('Choose the registered program before accepting this session.');
+  const requestedCourse=String(row[3]).replace(/^'/,''),course=['Session','Workshop'].includes(requestedCourse)?String(data.program||''):requestedCourse;if(['session','workshop'].includes(String(row[5]))&&(!SB_SESSION_PROGRAMS.includes(course)||['Assessment','Trial session'].includes(course)))throw new Error('Choose the registered program before accepting this session.');if(String(row[5])==='workshop'&&!/workshop/i.test(course))throw new Error('Choose the registered workshop.');
   const type=sbRegistrationType(String(row[5]),course);if(type.duration!==Number(row[8]))throw new Error('The program duration does not match this booking. Ask for a booking from the correct program.');const program=type.program||course,start=sbCairoTimestamp(String(row[6]),String(row[7])),sessions=sbSessionsSheet(),sessionRows=sbBookingRows(sessions,14),saved=row[12]?sessionRows.find(item=>String(item[0])===String(row[12])):null;
   if(!saved){if(!sbRegistrationSlots(String(row[6]),String(row[5]),course).some(slot=>slot.time===String(row[7])))throw new Error('This availability window was removed or dimmed. Ask the student to choose another slot.');const window=sbBookingWindow();if(start<=Date.now()||String(row[6])>window.end||sbCalendarDateBlocked(String(row[6]),book))throw new Error('This date is no longer available. Ask the student to choose another slot.');if(sbBookingOverlap(start,sbBookingBusy(book),[],type.duration))throw new Error('This slot has been taken. Decline this request or ask the student to choose another slot.');}
   const client=sbRegistrationClient(book,row,data),number=sessionRows.filter(item=>String(item[1])===String(client.row[0])&&String(item[10]||'')===program).reduce((max,item)=>Math.max(max,Number(item[2])||0),0)+1;
@@ -1121,4 +1122,14 @@ function sbOwnerCalendarSlots(data){
 }
 function sbSaveCalendarSlots(data){
  const lock=LockService.getScriptLock();lock.waitLock(20000);try{const date=String(data.date||''),parsed=new Date(date+'T12:00:00Z');if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==date||date<sbBookingToday())throw new Error('Choose today or a future date.');if(data.revision!==sbCalendarSlotRevision(date))throw new Error('The slots changed on another device. Refresh the calendar before editing.');if(!Array.isArray(data.slots)||data.slots.length>24)throw new Error('Use up to 24 availability windows per day.');const slots=data.slots.map(item=>{const time=String(item.time||''),endTime=String(item.endTime||'');if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(endTime)||endTime<=time||typeof item.enabled!=='boolean')throw new Error('Enter a valid start, later end time, and access setting.');return {time,endTime,enabled:item.enabled,label:time+'–'+endTime};}).sort((a,b)=>a.time.localeCompare(b.time));for(let i=1;i<slots.length;i++)if(slots[i].time<slots[i-1].endTime)throw new Error('Availability windows must not overlap.');PropertiesService.getScriptProperties().setProperty('SB_CALENDAR_SLOTS_'+date,JSON.stringify(slots));return {ok:true,date,slots,revision:sbCalendarSlotRevision(date)};}finally{lock.releaseLock();}
+}
+
+
+function sbDisplayTime(value){const match=String(value||'').match(/^(\d{1,2}):(\d{2})$/);if(!match)return String(value||'');const hour=Number(match[1]);return (hour%12||12)+':'+match[2]+' '+(hour<12?'AM':'PM');}
+function sbSaveSessionSeries(p){
+ if(!Array.isArray(p.sessions)||p.sessions.length<1||p.sessions.length>52)throw new Error('Choose between 1 and 52 weekly appointments.');
+ const sheet=sbSessionsSheet(),existing=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[],clients=sbExamBook().getSheetByName('Clients'),ids=clients&&clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,1).getValues().map(row=>String(row[0])):[],seen=new Set();
+ const first=p.sessions[0],planned=p.sessions.map((input,index)=>{const record={...input,clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||''),level:String(input.level||'')};const date=new Date(String(first.date)+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+index*7);if(record.clientId!==first.clientId||record.program!==first.program||record.time!==first.time||record.level!==String(first.level||'')||record.number!==Number(first.number)+index||record.date!==date.toISOString().slice(0,10))throw new Error('Use the same client, program, weekday and time with consecutive session numbers.');if(!ids.includes(record.clientId)||!Number.isInteger(record.number)||record.number<1||record.number>9999||!SB_SESSION_PROGRAMS.includes(record.program))throw new Error('Check the client, program and session numbers.');if(record.level&&!/^[1-9]\d{0,3}$/.test(record.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(record.level))throw new Error('Choose a valid session level.');if(record.course&&(!SB_SESSION_PROGRAMS.includes(record.course)||['Assessment','Trial session'].includes(record.course)))throw new Error('Choose a valid course.');const id=sbSessionId(record),start=sbCairoTimestamp(record.date,record.time),duration=record.program==='Assessment'?30:['Trial session','English Momentum'].includes(record.program)?60:90;if(seen.has(id))throw new Error('Duplicate appointment.');seen.add(id);const saved=existing.find(row=>String(row[0])===id);if(saved){if(String(saved[7])==='cancelled')throw new Error('A planned appointment was cancelled. Refresh before booking this series.');return record;}if(start<=Date.now()||sbCalendarDateBlocked(record.date))throw new Error(record.date+' is past or dimmed. No new appointments were added.');if(existing.some(row=>String(row[7])!=='cancelled'&&start<Date.parse(row[5])+sbSessionDuration(row)*60000&&start+duration*60000>Date.parse(row[5])))throw new Error('An appointment overlaps on '+record.date+'. No new appointments were added.');if(existing.some(row=>String(row[1])===record.clientId&&Number(row[2])===record.number&&String(row[10])===record.program&&String(row[0])!==id&&String(row[7])!=='cancelled'))throw new Error('Session '+record.number+' already exists for this client and program.');return record;});
+ // Complete validation happens before any write. Stable IDs make a retry safe after a partial Sheets failure.
+ for(const record of planned)sbSaveSheetSession(record);return planned.length;
 }
