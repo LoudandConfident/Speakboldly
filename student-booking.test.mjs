@@ -32,7 +32,7 @@ for(const filename of ['UnifiedCode.gs','Clients.gs']){
   assert.equal(f.owner({action:'reviewRegistration',requestId:result.requestId,decision:'decline'}).ok,false);
  });
  test(filename+': placement slots are 30 minutes and accepted appointments use their real durations',()=>{
-  const f=registrationFixture(filename),day=f.calendar().days.find(d=>d.slots.some(s=>s.status==='available'));
+  const f=registrationFixture(filename),day=f.calendar().days.find(d=>d.slots.filter(s=>s.status==='available').length===6);
   const available=day.slots.filter(s=>s.status==='available');assert.equal(available.length,6);assert(available.every(s=>s.duration===30));assert.equal(Number(available[1].time.slice(3)),30);
   for(const [index,slot]of available.slice(0,2).entries()){assert.equal(f.submit({date:slot.date,time:slot.time,requestId:'adjacent-'+index,email:'adjacent'+index+'@example.com',name:'Adjacent '+index}).ok,true);assert.equal(f.owner({action:'reviewRegistration',requestId:'adjacent-'+index,decision:'accept',payment:'Unpaid',level:'Not assessed'}).ok,true);}
   const current=f.calendar().days.find(d=>d.date===day.date);assert.equal(current.slots[0].status,'taken');assert.equal(current.slots[1].status,'taken');assert.equal(current.slots[2].status,'available');

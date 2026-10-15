@@ -8,9 +8,9 @@ function sbRegistrationType(kind,program){
 }
 function sbRegistrationSlots(date,kind,program){
  const type=sbRegistrationType(kind,program),slots=[];
- for(const slot of sbBookingSlots(date)){
-  const [hour,minute]=slot.time.split(':').map(Number),first=hour*60+minute;
-  for(let offset=0;offset+type.duration<=90;offset+=type.duration){const start=first+offset,end=start+type.duration,format=value=>String(Math.floor(value/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');slots.push({time:format(start),endTime:format(end),label:format(start)+'–'+format(end),duration:type.duration});}
+ for(const slot of sbBookingSlots(date).filter(slot=>slot.enabled!==false)){
+  const [hour,minute]=slot.time.split(':').map(Number),first=hour*60+minute;const end=slot.endTime?Number(slot.endTime.slice(0,2))*60+Number(slot.endTime.slice(3)):first+90;
+  for(let offset=0;offset+type.duration<=end-first;offset+=type.duration){const start=first+offset,end=start+type.duration,format=value=>String(Math.floor(value/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');slots.push({time:format(start),endTime:format(end),label:format(start)+'–'+format(end),duration:type.duration});}
  }
  return slots;
 }
@@ -90,7 +90,7 @@ function handleRegistrationOwner(data,book){
   const payment=String(data.payment||''),level=String(data.level||'Not assessed');if(!['Paid','Part paid','Unpaid'].includes(payment)||!(/^[1-9]\d{0,3}$/.test(level)||['Not assessed','A1','A2','B1','B2','C1','C2'].includes(level)))throw new Error('Choose the verified payment status and level.');
   const requestedCourse=String(row[3]).replace(/^'/,''),course=requestedCourse==='Session'?String(data.program||''):requestedCourse;if(String(row[5])==='session'&&(!SB_SESSION_PROGRAMS.includes(course)||['Assessment','Trial session'].includes(course)))throw new Error('Choose the registered program before accepting this session.');
   const type=sbRegistrationType(String(row[5]),course);if(type.duration!==Number(row[8]))throw new Error('The program duration does not match this booking. Ask for a booking from the correct program.');const program=type.program||course,start=sbCairoTimestamp(String(row[6]),String(row[7])),sessions=sbSessionsSheet(),sessionRows=sbBookingRows(sessions,14),saved=row[12]?sessionRows.find(item=>String(item[0])===String(row[12])):null;
-  if(!saved){const window=sbBookingWindow();if(start<=Date.now()||String(row[6])>window.end||sbCalendarDateBlocked(String(row[6]),book))throw new Error('This date is no longer available. Ask the student to choose another slot.');if(sbBookingOverlap(start,sbBookingBusy(book),[],type.duration))throw new Error('This slot has been taken. Decline this request or ask the student to choose another slot.');}
+  if(!saved){if(!sbRegistrationSlots(String(row[6]),String(row[5]),course).some(slot=>slot.time===String(row[7])))throw new Error('This availability window was removed or dimmed. Ask the student to choose another slot.');const window=sbBookingWindow();if(start<=Date.now()||String(row[6])>window.end||sbCalendarDateBlocked(String(row[6]),book))throw new Error('This date is no longer available. Ask the student to choose another slot.');if(sbBookingOverlap(start,sbBookingBusy(book),[],type.duration))throw new Error('This slot has been taken. Decline this request or ask the student to choose another slot.');}
   const client=sbRegistrationClient(book,row,data),number=sessionRows.filter(item=>String(item[1])===String(client.row[0])&&String(item[10]||'')===program).reduce((max,item)=>Math.max(max,Number(item[2])||0),0)+1;
   const plan={clientId:String(client.row[0]),number,date:String(row[6]),time:String(row[7]),program,course,level,duration:type.duration};
   if(!saved)row[12]=sbSessionId(plan);row[11]=String(client.row[0]);row[9]='accepting';sheet.getRange(index+2,1,1,16).setValues([row]);

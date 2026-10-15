@@ -1,6 +1,6 @@
 // Included in UnifiedCode.gs. Add separately only in a multi-file project.
 const SB_PUBLIC_BOOKING_ACTIONS=['studentBookingLogin','studentBookingCalendar','studentBookSlots','studentRegisterSlot'];
-const SB_OWNER_BOOKING_ACTIONS=['listRegistrationRequests','reviewRegistration','retryRegistrationNotification','instructorOverview','calendarAvailability','saveCalendarDay','bookingSettings','saveBookingSettings','checkStudentPortal'];
+const SB_OWNER_BOOKING_ACTIONS=['listRegistrationRequests','reviewRegistration','retryRegistrationNotification','instructorOverview','calendarAvailability','saveCalendarDay','calendarSlots','saveCalendarSlots','bookingSettings','saveBookingSettings','checkStudentPortal'];
 const SB_BOOKING_HEADERS=['Request ID','Client ID','Name','Planned sessions','Session IDs','Created at','Status','Notification status','Notification error'];
 function setupBookingCalendar(){
  const props=PropertiesService.getScriptProperties(),book=sbExamBook();
@@ -21,6 +21,8 @@ function setupStudentPortal(){setupStudentExams();setupBookingCalendar();
 }
 function sbBookingToday(){return Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');}
 function sbBookingSlots(date){
+ const saved=PropertiesService.getScriptProperties().getProperty('SB_CALENDAR_SLOTS_'+date);if(saved!==null&&saved!==undefined)return JSON.parse(saved);
+
  const day=new Date(date+'T12:00:00Z').getUTCDay();
  if([2,3,4].includes(day))return[{time:'18:00',label:'6–7:30pm'},{time:'19:30',label:'7:30–9pm'}];
  if(day===6)return[{time:'10:00',label:'10–11:30am'},{time:'11:30',label:'11:30am–1pm'}];
@@ -112,6 +114,8 @@ function handleOwnerBooking(data){
   if(['listRegistrationRequests','reviewRegistration','retryRegistrationNotification'].includes(data.action))return sbExamResponse(handleRegistrationOwner(data,book));
   if(data.action==='instructorOverview')return sbExamResponse(sbInstructorOverview(book));
   if(data.action==='calendarAvailability')return sbExamResponse({ok:true,blockedDates:sbCalendarAvailability(book),calendarAvailabilityReady:true});
+  if(data.action==='calendarSlots')return sbExamResponse(sbOwnerCalendarSlots(data));
+  if(data.action==='saveCalendarSlots')return sbExamResponse(sbSaveCalendarSlots(data));
   if(data.action==='saveCalendarDay')return sbExamResponse(sbSaveCalendarDay(book,data));
   if(data.action==='checkStudentPortal')return sbExamResponse({ok:true,examsReady:['Exam attempts','Exam sessions','Portal access'].every(name=>Boolean(book.getSheetByName(name))),bookingReady:['Sessions','Booking requests'].every(name=>Boolean(book.getSheetByName(name))),notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||'',remainingEmailQuota:MailApp.getRemainingDailyQuota()});
   if(data.action==='saveBookingSettings'){
@@ -123,4 +127,13 @@ function handleOwnerBooking(data){
   }
   return sbExamResponse({ok:true,enabled:props.getProperty('SB_BOOKING_ENABLED')==='true',passcode:sbWeeklyPortalPasswords().passwords.calendar,notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||''});
  }catch(error){return sbExamResponse({ok:false,error:error.message});}
+}
+
+
+function sbCalendarSlotRevision(date){return sbExamHash(PropertiesService.getScriptProperties().getProperty('SB_CALENDAR_SLOTS_'+date)||'default');}
+function sbOwnerCalendarSlots(data){
+ const month=String(data.month||sbBookingToday().slice(0,7));if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month))throw new Error('Choose a calendar month.');const [year,m]=month.split('-').map(Number),days={},revisions={};for(let n=1;n<=new Date(Date.UTC(year,m,0)).getUTCDate();n++){const date=month+'-'+String(n).padStart(2,'0');days[date]=sbBookingSlots(date);revisions[date]=sbCalendarSlotRevision(date);}return {ok:true,days,revisions};
+}
+function sbSaveCalendarSlots(data){
+ const lock=LockService.getScriptLock();lock.waitLock(20000);try{const date=String(data.date||''),parsed=new Date(date+'T12:00:00Z');if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==date||date<sbBookingToday())throw new Error('Choose today or a future date.');if(data.revision!==sbCalendarSlotRevision(date))throw new Error('The slots changed on another device. Refresh the calendar before editing.');if(!Array.isArray(data.slots)||data.slots.length>24)throw new Error('Use up to 24 availability windows per day.');const slots=data.slots.map(item=>{const time=String(item.time||''),endTime=String(item.endTime||'');if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(endTime)||endTime<=time||typeof item.enabled!=='boolean')throw new Error('Enter a valid start, later end time, and access setting.');return {time,endTime,enabled:item.enabled,label:time+'–'+endTime};}).sort((a,b)=>a.time.localeCompare(b.time));for(let i=1;i<slots.length;i++)if(slots[i].time<slots[i-1].endTime)throw new Error('Availability windows must not overlap.');PropertiesService.getScriptProperties().setProperty('SB_CALENDAR_SLOTS_'+date,JSON.stringify(slots));return {ok:true,date,slots,revision:sbCalendarSlotRevision(date)};}finally{lock.releaseLock();}
 }

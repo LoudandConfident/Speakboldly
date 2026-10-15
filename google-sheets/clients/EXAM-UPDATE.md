@@ -34,3 +34,9 @@ The eight existing uploaded books are shown under their matching Material levels
 Native English is a separate public Learning Hub card. Its curated page and original brief change on the first of each month in Cairo time: BBC in October 2026, TED in November, short stories in December, then mixed sources across a repeating twelve-month selection. It needs no script configuration.
 
 No separate server or new hosting service is needed. Existing Google Apps Script and Sheets remain the backend for shared passwords, booking requests, submissions and email. The visual layout, monthly links and saved result images run in the browser. Browser-only preferences/check-ins are not represented as synchronised student records.
+
+## Availability and card layout update
+
+After deploying this version, Instructor Calendar → **Slots** beside a date lets you add start/end windows and dim, undim or remove individual windows. The existing date Dim/Undim button closes or opens the whole day. Changes are shared through the existing Apps Script; students can request only times inside enabled windows. Placement tests use 30-minute starts within those windows. Removing a window does not cancel an existing class. Accepting a booking rechecks that its window still exists and is enabled.
+
+The former Exercises card is now **Activity**, and the separate Activities card is removed. Cards have horizontal icon/text layouts. Protected folders show a password popup before opening their section page. The back control is a green arrow. Native English now uses the supplied BBC course page for the current month.

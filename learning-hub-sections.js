@@ -1,7 +1,7 @@
 import {learningDocumentCategory} from './learning-document-cards.js?v=exam-rebuild';
 export const LEARNING_HUB_SECTIONS=[
  {id:'exams',title:'Examinations'},
- {id:'exercises',title:'Exercises'},
+ {id:'exercises',title:'Activity'},
  {id:'listening',title:'Listening'},
  {id:'material',title:'Material'},
  {id:'practice',title:'Activities'},

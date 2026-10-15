@@ -1,7 +1,7 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import {MONTHLY_LEARNING_PAGES,monthlyLearningPage} from './monthly-learning.js';
 test('Cairo calendar month, rather than elapsed days or browser timezone, selects the page',()=>{
  const october=monthlyLearningPage(new Date('2026-10-15T10:00:00Z'));
- assert.equal(october.key,'2026-10');assert.equal(october.title,'Learning multiple languages');
+ assert.equal(october.key,'2026-10');assert.equal(october.title,'BBC Learning English — Upper-intermediate');
  assert.equal(monthlyLearningPage(new Date('2026-10-31T21:59:59Z')).url,october.url);
  const november=monthlyLearningPage(new Date('2026-10-31T22:00:00Z'));assert.equal(november.key,'2026-11');assert.notEqual(november.url,october.url);
  assert.equal(november.source,'TED Talks');

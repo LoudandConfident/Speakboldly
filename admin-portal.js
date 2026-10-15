@@ -2,13 +2,13 @@ import {initializeInstructorOverview} from './instructor-overview.js?v=exam-rebu
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
 import {openClientReportTab} from './report-tabs.js?v=instructor-app';
 import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=momentum-and-uploads';
-import {initializeWeeklyPortalPasswords} from './weekly-portal-passwords.js?v=exam-rebuild';
+import {initializeWeeklyPortalPasswords} from './weekly-portal-passwords.js?v=horizontal-cards';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
-import {initializePortalSwitches} from './portal-switches.js?v=exam-rebuild';
+import {initializePortalSwitches} from './portal-switches.js?v=horizontal-cards';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=instructor-app';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=momentum-and-uploads';
+import {initializeAdminCalendar} from './admin-calendar.js?v=shared-slots';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=client-levels-eight';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=four-digit-restored';
 import {loadPortalMaterials} from './portal-materials.js';

@@ -2,9 +2,9 @@
 export const MONTHLY_LEARNING_PAGES=[
   {
     "source": "BBC Learning English",
-    "title": "Learning multiple languages",
-    "url": "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2025/ep-250410",
-    "brief": "Listen to various topics! Start with a short discussion about learning languages. Notice how the speakers connect their ideas, and take away a few expressions you can use yourself."
+    "title": "BBC Learning English — Upper-intermediate",
+    "url": "https://www.bbc.co.uk/learningenglish/english/hard_course",
+    "brief": "Listen to various topics! Choose a lesson from this BBC course, listen for the main idea, and keep a few expressions you can use in your own conversations."
   },
   {
     "source": "TED Talks",
