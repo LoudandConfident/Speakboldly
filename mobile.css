@@ -82,3 +82,68 @@
 @media(max-width:680px){#admin-portal{padding:0;background:transparent;border:0}#admin-students-list .admin-clients-heading{flex-wrap:nowrap;gap:12px}#admin-students-list .admin-clients-heading h3{width:auto;margin:0}#admin-students-list .admin-clients-heading #refresh-sheet-clients{flex:none;margin-left:auto;min-height:44px;padding:10px 14px}#admin-students-list .admin-clients-table tr{background:transparent;border-radius:0;box-shadow:none;border-bottom:1px solid var(--line);padding:16px 0;margin:0}#admin-dashboard .admin-detail{padding:16px 0;background:transparent;border-radius:0}}
 
 @media(max-width:680px){#admin-students-list .admin-clients-table td.admin-client-actions{flex-wrap:nowrap;gap:6px}#admin-students-list .admin-client-actions .button{flex:1 1 0;min-width:0;min-height:40px;font-size:12px;line-height:1.3;padding:8px;gap:4px;white-space:nowrap}#admin-students-list .admin-client-actions .button+.button{margin-left:0}}
+
+/* Phone layouts for Programs, courses, and learner reviews. */
+.mobile-menu-extra{display:none}
+.course-session-details>summary{display:none}
+@media(max-width:680px){
+ header #main-navigation .mobile-menu-extra{display:block}
+ #programs,#courses,#reviews{padding:28px 5% 20px}
+ main #programs:not([hidden]){display:flex;gap:0}
+ #programs>.coaching-independence{margin:0!important;max-width:100%;font-size:15px;line-height:1.7!important}
+ #programs .coaching-independence h3{font-size:26px;line-height:1.3;letter-spacing:-.5px;margin:0 0 18px}
+ #programs .coaching-independence p{margin:0 0 16px}
+ #programs .coaching-independence ul{padding-left:20px;margin:0 0 20px}
+ #programs .coaching-independence li{padding-left:3px;margin:0 0 10px}
+ #programs>.program-course-actions{align-self:flex-end;margin:8px 0 28px;transform:none}
+ #programs .program-course-actions>.button{min-height:44px;padding:11px 18px;font-size:14px}
+ #courses h2,#reviews h2{font-size:28px;line-height:1.25;letter-spacing:-.6px;margin:10px 0 14px}
+ #courses .courses-introduction{display:flex;flex-direction:column;gap:20px;margin:0 0 20px;align-items:stretch}
+ #courses .courses-heading{width:100%}
+ #courses .courses-subtitle{font-size:15px;line-height:1.65}
+ #courses .courses-introduction .course-booking-note{width:100%;max-width:none;margin:0;padding:14px 16px;background:#edf0e6;border:1px solid var(--line);border-radius:12px;font-size:13px;line-height:1.65}
+ .course-session-details>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:24px;cursor:pointer;font-weight:600;list-style:none;font-size:14px}
+ .course-session-details>summary::-webkit-details-marker{display:none}
+ .course-session-details>summary::after{content:'+';font-size:20px;font-weight:400}
+ .course-session-details[open]>summary::after{content:'−'}
+ #courses .course-session-details[open]>ul{margin-top:14px}
+ #courses .catalog-controls{display:flex;flex-direction:column;gap:14px;margin-bottom:20px;align-items:stretch}
+ #courses .filters{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;width:100%;padding:0 0 8px;scrollbar-width:thin}
+ #courses .filter{flex:none;min-height:40px;white-space:nowrap;font-size:13px;padding:9px 13px}
+ #courses .search{width:100%;min-height:46px}
+ #course-grid{grid-template-columns:minmax(0,1fr);grid-auto-rows:auto;gap:18px}
+ #course-grid .course-card{display:grid;grid-template-columns:78px minmax(0,1fr);gap:14px;align-items:start;padding:18px;border-radius:16px;height:auto}
+ #course-grid .course-illustration{width:78px;height:88px;margin:0;object-fit:contain;border-radius:10px}
+ #course-grid .course-body{padding:0;min-width:0}
+ #course-grid .category{font-size:11px;line-height:1.5;letter-spacing:.3px}
+ #course-grid .course-body h3{font-size:18px;line-height:1.35;margin:6px 0 10px;letter-spacing:-.25px}
+ #course-grid .course-summary{font-size:14px;line-height:1.6;margin:0 0 12px}
+ #course-grid .course-pricing{margin:0 0 12px}
+ #course-grid .course-price-option p{margin:0}
+ #course-grid .course-pricing strong{font-size:19px}
+ #course-grid .course-view-row{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;font-size:12px;line-height:1.5}
+ #course-grid .course-view-row .course-link{width:auto;min-height:44px;margin-left:auto;padding:10px 14px;font-size:13px}
+ #course-dialog{width:calc(100% - 24px);max-width:560px;max-height:calc(100dvh - 32px);padding:24px 20px;border-radius:18px}
+ #course-detail>.course-illustration{display:block;width:100px;height:88px;margin:0 0 16px}
+ #course-detail h2{font-size:25px;line-height:1.3}
+ #course-detail h3{font-size:17px;line-height:1.4;margin-top:24px}
+ #course-detail p,#course-detail li{font-size:15px;line-height:1.7}
+ #reviews .reviews-layout{display:flex;flex-direction:column;gap:24px;width:100%}
+ #reviews .reviews-copy,#reviews .reviews-album-area{width:100%;min-width:0;transform:none}
+ #reviews .review-intro{font-size:15px;line-height:1.7;margin:0 0 18px}
+ #reviews .reviews-copy #review-open{min-height:44px;font-size:14px;padding:10px 16px}
+ #reviews .reviews-album-area .review-album{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:14px 12px;max-width:none;margin:0;align-items:center}
+ #reviews .review-cards{grid-column:1/-1;grid-row:1;display:flex;align-items:flex-start;gap:16px;min-height:0;height:auto;overflow-x:auto;overflow-y:hidden;padding:0;scroll-snap-type:x mandatory;touch-action:pan-x pan-y pinch-zoom;scrollbar-width:none}
+ #reviews .review-cards::-webkit-scrollbar{display:none}
+ #reviews .review-card,#reviews .review-card.is-selected,#reviews .review-card.is-previous,#reviews .review-card.is-next{flex:0 0 100%;position:relative;inset:auto;width:100%;height:auto;max-height:none;padding:24px;margin:0;transform:none;filter:none;opacity:1;background:#fffef9;border:1px solid #bacbbf;border-radius:18px;box-shadow:none;overflow:visible;animation:none;transition:none;scroll-snap-align:start}
+ #reviews .review-card-content{height:auto;overflow:visible;padding:0;touch-action:auto}
+ #reviews .review-card h3{font-size:17px;line-height:1.4;margin:0 0 8px}
+ #reviews .review-card-details{font-size:12px;line-height:1.7;color:var(--muted)}
+ #reviews .review-card blockquote{font-size:17px;line-height:1.75;margin:20px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+ #reviews .review-arrow{grid-row:2;width:44px;height:44px;margin:0;font-size:26px}
+ #review-previous{grid-column:1}
+ #review-next{grid-column:3}
+ #reviews #review-position{grid-column:2;grid-row:2;margin:0;font-size:13px;line-height:1.5}
+ #reviews>.page-signature{transform:none;padding-top:28px}
+}
+@media(max-width:360px){#course-grid .course-card{grid-template-columns:58px minmax(0,1fr);gap:12px;padding:14px}#course-grid .course-illustration{width:58px;height:72px}#reviews .review-card{padding:20px}}

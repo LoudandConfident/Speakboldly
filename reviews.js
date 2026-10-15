@@ -13,10 +13,18 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  let hovering = false, focused = false, rotationTimer, drag = null;
  const view = doc.querySelector('#reviews');
  const mobileReviews=()=>Boolean(doc.defaultView.matchMedia?.('(max-width: 680px)').matches);
+ function fitMobileReview(){
+  if(!cards)return;
+  if(!mobileReviews()){cards.style.height='';return;}
+  const card=cards.children[selected];if(card)cards.style.height=Math.ceil(card.getBoundingClientRect().height)+'px';
+ }
+ const sizeObserver=doc.defaultView.ResizeObserver?new doc.defaultView.ResizeObserver(fitMobileReview):null;
+ const phoneQuery=doc.defaultView.matchMedia?.('(max-width: 680px)');phoneQuery?.addEventListener?.('change',()=>{render();restartRotation();});
+ doc.defaultView.addEventListener('resize',fitMobileReview);
  function restartRotation() {
   doc.defaultView.clearInterval(rotationTimer);
   rotationTimer = doc.defaultView.setInterval(()=>{
-   if (reviews.length < 2 || doc.hidden || view?.hidden || hovering || focused || drag || doc.querySelector('dialog[open]')) return;
+   if (mobileReviews() || reviews.length < 2 || doc.hidden || view?.hidden || hovering || focused || drag || doc.querySelector('dialog[open]')) return;
    moveReview(1);
   },15000);
  }
@@ -31,7 +39,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  function render() {
   if (!album) return;
   album.hidden = !reviews.length;
-  cards.replaceChildren();
+  sizeObserver?.disconnect();cards.replaceChildren();
   if (!reviews.length) return;
   selected = Math.min(selected,reviews.length-1);
   const indices = mobileReviews()?reviews.map((_,index)=>index):[...new Set([selected-1,selected+1,selected].map(i => (i+reviews.length)%reviews.length))];
@@ -44,11 +52,12 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
    const name = doc.createElement('h3');name.textContent = review.name || 'Anonymous';
    const detail = doc.createElement('p');detail.className = 'review-card-details';detail.textContent = [review.age ? 'Age: '+review.age : '',review.level ? 'Level: '+review.level : '',review.program ? 'Program: '+review.program : ''].filter(Boolean).join(' · ');
    const content = doc.createElement('div');content.className = 'review-card-content';
-   content.append(name,detail,quote);card.append(content);cards.append(card);
+   content.append(name,detail,quote);card.append(content);cards.append(card);sizeObserver?.observe(card);
   }
   previous.disabled = next.disabled = reviews.length < 2;
   position.textContent = 'Review '+(selected+1)+' of '+reviews.length;
   if(mobileReviews()){const target=cards.children[selected];if(target)cards.scrollLeft=target.offsetLeft-cards.children[0].offsetLeft;}
+  fitMobileReview();
  }
  async function load({force=false}={}) {
   if (!connected()) {listStatus.textContent='';album.hidden=true;return;}
@@ -63,12 +72,12 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  function moveReview(direction){
   if(reviews.length<2)return;
   selected=(selected+direction+reviews.length)%reviews.length;render();
-  cards.querySelector('.is-selected')?.classList.add(direction>0?'review-enter-next':'review-enter-previous');
+  if(!mobileReviews())cards.querySelector('.is-selected')?.classList.add(direction>0?'review-enter-next':'review-enter-previous');
   restartRotation();
  }
  previous?.addEventListener('click',()=>moveReview(-1));
  next?.addEventListener('click',()=>moveReview(1));
- cards?.addEventListener('scroll',()=>{if(!mobileReviews()||!cards.children.length)return;const first=cards.children[0].offsetLeft;let closest=0,distance=Infinity;for(let i=0;i<cards.children.length;i++){const delta=Math.abs(cards.children[i].offsetLeft-first-cards.scrollLeft);if(delta<distance){distance=delta;closest=i;}}selected=closest;position.textContent='Review '+(selected+1)+' of '+reviews.length;restartRotation();},{passive:true});
+ cards?.addEventListener('scroll',()=>{if(!mobileReviews()||!cards.children.length)return;const first=cards.children[0].offsetLeft;let closest=0,distance=Infinity;for(let i=0;i<cards.children.length;i++){const delta=Math.abs(cards.children[i].offsetLeft-first-cards.scrollLeft);if(delta<distance){distance=delta;closest=i;}}selected=closest;fitMobileReview();position.textContent='Review '+(selected+1)+' of '+reviews.length;restartRotation();},{passive:true});
  cards?.setAttribute('tabindex','0');
  cards?.setAttribute('aria-label','Reviews. Swipe left or right, or use the arrow keys.');
  cards?.addEventListener('pointerdown',event=>{
