@@ -1,6 +1,6 @@
 import {createDailyFollowUp} from './daily-task-interactions.js?v=no-written-response';
 import {createDailyGrammar} from './daily-grammar.js?v=grammar-v1';
-import {dailyMissionSet} from './daily-mission-set.js?v=standalone-readings';
+import {dailyMissionSet} from './daily-mission-set.js?v=past-stories';
 import {cairoMissionDate,missionLevels,readMissionState,writeMissionState} from './daily-mission-data.js?v=five-practices';
 export function initializeDailyMission(doc,win=doc.defaultView){
  const host=doc.querySelector('#daily-mission');if(!host||host.dataset.initialized)return;host.dataset.initialized='true';

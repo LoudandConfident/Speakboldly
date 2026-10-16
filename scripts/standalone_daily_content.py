@@ -26,3 +26,14 @@ def make_standalone(themes):
         for scene in theme['scenes']:
             if scene['title'] in REPLACEMENTS:
                 scene['title'],scene['scene'],scene['outcome']=REPLACEMENTS[scene['title']]
+
+
+def load_past_stories(themes, root):
+    rows=[line.split('|') for line in (root/'content/daily-standalone-stories.txt').read_text().splitlines() if line and not line.startswith('#')]
+    assert len(rows)==56 and all(len(row)==5 for row in rows)
+    fiction=[t for t in themes if t['kind']=='Original story']
+    assert len(fiction)==8
+    for theme,group in zip(fiction,[rows[i:i+7] for i in range(0,56,7)]):
+        for scene,row in zip(theme['scenes'],group):
+            title,opening,turn,ending,point=row
+            scene.update(title=title,scene=opening+' '+turn,outcome=ending,point=point,pastStory=True)
