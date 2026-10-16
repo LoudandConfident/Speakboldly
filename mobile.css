@@ -177,3 +177,6 @@ html.app-pull-refresh-enabled,html.app-pull-refresh-enabled body{overscroll-beha
 #daily-mission .mission-group-label{font-size:12px;font-weight:700;color:#176b3a;letter-spacing:.02em;margin:16px 0 8px}
 
 #daily-mission .daily-grammar{max-width:800px;border:1px solid var(--line);border-radius:12px;background:#edf0e6;margin:12px 0}#daily-mission .daily-grammar>summary{display:flex;justify-content:space-between;align-items:center;gap:14px;list-style:none;padding:14px 18px;min-height:48px;cursor:pointer;font-weight:600;font-size:16px}#daily-mission .daily-grammar>summary::-webkit-details-marker{display:none}#daily-mission .daily-grammar>summary::after{content:'+';font-size:24px;line-height:1;flex:none}#daily-mission .daily-grammar[open]>summary::after{content:'−'}#daily-mission .daily-grammar-body{padding:0 18px 14px}#daily-mission .daily-grammar blockquote{margin:10px 0;padding:12px;background:#fffef9;border-radius:8px;font-size:14px;line-height:1.65}#daily-mission .grammar-nuance{color:var(--muted)}
+
+
+#daily-mission .mission-expression-entry+.mission-expression-entry{border-top:1px solid var(--line);margin-top:12px;padding-top:8px}#daily-mission .daily-grammar-card .daily-grammar-body{padding:0}#daily-mission .daily-grammar-card .grammar-nuance{color:var(--muted)}
