@@ -8,7 +8,7 @@ import {initializePortalSwitches} from './portal-switches.js?v=horizontal-cards'
 import {initializeTeacherDocuments} from './teacher-documents.js?v=instructor-app';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=session-series';
+import {initializeAdminCalendar} from './admin-calendar.js?v=compact-day';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=client-levels-eight';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=four-digit-restored';
 import {loadPortalMaterials} from './portal-materials.js';
