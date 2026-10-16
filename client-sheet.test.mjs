@@ -48,7 +48,7 @@ test('combined Clients router authenticates and dispatches confirmation and PDF 
 
 test('email permission setup does not send messages',()=>{
  for(const filename of ['EmailActions.gs','UnifiedCode.gs']){
-  let checked=0;const context={MailApp:{getRemainingDailyQuota:()=>{checked++;return 100;},sendEmail:()=>{throw new Error('Must not send email during permission setup.');}}};vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/'+filename,'utf8'),context);context.authorizeClientEmails();assert.equal(checked,1);
+  let checked=0;const context={PropertiesService:{getScriptProperties:()=>({getProperty:()=>''})},MailApp:{getRemainingDailyQuota:()=>{checked++;return 100;},sendEmail:()=>{throw new Error('Must not send email during permission setup.');}}};vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/'+filename,'utf8'),context);context.authorizeClientEmails();assert.equal(checked,1);
  }
 });
 
@@ -65,13 +65,13 @@ test('permission retry checks spreadsheet and mail access without sending or cha
 
 test('branded email signature shows Speak Boldly without an email address',()=>{
  for(const filename of ['EmailActions.gs','UnifiedCode.gs']){
-  const context={};vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/'+filename,'utf8'),context);
+  const context={PropertiesService:{getScriptProperties:()=>({getProperty:()=>''})}};vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/'+filename,'utf8'),context);
   const html=context.sbBrandedEmail('Class confirmation','<p>Class details</p>');assert(html.includes('Speak Boldly</p>'));assert(!html.includes('mailto:'));assert(!html.includes('speakboldly16@gmail.com'));
  }
 });
 
 test('automatic sheet triggers never send and disabling them preserves other triggers',()=>{
  for(const filename of ['Sessions.gs','UnifiedCode.gs']){
-  const removed=[],properties=[];const auto={getHandlerFunction:()=> 'sendDueSheetReminders'},other={getHandlerFunction:()=> 'otherTask'};const context={MailApp:{sendEmail:()=>{throw new Error('Automatic sends are forbidden.');}},PropertiesService:{getScriptProperties:()=>({setProperty:(k,v)=>properties.push([k,v])})},ScriptApp:{getProjectTriggers:()=>[auto,other],deleteTrigger:t=>removed.push(t)}};vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/'+filename,'utf8'),context);context.sendDueSheetReminders();context.disableAutomaticReminders();assert.deepEqual(removed,[auto]);assert.deepEqual(properties,[['SB_REMINDERS_ENABLED','false']]);
+  const removed=[],properties=[];const auto={getHandlerFunction:()=> 'sendDueSheetReminders'},other={getHandlerFunction:()=> 'otherTask'};const context={MailApp:{sendEmail:()=>{throw new Error('Automatic sends are forbidden.');}},PropertiesService:{getScriptProperties:()=>({getProperty:()=>'',setProperty:(k,v)=>properties.push([k,v])})},ScriptApp:{getProjectTriggers:()=>[auto,other],deleteTrigger:t=>removed.push(t)}};vm.createContext(context);vm.runInContext(fs.readFileSync('./google-sheets/clients/'+filename,'utf8'),context);context.sendDueSheetReminders();context.disableAutomaticReminders();assert.deepEqual(removed,[auto]);assert.deepEqual(properties,[['SB_REMINDERS_ENABLED','false']]);
  }
 });

@@ -69,6 +69,7 @@ function handleClientSync(e){
   const key=props.getProperty('CLIENT_SYNC_KEY');
   if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
   if(!['sendClientEmail','uploadLibraryFile'].includes(p.action)&&e.postData.contents.length>20000)throw new Error('Request too large.');
+  if(['exportOwnerBackup','saveOwnerBackup'].includes(p.action))return sbOwnerBackupAction(p,sbExamBook());
   if(['nativeEnglishEdit','saveNativeEnglish'].includes(p.action))return sbNativeEnglishOwner(p);
   if(typeof SB_OWNER_BOOKING_ACTIONS!=='undefined'&&SB_OWNER_BOOKING_ACTIONS.includes(p.action))return handleOwnerBooking(p);
   if(typeof SB_INSTRUCTOR_EXAM_ACTIONS!=='undefined'&&SB_INSTRUCTOR_EXAM_ACTIONS.includes(p.action))return handleInstructorExam(p);

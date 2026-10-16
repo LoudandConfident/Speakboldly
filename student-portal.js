@@ -1,5 +1,5 @@
-import {initializeStudentAssessment} from './student-assessment.js?v=native-owner';
-import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
+import {initializeStudentAssessment} from './student-assessment.js?v=reliability';
+import {renderPdf} from './portal-document.js?v=embedded-books';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {takeStudentAttempt} from './student-attempts.js';
 import {showInteractiveExam} from './interactive-exams.js';

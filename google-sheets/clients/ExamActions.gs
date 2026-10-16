@@ -72,16 +72,23 @@ function sbPortalFolderGroup(key){
  throw new Error('Choose a valid folder.');
 }
 function sbExamNotify(sheet,index,row){
-  if(!row[6]||['sent','sending'].includes(String(row[15])))return;
+  if(!row[6]||['sent','sending','delivery_unknown'].includes(String(row[15])))return;
   const to=PropertiesService.getScriptProperties().getProperty('SB_EXAM_NOTIFY_EMAIL');
   try{
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_EXAM_NOTIFY_EMAIL in Script Properties.');
     if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
     row[15]='sending';row[16]='';sheet.getRange(index+2,1,1,18).setValues([row]);
-    const attempt=sbExamAttempt(row),automatic=attempt.automatic;const summary=automatic?Object.entries(automatic).map(([section,mark])=>({A:'Choose',B:'Correct the mistake',C:'Comprehension',D:'Complete the sentences',F:'Punctuation'}[section]||section)+': '+mark.score+' / '+mark.outOf+(mark.complete===false?' (review needed)':'')).join('\n'):'';
-    MailApp.sendEmail({to,subject:'Assessment submitted — '+String(row[2]).replace(/^'/,'')+' — Level '+row[3],body:'An interactive test has been submitted.\n\nName: '+String(row[2]).replace(/^'/,'')+'\nLevel: '+row[3]+'\nProgram: '+String(row[13]).replace(/^'/,'')+'\n\nAutomatic section scores:\n'+summary+'\n\nWriting: awaiting your mark (out of 10). Automatic scores are provisional where review is needed.\n\nWriting response:\n'+(attempt.answers.E||'(No response)')+'\n\nAll submitted answers:\n'+JSON.stringify(attempt.answers,null,2)+'\n\nOpen Instructor Portal → Exam Review to correct the answers and save the score.\n\nSpeak Boldly',name:'Speak Boldly'});
+    const attempt=sbExamAttempt(row),automatic=attempt.automatic,labels={A:'Choose',B:'Correct the mistake',C:'Comprehension',D:'Complete the sentences',F:'Punctuation'},lines=[],total={score:0,outOf:0};
+    if(automatic)for(const [section,mark]of Object.entries(automatic)){
+      total.score+=mark.score;total.outOf+=mark.outOf;
+      lines.push((labels[section]||section)+': '+mark.score+' / '+mark.outOf+(mark.complete===false?' (alternative answers flagged for your check)':''));
+      for(const item of mark.items||[]){const choice=Array.isArray(item.accepted),answer=item.answer,expected=choice?item.accepted.map(value=>'option '+(value+1)).join(' or '):item.expected,status=item.status||(item.correct?'correct':answer===null?'unanswered':'incorrect');lines.push('  '+item.number+'. '+status+' | Answer: '+(answer===null||answer===''?'(No response)':choice?'option '+(Number(answer)+1):answer)+' | Expected: '+expected);}
+      lines.push('');
+    }
+    const writingLimit=attempt.answers.examVersion===2?10:20;
+    MailApp.sendEmail({to,subject:'Assessment submitted — '+String(row[2]).replace(/^'/,'')+' — Level '+row[3],body:'An interactive test has been submitted.\n\nName: '+String(row[2]).replace(/^'/,'')+'\nLevel: '+row[3]+'\nProgram: '+String(row[13]).replace(/^'/,'')+'\nAttempt: '+attempt.id+'\n\nAutomatic section scores and corrections:\n'+lines.join('\n')+'\nObjective total: '+total.score+' / '+total.outOf+'\n\nWriting: awaiting your mark (out of '+writingLimit+'). Writing has not been automatically graded. Review any flagged alternatives before setting the final score.\n\nWriting response:\n'+(attempt.answers.E||'(No response)')+'\n\nAll submitted answers:\n'+JSON.stringify(attempt.answers,null,2)+'\n\nPrepare your final report and notes manually: Instructor Portal → client Actions → Send final Report / Notes. Nothing is sent to the student automatically.\n\nSpeak Boldly',name:'Speak Boldly'});
     row[15]='sent';
-  }catch(error){row[15]='failed';row[16]=sbExamSafe(error.message);}
+  }catch(error){row[15]=row[15]==='sending'?'delivery_unknown':'failed';row[16]=sbExamSafe(error.message);}
   sheet.getRange(index+2,1,1,18).setValues([row]);
 }
 function sbExamExpire(sheet,index,row){if(!row[6]&&Date.now()>=Number(row[14])){row[4]='Awaiting review';row[6]=new Date().toISOString();row[12]=Number(row[12])+1;sheet.getRange(index+2,1,1,18).setValues([row]);sbExamNotify(sheet,index,row);}}
@@ -207,7 +214,7 @@ function handleInstructorExam(data) {
     }
     const index=rows.findIndex(row=>String(row[0])===String(data.attemptId)),row=rows[index];
     if(!row||!row[6])throw new Error('No submitted assessment found.');
-    if(data.action==='retryExamNotification'){if(row[15]==='sending')throw new Error('Email delivery is uncertain. Check your sent mail before retrying.');sbExamNotify(sheet,index,row);return sbExamResponse({ok:true,attempt:sbExamAttempt(row)});}
+    if(data.action==='retryExamNotification'){if(['sending','delivery_unknown'].includes(row[15]))throw new Error('Email delivery is uncertain. Check your sent mail before retrying.');sbExamNotify(sheet,index,row);return sbExamResponse({ok:true,attempt:sbExamAttempt(row)});}
     if(Number(data.version)!==Number(row[12]))throw new Error('This review changed in another tab. Refresh before marking it again.');
     const limits=row[7]&&JSON.parse(String(row[7])).examVersion===2?{A:10,B:5,C:5,D:5,E:10,F:5}:{A:20,B:20,C:20,D:20,E:20};const marks={};for(const [section,max]of Object.entries(limits)){const mark=data.marks?.[section];if(typeof mark!=='number'||!Number.isFinite(mark)||mark<0||mark>max)throw new Error('Enter a mark from 0 to '+max+' for section '+section+'.');marks[section]=mark;}
     const feedback=String(data.feedback||'');if(feedback.length>10000)throw new Error('Feedback too long.');

@@ -1,6 +1,6 @@
 import {withBerlitzBooks} from './berlitz-material.js?v=exam-rebuild';
 import {initializeMonthlyLearning} from './monthly-learning.js?v=instructor-edit';
-import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=on-site-documents';
+import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=embedded-books';
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=exam-rebuild';
 import {initializeStudentContact} from './student-contact.js?v=mission-question';
 import {chooseLearningLevel} from './learning-level-dialog.js?v=folder-popups';

@@ -162,6 +162,7 @@ function sbRequireClientConnection(data) {
 }
 
 function sbRouteInstructorRequest(data, connection, lock) {
+  if(['exportOwnerBackup','saveOwnerBackup'].includes(data.action))return sbOwnerBackupAction(data,connection.book);
   if(['nativeEnglishEdit','saveNativeEnglish'].includes(data.action))return sbNativeEnglishOwner(data);
   if (SB_OWNER_BOOKING_ACTIONS.includes(data.action)) return handleOwnerBooking(data);
   if (SB_INSTRUCTOR_EXAM_ACTIONS.includes(data.action)) return handleInstructorExam(data);
@@ -310,7 +311,9 @@ function verifySpeakBoldlyInstall() {
     bookings: typeof handlePublicBooking === 'function',
     registrationApproval: typeof sbSubmitRegistration === 'function' && typeof handleRegistrationOwner === 'function',
     dayAvailability: typeof sbSaveCalendarDay === 'function',
-    personalCalendar: typeof sbPersonalCalendarFeed === 'function'
+    personalCalendar: typeof sbPersonalCalendarFeed === 'function',
+    backups: typeof sbOwnerBackupAction === 'function',
+    nativeEnglish: typeof sbNativeEnglishOwner === 'function'
   };
   const missing = Object.keys(checks).filter(name => !checks[name]);
   if (missing.length) throw new Error('The copied script is incomplete: ' + missing.join(', '));
@@ -646,16 +649,23 @@ function sbPortalFolderGroup(key){
  throw new Error('Choose a valid folder.');
 }
 function sbExamNotify(sheet,index,row){
-  if(!row[6]||['sent','sending'].includes(String(row[15])))return;
+  if(!row[6]||['sent','sending','delivery_unknown'].includes(String(row[15])))return;
   const to=PropertiesService.getScriptProperties().getProperty('SB_EXAM_NOTIFY_EMAIL');
   try{
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_EXAM_NOTIFY_EMAIL in Script Properties.');
     if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
     row[15]='sending';row[16]='';sheet.getRange(index+2,1,1,18).setValues([row]);
-    const attempt=sbExamAttempt(row),automatic=attempt.automatic;const summary=automatic?Object.entries(automatic).map(([section,mark])=>({A:'Choose',B:'Correct the mistake',C:'Comprehension',D:'Complete the sentences',F:'Punctuation'}[section]||section)+': '+mark.score+' / '+mark.outOf+(mark.complete===false?' (review needed)':'')).join('\n'):'';
-    MailApp.sendEmail({to,subject:'Assessment submitted — '+String(row[2]).replace(/^'/,'')+' — Level '+row[3],body:'An interactive test has been submitted.\n\nName: '+String(row[2]).replace(/^'/,'')+'\nLevel: '+row[3]+'\nProgram: '+String(row[13]).replace(/^'/,'')+'\n\nAutomatic section scores:\n'+summary+'\n\nWriting: awaiting your mark (out of 10). Automatic scores are provisional where review is needed.\n\nWriting response:\n'+(attempt.answers.E||'(No response)')+'\n\nAll submitted answers:\n'+JSON.stringify(attempt.answers,null,2)+'\n\nOpen Instructor Portal → Exam Review to correct the answers and save the score.\n\nSpeak Boldly',name:'Speak Boldly'});
+    const attempt=sbExamAttempt(row),automatic=attempt.automatic,labels={A:'Choose',B:'Correct the mistake',C:'Comprehension',D:'Complete the sentences',F:'Punctuation'},lines=[],total={score:0,outOf:0};
+    if(automatic)for(const [section,mark]of Object.entries(automatic)){
+      total.score+=mark.score;total.outOf+=mark.outOf;
+      lines.push((labels[section]||section)+': '+mark.score+' / '+mark.outOf+(mark.complete===false?' (alternative answers flagged for your check)':''));
+      for(const item of mark.items||[]){const choice=Array.isArray(item.accepted),answer=item.answer,expected=choice?item.accepted.map(value=>'option '+(value+1)).join(' or '):item.expected,status=item.status||(item.correct?'correct':answer===null?'unanswered':'incorrect');lines.push('  '+item.number+'. '+status+' | Answer: '+(answer===null||answer===''?'(No response)':choice?'option '+(Number(answer)+1):answer)+' | Expected: '+expected);}
+      lines.push('');
+    }
+    const writingLimit=attempt.answers.examVersion===2?10:20;
+    MailApp.sendEmail({to,subject:'Assessment submitted — '+String(row[2]).replace(/^'/,'')+' — Level '+row[3],body:'An interactive test has been submitted.\n\nName: '+String(row[2]).replace(/^'/,'')+'\nLevel: '+row[3]+'\nProgram: '+String(row[13]).replace(/^'/,'')+'\nAttempt: '+attempt.id+'\n\nAutomatic section scores and corrections:\n'+lines.join('\n')+'\nObjective total: '+total.score+' / '+total.outOf+'\n\nWriting: awaiting your mark (out of '+writingLimit+'). Writing has not been automatically graded. Review any flagged alternatives before setting the final score.\n\nWriting response:\n'+(attempt.answers.E||'(No response)')+'\n\nAll submitted answers:\n'+JSON.stringify(attempt.answers,null,2)+'\n\nPrepare your final report and notes manually: Instructor Portal → client Actions → Send final Report / Notes. Nothing is sent to the student automatically.\n\nSpeak Boldly',name:'Speak Boldly'});
     row[15]='sent';
-  }catch(error){row[15]='failed';row[16]=sbExamSafe(error.message);}
+  }catch(error){row[15]=row[15]==='sending'?'delivery_unknown':'failed';row[16]=sbExamSafe(error.message);}
   sheet.getRange(index+2,1,1,18).setValues([row]);
 }
 function sbExamExpire(sheet,index,row){if(!row[6]&&Date.now()>=Number(row[14])){row[4]='Awaiting review';row[6]=new Date().toISOString();row[12]=Number(row[12])+1;sheet.getRange(index+2,1,1,18).setValues([row]);sbExamNotify(sheet,index,row);}}
@@ -781,7 +791,7 @@ function handleInstructorExam(data) {
     }
     const index=rows.findIndex(row=>String(row[0])===String(data.attemptId)),row=rows[index];
     if(!row||!row[6])throw new Error('No submitted assessment found.');
-    if(data.action==='retryExamNotification'){if(row[15]==='sending')throw new Error('Email delivery is uncertain. Check your sent mail before retrying.');sbExamNotify(sheet,index,row);return sbExamResponse({ok:true,attempt:sbExamAttempt(row)});}
+    if(data.action==='retryExamNotification'){if(['sending','delivery_unknown'].includes(row[15]))throw new Error('Email delivery is uncertain. Check your sent mail before retrying.');sbExamNotify(sheet,index,row);return sbExamResponse({ok:true,attempt:sbExamAttempt(row)});}
     if(Number(data.version)!==Number(row[12]))throw new Error('This review changed in another tab. Refresh before marking it again.');
     const limits=row[7]&&JSON.parse(String(row[7])).examVersion===2?{A:10,B:5,C:5,D:5,E:10,F:5}:{A:20,B:20,C:20,D:20,E:20};const marks={};for(const [section,max]of Object.entries(limits)){const mark=data.marks?.[section];if(typeof mark!=='number'||!Number.isFinite(mark)||mark<0||mark>max)throw new Error('Enter a mark from 0 to '+max+' for section '+section+'.');marks[section]=mark;}
     const feedback=String(data.feedback||'');if(feedback.length>10000)throw new Error('Feedback too long.');
@@ -895,11 +905,14 @@ function sbInstructorOverview(book) {
  for(const row of logs){if(row[4]!=='sent'||!row[5])continue;const key=String(row[1])+':'+String(row[2]),time=Date.parse(row[5]);if(Number.isFinite(time))sent.set(key,Math.max(sent.get(key)||0,time));}
  const attemptSheet=book.getSheetByName('Exam attempts'),attempts=attemptSheet&&attemptSheet.getLastRow()>1?attemptSheet.getRange(2,1,attemptSheet.getLastRow()-1,18).getValues():[],pendingReviews=[],reportsToPrepare=[];
  const normalize=value=>String(value||'').replace(/^'/,'').normalize('NFKC').trim().toLowerCase();
- for(const row of attempts){if(!row[0]||!row[6])continue;if(!row[11])pendingReviews.push({id:String(row[0]),name:String(row[2]).replace(/^'/,''),level:Number(row[3]),program:String(row[13]||'').replace(/^'/,''),submittedAt:String(row[6])});else{const client=clients.find(person=>normalize(person[1])===normalize(row[2]));if(!client||(sent.get(String(client[0])+':final')||0)<Date.parse(row[11]))reportsToPrepare.push({id:String(row[0]),clientId:client?String(client[0]):'',name:String(row[2]).replace(/^'/,''),level:Number(row[3]),reviewedAt:String(row[11])});}}
+ for(const row of attempts){if(!row[0]||!row[6])continue;
+  const matching=clients.filter(person=>normalize(person[1])===normalize(row[2])),client=clients.find(person=>String(person[0])===String(row[1]))||(matching.length===1?matching[0]:null),stamp=Date.parse(row[11]||row[6]);
+  if(!client||(sent.get(String(client[0])+':final')||0)<stamp){if(!row[11])pendingReviews.push({id:String(row[0]),name:String(row[2]).replace(/^'/,''),level:Number(row[3]),notificationStatus:String(row[15]),submittedAt:String(row[6])});reportsToPrepare.push({id:String(row[0]),clientId:client?String(client[0]):'',name:String(row[2]).replace(/^'/,''),level:Number(row[3]),reviewedAt:String(row[11]),submittedAt:String(row[6]),writingPending:!row[11]});}
+ }
  const documentSheet=book.getSheetByName('TeacherDocuments'),documents=documentSheet&&documentSheet.getLastRow()>1?documentSheet.getRange(2,1,documentSheet.getLastRow()-1,4).getValues():[],latest=new Map(),drafts=[];
  for(const row of documents){let record;try{record=JSON.parse(String(row[3]));}catch{continue;}if(String(row[0]).startsWith('draft:')){if(record.values&&Object.values(record.values).some(value=>String(value).trim()))drafts.push({type:record.type,updatedAt:String(row[2])});continue;}if(!record.client?.id||!record.type)continue;const key=String(record.client.id)+':'+String(record.type),stamp=Date.parse(record.preparedAt||row[2]);if(!latest.has(key)||stamp>latest.get(key).stamp)latest.set(key,{record,stamp});}
  const preparedReports=[];for(const [key,entry]of latest){const record=entry.record;if(record.status==='sent'||record.sentAt||(sent.get(key)||0)>=entry.stamp)continue;preparedReports.push({id:record.id,clientId:record.client.id,name:record.client.name,type:record.type,title:record.title,preparedAt:record.preparedAt||''});}
- return {ok:true,today,refreshedAt:new Date().toISOString(),classes:classes.filter(item=>item.date===today),nextClass:classes.find(item=>Date.parse(item.startsAt)>=now)||null,zoomUrl:typeof SB_ZOOM_URL==='string'?SB_ZOOM_URL:'',pendingReviews,reportsToPrepare,preparedReports,drafts,registrationRequests:sbRegistrationRows(book).filter(row=>['awaiting','accepting'].includes(String(row[9]))).map(sbRegistrationView)};
+ return {ok:true,today,refreshedAt:new Date().toISOString(),classes:classes.filter(item=>item.date===today),nextClass:classes.find(item=>Date.parse(item.startsAt)>=now)||null,upcomingClasses:classes.filter(item=>item.date>today&&Date.parse(item.startsAt)<now+7*86400000),zoomUrl:PropertiesService.getScriptProperties().getProperty('SB_ZOOM_URL')||'',backupStatus:{lastSuccess:PropertiesService.getScriptProperties().getProperty('SB_BACKUP_LAST_SUCCESS')||'',dailyEnabled:PropertiesService.getScriptProperties().getProperty('SB_BACKUP_DAILY_ENABLED')==='true'},pendingReviews,reportsToPrepare,preparedReports,drafts,registrationRequests:sbRegistrationRows(book).filter(row=>['awaiting','accepting'].includes(String(row[9]))).map(sbRegistrationView)};
 }
 function handleOwnerBooking(data){
  try{
@@ -1094,7 +1107,7 @@ function handleRegistrationOwner(data,book){
   const type=sbRegistrationType(String(row[5]),course);if(type.duration!==Number(row[8]))throw new Error('The program duration does not match this booking. Ask for a booking from the correct program.');const program=type.program||course,start=sbCairoTimestamp(String(row[6]),String(row[7])),sessions=sbSessionsSheet(),sessionRows=sbBookingRows(sessions,14),saved=row[12]?sessionRows.find(item=>String(item[0])===String(row[12])):null;
   if(!saved){if(!sbRegistrationSlots(String(row[6]),String(row[5]),course).some(slot=>slot.time===String(row[7])))throw new Error('This availability window was removed or dimmed. Ask the student to choose another slot.');const window=sbBookingWindow();if(start<=Date.now()||String(row[6])>window.end||sbCalendarDateBlocked(String(row[6]),book))throw new Error('This date is no longer available. Ask the student to choose another slot.');if(sbBookingOverlap(start,sbBookingBusy(book),[],type.duration))throw new Error('This slot has been taken. Decline this request or ask the student to choose another slot.');}
   const client=sbRegistrationClient(book,row,data),number=sessionRows.filter(item=>String(item[1])===String(client.row[0])&&String(item[10]||'')===program).reduce((max,item)=>Math.max(max,Number(item[2])||0),0)+1;
-  const plan={clientId:String(client.row[0]),number,date:String(row[6]),time:String(row[7]),program,course,level,duration:type.duration};
+  const plan={clientId:String(client.row[0]),number,date:String(row[6]),time:String(row[7]),program,course:['Assessment','Trial session'].includes(course)?'':course,level,duration:type.duration};
   if(!saved)row[12]=sbSessionId(plan);row[11]=String(client.row[0]);row[9]='accepting';sheet.getRange(index+2,1,1,16).setValues([row]);
   if(client.isNew){client.row[11]=sbExamSafe(course);client.sheet.getRange(1,10,1,5).setValues([['Permissions','Level history','Program','Hours baseline','Hours baseline set at (UTC)']]);client.row[5]=payment;client.sheet.getRange(client.index,4).setNumberFormat('@');client.sheet.getRange(client.index,1,1,14).setValues([client.row]);}else if(!saved){client.sheet.getRange(client.index,6).setValue(payment);}
   if(!saved){plan.number=number;const plannedId=sbSessionId(plan);if(plannedId!==String(row[12]))throw new Error('The client session numbers changed while accepting. Contact your instructor before retrying.');sbSaveSheetSession(plan);}
@@ -1143,3 +1156,37 @@ function sbNativeReply(value){return typeof response==='function'?response(value
 function sbNativeEnglishRead(data){const month=sbNativeMonth(data.month),entry=sbNativeEntry(month);return sbNativeReply({ok:true,month,revision:entry.revision,page:entry.page});}
 function sbNativeEnglishOwner(data){const month=sbNativeMonth(data.month),lock=LockService.getScriptLock();lock.waitLock(20000);try{const entry=sbNativeEntry(month);if(data.action==='nativeEnglishEdit')return sbNativeReply({ok:true,month,...entry});if(data.action!=='saveNativeEnglish')throw new Error('Invalid action.');let page=null;if(data.page!==null){if(!data.page||typeof data.page!=='object'||Array.isArray(data.page))throw new Error('Check the monthly page.');page={};for(const [key,max]of [['source',150],['title',200],['url',2000],['brief',3000]]){const value=data.page[key];if(typeof value!=='string'||!value.trim()||value.trim().length>max)throw new Error('Check '+key+' (maximum '+max+' characters).');page[key]=value.trim();}if(!/^https:\/\/[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?(?::\d{1,5})?(?:[/?#][^\s\\]*)?$/i.test(page.url))throw new Error('Use a complete HTTPS link.');}
 if(data.revision!==entry.revision){if(JSON.stringify(page)===JSON.stringify(entry.page))return sbNativeReply({ok:true,month,...entry});throw new Error('This month changed on another device. Reload the month before saving.');}const next={revision:Utilities.getUuid(),page};if(encodeURIComponent(JSON.stringify(next)).replace(/%[0-9A-F]{2}/g,'x').length>8500)throw new Error('This introduction is too large. Shorten it before publishing.');PropertiesService.getScriptProperties().setProperty('SB_NATIVE_ENGLISH_'+month,JSON.stringify(next));return sbNativeReply({ok:true,month,...next});}finally{lock.releaseLock();}}
+
+// Included in UnifiedCode.gs. All web actions require the private owner key.
+const SB_BACKUP_TABLES={Clients:14,Sessions:15,TeacherDocuments:4,'Exam attempts':18,'Portal access':5,'Registration requests':16,'Calendar availability':3,EmailLog:7,DeletedClients:3};
+function sbBuildOwnerBackup(book){
+ const tables={};
+ for(const name of Object.keys(SB_BACKUP_TABLES)){const sheet=book.getSheetByName(name);if(sheet)tables[name]=sheet.getLastRow()?sheet.getRange(1,1,sheet.getLastRow(),SB_BACKUP_TABLES[name]).getValues():[];}
+ const props=PropertiesService.getScriptProperties(),settings={};
+ // Explicit allowlist: never export connection keys, passwords or login tokens.
+ if(typeof props.getProperties==='function')for(const [name,value]of Object.entries(props.getProperties()))if(/^SB_(CALENDAR_SLOTS_\d{4}-\d{2}-\d{2}|NATIVE_ENGLISH_\d{4}-\d{2}|LEARNING_LEVEL_ACCESS)$/.test(name))settings[name]=value;
+ return {format:'speak-boldly-owner-backup',version:1,createdAt:new Date().toISOString(),timeZone:'Africa/Cairo',tables,settings,materialFiles:'Links only. Keep the original uploaded files in their existing storage.'};
+}
+function sbSaveOwnerBackup(){
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{
+  const props=PropertiesService.getScriptProperties();let folder,id=props.getProperty('SB_BACKUP_FOLDER_ID');
+  if(id)folder=DriveApp.getFolderById(id);else{folder=DriveApp.createFolder('Speak Boldly — private backups');props.setProperty('SB_BACKUP_FOLDER_ID',folder.getId());}
+  const backup=sbBuildOwnerBackup(sbExamBook()),name='Speak-Boldly-backup-'+Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')+'.json',files=folder.getFilesByName(name);
+  const content=JSON.stringify(backup);if(files.hasNext())files.next().setContent(content);else folder.createFile(name,content,'application/json');
+  props.setProperty('SB_BACKUP_LAST_SUCCESS',backup.createdAt);
+  return {ok:true,savedAt:backup.createdAt};
+ }finally{lock.releaseLock();}
+}
+// Run once in the Apps Script editor after saving the complete script.
+function setupDailyBackups(){
+ sbSaveOwnerBackup();
+ if(!ScriptApp.getProjectTriggers().some(trigger=>trigger.getHandlerFunction()==='runDailyBackup'))ScriptApp.newTrigger('runDailyBackup').timeBased().everyDays(1).atHour(4).inTimezone('Africa/Cairo').create();
+ PropertiesService.getScriptProperties().setProperty('SB_BACKUP_DAILY_ENABLED','true');
+}
+function runDailyBackup(){return sbSaveOwnerBackup();}
+function sbOwnerBackupAction(data,book){
+ if(data.action==='exportOwnerBackup'){const lock=LockService.getScriptLock();lock.waitLock(20000);try{return sbExamResponse({ok:true,backup:sbBuildOwnerBackup(book)});}finally{lock.releaseLock();}}
+ if(data.action==='saveOwnerBackup')return sbExamResponse(sbSaveOwnerBackup());
+ throw new Error('Invalid backup action.');
+}

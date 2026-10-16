@@ -34,11 +34,11 @@ test('overview keeps scores private and separates pending reviews from emailed r
  attempts.appendRow(['review-me','','Test Student',2,'Submitted',now,now,'{}','','','private comment','',1,'General English']);
  attempts.appendRow(['reviewed','','Other Student',1,'Reviewed',now,now,'{}','{}',88,'private feedback',now,1,'General English']);
  assert.equal(owner({action:'saveTeacherDocument',record:{id:'document:prepared-one',type:'progress',client:{id:'student-1',name:'Test Student'},values:{test:'private text'},preparedAt:now},expectedVersion:0}).ok,true);
- let result=owner({action:'instructorOverview'});assert.equal(result.pendingReviews.length,1);assert.equal(result.reportsToPrepare.length,1);assert.equal(result.preparedReports.length,1);
+ let result=owner({action:'instructorOverview'});assert.equal(result.pendingReviews.length,1);assert.equal(result.reportsToPrepare.length,2);assert.equal(result.preparedReports.length,1);assert.equal(result.reportsToPrepare.find(item=>item.id==='review-me').writingPending,true);
  for(const secret of ['private comment','private feedback','private text'])assert(!JSON.stringify(result).includes(secret));
  assert.throws(()=>f.context.handleClientEmail({clientId:'student-1',kind:'confirmation',requestId:'no-upcoming'}),/No upcoming/);
  const logs=f.sheets.get('EmailLog');logs.appendRow(['sent-progress','student-1','progress','private@example.com','sent',now,'']);logs.appendRow(['sent-final','student-2','final','other@example.com','sent',now,'']);
- result=owner({action:'instructorOverview'});assert.equal(result.preparedReports.length,0);assert.equal(result.reportsToPrepare.length,0);assert.equal(result.pendingReviews.length,1);assert.equal(f.emails.length,0);
+ result=owner({action:'instructorOverview'});assert.equal(result.preparedReports.length,0);assert.equal(result.reportsToPrepare.length,1);assert.equal(result.reportsToPrepare[0].id,'review-me');assert.equal(result.pendingReviews.length,1);assert.equal(f.emails.length,0);
 });
 test('email confirmation rejects a stale preview and sends only the selected next session',()=>{
  const f=createBookingFixture(),owner=data=>f.request({key:'private-test-key',...data});

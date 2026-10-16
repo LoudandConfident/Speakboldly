@@ -101,15 +101,15 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient){
    if(clientSheetConnected()){
     let sharedLoaded=false;
     try{
-     let response=await loadSheetSessions();try{const slots=await sheetLibraryRequest('calendarSlots',{month});sharedSlots=slots.days;slotRevisions=slots.revisions;}catch{sharedSlots={};slotRevisions={};}blockedDates=new Set(response.blockedDates||[]);availabilityReady=response.calendarAvailabilityReady===true;if(!isUnlocked()||epoch!==loadEpoch)return;
+     const [sessionResult,slotResult]=await Promise.allSettled([loadSheetSessions(),sheetLibraryRequest('calendarSlots',{month})]);if(sessionResult.status==='rejected')throw sessionResult.reason;let response=sessionResult.value;if(slotResult.status==='fulfilled'){sharedSlots=slotResult.value.days;slotRevisions=slotResult.value.revisions;}else{sharedSlots={};slotRevisions={};}blockedDates=new Set(response.blockedDates||[]);availabilityReady=response.calendarAvailabilityReady===true;if(!isUnlocked()||epoch!==loadEpoch)return;
      sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));storageReadable=true;sharedLoaded=true;
      const warnings=[];
      if(!background){
       const today=cairoToday(),currentTime=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date());
-      const future=local.filter(s=>s.time);
+      const future=local.filter(s=>s.time&&!response.classes.some(saved=>saved.id===s.id||(saved.clientId===s.clientId&&saved.number===s.number&&saved.date===s.date&&saved.time===s.time)));
       const untimed=local.filter(s=>!s.time);if(untimed.length)warnings.push(untimed.length+' old appointment(s) need a class time before they can sync.');
       for(const record of future){if(!isUnlocked()||epoch!==loadEpoch)return;try{await saveSheetSession(record,undefined,{importPast:true});}catch(error){warnings.push(error.message);}}
-      response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));blockedDates=new Set(response.blockedDates||[]);availabilityReady=response.calendarAvailabilityReady===true;
+      if(future.length){response=await loadSheetSessions();if(!isUnlocked()||epoch!==loadEpoch)return;sessions=response.classes.filter(item=>!removedPortalClientIds(doc.defaultView.localStorage).has(item.clientId));blockedDates=new Set(response.blockedDates||[]);availabilityReady=response.calendarAvailabilityReady===true;}
      }
      status.textContent='Shared calendar connected. Send class confirmations manually from each client’s Actions button.'+(warnings.length?' '+warnings.length+' browser appointment(s) could not upload: '+warnings[0]:'')+(localError?' Some old browser entries could not be read; shared appointments are still shown.':'');
     }catch(error){status.textContent='Calendar could not sync: '+error.message;if(!background&&!sharedLoaded){sessions=local;storageReadable=false;}}
