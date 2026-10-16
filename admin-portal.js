@@ -1,4 +1,4 @@
-import {initializeInstructorFrench} from './instructor-french.js?v=fr-31-v1';
+import {initializeInstructorFrench} from './instructor-french.js?v=fr-365-v2';
 import {initializeInstructorBackups} from './instructor-backups.js?v=reliability';
 import {initializeNativeEnglishEditor} from './native-english-editor.js?v=monthly-owner';
 import {initializeInstructorOverview} from './instructor-overview.js?v=reliability';

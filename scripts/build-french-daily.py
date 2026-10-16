@@ -1,5 +1,6 @@
 """Original French reading practice. No translation or remote service is used."""
 import json
+import runpy
 from pathlib import Path
 days=[]
 def add(title,text,intermediate,advanced,question,model,expressions):
@@ -249,6 +250,9 @@ grammar={
  ('Pour autant que + subjonctif', 'Cette interprétation est utile pour autant qu’elle reste prudente.', 'Cette interprétation est utile pour autant qu’elle reste prudente.', 'La phrase est correcte : reste peut être un subjonctif présent, de même forme que l’indicatif.')]
 }
 assert len(days)==31,len(days)
+extra=runpy.run_path(str(Path(__file__).with_name('french-year-content.py')))['additional_days']()
+days.extend(extra)
+assert len(days)==365,len(days)
 out=[]
 for i,d in enumerate(days):
  readings={}
@@ -261,6 +265,16 @@ for i,d in enumerate(days):
   if level=='developing':model+=' '+d['intermediate']
   if level=='stretching':model+=' '+d['advanced']+' Dans ma propre pratique, je pourrais retenir cette distinction et la mettre à l’épreuve avec un exemple concret.'
   readings[level]=dict(paragraphs=paragraphs,prompt=instruction,model=model)
- out.append(dict(number=i+1,title=d['title'],group='La vie quotidienne' if i%2==0 else 'Histoires, arts et découvertes',expressions=d['expressions'],readings=readings,grammar={level:dict(zip(['rule','mistake','correct','explanation'],rules[i%len(rules)]))for level,rules in grammar.items()}))
-Path(__file__).resolve().parents[1].joinpath('french-daily-tasks.json').write_text(json.dumps(dict(version='fr-31-v1',days=out),ensure_ascii=False,separators=(',',':'))+'\n')
-print('Built',len(out),'original French daily lessons across three levels.')
+ out.append(dict(number=i+1,title=d['title'],group=d.get('group','La vie quotidienne' if i%2==0 else 'Histoires, arts et découvertes'),question=d['question'],answer=d['model'],expressions=d['expressions'],readings=readings,grammar=d.get('grammar') or {level:dict(zip(['rule','mistake','correct','explanation'],rules[i%len(rules)]))for level,rules in grammar.items()}))
+root=Path(__file__).resolve().parents[1]
+folder=root/'french-daily-tasks'
+folder.mkdir(exist_ok=True)
+version='fr-365-v2'
+chunks=[]
+for start in range(0,len(out),31):
+ name=f'{start//31+1:02}.json'
+ payload=dict(version=version,start=start+1,days=out[start:start+31])
+ (folder/name).write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':'))+'\n')
+ chunks.append(dict(file=name,start=start+1,end=min(start+31,len(out))))
+(root/'french-daily-tasks.json').write_text(json.dumps(dict(version=version,totalDays=365,levels=['foundation','developing','stretching'],chunks=chunks),ensure_ascii=False,indent=2)+'\n')
+print('Built',len(out),'original French daily lessons across three levels in',len(chunks),'chunks.')
