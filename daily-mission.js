@@ -1,4 +1,4 @@
-import {createDailyGrammar} from './daily-grammar.js?v=build-card';
+import {createDailyGrammar} from './daily-grammar.js?v=zucchini';
 import {dailyMissionSet} from './daily-mission-set.js?v=past-stories';
 import {cairoMissionDate,missionLevels,readMissionState,writeMissionState} from './daily-mission-data.js?v=five-practices';
 export function initializeDailyMission(doc,win=doc.defaultView){
