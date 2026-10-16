@@ -1,4 +1,4 @@
-import {dailyMissionSet} from './daily-mission-set.js?v=grammar-practices';
+import {dailyMissionSet} from './daily-mission-set.js?v=longer-readings';
 import {cairoMissionDate,missionLevels,readMissionState,writeMissionState} from './daily-mission-data.js?v=five-practices';
 export function initializeDailyMission(doc,win=doc.defaultView){
  const host=doc.querySelector('#daily-mission');if(!host||host.dataset.initialized)return;host.dataset.initialized='true';
@@ -18,11 +18,11 @@ export function initializeDailyMission(doc,win=doc.defaultView){
   const title=el('h4',mission.title),reading=el('section',null,'mission-reading'),readingTitle=el('h4','Today’s reading'),paragraphs=el('div',null,'mission-paragraphs');mission.paragraphs.forEach(text=>paragraphs.append(el('p',text)));const toggle=el('button','Hide the reading','mission-text-toggle');toggle.type='button';const setReading=visible=>{paragraphs.hidden=!visible;toggle.textContent=visible?'Hide the reading':'Show the reading';};toggle.onclick=()=>setReading(paragraphs.hidden);const controls=el('div',null,'mission-audio-controls');controls.append(audioButton('Read it aloud',mission.transcript,()=>setReading(true)),toggle);reading.append(readingTitle,paragraphs,controls);content.append(title,reading);
   const practices=el('div',null,'mission-practices');
   const activity=(number,name)=>{const section=el('section',null,'mission-practice');section.append(el('h4',number+'. '+name));practices.append(section);return section;};
-  const say=activity(1,'Say it');say.append(el('p',mission.say),el('p','Listen to the model, then repeat one sentence at a time. Notice stressed words, pauses, and final sounds.'),audioButton('Listen and repeat',mission.transcript,()=>setReading(true)));
+  const say=activity(1,'Say it (optional)');say.append(el('p',mission.say),el('p','Listen to the model, then repeat one sentence at a time. Notice stressed words, pauses, and final sounds.'),audioButton('Listen and repeat',mission.transcript,()=>setReading(true)));
   const hear=activity(2,'Hear it');hear.append(el('p','Hide the reading and listen to the short passage. Then answer this question aloud:'),el('p',mission.question,'mission-question'),audioButton('Listen without reading',mission.transcript,()=>setReading(false)),check('Reveal the answer',mission.answer));
   const build=activity(3,'Build it');for(const rule of mission.build.rules){build.append(el('p',rule.structure,'mission-expression'),el('blockquote',rule.example));}
   const fix=activity(4,'Fix it');fix.append(el('p','Correct both sentences before revealing the answers. Say or write each corrected sentence:'));for(const [index,item] of mission.fixItems.entries()){fix.append(el('blockquote',(index+1)+'. '+item.mistake),check('Reveal answer '+(index+1)+' and explanation',item.answer+' '+item.explanation));}
-  const use=activity(5,'Use it');for(const [index,item] of mission.useItems.entries()){use.append(el('p',(index+1)+'. “'+item.expression+'”','mission-expression'),el('p',item.instruction));}
+  const use=activity(5,'Three useful everyday expressions');for(const [index,item] of mission.useItems.entries()){use.append(el('p',(index+1)+'. “'+item.expression+'”','mission-expression'));if(item.meaning)use.append(el('p',item.meaning));if(item.example)use.append(el('blockquote',item.example));use.append(el('p',item.instruction));}
   content.append(practices);const tomorrow=el('p','Come back tomorrow','mission-tomorrow');content.append(tomorrow);const contact=el('button','Contact Instructor','button light small');contact.type='button';contact.onclick=()=>{stop();doc.dispatchEvent(new win.CustomEvent('daily-mission-contact',{detail:{message:"I have a question about today's mission…\n\n"}}));};content.append(contact);
  }
  function rollover(){const today=cairoMissionDate(new win.Date());if(today===day)return false;day=today;status.textContent='';render();return true;}

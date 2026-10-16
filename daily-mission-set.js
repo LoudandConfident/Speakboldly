@@ -1,4 +1,4 @@
-export const MISSION_DAYS=183, MISSION_CHUNK_SIZE=31, MISSION_VERSION='half-year-2026-v2';
+export const MISSION_DAYS=183, MISSION_CHUNK_SIZE=31, MISSION_VERSION='half-year-2026-v3-longer';
 const levels=['foundation','developing','stretching'], caches=new WeakMap();
 export function missionPositionForDate(day){
  const stamp=Date.parse(day+'T00:00:00Z');
@@ -18,6 +18,6 @@ export async function dailyMissionSet(day,level='foundation',fetcher=globalThis.
   return data.missions;
  })().catch(error=>{cache.delete(key);throw error;}));
  const mission=(await cache.get(key))[position.offset];
- if(!mission||mission.number!==position.index+1||mission.level!==level||mission.paragraphs?.length!==3)throw new Error('Missing daily mission');
+ if(!mission||mission.number!==position.index+1||mission.level!==level||(!Array.isArray(mission.paragraphs)||mission.paragraphs.length<3||mission.paragraphs.length>8))throw new Error('Missing daily mission');
  return {...mission,day,level};
 }
