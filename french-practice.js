@@ -1,0 +1,8 @@
+export const FRENCH_LEVELS={foundation:'A1–A2 · Français simple',developing:'B1–B2 · Français au quotidien',stretching:'C1–C2 · Nuances et réflexion'};
+export function frenchDate(now=new Date()){const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now),part=name=>parts.find(item=>item.type===name).value;return part('year')+'-'+part('month')+'-'+part('day');}
+export function frenchDayIndex(day){const stamp=Date.parse(day+'T00:00:00Z');if(!/^\d{4}-\d{2}-\d{2}$/.test(day)||!Number.isFinite(stamp)||new Date(stamp).toISOString().slice(0,10)!==day)throw Error('Date invalide.');return ((Math.floor((stamp-Date.UTC(2026,9,16))/86400000)%31)+31)%31;}
+export function normalizeFrenchAnswer(value){return String(value).normalize('NFKC').toLocaleLowerCase('fr').replace(/[’‘]/g,"'").replace(/[^\p{L}\p{N}]/gu,'');}
+export function frenchExpressionTask(expression){const last=[...expression.matchAll(/[\p{L}]+(?:['’][\p{L}]+)*/gu)].at(-1);if(!last)throw Error('Expression invalide.');return {prompt:expression.slice(0,last.index)+'____'+expression.slice(last.index+last[0].length),answer:last[0]};}
+export const frenchStorageKey=(day,level)=>'speak-boldly-french-practice-v1:'+day+':'+level;
+export function readFrenchProgress(storage,day,level){try{const value=JSON.parse(storage.getItem(frenchStorageKey(day,level))||'{}');return value&&typeof value==='object'&&!Array.isArray(value)?value:{};}catch{return {};}}
+export function saveFrenchProgress(storage,day,level,value){storage.setItem(frenchStorageKey(day,level),JSON.stringify(value));}
