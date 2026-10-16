@@ -7,10 +7,18 @@ export function addResultBranding(doc,result) {
  const email=doc.createElement('a');email.href='mailto:speakboldly16@gmail.com';email.textContent='speakboldly16@gmail.com';contact.append(email);result.append(contact);const footer=doc.createElement('div');footer.className='result-copyright';footer.style.cssText='display:flex;align-items:center;gap:12px;margin-top:24px;font-size:13px';const mark=logo.cloneNode();mark.className='result-footer-logo';mark.width=40;mark.height=40;footer.append(mark,doc.createTextNode(copyrightText()));result.append(footer);
 }
 export function resultImageBlocks(result) {
- return [...result.querySelectorAll('h2,h3,h4,p,li,tr')]
+ return [...result.querySelectorAll('h2,h3,h4,p,li,tr,.cefr-level')]
   .filter(node=>!node.closest('.result-image-actions,.result-copyright'))
-  .map(node=>({heading:/^H[234]$/.test(node.tagName),text:node.tagName==='TR'?[...node.children].map(cell=>cell.textContent.trim()).join(' — '):(node.tagName==='LI'?'• ':'')+node.textContent.trim()}))
+  .filter(node=>!node.closest('.cefr-level')||node.matches('.cefr-level'))
+  .map(node=>({heading:/^H[234]$/.test(node.tagName),text:node.matches('.cefr-level')?[node.querySelector('strong')?.textContent.trim(),node.querySelector('.cefr-label')?.textContent.trim(),node.querySelector('.cefr-description')?.textContent.trim()].filter(Boolean).join(' — '):node.tagName==='TR'?[...node.children].map(cell=>cell.textContent.trim()).join(' — '):(node.tagName==='LI'?'• ':'')+node.textContent.trim()}))
   .filter(block=>block.text);
+}
+export function resultImageColors(doc,result,options={}){
+ const card=options.learnerCard?(result.querySelector(':scope > section')||result):result;
+ const style=node=>doc.defaultView.getComputedStyle(node);
+ let background=options.learnerCard?'#edf0e6':'#e7f0e6';
+ for(let node=card;node;node=node.parentElement){const color=style(node).backgroundColor;if(color&&color!=='transparent'&&!/^rgba\(.*[,/]\s*0(?:\.0+)?\s*\)$/.test(color)){background=color;break;}}
+ return {background,foreground:style(card).color||'#193c32'};
 }
 export function learnerResultImageBlocks(result) {
  const cards=[...result.querySelectorAll(':scope > section')];
@@ -39,12 +47,13 @@ async function createImage(doc,result,title,options={}) {
  layout();
  if(options.learnerCard)while(contentHeight>width){scale*=.95;layout();}
  canvas.width=width;canvas.height=options.learnerCard?width:Math.ceil(contentHeight);
- ctx.fillStyle=options.learnerCard?'#edf0e6':'#faf9f4';ctx.fillRect(0,0,canvas.width,canvas.height);
- ctx.fillStyle='#193c32';ctx.textBaseline='top';
+ const colors=resultImageColors(doc,result,options);
+ ctx.fillStyle=colors.background;ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.fillStyle=colors.foreground;ctx.textBaseline='top';
  if(logo)ctx.drawImage(logo,padding,padding,96,96);
  let y=padding+(logo?128:0);
  for(const line of lines){if(line.space){y+=20*scale;continue;}ctx.font=(line.heading?'600 '+34*scale+'px':28*scale+'px')+' system-ui, sans-serif';ctx.fillText(line.text,padding,y);y+=(line.heading?48:42)*scale;}
- const footerY=canvas.height-padding-64;ctx.fillStyle='#193c32';if(logo)ctx.drawImage(logo,padding,footerY,64,64);ctx.font='500 24px system-ui, sans-serif';ctx.fillText(copyrightText(),padding+(logo?84:0),footerY+20);
+ const footerY=canvas.height-padding-64;ctx.fillStyle=colors.foreground;if(logo)ctx.drawImage(logo,padding,footerY,64,64);ctx.font='500 24px system-ui, sans-serif';ctx.fillText(copyrightText(),padding+(logo?84:0),footerY+20);
  return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('The picture could not be created. Please try again.')),'image/png'));
 }
 export function addResultImageButton(doc,win,result,title,options={}) {

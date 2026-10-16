@@ -1,5 +1,6 @@
+import {CEFR_LEVELS} from './cefr-levels.js';
 import {practiceForLevel} from './assessment-guidance.js';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=result-footer';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=card-colors-cefr';
 import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } from './assessment-time.js';
 import { questions, TEST_VERSION } from './placement-questions.js?v=balanced-v2';
 import { scoreAnswers } from './placement-scoring.js?v=balanced-v2';
@@ -77,7 +78,7 @@ function finish(record){
  const result=$('#placement-result');result.hidden=false;
  result.classList.add('assessment-result');
  result.innerHTML='<h3>Estimated level range: '+escape(resultScore.level)+'</h3><p class="placement-score"><strong>'+resultScore.score+' / '+resultScore.total+'</strong> · '+resultScore.percentage+'%</p>';
- const chart=document.createElement('section');chart.className='cefr-chart';chart.innerHTML='<h4>CEFR chart</h4><div class="cefr-level-chart">'+[['A1','Beginner'],['A2','Elementary'],['B1','Intermediate'],['B2','Upper intermediate'],['C1','Advanced'],['C2','Proficient']].map(([level,label])=>'<div class="cefr-level'+(resultScore.level.includes(level)?' is-result':'')+'"><strong>'+level+'</strong><span>'+label+'</span></div>').join('')+'</div>';result.append(chart);
+ const chart=document.createElement('section');chart.className='cefr-chart';chart.innerHTML='<h4>CEFR chart</h4><div class="cefr-level-chart">'+CEFR_LEVELS.map(({level,label,description})=>'<div class="cefr-level'+(resultScore.level.includes(level)?' is-result':'')+'"><strong>'+level+'</strong><span class="cefr-label">'+escape(label)+'</span><span class="cefr-description">'+escape(description)+'</span></div>').join('')+'</div>';result.append(chart);
  const guidance=practiceForLevel(resultScore.level);
  const priorities=document.createElement('section');priorities.className='result-practice';
  priorities.innerHTML='<h3>What to work on next</h3><p>Suggested priorities for your estimated range. Your teacher can refine these after speaking and listening assessment.</p>'+[['Structure of language',guidance.structure],['Vocabulary and meaning',guidance.vocabulary],['Using English',guidance.use],['On your own',guidance.routine]].map(([heading,text])=>'<h4>'+escape(heading)+'</h4><p>'+escape(text)+'</p>').join('');result.append(priorities);
