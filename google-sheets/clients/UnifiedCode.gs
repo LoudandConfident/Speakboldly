@@ -111,6 +111,7 @@ function doPost(event) {
   try {
     const request = sbParseWebRequest(event);
     const data = request.data;
+    if(data.action==='nativeEnglishPage'){if(request.size>4000)throw new Error('Request too large.');return sbNativeEnglishRead(data);}
     if (data.action === 'studentInstructorContact') {
       if (request.size > 16000) throw new Error('Request too large.');
       return handleStudentInstructorContact(data);
@@ -161,6 +162,7 @@ function sbRequireClientConnection(data) {
 }
 
 function sbRouteInstructorRequest(data, connection, lock) {
+  if(['nativeEnglishEdit','saveNativeEnglish'].includes(data.action))return sbNativeEnglishOwner(data);
   if (SB_OWNER_BOOKING_ACTIONS.includes(data.action)) return handleOwnerBooking(data);
   if (SB_INSTRUCTOR_EXAM_ACTIONS.includes(data.action)) return handleInstructorExam(data);
   if (['personalCalendarSettings', 'resetPersonalCalendarLink'].includes(data.action)) {
@@ -1133,3 +1135,11 @@ function sbSaveSessionSeries(p){
  // Complete validation happens before any write. Stable IDs make a retry safe after a partial Sheets failure.
  for(const record of planned)sbSaveSheetSession(record);return planned.length;
 }
+
+// Included in UnifiedCode.gs. Add separately only when using the multi-file project.
+function sbNativeMonth(value){const month=String(value||'');if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month))throw new Error('Choose a valid month.');return month;}
+function sbNativeEntry(month){const raw=PropertiesService.getScriptProperties().getProperty('SB_NATIVE_ENGLISH_'+month);return raw?JSON.parse(raw):{revision:'0',page:null};}
+function sbNativeReply(value){return typeof response==='function'?response(value):clientSyncResponse(value);}
+function sbNativeEnglishRead(data){const month=sbNativeMonth(data.month),entry=sbNativeEntry(month);return sbNativeReply({ok:true,month,revision:entry.revision,page:entry.page});}
+function sbNativeEnglishOwner(data){const month=sbNativeMonth(data.month),lock=LockService.getScriptLock();lock.waitLock(20000);try{const entry=sbNativeEntry(month);if(data.action==='nativeEnglishEdit')return sbNativeReply({ok:true,month,...entry});if(data.action!=='saveNativeEnglish')throw new Error('Invalid action.');let page=null;if(data.page!==null){if(!data.page||typeof data.page!=='object'||Array.isArray(data.page))throw new Error('Check the monthly page.');page={};for(const [key,max]of [['source',150],['title',200],['url',2000],['brief',3000]]){const value=data.page[key];if(typeof value!=='string'||!value.trim()||value.trim().length>max)throw new Error('Check '+key+' (maximum '+max+' characters).');page[key]=value.trim();}if(!/^https:\/\/[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?(?::\d{1,5})?(?:[/?#][^\s\\]*)?$/i.test(page.url))throw new Error('Use a complete HTTPS link.');}
+if(data.revision!==entry.revision){if(JSON.stringify(page)===JSON.stringify(entry.page))return sbNativeReply({ok:true,month,...entry});throw new Error('This month changed on another device. Reload the month before saving.');}const next={revision:Utilities.getUuid(),page};if(encodeURIComponent(JSON.stringify(next)).replace(/%[0-9A-F]{2}/g,'x').length>8500)throw new Error('This introduction is too large. Shorten it before publishing.');PropertiesService.getScriptProperties().setProperty('SB_NATIVE_ENGLISH_'+month,JSON.stringify(next));return sbNativeReply({ok:true,month,...next});}finally{lock.releaseLock();}}

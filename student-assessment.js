@@ -1,5 +1,5 @@
 import {withBerlitzBooks} from './berlitz-material.js?v=exam-rebuild';
-import {initializeMonthlyLearning} from './monthly-learning.js?v=bbc-course';
+import {initializeMonthlyLearning} from './monthly-learning.js?v=instructor-edit';
 import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=on-site-documents';
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=exam-rebuild';
 import {initializeStudentContact} from './student-contact.js?v=mission-question';

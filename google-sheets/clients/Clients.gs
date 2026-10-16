@@ -62,12 +62,14 @@ function handleClientSync(e){
  try{
   if(!e?.postData?.contents||e.postData.contents.length>8000000)throw new Error('Invalid request.');
   const p=JSON.parse(e.postData.contents),props=PropertiesService.getScriptProperties();
+  if(p.action==='nativeEnglishPage'){if(e.postData.contents.length>4000)throw new Error('Request too large.');return sbNativeEnglishRead(p);}
   if(p.action==='studentInstructorContact'){if(e.postData.contents.length>16000)throw new Error('Request too large.');if(typeof handleStudentInstructorContact!=='function')throw new Error('Add StudentContact.gs and deploy a New version.');return handleStudentInstructorContact(p);}
   if(typeof SB_PUBLIC_BOOKING_ACTIONS!=='undefined'&&SB_PUBLIC_BOOKING_ACTIONS.includes(p.action)){if(e.postData.contents.length>20000)throw new Error('Request too large.');return handlePublicBooking(p);}
   if(typeof SB_STUDENT_EXAM_ACTIONS!=='undefined'&&SB_STUDENT_EXAM_ACTIONS.includes(p.action)){if(e.postData.contents.length>65000)throw new Error('Request too large.');return handleStudentExam(p);}
   const key=props.getProperty('CLIENT_SYNC_KEY');
   if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
   if(!['sendClientEmail','uploadLibraryFile'].includes(p.action)&&e.postData.contents.length>20000)throw new Error('Request too large.');
+  if(['nativeEnglishEdit','saveNativeEnglish'].includes(p.action))return sbNativeEnglishOwner(p);
   if(typeof SB_OWNER_BOOKING_ACTIONS!=='undefined'&&SB_OWNER_BOOKING_ACTIONS.includes(p.action))return handleOwnerBooking(p);
   if(typeof SB_INSTRUCTOR_EXAM_ACTIONS!=='undefined'&&SB_INSTRUCTOR_EXAM_ACTIONS.includes(p.action))return handleInstructorExam(p);
   if(['personalCalendarSettings','resetPersonalCalendarLink'].includes(p.action)){if(typeof sbPersonalCalendarSettings!=='function')throw new Error('Add PersonalCalendar.gs for calendar subscriptions.');return clientSyncResponse(sbPersonalCalendarSettings(p));}
@@ -124,7 +126,8 @@ function handleClientSync(e){
 function doPost(e) {
  let data;
  try {data = JSON.parse(e.postData.contents);} catch {return clientSyncResponse({ok:false,error:'Invalid request.'});}
- if (['deleteClient','upsertClient','checkConnection','listClients','listSessions','saveSession','saveSessionSeries','cancelSession','listTeacherDocuments','saveTeacherDocument','sendClientEmail','listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(data.action)) return handleClientSync(e);
+ if(data.action==='nativeEnglishPage')return handleClientSync(e);
+ if (['nativeEnglishEdit','saveNativeEnglish','deleteClient','upsertClient','checkConnection','listClients','listSessions','saveSession','saveSessionSeries','cancelSession','listTeacherDocuments','saveTeacherDocument','sendClientEmail','listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(data.action)) return handleClientSync(e);
  return handleReviewPost(e);
 }
 
