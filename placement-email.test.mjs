@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {buildResultEmail,emailResponseStatus} from './placement-email.js';
 import {answerKey} from './placement-scoring.js';
+import {TEST_VERSION} from './placement-questions.js';
 test('email includes anonymous marks and estimated level without participant identifiers or answer choices',()=>{
- const record={version:'language-hub-50-v1',attemptId:'test-attempt-123456',submittedAt:'2026-10-07T00:00:00Z',answers:Object.fromEntries(answerKey.map((a,i)=>['q'+(i+1),String(a)])),name:'Never include',email:'private@example.com'};
+ const record={version:TEST_VERSION,attemptId:'test-attempt-123456',submittedAt:'2026-10-07T00:00:00Z',answers:Object.fromEntries(answerKey.map((a,i)=>['q'+(i+1),String(a)])),name:'Never include',email:'private@example.com'};
  const data=buildResultEmail(record);assert.equal(data.Score,'50 / 50');assert.equal(data['Estimated level'],'B2–C1');assert.equal(data['Attempt ID'],record.attemptId);assert.equal(data._subject,'Someone scored B2–C1 — Speak Boldly');assert.ok(!JSON.stringify(data).includes('Never include'));assert.ok(!JSON.stringify(data).includes('private@example.com'));assert.ok(!('answers'in data));
 });
 test('service acceptance, activation and rejection remain distinct',()=>{

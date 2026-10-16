@@ -1,8 +1,8 @@
 import {practiceForLevel} from './assessment-guidance.js';
 import {addResultImageButton,addResultBranding} from './result-image.js?v=result-footer';
 import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } from './assessment-time.js';
-import { questions, TEST_VERSION } from './placement-questions.js';
-import { scoreAnswers } from './placement-scoring.js';
+import { questions, TEST_VERSION } from './placement-questions.js?v=balanced-v2';
+import { scoreAnswers } from './placement-scoring.js?v=balanced-v2';
 
 import {courses,matches} from './courses.js?v=momentum-and-uploads';
 const $=s=>document.querySelector(s);
@@ -40,7 +40,7 @@ $('#course-dialog').addEventListener('click',e=>{if(e.target.closest('.course-qu
 
 const form=$('#placement-form'),storageKey='speak-boldly-'+TEST_VERSION;let locked=false,testPage=0,deadline=null,timerInterval=null;
 const pageSize=10,pageCount=Math.ceil(questions.length/pageSize);
-form.innerHTML='<div class="placement-participant"><p class="demo-note">Press Submit to see your estimated CEFR range immediately. </p></div><div class="test-submit-bar"><span id="assessment-timer" class="assessment-timer" role="timer" aria-label="Time remaining">20:00 remaining</span><span id="answered-count">0 / '+questions.length+' answered</span><button class="button" type="submit">Submit my answers</button></div>'+questions.map(q=>'<fieldset class="placement-question"><legend>'+q.number+'. '+escape(q.question)+'</legend>'+q.options.map((option,j)=>'<label><input type="radio" name="q'+q.number+'" value="'+j+'"> '+String.fromCharCode(97+j)+') '+escape(option)+'</label>').join('')+'</fieldset>').join('')+'<div class="test-pager"><button type="button" class="button light" id="test-prev">Previous</button><span id="test-page-label"></span><button type="button" class="button light" id="test-next">Next</button></div><p class="demo-note">Selected from Language Hub. © Springer Nature Limited, 2019.</p><button class="button" type="submit">Submit my answers</button>';
+form.innerHTML='<div class="placement-participant"><p class="demo-note">Grammar and vocabulary, with mixed difficulty throughout. Press Submit to see your estimated CEFR range. </p></div><div class="test-submit-bar"><span id="assessment-timer" class="assessment-timer" role="timer" aria-label="Time remaining">20:00 remaining</span><span id="answered-count">0 / '+questions.length+' answered</span><button class="button" type="submit">Submit my answers</button></div>'+questions.map(q=>'<fieldset class="placement-question"><legend>'+q.number+'. '+escape(q.question)+'</legend>'+q.options.map((option,j)=>'<label><input type="radio" name="q'+q.number+'" value="'+j+'"> '+String.fromCharCode(97+j)+') '+escape(option)+'</label>').join('')+'</fieldset>').join('')+'<div class="test-pager"><button type="button" class="button light" id="test-prev">Previous</button><span id="test-page-label"></span><button type="button" class="button light" id="test-next">Next</button></div><p class="demo-note">Original Speak Boldly assessment · Grammar and vocabulary.</p><button class="button" type="submit">Submit my answers</button>';
 const fields=[...form.querySelectorAll('.placement-question')];
 function renderPage(){fields.forEach((f,i)=>f.hidden=Math.floor(i/pageSize)!==testPage);$('#test-page-label').textContent='Page '+(testPage+1)+' of '+pageCount;$('#test-prev').disabled=testPage===0;$('#test-next').disabled=testPage===pageCount-1;}
 $('#test-prev').onclick=()=>{if(testPage>0){testPage--;renderPage();form.scrollIntoView({behavior:'smooth'});}};
@@ -81,7 +81,7 @@ function finish(record){
  const guidance=practiceForLevel(resultScore.level);
  const priorities=document.createElement('section');priorities.className='result-practice';
  priorities.innerHTML='<h3>What to work on next</h3><p>Suggested priorities for your estimated range. Your teacher can refine these after speaking and listening assessment.</p>'+[['Structure of language',guidance.structure],['Vocabulary and meaning',guidance.vocabulary],['Using English',guidance.use],['On your own',guidance.routine]].map(([heading,text])=>'<h4>'+escape(heading)+'</h4><p>'+escape(text)+'</p>').join('');result.append(priorities);
- const estimate=document.createElement('p');estimate.textContent='This shortened test gives a provisional estimate, not a certified CEFR level.';result.append(estimate);
+ const estimate=document.createElement('p');estimate.textContent='This grammar and vocabulary test gives a provisional estimate, not a certified CEFR level.';result.append(estimate);
  addResultBranding(document,result);
  addResultImageButton(document,window,result,'Speak Boldly — English assessment');
  const note=document.createElement('p');note.textContent='Send a voice note for your speaking assessment before starting your course.';result.append(note);

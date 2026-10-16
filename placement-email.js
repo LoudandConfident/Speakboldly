@@ -13,7 +13,7 @@ export function buildResultEmail(record) {
   'Percentage':result.percentage+'%',
   'Estimated level':result.level,
   'Answered questions':result.answered+' / '+result.total,
-  'Result note':'Provisional estimate from the shortened Language Hub test, not a certified CEFR level. No participant name or email is collected.'
+  'Result note':'Provisional estimate from the Speak Boldly grammar and vocabulary test, not a certified CEFR level. No participant name or email is collected.'
  };
 }
 export function emailResponseStatus(data) {

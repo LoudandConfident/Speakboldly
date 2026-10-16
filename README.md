@@ -1,6 +1,6 @@
 # Speak Boldly
 
-English coaching website with a course catalog, WhatsApp contact, quote requests, and a 50-question Language Hub placement test.
+English coaching website with a course catalog, WhatsApp contact, quote requests, and a 50-question Speak Boldly grammar and vocabulary placement test.
 
 ## Development
 
@@ -15,7 +15,7 @@ The local server uses port 3000; `PORT` overrides it. GitHub Pages serves the st
 
 ## Placement and anonymous email results
 
-The test uses 50 selected dialogues and their keyed answers from the uploaded Language Hub test. A print PDF is retained in the repository without the key; it is not linked from the placement page. The assessment introduction links to a separate question view with a 20-minute countdown. The timer continues while navigating other views and automatically submits when time runs out. The ten simplest opening dialogues have been removed; retained questions preserve source identifiers and have matching answer keys. Submission immediately shows marks out of 50 and a provisional estimated range (Below A1, A1–A2, A2–B1, B1–B2, B2–C1). These are not publisher-validated cutoffs for the shortened test.
+The placement test contains 50 original Speak Boldly questions: 25 grammar and 25 vocabulary, with one past-perfect item. Each ten-question page mixes two items from each approximate A1–C1 difficulty band, rather than progressing from easy to hard. Vocabulary covers everyday language, collocations, phrasal verbs, word formation and nuance. The question bank and matching key use version speak-boldly-balanced-50-v2. The 20-minute timer, immediate score out of 50, provisional estimated range and branded result-image saving remain. Difficulty labels and score ranges are editorial estimates, not validated CEFR cutoffs. The older publisher print PDF is retained as a legacy resource and is not linked from the current placement test.
 
 After reading the submission notice and pressing Submit, participants' anonymous scores, estimated levels, answered counts, timestamps, and attempt identifiers are emailed to Mira through FormSubmit. No participant name, email, or answer choices are sent. The recipient address is configured in `placement-config.js`.
 

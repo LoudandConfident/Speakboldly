@@ -1,6 +1,6 @@
-// Provisional Speak Boldly bands for the shortened 50-question test.
-// These are not publisher-validated CEFR cutoffs or a proficiency certificate.
-export const answerKey = [2, 3, 3, 2, 2, 0, 3, 2, 1, 2, 0, 0, 2, 3, 1, 1, 3, 1, 0, 2, 3, 1, 1, 2, 2, 0, 1, 2, 3, 0, 3, 1, 0, 2, 1, 3, 2, 0, 3, 0, 1, 3, 2, 1, 3, 0, 1, 0, 2, 3];
+// Provisional Speak Boldly bands for the original balanced 50-question test.
+// These are not validated CEFR cutoffs or a proficiency certificate.
+export const answerKey = [0, 3, 2, 1, 1, 0, 3, 2, 2, 1, 0, 3, 3, 2, 1, 0, 0, 3, 2, 1, 1, 0, 3, 2, 2, 1, 0, 3, 3, 2, 1, 0, 0, 3, 2, 1, 1, 0, 3, 2, 2, 1, 0, 3, 3, 2, 1, 0, 0, 3];
 export function scoreAnswers(answers) {
  let score=0,answered=0;
  answerKey.forEach((correct,i)=>{const value=answers['q'+(i+1)];if(value===undefined||value===null||value==='')return;if(!['string','number'].includes(typeof value)||!String(value).match(/^[0-3]$/))throw new Error('Invalid answer choice');const choice=Number(value);if(!Number.isInteger(choice)||choice<0||choice>3)throw new Error('Invalid answer choice');answered++;if(choice===correct)score++;});

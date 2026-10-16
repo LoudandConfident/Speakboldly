@@ -1,553 +1,705 @@
-export const TEST_VERSION = "language-hub-50-v1";
+export const TEST_VERSION = "speak-boldly-balanced-50-v2";
+export const QUESTION_ORDER = "mixed";
+// Original Speak Boldly questions. Difficulty labels are editorial estimates.
 export const questions = [
   {
     "number": 1,
-    "sourceNumber": 14,
-    "question": "Alicia: I’m going to the supermarket. Do you want anything?\nPeter: Could you get _____ milk, please?",
+    "id": "sb-balanced-v2-1",
+    "difficulty": "A1",
+    "skill": "vocabulary",
+    "focus": "everyday objects",
+    "question": "I write in my _____ during the lesson.",
     "options": [
-      "a",
-      "any",
-      "some",
-      "every"
+      "notebook",
+      "kitchen",
+      "jacket",
+      "window"
     ]
   },
   {
     "number": 2,
-    "sourceNumber": 15,
-    "question": "Karina: When do you want to play football?\nAniqa: I _____ to play tomorrow, because I don’t need to go to work.",
+    "id": "sb-balanced-v2-2",
+    "difficulty": "A2",
+    "skill": "vocabulary",
+    "focus": "opposites in context",
+    "question": "This shirt is too expensive. Do you have a _____ one?",
     "options": [
-      "like",
-      "likes",
-      "liked",
-      "‘d like"
+      "heavier",
+      "quieter",
+      "busier",
+      "cheaper"
     ]
   },
   {
     "number": 3,
-    "sourceNumber": 17,
-    "question": "Wife: Have we got any cheese in the fridge?\nHusband: No, we haven’t. I’m _____ buy some this afternoon.",
+    "id": "sb-balanced-v2-3",
+    "difficulty": "A1",
+    "skill": "grammar",
+    "focus": "be",
+    "question": "My sister _____ a teacher.",
     "options": [
-      "go",
-      "go to",
-      "going",
-      "going to"
+      "am",
+      "be",
+      "is",
+      "are"
     ]
   },
   {
     "number": 4,
-    "sourceNumber": 19,
-    "question": "Miriam: Are you coming to my party on Tuesday?\nBrian: I’m really sorry, but I _____ to take my daughter to the airport.",
+    "id": "sb-balanced-v2-4",
+    "difficulty": "B1",
+    "skill": "vocabulary",
+    "focus": "work collocations",
+    "question": "We need to _____ a decision before Friday.",
     "options": [
-      "has",
-      "had",
-      "have",
-      "having"
+      "set",
+      "make",
+      "do",
+      "take up"
     ]
   },
   {
     "number": 5,
-    "sourceNumber": 20,
-    "question": "Saif: Why do you like running?\nIsabella: Because it’s _____ way to keep fit.",
+    "id": "sb-balanced-v2-5",
+    "difficulty": "A2",
+    "skill": "grammar",
+    "focus": "past simple",
+    "question": "We _____ the museum last Saturday.",
     "options": [
-      "best",
-      "better",
-      "the best",
-      "the better"
+      "have visit",
+      "visited",
+      "visit",
+      "visiting"
     ]
   },
   {
     "number": 6,
-    "sourceNumber": 22,
-    "question": "Josef: Why didn’t you come to the cinema last week?\nChloe: I wanted to but I couldn’t. I _____ studying for that test we had on Monday.",
+    "id": "sb-balanced-v2-6",
+    "difficulty": "B2",
+    "skill": "vocabulary",
+    "focus": "work collocations",
+    "question": "We worked late to _____ the deadline.",
     "options": [
-      "was",
-      "were",
-      "am",
-      "been"
+      "meet",
+      "attend",
+      "arrive",
+      "reach to"
     ]
   },
   {
     "number": 7,
-    "sourceNumber": 23,
-    "question": "Anna: That bird’s on the garden table again. I think it’s hungry.\nJuliana: Yes, look! It _____ eat the bread we put there.",
+    "id": "sb-balanced-v2-7",
+    "difficulty": "B1",
+    "skill": "grammar",
+    "focus": "present perfect",
+    "question": "I have lived in Cairo _____ 2020.",
     "options": [
-      "is",
-      "will",
-      "goes to",
-      "is going to"
+      "for",
+      "during",
+      "from",
+      "since"
     ]
   },
   {
     "number": 8,
-    "sourceNumber": 24,
-    "question": "Sophie: How long _____ married?\nYing Yue: Two years. I met my husband when I was working in New York.",
+    "id": "sb-balanced-v2-8",
+    "difficulty": "C1",
+    "skill": "vocabulary",
+    "focus": "precision and nuance",
+    "question": "The evidence is promising but not yet _____. We cannot draw a firm conclusion.",
     "options": [
-      "had you got",
-      "did you get",
-      "have you been",
-      "are you being"
+      "redundant",
+      "interchangeable",
+      "conclusive",
+      "incidental"
     ]
   },
   {
     "number": 9,
-    "sourceNumber": 26,
-    "question": "Shop Assistant: Excuse me, please. Could I get past?\nCustomer: Oh, I’m sorry. I’m getting in the way, _____ I?",
+    "id": "sb-balanced-v2-9",
+    "difficulty": "B2",
+    "skill": "grammar",
+    "focus": "second conditional",
+    "question": "If I had more free time, I _____ a language club.",
     "options": [
-      "don’t",
-      "aren’t",
-      "can’t",
-      "haven’t"
+      "have joined",
+      "am joining",
+      "would join",
+      "will join"
     ]
   },
   {
     "number": 10,
-    "sourceNumber": 27,
-    "question": "Wife: Advertising is a big business for musicians.\nHusband: Yes, musicians _____ a lot of money for writing short pieces of music.",
+    "id": "sb-balanced-v2-10",
+    "difficulty": "C1",
+    "skill": "grammar",
+    "focus": "negative inversion",
+    "question": "Rarely _____ such a clear explanation of a complex issue.",
     "options": [
-      "pay",
-      "paid",
-      "are paid",
-      "are paying"
+      "have heard I",
+      "have I heard",
+      "I have heard",
+      "I heard have"
     ]
   },
   {
     "number": 11,
-    "sourceNumber": 28,
-    "question": "Son: Mum, I’d really like a guitar. Can I have one?\nMother: OK, but if we buy one you _____ have to practise playing it.",
+    "id": "sb-balanced-v2-11",
+    "difficulty": "A1",
+    "skill": "vocabulary",
+    "focus": "daily routines",
+    "question": "I usually _____ breakfast at seven.",
     "options": [
-      "will",
-      "can",
-      "could",
-      "must"
+      "have",
+      "wear",
+      "open",
+      "meet"
     ]
   },
   {
     "number": 12,
-    "sourceNumber": 29,
-    "question": "Juliana: Do you like Brazilian coffee?\nMiriodere: No I don’t, because it’s _____ strong.",
+    "id": "sb-balanced-v2-12",
+    "difficulty": "A2",
+    "skill": "vocabulary",
+    "focus": "travel",
+    "question": "Our train leaves from _____ six.",
     "options": [
-      "too",
-      "such",
-      "much",
-      "enough"
+      "receipt",
+      "luggage",
+      "traffic",
+      "platform"
     ]
   },
   {
     "number": 13,
-    "sourceNumber": 30,
-    "question": "Matthew: Would you like anything from the shop?\nAlicia: Yes, I’d like one of _____ celebrity magazines, please.",
+    "id": "sb-balanced-v2-13",
+    "difficulty": "A1",
+    "skill": "grammar",
+    "focus": "subject pronouns",
+    "question": "Omar and I live near the school. _____ walk there together.",
     "options": [
-      "most recent",
-      "more recent",
-      "the most recent",
-      "the more recent"
+      "They",
+      "He",
+      "It",
+      "We"
     ]
   },
   {
     "number": 14,
-    "sourceNumber": 31,
-    "question": "Daughter: Mum, my computer is broken again. I really need a new one.\nMother: I _____ buy one if we had the money, but it’s not possible right now.",
+    "id": "sb-balanced-v2-14",
+    "difficulty": "B1",
+    "skill": "vocabulary",
+    "focus": "phrasal verbs",
+    "question": "I do not know what this word means. I will _____ it up in a dictionary.",
     "options": [
-      "will",
-      "may",
-      "should",
-      "would"
+      "bring",
+      "turn",
+      "look",
+      "take"
     ]
   },
   {
     "number": 15,
-    "sourceNumber": 32,
-    "question": "Mother: _____ you packed your suitcase yet? We’re leaving early tomorrow morning.\nSon: I’ll do it later. It won’t take long.",
+    "id": "sb-balanced-v2-15",
+    "difficulty": "A2",
+    "skill": "grammar",
+    "focus": "comparatives",
+    "question": "The bus is _____ than a taxi.",
     "options": [
-      "Did",
-      "Have",
-      "Will",
-      "Are"
+      "more cheap",
+      "cheaper",
+      "cheap",
+      "cheapest"
     ]
   },
   {
     "number": 16,
-    "sourceNumber": 34,
-    "question": "Martina: What did the doctor say about your stomach pains?\nPadma: He asked me what I _____ for the last two days.",
+    "id": "sb-balanced-v2-16",
+    "difficulty": "B2",
+    "skill": "vocabulary",
+    "focus": "phrasal verbs",
+    "question": "The outdoor concert was _____ because of the storm.",
     "options": [
-      "eat",
-      "had eaten",
-      "was eating",
-      "would eat"
+      "called off",
+      "carried on",
+      "brought up",
+      "taken after"
     ]
   },
   {
     "number": 17,
-    "sourceNumber": 35,
-    "question": "Daughter: Everyone has arrived apart from Pamela.\nMother: Don’t worry, she phoned me this morning and said she _____ be a bit late.",
+    "id": "sb-balanced-v2-17",
+    "difficulty": "B1",
+    "skill": "grammar",
+    "focus": "first conditional",
+    "question": "If it rains tomorrow, we _____ indoors.",
     "options": [
-      "can",
-      "must",
-      "should",
-      "would"
+      "will stay",
+      "would stay",
+      "stayed",
+      "have stayed"
     ]
   },
   {
     "number": 18,
-    "sourceNumber": 36,
-    "question": "Vincent: Did you see the weather forecast? It’s going to be extremely hot this weekend.\nPauline: I know, I can’t believe it! It _____ since Monday.",
+    "id": "sb-balanced-v2-18",
+    "difficulty": "C1",
+    "skill": "vocabulary",
+    "focus": "collocations",
+    "question": "The decision could have _____ consequences, affecting several industries for years.",
     "options": [
-      "rains",
-      "has been raining",
-      "is raining",
-      "was raining"
+      "short-lived",
+      "self-contained",
+      "well-intentioned",
+      "far-reaching"
     ]
   },
   {
     "number": 19,
-    "sourceNumber": 37,
-    "question": "Ameena: What colour are you going to paint the living room?\nCharlotte: I _____ probably choose something bright, like yellow.",
+    "id": "sb-balanced-v2-19",
+    "difficulty": "B2",
+    "skill": "grammar",
+    "focus": "past deduction",
+    "question": "The floor is wet and there is an open umbrella by the door. It _____ rained.",
     "options": [
-      "will",
-      "may",
-      "can",
-      "might"
+      "should be",
+      "would be",
+      "must have",
+      "must be"
     ]
   },
   {
     "number": 20,
-    "sourceNumber": 38,
-    "question": "Victor: I’d love to go back in history to see how people lived hundreds of years ago.\nSimon: Me too! If I _____ choose, I’d probably travel to ancient Rome.",
+    "id": "sb-balanced-v2-20",
+    "difficulty": "C1",
+    "skill": "grammar",
+    "focus": "formal recommendations",
+    "question": "The panel recommended that every applicant _____ the same opportunity.",
     "options": [
-      "can",
-      "will",
-      "could",
-      "would"
+      "was giving",
+      "be given",
+      "is giving",
+      "has given"
     ]
   },
   {
     "number": 21,
-    "sourceNumber": 39,
-    "question": "Stephen: The concert was fantastic yesterday. You _____ have come.\nYuuto: I know. I wanted to, but I had to work late.",
+    "id": "sb-balanced-v2-21",
+    "difficulty": "A1",
+    "skill": "vocabulary",
+    "focus": "places",
+    "question": "You can buy bread at the _____.",
     "options": [
-      "must",
-      "could",
-      "ought",
-      "should"
+      "museum",
+      "bakery",
+      "library",
+      "station"
     ]
   },
   {
     "number": 22,
-    "sourceNumber": 40,
-    "question": "Katie: Would you like to go sightseeing or to the beach this afternoon?\nMatthew: I don’t mind, I’ll let you decide.\nKatie: OK, let’s go sightseeing, _____ we?",
+    "id": "sb-balanced-v2-22",
+    "difficulty": "A2",
+    "skill": "vocabulary",
+    "focus": "everyday collocations",
+    "question": "Could I _____ your pen for a moment? I will give it back.",
     "options": [
-      "should",
-      "shall",
-      "might",
-      "would"
+      "borrow",
+      "lend",
+      "keep",
+      "spend"
     ]
   },
   {
     "number": 23,
-    "sourceNumber": 41,
-    "question": "Amanda: It said on the news that the president also owns all the national newspapers.\nAndrew: That _____ be right! I don’t think that’s true.",
+    "id": "sb-balanced-v2-23",
+    "difficulty": "A1",
+    "skill": "grammar",
+    "focus": "plurals",
+    "question": "There are two _____ on the table.",
     "options": [
-      "must",
-      "can’t",
-      "won’t",
-      "would"
+      "book",
+      "a book",
+      "book’s",
+      "books"
     ]
   },
   {
     "number": 24,
-    "sourceNumber": 42,
-    "question": "Assistant: That meeting was really difficult. What would you have done if you _____ in my position?\nManager: Oh, I think you managed it very well.",
+    "id": "sb-balanced-v2-24",
+    "difficulty": "B1",
+    "skill": "vocabulary",
+    "focus": "meaning in context",
+    "question": "Nadia always arrives when she says she will and does what she promises. She is _____.",
     "options": [
-      "are",
-      "were",
-      "had been",
-      "would be"
+      "nervous",
+      "ordinary",
+      "reliable",
+      "curious"
     ]
   },
   {
     "number": 25,
-    "sourceNumber": 44,
-    "question": "Chris: I wish I could be with our cousins …\nAlison: Me too! By this time tomorrow they _____ on a Greek beach while we’re revising for our history test.",
+    "id": "sb-balanced-v2-25",
+    "difficulty": "A2",
+    "skill": "grammar",
+    "focus": "quantity",
+    "question": "How _____ water do you drink each day?",
     "options": [
-      "sunbathe",
-      "will sunbathe",
-      "will be sunbathing",
-      "will have sunbathed"
+      "a few",
+      "any",
+      "much",
+      "many"
     ]
   },
   {
     "number": 26,
-    "sourceNumber": 45,
-    "question": "Son: Are you OK, Mum? You don’t seem very relaxed.\nMother: I just wish I _____ an aisle seat so that I could get up and walk around more easily.",
+    "id": "sb-balanced-v2-26",
+    "difficulty": "B2",
+    "skill": "vocabulary",
+    "focus": "precise meaning",
+    "question": "The instructions were _____: two readers understood them in completely different ways.",
     "options": [
-      "had chosen",
-      "have chosen",
-      "would choose",
-      "should choose"
+      "irrelevant",
+      "ambiguous",
+      "accurate",
+      "compulsory"
     ]
   },
   {
     "number": 27,
-    "sourceNumber": 46,
-    "question": "Nicola: I love this picture, but won’t it cost a fortune?\nVictor: No, it’s just a copy. The original, _____ is a portrait of the artist’s friend, sold for €4 million!",
+    "id": "sb-balanced-v2-27",
+    "difficulty": "B1",
+    "skill": "grammar",
+    "focus": "present passive",
+    "question": "These bicycles _____ in Egypt.",
     "options": [
-      "whose",
-      "which",
-      "whom",
-      "that"
+      "are made",
+      "make",
+      "are making",
+      "made"
     ]
   },
   {
     "number": 28,
-    "sourceNumber": 47,
-    "question": "Laura: I can’t believe how talented this artist was.\nEmily: I know, it’s amazing. _____ he was almost 90 when he did them, his paintings are beautiful.",
+    "id": "sb-balanced-v2-28",
+    "difficulty": "C1",
+    "skill": "vocabulary",
+    "focus": "stance and register",
+    "question": "The researcher was _____ about the results, pointing out that the sample was small.",
     "options": [
-      "Since",
-      "Besides",
-      "Although",
-      "Therefore"
+      "complacent",
+      "adamant",
+      "indifferent",
+      "circumspect"
     ]
   },
   {
     "number": 29,
-    "sourceNumber": 48,
-    "question": "Andrea: I want to buy some new shoes for the winter.\nShan: Well, I _____ looking for a new pair of boots for weeks, but I can’t find anything I like.",
+    "id": "sb-balanced-v2-29",
+    "difficulty": "B2",
+    "skill": "grammar",
+    "focus": "past perfect",
+    "question": "When we arrived at the station, the train _____ already left.",
     "options": [
-      "am",
+      "has",
       "was",
-      "had been",
-      "have been"
+      "would",
+      "had"
     ]
   },
   {
     "number": 30,
-    "sourceNumber": 49,
-    "question": "Client: I don’t have much money – just enough to _____.\nAccountant: Well, let me suggest a way of helping you save more.",
+    "id": "sb-balanced-v2-30",
+    "difficulty": "C1",
+    "skill": "grammar",
+    "focus": "emphasis and agreement",
+    "question": "What the team needs most _____ a clear set of priorities.",
     "options": [
-      "get by",
-      "pay off",
-      "do with",
-      "make up"
+      "have",
+      "were",
+      "is",
+      "are"
     ]
   },
   {
     "number": 31,
-    "sourceNumber": 50,
-    "question": "Pablo: In April next year I _____ here for ten years exactly.\nAlison: Wow! It really doesn’t seem that long.",
+    "id": "sb-balanced-v2-31",
+    "difficulty": "A1",
+    "skill": "vocabulary",
+    "focus": "adjectives",
+    "question": "This bag weighs a lot. It is very _____.",
     "options": [
-      "will live",
-      "will be living",
-      "am going to live",
-      "will have been living"
+      "early",
+      "heavy",
+      "empty",
+      "quiet"
     ]
   },
   {
     "number": 32,
-    "sourceNumber": 51,
-    "question": "Student: Is it true that it took Bell and Watson ages to invent the telephone?\nTeacher: Yes. When they finally succeeded, they _____ on it for about 30 years.",
+    "id": "sb-balanced-v2-32",
+    "difficulty": "A2",
+    "skill": "vocabulary",
+    "focus": "health",
+    "question": "I have a headache. I need to _____ for a while.",
     "options": [
-      "must work",
-      "had been working",
-      "have worked",
-      "would be working"
+      "rest",
+      "invite",
+      "repair",
+      "deliver"
     ]
   },
   {
     "number": 33,
-    "sourceNumber": 52,
-    "question": "Rachel: This would be a lovely place to sit on a dry day.\nNatasha: Yes, I know. I just wish the rain _____.",
+    "id": "sb-balanced-v2-33",
+    "difficulty": "A1",
+    "skill": "grammar",
+    "focus": "present simple questions",
+    "question": "_____ you work on Saturdays?",
     "options": [
-      "would stop",
-      "has stopped",
-      "will have stopped",
-      "would be stopping"
+      "Do",
+      "Does",
+      "Are",
+      "Is"
     ]
   },
   {
     "number": 34,
-    "sourceNumber": 53,
-    "question": "Student: What’s today’s lesson going to be about?\nTeacher: Today we’re going to learn about a tribe _____ descendants live in Lima, the capital of Peru.",
+    "id": "sb-balanced-v2-34",
+    "difficulty": "B1",
+    "skill": "vocabulary",
+    "focus": "word formation",
+    "question": "Thank you for your clear _____. I understand the task now.",
     "options": [
-      "who",
-      "which",
-      "whose",
-      "whom"
+      "explain",
+      "explained",
+      "explanatory",
+      "explanation"
     ]
   },
   {
     "number": 35,
-    "sourceNumber": 55,
-    "question": "Daughter: Joanna has been really supportive. I’m so lucky to have her as a friend.\nMother: Yes. Just think – if you hadn’t sat next to her in class at school, you _____ so close now.",
+    "id": "sb-balanced-v2-35",
+    "difficulty": "A2",
+    "skill": "grammar",
+    "focus": "present continuous",
+    "question": "Please be quiet. The baby _____ right now.",
     "options": [
-      "won’t be",
-      "wouldn’t be",
-      "wouldn’t have been",
-      "aren’t"
+      "sleep",
+      "slept",
+      "is sleeping",
+      "sleeps"
     ]
   },
   {
     "number": 36,
-    "sourceNumber": 56,
-    "question": "David: Did you see the headline this evening?\nNicola: Yes – the Prime Minister was _____ to resign today.",
+    "id": "sb-balanced-v2-36",
+    "difficulty": "B2",
+    "skill": "vocabulary",
+    "focus": "word formation",
+    "question": "The application was rejected because the information was _____. Several required details were missing.",
     "options": [
-      "charged",
-      "argued",
-      "struggled",
-      "forced"
+      "completing",
+      "incomplete",
+      "completion",
+      "completely"
     ]
   },
   {
     "number": 37,
-    "sourceNumber": 57,
-    "question": "Student: I’m concerned about the chemical test results I’ve just had from the river.\nProfessor: It _____ be a good idea to check the acid levels as well then.",
+    "id": "sb-balanced-v2-37",
+    "difficulty": "B1",
+    "skill": "grammar",
+    "focus": "verb patterns",
+    "question": "I enjoy _____ new recipes at the weekend.",
     "options": [
-      "must",
-      "should",
-      "might",
-      "ought"
+      "tried",
+      "trying",
+      "try",
+      "to try"
     ]
   },
   {
     "number": 38,
-    "sourceNumber": 58,
-    "question": "Aamir: They’ve just announced that our train has been delayed.\nLaura: That’s annoying. We _____ have rushed to get here after all.",
+    "id": "sb-balanced-v2-38",
+    "difficulty": "C1",
+    "skill": "vocabulary",
+    "focus": "verb meaning",
+    "question": "The new evidence does not disprove her argument, but it does _____ its credibility.",
     "options": [
-      "needn’t",
-      "could",
-      "should",
-      "mustn’t"
+      "undermine",
+      "undergo",
+      "undertake",
+      "underline"
     ]
   },
   {
     "number": 39,
-    "sourceNumber": 59,
-    "question": "Liam: So, your Dad’s got a laptop!\nCian: Yes, I bought it for him last year – until then he _____ a typewriter!",
+    "id": "sb-balanced-v2-39",
+    "difficulty": "B2",
+    "skill": "grammar",
+    "focus": "contrast clauses",
+    "question": "_____ she was tired, she stayed to help us finish.",
     "options": [
-      "used",
-      "has used",
-      "has been using",
-      "had been using"
+      "Despite",
+      "Because of",
+      "However",
+      "Although"
     ]
   },
   {
     "number": 40,
-    "sourceNumber": 60,
-    "question": "Isabella: The flight is fully booked, so I won’t be able to go to Barbados next week.\nSafia: If you _____ the ticket sooner, you’d have found a seat.",
+    "id": "sb-balanced-v2-40",
+    "difficulty": "C1",
+    "skill": "grammar",
+    "focus": "concession",
+    "question": "Much _____ I admire his enthusiasm, I disagree with his proposal.",
     "options": [
-      "had booked",
-      "were booking",
-      "booked",
-      "would have booked"
+      "although",
+      "however",
+      "as",
+      "despite"
     ]
   },
   {
     "number": 41,
-    "sourceNumber": 61,
-    "question": "Receptionist: You _____ taken a taxi to the hotel since you arrived so late.\nCustomer: It was OK, actually. There was a direct bus service from the airport.",
+    "id": "sb-balanced-v2-41",
+    "difficulty": "A1",
+    "skill": "vocabulary",
+    "focus": "time expressions",
+    "question": "Today is Monday. _____ is Tuesday.",
     "options": [
-      "will have",
-      "should have",
-      "might have",
-      "would have"
+      "Tonight",
+      "Last week",
+      "Tomorrow",
+      "Yesterday"
     ]
   },
   {
     "number": 42,
-    "sourceNumber": 62,
-    "question": "Sophie: Have they finished interviewing for the manager’s position yet?\nRafi: No, but they _____ all the candidates by next Friday.",
+    "id": "sb-balanced-v2-42",
+    "difficulty": "A2",
+    "skill": "vocabulary",
+    "focus": "work and study",
+    "question": "I cannot come on Friday. I have an _____ with the dentist.",
     "options": [
-      "won’t see",
-      "would see",
-      "haven’t seen",
-      "will have seen"
+      "instruction",
+      "appointment",
+      "advertisement",
+      "argument"
     ]
   },
   {
     "number": 43,
-    "sourceNumber": 63,
-    "question": "Athlete: _____ hard I try, I can’t run any faster.\nCoach: You’ve improved a lot. I wouldn’t worry about it.",
+    "id": "sb-balanced-v2-43",
+    "difficulty": "A1",
+    "skill": "grammar",
+    "focus": "articles",
+    "question": "I have _____ umbrella in my bag.",
     "options": [
-      "Though",
-      "Whereas",
-      "However",
-      "Considering"
+      "an",
+      "a",
+      "some",
+      "any"
     ]
   },
   {
     "number": 44,
-    "sourceNumber": 64,
-    "question": "Laura: That’s a really beautiful painting. The colours are so vivid.\nJeremy: Yes, it’s amazing to think it was lost for years and _____.",
+    "id": "sb-balanced-v2-44",
+    "difficulty": "B1",
+    "skill": "vocabulary",
+    "focus": "confusing words",
+    "question": "Please _____ me to call Salma tomorrow. I do not want to forget.",
     "options": [
-      "must be restored",
-      "had to be restored",
-      "has been restoring",
-      "would be restoring"
+      "remember",
+      "recognise",
+      "realise",
+      "remind"
     ]
   },
   {
     "number": 45,
-    "sourceNumber": 65,
-    "question": "Charlotte: I saw the photos from the film festival. Was that you with the actor from The Hobbit?\nNiall: Yes, it was! _____ did I imagine I would ever actually meet him.",
+    "id": "sb-balanced-v2-45",
+    "difficulty": "A2",
+    "skill": "grammar",
+    "focus": "future plans",
+    "question": "We are _____ visit our cousins next weekend.",
     "options": [
-      "Not",
-      "Much",
-      "Hardly",
-      "Little"
+      "go to",
+      "going",
+      "will",
+      "going to"
     ]
   },
   {
     "number": 46,
-    "sourceNumber": 66,
-    "question": "Pauline: I hear you got soaked on the golf course this morning.\nChris: Yes. I wish I _____ listened to the weather forecast.",
+    "id": "sb-balanced-v2-46",
+    "difficulty": "B2",
+    "skill": "vocabulary",
+    "focus": "idiomatic language",
+    "question": "We finally broke the _____ by introducing ourselves and sharing a funny story.",
     "options": [
-      "had",
-      "have",
-      "would have",
-      "should have"
+      "stone",
+      "wall",
+      "ice",
+      "glass"
     ]
   },
   {
     "number": 47,
-    "sourceNumber": 67,
-    "question": "Laura: How was the meeting?\nRicardo: It finished late because Victor didn’t arrive until 5 pm. He told me he _____ been given the wrong directions.",
+    "id": "sb-balanced-v2-47",
+    "difficulty": "B1",
+    "skill": "grammar",
+    "focus": "relative clauses",
+    "question": "The woman _____ lives next door is a doctor.",
     "options": [
-      "has",
-      "had",
-      "should have",
-      "would have"
+      "where",
+      "who",
+      "which",
+      "whose"
     ]
   },
   {
     "number": 48,
-    "sourceNumber": 68,
-    "question": "Andrew: I picked up some of that cat food you wanted.\nPedro: Oh good. Once _____ to these new cat biscuits, they won’t want to go back to the other stuff.",
+    "id": "sb-balanced-v2-48",
+    "difficulty": "C1",
+    "skill": "vocabulary",
+    "focus": "idiomatic precision",
+    "question": "The team is not abandoning the project; it is simply putting it on the _____ until funding is secured.",
     "options": [
-      "we’ve switched",
-      "we’ll be switching",
-      "we’ll have switched",
-      "we’ve been switched"
+      "back burner",
+      "drawing board",
+      "front line",
+      "same page"
     ]
   },
   {
     "number": 49,
-    "sourceNumber": 69,
-    "question": "Antonia: Has your son done well in his exams?\nPhillip: Yes. Only once _____ he wasn’t sufficiently prepared, but he can take that one again.",
+    "id": "sb-balanced-v2-49",
+    "difficulty": "B2",
+    "skill": "grammar",
+    "focus": "indirect questions",
+    "question": "Could you tell me where _____?",
     "options": [
-      "he found",
-      "he has found",
-      "did he find",
-      "could he find"
+      "the nearest bank is",
+      "is the nearest bank",
+      "does the nearest bank be",
+      "the nearest bank does"
     ]
   },
   {
     "number": 50,
-    "sourceNumber": 70,
-    "question": "Son: I had a bit of a stomach ache this morning.\nMother: Oh dear! Well, I did say you _____ eaten that chicken last night.",
+    "id": "sb-balanced-v2-50",
+    "difficulty": "C1",
+    "skill": "grammar",
+    "focus": "formal passive reporting",
+    "question": "The missing documents are believed _____ during the move last month.",
     "options": [
-      "wouldn’t have",
-      "couldn’t have",
-      "mustn’t have",
-      "shouldn’t have"
+      "to be losing",
+      "having lost",
+      "that they lost",
+      "to have been lost"
     ]
   }
 ];
