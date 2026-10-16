@@ -3,6 +3,8 @@ import json
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 VERSION='half-year-2026-v3-longer'
+if json.loads((ROOT/'daily-missions/index.json').read_text()).get('totalDays',183)>183:
+    raise SystemExit('This archive builder covers the original half-year. Use build-full-year-daily.py for the full library.')
 TOPICS={}
 def add(category,a,b,c,expressions):
     TOPICS[category]={'foundation':a,'developing':b,'stretching':c,'expressions':[dict(zip(['expression','meaning','example'],line.split('|'))) for line in expressions.strip().splitlines()]}

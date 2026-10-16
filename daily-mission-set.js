@@ -1,9 +1,9 @@
-export const MISSION_DAYS=183, MISSION_CHUNK_SIZE=31, MISSION_VERSION='half-year-2026-v3-longer';
+export const MISSION_DAYS=365, MISSION_CHUNK_SIZE=31, MISSION_VERSION='full-year-2026-v5-alternating';
 const levels=['foundation','developing','stretching'], caches=new WeakMap();
 export function missionPositionForDate(day){
  const stamp=Date.parse(day+'T00:00:00Z');
  if(!/^\d{4}-\d{2}-\d{2}$/.test(day)||!Number.isFinite(stamp)||new Date(stamp).toISOString().slice(0,10)!==day)throw new Error('Invalid mission date');
- const ordinal=Math.round((stamp-Date.UTC(2026,9,15))/86400000),index=((ordinal%MISSION_DAYS)+MISSION_DAYS)%MISSION_DAYS;
+ const ordinal=Math.round((stamp-Date.UTC(2026,9,15))/86400000),scenario=ordinal%2===0,poolSize=scenario?183:182,poolIndex=((Math.floor(ordinal/2)%poolSize)+poolSize)%poolSize,index=poolIndex*2+(scenario?0:1);
  return {index,chunk:String(Math.floor(index/MISSION_CHUNK_SIZE)+1).padStart(2,'0'),offset:index%MISSION_CHUNK_SIZE};
 }
 export async function dailyMissionSet(day,level='foundation',fetcher=globalThis.fetch){
