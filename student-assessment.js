@@ -9,7 +9,7 @@ import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v
 import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=folder-popups';
 import {materialProgram} from './material-program-folders.js?v=comprehension-listening';
-import {initializeStudentBooking} from './student-booking.js?v=weekly-requests';
+import {initializeStudentBooking} from './student-booking.js?v=december-oct17';
 import {attachTemporaryPortalUploads,getTemporaryOwnerConnection} from './temporary-portal-uploads.js?v=exam-rebuild';
 import {createExamForm} from './exam-form.js?v=exam-rebuild';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
@@ -196,3 +196,4 @@ export function initializeStudentAssessment(doc) {
  if(doc.defaultView.location.hash.endsWith('/calendar'))Promise.resolve().then(openCalendarRoute);
  else if(new URL(doc.defaultView.location.href).searchParams.get('app')==='learner'&&(!doc.defaultView.location.hash||doc.defaultView.location.hash.startsWith('#students-portal')))Promise.resolve().then(()=>root.querySelector('[data-portal-area=client]').click());
 }
+

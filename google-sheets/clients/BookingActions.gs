@@ -75,14 +75,16 @@ function handlePublicBooking(data){
  finally{if(lock.hasLock())lock.releaseLock();}
 }
 function sbCalendarAvailability(book) {
+ const december=Array.from({length:31},(_,i)=>'2026-12-'+String(i+1).padStart(2,'0'));
  const sheet=book.getSheetByName('Calendar availability');
- if(!sheet||sheet.getLastRow()<2)return [];
- return sheet.getRange(2,1,sheet.getLastRow()-1,3).getValues().filter(row=>row[0]&&(row[1]===false||String(row[1]).toLowerCase()==='false')).map(row=>row[0] instanceof Date?Utilities.formatDate(row[0],'Africa/Cairo','yyyy-MM-dd'):String(row[0])).filter(date=>/^\d{4}-\d{2}-\d{2}$/.test(date));
+ if(!sheet||sheet.getLastRow()<2)return december;
+ return december.concat(sheet.getRange(2,1,sheet.getLastRow()-1,3).getValues().filter(row=>row[0]&&(row[1]===false||String(row[1]).toLowerCase()==='false')).map(row=>row[0] instanceof Date?Utilities.formatDate(row[0],'Africa/Cairo','yyyy-MM-dd'):String(row[0])).filter(date=>/^\d{4}-\d{2}-\d{2}$/.test(date)));
 }
 function sbCalendarDateBlocked(date,book){return sbCalendarAvailability(book||sbExamBook()).includes(String(date));}
 function sbSaveCalendarDay(book,data) {
  const date=String(data.date||''),parsed=new Date(date+'T12:00:00Z');
  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==date||typeof data.available!=='boolean')throw new Error('Choose a valid date and availability.');
+ if(date.startsWith('2026-12-')&&data.available)throw new Error('December 2026 is closed for new bookings.');
  if(date<sbBookingToday())throw new Error('Only today and future dates can be changed.');
  const lock=LockService.getScriptLock();lock.waitLock(20000);
  try{
@@ -140,3 +142,4 @@ function sbOwnerCalendarSlots(data){
 function sbSaveCalendarSlots(data){
  const lock=LockService.getScriptLock();lock.waitLock(20000);try{const date=String(data.date||''),parsed=new Date(date+'T12:00:00Z');if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==date||date<sbBookingToday())throw new Error('Choose today or a future date.');if(data.revision!==sbCalendarSlotRevision(date))throw new Error('The slots changed on another device. Refresh the calendar before editing.');if(!Array.isArray(data.slots)||data.slots.length>24)throw new Error('Use up to 24 availability windows per day.');const slots=data.slots.map(item=>{const time=String(item.time||''),endTime=String(item.endTime||'');if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(endTime)||endTime<=time||typeof item.enabled!=='boolean')throw new Error('Enter a valid start, later end time, and access setting.');return {time,endTime,enabled:item.enabled,label:time+'–'+endTime};}).sort((a,b)=>a.time.localeCompare(b.time));for(let i=1;i<slots.length;i++)if(slots[i].time<slots[i-1].endTime)throw new Error('Availability windows must not overlap.');PropertiesService.getScriptProperties().setProperty('SB_CALENDAR_SLOTS_'+date,JSON.stringify(slots));return {ok:true,date,slots,revision:sbCalendarSlotRevision(date)};}finally{lock.releaseLock();}
 }
+
