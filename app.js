@@ -40,19 +40,31 @@ $('#search').addEventListener('input',render);
 $('#course-dialog').addEventListener('click',e=>{if(e.target.closest('.course-quote'))$('#course-dialog').close();});
 
 const form=$('#placement-form'),storageKey='speak-boldly-'+TEST_VERSION;let locked=false,testPage=0,deadline=null,timerInterval=null;
+const draftKey=storageKey+'-draft-v1';let draftRestored=false;
 const pageSize=10,pageCount=Math.ceil(questions.length/pageSize);
 form.innerHTML='<div class="placement-participant"><p class="demo-note">Grammar and vocabulary, with mixed difficulty throughout. Press Submit to see your estimated CEFR range. </p></div><div class="test-submit-bar"><span id="assessment-timer" class="assessment-timer" role="timer" aria-label="Time remaining">20:00 remaining</span><span id="answered-count">0 / '+questions.length+' answered</span><button class="button" type="submit">Submit my answers</button></div>'+questions.map(q=>'<fieldset class="placement-question"><legend>'+q.number+'. '+escape(q.question)+'</legend>'+q.options.map((option,j)=>'<label><input type="radio" name="q'+q.number+'" value="'+j+'"> '+String.fromCharCode(97+j)+') '+escape(option)+'</label>').join('')+'</fieldset>').join('')+'<div class="test-pager"><button type="button" class="button light" id="test-prev">Previous</button><span id="test-page-label"></span><button type="button" class="button light" id="test-next">Next</button></div><p class="demo-note">Original Speak Boldly assessment · Grammar and vocabulary.</p><button class="button" type="submit">Submit my answers</button>';
 const fields=[...form.querySelectorAll('.placement-question')];
+const submitNotice=document.createElement('p');submitNotice.id='placement-submit-notice';submitNotice.setAttribute('role','status');submitNotice.setAttribute('aria-live','polite');form.append(submitNotice);
+const confirmation=document.createElement('section');confirmation.id='placement-submit-confirmation';confirmation.hidden=true;confirmation.setAttribute('aria-label','Confirm placement test submission');confirmation.style.cssText='padding:20px;margin:20px 0;border:1px solid #193c32;border-radius:12px;background:#edf0e6';
+const confirmationText=document.createElement('p');confirmationText.textContent='Ready to submit? Your score and estimated level will appear immediately. Submitted answers cannot be changed.';
+const confirmSubmission=document.createElement('button');confirmSubmission.type='button';confirmSubmission.className='button';confirmSubmission.textContent='Confirm submission';
+const keepReviewing=document.createElement('button');keepReviewing.type='button';keepReviewing.className='button light';keepReviewing.textContent='Keep reviewing';confirmation.append(confirmationText,confirmSubmission,keepReviewing);form.append(confirmation);
+keepReviewing.onclick=()=>{confirmation.hidden=true;form.querySelector('button[type=submit]').focus();};
+confirmSubmission.onclick=()=>submitAssessment(false,true);
+function saveAssessmentDraft(){if(locked||deadline===null)return;try{sessionStorage.setItem(draftKey,JSON.stringify({version:TEST_VERSION,answers:collectAnswers(),deadline,page:testPage}));}catch{}}
+function removeAssessmentDraft(){try{sessionStorage.removeItem(draftKey);}catch{}}
+function restoreAssessmentDraft(){if(draftRestored)return;draftRestored=true;try{const saved=JSON.parse(sessionStorage.getItem(draftKey)||'null');if(!saved||saved.version!==TEST_VERSION||!Number.isFinite(saved.deadline)||saved.deadline>Date.now()+ASSESSMENT_DURATION_MS+5000||saved.deadline<Date.now()-24*60*60*1000){removeAssessmentDraft();return;}deadline=saved.deadline;testPage=Number.isInteger(saved.page)?Math.max(0,Math.min(pageCount-1,saved.page)):0;for(const [name,value]of Object.entries(saved.answers||{})){if(!/^q\d+$/.test(name)||!/^\d$/.test(String(value)))continue;const input=form.querySelector('input[name="'+name+'"][value="'+value+'"]');if(input)input.checked=true;}count();renderPage();submitNotice.textContent='Your saved answers have been restored on this tab. The original timer continues.';}catch{removeAssessmentDraft();}}
+
 function renderPage(){fields.forEach((f,i)=>f.hidden=Math.floor(i/pageSize)!==testPage);$('#test-page-label').textContent='Page '+(testPage+1)+' of '+pageCount;$('#test-prev').disabled=testPage===0;$('#test-next').disabled=testPage===pageCount-1;}
-$('#test-prev').onclick=()=>{if(testPage>0){testPage--;renderPage();form.scrollIntoView({behavior:'smooth'});}};
-$('#test-next').onclick=()=>{if(testPage<pageCount-1){testPage++;renderPage();form.scrollIntoView({behavior:'smooth'});}};
+$('#test-prev').onclick=()=>{if(testPage>0){testPage--;renderPage();saveAssessmentDraft();form.scrollIntoView({behavior:'smooth'});}};
+$('#test-next').onclick=()=>{if(testPage<pageCount-1){testPage++;renderPage();saveAssessmentDraft();form.scrollIntoView({behavior:'smooth'});}};
 function collectAnswers(){return Object.fromEntries([...new FormData(form)].filter(([name])=>/^q\d+$/.test(name)));}
 function count(){ $('#answered-count').textContent=Object.keys(collectAnswers()).length+' / '+questions.length+' answered';}
-form.addEventListener('change',count);
+form.addEventListener('change',()=>{count();saveAssessmentDraft();});
 // Clear legacy saved results; assessment feedback lasts only while this page is open.
 try{localStorage.removeItem(storageKey);}catch{}
 function clearAssessmentResult(){
- clearInterval(timerInterval);timerInterval=null;deadline=null;locked=false;testPage=0;$('#assessment-timer').textContent='20:00 remaining';$('#assessment-timer').classList.remove('is-urgent');form.reset();form.querySelectorAll('input,button').forEach(element=>element.disabled=false);const result=$('#placement-result');result.hidden=true;result.replaceChildren();count();renderPage();
+ confirmation.hidden=true;submitNotice.textContent='';$('#placement-view-results')?.remove();clearInterval(timerInterval);timerInterval=null;deadline=null;locked=false;testPage=0;$('#assessment-timer').textContent='20:00 remaining';$('#assessment-timer').classList.remove('is-urgent');form.reset();form.querySelectorAll('input,button').forEach(element=>element.disabled=false);const result=$('#placement-result');result.hidden=true;result.replaceChildren();count();renderPage();
 }
 function tickTimer(){
  if(locked||deadline===null)return;
@@ -63,17 +75,16 @@ function tickTimer(){
 }
 function startAssessment(){
  if(!document.querySelector('#assessment-dialog')?.open && !(window.location.hash==='#assessment' && document.querySelector('#assessment')?.hasAttribute('data-view')))return;
- if(deadline===null&&!locked){deadline=Date.now()+ASSESSMENT_DURATION_MS;timerInterval=setInterval(tickTimer,250);tickTimer();}
+ restoreAssessmentDraft();if(!locked){if(deadline===null)deadline=Date.now()+ASSESSMENT_DURATION_MS;if(timerInterval===null)timerInterval=setInterval(tickTimer,250);saveAssessmentDraft();tickTimer();}
 }
 document.addEventListener('assessment-open',startAssessment);
 window.addEventListener('hashchange',startAssessment);
 window.addEventListener('pageshow',startAssessment);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)tickTimer();});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)tickTimer();else saveAssessmentDraft();});
 form.addEventListener('change',tickTimer);
 
-window.addEventListener('pagehide',clearAssessmentResult);
+window.addEventListener('pagehide',()=>{saveAssessmentDraft();clearAssessmentResult();draftRestored=false;});
 function finish(record){
- locked=true;clearInterval(timerInterval);timerInterval=null;form.querySelectorAll('input,button').forEach(e=>{if(!['test-prev','test-next'].includes(e.id))e.disabled=true;});renderPage();
  const resultScore=scoreAnswers(record.answers);
  const result=$('#placement-result');result.hidden=false;
  result.classList.add('assessment-result');
@@ -87,17 +98,18 @@ function finish(record){
  addResultImageButton(document,window,result,'Speak Boldly — English assessment');
  const note=document.createElement('p');note.textContent='Send a voice note for your speaking assessment before starting your course.';result.append(note);
  const contact=document.createElement('a');contact.className='button';contact.href='#contact';contact.textContent='Contact us';result.append(contact);
- return record;
+ locked=true;confirmation.hidden=true;submitNotice.textContent='Assessment submitted. Your results are below.';removeAssessmentDraft();clearInterval(timerInterval);timerInterval=null;form.querySelectorAll('input,button').forEach(e=>{if(!['test-prev','test-next'].includes(e.id))e.disabled=true;});renderPage();const viewResults=document.createElement('button');viewResults.id='placement-view-results';viewResults.type='button';viewResults.className='button light';viewResults.textContent='View results';viewResults.onclick=()=>result.scrollIntoView({behavior:'smooth'});form.querySelector('.test-submit-bar').append(viewResults);return record;
 }
-function submitAssessment(timedOut=false){
- if(locked||deadline===null)return;
+function submitAssessment(timedOut=false,confirmed=false){
+ if(locked){$('#placement-result').scrollIntoView({behavior:'smooth'});return;}
+ if(deadline===null){startAssessment();if(deadline===null){submitNotice.textContent='Please reopen the placement test to start its timer. Your current choices are still here.';return;}}
  const expired=remainingSeconds(deadline)===0;
- if(!timedOut&&!expired&&(!form.reportValidity()||!confirm('Submit now? Your score and estimated level will appear immediately. You cannot change your answers afterwards.')))return;
+ if(!timedOut&&!expired){if(!form.reportValidity())return;if(!confirmed){saveAssessmentDraft();confirmation.hidden=false;confirmation.scrollIntoView({behavior:'smooth',block:'center'});confirmSubmission.focus();return;}}
  // A confirmation dialog can remain open past the deadline.
  const autoSubmitted=timedOut||remainingSeconds(deadline)===0;
  const answers=collectAnswers();
- const record={version:TEST_VERSION,attemptId:crypto.randomUUID(),answers,answered:Object.keys(answers).length,submittedAt:new Date().toISOString(),consent:false,emailStatus:'disabled'};
- finish(record);
+ const record={version:TEST_VERSION,attemptId:globalThis.crypto?.randomUUID?.()||'placement-'+Date.now()+'-'+Math.random().toString(36).slice(2),answers,answered:Object.keys(answers).length,submittedAt:new Date().toISOString(),consent:false,emailStatus:'disabled'};
+ try{finish(record);}catch{saveAssessmentDraft();submitNotice.textContent='Your result could not finish displaying. Your answers are still here. Please try Submit again.';return;}
  $('#assessment-timer').textContent=autoSubmitted?'Time is up — answers submitted':'Assessment submitted';
  if(document.querySelector('#assessment-dialog')?.open || window.location.hash==='#assessment')$('#placement-result').scrollIntoView({behavior:'smooth'});
 }
@@ -111,3 +123,4 @@ renderPage();$('#year').textContent=new Date().getFullYear();render();
 
 function openRequestedPlacement(){if(location.hash!=='#placement')return;try{if(sessionStorage.getItem('speak-boldly-open-placement')!=='yes')return;sessionStorage.removeItem('speak-boldly-open-placement');}catch{return;}document.querySelector('#assessment-start')?.click();}
 window.addEventListener('hashchange',openRequestedPlacement);openRequestedPlacement();
+
