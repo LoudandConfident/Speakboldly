@@ -10,6 +10,8 @@ const $=s=>document.querySelector(s);
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const chat=message=>'https://wa.me/201050226476?text='+encodeURIComponent(message);
 const scenes={
+momentum:'<path d="M42 156h43v-35h42V87h42V50h36"/><path d="m187 33 18 17-18 17"/><circle cx="70" cy="65" r="25"/><path d="M70 51v15l10 7M43 173h162"/><path d="M36 92h14M27 107h25"/>',
+
 urgent:'<path d="M28 46h115v76h-43l-27 23v-23H28z"/><path d="M49 68h65M49 86h49"/><circle cx="168" cy="129" r="43"/><path d="M168 101v28l18 12M168 91v5M168 162v5M130 129h5M201 129h5"/>',
 pronunciation:"<rect x=\"85\" y=\"35\" width=\"50\" height=\"88\" rx=\"25\"/><path d=\"M70 97v9a40 40 0 0 0 80 0v-9M110 146v25M88 171h44M49 72v37M33 84v13M173 63v55M189 77v27M99 60h22M99 78h22\"/>",
 technology:"<rect x=\"42\" y=\"39\" width=\"156\" height=\"102\" rx=\"8\"/><path d=\"M100 142v20h40v-20M79 164h82M92 74l-16 16 16 16M148 74l16 16-16 16M129 68l-18 43\"/><circle cx=\"181\" cy=\"154\" r=\"18\"/><path d=\"M181 145v18M172 154h18\"/>",
@@ -124,6 +126,7 @@ renderPage();$('#year').textContent=new Date().getFullYear();render();
 
 function openRequestedPlacement(){if(location.hash!=='#placement')return;try{if(sessionStorage.getItem('speak-boldly-open-placement')!=='yes')return;sessionStorage.removeItem('speak-boldly-open-placement');}catch{return;}document.querySelector('#assessment-start')?.click();}
 window.addEventListener('hashchange',openRequestedPlacement);openRequestedPlacement();
+
 
 
 

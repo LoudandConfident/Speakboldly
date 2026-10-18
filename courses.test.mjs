@@ -20,10 +20,10 @@ test('General English has distinct four- and eight-session packages with their o
 });
 
 test('public program order omits One Session and keeps the other available programs',()=>{
- assert.deepEqual(courses.filter(c=>matches(c,'All courses','')).slice(0,5).map(c=>c.id),['general-8','general-4','english-momentum','make-up-revision','interview']);
+ assert.deepEqual(courses.filter(c=>matches(c,'All courses','')).slice(0,5).map(c=>c.id),['general-8','general-4','english-momentum','interview','writing']);
  const interview=courses.find(c=>c.id==='interview');assert(!interview.comingSoon&&!interview.dimmed);
  const writing=courses.find(c=>c.id==='writing');assert(!writing.dimmed);assert(!courses.find(c=>c.id==='urgent-session').comingSoon);assert(!writing.comingSoon);assert.equal(writing.price,1500);
 });
 
 
-test('One Session is absent from public category and search results while make-up sessions remain available',()=>{const one=courses.find(c=>c.id==='urgent-session');assert(one);for(const category of ['All courses','Session'])for(const query of ['', 'One Session'])assert.equal(matches(one,category,query),false);assert(matches(courses.find(c=>c.id==='make-up-revision'),'Session',''));});
+test('One Session is absent from public category and search results and make-up sessions stay hidden',()=>{const one=courses.find(c=>c.id==='urgent-session');assert(one);for(const category of ['All courses','Session'])for(const query of ['', 'One Session'])assert.equal(matches(one,category,query),false);assert.equal(matches(courses.find(c=>c.id==='make-up-revision'),'Session',''),false);});

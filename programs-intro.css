@@ -1,0 +1,14 @@
+/* Rounded filters and an open, asymmetric coaching introduction. */
+#courses .filter{border-radius:999px;min-height:42px;padding:11px 18px}
+#programs{position:relative;overflow:clip}
+#programs .coaching-independence{position:relative;max-width:none!important;margin:0!important;padding:15px 34% 28px 0}
+#programs .coaching-independence h3{font-size:clamp(32px,4.2vw,58px);font-weight:500;line-height:1.12;letter-spacing:-1.8px;margin:0 0 30px;max-width:800px}
+#programs .coaching-independence>p{max-width:650px;line-height:1.9}
+#programs .coaching-independence ul{list-style:none;counter-reset:promise;padding:0;margin:28px 0 32px;max-width:650px}
+#programs .coaching-independence li{counter-increment:promise;position:relative;border-top:1px solid #c5cebd;padding:18px 0 18px 47px;font-size:14px;line-height:1.6}
+#programs .coaching-independence li:before{content:'0' counter(promise);position:absolute;left:0;top:18px;font-style:italic;color:#677b64;font-size:18px}
+#programs .coaching-independence li:last-child{border-bottom:1px solid #c5cebd}
+#programs .program-intro-art{position:absolute;top:25px;right:0;width:29%;height:350px;color:#193c32;transform:rotate(8deg);pointer-events:none}
+#programs .program-course-actions{margin-top:10px}
+#programs .program-course-actions .button{border-radius:999px;min-height:48px;padding:14px 25px}
+@media(max-width:760px){#programs .coaching-independence{padding:0 0 20px}#programs .coaching-independence h3{font-size:36px;padding-right:0}#programs .program-intro-art{position:relative;display:block;width:170px;height:170px;top:auto;right:auto;margin:24px auto}#programs .coaching-independence>p{font-size:14px}}

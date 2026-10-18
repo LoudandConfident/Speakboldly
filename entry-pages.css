@@ -71,3 +71,16 @@
 
 #quote .quote-request-grid{max-width:820px;margin:32px auto;gap:0}
 @media(max-width:760px){#quote .quote-request-grid{max-width:300px}#quote .quote-popup-choice,#quote .quote-popup-choice:nth-child(2),#quote .quote-popup-choice:nth-child(3),#quote .quote-popup-choice:nth-child(4){padding:14px}#quote .quote-tile-label{font-size:18px}#quote .quote-tile-number,#quote .quote-popup-choice:nth-child(2) .quote-tile-number{font-size:30px}}
+
+#quote .quote-request-grid{max-width:1000px}
+#quote .quote-popup-choice{gap:14px;position:relative}
+#quote .quote-tile-number{font-size:36px}
+#quote .quote-tile-copy{display:block}
+#quote .quote-tile-label{display:block}
+#quote .quote-tile-label:after{display:none}
+#quote .quote-tile-copy small{display:block;font-size:11px;line-height:1.6;margin-top:12px;max-width:180px;color:#53685b}
+#quote .quote-mini-art{position:absolute;right:20px;top:22px;width:42px;height:38px;color:#193c32}
+@media(max-width:760px){#quote .quote-request-grid{max-width:360px}#quote .quote-popup-choice,#quote .quote-popup-choice:nth-child(2),#quote .quote-popup-choice:nth-child(3),#quote .quote-popup-choice:nth-child(4){aspect-ratio:auto;min-height:195px;padding:14px}#quote .quote-mini-art{width:30px;height:28px;right:12px;top:16px}#quote .quote-tile-copy small{font-size:10px;margin-top:8px}#quote .quote-tile-label{font-size:18px}}
+
+#join-team .join-orbit{border-radius:75% 12% 75% 12%;width:180px;height:170px;transform:rotate(-9deg);background:#d5ed98;border:1px solid #193c32}
+@media(max-width:760px){#join-team .join-orbit{width:135px;height:128px;font-size:22px}}

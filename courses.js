@@ -75,7 +75,7 @@ export const courses = [
       "Focused feedback and revision",
       "Independent practice between sessions"
     ],
-    "art": "general"
+    "art": "momentum"
   },
   {
     "id": "urgent-session",
@@ -100,6 +100,7 @@ export const courses = [
   },
   {
     "id": "make-up-revision",
+    "catalogHidden": true,
     "title": "Make-up / revision session",
     "level": "Already enrolled clients",
     "duration": "1 session · 90 minutes",
@@ -295,4 +296,5 @@ export const courses = [
   }
 ];
 export function matches(c,category,query){return !c.catalogHidden&&(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
+
 

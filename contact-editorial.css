@@ -1,0 +1,13 @@
+#contact.contact-section{position:relative;overflow:clip;background:transparent;padding:65px 6% 30px;min-height:650px}
+#contact>.eyebrow{margin-bottom:28px}
+#contact>h2{font-size:clamp(38px,4.7vw,64px);font-weight:500;line-height:1.12;letter-spacing:-2px;max-width:760px;margin:0 0 28px;position:relative;z-index:1}
+#contact>h2 em{font-weight:500}
+#contact>.intro{max-width:570px;margin:0 0 35px;font-size:16px;line-height:1.9}
+#contact .contact-orbit{position:absolute;right:5%;top:130px;width:29%;max-width:330px;color:#193c32;transform:rotate(-8deg)}
+#contact .contact-orbit svg{display:block;width:100%;height:auto}
+#contact>.whatsapp-contact{border-radius:999px;min-height:52px;gap:35px;padding:15px 25px}
+#contact>.whatsapp-contact:after{content:'→';font-size:20px}
+#contact>.whatsapp-contact+p{border-top:1px solid #bdcab5;border-bottom:1px solid #bdcab5;max-width:570px;padding:24px 0;margin:30px 0 0;font-size:13px;line-height:1.8;overflow-wrap:anywhere}
+#contact .email-link{font-size:16px;text-underline-offset:5px}
+#contact>.page-signature{margin-top:65px}
+@media(max-width:760px){#contact.contact-section{padding-top:40px;min-height:0}#contact>h2{font-size:39px;letter-spacing:-1.3px}#contact .contact-orbit{position:relative;top:auto;right:auto;width:155px;margin:0 0 25px auto}#contact>.intro{font-size:15px}#contact>.page-signature{margin-top:45px}}
