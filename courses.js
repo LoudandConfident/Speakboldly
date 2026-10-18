@@ -79,6 +79,7 @@ export const courses = [
   },
   {
     "id": "urgent-session",
+    "catalogHidden": true,
     "title": "One Session",
     "level": "Your current English level",
     "duration": "1 session",
@@ -293,4 +294,5 @@ export const courses = [
     "outcomes": "You’ll practise planning purposeful lessons, giving clear instructions, and helping learners take part. You’ll also develop ways to review your teaching, use feedback, and continue improving independently."
   }
 ];
-export function matches(c,category,query){return(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
+export function matches(c,category,query){return !c.catalogHidden&&(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
+

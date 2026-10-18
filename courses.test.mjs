@@ -13,14 +13,17 @@ test('published courses have unique identities and usable coaching topics',()=>{
 });
 
 test('General English has distinct four- and eight-session packages with their own prices',()=>{
- const packages=courses.filter(c=>c.category==='General English');assert.equal(packages.length,2);
+ const packages=courses.filter(c=>['general-8','general-4'].includes(c.id));assert.equal(packages.length,2);
  assert.deepEqual(packages.map(c=>c.id),['general-8','general-4']);
  for(const [i,count] of [8,4].entries()){assert.equal(packages[i].duration,count+' sessions per month');assert.equal(packages[i].priceOptions.length,1);assert(packages[i].priceOptions[0].schedule.startsWith(count+' sessions'));}
  assert.equal(packages[0].priceOptions[0].amount,3000);assert.equal(packages[1].priceOptions[0].amount,2000);
 });
 
-test('featured program order and all five featured programs are undimmed',()=>{
- assert.deepEqual(courses.slice(0,4).map(c=>c.id),['general-8','general-4','urgent-session','interview']);
+test('public program order omits One Session and keeps the other available programs',()=>{
+ assert.deepEqual(courses.filter(c=>matches(c,'All courses','')).slice(0,5).map(c=>c.id),['general-8','general-4','english-momentum','make-up-revision','interview']);
  const interview=courses.find(c=>c.id==='interview');assert(!interview.comingSoon&&!interview.dimmed);
  const writing=courses.find(c=>c.id==='writing');assert(!writing.dimmed);assert(!courses.find(c=>c.id==='urgent-session').comingSoon);assert(!writing.comingSoon);assert.equal(writing.price,1500);
 });
+
+
+test('One Session is absent from public category and search results while make-up sessions remain available',()=>{const one=courses.find(c=>c.id==='urgent-session');assert(one);for(const category of ['All courses','Session'])for(const query of ['', 'One Session'])assert.equal(matches(one,category,query),false);assert(matches(courses.find(c=>c.id==='make-up-revision'),'Session',''));});
