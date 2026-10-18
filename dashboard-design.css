@@ -1,0 +1,29 @@
+#vision .vision-heading-star{display:none}
+.learning-space-heading{margin:12px 0 24px}
+.learning-space-heading h3,.admin-dashboard-heading>h3{font-size:clamp(27px,3vw,38px);font-weight:500;letter-spacing:-1px;margin:12px 0}
+.learning-space-heading>p:last-child{font-size:15px}
+#students-portal .learning-space-destinations{gap:20px;grid-template-columns:repeat(4,minmax(0,1fr))}
+#students-portal .learning-space-card{position:relative;min-height:150px;padding:22px 17px!important;border:1px solid #c2cfb8;border-radius:30px 30px 30px 7px;background:#edf0e6;color:#193c32;box-shadow:none;gap:10px}
+#students-portal .learning-space-card:nth-child(4n+2){border-radius:42% 42% 10px 10px;background:#f1f3e9}
+#students-portal .learning-space-card:nth-child(4n+3){border-radius:10px 36px 10px 36px;background:#faf9f4}
+#students-portal .learning-space-card:nth-child(4n){border-radius:30px 30px 7px 30px;background:#edf0e6}
+#students-portal .learning-space-card-title{font-size:17px;font-weight:600}
+#students-portal .learning-space-card-description{font-size:12px;line-height:1.6}
+#students-portal .learning-space-card svg{width:31px;height:31px}
+#students-portal .learning-space-card:hover{background:#e1e9d5;border-color:#193c32}
+.instructor-destination-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:15px;width:100%;margin:24px 0 28px}
+.instructor-destination-card{min-width:0;min-height:145px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:10px;padding:20px;background:#edf0e6;color:#193c32;border:1px solid #c2cfb8;border-radius:28px 28px 7px 28px;text-align:left}
+.instructor-destination-card:nth-child(2){border-radius:42% 42% 8px 8px;background:#f1f3e9}
+.instructor-destination-card:nth-child(3){border-radius:28px 28px 28px 7px;background:#faf9f4}
+.instructor-destination-card:nth-child(4){border-radius:8px 32px 8px 32px}
+.instructor-destination-card:nth-child(5){border-radius:32px;background:#f1f3e9}
+.instructor-destination-card svg{width:33px;height:33px}
+.instructor-destination-card strong{font-size:16px;font-weight:600}
+.instructor-destination-card>span{font-size:11px;line-height:1.5;color:#53685b}
+.instructor-destination-card:hover{background:#e1e9d5;border-color:#193c32}
+.panel-symbol{display:inline-flex;vertical-align:middle;margin-right:12px;color:#193c32}
+.panel-symbol svg{width:27px;height:27px}
+.exam-section-symbol{display:flex;justify-content:flex-end;margin:0 0 8px;padding-bottom:8px;border-bottom:1px solid #c7d2bb;color:#193c32}
+.exam-section-symbol svg{width:46px;height:46px}
+@media(max-width:900px){.instructor-destination-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:680px){#students-portal .learning-space-destinations{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}#students-portal .learning-space-card{min-height:135px;padding:18px 12px!important}#students-portal .learning-space-card-title{font-size:15px}#students-portal .learning-space-card-description{font-size:11px}.instructor-destination-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.instructor-destination-card{min-height:125px;padding:17px}.instructor-destination-card strong{font-size:15px}.learning-space-heading h3,.admin-dashboard-heading>h3{font-size:28px}}
