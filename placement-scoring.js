@@ -8,3 +8,9 @@ export function scoreAnswers(answers) {
  const level=score<10?'Below A1':score<20?'A1–A2':score<30?'A2–B1':score<40?'B1–B2':'B2–C1';
  return {score,total:answerKey.length,answered,percentage,level};
 }
+
+
+export function placementCorrections(answers){
+ scoreAnswers(answers);
+ return answerKey.flatMap((correct,index)=>{const raw=answers['q'+(index+1)],selected=raw===undefined||raw===null||raw===''?null:Number(raw);return selected===correct?[]:[{number:index+1,selected,correct}];});
+}

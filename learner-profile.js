@@ -1,12 +1,14 @@
 import {learnerCourseGuidance} from './assessment-guidance.js';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=card-colors-cefr';
-import {learnerProfiles,learnerQuestions,scoreLearnerProfile} from './learner-profile-data.js?v=general-learning-30';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=page-capture-v2';
+import {learnerProfiles,learnerQuestions,scoreLearnerProfile,learnerQuestionOrder} from './learner-profile-data.js?v=short-shuffled-v2';
 export function initializeLearnerProfile(doc,win){
  const root=doc.querySelector('#learner-profile');if(!root)return;
  const form=root.querySelector('form'),questions=root.querySelector('.learner-questions'),progress=root.querySelector('.learner-progress'),result=doc.querySelector('#learner-results .learner-result'),previous=root.querySelector('[data-learner-previous]'),next=root.querySelector('[data-learner-next]'),submit=root.querySelector('[type=submit]'),error=root.querySelector('.learner-error');
  let page=0;const pageSize=5;const pageCount=Math.ceil(learnerQuestions.length/pageSize);const fields=[];
  const el=(tag,text,className)=>{const node=doc.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
  learnerQuestions.forEach((question,index)=>{const field=el('fieldset');field.append(el('legend',(index+1)+'. '+question.prompt));question.options.forEach(option=>{const label=el('label'),input=el('input');input.type='radio';input.name='learner-'+index;input.value=option.profile;input.required=true;label.append(input,el('span',option.text));field.append(label);});questions.append(field);fields.push(field);});
+ const originalFields=[...fields];function shuffleQuestions(){const order=learnerQuestionOrder();fields.splice(0,fields.length,...order.map(index=>originalFields[index]));for(const field of fields)questions.append(field);}
+ shuffleQuestions();
  function showPage(){fields.forEach((field,index)=>{const active=Math.floor(index/pageSize)===page;field.hidden=!active;field.disabled=!active;});progress.textContent='Step '+(page+1)+' of '+pageCount;previous.disabled=page===0;next.hidden=page===pageCount-1;submit.hidden=page!==pageCount-1;error.textContent='';}
  const pageValid=()=>fields.filter(field=>!field.disabled).every(field=>{const input=field.querySelector('input');return input.reportValidity();});
  previous.onclick=()=>{if(page>0){page--;showPage();progress.focus();}};
@@ -18,9 +20,10 @@ export function initializeLearnerProfile(doc,win){
  result.append(el('h3','Whatever your preferences'),el('p','Mix listening, reading, speaking, and writing. Try to recall useful language without looking, use it in real situations, review feedback, and return to it over several days. Choose a routine you can repeat, then adjust it based on your progress.'));
  addResultBranding(doc,result);
  addResultImageButton(doc,win,result,'Your learning profile',{learnerCard:true});
- const restart=el('button','Retake the learner test','button light');restart.type='button';restart.onclick=()=>{form.reset();page=0;form.hidden=false;result.hidden=true;doc.querySelector('.learner-results-empty').hidden=false;showPage();win.location.hash='learner-profile';};result.append(restart);form.hidden=false;result.hidden=false;doc.querySelector('.learner-results-empty').hidden=true;win.location.hash='learner-results';
+ const restart=el('button','Retake the learner test','button light');restart.type='button';restart.onclick=()=>{form.reset();shuffleQuestions();page=0;form.hidden=false;result.hidden=true;doc.querySelector('.learner-results-empty').hidden=false;showPage();win.location.hash='learner-profile';};result.append(restart);form.hidden=false;result.hidden=false;doc.querySelector('.learner-results-empty').hidden=true;win.location.hash='learner-results';
  }
- form.onsubmit=event=>{event.preventDefault();if(page!==pageCount-1){next.click();return;}if(!pageValid())return;const answers=learnerQuestions.map((_,index)=>form.querySelector('[name="learner-'+index+'"]:checked')?.value);try{renderResult(scoreLearnerProfile(answers));}catch(e){error.textContent=e.message;const missing=answers.findIndex(answer=>!answer);if(missing>=0){page=Math.floor(missing/pageSize);showPage();error.textContent=e.message;progress.focus();}}};
+ form.onsubmit=event=>{event.preventDefault();if(page!==pageCount-1){next.click();return;}if(!pageValid())return;const answers=learnerQuestions.map((_,index)=>form.querySelector('[name="learner-'+index+'"]:checked')?.value);try{renderResult(scoreLearnerProfile(answers));}catch(e){error.textContent=e.message;const missing=answers.findIndex(answer=>!answer);if(missing>=0){page=Math.floor(fields.indexOf(originalFields[missing])/pageSize);showPage();error.textContent=e.message;progress.focus();}}};
  showPage();
 }
 if(typeof document!=='undefined')initializeLearnerProfile(document,window);
+

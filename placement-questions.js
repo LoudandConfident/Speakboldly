@@ -1,4 +1,4 @@
-export const TEST_VERSION = "speak-boldly-balanced-50-v2";
+export const TEST_VERSION = "speak-boldly-balanced-50-v3";
 export const QUESTION_ORDER = "mixed";
 // Original Speak Boldly questions. Difficulty labels are editorial estimates.
 export const questions = [
@@ -130,16 +130,16 @@ export const questions = [
   },
   {
     "number": 10,
-    "id": "sb-balanced-v2-10",
+    "id": "sb-balanced-v3-10",
     "difficulty": "C1",
     "skill": "grammar",
-    "focus": "negative inversion",
-    "question": "Rarely _____ such a clear explanation of a complex issue.",
+    "focus": "negative inversion with a delayed main clause",
+    "question": "Not until the figures had been independently verified _____ permission to publish them.",
     "options": [
-      "have heard I",
-      "have I heard",
-      "I have heard",
-      "I heard have"
+      "the team was granted",
+      "was the team granted",
+      "did the team granted",
+      "was granted the team"
     ]
   },
   {
@@ -270,16 +270,16 @@ export const questions = [
   },
   {
     "number": 20,
-    "id": "sb-balanced-v2-20",
+    "id": "sb-balanced-v3-20",
     "difficulty": "C1",
     "skill": "grammar",
-    "focus": "formal recommendations",
-    "question": "The panel recommended that every applicant _____ the same opportunity.",
+    "focus": "mixed past and present conditional",
+    "question": "Had she accepted the overseas post last year, she _____ in Cairo at this very moment.",
     "options": [
-      "was giving",
-      "be given",
-      "is giving",
-      "has given"
+      "would have worked",
+      "would be working",
+      "will be working",
+      "had been working"
     ]
   },
   {
@@ -382,16 +382,16 @@ export const questions = [
   },
   {
     "number": 28,
-    "id": "sb-balanced-v2-28",
+    "id": "sb-balanced-v3-28",
     "difficulty": "C1",
     "skill": "vocabulary",
-    "focus": "stance and register",
-    "question": "The researcher was _____ about the results, pointing out that the sample was small.",
+    "focus": "precise verbs for responding to criticism",
+    "question": "A spokesperson tried to _____ the criticism by pointing to unrelated improvements rather than addressing the complaint.",
     "options": [
-      "complacent",
-      "adamant",
-      "indifferent",
-      "circumspect"
+      "rebut",
+      "refute",
+      "invalidate",
+      "deflect"
     ]
   },
   {
@@ -410,16 +410,16 @@ export const questions = [
   },
   {
     "number": 30,
-    "id": "sb-balanced-v2-30",
+    "id": "sb-balanced-v3-30",
     "difficulty": "C1",
     "skill": "grammar",
-    "focus": "emphasis and agreement",
-    "question": "What the team needs most _____ a clear set of priorities.",
+    "focus": "formal hypothetical conditional inversion",
+    "question": "Were the safety system _____, the entire plant would have to shut down.",
     "options": [
-      "have",
-      "were",
-      "is",
-      "are"
+      "fail",
+      "fails",
+      "to fail",
+      "had failed"
     ]
   },
   {
@@ -662,16 +662,16 @@ export const questions = [
   },
   {
     "number": 48,
-    "id": "sb-balanced-v2-48",
+    "id": "sb-balanced-v3-48",
     "difficulty": "C1",
     "skill": "vocabulary",
-    "focus": "idiomatic precision",
-    "question": "The team is not abandoning the project; it is simply putting it on the _____ until funding is secured.",
+    "focus": "nuance of implicit approval",
+    "question": "His approval was _____ rather than explicit: he never said yes, but allowed the plan to proceed without objection.",
     "options": [
-      "back burner",
-      "drawing board",
-      "front line",
-      "same page"
+      "tacit",
+      "overt",
+      "categorical",
+      "provisional"
     ]
   },
   {

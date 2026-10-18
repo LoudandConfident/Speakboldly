@@ -9,40 +9,673 @@ const english = (...args) => ({...q(...args),scope:'english'});
 // Original preference questions: 24 general-learning situations and 6 English situations.
 // These are self-reported preferences, not a validated measure of ability or fixed learning styles.
 export const learnerQuestions = [
- q('You are learning to use an unfamiliar device. What would you choose first?','Look at a labelled picture of its controls.','Listen to someone explain how the controls work.','Read the short instructions for its controls.','Try the controls on a simple practice task.'),
- q('You need to find your way to a place you have never visited. What would you prefer?','Follow a map showing the route and landmarks.','Hear someone describe the route and landmarks.','Read a list of directions in order.','Walk through the route once to become familiar with it.'),
- q('A new idea is difficult to understand. Which explanation would you request?','A diagram showing how the parts connect.','A spoken explanation I can discuss with someone.','A written explanation I can read at my own pace.','A small activity that lets me explore the idea.'),
- q('You want to remember the stages of a process. What would you choose?','Arrange the stages in a flowchart.','Explain the stages aloud to someone.','Write a numbered description of the stages.','Carry out the stages in a practice run.'),
- english('You are starting an unfamiliar English topic. How would you prefer to begin?','Study an illustrated example or visual outline.','Hear an explanation and discuss some examples.','Read an explanation and make brief notes.','Try a short task and learn from the attempt.'),
- q('You are choosing a way to learn a new hobby. What appeals to you most?','A guide with clear pictures and diagrams.','A guide who talks me through it and answers questions.','A written guide with explanations I can revisit.','A guided activity where I try the basic skills.'),
- q('After a lesson, how would you prefer to review its main ideas?','Create a diagram connecting the main ideas.','Talk through the main ideas with someone.','Write a summary of the main ideas.','Use the main ideas to complete a small task.'),
- q('You are comparing several options before making a decision. What would help you organise them?','A chart displaying the options side by side.','A conversation about the advantages of each option.','A written list of the advantages of each option.','A chance to try the options and compare the experience.'),
- q('You need to learn a new routine for a job, course, or everyday task. What would you prefer?','See the routine mapped out in pictures.','Have someone describe the routine and discuss it with me.','Read a checklist explaining the routine.','Rehearse the routine with someone available to help.'),
- english('You want to remember some useful English expressions. What would you try first?','Connect each expression to a picture or visual map.','Hear each expression and practise saying it aloud.','Write each expression with its meaning and an example.','Use each expression in a realistic situation.'),
- q('You are learning about how something works. Which resource would you pick first?','A labelled diagram showing its parts.','An audio explanation describing its parts.','An article explaining its parts.','A model or simulation whose parts I can explore.'),
- q('You want to remember new information for later. Which review activity would you choose?','Draw a visual overview from memory, then check it.','Explain it aloud from memory, then check it.','Write a summary from memory, then check it.','Use it in a practice task, then check my attempt.'),
- q('During a group learning activity, which contribution would you most enjoy?','Sketching the ideas so the group can see the connections.','Discussing the ideas and asking follow-up questions.','Making notes that organise the ideas clearly.','Testing the ideas through a small practical task.'),
- q('You have been shown a new skill and are ready for more practice. What would you choose next?','Look closely at a visual breakdown of the skill.','Talk through the skill with someone who can explain it.','Read instructions explaining the skill in detail.','Make a guided attempt at performing the skill.'),
- english('You are preparing for a conversation in English. What would you prefer?','Make a visual outline of the ideas I want to express.','Rehearse the conversation aloud with a partner.','Write some notes and useful phrases to review.','Role-play the situation with different possible replies.'),
- q('Someone gives you feedback on a task. How would you prefer to explore it?','Compare marked examples of my attempt and an improved version.','Discuss the feedback and ask questions about it.','Read the feedback and note what I want to change.','Make another attempt with guidance as I go.'),
- q('You are learning the rules of an unfamiliar game. What would you choose first?','A diagram showing examples of play.','A spoken explanation with time for questions.','A written explanation of the rules with examples.','A practice round where the rules are explained as we play.'),
- q('You want to explain something you have learned to another person. What would you prepare?','A sketch or diagram of the main ideas.','An explanation I can give aloud and discuss.','A short written explanation of the main ideas.','An activity or demonstration we can try together.'),
- q('You are learning to follow a sequence, such as a recipe or assembly task. Which guide would you choose?','Pictures showing each stage in order.','Spoken instructions for each stage in order.','Written instructions for each stage in order.','A guided practice attempt at each stage in order.'),
- english('You receive feedback on an English sentence. What would you like to do next?','Compare the original and improved versions with changes highlighted.','Hear the improved version and discuss the change aloud.','Read an explanation and write a new example.','Repeat the original task using the improvement.'),
- q('A topic includes several unfamiliar terms. How would you prefer to organise them?','Make a visual map linking the terms and examples.','Discuss the terms and explain examples aloud.','Write definitions and examples in my own words.','Use the terms while working through a relevant task.'),
- q('You return to something you learned a while ago. What would help you restart?','Review a visual overview of the main points.','Talk through the main points with someone.','Read my notes or a short written summary.','Try a familiar task to see what I remember.'),
- q('You are exploring a subject that interests you. Which activity would you choose?','Study an illustrated explanation of the subject.','Listen to a discussion about the subject.','Read a detailed explanation of the subject.','Explore the subject through a small project.'),
- q('You need to organise your study of a large topic. What would you choose?','Map the topic visually into connected sections.','Talk through the sections and my plan for each.','Write a structured outline and study checklist.','Break the topic into small tasks I can work through.'),
- english('You want to understand a short passage in English. Which support would you choose first?','Pictures or a visual outline of the main ideas.','A recording and a chance to discuss what it means.','The text and written explanations of unfamiliar phrases.','An activity that puts the meaning into a realistic situation.'),
- q('When a task goes wrong, how would you prefer to investigate?','Compare what happened with a diagram of the expected result.','Talk through what happened and possible explanations.','Read the instructions again and note possible explanations.','Test one change at a time and observe what happens.'),
- q('You are given a choice of ways to practise the same topic. Which would you select?','Build a visual explanation using examples.','Discuss examples and explain my reasoning aloud.','Write explanations and work through written examples.','Apply the topic in a realistic activity.'),
- q('You want to check what you understand without looking at your materials. What would you try?','Draw a diagram or visual outline from memory.','Explain the topic aloud and answer follow-up questions.','Write what I remember and answer written questions.','Complete a task that requires the information.'),
- q('After several weeks of learning, how would you prefer to review your progress?','Compare visual examples of my earlier and current work.','Discuss my earlier and current work with someone.','Write a reflection comparing my earlier and current work.','Repeat an earlier task and compare how I approach it now.'),
- english('You have a short session to practise English independently. Which plan appeals to you most?','Use a picture or word map to organise ideas, then describe them.','Listen to a short exchange and record a spoken reply.','Read a short passage and write a response.','Practise a realistic task, such as asking for help or explaining a problem.')
-].map((question,index)=>({...question,options:[...question.options.slice(index%4),...question.options.slice(0,index%4)]}));
+  {
+    "scope": "general",
+    "prompt": "Learning a new device?",
+    "options": [
+      {
+        "profile": "visual",
+        "text": "See a labelled picture."
+      },
+      {
+        "profile": "listening",
+        "text": "Hear an explanation."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read the instructions."
+      },
+      {
+        "profile": "practical",
+        "text": "Try it out."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "Finding a new place?",
+    "options": [
+      {
+        "profile": "listening",
+        "text": "Ask for spoken directions."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read step-by-step directions."
+      },
+      {
+        "profile": "practical",
+        "text": "Walk the route once."
+      },
+      {
+        "profile": "visual",
+        "text": "Follow a map."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "An idea feels confusing. What helps?",
+    "options": [
+      {
+        "profile": "reflective",
+        "text": "A written explanation."
+      },
+      {
+        "profile": "practical",
+        "text": "A practical example to try."
+      },
+      {
+        "profile": "visual",
+        "text": "A clear diagram."
+      },
+      {
+        "profile": "listening",
+        "text": "Talking it through."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "How would you remember a process?",
+    "options": [
+      {
+        "profile": "practical",
+        "text": "Practise the steps."
+      },
+      {
+        "profile": "visual",
+        "text": "Draw a flowchart."
+      },
+      {
+        "profile": "listening",
+        "text": "Explain it aloud."
+      },
+      {
+        "profile": "reflective",
+        "text": "Write a checklist."
+      }
+    ]
+  },
+  {
+    "scope": "english",
+    "prompt": "Starting a new English topic?",
+    "options": [
+      {
+        "profile": "visual",
+        "text": "See illustrated examples."
+      },
+      {
+        "profile": "listening",
+        "text": "Hear and discuss examples."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read and take notes."
+      },
+      {
+        "profile": "practical",
+        "text": "Try a short task."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "Learning a new hobby?",
+    "options": [
+      {
+        "profile": "listening",
+        "text": "Ask someone to explain."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read a short guide."
+      },
+      {
+        "profile": "practical",
+        "text": "Try a guided activity."
+      },
+      {
+        "profile": "visual",
+        "text": "Use a picture guide."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "Reviewing a lesson?",
+    "options": [
+      {
+        "profile": "reflective",
+        "text": "Write a short summary."
+      },
+      {
+        "profile": "practical",
+        "text": "Use it in a task."
+      },
+      {
+        "profile": "visual",
+        "text": "Draw the key ideas."
+      },
+      {
+        "profile": "listening",
+        "text": "Discuss the key ideas."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "Comparing your options?",
+    "options": [
+      {
+        "profile": "practical",
+        "text": "Try each option."
+      },
+      {
+        "profile": "visual",
+        "text": "Look at a comparison chart."
+      },
+      {
+        "profile": "listening",
+        "text": "Talk about each option."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read a pros-and-cons list."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "Learning a new routine?",
+    "options": [
+      {
+        "profile": "visual",
+        "text": "See pictures of the steps."
+      },
+      {
+        "profile": "listening",
+        "text": "Hear someone explain it."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read a checklist."
+      },
+      {
+        "profile": "practical",
+        "text": "Rehearse the steps."
+      }
+    ]
+  },
+  {
+    "scope": "english",
+    "prompt": "Remembering new English expressions?",
+    "options": [
+      {
+        "profile": "listening",
+        "text": "Hear and repeat them."
+      },
+      {
+        "profile": "reflective",
+        "text": "Write meanings and examples."
+      },
+      {
+        "profile": "practical",
+        "text": "Use them in a situation."
+      },
+      {
+        "profile": "visual",
+        "text": "Link them to pictures."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You are learning about how something works. Which resource would you pick first?",
+    "options": [
+      {
+        "profile": "reflective",
+        "text": "An article explaining its parts."
+      },
+      {
+        "profile": "practical",
+        "text": "A model or simulation whose parts I can explore."
+      },
+      {
+        "profile": "visual",
+        "text": "A labelled diagram showing its parts."
+      },
+      {
+        "profile": "listening",
+        "text": "An audio explanation describing its parts."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You want to remember new information for later. Which review activity would you choose?",
+    "options": [
+      {
+        "profile": "practical",
+        "text": "Use it in a practice task, then check my attempt."
+      },
+      {
+        "profile": "visual",
+        "text": "Draw a visual overview from memory, then check it."
+      },
+      {
+        "profile": "listening",
+        "text": "Explain it aloud from memory, then check it."
+      },
+      {
+        "profile": "reflective",
+        "text": "Write a summary from memory, then check it."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "During a group learning activity, which contribution would you most enjoy?",
+    "options": [
+      {
+        "profile": "visual",
+        "text": "Sketching the ideas so the group can see the connections."
+      },
+      {
+        "profile": "listening",
+        "text": "Discussing the ideas and asking follow-up questions."
+      },
+      {
+        "profile": "reflective",
+        "text": "Making notes that organise the ideas clearly."
+      },
+      {
+        "profile": "practical",
+        "text": "Testing the ideas through a small practical task."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You have been shown a new skill and are ready for more practice. What would you choose next?",
+    "options": [
+      {
+        "profile": "listening",
+        "text": "Talk through the skill with someone who can explain it."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read instructions explaining the skill in detail."
+      },
+      {
+        "profile": "practical",
+        "text": "Make a guided attempt at performing the skill."
+      },
+      {
+        "profile": "visual",
+        "text": "Look closely at a visual breakdown of the skill."
+      }
+    ]
+  },
+  {
+    "scope": "english",
+    "prompt": "You are preparing for a conversation in English. What would you prefer?",
+    "options": [
+      {
+        "profile": "reflective",
+        "text": "Write some notes and useful phrases to review."
+      },
+      {
+        "profile": "practical",
+        "text": "Role-play the situation with different possible replies."
+      },
+      {
+        "profile": "visual",
+        "text": "Make a visual outline of the ideas I want to express."
+      },
+      {
+        "profile": "listening",
+        "text": "Rehearse the conversation aloud with a partner."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "Someone gives you feedback on a task. How would you prefer to explore it?",
+    "options": [
+      {
+        "profile": "practical",
+        "text": "Make another attempt with guidance as I go."
+      },
+      {
+        "profile": "visual",
+        "text": "Compare marked examples of my attempt and an improved version."
+      },
+      {
+        "profile": "listening",
+        "text": "Discuss the feedback and ask questions about it."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read the feedback and note what I want to change."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You are learning the rules of an unfamiliar game. What would you choose first?",
+    "options": [
+      {
+        "profile": "visual",
+        "text": "A diagram showing examples of play."
+      },
+      {
+        "profile": "listening",
+        "text": "A spoken explanation with time for questions."
+      },
+      {
+        "profile": "reflective",
+        "text": "A written explanation of the rules with examples."
+      },
+      {
+        "profile": "practical",
+        "text": "A practice round where the rules are explained as we play."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You want to explain something you have learned to another person. What would you prepare?",
+    "options": [
+      {
+        "profile": "listening",
+        "text": "An explanation I can give aloud and discuss."
+      },
+      {
+        "profile": "reflective",
+        "text": "A short written explanation of the main ideas."
+      },
+      {
+        "profile": "practical",
+        "text": "An activity or demonstration we can try together."
+      },
+      {
+        "profile": "visual",
+        "text": "A sketch or diagram of the main ideas."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You are learning to follow a sequence, such as a recipe or assembly task. Which guide would you choose?",
+    "options": [
+      {
+        "profile": "reflective",
+        "text": "Written instructions for each stage in order."
+      },
+      {
+        "profile": "practical",
+        "text": "A guided practice attempt at each stage in order."
+      },
+      {
+        "profile": "visual",
+        "text": "Pictures showing each stage in order."
+      },
+      {
+        "profile": "listening",
+        "text": "Spoken instructions for each stage in order."
+      }
+    ]
+  },
+  {
+    "scope": "english",
+    "prompt": "You receive feedback on an English sentence. What would you like to do next?",
+    "options": [
+      {
+        "profile": "practical",
+        "text": "Repeat the original task using the improvement."
+      },
+      {
+        "profile": "visual",
+        "text": "Compare the original and improved versions with changes highlighted."
+      },
+      {
+        "profile": "listening",
+        "text": "Hear the improved version and discuss the change aloud."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read an explanation and write a new example."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "A topic includes several unfamiliar terms. How would you prefer to organise them?",
+    "options": [
+      {
+        "profile": "visual",
+        "text": "Make a visual map linking the terms and examples."
+      },
+      {
+        "profile": "listening",
+        "text": "Discuss the terms and explain examples aloud."
+      },
+      {
+        "profile": "reflective",
+        "text": "Write definitions and examples in my own words."
+      },
+      {
+        "profile": "practical",
+        "text": "Use the terms while working through a relevant task."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You return to something you learned a while ago. What would help you restart?",
+    "options": [
+      {
+        "profile": "listening",
+        "text": "Talk through the main points with someone."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read my notes or a short written summary."
+      },
+      {
+        "profile": "practical",
+        "text": "Try a familiar task to see what I remember."
+      },
+      {
+        "profile": "visual",
+        "text": "Review a visual overview of the main points."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You are exploring a subject that interests you. Which activity would you choose?",
+    "options": [
+      {
+        "profile": "reflective",
+        "text": "Read a detailed explanation of the subject."
+      },
+      {
+        "profile": "practical",
+        "text": "Explore the subject through a small project."
+      },
+      {
+        "profile": "visual",
+        "text": "Study an illustrated explanation of the subject."
+      },
+      {
+        "profile": "listening",
+        "text": "Listen to a discussion about the subject."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You need to organise your study of a large topic. What would you choose?",
+    "options": [
+      {
+        "profile": "practical",
+        "text": "Break the topic into small tasks I can work through."
+      },
+      {
+        "profile": "visual",
+        "text": "Map the topic visually into connected sections."
+      },
+      {
+        "profile": "listening",
+        "text": "Talk through the sections and my plan for each."
+      },
+      {
+        "profile": "reflective",
+        "text": "Write a structured outline and study checklist."
+      }
+    ]
+  },
+  {
+    "scope": "english",
+    "prompt": "You want to understand a short passage in English. Which support would you choose first?",
+    "options": [
+      {
+        "profile": "visual",
+        "text": "Pictures or a visual outline of the main ideas."
+      },
+      {
+        "profile": "listening",
+        "text": "A recording and a chance to discuss what it means."
+      },
+      {
+        "profile": "reflective",
+        "text": "The text and written explanations of unfamiliar phrases."
+      },
+      {
+        "profile": "practical",
+        "text": "An activity that puts the meaning into a realistic situation."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "When a task goes wrong, how would you prefer to investigate?",
+    "options": [
+      {
+        "profile": "listening",
+        "text": "Talk through what happened and possible explanations."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read the instructions again and note possible explanations."
+      },
+      {
+        "profile": "practical",
+        "text": "Test one change at a time and observe what happens."
+      },
+      {
+        "profile": "visual",
+        "text": "Compare what happened with a diagram of the expected result."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You are given a choice of ways to practise the same topic. Which would you select?",
+    "options": [
+      {
+        "profile": "reflective",
+        "text": "Write explanations and work through written examples."
+      },
+      {
+        "profile": "practical",
+        "text": "Apply the topic in a realistic activity."
+      },
+      {
+        "profile": "visual",
+        "text": "Build a visual explanation using examples."
+      },
+      {
+        "profile": "listening",
+        "text": "Discuss examples and explain my reasoning aloud."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "You want to check what you understand without looking at your materials. What would you try?",
+    "options": [
+      {
+        "profile": "practical",
+        "text": "Complete a task that requires the information."
+      },
+      {
+        "profile": "visual",
+        "text": "Draw a diagram or visual outline from memory."
+      },
+      {
+        "profile": "listening",
+        "text": "Explain the topic aloud and answer follow-up questions."
+      },
+      {
+        "profile": "reflective",
+        "text": "Write what I remember and answer written questions."
+      }
+    ]
+  },
+  {
+    "scope": "general",
+    "prompt": "After several weeks of learning, how would you prefer to review your progress?",
+    "options": [
+      {
+        "profile": "visual",
+        "text": "Compare visual examples of my earlier and current work."
+      },
+      {
+        "profile": "listening",
+        "text": "Discuss my earlier and current work with someone."
+      },
+      {
+        "profile": "reflective",
+        "text": "Write a reflection comparing my earlier and current work."
+      },
+      {
+        "profile": "practical",
+        "text": "Repeat an earlier task and compare how I approach it now."
+      }
+    ]
+  },
+  {
+    "scope": "english",
+    "prompt": "You have a short session to practise English independently. Which plan appeals to you most?",
+    "options": [
+      {
+        "profile": "listening",
+        "text": "Listen to a short exchange and record a spoken reply."
+      },
+      {
+        "profile": "reflective",
+        "text": "Read a short passage and write a response."
+      },
+      {
+        "profile": "practical",
+        "text": "Practise a realistic task, such as asking for help or explaining a problem."
+      },
+      {
+        "profile": "visual",
+        "text": "Use a picture or word map to organise ideas, then describe them."
+      }
+    ]
+  }
+];
+export function learnerQuestionOrder(random=Math.random){const order=learnerQuestions.map((_,i)=>i);for(let i=order.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}return order;}
+
 export function scoreLearnerProfile(answers){
  if(!Array.isArray(answers)||answers.length!==learnerQuestions.length||answers.some((answer,index)=>!learnerQuestions[index].options.some(option=>option.profile===answer)))throw new Error('Please complete the assessment before viewing your result.');
  const counts=Object.fromEntries(Object.keys(learnerProfiles).map(key=>[key,0]));answers.forEach(answer=>counts[answer]++);
  const highest=Math.max(...Object.values(counts));const strongest=Object.keys(counts).filter(key=>counts[key]===highest);
  return {counts,strongest,total:answers.length};
 }
+
