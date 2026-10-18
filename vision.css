@@ -63,3 +63,6 @@
 #vision .vision-year-bubble>em{font:italic 27px/1.1 Georgia,serif;max-width:100px}
 
 #vision .vision-plane{display:inline-block;width:27px;height:27px;color:#193c32;vertical-align:middle;margin-left:8px;transform:rotate(-8deg)}
+
+#vision .vision-experience-line{font-size:13px;letter-spacing:.4px;margin:26px 0 12px;font-style:italic;color:#53685b}
+#vision .vision-purpose-grid{grid-template-columns:1fr}

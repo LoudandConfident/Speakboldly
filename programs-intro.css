@@ -12,3 +12,5 @@
 #programs .program-course-actions{margin-top:10px}
 #programs .program-course-actions .button{border-radius:999px;min-height:48px;padding:14px 25px}
 @media(max-width:760px){#programs .coaching-independence{padding:0 0 20px}#programs .coaching-independence h3{font-size:36px;padding-right:0}#programs .program-intro-art{position:relative;display:block;width:170px;height:170px;top:auto;right:auto;margin:24px auto}#programs .coaching-independence>p{font-size:14px}}
+
+#programs .independence-highlight{font-weight:inherit;font-style:italic;background:linear-gradient(transparent 65%,#d5ed98 65%,#d5ed98 92%,transparent 92%);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:0 3px}
