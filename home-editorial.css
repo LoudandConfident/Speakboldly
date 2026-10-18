@@ -51,3 +51,52 @@ main #home>.home-bottom-row{margin:0;padding:24px 6% 10px}
  #home>.benefits>span+span{border:0;padding:0}
 }
 @media(prefers-reduced-motion:reduce){#home .home-speech-bubble{transition:none}}
+/* Calm single-screen desktop composition. */
+main #home .hero{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:42px;padding:30px 6% 28px;min-height:0}
+main #home .hero-copy{padding:0}
+#home .home-kicker{margin-bottom:24px}
+#home .home-title-top,#home .home-title-main,#home .home-title-bottom{font-size:clamp(30px,3.4vw,48px);line-height:1.15;letter-spacing:-1.5px;font-weight:400;margin:0;white-space:normal}
+#home .home-title-main{font-style:normal;display:inline}
+#home .home-title-main:after{display:none}
+#home .home-title-bottom{margin-top:8px;font-size:clamp(26px,2.7vw,38px)}
+main #home .hero-copy .home-slogan{margin-bottom:24px}
+#home .home-pricing-note{padding-top:16px;font-size:13px;line-height:2}
+#home .home-picture-and-reviews{padding:0;gap:14px;flex-direction:column;width:100%;margin:0}
+#home .home-picture-and-reviews:before,#home .home-picture-and-reviews:after{display:none}
+#home .home-picture-and-reviews .coaching-photo{width:100%;height:clamp(260px,44vh,450px);aspect-ratio:auto;border-radius:8px;border:0;transform:none;box-shadow:none}
+main #home .home-picture-and-reviews .coaching-photo img{object-fit:cover;object-position:center}
+#home .home-speech-links{position:static;top:auto;bottom:auto;left:auto;right:auto;display:flex;align-self:flex-end;gap:10px;margin:0;padding:0;width:auto;order:-1}
+#home .home-speech-bubble,#home .home-speech-bubble:nth-child(2){width:auto;min-width:0;height:auto;min-height:41px;padding:12px 17px;border:1px solid #ced6c4;border-radius:999px;background:#edf0e6;color:#193c32;transform:none;box-shadow:none}
+#home .home-speech-bubble>span{font-size:13px;font-weight:600;line-height:1.2;white-space:nowrap}
+#home .home-speech-bubble>span:after{display:none}
+#home .home-speech-bubble:hover,#home .home-speech-bubble:nth-child(2):hover{background:#193c32;color:#fff;transform:none}
+#home>.benefits{padding:18px 0;font-size:11px;gap:16px}
+main #home>.home-bottom-row{padding:18px 6% 8px}
+@media(min-width:1000px) and (min-height:650px){main:has(>#home:not([hidden])){padding-bottom:0}main #home .hero{min-height:calc(100svh - 245px);max-height:none}#home .home-picture-and-reviews .coaching-photo{height:clamp(280px,calc(100svh - 335px),530px)}}
+@media(max-width:680px){
+ main #home .hero{grid-template-columns:1fr;gap:24px;padding:26px 6% 28px}
+ #home .home-kicker{margin-bottom:18px}
+ #home .home-title-top,#home .home-title-main{font-size:34px;line-height:1.12;letter-spacing:-1px}
+ #home .home-title-bottom{font-size:28px;letter-spacing:-.8px;margin-top:8px}
+ main #home .hero-copy .home-slogan{margin-bottom:20px}
+ #home .home-pricing-note{font-size:13px;line-height:1.8;padding-top:12px}
+ #home .home-picture-and-reviews{width:100%;padding:0;gap:12px}
+ #home .home-speech-links{align-self:flex-start;gap:10px;position:static}
+ #home .home-speech-bubble,#home .home-speech-bubble:nth-child(2){width:auto;height:auto;padding:12px 17px;min-height:41px;transform:none}
+ #home .home-picture-and-reviews .coaching-photo{height:auto;aspect-ratio:1.5;border-radius:8px;width:100%}
+ #home>.benefits{padding:16px 0;font-size:10px;gap:14px}
+ main #home>.home-bottom-row{padding-top:18px}
+}
+main:has(>#home:not([hidden])){padding-bottom:0}
+@media(max-width:680px) and (max-height:800px){
+ main #home .hero{padding-top:18px;padding-bottom:18px;gap:18px}
+ #home .home-kicker{margin-bottom:12px}
+ #home .home-title-top,#home .home-title-main{font-size:30px}
+ #home .home-title-bottom{font-size:25px}
+ main #home .hero-copy .home-slogan{margin-bottom:14px}
+ #home .home-pricing-note{padding-top:8px;line-height:1.65;font-size:12px}
+ #home .home-picture-and-reviews .coaching-photo{height:clamp(145px,calc(100svh - 500px),220px);aspect-ratio:auto}
+ #home>.benefits{padding:12px 0;gap:10px;font-size:9px}
+ main #home>.home-bottom-row{padding-top:12px}
+}
+@media(max-width:680px) and (max-height:800px){#home .home-picture-and-reviews .coaching-photo{height:clamp(120px,calc(100svh - 545px),215px)}}
