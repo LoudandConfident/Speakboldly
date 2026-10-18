@@ -1,0 +1,34 @@
+/* Balanced portal cards: one consistent silhouette, alternating brand tones. */
+#students-portal .learning-space-card,#students-portal .learning-space-card:nth-child(n),.instructor-destination-card,.instructor-destination-card:nth-child(n){border-radius:24px!important;background:#edf0e6;border:1px solid #c2cfb8}
+#students-portal .learning-space-card:nth-child(even),.instructor-destination-card:nth-child(even){background:#faf9f4}
+#students-portal .learning-space-card:hover,.instructor-destination-card:hover{background:#e1e9d5}
+/* Titles first; right-hand idiom cards remain collapsed until selected. */
+#daily-mission,#instructor-french-view{display:grid;grid-template-columns:minmax(0,1fr) 245px;column-gap:30px;align-items:start}
+#daily-mission>* ,#instructor-french-view>*{grid-column:1;min-width:0}
+#daily-mission>.learning-visual-note{display:none}
+#daily-mission>h3{grid-row:1;font-size:30px;margin:0 0 12px}
+#daily-mission>.daily-task-intro,#instructor-french-view>.daily-task-intro{display:table;position:relative;font-size:16px;line-height:1.55;font-style:italic;padding:9px 18px;background:#edf0e6;color:#193c32;border-radius:4px 24px 24px 24px;margin:0 0 22px}
+#daily-mission>.daily-idiom,#instructor-french-view>.french-idiom{grid-column:2;grid-row:1 / span 5;align-self:start;position:relative;min-height:125px;padding:20px;margin:0;background:#edf0e6;border:1px solid #c2cfb8;border-radius:24px 24px 6px 24px}
+#daily-mission>.daily-idiom>summary,#instructor-french-view>.french-idiom>summary{font-size:16px;font-weight:500;line-height:1.5;cursor:pointer;list-style-position:inside}
+#daily-mission>.daily-idiom>summary .idiom-symbol{display:block;margin:0 0 12px}
+#daily-mission>.daily-idiom>summary svg,#instructor-french-view>.french-idiom>summary svg{display:block;width:36px;height:36px;color:#193c32;margin-bottom:10px}
+#instructor-french-view>.french-idiom h4{font-size:19px;line-height:1.4;margin:20px 0 10px}
+#instructor-french-view>.french-idiom p{font-size:14px;line-height:1.7}
+.practice-heading-icon{display:inline-flex;vertical-align:middle;margin-right:10px;color:#193c32}
+.practice-heading-icon svg{width:25px;height:25px;display:block}
+#daily-mission .mission-practice,#daily-mission .mission-reading,#instructor-french-view [data-french-stage],#instructor-french-view .mission-reading{position:relative;padding-right:64px}
+.practice-corner{position:absolute;right:14px;bottom:13px;color:#819575;pointer-events:none}
+.practice-corner svg{width:38px;height:38px;display:block;opacity:.7}
+#instructor-french-view>h2{font-size:30px!important;margin-top:8px}
+#instructor-french-view>.french-back{justify-self:start}
+/* Homepage speech links use the logo-like rounded speech-bubble outline. */
+#home .home-speech-bubble,#home .home-speech-bubble:nth-child(2){width:143px;height:65px;padding:10px 15px 18px;min-height:0;background:transparent;border:0;border-radius:0!important;box-shadow:none;display:flex;align-items:center;justify-content:center}
+#home .home-speech-bubble:after{display:none}
+#home .home-speech-bubble .home-bubble-shape{display:block;position:absolute;inset:0;width:100%;height:100%;fill:#edf0e6;stroke:#ced6c4;stroke-width:1}
+#home .home-speech-bubble:hover .home-bubble-shape{fill:#d5ed98}
+#home .home-speech-bubble:hover{background:transparent;color:#193c32}
+#home .home-speech-bubble>span{position:relative;z-index:1}
+@media(max-width:950px){#daily-mission,#instructor-french-view{grid-template-columns:minmax(0,1fr) 210px;column-gap:20px}}
+@media(max-width:680px){#daily-mission,#instructor-french-view{display:block}#daily-mission>.daily-idiom,#instructor-french-view>.french-idiom{width:min(100%,330px);min-height:95px;margin:0 0 22px auto;padding:16px}#daily-mission>h3{font-size:28px}#daily-mission>.daily-task-intro,#instructor-french-view>.daily-task-intro{font-size:14px;margin-bottom:18px}#daily-mission .mission-practice,#daily-mission .mission-reading,#instructor-french-view [data-french-stage],#instructor-french-view .mission-reading{padding-right:46px}.practice-corner{right:9px;bottom:10px}.practice-corner svg{width:27px;height:27px}#home .home-speech-bubble,#home .home-speech-bubble:nth-child(2){width:137px;height:61px;padding:9px 13px 17px}}
+
+#programs .independence-highlight{background:none;padding:0;font-style:inherit;text-decoration-line:underline;text-decoration-color:#729444;text-decoration-thickness:2px;text-underline-offset:7px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
