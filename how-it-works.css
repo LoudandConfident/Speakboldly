@@ -1,0 +1,63 @@
+/* Speak Boldly · an editorial learning journey, using the existing brand palette. */
+#how.how-editorial{--how-ink:var(--ink,#193c32);--how-lime:#d5ed98;--how-paper:var(--cream,#faf9f4);max-width:1120px;margin:0 auto;padding-top:30px;color:var(--how-ink)}
+#how.how-editorial .eyebrow{font-family:"DM Sans",sans-serif;font-size:11px;line-height:1.5;font-weight:600;letter-spacing:.13em;margin:0 0 20px}
+#how .how-hero{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;padding:20px 0 62px}
+#how .how-hero h2{font-family:Georgia,"Times New Roman",serif;font-size:clamp(70px,7.5vw,104px);font-weight:400;line-height:.95;letter-spacing:-.065em;margin:24px 0 26px}
+#how.how-editorial em{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+#how .how-hero h2 em{position:relative;display:inline-block;font-style:italic;letter-spacing:-.055em}
+#how .how-hero h2 em:after{content:"";position:absolute;left:2%;right:-2%;bottom:-12px;height:9px;border-bottom:2px solid var(--how-ink);border-radius:50%;transform:rotate(-3deg)}
+#how .how-hero-note{font-size:18px;line-height:1.7;max-width:300px;margin:32px 0 24px}
+#how .how-main-action{display:inline-flex;align-items:center;justify-content:space-between;gap:30px;font-size:13px;min-height:48px;padding:12px 20px;border-radius:50px}
+#how .how-main-action>span{font-size:21px;line-height:1}
+#how .how-hero-visual{position:relative;margin:0;padding:42px 12px 22px 24px;isolation:isolate}
+#how .how-hero-visual:before{content:"";position:absolute;inset:25px 0 22px 5px;border:1px solid #bacbbf;border-radius:48% 48% 22px 22px;transform:rotate(5deg);z-index:-1}
+#how .how-photo-frame{overflow:hidden;border-radius:48% 48% 18px 18px;background:#edf0e6;border:1px solid var(--how-ink);aspect-ratio:1.28;transform:rotate(-3deg)}
+#how .how-photo-frame img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
+#how .how-hero-visual figcaption{font-size:11px;letter-spacing:.06em;line-height:1.6;padding:19px 10px 0;text-align:center}
+#how .how-speech-note{position:absolute;left:0;top:28px;padding:17px 22px;background:var(--how-lime);border:1px solid var(--how-ink);border-radius:50% 50% 50% 8px;transform:rotate(-9deg);font-family:Georgia,serif;font-size:20px;line-height:1.2;box-shadow:4px 5px 0 #193c3210}
+#how .how-speech-note span,#how .how-speech-note strong{display:block;font-weight:400}
+#how .how-speech-note strong{font-style:italic}
+#how .how-star{position:absolute;right:-4px;top:0;width:85px;height:85px;color:var(--how-ink);transform:rotate(12deg)}
+#how .how-star svg,#how .how-closing-star svg{width:100%;height:100%;display:block}
+#how .how-photo-stamp{position:absolute;right:-1px;bottom:70px;background:var(--how-paper);border:1px solid var(--how-ink);padding:16px 20px;border-radius:5px;transform:rotate(7deg);font-size:11px;line-height:1.6;letter-spacing:.1em;font-weight:600}
+#how .how-photo-stamp>span{font-size:30px;position:absolute;right:12px;top:9px}#how .how-photo-stamp{padding-right:48px}
+#how .how-ribbon{overflow:hidden;margin:0 0 62px;padding:16px 0;transform:rotate(-1.2deg);background:var(--how-ink);color:var(--how-lime);border-top:1px solid var(--how-ink);border-bottom:1px solid var(--how-ink)}
+#how .how-ribbon>div{display:flex;justify-content:space-around;align-items:center;gap:30px;white-space:nowrap;min-width:880px}
+#how .how-ribbon span{font-family:Georgia,serif;font-size:31px;line-height:1.15;font-style:italic}#how .how-ribbon span:nth-child(even){font-size:21px}
+#how .how-introduction{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-bottom:66px;padding:0 22px}
+#how .how-introduction h3,#how .how-closing h3{font-family:Georgia,serif;font-weight:400;font-size:43px;line-height:1.08;letter-spacing:-.035em;margin:0}
+#how .how-introduction>p{font-size:16px;line-height:1.9;margin:0;max-width:520px}
+#how .how-journey-heading{display:grid;grid-template-columns:1fr auto;align-items:center;margin:0 0 25px;padding:24px 0 0;border-top:1px solid #cdd7cb}
+#how .how-journey-heading .eyebrow{grid-column:1;margin-bottom:9px}
+#how .how-journey-heading h3{font-family:Georgia,serif;font-weight:400;font-size:39px;line-height:1.1;letter-spacing:-.035em;margin:0}
+#how .how-journey-heading>svg{grid-column:2;grid-row:1/3;width:135px;height:48px;align-self:end;margin-right:30px}
+#how .how-guide.how-editorial-guide{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:24px;margin:0}
+#how .how-editorial-guide>.how-step{grid-column:span 2;border:0;border-radius:0;background:transparent;padding:24px 0 12px;box-shadow:none;min-width:0}
+#how .how-editorial-guide>.how-step-1,#how .how-editorial-guide>.how-step-2{grid-column:span 3;padding:28px 30px 32px;border:1px solid #cbd6c7;border-radius:8px 50px 8px 8px;background:#edf0e6}
+#how .how-editorial-guide>.how-step-2{border-radius:50px 8px 8px 8px;background:var(--how-paper)}
+#how .how-step-top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:0 0 20px}
+#how .how-step-number{font-family:Georgia,serif;font-size:46px;font-weight:400;font-style:italic;line-height:1;color:var(--how-ink)}
+#how .how-step-icon{width:44px;height:44px;flex:none;color:var(--how-ink)}
+#how .how-step h3{font-family:"DM Sans",sans-serif;font-size:20px;font-weight:600;line-height:1.35;margin:0 0 18px;letter-spacing:-.02em;text-transform:none}
+#how .how-step p,#how .how-step li{font-size:14px;line-height:1.85;margin:0 0 13px;max-width:none}
+#how .how-step .button{font-size:12px;line-height:1.6;min-height:44px;white-space:normal;margin-top:12px;border-radius:30px;padding:12px 18px}
+#how .how-editorial-guide>.how-step-policy{grid-column:1/-1;display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;margin:10px 0;padding:42px 40px;background:var(--how-ink);color:var(--how-paper);border-radius:10px;position:relative;overflow:hidden}
+#how .how-step-policy .how-step-top{max-width:270px}#how .how-step-policy .how-step-number,#how .how-step-policy .how-step-icon,#how .how-step-policy h3{color:var(--how-lime)}
+#how .how-policy-heading>h3{font-size:14px;letter-spacing:.04em;line-height:1.6;text-transform:uppercase;max-width:250px}
+#how .how-policy-heading .how-policy-note{font-family:Georgia,serif;font-size:clamp(37px,4vw,48px);line-height:1.15;font-weight:400;margin-top:32px;letter-spacing:-.035em}
+#how .how-policy-content p,#how .how-policy-content li{color:var(--how-paper)}
+#how .how-policy-content a{color:var(--how-lime);overflow-wrap:anywhere;text-decoration:underline;text-underline-offset:4px}
+#how .how-policy-content ul{margin:22px 0;padding:16px 0 4px;border-top:1px solid #faf9f433;border-bottom:1px solid #faf9f433;list-style:none}
+#how .how-policy-content li{position:relative;padding-left:19px;font-size:12px;font-weight:400;line-height:1.8;margin-bottom:12px}#how .how-policy-content li:before{content:"✳";position:absolute;left:0;color:var(--how-lime)}#how .how-policy-content li strong{font-weight:500}
+#how .how-step-4,#how .how-step-5,#how .how-step-6{border-top:1px solid #cbd6c7!important;padding:25px 14px 18px!important}
+#how .how-step-4 .how-step-top,#how .how-step-5 .how-step-top,#how .how-step-6 .how-step-top{padding-bottom:22px}
+#how .how-step-4 .how-step-number,#how .how-step-5 .how-step-number,#how .how-step-6 .how-step-number{font-size:38px}
+#how .how-closing{display:grid;grid-template-columns:75px 1fr auto;gap:28px;align-items:center;border-top:1px solid #cbd6c7;border-bottom:1px solid #cbd6c7;padding:38px 12px;margin:38px 0 0}
+#how .how-closing-star{width:70px;height:70px;color:var(--how-ink)}#how .how-closing .eyebrow{margin-bottom:13px}
+#how .how-closing h3{font-size:34px}#how .how-closing>.button{background:var(--how-lime);color:var(--how-ink);border:1px solid var(--how-ink);border-radius:40px;font-size:13px;padding:14px 18px;white-space:normal}
+#how .page-signature{margin-top:30px}
+@media(max-width:900px){#how .how-hero{gap:22px}#how .how-hero h2{font-size:76px}#how .how-hero-visual{padding-left:12px}#how .how-speech-note{font-size:17px;padding:14px 18px}#how .how-star{width:65px;height:65px}#how .how-introduction{gap:30px;padding:0}#how .how-introduction h3{font-size:36px}#how .how-editorial-guide>.how-step-policy{gap:30px;padding:30px}#how .how-step-4,#how .how-step-5,#how .how-step-6{grid-column:span 2}#how .how-closing{grid-template-columns:50px 1fr;gap:20px}#how .how-closing-star{width:50px;height:50px}#how .how-closing>.button{grid-column:2;justify-self:start}}
+@media(max-width:680px){#how.how-editorial{padding-top:12px;max-width:100%}#how .how-hero{grid-template-columns:1fr;gap:20px;padding:10px 0 35px}#how .how-hero .eyebrow{font-size:10px;margin-bottom:18px}#how .how-hero h2{font-size:74px;line-height:.94;margin:18px 0 24px}#how .how-hero-note{font-size:16px;line-height:1.7;margin:28px 0 20px}#how .how-main-action{font-size:12px;min-height:46px;gap:25px;padding:11px 18px}#how .how-hero-visual{width:100%;max-width:430px;box-sizing:border-box;justify-self:center;padding:34px 12px 20px 12px;margin-top:8px}#how .how-photo-frame{aspect-ratio:1.27;border-radius:46% 46% 16px 16px}#how .how-speech-note{top:17px;left:1px;font-size:18px;padding:13px 18px}#how .how-star{right:2px;top:4px;width:60px;height:60px}#how .how-photo-stamp{font-size:9px;right:1px;bottom:50px;padding:12px 36px 12px 13px}#how .how-photo-stamp>span{font-size:24px;right:9px;top:7px}#how .how-hero-visual figcaption{font-size:10px;padding-top:18px}#how .how-ribbon{margin-bottom:37px;padding:13px 0}#how .how-ribbon>div{min-width:660px;gap:20px;justify-content:flex-start;padding-left:20px}#how .how-ribbon span{font-size:25px}#how .how-introduction{grid-template-columns:1fr;gap:20px;margin-bottom:38px}#how .how-introduction .eyebrow{font-size:10px;margin-bottom:14px}#how .how-introduction h3{font-size:39px}#how .how-introduction>p{font-size:14px;line-height:1.9}#how .how-journey-heading{grid-template-columns:1fr auto;padding-top:24px;margin-bottom:22px}#how .how-journey-heading .eyebrow{font-size:9px}#how .how-journey-heading h3{font-size:30px}#how .how-journey-heading>svg{width:65px;height:36px;margin-right:0}#how .how-guide.how-editorial-guide{grid-template-columns:minmax(0,1fr);gap:18px}#how .how-editorial-guide>.how-step{grid-column:1!important}#how .how-editorial-guide>.how-step-1,#how .how-editorial-guide>.how-step-2{padding:24px 22px 27px}#how .how-step h3{font-size:20px;margin-bottom:15px}#how .how-step p,#how .how-step li{font-size:14px;line-height:1.8}#how .how-step-number{font-size:42px}#how .how-step-top{margin-bottom:17px}#how .how-editorial-guide>.how-step-policy{grid-template-columns:minmax(0,1fr);gap:24px;margin:2px 0;padding:27px 23px}#how .how-policy-heading>h3{font-size:12px;max-width:none;margin-bottom:0}#how .how-policy-heading .how-policy-note{font-size:38px;margin-top:20px;margin-bottom:0}#how .how-policy-content p{font-size:13px;line-height:1.9}#how .how-policy-content li{font-size:12px}#how .how-step-4,#how .how-step-5,#how .how-step-6{padding:24px 3px 10px!important}#how .how-step-4 .how-step-top,#how .how-step-5 .how-step-top,#how .how-step-6 .how-step-top{padding-bottom:0}#how .how-closing{grid-template-columns:40px minmax(0,1fr);padding:26px 0;gap:16px;margin-top:20px}#how .how-closing-star{width:40px;height:40px}#how .how-closing h3{font-size:29px}#how .how-closing .eyebrow{font-size:9px;margin-bottom:12px}#how .how-closing>.button{font-size:12px;padding:12px 18px}#how .page-signature{margin-top:25px}}
+@media(prefers-reduced-motion:no-preference){#how .how-photo-frame{transition:transform .3s ease}#how .how-hero-visual:hover .how-photo-frame{transform:rotate(-1deg)}}
+
+#how .how-main-action>.how-arrow{width:20px;height:20px;flex:none}#how .how-photo-stamp>.how-arrow{position:absolute;width:25px;height:25px;right:12px;top:12px}#how .how-closing .how-arrow{width:17px;height:17px;margin-left:12px;vertical-align:middle}

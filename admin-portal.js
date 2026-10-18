@@ -1,7 +1,7 @@
-import {initializeInstructorFrench} from './instructor-french.js?v=fr-only-v3';
+import {initializeInstructorFrench} from './instructor-french.js?v=toolbar-v2';
 import {initializeInstructorBackups} from './instructor-backups.js?v=reliability';
 import {initializeNativeEnglishEditor} from './native-english-editor.js?v=monthly-owner';
-import {initializeInstructorOverview} from './instructor-overview.js?v=dashboard-oct17';
+import {initializeInstructorOverview} from './instructor-overview.js?v=requests-only-v2';
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
 import {openClientReportTab} from './report-tabs.js?v=instructor-app';
 import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=momentum-and-uploads';
@@ -154,4 +154,5 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  lock();return{lock};
 }
 if(typeof document!=='undefined')initializeAdminPortal(document);
+
 

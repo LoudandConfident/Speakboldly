@@ -1,7 +1,7 @@
 import {FRENCH_LEVELS,FRENCH_DAYS,loadFrenchDay,frenchDate,normalizeFrenchAnswer,normalizeFrenchSentence,frenchSpeechRate,frenchExpressionTask,readFrenchProgress,saveFrenchProgress} from './french-practice.js?v=fr-365-v2';
 export function initializeInstructorFrench(doc,isUnlocked){
  const dashboard=doc.querySelector('#admin-dashboard'),heading=dashboard?.querySelector('.admin-dashboard-heading');if(!heading)return;
- const win=doc.defaultView,el=(tag,text,cls)=>{const n=doc.createElement(tag);if(text)n.textContent=text;if(cls)n.className=cls;return n;},button=el('button','FRENCH','button light small instructor-french-button');button.id='instructor-french-button';button.type='button';button.setAttribute('aria-controls','instructor-french-view');heading.append(button);
+ const win=doc.defaultView,el=(tag,text,cls)=>{const n=doc.createElement(tag);if(text)n.textContent=text;if(cls)n.className=cls;return n;},button=el('button','FRENCH','button light small instructor-french-button');button.id='instructor-french-button';button.type='button';button.setAttribute('aria-controls','instructor-french-view');(heading.querySelector('.instructor-shortcuts')||heading).append(button);
  const view=el('section',null,'instructor-french');view.id='instructor-french-view';view.lang='fr';view.hidden=true;dashboard.append(view);
  const fetcher=win.fetch.bind(win);
  let snapshot=null,day='',level='foundation',ticket=0,speaking=false,activeAudio=null,settingsReady=false;
@@ -45,4 +45,5 @@ export function initializeInstructorFrench(doc,isUnlocked){
  doc.addEventListener('visibilitychange',()=>{if(doc.hidden)stop();else rollover();});doc.addEventListener('speak-boldly-app-resume',rollover);win.addEventListener('hashchange',()=>{if(win.location.hash!=='#students-portal/french')close();});win.addEventListener('pagehide',close);let timer=win.setInterval(rollover,30000);win.addEventListener('pagehide',()=>{win.clearInterval(timer);timer=null;});win.addEventListener('pageshow',()=>{if(timer===null)timer=win.setInterval(rollover,30000);});
  return{lock(){close();view.replaceChildren();settingsReady=false;}};
 }
+
 
