@@ -1,0 +1,23 @@
+#admin-calendar .calendar-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px}
+#admin-calendar .calendar-toolbar h4{flex:1 1 170px;font-size:21px;line-height:1.4;margin:0 8px}
+#admin-calendar .calendar-jump-label{display:flex;flex-direction:column;gap:5px;margin:0;font-size:10px;color:#53685b}
+#admin-calendar .calendar-jump-label input{font-size:14px;color:#193c32;background:#faf9f4;border:1px solid #c2cfb8;border-radius:999px;padding:9px 13px;min-height:42px}
+#admin-calendar .calendar-view-switch{display:flex;gap:4px;border:1px solid #c2cfb8;border-radius:999px;padding:4px;background:#faf9f4}
+#admin-calendar .calendar-view-switch .button{border:0;min-height:34px;padding:8px 13px;background:transparent;color:#193c32;border-radius:999px}
+#admin-calendar .calendar-view-switch .button[aria-pressed=true]{background:#193c32;color:#faf9f4}
+.instructor-calendar-legend{display:flex;flex-wrap:wrap;gap:20px;font-size:11px;color:#53685b;margin:10px 0 15px}
+.instructor-calendar-legend>span{display:inline-flex;align-items:center;gap:7px}
+.instructor-calendar-legend>span:before{content:'';width:9px;height:9px;border-radius:50%;border:1px solid #8ea779;background:#edf0e6}
+.instructor-calendar-legend>[data-legend=booked]:before{background:#193c32;border-color:#193c32}
+.instructor-calendar-legend>[data-legend=closed]:before{background:#dedfd5;border-color:#b3b9ad}
+#admin-calendar .calendar-availability-note,#admin-calendar .calendar-scroll-hint{font-size:11px;line-height:1.6;margin:6px 0;color:#53685b}
+.instructor-day-dialog{max-width:720px}
+.instructor-day-dialog .instructor-day-agenda{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.instructor-day-dialog .calendar-appointment{position:relative;width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;padding:17px;border:1px solid #c2cfb8;border-radius:18px;background:#f1f3e9;min-width:0}
+.instructor-day-dialog .calendar-appointment>.calendar-slot,.instructor-day-dialog .calendar-appointment>.calendar-session{grid-column:1/-1;width:100%;text-align:left;background:transparent;border:0;padding:0 30px 0 0;color:#193c32;font-size:15px;line-height:1.6;min-height:30px;font-weight:600}
+.calendar-appointment-course{grid-column:1/-1;font-size:12px;line-height:1.7;color:#53685b}
+.calendar-confirmation-status{grid-column:1/-1;font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.calendar-send-confirmation{justify-self:start;grid-column:1;width:auto;min-height:42px;font-size:12px;padding:11px 16px}
+.instructor-day-dialog .calendar-appointment>.calendar-cancel{position:absolute;right:10px;top:10px;width:29px;height:29px;border-radius:50%;border:1px solid #c2cfb8;background:#faf9f4;color:#193c32;line-height:1;font-size:20px}
+.hours-cutoff-note{display:block!important;font-size:10px!important;font-weight:400!important;line-height:1.6;margin-top:8px;color:#53685b}
+@media(max-width:680px){#admin-calendar .calendar-toolbar{gap:8px}#admin-calendar .calendar-toolbar h4{flex-basis:120px;font-size:18px}#admin-calendar .calendar-jump-label{flex:1 1 140px}#admin-calendar .calendar-jump-label input{width:100%;font-size:16px;min-width:0}#admin-calendar .calendar-view-switch{flex:none}#admin-calendar .calendar-view-switch .button{padding:8px 11px;font-size:11px}.instructor-day-dialog .calendar-appointment{padding:14px}.instructor-calendar-legend{gap:15px}.instructor-day-dialog .calendar-appointment>.calendar-slot{font-size:14px}.calendar-appointment-course{font-size:11px}}

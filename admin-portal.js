@@ -11,7 +11,7 @@ import {initializePortalSwitches} from './portal-switches.js?v=horizontal-cards'
 import {initializeTeacherDocuments} from './teacher-documents.js?v=instructor-app';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=calendar-views-oct17';
+import {initializeAdminCalendar} from './admin-calendar.js?v=friendly-confirmations-v3';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=client-levels-eight';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=four-digit-restored';
 import {loadPortalMaterials} from './portal-materials.js';
@@ -101,7 +101,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  const nativeEnglish=initializeNativeEnglishEditor(doc,()=>unlocked);
  const weeklyPasswords=initializeWeeklyPortalPasswords(doc,()=>unlocked);
  const switches=initializePortalSwitches(doc,()=>unlocked,loader);
- const calendar=initializeAdminCalendar(doc,()=>unlocked,()=>clients,openClientInfo);
+ const calendar=initializeAdminCalendar(doc,()=>unlocked,()=>clients,openClientInfo,()=>clientSheetConnected()?refreshSheetClients(true):calendar.load(true));
  const documents=initializeTeacherDocuments(doc,()=>unlocked,()=>clients,loader);
  const overview=initializeInstructorOverview(doc,()=>unlocked,{getClients:()=>clients,openClient:openClientInfo,openReport:(id,type)=>{const client=clients.find(c=>c.id===id);if(client)openClientReportTab(doc.defaultView,type,client,root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue);}});
 

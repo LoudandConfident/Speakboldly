@@ -510,8 +510,18 @@ function handleClientEmail(p){
   const labels={confirmation:'Email confirmation',progress:'Progress report',final:'Final report',registration:'Payment and registration confirmation',notes:'Notes'};
   let message;
   if(kind==='confirmation'){
-   const meetings=sbUpcomingClientMeetings(book,id).slice(0,1);if(!meetings.length)throw new Error('No upcoming calendar sessions are saved for this client. Add or sync their appointments first.');
-   if(p.sessionId&&String(meetings[0][0])!==String(p.sessionId))throw new Error('The next session changed. Reopen the confirmation preview before sending.');
+   let meetings;
+   if(p.calendarSession===true){
+    const sessions=book.getSheetByName('Sessions'),all=sessions&&sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,15).getValues():[],session=all.find(row=>String(row[0])===String(p.sessionId)&&String(row[1])===id);
+    const today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');
+    if(!session||String(session[7])==='cancelled')throw new Error('This appointment is no longer available. Refresh the calendar.');
+    if(String(session[3])<today)throw new Error('Confirmations can only be sent for today or a future date.');
+    if(!String(session[4]))throw new Error('Add a time to this appointment before sending its confirmation.');
+    meetings=[session];
+   }else{
+    meetings=sbUpcomingClientMeetings(book,id).slice(0,1);if(!meetings.length)throw new Error('No upcoming calendar sessions are saved for this client. Add or sync their appointments first.');
+    if(p.sessionId&&String(meetings[0][0])!==String(p.sessionId))throw new Error('The next session changed. Reopen the confirmation preview before sending.');
+   }
    message=sbCalendarEmail(client,meetings);
   }else{
    const course=sbEmailProgramName(client[11]||''),level=String(client[4]||'');
@@ -937,7 +947,13 @@ function handleOwnerBooking(data){
  }catch(error){return sbExamResponse({ok:false,error:error.message});}
 }
 
-function sbCountedSessionHours(book,id){const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return 0;const rows=sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues(),ids=new Map();for(const row of rows)if(String(row[1])===id&&String(row[7])!=='cancelled'&&row[12]==='counted')ids.set(String(row[0]),sbSessionDuration(row)/60);return [...ids.values()].reduce((sum,value)=>sum+value,0);}
+function sbSessionHasFinished(row,now){
+ const start=Date.parse(row[5]);
+ if(Number.isFinite(start))return start+sbSessionDuration(row)*60000<=now;
+ const today=Utilities.formatDate(new Date(now),'Africa/Cairo','yyyy-MM-dd');
+ return /^\d{4}-\d{2}-\d{2}$/.test(String(row[3]))&&String(row[3])<today;
+}
+function sbCountedSessionHours(book,id){const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return 0;const rows=sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues(),ids=new Map(),now=Date.now();for(const row of rows)if(String(row[1])===id&&String(row[7])!=='cancelled'&&row[12]==='counted'&&sbSessionHasFinished(row,now))ids.set(String(row[0]),sbSessionDuration(row)/60);return [...ids.values()].reduce((sum,value)=>sum+value,0);}
 function sbApplySessionHours(book){
  const sessions=book.getSheetByName('Sessions'),clients=book.getSheetByName('Clients');if(!sessions||!clients)return;
  const props=PropertiesService.getScriptProperties(),first=props.getProperty('SB_SESSION_HOURS_READY')!=='1',today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');
@@ -945,7 +961,7 @@ function sbApplySessionHours(book){
  const people=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,14).getValues():[];
  for(let i=0;i<people.length;i++)if(people[i][0]&&people[i][12]===''){people[i][12]=Number(people[i][7])||0;clients.getRange(i+2,13,1,2).setValues([[people[i][12],new Date().toISOString()]]);}
  const rows=sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,14).getValues():[];
- for(let i=0;i<rows.length;i++){const row=rows[i];if(row[0]&&/^\d{4}-\d{2}-\d{2}$/.test(String(row[3]))&&String(row[3])<today&&!row[12]){row[12]=String(row[3])<'2026-10-14'?'baseline':'counted';sessions.getRange(i+2,13).setValue(row[12]);}}
+ for(let i=0;i<rows.length;i++){const row=rows[i];if(row[0]&&/^\d{4}-\d{2}-\d{2}$/.test(String(row[3]))&&sbSessionHasFinished(row,Date.now())&&!row[12]){row[12]=String(row[3])<'2026-10-14'?'baseline':'counted';sessions.getRange(i+2,13).setValue(row[12]);}}
  props.setProperty('SB_SESSION_HOURS_READY','1');
  for(let i=0;i<people.length;i++){const person=people[i];if(!person[0])continue;const hours=sbCountedSessionHours(book,String(person[0]));const total=Math.round((Number(person[12])+hours)*100)/100;if(Number(person[7])!==total)clients.getRange(i+2,8).setValue(total);}
 }
@@ -1192,4 +1208,5 @@ function sbOwnerBackupAction(data,book){
  if(data.action==='saveOwnerBackup')return sbExamResponse(sbSaveOwnerBackup());
  throw new Error('Invalid backup action.');
 }
+
 
