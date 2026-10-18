@@ -55,3 +55,11 @@
 #vision .vision-need-band>div{width:52px;height:52px;color:var(--ink,#193c32)}
 @media(max-width:680px){#vision .vision-need-band{padding:25px 0;gap:18px}#vision .vision-need-band>div{width:35px;height:35px}}
 
+
+/* A clean circular date seal, without a speech-bubble tail. */
+#vision .vision-year-bubble{width:148px;height:148px;box-sizing:border-box;border:1px solid #193c32;border-radius:50%;padding:18px;margin:24px 0;background:transparent;display:flex;align-items:center;justify-content:center;text-align:center;gap:8px;transform:rotate(-7deg)}
+#vision .vision-year-bubble:after{display:none}
+#vision .vision-year-bubble>span{font:10px/1.5 sans-serif;letter-spacing:2px;text-transform:uppercase;max-width:100px}
+#vision .vision-year-bubble>em{font:italic 27px/1.1 Georgia,serif;max-width:100px}
+
+#vision .vision-plane{display:inline-block;width:27px;height:27px;color:#193c32;vertical-align:middle;margin-left:8px;transform:rotate(-8deg)}

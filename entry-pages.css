@@ -49,3 +49,25 @@
 #quote .quote-tile-art svg{display:block;width:42px;height:42px}
 #students-portal .portal-bubble-art svg{display:block;width:64px;height:64px}
 #students-portal .portal-choice:hover{color:#193c32}
+
+/* Quiet preview watermarks; quote options as four numbered paper tiles. */
+#quote.upcoming-view,#join-team.upcoming-view{overflow:clip}
+#quote .upcoming-view-content,#join-team .upcoming-view-content{opacity:.25;filter:grayscale(1)}
+#quote .upcoming-watermark,#join-team .upcoming-watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;margin:0;padding:0;border:0;border-radius:0;transform:rotate(-12deg);background:transparent;color:rgba(25,60,50,.22);font:italic clamp(56px,9vw,112px)/1 Georgia,serif;letter-spacing:-2px;text-align:center;pointer-events:none}
+#quote .quote-request-grid{gap:0;border-top:1px solid #193c32;border-bottom:1px solid #193c32}
+#quote .quote-popup-choice,#quote .quote-popup-choice:nth-child(2),#quote .quote-popup-choice:nth-child(3),#quote .quote-popup-choice:nth-child(4){border:0;border-right:1px solid #193c32;border-radius:0;background:transparent;padding:24px;justify-content:space-between;aspect-ratio:1}
+#quote .quote-popup-choice:last-child{border-right:0}
+#quote .quote-tile-number,#quote .quote-popup-choice:nth-child(2) .quote-tile-number{align-self:flex-start;font:italic 48px/1 Georgia,serif;letter-spacing:-2px}
+#quote .quote-tile-label{font:24px/1.15 Georgia,serif;font-weight:400}
+#quote .quote-tile-label:after{content:'';display:block;width:35px;border-bottom:2px solid #193c32;margin-top:18px}
+@media(max-width:760px){
+ #quote .quote-popup-choice,#quote .quote-popup-choice:nth-child(2),#quote .quote-popup-choice:nth-child(3),#quote .quote-popup-choice:nth-child(4){padding:18px}
+ #quote .quote-popup-choice:nth-child(2){border-right:0}
+ #quote .quote-popup-choice:nth-child(-n+2){border-bottom:1px solid #193c32}
+ #quote .quote-tile-label{font-size:20px}
+ #quote .quote-tile-number{font-size:36px}
+ #quote .upcoming-watermark,#join-team .upcoming-watermark{font-size:64px}
+}
+
+#quote .quote-request-grid{max-width:820px;margin:32px auto;gap:0}
+@media(max-width:760px){#quote .quote-request-grid{max-width:300px}#quote .quote-popup-choice,#quote .quote-popup-choice:nth-child(2),#quote .quote-popup-choice:nth-child(3),#quote .quote-popup-choice:nth-child(4){padding:14px}#quote .quote-tile-label{font-size:18px}#quote .quote-tile-number,#quote .quote-popup-choice:nth-child(2) .quote-tile-number{font-size:30px}}

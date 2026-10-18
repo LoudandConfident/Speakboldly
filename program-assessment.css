@@ -1,0 +1,51 @@
+/* Course catalogue: editorial heading, clean comparison cards. */
+#courses .courses-introduction{align-items:flex-end;padding-bottom:30px;border-bottom:1px solid #b9c9b9}
+#courses .courses-heading h2{font:clamp(40px,5vw,66px)/1.05 Georgia,serif;letter-spacing:-2px;margin:20px 0 24px}
+#courses .courses-heading h2 em{font-weight:400}
+#courses .courses-subtitle{line-height:1.8;max-width:520px}
+#courses .course-booking-note{border-left:1px solid #b9c9b9;padding-left:26px;max-width:260px}
+#courses .course-fees-open{border-radius:0;background:transparent;border:0;padding:14px 0;text-align:left;line-height:1.6}
+#courses .catalog-controls{align-items:center;margin:28px 0 34px}
+#courses .filter{border-radius:3px;padding:10px 16px}
+#courses #course-grid{gap:22px}
+#courses #course-grid .course-card{border-radius:2px;border-color:#cbd3c5;background:transparent;box-shadow:none;position:relative}
+#courses #course-grid .course-card:before{content:'';position:absolute;left:0;top:0;width:45px;height:3px;background:#193c32}
+#courses #course-grid .course-body{padding:26px 23px}
+#courses #course-grid .course-body h3{font:25px/1.2 Georgia,serif;letter-spacing:-.5px;margin:12px 0 20px}
+#courses #course-grid .course-summary{line-height:1.8;font-size:13px}
+#courses #course-grid .course-view-row .course-link{border-radius:2px;background:#edf0e6}
+#courses #course-grid .course-pricing{padding-top:14px;border-top:1px solid #dedfd5}
+/* Assessments: two facing folios, distinct illustrations and shared alignment. */
+#placement .assessment-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid #b9c9b9;border-bottom:1px solid #b9c9b9}
+#placement .assessment-options>article{position:relative;max-width:none;min-width:0;padding:0 40px 36px;border:0;border-radius:0;background:transparent;box-shadow:none;display:flex;flex-direction:column;align-items:flex-start}
+#placement .assessment-options>article:first-child{border-right:1px solid #b9c9b9}
+#placement .assessment-visual{width:100%;height:180px;margin:0 0 30px;padding:20px 0 0;position:relative;border-bottom:1px solid #dedfd5}
+#placement .assessment-folio{font-size:10px;letter-spacing:2px;font-weight:600}
+#placement .level-stair{display:flex;align-items:flex-end;justify-content:space-between;gap:5px;height:110px;margin-top:12px}
+#placement .level-stair>span{width:15%;height:32px;display:flex;align-items:center;justify-content:center;background:#edf0e6;border-top:1px solid #193c32;font:italic 18px Georgia,serif}
+#placement .level-stair>span:nth-child(2){height:44px}
+#placement .level-stair>span:nth-child(3){height:56px}
+#placement .level-stair>span:nth-child(4){height:68px}
+#placement .level-stair>span:nth-child(5){height:80px}
+#placement .level-stair>span:nth-child(6){height:92px;background:#d5ed98}
+#placement .learner-visual svg{display:block;width:100%;height:130px;max-width:360px;margin:0 auto}
+#placement .assessment-option-title{font:clamp(29px,3vw,43px)/1.15 Georgia,serif;letter-spacing:-1px;margin:16px 0 20px}
+#placement .assessment-options>article>.assessment-details{font-size:12px;color:#6b746e;line-height:1.8;margin-bottom:28px}
+#placement .assessment-options>article>.button{margin-top:auto;border-radius:3px;width:auto;min-width:230px;max-width:100%;min-height:48px}
+#placement .assessment-description{margin:0 0 18px}
+@media(max-width:760px){
+ #courses .courses-introduction{align-items:flex-start}
+ #courses .course-booking-note{padding-left:16px;max-width:none;margin:0}
+ #courses #course-grid .course-body{padding:20px 16px}
+ #courses #course-grid .course-body h3{font-size:22px}
+ #placement .assessment-options{grid-template-columns:1fr}
+ #placement .assessment-options>article{padding:0 12px 30px}
+ #placement .assessment-options>article:first-child{border-right:0;border-bottom:1px solid #b9c9b9;margin-bottom:25px}
+ #placement .assessment-option-title{font-size:32px}
+}
+
+#courses .courses-heading{position:relative;padding-right:80px}
+#courses .program-flower{position:absolute;right:0;top:24px;font-size:80px;line-height:1;color:#193c32;transform:rotate(12deg);font-family:Georgia,serif}
+#placement .learner-visual:after{content:'';position:absolute;right:12px;top:42px;width:28px;height:28px;background:#d5ed98;border-radius:50% 50% 3px 50%;transform:rotate(20deg)}
+#placement .placement-visual:after{content:'';position:absolute;right:0;top:18px;width:19px;height:19px;border:1px solid #193c32;transform:rotate(45deg)}
+@media(max-width:760px){#courses .courses-heading{padding-right:52px}#courses .program-flower{font-size:49px;top:40px}}
