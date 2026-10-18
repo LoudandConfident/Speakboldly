@@ -84,3 +84,8 @@
 
 #join-team .join-orbit{border-radius:75% 12% 75% 12%;width:180px;height:170px;transform:rotate(-9deg);background:#d5ed98;border:1px solid #193c32}
 @media(max-width:760px){#join-team .join-orbit{width:135px;height:128px;font-size:22px}}
+
+#join-team .join-anatomical-heart{width:205px;height:265px;background:transparent;border:0;border-radius:0;transform:rotate(6deg);top:45px;right:0;display:block}
+#join-team .join-anatomical-heart>svg{width:100%;height:100%;display:block}
+#join-team .join-anatomical-heart>span{position:absolute;left:45px;top:124px;font-size:23px;line-height:1.15;transform:rotate(-6deg);background:#edf0e6;padding:5px 4px}
+@media(max-width:760px){#join-team .join-anatomical-heart{position:relative;top:auto;right:auto;width:170px;height:215px;margin:20px auto 28px}#join-team .join-anatomical-heart>span{left:38px;top:103px;font-size:20px}}
