@@ -19,3 +19,6 @@
 #admin-dashboard .instructor-tool-cards>details[open]>*:last-child{margin-bottom:22px}
 @media(max-width:680px){.seasonal-calendar-art{width:18px;height:20px;margin:4px 1px 1px auto}.instructor-tool-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#admin-dashboard .instructor-tool-cards>details>summary{min-height:135px;padding:17px;font-size:13px}#admin-dashboard .instructor-tool-cards>details[open]>*:not(summary){margin-left:12px;margin-right:12px}.portal-interior-art svg{width:42px;height:42px}}
 #admin-dashboard:has(#admin-client-page:not([hidden]))>.instructor-tool-cards,#admin-dashboard:has(#admin-client-page:not([hidden]))>.instructor-destination-cards{display:none}
+/* Decorations occupy corners without increasing calendar row heights. */
+.seasonal-calendar-art{position:absolute;right:4px;bottom:3px;margin:0;opacity:.6}
+.calendar-day:has(.calendar-slot:nth-child(n+5))>.seasonal-calendar-art{display:none}
