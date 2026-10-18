@@ -50,3 +50,21 @@ main #home .hero-copy .home-slogan{font-size:clamp(34px,4.3vw,60px)}
 main #vision .vision-heading h2{font-size:clamp(32px,4vw,51px)!important;line-height:1.15}
 #students-portal .portal-choice-label{font-size:clamp(24px,2.6vw,32px)}
 @media(max-width:680px){main #vision .vision-heading h2{font-size:36px!important}#students-portal .portal-choice-label{font-size:25px}}
+
+/* Retain the full photographic layout; refine its lettering and speech links. */
+#home .home-title-top{font-weight:400;letter-spacing:-1.4px}
+#home .home-title-main{font-style:italic;font-weight:400;color:#faf9f4;letter-spacing:-1px}
+#home .home-title-bottom{font-style:normal;font-size:.64em;letter-spacing:.1px;margin-top:14px}
+#home .home-kicker{letter-spacing:2.8px}
+#home .home-speech-links{gap:18px}
+#home .home-speech-bubble,#home .home-speech-bubble:nth-child(2){position:relative;border-radius:17px 17px 17px 5px;background:#edf0e6;color:#193c32;min-height:43px;padding:12px 19px;isolation:isolate}
+#home .home-speech-bubble:after{content:'';display:block;position:absolute;width:10px;height:10px;left:20px;bottom:-6px;background:inherit;border-right:1px solid #ced6c4;border-bottom:1px solid #ced6c4;transform:skewY(-15deg) rotate(35deg);z-index:-1}
+#home .home-speech-bubble:nth-child(2){border-radius:17px 17px 5px 17px}
+#home .home-speech-bubble:nth-child(2):after{left:auto;right:20px;transform:skewY(15deg) rotate(55deg)}
+#home .home-speech-bubble:hover{background:#193c32;color:#faf9f4}
+@media(max-width:680px){#home .home-title-bottom{font-size:.78em;margin-top:8px}#home .home-speech-links{gap:15px}#home .home-speech-bubble,#home .home-speech-bubble:nth-child(2){padding:12px 17px}}
+/* Consistent rounded navigation and action controls across every view. */
+main .button,dialog .button,main button.course-link,main .course-view-row .course-link,main .course-fees-open,main .program-course-actions .button{border-radius:999px!important}
+/* Conversation links retain their speech-bubble silhouette. */
+#home .home-speech-bubble{border-radius:17px 17px 17px 5px!important}
+#home .home-speech-bubble:nth-child(2){border-radius:17px 17px 5px 17px!important}
