@@ -1,0 +1,106 @@
+/* Shared phone and installed-app rhythm. Desktop compositions stay intact. */
+@media(max-width:760px){
+ html{scroll-padding-top:16px}
+ body{overflow-wrap:break-word}
+ main,main>[data-view],.portal-panel,.admin-detail,.admin-client-form,.calendar-toolbar{min-width:0}
+ main .catalog,main .learning{padding-left:5%;padding-right:5%}
+ main [data-view]>h2{line-height:1.2}
+ .button{min-height:44px}
+ input,select,textarea{max-width:100%;min-width:0}
+ input:not([type=checkbox]):not([type=radio]),select,textarea{font-size:16px}
+ dialog{max-width:calc(100vw - 24px);width:calc(100vw - 24px);max-height:calc(100dvh - 32px);padding:26px 18px;overflow-y:auto;overscroll-behavior:contain}
+ dialog h2{padding-right:20px;font-size:25px;line-height:1.25}
+ dialog .detail-actions,.admin-form-actions{display:flex;flex-wrap:wrap;gap:10px}
+ .page-signature{line-height:1.6}
+ #students-portal .portal-area-choices{padding:0;gap:22px;margin:20px auto 28px}
+ #students-portal .portal-choice{min-height:190px;padding:24px 28px}
+ #students-portal .learning-space-heading .eyebrow{font-size:10px;line-height:1.5}
+ #students-portal .learning-space-heading{margin:8px 0 22px}
+ #students-portal .learning-space-destinations{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ #students-portal .learning-space-card{padding:17px 12px!important;min-height:140px;gap:10px}
+ #students-portal .learning-space-card-title{font-size:15px;line-height:1.35}
+ #students-portal .learning-space-card-description{font-size:11px;line-height:1.6}
+ .admin-dashboard-heading{display:flex;flex-wrap:wrap;gap:15px;align-items:center}
+ .admin-dashboard-heading>h3{flex:1 1 220px;margin:8px 0}
+ .instructor-shortcuts{display:flex;flex-wrap:wrap;gap:10px}
+ .instructor-shortcuts .button,.admin-dashboard-heading>.instructor-french-button{min-height:44px}
+ .admin-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .admin-metrics>article{min-width:0;padding:18px}
+ .admin-metrics>article>span{font-size:11px;line-height:1.5}
+ .admin-metrics>article>strong{font-size:28px}
+ .instructor-tool-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ #admin-dashboard .instructor-tool-cards>details>summary,#admin-dashboard .instructor-review-card{min-height:145px;padding:17px;font-size:13px;line-height:1.5}
+ #admin-dashboard .instructor-tool-cards>details[open]{grid-column:1/-1}
+ #admin-dashboard .instructor-tool-cards>details[open]>summary{min-height:80px}
+ #admin-dashboard .instructor-tool-cards>details[open]>*:not(summary){max-width:calc(100% - 24px);min-width:0}
+ .admin-client-form,.calendar-form{grid-template-columns:1fr}
+ .admin-client-form label,.calendar-form label{min-width:0}
+ .admin-table-wrap{max-width:100%;overflow-x:auto}
+ .calendar-toolbar{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+ .calendar-toolbar h4{font-size:17px;margin:8px 0}
+ .calendar-toolbar .button{min-height:40px;padding:8px 11px;font-size:12px}
+ .calendar-grid{min-width:0;gap:3px}
+ .calendar-day{min-width:0}
+ .calendar-weekdays span{font-size:10px}
+ .calendar-day-number{font-size:12px}
+ .calendar-slot{max-width:100%;overflow-wrap:anywhere}
+ #courses .catalog-controls{gap:17px;margin:22px 0 26px}
+ #courses .filters{gap:7px}
+ #courses .filter{font-size:11px;padding:9px 13px;min-height:38px}
+ #courses .search{width:100%}
+ #courses #course-grid{gap:14px}
+ #courses #course-grid .course-body{padding:17px 14px}
+ #courses #course-grid .course-body h3{font-size:19px;line-height:1.25}
+ #courses .course-view-row{gap:8px;flex-wrap:wrap}
+ #courses .course-view-row .course-link{max-width:100%}
+ #quote .quote-popup-choice{overflow-wrap:break-word}
+ #reviews .reviews-layout{grid-template-columns:1fr;gap:26px}
+ #reviews .reviews-copy{padding:15px 10px 24px 0}
+ #reviews .reviews-copy:before{inset:35px 0 0 -6px;transform:rotate(-2deg)}
+ #reviews .reviews-copy>h2{font-size:34px!important}
+ #reviews .reviews-album-area{min-width:0;width:100%;padding:12px 0}
+ #reviews .review-card{max-width:100%}
+ #daily-quote .motivation-layout{grid-template-columns:1fr;gap:25px}
+ #daily-quote .motivation-page-heading{margin:5px 0 20px!important;max-width:100%}
+ #daily-quote .motivation-picture{margin:0 auto;max-width:420px;width:100%}
+ #daily-quote .motivation-headline{font-size:22px;line-height:1.5}
+ #daily-mission>.daily-idiom,#instructor-french-view>.french-idiom{width:100%;max-width:none;margin:0 0 22px;padding:17px;box-sizing:border-box}
+ #daily-mission>.daily-task-intro,#instructor-french-view>.daily-task-intro{max-width:100%;box-sizing:border-box}
+ #daily-mission .mission-practice,#daily-mission .mission-reading,#instructor-french-view [data-french-stage],#instructor-french-view .mission-reading{padding:17px}
+ .learning-document-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+ .learning-breadcrumbs{line-height:1.6;gap:6px}
+ #learner-profile .learner-questions legend{font-size:14px;line-height:1.6}
+ #learner-profile .learner-questions label{font-size:14px;line-height:1.6;padding:9px}
+ .test-pager,.learner-pager{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+ .test-pager .button,.learner-pager .button{padding:11px 15px;font-size:13px}
+}
+@media(max-width:380px){
+ #courses #course-grid{grid-template-columns:1fr}
+ #students-portal .learning-space-card-description{font-size:10px}
+ #admin-dashboard .instructor-tool-cards>details>summary,#admin-dashboard .instructor-review-card{padding:14px;font-size:12px}
+ #home .home-speech-bubble,#home .home-speech-bubble:nth-child(2){width:129px}
+ #home .home-speech-links{gap:9px}
+}
+/* Keep fixed app navigation clear of device home indicators. */
+.instructor-app .instructor-tool-cards{width:100%}
+.instructor-app .app-nav button{border-radius:999px}
+@media(display-mode:standalone){
+ body{padding-bottom:env(safe-area-inset-bottom,0px)}
+ body:not(.instructor-app)>header{padding-top:max(18px,env(safe-area-inset-top,0px))}
+ .instructor-app main{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+}
+@media(max-width:760px){
+ #daily-quote .motivation-layout{grid-template-columns:minmax(0,1fr);width:100%;min-width:0}
+ #daily-quote .motivation-visual,#daily-quote .motivation-content{width:100%;min-width:0;max-width:100%}
+ #daily-quote .motivation-picture,#daily-quote .motivation-picture img{min-width:0;max-width:100%;width:100%}
+}
+@media(max-width:760px){
+ #students-portal .learning-space-destinations .learning-space-card{display:flex!important;flex-direction:column!important;align-items:flex-start;justify-content:center;text-align:left;min-height:150px;gap:10px}
+ #students-portal .learning-space-destinations .learning-space-card:nth-child(even){align-items:center;text-align:center}
+ #students-portal .learning-space-card>svg{flex:none}
+ #students-portal .learning-space-card-title,#students-portal .learning-space-card-description{display:block;width:100%;min-width:0}
+}
+@media(display-mode:standalone) and (max-width:760px){
+ main #home .hero{height:calc(100svh - 150px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+ dialog{max-height:calc(100dvh - 32px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+}
