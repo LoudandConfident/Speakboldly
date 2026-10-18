@@ -1,0 +1,23 @@
+// Decorative only: never changes availability, appointments, or holiday closures.
+const paths={
+ people:'<circle cx="18" cy="15" r="8"/><circle cx="37" cy="18" r="6"/><path d="M4 47V34c0-14 28-14 28 0v13M35 29c10-1 13 6 13 18"/>',
+ tree:'<path d="m25 3-12 14h7L9 29h10L6 42h38L31 29h10L30 17h7ZM25 42v8M18 50h14"/>',
+ gift:'<path d="M7 22h36v27H7ZM4 15h42v9H4ZM25 15v34M25 15C6 17 9 0 18 6l7 9Zm0 0C44 17 41 0 32 6Z"/>',
+ snow:'<path d="M25 3v44M6 14l38 22M6 36l38-22M20 7l5 5 5-5M20 43l5-5 5 5M6 20l8-2-2-8M38 40l-2-8 8-2M6 30l8 2-2 8M38 10l-2 8 8 2"/>',
+ leaf:'<path d="M8 43C-1 14 34 5 44 7c-1 28-13 39-30 32M10 44l26-27M22 31V19M22 31h12"/>',
+ umbrella:'<path d="M4 27a21 21 0 0 1 42 0c-7-6-14-6-21 0-7-6-14-6-21 0ZM25 6v36c0 11 14 11 14 0M10 7l-2 5M39 5l-2 5"/>',
+ flower:'<path d="M25 46V29M25 38c-12 2-17-5-18-10 11-2 16 4 18 10M25 41c12 2 17-5 18-10-11-2-16 4-18 10"/><circle cx="25" cy="17" r="6"/><path d="M25 11C13-8 4 13 19 17 0 28 24 38 25 23c12 19 21-2 6-6 19-11-5-21-6-6Z"/>',
+ sun:'<circle cx="25" cy="25" r="12"/><path d="M25 2v7M25 41v7M2 25h7M41 25h7M8 8l5 5M37 37l5 5M8 42l5-5M37 13l5-5"/>',
+ waves:'<path d="M3 22q6-9 12 0t12 0 12 0h8M3 34q6-9 12 0t12 0 12 0h8M3 46q6-9 12 0t12 0 12 0h8"/><circle cx="35" cy="8" r="5"/>',
+ kite:'<path d="m24 3 19 20-15 18L10 21ZM24 3l4 38M10 21l33 2M28 41c13 8-12 3-5 12M23 48l-5-2"/>',
+ book:'<path d="M4 9q11-5 21 0 11-5 21 0v33q-11-5-21 0-10-5-21 0ZM25 9v33M10 20h10M30 20h10"/>',
+ speech:'<path d="M4 7h42v29H24L12 47V36H4ZM12 17h25M12 26h17"/>',
+ clock:'<circle cx="25" cy="25" r="21"/><path d="M25 10v15l11 8"/>'
+};
+const svg=key=>'<svg viewBox="0 0 50 56" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+paths[key]+'</svg>';
+const monthThemes=[['snow','umbrella','book','clock'],['book','speech','umbrella','clock'],['flower','leaf','kite','book'],['flower','kite','leaf','sun'],['sun','flower','kite','book'],['sun','waves','kite','leaf'],['waves','sun','kite','book'],['sun','waves','leaf','speech'],['book','leaf','clock','speech'],['leaf','book','umbrella','clock'],['umbrella','leaf','book','speech'],['tree','gift','snow','tree']];
+function decorate(){for(const cell of document.querySelectorAll('.calendar-day[data-date]')){const date=cell.dataset.date;if(!/^\d{4}-\d{2}-\d{2}$/.test(date))continue;const day=Number(date.slice(-2)),month=Number(date.slice(5,7));const days=month===12?[5,12,19,25]:[4,11,18,25];const index=days.indexOf(day);if(index<0||cell.querySelector(':scope>.seasonal-calendar-art'))continue;const mark=document.createElement('span');mark.className='seasonal-calendar-art';mark.dataset.theme=month===12?'christmas':'seasonal';mark.innerHTML=svg(monthThemes[month-1][index]);cell.append(mark);}
+ for(const [id,key]of [['portal-contact','speech'],['portal-calendar','clock'],['portal-material','book'],['portal-exercises','leaf'],['portal-listening','waves']]){const host=document.getElementById(id);if(!host||host.querySelector(':scope>.portal-interior-art'))continue;const mark=document.createElement('div');mark.className='portal-interior-art';mark.innerHTML=svg(key);const heading=host.querySelector(':scope>h3,:scope>h2');if(heading)heading.after(mark);else host.prepend(mark);}
+ const dash=document.getElementById('admin-dashboard');if(dash){const clients=dash.querySelector('#admin-students-list');if(clients&&!dash.querySelector('#instructor-clients-card')){const card=document.createElement('details');card.id='instructor-clients-card';card.className='admin-detail';const summary=document.createElement('summary');summary.textContent='Clients';const symbol=document.createElement('span');symbol.className='panel-symbol';symbol.innerHTML=svg('people');summary.prepend(symbol);card.append(summary);card.append(clients);const add=dash.querySelector('#admin-add-client');if(add)card.append(add);dash.append(card);}let grid=dash.querySelector(':scope>.instructor-tool-cards');if(!grid){grid=document.createElement('div');grid.className='instructor-tool-cards';dash.append(grid);}for(const detail of dash.querySelectorAll('details.admin-detail')){if(detail.parentElement===grid||detail.parentElement.closest('details'))continue;grid.append(detail);}}
+}
+const root=document.getElementById('students-portal');if(root){decorate();new MutationObserver(decorate).observe(root,{childList:true,subtree:true});}
