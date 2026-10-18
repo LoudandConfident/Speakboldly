@@ -1,0 +1,52 @@
+/* Consistent type scale, quiet palette and compact page rhythm. */
+main [data-view]>h2,main .courses-heading h2,main .quote-editorial-title,main .join-editorial-title,main #contact>h2{font-size:clamp(28px,3.6vw,45px)!important;line-height:1.16!important;letter-spacing:-1.1px!important}
+main #how .how-hero-copy h2,main #vision .vision-hero h2,main #vision .vision-hero-copy h2{font-size:clamp(32px,4vw,51px)!important}
+main #programs .coaching-independence h3{font-size:clamp(29px,3.6vw,45px)!important}
+main #placement .assessment-option-title{font-size:clamp(26px,2.8vw,35px)!important}
+main #courses #course-grid .course-body h3{font-size:21px}
+main .catalog{padding-top:40px;padding-bottom:30px}
+main #contact.contact-section{padding-top:42px;min-height:0}
+main #how .how-hero{padding-top:34px;padding-bottom:30px}
+main #vision .vision-hero{padding-top:32px;padding-bottom:30px}
+main .page-signature{margin-top:30px}
+main #placement .assessment-visual{height:145px;margin-bottom:20px}
+main #placement .level-stair{height:86px}
+main #placement .level-stair>span:nth-child(6){height:76px}
+main #placement .learner-visual svg{height:105px}
+main #placement .assessment-options>article{padding-bottom:28px}
+main #quote .upcoming-watermark,main #join-team .upcoming-watermark{font-size:clamp(50px,8vw,95px)}
+/* Show more of the complete photograph without enlarging its contents. */
+main #home .home-picture-and-reviews .coaching-photo img{object-fit:contain;object-position:right center;background:#193c32}
+#home .hero:before{background:linear-gradient(90deg,rgba(12,39,31,.94),rgba(12,39,31,.65) 35%,transparent 78%),linear-gradient(0deg,rgba(12,39,31,.8),transparent 25%)}
+main #home .hero-copy .home-slogan{font-size:clamp(34px,4.3vw,60px)}
+/* Small illustrations are secondary to the task, never answer hints. */
+.learning-visual-note{display:flex;align-items:center;gap:14px;max-width:720px;padding:10px 15px;margin:0 0 18px;background:#edf0e6;border-left:2px solid #b8c8a6;color:#193c32;border-radius:0 28px 28px 0}
+.learning-visual-note svg{width:50px;height:46px;flex:none}
+.learning-visual-note span{font-size:12px;line-height:1.6;font-style:italic}
+.learning-visual-note[data-art="1"]{border-radius:25px 0 25px 0;background:#f1f3e9}
+.learning-visual-note[data-art="2"]{background:transparent;border:1px solid #c7d2bb;border-radius:4px}
+.learning-visual-note[data-art="3"]{border-radius:0 34px 5px 0;background:#edf0e6}
+.learning-visual-note[data-art="4"]{border:0;border-bottom:1px solid #c7d2bb;background:transparent;border-radius:0}
+.learning-visual-note[data-art="5"]{border-radius:30px;border:1px solid #c7d2bb;background:#f1f3e9}
+#learner-profile .learner-questions fieldset{padding:14px;margin:18px 0}
+#learner-profile .learner-questions label{padding:8px;margin:7px 0}
+#placement-form .placement-question{margin-top:18px;margin-bottom:18px}
+#daily-mission>h3,#portal-monthly>h3{font-size:25px}
+#daily-mission .daily-mission-reading,#daily-mission .daily-task-reading{background:#edf0e6}
+#students-portal .portal-bubble-art svg{width:60px;height:60px}
+@media(max-width:680px){
+ main .catalog{padding-top:28px;padding-bottom:26px}
+ main [data-view]>h2,main #contact>h2,main .quote-editorial-title,main .join-editorial-title{font-size:30px!important}
+ main #how .how-hero-copy h2,main #vision .vision-hero h2,main #vision .vision-hero-copy h2{font-size:36px!important}
+ main #programs .coaching-independence h3{font-size:31px!important}
+ main #placement .assessment-option-title{font-size:28px!important}
+ main #home .hero-copy .home-slogan{font-size:30px}
+ .learning-visual-note{gap:10px;padding:8px 12px;margin-bottom:14px}
+ .learning-visual-note svg{width:42px;height:38px}
+ .learning-visual-note span{font-size:11px}
+ main #home .home-picture-and-reviews .coaching-photo img{object-fit:cover;object-position:52% center}
+}
+@media(max-width:680px){main #home .home-picture-and-reviews .coaching-photo img{object-fit:contain;object-position:center top}}
+main #vision .vision-heading h2{font-size:clamp(32px,4vw,51px)!important;line-height:1.15}
+#students-portal .portal-choice-label{font-size:clamp(24px,2.6vw,32px)}
+@media(max-width:680px){main #vision .vision-heading h2{font-size:36px!important}#students-portal .portal-choice-label{font-size:25px}}
