@@ -1,0 +1,47 @@
+/* Learning Hub: a balanced set of playful speech, arch and notebook silhouettes. */
+#students-portal .learning-space-card:nth-child(n){border-radius:30px 8px 30px 8px!important;align-items:flex-start;text-align:left;background:#edf0e6}
+#students-portal .learning-space-card:nth-child(4n+2){border-radius:50% 50% 8px 8px!important;align-items:center;text-align:center;background:#faf9f4}
+#students-portal .learning-space-card:nth-child(4n+3){border-radius:26px 26px 6px 26px!important;background:#edf0e6}
+#students-portal .learning-space-card:nth-child(4n){border-radius:8px 30px 8px 30px!important;align-items:flex-end;text-align:right;background:#faf9f4}
+#students-portal .learning-space-card{min-height:155px;justify-content:center}
+/* Instructor tools: one set of cards, with an editorial label-and-symbol layout. */
+.instructor-destination-cards{display:none!important}
+.instructor-tool-cards{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+#admin-dashboard .instructor-tool-cards>details.admin-detail:nth-child(n),#admin-dashboard .instructor-review-card{border-radius:8px 34px 8px 34px;background:#edf0e6;border:1px solid #c2cfb8;min-width:0;margin:0;overflow:hidden}
+#admin-dashboard .instructor-tool-cards>details:nth-child(even){background:#faf9f4;border-radius:34px 8px 34px 8px}
+#admin-dashboard .instructor-tool-cards>details:nth-child(3n){border-radius:30px 30px 7px 30px}
+#admin-dashboard .instructor-tool-cards>details>summary{min-height:160px;gap:15px;padding:23px;position:relative;justify-content:flex-end}
+#admin-dashboard .instructor-tool-cards .panel-symbol{align-self:flex-end}
+#admin-dashboard .instructor-tool-cards .panel-symbol svg{width:39px;height:39px}
+#admin-dashboard .instructor-tool-cards>details[open]{border-radius:20px}
+#admin-dashboard .instructor-tool-cards>details[open]>summary{min-height:90px;justify-content:flex-start}
+#admin-dashboard .instructor-review-card{min-height:160px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;padding:23px;gap:12px;background:#faf9f4;color:#193c32;text-align:left;cursor:pointer}
+#admin-dashboard .instructor-review-card>svg{width:39px;height:39px;align-self:flex-end}
+#admin-dashboard .instructor-review-card>strong{font-size:15px;font-weight:600}
+#admin-dashboard .instructor-review-card>span{font-size:11px;line-height:1.5;color:#53685b}
+#admin-dashboard .instructor-tool-cards>details:hover,#admin-dashboard .instructor-review-card:hover{border-color:#193c32}
+/* Daily Motivation uses a quiet, light page title. */
+#daily-quote .motivation-page-heading{font-size:15px!important;font-weight:400!important;letter-spacing:.2px!important;line-height:1.5!important;text-transform:none;margin:12px 0 25px!important}
+#daily-quote .motivation-headline{font-size:clamp(21px,2.5vw,30px);font-weight:400;line-height:1.45}
+/* Reviews: open conversation composition, preserving the existing album controls. */
+#reviews .reviews-layout{gap:45px;align-items:center}
+#reviews .reviews-copy{position:relative;padding:25px 28px 30px 0;border:0;background:transparent;isolation:isolate}
+#reviews .reviews-copy:before{content:'';position:absolute;inset:45px 20px 0 -25px;border-radius:45% 45% 10px 10px;background:#edf0e6;z-index:-1;transform:rotate(-4deg)}
+#reviews .reviews-copy>h2{font-size:clamp(32px,3.8vw,48px)!important;line-height:1.1!important;font-weight:400;letter-spacing:-1.5px;margin:22px 0}
+#reviews .reviews-copy>h2 em{font-style:italic;font-weight:400}
+#reviews .reviews-spark-art{width:86px;height:73px;display:block;margin:0 0 25px auto;color:#193c32;transform:rotate(7deg)}
+#reviews .review-intro{font-size:14px;line-height:1.85;max-width:360px}
+#reviews #review-open{margin-top:20px;border:1px solid #c2cfb8;background:#faf9f4}
+#reviews .reviews-album-area{position:relative;padding:22px 0}
+#reviews .reviews-album-area:before{content:'“';position:absolute;right:5px;top:-30px;color:#a8bd91;font-size:100px;line-height:1;pointer-events:none}
+#reviews .review-card{border-radius:4px 28px 4px 28px;border-color:#c2cfb8}
+#reviews .review-card blockquote{font-weight:400}
+@media(max-width:1000px){.instructor-tool-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:680px){#students-portal .learning-space-card{min-height:140px}.instructor-tool-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}#admin-dashboard .instructor-tool-cards>details>summary,#admin-dashboard .instructor-review-card{min-height:145px;padding:18px;font-size:13px}#admin-dashboard .instructor-tool-cards .panel-symbol svg,#admin-dashboard .instructor-review-card>svg{width:31px;height:31px}#daily-quote .motivation-page-heading{font-size:13px!important}#reviews .reviews-layout{gap:28px}#reviews .reviews-copy{padding:12px 12px 24px 0}#reviews .reviews-copy:before{inset:40px 0 0 -12px}#reviews .reviews-copy>h2{font-size:36px!important}#reviews .reviews-spark-art{width:65px;height:57px;margin-bottom:18px}#reviews .reviews-album-area:before{font-size:70px;top:-16px}}
+
+/* One meaningful illustration per practice section. */
+#daily-mission .practice-corner,#instructor-french-view .practice-corner{display:none}
+#daily-mission .mission-practice,#daily-mission .mission-reading,#instructor-french-view [data-french-stage],#instructor-french-view .mission-reading{padding-right:20px}
+@media(max-width:680px){#daily-mission .mission-practice,#daily-mission .mission-reading,#instructor-french-view [data-french-stage],#instructor-french-view .mission-reading{padding-right:16px}}
+#admin-dashboard .instructor-tool-cards>details.admin-detail:nth-child(even){background:#faf9f4;border-radius:34px 8px 34px 8px}
+#admin-dashboard .instructor-tool-cards>details.admin-detail:nth-child(3n){border-radius:30px 30px 7px 30px}
