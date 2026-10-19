@@ -1,4 +1,5 @@
 export function initializeNavigation(doc,win){
+ doc.querySelector('.sb-method-illustrated-button')?.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.currentTarget.dispatchEvent(new win.MouseEvent('click',{bubbles:true}));}});
  const menu=doc.querySelector('.mobile-menu-toggle'),nav=doc.querySelector('#main-navigation');
  function closeMenu(){menu?.setAttribute('aria-expanded','false');nav?.classList.remove('mobile-open');}
  menu?.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));nav?.classList.toggle('mobile-open',open);});
