@@ -1,0 +1,58 @@
+#courses .course-booking-note{display:flex;align-items:center;gap:14px;width:auto!important;max-width:none!important;flex-wrap:wrap;justify-content:flex-end}
+#courses .course-fees-open{flex-shrink:0}
+.consultation-open{width:150px;height:150px;flex-shrink:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:25px;border-radius:50%;border:1px solid #b8c8ad;background:#faf9f4;color:#193c32;font-size:13px;line-height:1.5}
+.consultation-open:hover{background:#edf0e6}
+.consultation-composer{max-width:690px}
+.consultation-composer h2{font-size:26px}
+.composer-row{display:flex;gap:25px;padding:15px 0;border-bottom:1px solid #d7dfcd;font-size:13px;overflow-wrap:anywhere}
+.consultation-composer textarea{font:inherit;min-height:175px;resize:vertical;padding:17px;border:1px solid #c2cfb8;background:#fffef9;color:#193c32;border-radius:8px;line-height:1.8}
+.consultation-composer input[readonly]{background:transparent}
+.consultation-composer input[type=file]{max-width:100%;font-size:12px;padding:8px}
+.composer-note,[data-files]{font-size:11px!important;overflow-wrap:anywhere}
+#portal-content [data-portal-panel],#daily-mission{display:flow-root}
+.section-guide{float:right;width:115px;height:115px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:17px;border:1px solid #b8c8ad;border-radius:50%;background:#edf0e6;color:#193c32;font-size:11px;line-height:1.5;text-align:center;margin:0 0 20px 22px;box-shadow:none}
+.section-guide:hover{background:#e1e9d5}
+.guide-mark{display:block;font-family:Georgia,serif!important;font-style:italic;font-size:25px;line-height:1}
+.section-guide-popup{max-width:560px}.section-guide-popup p{line-height:1.9}
+.native-mode-choice{display:flex!important;flex-direction:row!important;align-items:center;gap:10px;font-size:13px!important}
+.native-mode-choice input{width:18px!important;height:18px;accent-color:#193c32}
+.native-english-form fieldset{border:1px solid #c2cfb8;border-radius:15px;padding:20px;min-width:0}
+.native-english-form legend{padding:0 10px;font-size:13px}
+.native-english-form select{max-width:100%;text-overflow:ellipsis}
+.native-english-form [data-manual]{padding:10px 0}
+#portal-monthly .native-listening-part{clear:both}
+.monthly-novels{margin:32px 0 15px;padding:25px;border:1px solid #c2cfb8;border-radius:8px 28px 8px 28px;background:#edf0e6;clear:both}
+.monthly-novels>p:first-child{font-size:9px;letter-spacing:1.5px}
+.monthly-novels h4{font-size:24px;font-weight:500;margin:12px 0}
+.monthly-novels h5{font-size:20px;font-weight:500;margin:25px 0 8px}
+.monthly-novels>p{font-size:13px;line-height:1.8}
+.novel-reader{margin-top:23px;max-width:100%;min-width:0}
+.novel-reader canvas{display:block;max-width:100%;height:auto;margin:20px auto 0;background:#fff}
+.novel-reader-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px}
+.novel-reader-controls label{display:flex;align-items:center;gap:7px;font-size:12px}
+.novel-reader-controls input{width:75px;padding:8px;border:1px solid #b8c8ad;border-radius:8px;background:#faf9f4;color:#193c32}
+.novel-reader>p{font-size:12px;line-height:1.7}
+@media(max-width:900px){#courses .course-booking-note{justify-content:flex-start}.consultation-open{width:135px;height:135px}}
+@media(max-width:540px){#courses .course-booking-note{width:100%!important;align-self:auto;gap:12px;justify-content:center}.consultation-open{width:135px;height:135px;font-size:12px;padding:22px}.section-guide{width:94px;height:94px;font-size:10px;padding:13px;margin-left:15px}.monthly-novels{padding:18px 14px}.monthly-novels h4{font-size:21px}.novel-reader-controls{gap:7px}.novel-reader-controls input{width:65px}.consultation-composer{padding:26px 20px}}
+#portal-studio .studio-tabs{display:flex;flex-wrap:wrap;gap:10px;margin:25px 0}
+.studio-tabs>button{border:1px solid #b8c8ad;border-radius:999px;padding:12px 20px;background:#faf9f4;color:#193c32;font-size:13px}
+.studio-tabs>button[aria-selected=true]{background:#193c32;color:#faf9f4}
+#portal-studio h4{font-size:24px;line-height:1.4;font-weight:500}
+.studio-roleplay dl{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px 18px;background:#edf0e6;border-radius:8px 26px 8px 26px;padding:24px;line-height:1.7;font-size:13px}
+.studio-roleplay dt{font-weight:600}.studio-roleplay dd{margin:0}
+.studio-roleplay textarea{width:100%;font:inherit;line-height:1.7;border:1px solid #b8c8ad;border-radius:12px;padding:17px;color:#193c32;background:#faf9f4;resize:vertical;font-size:12px;margin-bottom:16px}
+.studio-roleplay>.button,.studio-voice>.button{margin:0 10px 12px 0}
+.studio-roleplay>p,.studio-voice>p{font-size:13px;line-height:1.8}
+.studio-model-line{font-size:24px;line-height:1.6;font-style:italic;margin:20px 0;padding:24px;background:#edf0e6;border-radius:30px 30px 30px 5px}
+.studio-voice label{display:block;font-size:12px;margin:20px 0}
+.studio-voice select{display:block;margin-top:8px;max-width:250px;padding:10px;border:1px solid #b8c8ad;border-radius:12px;background:#faf9f4;color:#193c32}
+.studio-voice audio{display:block;max-width:100%;margin:15px 0}
+@media(max-width:540px){.studio-roleplay dl{grid-template-columns:1fr;gap:4px;padding:18px}.studio-roleplay dd{margin-bottom:12px}#portal-studio h4{font-size:21px}.studio-model-line{font-size:21px;padding:20px}}
+.studio-word-comparison{border:1px solid #b8c8ad;border-radius:18px;padding:18px;margin:20px 0;background:#faf9f4}
+.studio-word-comparison>button{display:inline-block;margin:3px;padding:5px 8px;border:0;border-radius:8px;color:#193c32;font-size:15px}
+.studio-word-comparison .word-heard{background:#d5ed98}
+.studio-word-comparison .word-check{background:#edf0e6;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.studio-word-comparison p{font-size:12px;line-height:1.8}
+@media(max-width:540px){#courses .course-fees-open,#courses .consultation-open{width:125px;height:125px;min-height:125px;font-size:11px;padding:18px!important}}
+#students-portal.learning-section-open .learning-space-toolbar{display:none!important;margin:0!important}
+#students-portal [data-learning-back] svg{display:block;width:34px;height:25px}

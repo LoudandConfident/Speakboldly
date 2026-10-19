@@ -1,6 +1,6 @@
 import {initializeInstructorFrench} from './instructor-french.js?v=toolbar-v2';
 import {initializeInstructorBackups} from './instructor-backups.js?v=reliability';
-import {initializeNativeEnglishEditor} from './native-english-editor.js?v=monthly-owner';
+import {initializeNativeEnglishEditor} from './native-english-editor.js?v=january-choices-1';
 import {initializeInstructorOverview} from './instructor-overview.js?v=requests-only-v2';
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
 import {openClientReportTab} from './report-tabs.js?v=instructor-app';
@@ -154,5 +154,6 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  lock();return{lock};
 }
 if(typeof document!=='undefined')initializeAdminPortal(document);
+
 
 

@@ -111,6 +111,7 @@ function doPost(event) {
   try {
     const request = sbParseWebRequest(event);
     const data = request.data;
+    if(data.action==='programConsultation'){if(request.size>2900000)throw new Error('Pictures are too large. Use up to 2 pictures, 1 MB each.');return handleStudentInstructorContact(data);}
     if(data.action==='nativeEnglishPage'){if(request.size>4000)throw new Error('Request too large.');return sbNativeEnglishRead(data);}
     if (data.action === 'studentInstructorContact') {
       if (request.size > 16000) throw new Error('Request too large.');
@@ -163,6 +164,7 @@ function sbRequireClientConnection(data) {
 
 function sbRouteInstructorRequest(data, connection, lock) {
   if(['exportOwnerBackup','saveOwnerBackup'].includes(data.action))return sbOwnerBackupAction(data,connection.book);
+  if(['nativeEnglishSettings','saveNativeEnglishSettings'].includes(data.action))return sbNativeSettingsOwner(data);
   if(['nativeEnglishEdit','saveNativeEnglish'].includes(data.action))return sbNativeEnglishOwner(data);
   if (SB_OWNER_BOOKING_ACTIONS.includes(data.action)) return handleOwnerBooking(data);
   if (SB_INSTRUCTOR_EXAM_ACTIONS.includes(data.action)) return handleInstructorExam(data);
@@ -1001,6 +1003,7 @@ function sbPersonalCalendarFeed(token){
 
 // Public Learning Hub requests. The recipient is fixed; visitors supply only a reply address.
 function handleStudentInstructorContact(data) {
+ const consultation=data.action==='programConsultation',attachments=consultation?sbConsultationAttachments(data.attachments):[];
  const respond=typeof response==='function'?response:clientSyncResponse;
  const requestId=String(data.requestId||''),name=String(data.name||'').trim(),email=String(data.email||'').trim().toLowerCase(),message=String(data.message||'').trim();
  if(String(data.website||'')||! /^[a-zA-Z0-9-]{1,100}$/.test(requestId)||!name||name.length>100||/[\r\n]/.test(name)||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254||!message||message.length>4000)throw new Error('Check your name, email, and note before sending.');
@@ -1023,9 +1026,9 @@ function handleStudentInstructorContact(data) {
   const rowNumber=sheet.getLastRow()+1;sheet.appendRow([requestId,"'"+name,"'"+email,"'"+message,new Date().toISOString(),'sending','']);SpreadsheetApp.flush();
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const content='<p><strong>Name:</strong> '+escape(name)+'<br><strong>Reply email:</strong> '+escape(email)+'</p><p style="white-space:pre-wrap">'+escape(message)+'</p>';
-  const htmlBody=typeof sbBrandedEmail==='function'?sbBrandedEmail('Learning Hub request',content):'<html><body style="font-family:Arial,sans-serif;color:#193c32"><h2>Learning Hub request</h2>'+content+'<p>Speak Boldly</p></body></html>';
+  const htmlBody=typeof sbBrandedEmail==='function'?sbBrandedEmail(consultation?'Program consultation':'Learning Hub request',content):'<html><body style="font-family:Arial,sans-serif;color:#193c32"><h2>Learning Hub request</h2>'+content+'<p>Speak Boldly</p></body></html>';
   try{
-   MailApp.sendEmail({to:'speakboldly16@gmail.com',replyTo:email,name:'Speak Boldly',subject:'Learning Hub request — '+name,body:'How can I help you?\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
+   MailApp.sendEmail({to:'speakboldly16@gmail.com',replyTo:email,name:'Speak Boldly',attachments,subject:(consultation?'Program consultation — ':'Learning Hub request — ')+name,body:(consultation?'Program consultation':'How can I help you?')+'\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
    sheet.getRange(rowNumber,6,1,2).setValues([['sent','']]);return respond({ok:true,status:'sent'});
   }catch(error){sheet.getRange(rowNumber,6,1,2).setValues([['delivery_unknown',String(error.message||error)]]);throw new Error('Your note is saved, but email delivery could not be confirmed. Please wait for your instructor to check it before sending again.');}
  }finally{lock.releaseLock();}
@@ -1171,7 +1174,7 @@ function sbSaveSessionSeries(p){
 function sbNativeMonth(value){const month=String(value||'');if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month))throw new Error('Choose a valid month.');return month;}
 function sbNativeEntry(month){const raw=PropertiesService.getScriptProperties().getProperty('SB_NATIVE_ENGLISH_'+month);return raw?JSON.parse(raw):{revision:'0',page:null};}
 function sbNativeReply(value){return typeof response==='function'?response(value):clientSyncResponse(value);}
-function sbNativeEnglishRead(data){const month=sbNativeMonth(data.month),entry=sbNativeEntry(month);return sbNativeReply({ok:true,month,revision:entry.revision,page:entry.page});}
+function sbNativeEnglishRead(data){const month=sbNativeMonth(data.month),entry=sbNativeEntry(month);return sbNativeReply({ok:true,month,revision:entry.revision,page:entry.page,settings:sbNativeSettings()});}
 function sbNativeEnglishOwner(data){const month=sbNativeMonth(data.month),lock=LockService.getScriptLock();lock.waitLock(20000);try{const entry=sbNativeEntry(month);if(data.action==='nativeEnglishEdit')return sbNativeReply({ok:true,month,...entry});if(data.action!=='saveNativeEnglish')throw new Error('Invalid action.');let page=null;if(data.page!==null){if(!data.page||typeof data.page!=='object'||Array.isArray(data.page))throw new Error('Check the monthly page.');page={};for(const [key,max]of [['source',150],['title',200],['url',2000],['brief',3000]]){const value=data.page[key];if(typeof value!=='string'||!value.trim()||value.trim().length>max)throw new Error('Check '+key+' (maximum '+max+' characters).');page[key]=value.trim();}if(!/^https:\/\/[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?(?::\d{1,5})?(?:[/?#][^\s\\]*)?$/i.test(page.url))throw new Error('Use a complete HTTPS link.');}
 if(data.revision!==entry.revision){if(JSON.stringify(page)===JSON.stringify(entry.page))return sbNativeReply({ok:true,month,...entry});throw new Error('This month changed on another device. Reload the month before saving.');}const next={revision:Utilities.getUuid(),page};if(encodeURIComponent(JSON.stringify(next)).replace(/%[0-9A-F]{2}/g,'x').length>8500)throw new Error('This introduction is too large. Shorten it before publishing.');PropertiesService.getScriptProperties().setProperty('SB_NATIVE_ENGLISH_'+month,JSON.stringify(next));return sbNativeReply({ok:true,month,...next});}finally{lock.releaseLock();}}
 
@@ -1182,7 +1185,7 @@ function sbBuildOwnerBackup(book){
  for(const name of Object.keys(SB_BACKUP_TABLES)){const sheet=book.getSheetByName(name);if(sheet)tables[name]=sheet.getLastRow()?sheet.getRange(1,1,sheet.getLastRow(),SB_BACKUP_TABLES[name]).getValues():[];}
  const props=PropertiesService.getScriptProperties(),settings={};
  // Explicit allowlist: never export connection keys, passwords or login tokens.
- if(typeof props.getProperties==='function')for(const [name,value]of Object.entries(props.getProperties()))if(/^SB_(CALENDAR_SLOTS_\d{4}-\d{2}-\d{2}|NATIVE_ENGLISH_\d{4}-\d{2}|LEARNING_LEVEL_ACCESS)$/.test(name))settings[name]=value;
+ if(typeof props.getProperties==='function')for(const [name,value]of Object.entries(props.getProperties()))if(/^SB_(CALENDAR_SLOTS_\d{4}-\d{2}-\d{2}|NATIVE_ENGLISH_\d{4}-\d{2}|NATIVE_ENGLISH_SETTINGS|LEARNING_LEVEL_ACCESS)$/.test(name))settings[name]=value;
  return {format:'speak-boldly-owner-backup',version:1,createdAt:new Date().toISOString(),timeZone:'Africa/Cairo',tables,settings,materialFiles:'Links only. Keep the original uploaded files in their existing storage.'};
 }
 function sbSaveOwnerBackup(){
@@ -1210,3 +1213,21 @@ function sbOwnerBackupAction(data,book){
 }
 
 
+
+
+function sbConsultationAttachments(value){
+ if(value===undefined)return [];if(!Array.isArray(value)||value.length>2)throw new Error('Attach up to 2 pictures.');
+ return value.map(file=>{const type=String(file?.type||''),data=String(file?.data||''),allowed={'image/png':['iVBORw0KGgo','png'],'image/jpeg':['/9j/','jpg'],'image/webp':['UklGR','webp']};
+ if(!allowed[type]||!data.startsWith(allowed[type][0])||! /^[A-Za-z0-9+/]+={0,2}$/.test(data)||data.length>1398104)throw new Error('Use JPG, PNG or WebP pictures, no larger than 1 MB each.');
+ const bytes=Utilities.base64Decode(data);if(!bytes.length||bytes.length>1048576)throw new Error('A picture is too large.');
+ const name=String(file.name||'assessment').replace(/[^a-zA-Z0-9._-]/g,'-').slice(0,90);return Utilities.newBlob(bytes,type,name);
+ });
+}
+function sbNativeSettings(){const raw=PropertiesService.getScriptProperties().getProperty('SB_NATIVE_ENGLISH_SETTINGS');return raw?JSON.parse(raw):{revision:'0',mode:'automatic',manualLink:0,manualNovel:0};}
+function sbNativeSettingsOwner(data){
+ const lock=LockService.getScriptLock();lock.waitLock(20000);try{const settings=sbNativeSettings();if(data.action==='nativeEnglishSettings')return sbNativeReply({ok:true,settings});
+ if(!['automatic','manual'].includes(data.mode)||!Number.isInteger(data.manualLink)||data.manualLink<0||data.manualLink>11||!Number.isInteger(data.manualNovel)||data.manualNovel<0||data.manualNovel>23)throw new Error('Choose automatic or manual, a listening page and a novel.');
+ const same=settings.mode===data.mode&&settings.manualLink===data.manualLink&&settings.manualNovel===data.manualNovel;if(data.revision!==settings.revision){if(same)return sbNativeReply({ok:true,settings});throw new Error('Settings changed on another device. Reload before saving.');}
+ const next={revision:Utilities.getUuid(),mode:data.mode,manualLink:data.manualLink,manualNovel:data.manualNovel};PropertiesService.getScriptProperties().setProperty('SB_NATIVE_ENGLISH_SETTINGS',JSON.stringify(next));return sbNativeReply({ok:true,settings:next});
+ }finally{lock.releaseLock();}
+}

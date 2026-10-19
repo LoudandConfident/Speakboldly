@@ -1,4 +1,4 @@
-import {initializeStudentAssessment} from './student-assessment.js?v=studio-1';
+import {initializeStudentAssessment} from './student-assessment.js?v=january-learning-2';
 import {renderPdf} from './portal-document.js?v=embedded-books';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {takeStudentAttempt} from './student-attempts.js';
@@ -100,5 +100,6 @@ export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMa
  lock(false);
 }
 if(typeof document!=='undefined')initializeStudentPortal(document,code=>findStudentAccess(code,document.defaultView.localStorage),portalResources);
+
 
 

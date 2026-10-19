@@ -1,5 +1,5 @@
 import {withBerlitzBooks} from './berlitz-material.js?v=exam-rebuild';
-import {initializeMonthlyLearning} from './monthly-learning.js?v=instructor-edit';
+import {initializeMonthlyLearning} from './monthly-learning.js?v=january-rotation-1';
 import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=embedded-books';
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=exam-rebuild';
 import {initializeStudentContact} from './student-contact.js?v=mission-question';
@@ -197,5 +197,6 @@ export function initializeStudentAssessment(doc) {
  if(doc.defaultView.location.hash.endsWith('/calendar'))Promise.resolve().then(openCalendarRoute);
  else if(new URL(doc.defaultView.location.href).searchParams.get('app')==='learner'&&(!doc.defaultView.location.hash||doc.defaultView.location.hash.startsWith('#students-portal')))Promise.resolve().then(()=>root.querySelector('[data-portal-area=client]').click());
 }
+
 
 
