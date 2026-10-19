@@ -1,0 +1,15 @@
+#students-portal .learning-space-destinations{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:16px!important;width:100%;max-width:none}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(n){display:flex!important;position:relative;flex-direction:column;align-items:flex-start;justify-content:center;aspect-ratio:1;min-height:0!important;height:auto;width:100%;min-width:0;padding:20px!important;gap:10px;border:1px solid #c2cfb8!important;border-radius:10px!important;background:#edf0e6!important;box-shadow:none!important;clip-path:none!important;overflow:visible!important;text-align:left}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(even){background:#faf9f4!important}
+#students-portal .learning-space-destinations>.learning-space-card:before,#students-portal .learning-space-destinations>.learning-space-card:after{display:none!important;content:none!important}
+#students-portal .learning-space-destinations>.learning-space-card:hover{background:#e1e9d5!important;border-color:#193c32!important}
+#students-portal .learning-space-card>svg[data-card-glyph]{display:block;width:39px!important;height:39px!important;flex-shrink:0;color:#193c32;margin:0 0 6px}
+#students-portal .learning-space-card-title{font-size:16px!important;line-height:1.4;font-weight:600}
+#students-portal .learning-space-card-description{font-size:11px!important;line-height:1.6}
+#students-portal #portal-tab-accent{display:flex!important}
+#students-portal #portal-accent:not([hidden]){display:flow-root!important;min-height:200px}
+#portal-accent h3{font-size:29px;font-weight:500;margin:12px 0}
+#portal-accent>p{font-size:14px;line-height:1.7}
+@media(max-width:1050px) and (min-width:901px){#students-portal .learning-space-destinations>.learning-space-card:nth-child(n){padding:15px!important;gap:8px}#students-portal .learning-space-card-title{font-size:14px!important}#students-portal .learning-space-card-description{font-size:10px!important}}
+@media(max-width:900px){#students-portal .learning-space-destinations{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important}}
+@media(max-width:540px){#students-portal .learning-space-destinations>.learning-space-card:nth-child(n){padding:17px 14px!important;gap:8px}#students-portal .learning-space-card-title{font-size:14px!important}#students-portal .learning-space-card-description{font-size:10px!important}#students-portal .learning-space-card>svg[data-card-glyph]{width:32px!important;height:32px!important;margin-bottom:4px}}

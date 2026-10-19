@@ -1,12 +1,13 @@
 const GUIDES={
- 'portal-exams':['Examinations','Take the interactive examination for your level. Enter the details requested before starting. Submit your answers when you finish; your instructor reviews the writing and sends your final report separately.'],
- 'portal-exercises':['Activity','Open the practice sheets and resources your instructor has made available. Use the folder password when requested, then choose a document to practise.'],
+ 'portal-accent':['Accent','This space is being prepared. More details are coming soon.'],
+ 'portal-exams':['Quizzes','Take the interactive examination for your level. Enter the details requested before starting. Submit your answers when you finish; your instructor reviews the writing and sends your final report separately.'],
+ 'portal-exercises':['Activities','Open the practice sheets and resources your instructor has made available. Use the folder password when requested, then choose a document to practise.'],
  'portal-material':['Material','Choose your level and enter its passcode. Open the books and learning documents here, and return to useful pages between sessions.'],
  'portal-listening':['Listening','Choose your level and open the listening resources. Listen for the main idea first, then return for useful expressions and details.'],
  'portal-practice':['Activities','Choose a realistic practice goal and use the activities to keep English part of your week.'],
  'daily-mission':['Daily Task','A new reading task appears every day. Choose your level, read at your own pace and try the language activities. Open today’s idiom for one more useful expression.'],
  'portal-monthly':['Native English','Explore the selected listening page and monthly novel. Open a novel inside the website; the reader remembers your page on this browser/device. Your instructor can choose the selections or keep automatic changes.'],
- 'portal-contact':['Contact Instructor','Send a question or learning note to your instructor. Include your name and an email address where you can receive a reply.'],
+ 'portal-contact':['Contact','Send a question or learning note to your instructor. Include your name and an email address where you can receive a reply.'],
  'portal-calendar':['Calendar','Choose an available appointment within the booking window. Follow the assessment and payment instructions for that appointment. Your instructor accepts or declines the request before the booking is confirmed.'],
  'portal-studio':['SB Studio','Open Roleplay Room for a daily situation and a prompt to use in your own chat. Open Voice Lab to hear a model, record yourself and compare the words heard.']
 };
@@ -15,3 +16,4 @@ export function initializeSectionGuides(doc){const root=doc.querySelector('#port
  decorate();new doc.defaultView.MutationObserver(decorate).observe(root,{childList:true,subtree:true});
 }
 if(typeof document!=='undefined')initializeSectionGuides(document);
+

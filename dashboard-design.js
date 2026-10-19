@@ -22,10 +22,11 @@ if(dashboard){
 // Distinct visual signposts for examination sections; no answer content is changed.
 const examHost=document.querySelector('#portal-exams');if(examHost){const decorate=()=>{examHost.querySelectorAll('.exam-text-page').forEach((section,i)=>{if(section.querySelector(':scope>.exam-section-symbol'))return;const mark=document.createElement('div');mark.className='exam-section-symbol';mark.innerHTML=svg(['ladder','book','speech','star','support','headphones'][i%6]);section.prepend(mark);});};decorate();new MutationObserver(decorate).observe(examHost,{childList:true,subtree:true});}
 
-const monthlyCard=document.querySelector('#portal-tab-monthly>svg');if(monthlyCard){const month=Number(new Intl.DateTimeFormat('en',{timeZone:'Africa/Cairo',month:'numeric'}).format(new Date()))-1;monthlyCard.outerHTML=svg(['globe','headphones','book','speech','compass','people','ladder','board','support','calendar','folder','star'][month]);}
+const monthlyCard=document.querySelector('#portal-tab-monthly>svg');if(monthlyCard&&!monthlyCard.hasAttribute('data-card-glyph')){const month=Number(new Intl.DateTimeFormat('en',{timeZone:'Africa/Cairo',month:'numeric'}).format(new Date()))-1;monthlyCard.outerHTML=svg(['globe','headphones','book','speech','compass','people','ladder','board','support','calendar','folder','star'][month]);}
 
 
 // A quiet daily teaching reflection beside the two compact totals.
 import {initializeTeachingQuote} from './teaching-quotes.js?v=365-reflections-1';
 initializeTeachingQuote(document);
 if(dashboard){const sentenceCaseFrench=()=>{const button=dashboard.querySelector('#instructor-french-button');if(button&&button.textContent==='FRENCH')button.textContent='French';};sentenceCaseFrench();new MutationObserver(sentenceCaseFrench).observe(dashboard,{childList:true,subtree:true});}
+

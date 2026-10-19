@@ -1,8 +1,8 @@
 /* Back navigation no longer reserves a blank row above every page. */
 main{position:relative}
-main>#page-back-arrow{position:absolute;right:6%;left:auto;top:3px;z-index:3;margin:0;min-height:32px;width:36px}
+main>#page-back-arrow{position:absolute;right:6%;left:auto;top:21px;z-index:3;margin:0;min-height:32px;width:36px}
 main>#page-back-arrow svg{width:30px;height:22px}
-main>[data-view]:not(#home){padding-top:4px!important;margin-top:0!important}
+main>[data-view]:not(#home){padding-top:22px!important;margin-top:0!important}
 main>[data-view]:not(#home)>:first-child{margin-top:0!important}
 main>[data-view]>.eyebrow:first-child{margin-top:0!important;margin-bottom:10px!important}
 main>[data-view]>h2:first-child{padding-right:44px;margin-top:0!important}
@@ -62,3 +62,6 @@ body:has(#students-portal.portal-session-active:not([hidden])) #page-back-arrow{
 @media(max-width:760px){#courses .courses-heading{padding-right:0!important;min-width:0}#courses .courses-subtitle br{display:none}}
 #admin-portal .admin-dashboard-heading,#portal-content .learning-space-heading{margin-top:0!important;padding-top:0!important}
 #admin-dashboard .admin-dashboard-heading>h3,#portal-content .learning-space-heading>.eyebrow{margin-top:0!important}
+
+#courses .course-booking-note .consultation-open{position:static!important;transform:none!important;align-self:center!important;margin:0!important;flex-shrink:0}
+#courses .course-booking-note .course-fees-open{margin:0!important;flex-shrink:0}

@@ -25,7 +25,7 @@ export function initializeStudentAssessment(doc) {
  const endpoint=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
  initializePractice(doc);
 
- const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['exercises','material','exams','contact','calendar','practice','listening','monthly','mission','studio'].includes(el.dataset.portalTab));
+ const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['exercises','material','exams','contact','calendar','practice','listening','monthly','mission','studio','accent'].includes(el.dataset.portalTab));
  let learningLevel=null,learningPasscode='',examPasscode='',latestItems=[];
  let exercisesUnlocked=false;
  let passwordMetadata=null,assessmentUnlocked=false,resumableSession=null;
@@ -46,8 +46,8 @@ export function initializeStudentAssessment(doc) {
  function remember(level){try{doc.defaultView.sessionStorage.setItem(SESSION_KEY,JSON.stringify({token,student,level}));}catch{}}
  function lock(){crumbs.hidden=true;crumbs.replaceChildren();epoch++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));clearFolderPasswords(doc);learningLevel=null;learningPasscode='';examPasscode='';exercisesUnlocked=false;delete root.querySelector('#portal-contact').dataset.passwordLocked;clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);profile.hidden=true;booking.lock();contact.lock();monthly.lock();token='';student=null;assessmentUnlocked=false;resumableSession=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
  const crumbs=doc.createElement('nav');crumbs.className='learning-breadcrumbs';crumbs.setAttribute('aria-label','Learning Hub breadcrumb');crumbs.hidden=true;root.querySelector('[data-learning-back]')?.after(crumbs);
- function publicSectionSelected(){return tabs.some(tab=>['contact','calendar','monthly','mission','studio'].includes(tab.dataset.portalTab)&&tab.getAttribute('aria-selected')==='true');}
- function select(id){retryFiles.hidden=true;if(['contact','calendar','monthly','mission','studio'].includes(id))status.textContent='';root.classList.toggle('learning-section-open',Boolean(id));if(id!=='mission')doc.dispatchEvent(new doc.defaultView.Event('daily-mission-pause'));closeLearningDocument(doc);crumbs.replaceChildren();crumbs.hidden=!id;if(id){const home=text('button','Learning Hub');home.type='button';home.onclick=()=>select(null);crumbs.append(home,text('span',' → '+({exercises:'Activity',material:'Material',exams:'Examinations',practice:'Activities',listening:'Listening',calendar:'Calendar',contact:'Contact Instructor',monthly:'Native English',mission:'Daily Task',studio:'SB Studio'}[id]||id)+(learningLevel&&!['calendar','contact','monthly','mission','studio','exercises','exams'].includes(id)?' → Level '+learningLevel:'')));}if(id&&!['contact','calendar','monthly','mission','studio'].includes(id)&&!getTemporaryOwnerConnection(doc))assertPortalAllowed(doc.defaultView.localStorage);tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);const back=root.querySelector('[data-learning-back]');if(back)back.hidden=!id;if(id)doc.defaultView.scrollTo({top:0,behavior:'instant'});}
+ function publicSectionSelected(){return tabs.some(tab=>['contact','calendar','monthly','mission','studio','accent'].includes(tab.dataset.portalTab)&&tab.getAttribute('aria-selected')==='true');}
+ function select(id){retryFiles.hidden=true;if(['contact','calendar','monthly','mission','studio','accent'].includes(id))status.textContent='';root.classList.toggle('learning-section-open',Boolean(id));if(id!=='mission')doc.dispatchEvent(new doc.defaultView.Event('daily-mission-pause'));closeLearningDocument(doc);crumbs.replaceChildren();crumbs.hidden=!id;if(id){const home=text('button','Learning Hub');home.type='button';home.onclick=()=>select(null);crumbs.append(home,text('span',' → '+({exercises:'Activities',material:'Material',exams:'Quizzes',practice:'Activities',listening:'Listening',calendar:'Calendar',contact:'Contact',monthly:'Native English',mission:'Daily Task',studio:'SB Studio',accent:'Accent'}[id]||id)+(learningLevel&&!['calendar','contact','monthly','mission','studio','accent','exercises','exams'].includes(id)?' → Level '+learningLevel:'')));}if(id&&!['contact','calendar','monthly','mission','studio','accent'].includes(id)&&!getTemporaryOwnerConnection(doc))assertPortalAllowed(doc.defaultView.localStorage);tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);const back=root.querySelector('[data-learning-back]');if(back)back.hidden=!id;if(id)doc.defaultView.scrollTo({top:0,behavior:'instant'});}
  doc.addEventListener('daily-mission-contact',event=>{status.textContent='';delete root.querySelector('#portal-contact').dataset.passwordLocked;select('contact');contact.open(event.detail?.message);});
  doc.addEventListener('daily-mission-home',()=>{select(null);root.querySelector('.learning-space-heading')?.scrollIntoView({block:'start',behavior:'auto'});});
  root.querySelector('[data-learning-back]')?.addEventListener('click',()=>{select(null);root.querySelector('.learning-space-heading')?.scrollIntoView({block:'start',behavior:'auto'});});
@@ -63,15 +63,16 @@ export function initializeStudentAssessment(doc) {
   passwordMetadata=next;
  }
  tabs.forEach(tab=>tab.onclick=async()=>{
-  try{const id=tab.dataset.portalTab;if(!['contact','calendar','monthly','mission','studio'].includes(id)&&!getTemporaryOwnerConnection(doc))assertPortalAllowed(doc.defaultView.localStorage);if(busy&&id==='exams'){select(id);return;}if(busy&&!['contact','calendar','monthly','mission','studio'].includes(id)){status.textContent='Finish your current examination before opening another section.';return;}
+  try{const id=tab.dataset.portalTab;if(!['contact','calendar','monthly','mission','studio','accent'].includes(id)&&!getTemporaryOwnerConnection(doc))assertPortalAllowed(doc.defaultView.localStorage);if(busy&&id==='exams'){select(id);return;}if(busy&&!['contact','calendar','monthly','mission','studio','accent'].includes(id)){status.textContent='Finish your current examination before opening another section.';return;}
+   if(id==='accent'){blocked.hidden=true;status.textContent='';select(id);return;}
    if(id==='studio'){blocked.hidden=true;status.textContent='';select(id);return;}
    if(id==='mission'){blocked.hidden=true;status.textContent='';select(id);doc.dispatchEvent(new doc.defaultView.Event('daily-mission-open'));return;}
    if(id==='monthly'){status.textContent='';select(id);monthly.open();return;}
    if(id==='contact'){status.textContent='';delete root.querySelector('#portal-contact').dataset.passwordLocked;select(id);contact.open();return;}
    if(id==='calendar'){status.textContent='';select(id);await booking.open();return;}
-   if(id==='exercises'){const accepted=await unlockStudentFolder(doc,'exercises','Activity',async passcode=>{await call('studentFolderLogin',{folder:'exercises',passcode});return true;},root.querySelector('#portal-exercises'),{popup:true});if(accepted){exercisesUnlocked=true;select(id);await reloadFiles();}return;}
-   if(id==='exams'){const accepted=await unlockStudentFolder(doc,'exams','Examinations',async passcode=>{await call('studentFolderLogin',{folder:'exams',passcode});examPasscode=passcode;return true;},panel,{popup:true});if(accepted){assessmentUnlocked=true;select(id);showAssessment(latestItems);profile.hidden=false;}return;}
-   const labels={exercises:'Activity',material:'Material',listening:'Listening',practice:'Activities',exams:'Examinations'};
+   if(id==='exercises'){const accepted=await unlockStudentFolder(doc,'exercises','Activities',async passcode=>{await call('studentFolderLogin',{folder:'exercises',passcode});return true;},root.querySelector('#portal-exercises'),{popup:true});if(accepted){exercisesUnlocked=true;select(id);await reloadFiles();}return;}
+   if(id==='exams'){const accepted=await unlockStudentFolder(doc,'exams','Quizzes',async passcode=>{await call('studentFolderLogin',{folder:'exams',passcode});examPasscode=passcode;return true;},panel,{popup:true});if(accepted){assessmentUnlocked=true;select(id);showAssessment(latestItems);profile.hidden=false;}return;}
+   const labels={exercises:'Activities',material:'Material',listening:'Listening',practice:'Activities',exams:'Examinations'};
    const owner=getTemporaryOwnerConnection(doc);
    const chosen=await chooseLearningLevel(doc,labels[id],async(level,passcode)=>{
     const response=await call('studentPortalAccess');latestItems=response.items;updatePasswordMetadata(response);
@@ -133,7 +134,7 @@ export function initializeStudentAssessment(doc) {
   for(const id of ['material','listening','practice','exercises']){
    const target=root.querySelector('#portal-'+id);delete target.dataset.passwordLocked;
    const existing=target.querySelector(':scope>.temporary-portal-uploads'),oldGrid=target.querySelector('.learning-document-grid');oldGrid?.remove();
-   if(id!=='practice'){target.replaceChildren(text('h3',{material:'Material',listening:'Listening',exercises:'Activity'}[id]),text('p',id==='exercises'?'Practice sheets and resources':learningLevel?'Level '+learningLevel:'Choose your level to view documents.'));if(existing)target.append(existing);}
+   if(id!=='practice'){target.replaceChildren(text('h3',{material:'Material',listening:'Listening',exercises:'Activities'}[id]),text('p',id==='exercises'?'Practice sheets and resources':learningLevel?'Level '+learningLevel:'Choose your level to view documents.'));if(existing)target.append(existing);}
    if(id==='exercises'?!exercisesUnlocked:!learningLevel){delete target.dataset.learningLevel;continue;}target.dataset.learningLevel=learningLevel||1;target.dataset.learningCategory=id;
    const grid=doc.createElement('div');grid.className='learning-document-grid';
    for(const item of items.filter(item=>(id==='exercises'||learningDocumentLevel(item)===learningLevel)&&learningDocumentCategory(item)===id)){
@@ -174,7 +175,7 @@ export function initializeStudentAssessment(doc) {
  }
  doc.addEventListener('portal-files-uploaded',async()=>{try{await reloadFiles();}catch{}});
  function showBlocked(message=PORTAL_LOCK_MESSAGE){lock();content.hidden=false;blocked.textContent=message;blocked.hidden=false;root.classList.add('portal-session-active');}
- function checkAttempts(){if(getTemporaryOwnerConnection(doc))return;try{assertPortalAllowed(doc.defaultView.localStorage);if(!blocked.hidden){blocked.hidden=true;if(!root.querySelector('#client-portal').hidden)openStudent();}}catch(error){if(!root.querySelector('#client-portal').hidden&&!tabs.some(tab=>['contact','calendar','monthly','mission','studio'].includes(tab.dataset.portalTab)&&tab.getAttribute('aria-selected')==='true'))showBlocked(error.message);}}
+ function checkAttempts(){if(getTemporaryOwnerConnection(doc))return;try{assertPortalAllowed(doc.defaultView.localStorage);if(!blocked.hidden){blocked.hidden=true;if(!root.querySelector('#client-portal').hidden)openStudent();}}catch(error){if(!root.querySelector('#client-portal').hidden&&!tabs.some(tab=>['contact','calendar','monthly','mission','studio','accent'].includes(tab.dataset.portalTab)&&tab.getAttribute('aria-selected')==='true'))showBlocked(error.message);}}
  doc.defaultView.addEventListener('student-password-attempts-changed',checkAttempts);doc.defaultView.addEventListener('storage',event=>{if(event.key===PORTAL_ATTEMPT_KEY)checkAttempts();});
  root.querySelector('#portal-sign-out')?.addEventListener('click',()=>{
   if(busy&&!doc.defaultView.confirm('Leave this assessment? The 20-minute timer will keep running. Saved answers will still be submitted.'))return;
@@ -197,6 +198,7 @@ export function initializeStudentAssessment(doc) {
  if(doc.defaultView.location.hash.endsWith('/calendar'))Promise.resolve().then(openCalendarRoute);
  else if(new URL(doc.defaultView.location.href).searchParams.get('app')==='learner'&&(!doc.defaultView.location.hash||doc.defaultView.location.hash.startsWith('#students-portal')))Promise.resolve().then(()=>root.querySelector('[data-portal-area=client]').click());
 }
+
 
 
 
