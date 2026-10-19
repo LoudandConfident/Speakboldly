@@ -12,6 +12,7 @@ export function initializeNavigation(doc,win){
  down?.addEventListener('click',()=>win.scrollTo({top:doc.documentElement.scrollHeight,behavior:reducedMotion?.matches?'instant':'smooth'}));
  win.addEventListener('scroll',updateDownArrow,{passive:true});win.addEventListener('resize',updateDownArrow);
  if(down&&win.ResizeObserver){const sizeObserver=new win.ResizeObserver(updateDownArrow);sizeObserver.observe(doc.querySelector('main')||doc.body);}
+ const trail=[];const back=doc.createElement('a');back.id='page-back-arrow';back.className='plain-back-arrow';back.setAttribute('aria-label','Back to previous page');back.innerHTML='<svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M35 13H5m11-9L5 13l11 9"/></svg>';back.hidden=true;doc.querySelector('main')?.prepend(back);
  let active=null,transition=null,request=0;
  function showView(){
   const views=[...doc.querySelectorAll('[data-view]')];
@@ -25,6 +26,8 @@ export function initializeNavigation(doc,win){
    if(ticket!==request)return;
    views.forEach(v=>{v.hidden=v!==next;v.classList.remove('view-enter');});
    doc.querySelectorAll('[data-open-view]').forEach(b=>{if(b.dataset.openView===(['assessment','learner-profile','learner-results'].includes(next.id)?'placement':next.id)||(b.closest('#main-navigation')&&b.dataset.openView==='programs'&&next.id==='courses'))b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+   if(trail.at(-1)!==next.id){if(trail.at(-2)===next.id)trail.pop();else trail.push(next.id);}
+   const parent=['assessment','learner-profile','learner-results'].includes(next.id)?'placement':'home';back.href='#'+(trail.at(-2)||parent);back.hidden=next.id==='home';
    active=next;win.scrollTo({top:0,left:0,behavior:'instant'});updateDownArrow();
   };
   if(animate&&typeof doc.startViewTransition==='function'){
@@ -37,4 +40,5 @@ export function initializeNavigation(doc,win){
  return showView;
 }
 if(typeof document!=='undefined')initializeNavigation(document,window);
+
 

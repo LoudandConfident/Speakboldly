@@ -1,0 +1,27 @@
+/* A consistent starting point just below the site navigation. */
+main>[data-view]:not(#home){padding-top:10px!important;margin-top:0!important}
+main>[data-view]:not(#home)>:first-child{margin-top:0!important}
+main>#page-back-arrow{margin:5px 6% 0;display:inline-flex;vertical-align:top}
+.plain-back-arrow{color:#193c32;background:transparent;border:0;box-shadow:none;align-items:center;justify-content:center;width:42px;min-height:36px;padding:3px;text-decoration:none;cursor:pointer}
+.plain-back-arrow svg{width:34px;height:25px;transition:transform .18s}
+.plain-back-arrow:hover svg{transform:translateX(-3px)}
+.plain-back-arrow:focus-visible{outline:2px solid #193c32;outline-offset:3px;border-radius:3px}
+#page-back-arrow[hidden]{display:none!important}
+body:has(#students-portal.learning-section-open:not([hidden])) #page-back-arrow{display:none!important}
+/* The portal already has its own return action; give it the same bare arrow. */
+#students-portal #portal-content [data-learning-back]:not([hidden]){display:inline-flex!important;align-items:center;justify-content:center;color:#193c32!important;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;min-width:42px;min-height:36px;padding:0!important;margin:0 0 5px!important;font-size:31px;font-weight:400;line-height:1}
+#students-portal .learning-breadcrumbs{display:none!important}
+#learner-profile>a[href="#placement"],#learner-results>a[href="#placement"]{display:none}
+#admin-back-dashboard{color:#193c32;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:0 8px!important;font-size:0!important;min-width:42px;min-height:36px}
+#admin-back-dashboard:before{content:'←';font-size:31px;font-weight:400;line-height:1}
+#students-portal #portal-tab-studio:before{border-radius:48% 48% 12px 12px;background:#edf0e6;border:1px solid #b8c8ad;box-shadow:inset 0 -6px 0 #cbd6bd}
+#students-portal #portal-tab-studio{padding-top:28px!important}
+#portal-studio{position:relative;max-width:760px;min-height:260px;padding:12px 0}
+#portal-studio .sb-studio-art{display:block;width:155px;height:130px;margin:0 0 20px;color:#193c32}
+#portal-studio h3{font-size:29px;font-weight:500;margin:12px 0}
+#portal-studio>p:last-child{font-size:14px;line-height:1.7;color:#53685b}
+body.instructor-app main{padding-top:10px}
+@media(max-width:680px){main>[data-view]:not(#home){padding-top:8px!important}main>#page-back-arrow{margin-top:3px}#students-portal #portal-content [data-learning-back]:not([hidden]){margin-bottom:4px!important}#portal-studio .sb-studio-art{width:130px;height:110px}}
+@media(prefers-reduced-motion:reduce){.plain-back-arrow svg{transition:none}}
+#students-portal #portal-tab-studio{display:flex!important}
+#students-portal #portal-studio:not([hidden]){display:block!important}
