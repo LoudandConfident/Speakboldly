@@ -28,7 +28,7 @@ export function initializeNavigation(doc,win){
    doc.querySelectorAll('[data-open-view]').forEach(b=>{if(b.dataset.openView===(['assessment','learner-profile','learner-results'].includes(next.id)?'placement':next.id)||(b.closest('#main-navigation')&&b.dataset.openView==='programs'&&next.id==='courses'))b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
    if(trail.at(-1)!==next.id){if(trail.at(-2)===next.id)trail.pop();else trail.push(next.id);}
    const parent=['assessment','learner-profile','learner-results'].includes(next.id)?'placement':'home';back.href='#'+(trail.at(-2)||parent);back.hidden=next.id==='home';
-   active=next;win.scrollTo({top:0,left:0,behavior:'instant'});updateDownArrow();
+   active=next;const resetScroll=()=>{if(ticket===request)win.scrollTo({top:0,left:0,behavior:'instant'});};resetScroll();win.requestAnimationFrame(()=>win.requestAnimationFrame(resetScroll));updateDownArrow();
   };
   if(animate&&typeof doc.startViewTransition==='function'){
    const current=doc.startViewTransition(update);transition=current;
@@ -40,5 +40,6 @@ export function initializeNavigation(doc,win){
  return showView;
 }
 if(typeof document!=='undefined')initializeNavigation(document,window);
+
 
 

@@ -1,0 +1,64 @@
+/* Back navigation no longer reserves a blank row above every page. */
+main{position:relative}
+main>#page-back-arrow{position:absolute;right:6%;left:auto;top:3px;z-index:3;margin:0;min-height:32px;width:36px}
+main>#page-back-arrow svg{width:30px;height:22px}
+main>[data-view]:not(#home){padding-top:4px!important;margin-top:0!important}
+main>[data-view]:not(#home)>:first-child{margin-top:0!important}
+main>[data-view]>.eyebrow:first-child{margin-top:0!important;margin-bottom:10px!important}
+main>[data-view]>h2:first-child{padding-right:44px;margin-top:0!important}
+body:has(#students-portal.portal-session-active:not([hidden])) #page-back-arrow{display:none!important}
+#how .how-hero{padding-top:0!important}
+#how .how-hero-copy>.eyebrow{margin:0 0 10px!important}
+#how .how-hero-copy>h2{margin-top:8px!important}
+#vision .vision-heading{margin-top:0!important}
+#vision .vision-heading>.eyebrow{margin-top:0!important;margin-bottom:10px!important}
+#courses .courses-heading>.eyebrow{margin-top:0!important;margin-bottom:10px!important}
+#courses .courses-heading>h2{margin-top:8px!important}
+#courses .courses-introduction{align-items:start!important;margin-top:0!important;gap:24px}
+#courses .course-booking-note{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:9px!important;width:230px!important;max-width:230px!important;padding:28px 0 0!important;margin:0!important}
+#courses .course-fees-open{width:210px!important;height:210px!important;min-height:210px!important;border-radius:50%!important;padding:28px!important;font-size:15px!important;line-height:1.6}
+#courses .course-fees-open .pricing-circle-art{width:50px;height:50px}
+#courses .consultation-open{width:112px!important;height:112px!important;min-height:112px!important;padding:18px!important;font-size:11px!important;line-height:1.5;border-radius:50%!important}
+#courses .course-fees-open>span{display:none}
+#placement .assessment-options>article{padding-top:0!important}
+#placement .assessment-options>article>.eyebrow{margin:0 0 10px!important;padding-right:36px}
+#placement .assessment-option-title{margin:0 0 14px!important}
+#placement .assessment-visual{margin-top:0!important}
+#reviews .reviews-copy{padding-top:0!important}
+#reviews .reviews-copy>.eyebrow{margin-top:0!important;margin-bottom:10px!important}
+#reviews .reviews-copy>h2{margin:0 0 16px!important}
+#reviews .reviews-spark-art{margin:5px 0 15px auto!important}
+#quote .upcoming-view-content,#join-team .upcoming-view-content,#join-team .join-sb-content{padding-top:0!important;margin-top:0!important}
+#quote .eyebrow,#join-team .eyebrow{margin-top:0!important;margin-bottom:10px!important}
+#quote .quote-editorial-title,#join-team .join-editorial-title{margin-top:0!important}
+#contact>.eyebrow{margin-top:0!important;margin-bottom:10px!important}
+#contact>h2{margin-top:0!important;padding-right:38px}
+#daily-quote .motivation-page-heading{padding-right:44px;margin-top:0!important}
+@media(max-width:760px){
+ #courses .courses-introduction{grid-template-columns:minmax(0,1fr) 160px!important;gap:14px!important}
+ #courses .courses-heading h2{font-size:30px!important;letter-spacing:-1px;line-height:1.15!important}
+ #courses .courses-heading .courses-subtitle{font-size:12px!important;line-height:1.7}
+ #courses .course-booking-note{width:160px!important;max-width:160px!important;padding-top:30px!important;align-self:start!important}
+ #courses .course-fees-open{width:160px!important;height:160px!important;min-height:160px!important;padding:22px!important;font-size:12px!important}
+ #courses .consultation-open{width:96px!important;height:96px!important;min-height:96px!important;padding:16px!important;font-size:10px!important}
+ #courses .course-fees-open .pricing-circle-art{width:38px;height:38px}
+ #courses .program-flower{display:none}
+ #contact .contact-orbit{position:absolute;right:6%;top:140px;width:90px;margin:0;opacity:.7}
+ #contact>.intro{max-width:calc(100% - 85px)}
+ #reviews .reviews-copy:before{top:20px}
+}
+@media(max-width:380px){
+ #courses .courses-introduction{grid-template-columns:minmax(0,1fr) 140px!important;gap:10px!important}
+ #courses .courses-heading h2{font-size:25px!important}
+ #courses .courses-heading .eyebrow{font-size:8px;letter-spacing:1px}
+ #courses .course-booking-note{width:140px!important;max-width:140px!important}
+ #courses .course-fees-open{width:140px!important;height:140px!important;min-height:140px!important;padding:20px!important;font-size:11px!important}
+ #courses .consultation-open{width:86px!important;height:86px!important;min-height:86px!important;padding:13px!important;font-size:9px!important}
+}
+#reviews .reviews-layout{align-items:start!important}
+#how .how-hero{align-items:start!important}
+#how .how-hero-copy{align-self:start!important;padding-top:0!important;margin-top:0!important}
+#courses .courses-introduction{display:grid!important}
+@media(max-width:760px){#courses .courses-heading{padding-right:0!important;min-width:0}#courses .courses-subtitle br{display:none}}
+#admin-portal .admin-dashboard-heading,#portal-content .learning-space-heading{margin-top:0!important;padding-top:0!important}
+#admin-dashboard .admin-dashboard-heading>h3,#portal-content .learning-space-heading>.eyebrow{margin-top:0!important}
