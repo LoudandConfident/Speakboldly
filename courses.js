@@ -260,7 +260,7 @@ export const courses = [
   {
     "id": "different-learners",
     "title": "The different learners",
-    "level": "Understanding learning preferences",
+    "level": "For instructors · Understanding learning preferences",
     "duration": "8 sessions",
     "category": "Training",
     "description": "Explore visual, auditory, reading and writing, and hands-on learning preferences, with flexible activities that support different learners.",
@@ -277,7 +277,7 @@ export const courses = [
   {
     "id": "instructor-training",
     "title": "Instructor training",
-    "level": "Instructors · 0–2 years of experience",
+    "level": "For English instructors · 0–2 years of experience",
     "duration": "8 sessions",
     "category": "Training",
     "description": "Before joining, instructors must complete an interview and an English exam. Admission requires a score of at least 93%.",
@@ -296,5 +296,6 @@ export const courses = [
   }
 ];
 export function matches(c,category,query){return !c.catalogHidden&&(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
+
 
 

@@ -1,0 +1,59 @@
+/* Smaller steps, with the same clear reading order. */
+#how .how-step-number{font-size:30px;line-height:1;font-weight:400}
+#how .how-step h3{font-size:19px;line-height:1.3}
+#how .how-step-policy h3{font-size:20px}
+#how .how-policy-content{font-size:13px;line-height:1.8}
+#how .how-policy-content p,#how .registration-policies li{font-size:13px;line-height:1.8}
+#how .how-policy-note{font-size:15px}
+#how .how-policy-content>p:last-child{font-size:12px}
+#vision .vision-heading{padding-right:0;max-width:900px}
+main #vision .vision-heading h2{font-size:clamp(28px,3.4vw,43px)!important;line-height:1.25}
+#vision .vision-heading h2 em:after{display:none}
+#vision .vision-need-band{display:grid;grid-template-columns:minmax(0,1fr) 60px;align-items:center;gap:22px 30px}
+#vision .vision-need-band>.vision-need-reflection{grid-column:1/-1;width:auto;height:auto;max-width:850px;color:#193c32}
+#vision .vision-need-reflection p{font-size:15px;line-height:1.85;margin:0 0 15px}
+#vision .vision-need-reflection p:last-child{margin-bottom:0}
+#vision .vision-purpose-community{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:12px 25px;align-items:center}
+#vision .vision-purpose-community>p:first-child{grid-column:1/-1}
+#vision .vision-africa{margin:0;max-width:230px;justify-self:center;transform:rotate(-3deg)}
+#vision .vision-africa svg{width:100%;height:auto;display:block}
+#vision .vision-plane{display:inline-block;width:25px;height:25px;vertical-align:middle;margin:0 5px;color:#193c32;transform:rotate(35deg)}
+/* The circle sits directly on the page; no rectangular wrapper. */
+#courses .course-booking-note{background:none!important;border:0!important;box-shadow:none!important;outline:0!important}
+#course-fees-dialog .inclusion-symbol{font-size:30px;flex:0 0 45px;text-align:center;font-weight:400}
+#course-fees-dialog .funding-heart{width:46px;height:46px;float:left;margin:0 15px 12px 0;color:#193c32}
+#course-fees-dialog .course-funding-note{border:0;padding:15px 0 0}
+/* Shapes follow the destination, rather than an nth-child pattern. */
+#students-portal .learning-space-card{isolation:isolate;overflow:visible!important;position:relative;border:0!important;background:transparent!important;border-radius:0!important;box-shadow:none!important;min-height:190px;padding:30px 24px!important}
+#students-portal .learning-space-card:before{content:'';position:absolute;inset:0;background:#edf0e6;border:1px solid #b8c8ad;z-index:-1;transition:background .2s}
+#students-portal .learning-space-card:hover:before{background:#e1e9d5}
+#students-portal #portal-tab-exams:before{border-radius:5px 22px 22px 5px;box-shadow:-5px 0 0 #cbd6bd}
+#students-portal #portal-tab-material:before{border-radius:6px 22px 22px 6px;box-shadow:inset 8px 0 0 #cbd6bd;background:#faf9f4}
+#students-portal #portal-tab-listening:before{border-radius:50% 50% 18% 18%;background:#f1f3e9}
+#students-portal #portal-tab-mission:before{border-radius:25px 25px 25px 5px;clip-path:polygon(0 0,100% 0,100% 89%,26% 89%,10% 100%,10% 89%,0 89%)}
+#students-portal #portal-tab-mission{padding-bottom:42px!important}
+#students-portal #portal-tab-exercises:before{border-radius:20px 5px 20px 5px;background:#faf9f4;border-top:7px solid #b8c8ad}
+#students-portal #portal-tab-monthly:before{border-radius:50%;background:#edf0e6}
+#students-portal #portal-tab-contact:before{border-radius:30px 30px 5px 30px;clip-path:polygon(0 0,100% 0,100% 100%,80% 87%,0 87%);background:#f1f3e9}
+#students-portal #portal-tab-contact{padding-bottom:42px!important}
+#students-portal #portal-tab-calendar:before{border-radius:18px;background:#faf9f4;border-top:12px solid #b8c8ad}
+#students-portal .learning-space-card-title{position:relative;font-size:16px}
+#students-portal .learning-space-card-description{position:relative;font-size:12px}
+#admin-dashboard .admin-metrics{display:grid;grid-template-columns:130px 130px minmax(0,1fr);gap:18px;align-items:center;margin:25px 0}
+#admin-dashboard .admin-metrics>article{height:130px;min-width:0;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:8px;padding:14px;border-radius:15px;background:#edf0e6;border:1px solid #c2cfb8}
+#admin-dashboard .admin-metrics>article:nth-child(2){background:#faf9f4}
+#admin-dashboard .admin-metrics>article>span{font-size:10px;line-height:1.4}
+#admin-dashboard .admin-metrics>article>strong{font-size:26px;line-height:1;font-weight:500}
+#admin-dashboard .admin-metrics .hours-cutoff-note{font-size:8px!important;margin:0;line-height:1.4}
+#admin-dashboard .instructor-teaching-quote{position:relative;margin:0;padding:18px 24px;max-width:650px;border:0;background:transparent;min-width:0}
+#admin-dashboard .instructor-teaching-quote:before{content:'“';position:absolute;font-family:Georgia,serif!important;font-size:75px;line-height:1;color:#b8c8ad;left:0;top:-3px;z-index:0}
+#admin-dashboard .instructor-teaching-quote p{position:relative;font-family:Georgia,'Times New Roman',serif!important;font-style:italic;font-size:clamp(18px,2.1vw,25px);font-weight:400;line-height:1.5;margin:0;color:#193c32}
+#instructor-french-button{text-transform:none}
+@media(max-width:760px){#vision .vision-purpose-community{grid-template-columns:minmax(0,1fr)}#vision .vision-africa{max-width:210px}#admin-dashboard .admin-metrics{grid-template-columns:110px 110px minmax(0,1fr);gap:12px}#admin-dashboard .admin-metrics>article{height:110px;padding:11px}#admin-dashboard .instructor-teaching-quote{padding:10px 15px}#admin-dashboard .instructor-teaching-quote p{font-size:18px}}
+@media(max-width:540px){#how .how-step-number{font-size:25px}#how .how-step h3{font-size:18px}main #vision .vision-heading h2{font-size:28px!important}#vision .vision-need-band{grid-template-columns:minmax(0,1fr) 40px;gap:18px}#vision .vision-need-reflection p{font-size:14px}#students-portal .learning-space-card{min-height:175px;padding:25px 15px!important}#students-portal .learning-space-card-title{font-size:14px}#students-portal .learning-space-card-description{font-size:11px}#admin-dashboard .admin-metrics{grid-template-columns:100px 100px;gap:12px}#admin-dashboard .admin-metrics>article{height:100px;padding:10px;gap:5px}#admin-dashboard .admin-metrics>article>strong{font-size:24px}#admin-dashboard .admin-metrics>article>span{font-size:9px}#admin-dashboard .instructor-teaching-quote{grid-column:1/-1;padding:12px 20px;margin-top:6px}#admin-dashboard .instructor-teaching-quote p{font-size:20px}}
+#how .how-step .how-step-number{font-size:30px!important}
+#how .how-policy-heading>h3{font-size:16px!important}
+#how .how-policy-heading .how-policy-note{font-size:23px!important}
+@media(max-width:540px){#how .how-step .how-step-number{font-size:25px!important}#how .how-policy-heading .how-policy-note{font-size:20px!important}}
+#vision .vision-purpose{grid-template-columns:minmax(0,1fr)}
+#vision .vision-purpose-community{width:100%;min-width:0}
