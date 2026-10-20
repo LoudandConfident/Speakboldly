@@ -112,6 +112,7 @@ function doPost(event) {
     const request = sbParseWebRequest(event);
     const data = request.data;
     if(data.action==='programConsultation'){if(request.size>2900000)throw new Error('Pictures are too large. Use up to 2 pictures, 1 MB each.');return handleStudentInstructorContact(data);}
+    if(['hubAccessSettings','hubLevelLogin'].includes(data.action)){if(request.size>4000)throw new Error('Request too large.');return sbHubPublic(data);}
     if(data.action==='dailyMotivationSettings')return response({ok:true,settings:sbDailyMotivationSettings()});
     if(data.action==='nativeEnglishPage'){if(request.size>4000)throw new Error('Request too large.');return sbNativeEnglishRead(data);}
     if (data.action === 'studentInstructorContact') {
@@ -165,6 +166,7 @@ function sbRequireClientConnection(data) {
 
 function sbRouteInstructorRequest(data, connection, lock) {
   if(['exportOwnerBackup','saveOwnerBackup'].includes(data.action))return sbOwnerBackupAction(data,connection.book);
+  if(['hubAccessOwnerSettings','saveHubAccessSetting'].includes(data.action))return sbHubOwner(data,connection.book);
   if(['dailyMotivationOwnerSettings','saveDailyMotivationSettings'].includes(data.action))return sbDailyMotivationOwner(data);
   if(['nativeEnglishSettings','saveNativeEnglishSettings'].includes(data.action))return sbNativeSettingsOwner(data);
   if(['nativeEnglishEdit','saveNativeEnglish'].includes(data.action))return sbNativeEnglishOwner(data);
@@ -658,7 +660,7 @@ function sbSaveMonthlyPortalPassword(data){
 }
 function sbWeeklyPortalPasswords(){const monthly=sbMonthlyPortalPasswords(),passwords={...monthly.passwords};for(let level=1;level<=8;level++)passwords['level:'+level]=passwords['material:'+level];for(const group of ['practice','exercise:comprehension','exercise:resources'])passwords[group]=passwords.activities;passwords['exercise:listening']=passwords.listening;passwords.material=passwords['material:1'];passwords.assessments=passwords.exams;passwords.calendar=passwords.activities;return {...monthly,weekStart:monthly.monthStart,passwords};}
 function sbLearningLevelAccess(){const raw=PropertiesService.getScriptProperties().getProperty('SB_LEARNING_LEVEL_ACCESS');let saved={};try{saved=JSON.parse(raw||'{}');}catch{}return Object.fromEntries(Array.from({length:8},(_,i)=>[String(i+1),saved[String(i+1)]!==false]));}
-function sbLearningItemLevel(item){const match=String(item.title||'').match(/(?:^|[^a-z0-9])level[\s_-]*([1-8])(?:[^0-9]|$)/i);return match?Number(match[1]):null;}
+function sbLearningItemLevel(item){const match=String(item.title||'').match(/(?:^|[^a-z0-9])level[\s_-]*(1[0-2]|[1-9])(?:[^0-9]|$)/i);return match?Number(match[1]):null;}
 function sbPortalFolderGroup(key){
  if(key==='exams'||/^exams:[1-8]$/.test(key))return 'exams';
  if(/^(material|exams):[1-8]$/.test(key)||['exercises','activities','listening'].includes(key))return key;
@@ -729,13 +731,14 @@ function handleStudentExam(data) {
   const lock=LockService.getScriptLock();
   try {
     const book=sbExamBook(),items=sbPortalItems(book);
-    if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,passwordFreeFiles:true,items:items.map(item=>({...item,url:item.enabled?item.url:''}))});
+    if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,passwordFreeFiles:true,hubAccess:sbHubSnapshot(false),items:items.map(item=>{const key=sbHubItemKey(item)||(item.section==='exercises'?sbHubKeys().find(k=>k.startsWith('exercises:')&&sbHubAllowed(k,(data.hubGrants||{})[k])):null),entry=key?sbHubEntry(key):null,enabled=item.enabled&&(!entry||entry.enabled);const grant=(data.hubGrants||{})[key];return {...item,enabled,url:enabled&&key&&sbHubAllowed(key,grant)?item.url:'',requiresAccess:Boolean(entry&&entry.protected)};})});
     if(data.action==='studentFolderLogin'){
       sbPortalFolderGroup(data.folder);return sbExamResponse({ok:true,passwordFreeFiles:true});
     }
     if(data.action==='studentExamLogin') {
       const requestedLevel=Number(data.level);if(!Number.isInteger(requestedLevel)||requestedLevel<1||requestedLevel>8)throw new Error('Choose a valid level.');
       
+      if(!sbHubAllowed('exams:'+requestedLevel,(data.hubGrants||{})['exams:'+requestedLevel]))throw new Error('Enter your level password before starting.');
       if(!items.some(item=>item.id==='test:'+requestedLevel&&item.enabled))throw new Error('This examination is currently closed by your instructor.');
       const name=String(data.name||'').trim(),program=String(data.program||'').trim(),age=data.age===undefined?'':Number(data.age);if(age!==''&&(!Number.isInteger(age)||age<1||age>120))throw new Error('Enter a valid age.');
       if(!name||name.length>100||program.length>100)throw new Error('Enter your name.');
@@ -752,6 +755,7 @@ function handleStudentExam(data) {
     if(!saved)throw new Error('Your session expired. Ask your instructor to check your saved assessment.');
     const session={clientId:String(saved[1]),name:String(saved[2]).replace(/^'/,''),program:String(saved[3]).replace(/^'/,''),age:saved[5]||''},level=Number(data.level);
     if(!Number.isInteger(level)||level<1||level>8)throw new Error('Choose a valid level.');
+    if(data.action==='studentExamGet'&&!sbHubAllowed('exams:'+level,(data.hubGrants||{})['exams:'+level]))throw new Error('Enter your level password before reopening this examination.');
     if(data.action==='studentExamGet'&&!items.some(item=>item.id==='test:'+level&&item.enabled))throw new Error('This examination is currently closed by your instructor.');
     if(saved[6]&&Number(saved[6])!==level)throw new Error('Your passcode allows only your selected level.');
     lock.waitLock(20000);
@@ -1252,3 +1256,29 @@ function sbDailyMotivationOwner(data){const lock=LockService.getScriptLock();loc
  settings={frozen:data.mode!=='resume',day:heldDay,until,revision:Utilities.getUuid()};PropertiesService.getScriptProperties().setProperty('SB_DAILY_MOTIVATION_SETTINGS',JSON.stringify(settings));
  }return response({ok:true,settings});}
 
+
+
+// Monthly, owner-controlled access for the twelve level menus and two free sections.
+const SB_HUB_LEVEL_SECTIONS=['exercises','material','exams'];
+function sbHubState(){try{return JSON.parse(PropertiesService.getScriptProperties().getProperty('SB_HUB_ACCESS_V1')||'{}');}catch{return {};}}
+function sbHubMonth(){return Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd').slice(0,7);}
+function sbHubKeys(){return SB_HUB_LEVEL_SECTIONS.flatMap(section=>Array.from({length:12},(_,i)=>section+':'+(i+1))).concat(['mission','monthly']);}
+function sbHubEntry(key,state){if(!sbHubKeys().includes(key))throw new Error('Choose a valid section and level.');state=state||sbHubState();const saved=(state.entries||{})[key]||{},month=sbHubMonth(),free=['mission','monthly'].includes(key),mode=free?(saved.mode||'scheduled'):'password';const password=sbHubMonthlyPasswords(state)[key];
+ const protectedNow=!free||mode==='password'||(mode==='scheduled'&&Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')>='2027-02-01');return {key,enabled:free?saved.enabled!==false:saved.enabled===true,protected:protectedNow,password,mode,month,version:month+':'+(saved.revision||'0'),available:!key.startsWith('exams:')||Number(key.split(':')[1])<=8};}
+function sbHubSnapshot(owner){const state=sbHubState();return {revision:state.revision||'0',month:sbHubMonth(),startsOn:'2027-02-01',entries:sbHubKeys().map(key=>{const entry=sbHubEntry(key,state);if(!owner)delete entry.password;return entry;})};}
+function sbHubAllowed(key,token){const entry=sbHubEntry(key);if(!entry.enabled||!entry.available)return false;if(!entry.protected)return true;if(typeof token!=='string'||token.length>200)return false;let grant;try{grant=JSON.parse(CacheService.getScriptCache().get('hub-grant:'+sbExamHash(token))||'null');}catch{}return Boolean(grant&&grant.key===key&&grant.version===entry.version&&grant.passwordHash===sbExamHash(entry.password)&&grant.expires>Date.now());}
+function sbHubPublic(data){if(data.action==='hubAccessSettings')return response({ok:true,...sbHubSnapshot(false)});const key=String(data.group||''),entry=sbHubEntry(key),browser=String(data.browserId||'');if(!/^[a-zA-Z0-9-]{10,100}$/.test(browser))throw new Error('Reload the page and try again.');if(!entry.enabled||!entry.available)throw new Error('This level is currently closed by your instructor.');const lock=LockService.getScriptLock();lock.waitLock(20000);const cache=CacheService.getScriptCache(),attemptKey='hub-tries:'+sbExamHash(browser+':'+key+':'+entry.version);let attempts={count:0,lockedUntil:0};try{attempts=JSON.parse(cache.get(attemptKey)||'null')||attempts;}catch{}if(attempts.lockedUntil>Date.now())return response({ok:false,error:'Two incorrect attempts. Try again in 15 minutes.',attemptsRemaining:0,lockedUntil:attempts.lockedUntil});if(attempts.lockedUntil)attempts={count:0,lockedUntil:0};
+ if(entry.protected&&String(data.password||'')!==entry.password){attempts.count++;if(attempts.count>=2)attempts.lockedUntil=Date.now()+15*60000;cache.put(attemptKey,JSON.stringify(attempts),900);return response({ok:false,error:attempts.lockedUntil?'Two incorrect attempts. Try again in 15 minutes.':'Incorrect password. One attempt remaining.',attemptsRemaining:Math.max(0,2-attempts.count),lockedUntil:attempts.lockedUntil||0});}
+ cache.remove(attemptKey);const token=Utilities.getUuid()+Utilities.getUuid(),expires=Date.now()+6*60*60000;cache.put('hub-grant:'+sbExamHash(token),JSON.stringify({key,version:entry.version,passwordHash:sbExamHash(entry.password),expires}),21600);return response({ok:true,grant:token,expires,version:entry.version});}
+function sbHubOwner(data,book){const lock=LockService.getScriptLock();lock.waitLock(20000);if(data.action==='hubAccessOwnerSettings')return response({ok:true,...sbHubSnapshot(true)});const state=sbHubState(),key=String(data.group||''),previous=sbHubEntry(key,state);if(String(data.revision)!==String(state.revision||'0'))throw new Error('Settings changed on another device. Refresh before saving.');if(typeof data.enabled!=='boolean'||!/^\d{4}$/.test(String(data.password||'')))throw new Error('Enter a four-digit password and access setting.');if(!previous.available&&data.enabled)throw new Error('The interactive examination for this level has not been added yet.');const free=['mission','monthly'].includes(key);if(free&&!['scheduled','free','password'].includes(data.mode))throw new Error('Choose when a password is needed.');state.entries=state.entries||{};state.entries[key]={enabled:data.enabled,password:String(data.password),passwordMonth:sbHubMonth(),mode:free?data.mode:'password',revision:Utilities.getUuid()};state.revision=Utilities.getUuid();PropertiesService.getScriptProperties().setProperty('SB_HUB_ACCESS_V1',JSON.stringify(state));
+ if(key.startsWith('exams:')&&previous.enabled!==data.enabled){const level=Number(key.split(':')[1]);if(level<=8){const sheet=book.getSheetByName('Portal access'),items=sbPortalItems(book),index=items.findIndex(item=>item.id==='test:'+level);if(index>=0)sheet.getRange(index+2,5).setValue(data.enabled);}}
+ if(key.includes(':')&&!key.startsWith('exams:')&&previous.enabled!==data.enabled)sbHubSetLevelFiles(book,key,data.enabled,state);
+ return response({ok:true,...sbHubSnapshot(true)});}
+function sbHubItemKey(item){const section=item.section==='tests'?'exams':item.section==='exercises'?'exercises':'material';const level=item.section==='tests'?Number(item.id.split(':')[1]):sbLearningItemLevel(item);return level?section+':'+level:null;}
+
+function sbHubSetLevelFiles(book,key,enabled,state){const parts=key.split(':'),section=parts[0],level=Number(parts[1]),sheet=book.getSheetByName('Portal access');if(!sheet)return;let items=sbPortalItems(book);
+ if(section==='material'&&level<=8&&!items.some(item=>item.title==='Level '+level+' Book')){const url='https://loudandconfident.github.io/Speakboldly/student-files/material/B-Level-'+level+'-Book.pdf';sheet.appendRow(['file:'+sbExamHash('levels:'+url),'levels','Level '+level+' Book',url,enabled]);items=sbPortalItems(book);}
+ const anyPracticeOpen=sbHubKeys().some(k=>k.startsWith('exercises:')&&sbHubEntry(k,state).enabled);items.forEach((item,index)=>{const itemLevel=sbLearningItemLevel(item);if(section==='material'&&item.section==='levels'&&itemLevel===level&&!/\bexam/i.test(item.title))sheet.getRange(index+2,5).setValue(enabled);if(section==='exercises'&&item.section==='exercises'&&(itemLevel===level||!itemLevel))sheet.getRange(index+2,5).setValue(itemLevel?enabled:anyPracticeOpen);});}
+
+let SB_HUB_PASSWORDS_CACHE;
+function sbHubMonthlyPasswords(state){const month=sbHubMonth(),secret=PropertiesService.getScriptProperties().getProperty('CLIENT_SYNC_KEY');if(!secret)throw new Error('Connect your Clients sheet first.');const stamp=month+':'+(state.revision||'0')+':'+sbExamHash(secret);if(SB_HUB_PASSWORDS_CACHE&&SB_HUB_PASSWORDS_CACHE.stamp===stamp)return SB_HUB_PASSWORDS_CACHE.values;const values={},used=new Set();for(const key of sbHubKeys()){const saved=(state.entries||{})[key]||{};if(saved.passwordMonth===month&&/^\d{4}$/.test(saved.password)){values[key]=saved.password;used.add(saved.password);}}for(const key of sbHubKeys()){if(values[key])continue;const bytes=Utilities.computeHmacSha256Signature('SB hub:'+month+':'+key,secret);let number=0;for(const byte of bytes)number=(number*256+(byte&255))%10000;while(used.has(String(number).padStart(4,'0')))number=(number+1)%10000;values[key]=String(number).padStart(4,'0');used.add(values[key]);}SB_HUB_PASSWORDS_CACHE={stamp,values};return values;}

@@ -1,9 +1,10 @@
+import {initializeHubAccessEditor} from './hub-access-editor.js?v=1';
 import {initializeMotivationFreeze} from './motivation-freeze-editor.js?v=1';
 import {refreshMotivationSettings} from './motivation-settings.js?v=1';
 import {clientDailyMotivation} from './home-gallery.js?v=freeze-1';
 import {initializeInstructorFrench} from './instructor-french.js?v=toolbar-v2';
 import {initializeInstructorBackups} from './instructor-backups.js?v=reliability';
-import {initializeNativeEnglishEditor} from './native-english-editor.js?v=january-choices-1';
+import {initializeNativeEnglishEditor} from './native-english-editor.js?v=real-english-label-2';
 import {initializeInstructorOverview} from './instructor-overview.js?v=requests-only-v2';
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
 import {openClientReportTab} from './report-tabs.js?v=instructor-app';
@@ -112,6 +113,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  const french=initializeInstructorFrench(doc,()=>unlocked);
  const backups=initializeInstructorBackups(doc,()=>unlocked);
  const motivationFreeze=initializeMotivationFreeze(doc,()=>unlocked);
+ const hubAccessEditor=initializeHubAccessEditor(doc,()=>unlocked);
  const nativeEnglish=initializeNativeEnglishEditor(doc,()=>unlocked);
  const weeklyPasswords={lock(){},refresh(){}};doc.querySelector('#weekly-portal-passwords')?.remove();
  const switches=initializePortalSwitches(doc,()=>unlocked,loader);
@@ -153,7 +155,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  function openClientInfo(id,historyId=null){const client=clients.find(c=>c.id===id);if(!client||!unlocked)return;const history=historyId?client.enrollmentHistory?.find(entry=>entry.id===historyId):null;if(historyId&&!history)return;editingId=client.id;editingHistoryId=historyId;isAdvancing=false;for(const key of ['name','email','code','level','payment','amountPaid','hours'])form.elements[key].value=key==='level'&&history?history.level:client[key]??(key==='amountPaid'?0:'');const program=history?history.program:client.program||'';if(program&&![...programChooser.options].some(option=>option.value===program))programChooser.append(new doc.defaultView.Option(program,program));programChooser.value=program;advance.hidden=Boolean(history);root.querySelector('#save-admin-client').textContent='Save changes';root.querySelector('#cancel-admin-edit').hidden=false;renderAccess(client.permissions);openClientPage();status.textContent=history?'Editing previous level '+history.level+' for '+client.name+'. Their current level stays unchanged.':'Editing '+client.name;form.elements.name.focus();}
  function openClientPage(){root.querySelector('#admin-overview').hidden=true;root.querySelector('#admin-client-page').hidden=false;root.querySelector('#admin-client-page-title').textContent=editingId?'Edit client folder':'Add client';doc.defaultView.location.hash='students-portal/client';}
  function showDashboard(){root.querySelector('#admin-overview').hidden=false;root.querySelector('#admin-client-page').hidden=true;doc.defaultView.location.hash='students-portal/teacher';}
- function lock(){if(authorization.open)authorization.close();authorizationClientId=null;confirmationId=null;sheetGeneration++;sheetLoading=false;refreshClients.disabled=false;root.querySelector('#admin-add-client').disabled=false;const dialog=root.querySelector('#teacher-login-dialog');if(dialog?.open)dialog.close();if(!root.hidden)doc.querySelector('#students-portal').classList.remove('portal-session-active');unlocked=false;french?.lock();backups?.lock();nativeEnglish?.lock();motivationFreeze?.lock();overview?.lock();documents?.lock();switches?.lock();weeklyPasswords?.lock();clientSheet?.lock();calendar?.lock();gate.hidden=false;dashboard.hidden=true;login.reset();loginError.textContent='';password.removeAttribute('aria-invalid');clearForm();tbody.replaceChildren();clients=[];status.textContent='';}
+ function lock(){if(authorization.open)authorization.close();authorizationClientId=null;confirmationId=null;sheetGeneration++;sheetLoading=false;refreshClients.disabled=false;root.querySelector('#admin-add-client').disabled=false;const dialog=root.querySelector('#teacher-login-dialog');if(dialog?.open)dialog.close();if(!root.hidden)doc.querySelector('#students-portal').classList.remove('portal-session-active');unlocked=false;french?.lock();backups?.lock();nativeEnglish?.lock();hubAccessEditor?.lock();motivationFreeze?.lock();overview?.lock();documents?.lock();switches?.lock();weeklyPasswords?.lock();clientSheet?.lock();calendar?.lock();gate.hidden=false;dashboard.hidden=true;login.reset();loginError.textContent='';password.removeAttribute('aria-invalid');clearForm();tbody.replaceChildren();clients=[];status.textContent='';}
  let loginMemory={};const loginLimit=()=>{try{return JSON.parse(doc.defaultView.localStorage.getItem(LOGIN_LIMIT_KEY)||JSON.stringify(loginMemory));}catch{return loginMemory;}};
  const saveLoginLimit=value=>{loginMemory=value;try{doc.defaultView.localStorage.setItem(LOGIN_LIMIT_KEY,JSON.stringify(value));}catch{}};
  login.addEventListener('submit',event=>{event.preventDefault();const limit=loginLimit();if(limit.lockedUntil>Date.now()){loginError.textContent='Three incorrect attempts. Please try again in '+Math.ceil((limit.lockedUntil-Date.now())/60000)+' minute(s).';return;}if(limit.lockedUntil)saveLoginLimit({});if(password.value!==ADMIN_CODE){const attempts=(limit.lockedUntil?0:Number(limit.attempts)||0)+1;saveLoginLimit(attempts>=3?{attempts,lockedUntil:Date.now()+15*60000}:{attempts});loginError.textContent=attempts>=3?'Three incorrect attempts. Please try again in 15 minutes.':'Incorrect instructor password. '+(3-attempts)+' attempt(s) remaining.';password.setAttribute('aria-invalid','true');password.focus();return;}saveLoginLimit({});unlocked=true;loginError.textContent='';password.value='';gate.hidden=true;dashboard.hidden=false;dashboard.querySelectorAll('details').forEach(section=>section.open=false);root.querySelector('#teacher-login-dialog')?.close();doc.querySelector('#students-portal').classList.add('portal-session-active');doc.defaultView.scrollTo({top:0,left:0,behavior:'instant'});showDashboard();load();clientSheet?.restore();overview?.refresh();weeklyPasswords?.refresh();documents?.refresh();render();calendar?.load();loadAccessOptions();if(clientSheetConnected())refreshSheetClients();else status.textContent='Connect Google Sheets on this device to load students saved from your other devices.';});
@@ -168,6 +170,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  lock();return{lock};
 }
 if(typeof document!=='undefined')initializeAdminPortal(document);
+
 
 
 

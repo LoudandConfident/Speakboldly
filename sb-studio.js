@@ -1,6 +1,6 @@
 import {compareStudioWords} from './studio-word-comparison.js?v=1';
 import {studioDay,roleplayPrompt} from './sb-studio-topics.js?v=365-roleplays-1';
-export function initializeStudio(doc){const root=doc.querySelector('#portal-studio');if(!root)return;const win=doc.defaultView;let built=false,day=-1,recorder,stream,recognizer,audioUrl='',timeout;
+export function initializeStudio(doc){const root=doc.querySelector('#portal-studio');if(!root||root.dataset.stayTuned==='true')return;const win=doc.defaultView;let built=false,day=-1,recorder,stream,recognizer,audioUrl='',timeout;
  const text=(tag,value,cls)=>{const el=doc.createElement(tag);if(value)el.textContent=value;if(cls)el.className=cls;return el;};
  function stop(){win.clearTimeout(timeout);if(recorder?.state==='recording')recorder.stop();stream?.getTracks().forEach(track=>track.stop());stream=null;try{recognizer?.stop();}catch{}win.speechSynthesis?.cancel();}
  function build(){const topic=studioDay(new win.Date());if(built&&day===topic.id)return;stop();if(audioUrl){win.URL.revokeObjectURL(audioUrl);audioUrl='';}root.replaceChildren();built=true;day=topic.id;
@@ -21,3 +21,4 @@ export function initializeStudio(doc){const root=doc.querySelector('#portal-stud
  const open=()=>{if(!root.hidden)build();else stop();};win.setInterval(()=>{if(!doc.hidden&&!root.hidden&&recorder?.state!=='recording')build();},60000);new win.MutationObserver(open).observe(root,{attributes:true,attributeFilter:['hidden']});doc.addEventListener('student-portal-locking',stop);win.addEventListener('pagehide',stop);doc.addEventListener('visibilitychange',()=>{if(doc.hidden)stop();else open();});open();
 }
 if(typeof document!=='undefined')initializeStudio(document);
+

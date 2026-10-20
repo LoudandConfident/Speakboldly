@@ -1,0 +1,27 @@
+/* Equal overview tiles, with a separate, readable teaching reflection. */
+#admin-dashboard .admin-metrics{align-items:stretch!important}
+#admin-dashboard .admin-metrics>article{width:130px!important;height:130px!important;min-height:130px!important;box-sizing:border-box!important;align-self:start!important;display:grid!important;grid-template-rows:32px 32px 22px!important;gap:5px!important;justify-content:stretch!important;padding:14px!important}
+#admin-dashboard .admin-metrics>article>span{line-height:1.4!important;margin:0!important;align-self:start}
+#admin-dashboard .admin-metrics>article>strong{line-height:1!important;margin:0!important;align-self:center}
+#admin-dashboard .instructor-teaching-quote{quotes:none;padding:12px 20px!important}
+#admin-dashboard .instructor-teaching-quote:before,#admin-dashboard .instructor-teaching-quote:after{content:none!important;display:none!important}
+#admin-dashboard .instructor-teaching-quote p:before,#admin-dashboard .instructor-teaching-quote p:after{content:none!important}
+/* The same balanced review outline on every screen. */
+#reviews .review-cards{position:relative!important;height:360px!important;min-height:360px!important;overflow:hidden!important}
+#reviews .review-card{border-radius:28px 28px 28px 8px!important;transform:none!important;filter:none!important;animation:none!important}
+@media(min-width:681px){
+ #reviews .review-card{display:none!important}
+ #reviews .review-card.is-selected{display:block!important;position:relative!important;inset:auto!important;width:100%!important;height:360px!important;max-height:none!important;opacity:1!important;margin:0!important}
+}
+#daily-quote .motivation-layout{position:relative}
+#daily-quote .motivation-sharing{position:relative;padding-top:18px}
+#daily-quote .motivation-sharing:before{content:'';display:block;width:38px;height:30px;margin:0 0 14px;background:#edf0e6;border:1.5px solid #193c32;border-radius:13px 13px 13px 3px;transform:rotate(-5deg);pointer-events:none}
+#daily-quote #daily-quote-reflection{border-left:2px solid #c2cfb8;padding-left:18px}
+@media(max-width:760px){
+ #admin-dashboard .admin-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;max-width:420px!important}
+ #admin-dashboard .admin-metrics>article{width:100%!important;height:auto!important;min-height:130px!important;aspect-ratio:1!important;padding:14px!important;grid-template-rows:36px 32px 24px!important;align-content:center!important}
+ #admin-dashboard .instructor-teaching-quote{grid-column:1/-1!important;margin:4px 0 14px!important;padding:12px 4px!important}
+ #admin-dashboard .instructor-teaching-quote p{font-size:19px!important;line-height:1.55!important}
+ #reviews .review-cards{overflow-x:auto!important}
+ #reviews .review-arrow{height:32px!important;min-height:32px!important}
+}

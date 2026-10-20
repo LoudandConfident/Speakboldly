@@ -1,10 +1,11 @@
+import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=1';
 import {withBerlitzBooks} from './berlitz-material.js?v=dim-default-1';
 import {initializeMonthlyLearning} from './monthly-learning.js?v=hub-eight-2';
 import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=embedded-books';
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=exam-rebuild';
-import {initializeStudentContact} from './student-contact.js?v=mission-question';
+import {initializeStudentContact} from './student-contact.js?v=inline-faq-1';
 import {chooseLearningLevel} from './learning-level-dialog.js?v=password-free-1';
-import {learningDocumentTitle,learningDocumentLevel,learningDocumentCategory,createLearningDocumentCard} from './learning-document-cards.js?v=exam-rebuild';
+import {learningDocumentTitle,learningDocumentLevel,learningDocumentCategory,createLearningDocumentCard} from './learning-document-cards.js?v=twelve-levels-1';
 import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v=learning-space';
 import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=folder-popups';
@@ -26,6 +27,7 @@ export function initializeStudentAssessment(doc) {
  initializePractice(doc);
 
  const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['exercises','material','exams','contact','calendar','practice','listening','monthly','mission','studio','accent'].includes(el.dataset.portalTab));
+ let activeLearningSection=null;
  let learningLevel=null,learningPasscode='',examPasscode='',latestItems=[];
  let exercisesUnlocked=false;
  let passwordMetadata=null,assessmentUnlocked=false,resumableSession=null;
@@ -35,8 +37,8 @@ export function initializeStudentAssessment(doc) {
   
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
   try {
-   const response=await doc.defaultView.fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action,token,...data}),signal:controller.signal});
-   const result=await response.json();if(action==='studentPortalAccess'&&Array.isArray(result.items))result.items=withBerlitzBooks(result.items.map(item=>({...item,enabled:result.passwordFreeFiles===true&&item.enabled})));
+   const response=await doc.defaultView.fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action,token,hubGrants:hubGrantPayload(),...data}),signal:controller.signal});
+   const result=await response.json();if(result.hubAccess)updateHubAccess(result.hubAccess,doc);if(action==='studentPortalAccess'&&Array.isArray(result.items))result.items=withBerlitzBooks(result.items.map(item=>({...item,enabled:result.passwordFreeFiles===true&&item.enabled})));
    if(!response.ok||!result.ok)throw new Error(/Incorrect connection key|Not authorized|Invalid action/.test(result.error||'')?'This part of the portal is not ready yet. Please contact your instructor.':result.error||'The assessment could not be saved.');
    return result;
   }catch(error){if(error.name==='AbortError')throw new Error(action==='studentPortalAccess'?'The shared file list took too long to load. Reopen the folder to retry.':action==='studentExamDraft'?'Saving answers took too long. Retry Save answers; your current answers are still on this page.':action==='studentExamSubmit'?'Submission confirmation took too long. Retry Submit assessment; the same attempt will not be duplicated.':'Google Sheets took too long to respond. Please try again.');if(error instanceof TypeError)throw new Error('Could not reach the portal. Please check your connection and try again.');throw error;}
@@ -62,21 +64,11 @@ export function initializeStudentAssessment(doc) {
   try{const id=tab.dataset.portalTab;if(busy&&id==='exams'){select(id);return;}if(busy&&!['contact','calendar','monthly','mission','studio','accent'].includes(id)){status.textContent='Finish your current examination before opening another section.';return;}
    if(id==='accent'){blocked.hidden=true;status.textContent='';select(id);return;}
    if(id==='studio'){blocked.hidden=true;status.textContent='';select(id);return;}
-   if(id==='mission'){blocked.hidden=true;status.textContent='';select(id);doc.dispatchEvent(new doc.defaultView.Event('daily-mission-open'));return;}
-   if(id==='monthly'){status.textContent='';select(id);monthly.open();return;}
+   if(id==='mission'){if(!await enterHubLevel(doc,'mission'))return;blocked.hidden=true;status.textContent='';select(id);doc.dispatchEvent(new doc.defaultView.Event('daily-mission-open'));return;}
+   if(id==='monthly'){if(!await enterHubLevel(doc,'monthly'))return;status.textContent='';select(id);monthly.open();return;}
    if(id==='contact'){status.textContent='';delete root.querySelector('#portal-contact').dataset.passwordLocked;select(id);contact.open();return;}
    if(id==='calendar'){status.textContent='';select(id);await booking.open();return;}
-   if(id==='exercises'){exercisesUnlocked=true;select(id);await reloadFiles();return;}
-   if(id==='exams'){assessmentUnlocked=true;select(id);await reloadFiles();profile.hidden=true;return;}
-   const labels={exercises:'Practice Zone',material:'Learning Library',listening:'Listening Lab',practice:'Practice Zone',exams:'Test Yourself'};
-   const owner=getTemporaryOwnerConnection(doc);
-   const chosen=await chooseLearningLevel(doc,labels[id],async(level,passcode)=>{
-    const response=await call('studentPortalAccess');latestItems=response.items;updatePasswordMetadata(response);
-    if(owner){const check=await doc.defaultView.fetch(owner.endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action:'checkConnection',key:owner.key})});const result=await check.json();if(!check.ok||!result.ok)throw new Error('Reconnect Google Sheets in Instructor Portal before uploading.');return true;}
-    return true;
-   },{owner:Boolean(owner),passwordless:true});
-   if(!chosen)return;if(learningLevel!==chosen.level)root.querySelectorAll('.temporary-portal-uploads').forEach(controls=>controls.remove());learningLevel=chosen.level;learningPasscode=chosen.passcode;assessmentUnlocked=false;select(id);renderFiles(latestItems);attachTemporaryPortalUploads(doc);
-   if(id==='exams'){showAssessment(latestItems);attachTemporaryPortalUploads(doc);}
+   if(['exercises','material','listening','exams'].includes(id)){learningLevel=null;activeLearningSection=id;assessmentUnlocked=id==='exams';exercisesUnlocked=id==='exercises';select(id);if(id==='exams')showAssessment(latestItems);else renderFiles(latestItems);await reloadFiles();profile.hidden=true;return;}
   }catch(error){if(!publicSectionSelected())status.textContent=error.message;}
  });
  tabs.forEach((tab,index)=>tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();tabs[next].focus();}));
@@ -124,32 +116,26 @@ export function initializeStudentAssessment(doc) {
   event.preventDefault();const current=epoch;status.textContent='Opening document…';
   try{const response=await call('studentPortalAccess'),fresh=response.items.find(entry=>entry.id===item.id);if(current!==epoch)return;if(!fresh?.enabled){status.textContent='This document is currently closed by your instructor.';return;}openLearningDocument(doc,{...fresh,title:learningDocumentTitle(fresh.title)});status.textContent='';}catch(error){if(current===epoch)status.textContent=error.message;}
  }
- function renderFiles(items){
-  latestItems=items;
-  for(const id of ['material','listening','practice','exercises']){
-   const target=root.querySelector('#portal-'+id);delete target.dataset.passwordLocked;
-   const existing=target.querySelector(':scope>.temporary-portal-uploads'),oldGrid=target.querySelector('.learning-document-grid');oldGrid?.remove();
-   if(id!=='practice'){target.replaceChildren(text('h3',{material:'Learning Library',listening:'Listening Lab',exercises:'Practice Zone'}[id]),text('p',id==='exercises'?'Practice sheets and resources':learningLevel?'Level '+learningLevel:'Choose your level to view documents.'));if(existing)target.append(existing);}
-   if(id==='exercises'?!exercisesUnlocked:!learningLevel){delete target.dataset.learningLevel;continue;}target.dataset.learningLevel=learningLevel||1;target.dataset.learningCategory=id;
-   const grid=doc.createElement('div');grid.className='learning-document-grid';
-   for(const item of items.filter(item=>(id==='exercises'||learningDocumentLevel(item)===learningLevel)&&(learningDocumentCategory(item)===id||(id==='material'&&learningDocumentCategory(item)==='listening')))){
-    const card=createLearningDocumentCard(doc,item,event=>openDocument(item,event));grid.append(card);
-   }
-   if(!grid.children.length)grid.append(text('p','No documents have been added for Level '+learningLevel+' yet.'));
-   target.append(grid);
+ const sectionNames={material:'Learning Library',listening:'Listening Lab',exercises:'Practice Zone'};
+ function matchingFiles(id,level,items){return items.filter(item=>(learningDocumentLevel(item)===level||(id==='exercises'&&!learningDocumentLevel(item)))&&(learningDocumentCategory(item)===id||(id==='material'&&learningDocumentCategory(item)==='listening')));}
+ function renderFiles(items){latestItems=items;
+  for(const id of ['material','listening','exercises']){const target=root.querySelector('#portal-'+id);delete target.dataset.passwordLocked;target.replaceChildren(text('h3',sectionNames[id]));
+   if(activeLearningSection===id&&learningLevel){target.dataset.learningLevel=learningLevel;target.dataset.learningCategory=id;const back=text('button','Choose another level');back.type='button';back.className='button light small';back.onclick=()=>{learningLevel=null;renderFiles(latestItems);};target.append(text('p','Level '+learningLevel),back);const grid=doc.createElement('div');grid.className='learning-document-grid';for(const item of matchingFiles(id,learningLevel,items))grid.append(createLearningDocumentCard(doc,item,event=>openDocument(item,event)));target.append(grid);continue;}
+   delete target.dataset.learningLevel;target.append(text('p','Choose your level. Closed levels will be opened by your instructor.'));const grid=doc.createElement('div');grid.className='portal-level-menu';grid.setAttribute('aria-label',sectionNames[id]+' levels');
+   for(let n=1;n<=12;n++){const button=text('button','Level '+n);button.type='button';button.className='portal-level-button';button.disabled=!hubEntry(id+':'+n)?.enabled;button.setAttribute('aria-label',sectionNames[id]+' Level '+n+(button.disabled?' — currently closed':''));button.onclick=async()=>{try{if(!await enterHubLevel(doc,id+':'+n))return;await reloadFiles();learningLevel=n;activeLearningSection=id;renderFiles(latestItems);select(id);}catch(e){status.textContent=e.message;}};grid.append(button);}target.append(grid);
   }
  }
  function openAssessmentGate(){const form=profile.querySelector('#student-assessment-start');if(!form)return;profile.hidden=false;form.elements.name.focus();}
  function showAssessment(items,open=true){
   delete panel.dataset.learningLevel;delete panel.dataset.learningCategory;
-  panel.replaceChildren(text('h3','Test Yourself'),text('p','Enter your name and choose your level to begin your interactive examination. Your instructor reviews the submission privately.'));const gate=doc.createElement('div');gate.dataset.assessmentGate='';gate.hidden=true;gate.append(text('p','Choose an examination opened by your instructor, then enter your name to start.'));const openGate=text('button','Open Examinations');openGate.type='button';openGate.className='button light';openGate.onclick=openAssessmentGate;gate.append(openGate);panel.append(gate,profile);profile.hidden=true;const files=doc.createElement('div');files.className='interactive-assessment-files';files.hidden=!assessmentUnlocked;for(let n=1;n<=8;n++){const item=items.find(entry=>entry.id==='test:'+n),button=text('button','Level '+n);button.type='button';button.className='learning-exam-card assessment-file';const preview=doc.createElement('img');preview.src='./images/exam-previews/level-'+Math.min(n,6)+'.png';preview.alt='First page of the Level '+n+' examination';preview.loading='lazy';const caption=text('span','Level '+n+' examination');if(n<=6)button.replaceChildren(preview,caption);else{const cover=text('span','Interactive examination');cover.className='learning-document-placeholder';button.replaceChildren(cover,caption);}button.dataset.assessmentLevel=n;button.disabled=!item?.enabled;button.classList.toggle('learning-document-closed',!item?.enabled);button.setAttribute('aria-label','Level '+n+' interactive examination'+(!item?.enabled?' — closed by instructor':''));button.onclick=()=>{if(!item?.enabled)return;const form=profile.querySelector('#student-assessment-start');form.elements.level.value=n;profile.hidden=false;form.elements.name.focus();};files.append(button);}panel.append(files);  const password=text('label','Examination password:'),passwordInput=doc.createElement('input');password.hidden=true;passwordInput.name='assessmentPassword';passwordInput.value=examPasscode;passwordInput.type='password';passwordInput.required=false;passwordInput.autocomplete='off';password.append(passwordInput);
+  panel.replaceChildren(text('h3','Test Yourself'),text('p','Choose your level to take an interactive end-of-level examination. Closed levels will be opened by your instructor.'));const gate=doc.createElement('div');gate.dataset.assessmentGate='';gate.hidden=true;gate.append(text('p','Choose an examination opened by your instructor, then enter your name to start.'));const openGate=text('button','Open Examinations');openGate.type='button';openGate.className='button light';openGate.onclick=openAssessmentGate;gate.append(openGate);panel.append(gate,profile);profile.hidden=true;const files=doc.createElement('div');files.className='portal-level-menu interactive-assessment-files';files.hidden=!assessmentUnlocked;for(let n=1;n<=12;n++){const item=items.find(entry=>entry.id==='test:'+n),button=text('button','Level '+n);button.type='button';button.className='learning-exam-card assessment-file';button.className='portal-level-button assessment-file';button.dataset.assessmentLevel=n;button.disabled=n>8||!hubEntry('exams:'+n)?.enabled||!item?.enabled;button.classList.toggle('learning-document-closed',button.disabled);button.setAttribute('aria-label','Level '+n+' interactive examination'+(!item?.enabled?' — closed by instructor':''));button.onclick=async()=>{if(!item?.enabled)return;try{if(!await enterHubLevel(doc,'exams:'+n))return;}catch(e){status.textContent=e.message;return;}const form=profile.querySelector('#student-assessment-start');form.elements.level.value=n;profile.hidden=false;form.elements.name.focus();};files.append(button);}panel.append(files);  const password=text('label','Examination password:'),passwordInput=doc.createElement('input');password.hidden=true;passwordInput.name='assessmentPassword';passwordInput.value=examPasscode;passwordInput.type='password';passwordInput.required=false;passwordInput.autocomplete='off';password.append(passwordInput);
   const selection=doc.createElement('form');selection.className='student-assessment-start';selection.id='student-assessment-start';
   const name=text('label','Name:'),nameInput=doc.createElement('input');nameInput.name='name';nameInput.maxLength=100;nameInput.autocomplete='name';nameInput.required=true;nameInput.value=student?.name||'';name.append(nameInput);
   const age=text('label','Age:'),ageInput=doc.createElement('input');ageInput.name='age';ageInput.type='number';ageInput.min=1;ageInput.max=120;ageInput.required=false;ageInput.value=student?.age||'';age.append(ageInput);
   const program=text('label','Program:'),programInput=doc.createElement('input');programInput.name='program';programInput.maxLength=100;programInput.required=false;programInput.placeholder='e.g. General English';programInput.value=student?.program||'';program.append(programInput);
   const level=text('label','Level:'),selectLevel=doc.createElement('select');selectLevel.name='level';selectLevel.required=true;
   selectLevel.append(Object.assign(text('option','Choose your level'),{value:''}));
-  for(let n=1;n<=8;n++){const option=text('option','Level '+n);option.value=String(n);option.disabled=!items.find(item=>item.id==='test:'+n)?.enabled;selectLevel.append(option);}level.append(selectLevel);
+  for(let n=1;n<=12;n++){const option=text('option','Level '+n);option.value=String(n);option.disabled=n>8||!hubEntry('exams:'+n)?.enabled||!items.find(item=>item.id==='test:'+n)?.enabled;selectLevel.append(option);}level.append(selectLevel);
   const start=text('button','Start assessment');start.className='button';start.type='submit';level.hidden=false;selectLevel.value='';age.hidden=true;program.hidden=true;selection.append(password,name,level,age,program,start);const close=text('button','Hide details');close.type='button';close.className='button light small';close.onclick=()=>profile.hidden=true;profile.replaceChildren(text('h4','Assessment details'),selection,close);
   selection.onsubmit=async event=>{
    event.preventDefault();if(busy){status.textContent='Finish the current assessment before starting another.';return;}const current=epoch;start.disabled=true;
@@ -166,7 +152,7 @@ export function initializeStudentAssessment(doc) {
    renderFiles(response.items);showAssessment(response.items);attachTemporaryPortalUploads(doc);status.textContent='';
    
   }catch(error){if(current===epoch&&request===catalogRequest)fileLoadError(error);}finally{catalogInFlight--;}
-  if(current!==epoch)return;clearInterval(accessTimer);accessTimer=setInterval(async()=>{if(current!==epoch||doc.hidden||publicSectionSelected()||busy||catalogInFlight)return;try{await reloadFiles();}catch{}},20000);
+  if(current!==epoch)return;clearInterval(accessTimer);accessTimer=setInterval(async()=>{if(current!==epoch||doc.hidden||busy||catalogInFlight)return;const freeTab=tabs.find(t=>['mission','monthly'].includes(t.dataset.portalTab)&&t.getAttribute('aria-selected')==='true');if(freeTab){try{await refreshHubAccess(doc,true);if(!hasHubGrant(freeTab.dataset.portalTab)){select(null);status.textContent='This section now needs the password shared by your instructor.';}}catch{}return;}if(publicSectionSelected())return;try{await reloadFiles();}catch{}},20000);
  }
  doc.addEventListener('portal-files-uploaded',async()=>{try{await reloadFiles();}catch{}});
  function showBlocked(message=PORTAL_LOCK_MESSAGE){lock();content.hidden=false;blocked.textContent=message;blocked.hidden=false;root.classList.add('portal-session-active');}
@@ -193,6 +179,7 @@ export function initializeStudentAssessment(doc) {
  if(doc.defaultView.location.hash.endsWith('/calendar'))Promise.resolve().then(openCalendarRoute);
  else if(new URL(doc.defaultView.location.href).searchParams.get('app')==='learner'&&(!doc.defaultView.location.hash||doc.defaultView.location.hash.startsWith('#students-portal')))Promise.resolve().then(()=>root.querySelector('[data-portal-area=client]').click());
 }
+
 
 
 
