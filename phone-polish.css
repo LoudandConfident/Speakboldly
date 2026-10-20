@@ -43,3 +43,9 @@ main>#page-back-arrow{left:2%;right:auto;width:28px}
  #client-authorization-name{overflow-wrap:anywhere;font-size:14px;line-height:1.6}
  #portal-content .portal-panel:not([hidden]){min-width:0;max-width:100%}#portal-content .portal-panel iframe,#portal-content .portal-panel canvas{max-width:100%}
 }
+
+/* Phone navigation uses a deliberate horizontal swipe instead of back arrows. */
+@media(max-width:760px){main>#page-back-arrow,#students-portal #portal-content [data-learning-back]:not([hidden]),.plain-back-arrow{display:none!important}}
+@media(max-width:680px){
+ main #home .home-picture-and-reviews .coaching-photo img{height:86%!important;max-height:none!important;object-fit:cover!important;object-position:64% center!important;transform:none!important;top:0;bottom:auto}
+}
