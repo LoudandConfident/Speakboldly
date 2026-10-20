@@ -99,9 +99,14 @@ dailyPractice.push("You, too, can go further than you ever imagined by enjoying 
 export function motivationShareUrl(entry,base='https://loudandconfident.github.io/Speakboldly/'){
  const name=entry.image.split('/').pop().replace(/\.png$/,'.html');return new URL('./motivation/'+name,base).href;
 }
+export function clientDailyMotivation(now=new Date()){
+ const day=cairoDayNumber(now),index=day%dailyQuotes.length,entry=dailyQuotes[index],details=quoteDetails[index];
+ return {day,quote:entry.quote,image:new URL(entry.image,'https://loudandconfident.github.io/Speakboldly/').href,paragraphs:details.paragraphs||[details.reflection,dailyPractice[index]],url:motivationShareUrl(entry)};
+}
 export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
- if (!page) return;
+ if (!page||page.dataset.galleryInitialized) return;
+ page.dataset.galleryInitialized='true';
  let day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,shareStatus);page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationShareUrl(currentEntry,doc.baseURI);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
  function refresh() {
   const now = new win.Date(), nextDay = cairoDayNumber(now);
@@ -130,3 +135,4 @@ export function initializeGallery(doc, win) {
  win.addEventListener('pageshow', start);
 }
 if (typeof document !== 'undefined') initializeGallery(document, window);
+

@@ -1,3 +1,4 @@
+import {clientDailyMotivation} from './home-gallery.js?v=client-motivation-1';
 import {initializeInstructorFrench} from './instructor-french.js?v=toolbar-v2';
 import {initializeInstructorBackups} from './instructor-backups.js?v=reliability';
 import {initializeNativeEnglishEditor} from './native-english-editor.js?v=january-choices-1';
@@ -29,11 +30,21 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  const advance=doc.createElement('button');advance.type='button';advance.className='button light small';advance.textContent='Move to next level';advance.hidden=true;root.querySelector('#save-admin-client').before(advance);
  advance.onclick=()=>{if(!unlocked||!editingId||editingHistoryId)return;const client=clients.find(item=>item.id===editingId);if(Number(client.level)>=8){status.textContent='This client is already at Level 8.';return;}isAdvancing=true;const next=/^\d+$/.test(client.level)?String(Number(client.level)+1):'1';form.elements.level.value=next;programChooser.value=client.program||suggestedSessionProgram(client)||'';status.textContent='Choose the next level and program, then Save changes. The previous line will stay dimmed and editable.';form.elements.level.focus();};
  const clientSheet=initializeClientSheet(doc);
- const authorization=doc.createElement('dialog');authorization.id='client-authorization-dialog';authorization.className='action-popup';authorization.setAttribute('aria-labelledby','client-authorization-title');authorization.innerHTML='<button type="button" class="popup-close" aria-label="Close client actions">×</button><h2 id="client-authorization-title">Actions</h2><p id="client-authorization-name"></p><div class="client-authorization-actions"><button type="button" class="button light small" data-authorize-action="confirmation">Send e-mail confirmation</button><button type="button" class="button light small" data-authorize-action="progress">Send Progress Report</button><button type="button" class="button light small" data-authorize-action="final">Send final Report</button><button type="button" class="button light small" data-authorize-action="notes">Notes</button><button type="button" class="button light small" data-authorize-action="registration">Send Payment and registration confirmation</button></div><p id="client-authorization-status" role="status"></p>';doc.body.append(authorization);authorization.querySelector('.popup-close').onclick=()=>authorization.close();
- let authorizationClientId=null,confirmationId=null;
+ const authorization=doc.createElement('dialog');authorization.id='client-authorization-dialog';authorization.className='action-popup';authorization.setAttribute('aria-labelledby','client-authorization-title');authorization.innerHTML='<button type="button" class="popup-close" aria-label="Close client actions">×</button><h2 id="client-authorization-title">Actions</h2><p id="client-authorization-name"></p><div class="client-authorization-actions"><button type="button" class="button light small" data-authorize-action="confirmation">Send e-mail confirmation</button><button type="button" class="button light small" data-authorize-action="progress">Send Progress Report</button><button type="button" class="button light small" data-authorize-action="final">Send final Report</button><button type="button" class="button light small" data-authorize-action="notes">Notes</button><button type="button" class="button light small" data-authorize-action="motivation">Send daily motivation</button><button type="button" class="button light small" data-authorize-action="registration">Send Payment and registration confirmation</button></div><p id="client-authorization-status" role="status"></p>';doc.body.append(authorization);authorization.querySelector('.popup-close').onclick=()=>authorization.close();
+ let authorizationClientId=null,confirmationId=null;const motivationRequests=new Map();
  function openAuthorization(client){authorization.querySelectorAll('[data-authorize-action]').forEach(b=>b.disabled=false);authorizationClientId=client.id;confirmationId=null;authorization.querySelector('#client-authorization-name').textContent=client.name+' · '+client.email+' · Passcode '+client.code;authorization.querySelector('[role=status]').textContent='';if(!authorization.open)authorization.showModal();authorization.scrollTop=0;}
  authorization.querySelectorAll('[data-authorize-action]').forEach(button=>button.addEventListener('click',async()=>{
   if(!unlocked)return;const client=clients.find(c=>c.id===authorizationClientId);if(!client)return;const action=button.dataset.authorizeAction,note=authorization.querySelector('[role=status]');
+  if(action==='motivation'){
+   if(!clientSheetConnected()){note.textContent='Connect your Clients sheet first.';return;}
+   button.disabled=true;const target=client.id,motivation=clientDailyMotivation(new doc.defaultView.Date()),signature=JSON.stringify([target,motivation]);
+   try{const approved=await confirmClientEmail(doc,'Send today’s daily motivation to '+client.name+' ('+client.email+')?',{details:{Motivation:motivation.quote}});
+    if(!approved||!unlocked||authorizationClientId!==target)return;
+    if(!motivationRequests.has(signature))motivationRequests.set(signature,doc.defaultView.crypto.randomUUID());note.textContent='Sending daily motivation…';
+    const result=await sheetLibraryRequest('sendClientEmail',{clientId:target,kind:'motivation',requestId:motivationRequests.get(signature),motivation});
+    if(unlocked&&authorizationClientId===target)note.textContent='Daily motivation emailed to '+result.recipient+'.';
+   }catch(error){if(unlocked&&authorizationClientId===target)note.textContent=/Invalid email request|Invalid action/.test(error.message)?'Update UnifiedCode.gs and deploy a New version to enable daily motivation emails.':error.message;}finally{button.disabled=false;}return;
+  }
   if(action!=='confirmation'){try{openClientReportTab(doc.defaultView,action,client,root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue);authorization.close();}catch(error){note.textContent=error.message;}return;}
   if(!clientSheetConnected()){note.textContent='Connect your Clients sheet first.';return;}
   button.disabled=true;note.textContent='Loading upcoming session…';const previewClientId=client.id;
@@ -154,6 +165,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  lock();return{lock};
 }
 if(typeof document!=='undefined')initializeAdminPortal(document);
+
 
 
 

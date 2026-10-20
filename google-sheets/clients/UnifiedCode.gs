@@ -483,12 +483,12 @@ function sbCalendarEmail(client,meetings,reminder=false){
 function handleClientEmail(p){
  const respond=typeof response==='function'?response:clientSyncResponse;
  const id=String(p.clientId||''),kind=String(p.kind||''),requestId=String(p.requestId||'');
- if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!['confirmation','progress','final','registration','notes'].includes(kind)||! /^[a-zA-Z0-9-]{1,100}$/.test(requestId))throw new Error('Invalid email request.');
+ if(!/^[a-zA-Z0-9-]{1,100}$/.test(id)||!['confirmation','progress','final','registration','notes','motivation'].includes(kind)||! /^[a-zA-Z0-9-]{1,100}$/.test(requestId))throw new Error('Invalid email request.');
  const props=PropertiesService.getScriptProperties(),book=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')),clients=book.getSheetByName('Clients');
  const rows=clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,12).getValues():[],client=rows.find(r=>String(r[0])===id);
  if(!client||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(client[2])))throw new Error('Client email missing or invalid.');
  let attachment=null;
- if(kind!=='confirmation'){
+ if(!['confirmation','motivation'].includes(kind)){
   const word=kind==='notes'&&typeof p.pdfBase64!=='string',encoded=word?p.docxBase64:p.pdfBase64;
   if(typeof encoded!=='string'||encoded.length>7500000||! /^[A-Za-z0-9+/]*={0,2}$/.test(encoded))throw new Error(word?'A valid Word attachment is required.':'A valid completed PDF is required.');
   const bytes=Utilities.base64Decode(encoded);
@@ -509,7 +509,7 @@ function handleClientEmail(p){
   const logs=log.getLastRow()>1?log.getRange(2,1,log.getLastRow()-1,7).getValues():[],existing=logs.find(r=>String(r[0])===requestId);
   if(existing){if(String(existing[1])!==id||String(existing[2])!==kind)throw new Error('Email request identity mismatch.');if(existing[4]==='sent')return respond({ok:true,status:'sent',recipient:String(existing[3])});throw new Error('This email has an uncertain delivery status. Check EmailLog before sending it again.');}
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached. Try again tomorrow.');
-  const labels={confirmation:'Email confirmation',progress:'Progress report',final:'Final report',registration:'Payment and registration confirmation',notes:'Notes'};
+  const labels={confirmation:'Email confirmation',progress:'Progress report',final:'Final report',registration:'Payment and registration confirmation',notes:'Notes',motivation:'Daily motivation'};
   let message;
   if(kind==='confirmation'){
    let meetings;
@@ -525,6 +525,10 @@ function handleClientEmail(p){
     if(p.sessionId&&String(meetings[0][0])!==String(p.sessionId))throw new Error('The next session changed. Reopen the confirmation preview before sending.');
    }
    message=sbCalendarEmail(client,meetings);
+  }else if(kind==='motivation'){
+   const m=p.motivation||{},quote=String(m.quote||'').trim(),paragraphs=m.paragraphs,image=String(m.image||''),url=String(m.url||'');
+   if(!quote||quote.length>1200||!Array.isArray(paragraphs)||paragraphs.length>25||paragraphs.some(t=>typeof t!=='string'||t.length>5000)||paragraphs.join('').length>20000||!/^https:\/\/loudandconfident\.github\.io\/Speakboldly\/images\/daily-motivation-[a-z0-9-]+\.png$/.test(image)||!/^https:\/\/loudandconfident\.github\.io\/Speakboldly\/motivation\/daily-motivation-[a-z0-9-]+\.html$/.test(url))throw new Error('Invalid daily motivation content.');
+   message={body:'Hello '+client[1]+',\n\n'+quote+'\n\n'+paragraphs.join('\n\n')+'\n\n'+url+'\n\nSpeak Boldly',htmlBody:sbBrandedEmail('A little motivation for today','<p>Hello '+sbEmailEscape(client[1])+',</p><img src="'+sbEmailEscape(image)+'" alt="Today’s daily motivation" width="480" style="display:block;width:100%;max-width:480px;height:auto;border-radius:16px"><h2 style="font-size:22px;line-height:1.5">'+sbEmailEscape(quote)+'</h2>'+paragraphs.map(t=>'<p>'+sbEmailEscape(t).replace(/\n/g,'<br>')+'</p>').join('')+'<p><a href="'+sbEmailEscape(url)+'">View today’s motivation</a></p>')};
   }else{
    const course=sbEmailProgramName(client[11]||''),level=String(client[4]||'');
    const details=kind==='registration'?[course,level?'Level / Program: '+level:''].filter(Boolean).join('\n'):'';
@@ -1231,3 +1235,4 @@ function sbNativeSettingsOwner(data){
  const next={revision:Utilities.getUuid(),mode:data.mode,manualLink:data.manualLink,manualNovel:data.manualNovel};PropertiesService.getScriptProperties().setProperty('SB_NATIVE_ENGLISH_SETTINGS',JSON.stringify(next));return sbNativeReply({ok:true,settings:next});
  }finally{lock.releaseLock();}
 }
+
