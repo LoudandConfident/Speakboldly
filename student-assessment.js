@@ -1,4 +1,4 @@
-import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=1';
+import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=free-compatibility-2';
 import {withBerlitzBooks} from './berlitz-material.js?v=dim-default-1';
 import {initializeMonthlyLearning} from './monthly-learning.js?v=hub-eight-2';
 import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=embedded-books';
@@ -69,7 +69,7 @@ export function initializeStudentAssessment(doc) {
    if(id==='contact'){status.textContent='';delete root.querySelector('#portal-contact').dataset.passwordLocked;select(id);contact.open();return;}
    if(id==='calendar'){status.textContent='';select(id);await booking.open();return;}
    if(['exercises','material','listening','exams'].includes(id)){learningLevel=null;activeLearningSection=id;assessmentUnlocked=id==='exams';exercisesUnlocked=id==='exercises';select(id);if(id==='exams')showAssessment(latestItems);else renderFiles(latestItems);await reloadFiles();profile.hidden=true;return;}
-  }catch(error){if(!publicSectionSelected())status.textContent=error.message;}
+  }catch(error){status.textContent=error.message;}
  });
  tabs.forEach((tab,index)=>tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();tabs[next].focus();}));
  function result(attempt,viewer){
@@ -179,6 +179,7 @@ export function initializeStudentAssessment(doc) {
  if(doc.defaultView.location.hash.endsWith('/calendar'))Promise.resolve().then(openCalendarRoute);
  else if(new URL(doc.defaultView.location.href).searchParams.get('app')==='learner'&&(!doc.defaultView.location.hash||doc.defaultView.location.hash.startsWith('#students-portal')))Promise.resolve().then(()=>root.querySelector('[data-portal-area=client]').click());
 }
+
 
 
 
