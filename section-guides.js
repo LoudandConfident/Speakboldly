@@ -1,8 +1,8 @@
 const GUIDES={
  'portal-accent':['Accent','This space is being prepared. More details are coming soon.'],
  'portal-exams':['Quizzes','Take the interactive examination for your level. Enter the details requested before starting. Submit your answers when you finish; your instructor reviews the writing and sends your final report separately.'],
- 'portal-exercises':['Activities','Open the practice sheets and resources your instructor has made available. Use the folder password when requested, then choose a document to practise.'],
- 'portal-material':['Material','Choose your level and enter its passcode. Open the books and learning documents here, and return to useful pages between sessions.'],
+ 'portal-exercises':['Activities','Open the practice sheets and resources your instructor has made available. Dimmed documents are closed; choose a document your instructor has opened.'],
+ 'portal-material':['Material','Choose your level. Dimmed files stay closed until your instructor opens them. Open the books and learning documents here, and return to useful pages between sessions.'],
  'portal-listening':['Listening','Choose your level and open the listening resources. Listen for the main idea first, then return for useful expressions and details.'],
  'portal-practice':['Activities','Choose a realistic practice goal and use the activities to keep English part of your week.'],
  'daily-mission':['Daily Task','A new reading task appears every day. Choose your level, read at your own pace and try the language activities. Open today’s idiom for one more useful expression.'],
@@ -16,4 +16,5 @@ export function initializeSectionGuides(doc){const root=doc.querySelector('#port
  decorate();new doc.defaultView.MutationObserver(decorate).observe(root,{childList:true,subtree:true});
 }
 if(typeof document!=='undefined')initializeSectionGuides(document);
+
 

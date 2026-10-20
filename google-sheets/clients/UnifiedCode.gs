@@ -637,7 +637,9 @@ function sbExamBook() {
 }
 function sbExamSafe(value) { const text=String(value||''); return /^[=+\-@\t\r]/.test(text) ? "'"+text : text; }
 function sbExamHash(value) { return Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,value)).replace(/=+$/,''); }
-function sbPortalItems(book){const sheet=book.getSheetByName('Portal access');if(!sheet)throw new Error('Run setupStudentExams, then deploy a New version.');return sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues().map(row=>({id:String(row[0]),section:String(row[1]),title:String(row[2]).replace(/^'/,''),url:String(row[3]),enabled:row[4]===true||row[4]==='true'})):[];}
+function sbPortalItems(book){const sheet=book.getSheetByName('Portal access');if(!sheet)throw new Error('Run setupStudentExams, then deploy a New version.');sbPasswordFreeFileMigration(book);return sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues().map(row=>({id:String(row[0]),section:String(row[1]),title:String(row[2]).replace(/^'/,''),url:String(row[3]),enabled:row[4]===true||row[4]==='true'})):[];}
+function sbPasswordFreeFileMigration(book){const props=PropertiesService.getScriptProperties();if(props.getProperty('SB_PASSWORD_FREE_FILES_V1')==='done')return;const lock=LockService.getScriptLock();lock.waitLock(20000);if(props.getProperty('SB_PASSWORD_FREE_FILES_V1')==='done')return;const sheet=book.getSheetByName('Portal access');if(!sheet)return;const count=sheet.getLastRow()-1;if(count>0)sheet.getRange(2,5,count,1).setValues(Array.from({length:count},()=>[false]));const rows=count>0?sheet.getRange(2,1,count,1).getValues().flat().map(String):[];for(let n=1;n<=8;n++)if(!rows.includes('test:'+n))sheet.appendRow(['test:'+n,'tests','Level '+n,'',false]);props.setProperty('SB_PASSWORD_FREE_FILES_V1','done');}
+
 // Folder passwords change at the start of each month in Cairo.
 function sbPortalWeek(){
  const today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd'),start=today.slice(0,7)+'-01',date=new Date(start+'T12:00:00Z');date.setUTCMonth(date.getUTCMonth()+1);return {start,next:date.toISOString().slice(0,10)};
@@ -727,17 +729,14 @@ function handleStudentExam(data) {
   const lock=LockService.getScriptLock();
   try {
     const book=sbExamBook(),items=sbPortalItems(book);
-    if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,passwordSettings:{revision:sbPortalPasswordRevision(),monthly:true},levelAccess:sbLearningLevelAccess(),items:items.map(item=>{const level=sbLearningItemLevel(item),enabled=item.enabled&&(!level||sbLearningLevelAccess()[String(level)]);return {...item,enabled,url:enabled?item.url:''};})});
+    if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,passwordFreeFiles:true,items:items.map(item=>({...item,url:item.enabled?item.url:''}))});
     if(data.action==='studentFolderLogin'){
-      const group=sbPortalFolderGroup(data.folder),weekly=sbWeeklyPortalPasswords();
-      if(/^(material|exams):[1-8]$/.test(group)&&!sbLearningLevelAccess()[group.split(':')[1]])throw new Error('This level is currently closed by your instructor.');
-      if(String(data.passcode||'')!==weekly.passwords[group])throw new Error('Incorrect folder password.');
-      return sbExamResponse({ok:true,revision:sbPortalPasswordRevision()});
+      sbPortalFolderGroup(data.folder);return sbExamResponse({ok:true,passwordFreeFiles:true});
     }
     if(data.action==='studentExamLogin') {
       const requestedLevel=Number(data.level);if(!Number.isInteger(requestedLevel)||requestedLevel<1||requestedLevel>8)throw new Error('Choose a valid level.');
       
-      const passcode=sbMonthlyPortalPasswords().passwords.exams;if(String(data.passcode||'')!==passcode)throw new Error('Incorrect assessment password.');
+      if(!items.some(item=>item.id==='test:'+requestedLevel&&item.enabled))throw new Error('This examination is currently closed by your instructor.');
       const name=String(data.name||'').trim(),program=String(data.program||'').trim(),age=data.age===undefined?'':Number(data.age);if(age!==''&&(!Number.isInteger(age)||age<1||age>120))throw new Error('Enter a valid age.');
       if(!name||name.length>100||program.length>100)throw new Error('Enter your name.');
       if(requestedLevel>8)throw new Error('Choose an available examination level (1–8).');
@@ -753,6 +752,7 @@ function handleStudentExam(data) {
     if(!saved)throw new Error('Your session expired. Ask your instructor to check your saved assessment.');
     const session={clientId:String(saved[1]),name:String(saved[2]).replace(/^'/,''),program:String(saved[3]).replace(/^'/,''),age:saved[5]||''},level=Number(data.level);
     if(!Number.isInteger(level)||level<1||level>8)throw new Error('Choose a valid level.');
+    if(data.action==='studentExamGet'&&!items.some(item=>item.id==='test:'+level&&item.enabled))throw new Error('This examination is currently closed by your instructor.');
     if(saved[6]&&Number(saved[6])!==level)throw new Error('Your passcode allows only your selected level.');
     lock.waitLock(20000);
     const sheet=book.getSheetByName('Exam attempts');if(!sheet)throw new Error('The instructor needs to run setupStudentExams first.');
@@ -1251,3 +1251,4 @@ function sbDailyMotivationOwner(data){const lock=LockService.getScriptLock();loc
  const previousUntil=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity,heldDay=settings.frozen&&day<previousUntil?settings.day:day;
  settings={frozen:data.mode!=='resume',day:heldDay,until,revision:Utilities.getUuid()};PropertiesService.getScriptProperties().setProperty('SB_DAILY_MOTIVATION_SETTINGS',JSON.stringify(settings));
  }return response({ok:true,settings});}
+

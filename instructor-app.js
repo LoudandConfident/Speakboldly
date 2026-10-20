@@ -1,5 +1,5 @@
 import {initializePersonalCalendar} from './personal-calendar.js';
-import './admin-portal.js?v=freeze-1';
+import './admin-portal.js?v=password-free-1';
 import {clientSheetConnected} from './client-sheet.js?v=level-history';
 const SESSION='speak-boldly-instructor-app-session-v1';
 const dashboard=document.querySelector('#admin-dashboard'),clientPage=document.querySelector('#admin-client-page'),login=document.querySelector('#admin-login-form'),dialog=document.querySelector('#teacher-login-dialog'),nav=document.querySelector('.app-nav'),lock=document.querySelector('#app-lock'),message=document.querySelector('#app-locked-message');
@@ -18,6 +18,7 @@ if(resume){document.querySelector('#admin-code').value='16051962';login.requestS
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./instructor-sw.js',{scope:'./',updateViaCache:'none'}).catch(()=>{});
 
 initializePersonalCalendar(document);
+
 
 
 

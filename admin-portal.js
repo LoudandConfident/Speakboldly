@@ -10,7 +10,7 @@ import {openClientReportTab} from './report-tabs.js?v=instructor-app';
 import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=momentum-and-uploads';
 import {initializeWeeklyPortalPasswords} from './weekly-portal-passwords.js?v=horizontal-cards';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
-import {initializePortalSwitches} from './portal-switches.js?v=horizontal-cards';
+import {initializePortalSwitches} from './portal-switches.js?v=password-free-1';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=instructor-app';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
@@ -113,7 +113,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  const backups=initializeInstructorBackups(doc,()=>unlocked);
  const motivationFreeze=initializeMotivationFreeze(doc,()=>unlocked);
  const nativeEnglish=initializeNativeEnglishEditor(doc,()=>unlocked);
- const weeklyPasswords=initializeWeeklyPortalPasswords(doc,()=>unlocked);
+ const weeklyPasswords={lock(){},refresh(){}};doc.querySelector('#weekly-portal-passwords')?.remove();
  const switches=initializePortalSwitches(doc,()=>unlocked,loader);
  const calendar=initializeAdminCalendar(doc,()=>unlocked,()=>clients,openClientInfo,()=>clientSheetConnected()?refreshSheetClients(true):calendar.load(true));
  const documents=initializeTeacherDocuments(doc,()=>unlocked,()=>clients,loader);
@@ -168,6 +168,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  lock();return{lock};
 }
 if(typeof document!=='undefined')initializeAdminPortal(document);
+
 
 
 
