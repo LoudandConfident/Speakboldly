@@ -16,3 +16,26 @@
 
 #students-portal .learning-space-destinations>.learning-space-card:nth-child(n){justify-content:center!important;align-items:flex-start!important;flex-direction:column!important;text-align:left!important}
 #students-portal .learning-space-destinations>.learning-space-card>svg[data-card-glyph]{position:static!important;align-self:flex-start!important;transform:none!important;margin:0 0 6px!important}
+
+#students-portal .learning-space-destinations>.learning-space-card>svg[data-card-glyph]{width:62px!important;height:57px!important;margin:0 0 8px!important}
+@media(max-width:760px){
+ #students-portal .learning-space-destinations>.learning-space-card:nth-child(n){aspect-ratio:auto!important;min-height:184px!important;padding:18px 14px!important;gap:9px!important}
+ #students-portal .learning-space-destinations>.learning-space-card>svg[data-card-glyph]{width:52px!important;height:48px!important;margin:0 0 5px!important}
+ #students-portal .learning-space-card-title{font-size:14px!important;line-height:1.4!important}
+ #students-portal .learning-space-card-description{display:block!important;font-size:11px!important;line-height:1.65!important}
+}
+/* Playful outlines, with a consistent grid and room for the illustrations. */
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(n){border-color:#b8c8ad!important;box-shadow:0 5px 14px #193c3207!important;transition:box-shadow .18s,border-color .18s,background .18s}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(1){border-radius:30px 30px 30px 8px!important}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(2){border-radius:8px 30px 30px 8px!important}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(3){border-radius:46px 22px 46px 22px!important}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(4){border-radius:48px 48px 22px 22px!important}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(5){border-radius:8px 28px 28px 8px!important}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(6){border-radius:26px 26px 14px 14px!important}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(7){border-radius:14px 14px 32px 32px!important}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(8){border-radius:30px 30px 8px 30px!important}
+#students-portal .learning-space-destinations>.learning-space-card:hover{box-shadow:0 7px 18px #193c3210!important}
+@media(max-width:760px){#students-portal .learning-space-destinations>.learning-space-card:nth-child(n){min-height:196px!important}}
+#students-portal #portal-content .learning-space-card:nth-child(1):after,#students-portal #portal-content .learning-space-card:nth-child(8):after{content:''!important;display:block!important;position:absolute;top:auto;right:auto;left:24px;bottom:-5px;width:10px;height:10px;background:inherit!important;border:0;border-right:1px solid #b8c8ad;border-bottom:1px solid #b8c8ad;transform:rotate(45deg);z-index:1}
+#students-portal #portal-content .learning-space-card:nth-child(8):after{left:auto;right:24px}
+#students-portal .learning-space-destinations>.learning-space-card:nth-child(2),#students-portal .learning-space-destinations>.learning-space-card:nth-child(5){border-left-width:3px!important}

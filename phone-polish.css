@@ -49,3 +49,42 @@ main>#page-back-arrow{left:2%;right:auto;width:28px}
 @media(max-width:680px){
  main #home .home-picture-and-reviews .coaching-photo img{height:86%!important;max-height:none!important;object-fit:cover!important;object-position:64% center!important;transform:none!important;top:0;bottom:auto}
 }
+
+/* A small, consistent breath before each page heading. */
+main>[data-view]:not(#home){padding-top:30px!important}
+@media(max-width:760px){
+ main>[data-view]:not(#home){padding-top:28px!important;padding-left:6%!important;padding-right:6%!important}
+ main>[data-view]>.eyebrow:first-child{margin-bottom:12px!important}
+ #how .how-hero-copy>h2,#courses .courses-heading>h2{line-height:1.2!important}
+ #how .how-guide{gap:18px!important}.how-step>p{line-height:1.8!important}
+ #students-portal .learning-space-heading{margin-bottom:24px!important}
+ #students-portal .learning-space-heading>p:last-child{font-size:14px!important;line-height:1.7!important}
+ #students-portal .learning-space-destinations{gap:14px!important}
+}
+#portal-content .learning-space-heading{position:relative;padding-right:60px}
+#portal-content .dashboard-help-circle{position:absolute;right:0;top:0;display:grid;place-items:center;width:48px;height:48px;min-height:48px;border:1px solid #bdcbb1;border-radius:50%;background:#edf0e6;color:#193c32;font-family:inherit;font-size:21px;font-weight:500;cursor:pointer}
+.dashboard-guide-popup dl{margin:20px 0 0}.dashboard-guide-popup dt{font-size:15px;font-weight:600;margin:20px 0 5px}.dashboard-guide-popup dd{margin:0;font-size:14px;line-height:1.8;color:#53685b}
+#daily-mission>.daily-idiom{padding:0!important;border:0!important;background:transparent!important;min-height:0!important;border-radius:0!important;width:100%;max-width:245px;margin:0!important;grid-column:2;grid-row:1 / span 5}
+#daily-mission>.daily-idiom>summary{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:144px;height:144px;padding:16px;box-sizing:border-box;margin:0 auto 16px;border:1px solid #bdcbb1;border-radius:50%;background:#edf0e6;list-style:none;font-size:14px!important;text-align:center;line-height:1.5}
+#daily-mission>.daily-idiom>summary::-webkit-details-marker{display:none}
+#daily-mission>.daily-idiom>summary .idiom-symbol{margin:0!important}
+#daily-mission>.daily-idiom>summary svg{margin:0!important;width:34px;height:34px}
+#daily-mission>.daily-idiom[open]{padding-bottom:16px!important}
+#daily-mission>.daily-idiom>h4{padding:16px 16px 0;margin:0!important;border-top:1px solid #c2cfb8}
+#daily-mission>.daily-idiom>p{padding:0 16px;margin:12px 0!important}
+@media(max-width:760px){
+ #portal-content .dashboard-help-circle{width:44px;height:44px;min-height:44px;font-size:19px}
+ #daily-mission{display:flex!important;flex-direction:column;align-items:stretch;gap:0}
+ #daily-mission>h3{order:0}
+ #daily-mission>.daily-idiom{order:1;align-self:flex-end;width:100%;max-width:100%;margin:0 0 14px!important}
+ #daily-mission>.daily-idiom>summary{width:112px;height:112px;margin:0 0 0 auto;padding:13px;font-size:12px!important;gap:6px}
+ #daily-mission>.daily-idiom>summary svg{width:27px;height:27px}
+ #daily-mission>.daily-task-intro{order:2}
+ #daily-mission>*:not(h3):not(.daily-idiom):not(.daily-task-intro){order:3;width:100%}
+}
+@media(min-width:761px){
+ #students-portal #daily-mission{display:grid!important;grid-template-columns:minmax(0,1fr) 220px!important;column-gap:28px;align-items:start}
+ #students-portal #daily-mission>*{grid-column:1;min-width:0}
+ #students-portal #daily-mission>.daily-idiom{grid-column:2!important;grid-row:1 / span 5!important;align-self:start;width:100%;max-width:220px}
+ #students-portal #daily-mission>h3{grid-row:1}
+}
