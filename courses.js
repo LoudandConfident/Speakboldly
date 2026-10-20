@@ -125,7 +125,7 @@ export const courses = [
     "priceOptions": [
       {
         "previous": 900,
-        "amount": 600,
+        "amount": 700,
         "schedule": "2 sessions"
       }
     ],
@@ -296,6 +296,7 @@ export const courses = [
   }
 ];
 export function matches(c,category,query){return !c.catalogHidden&&(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
+
 
 
 
