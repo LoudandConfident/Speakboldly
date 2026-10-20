@@ -74,7 +74,7 @@ main>[data-view]:not(#home){padding-top:30px!important}
 #daily-mission>.daily-idiom>p{padding:0 16px;margin:12px 0!important}
 @media(max-width:760px){
  #portal-content .dashboard-help-circle{width:44px;height:44px;min-height:44px;font-size:19px}
- #daily-mission{display:flex!important;flex-direction:column;align-items:stretch;gap:0}
+ #daily-mission:not([hidden]){display:flex!important;flex-direction:column;align-items:stretch;gap:0}
  #daily-mission>h3{order:0}
  #daily-mission>.daily-idiom{order:1;align-self:flex-end;width:100%;max-width:100%;margin:0 0 14px!important}
  #daily-mission>.daily-idiom>summary{width:112px;height:112px;margin:0 0 0 auto;padding:13px;font-size:12px!important;gap:6px}
@@ -83,8 +83,12 @@ main>[data-view]:not(#home){padding-top:30px!important}
  #daily-mission>*:not(h3):not(.daily-idiom):not(.daily-task-intro){order:3;width:100%}
 }
 @media(min-width:761px){
- #students-portal #daily-mission{display:grid!important;grid-template-columns:minmax(0,1fr) 220px!important;column-gap:28px;align-items:start}
+ #students-portal #daily-mission:not([hidden]){display:grid!important;grid-template-columns:minmax(0,1fr) 220px!important;column-gap:28px;align-items:start}
  #students-portal #daily-mission>*{grid-column:1;min-width:0}
  #students-portal #daily-mission>.daily-idiom{grid-column:2!important;grid-row:1 / span 5!important;align-self:start;width:100%;max-width:220px}
  #students-portal #daily-mission>h3{grid-row:1}
 }
+
+/* Hidden portal panels must stay hidden, regardless of their internal layout. */
+#students-portal #portal-content [data-portal-panel][hidden]{display:none!important}
+
