@@ -1,0 +1,26 @@
+/* Small title, breathing room, then the main heading. */
+main>[data-view]:not(#home){padding-top:46px!important}
+#how .how-hero-copy>.eyebrow,#vision .vision-heading>.eyebrow,#courses .courses-heading>.eyebrow,#reviews .reviews-copy>.eyebrow,#quote .eyebrow,#join-team .eyebrow,#contact>.eyebrow,#placement .assessment-options>article>.eyebrow,#portal-content .learning-space-heading>.eyebrow{margin:0 0 22px!important;line-height:1.6!important}
+#how .how-hero-copy>h2,#vision .vision-heading>h2,#courses .courses-heading>h2,#reviews .reviews-copy>h2,#contact>h2,#quote .quote-editorial-title,#join-team .join-editorial-title{margin-top:0!important}
+#portal-content .learning-space-heading>h3{margin-top:0!important}
+#students-portal:has(#daily-mission:not([hidden])){padding-top:32px!important}
+#courses .course-booking-note{gap:12px!important}
+#courses .course-fees-open{width:190px!important;height:190px!important;min-height:190px!important;padding:25px!important;font-size:14px!important}
+#courses .consultation-open{width:164px!important;height:164px!important;min-height:164px!important;padding:25px!important;font-size:13px!important}
+#courses .course-booking-note .course-fees-open,#courses .course-booking-note .consultation-open{transition:transform .2s ease,box-shadow .2s ease,background-color .2s ease;transform:translateY(0)!important}
+@media(hover:hover) and (pointer:fine){
+ #courses .course-booking-note .course-fees-open:hover,#courses .course-booking-note .consultation-open:hover{transform:translateY(-5px) rotate(-2deg)!important;box-shadow:0 9px 20px #193c3218}
+}
+#courses .course-booking-note .course-fees-open:focus-visible,#courses .course-booking-note .consultation-open:focus-visible{outline:2px solid #193c32;outline-offset:5px}
+@media(max-width:760px){
+ main>[data-view]:not(#home){padding-top:38px!important}
+ #how .how-hero-copy>.eyebrow,#vision .vision-heading>.eyebrow,#courses .courses-heading>.eyebrow,#reviews .reviews-copy>.eyebrow,#quote .eyebrow,#join-team .eyebrow,#contact>.eyebrow,#placement .assessment-options>article>.eyebrow,#portal-content .learning-space-heading>.eyebrow{margin-bottom:18px!important}
+ #courses .course-fees-open{width:160px!important;height:160px!important;min-height:160px!important;padding:23px!important;font-size:12px!important}
+ #courses .consultation-open{width:138px!important;height:138px!important;min-height:138px!important;padding:22px!important;font-size:12px!important}
+ #courses .course-booking-note{gap:11px!important}
+}
+@media(max-width:380px){
+ #courses .course-fees-open{width:140px!important;height:140px!important;min-height:140px!important;padding:19px!important;font-size:11px!important}
+ #courses .consultation-open{width:122px!important;height:122px!important;min-height:122px!important;padding:19px!important;font-size:11px!important}
+}
+@media(prefers-reduced-motion:reduce){#courses .course-booking-note .course-fees-open,#courses .course-booking-note .consultation-open{transition:none!important;transform:none!important}}
