@@ -112,6 +112,7 @@ function doPost(event) {
     const request = sbParseWebRequest(event);
     const data = request.data;
     if(data.action==='programConsultation'){if(request.size>2900000)throw new Error('Pictures are too large. Use up to 2 pictures, 1 MB each.');return handleStudentInstructorContact(data);}
+    if(data.action==='dailyMotivationSettings')return response({ok:true,settings:sbDailyMotivationSettings()});
     if(data.action==='nativeEnglishPage'){if(request.size>4000)throw new Error('Request too large.');return sbNativeEnglishRead(data);}
     if (data.action === 'studentInstructorContact') {
       if (request.size > 16000) throw new Error('Request too large.');
@@ -164,6 +165,7 @@ function sbRequireClientConnection(data) {
 
 function sbRouteInstructorRequest(data, connection, lock) {
   if(['exportOwnerBackup','saveOwnerBackup'].includes(data.action))return sbOwnerBackupAction(data,connection.book);
+  if(['dailyMotivationOwnerSettings','saveDailyMotivationSettings'].includes(data.action))return sbDailyMotivationOwner(data);
   if(['nativeEnglishSettings','saveNativeEnglishSettings'].includes(data.action))return sbNativeSettingsOwner(data);
   if(['nativeEnglishEdit','saveNativeEnglish'].includes(data.action))return sbNativeEnglishOwner(data);
   if (SB_OWNER_BOOKING_ACTIONS.includes(data.action)) return handleOwnerBooking(data);
@@ -1236,3 +1238,16 @@ function sbNativeSettingsOwner(data){
  }finally{lock.releaseLock();}
 }
 
+
+
+// Shared Daily Motivation controls. Public reads, private owner writes.
+function sbDailyMotivationSettings(){const raw=PropertiesService.getScriptProperties().getProperty('SB_DAILY_MOTIVATION_SETTINGS');if(raw){try{return JSON.parse(raw);}catch{}}return {frozen:true,day:20746,until:'2026-10-26',revision:'0'};}
+function sbDailyMotivationOwner(data){const lock=LockService.getScriptLock();lock.waitLock(20000);let settings=sbDailyMotivationSettings();if(data.action==='saveDailyMotivationSettings'){
+ if(String(data.revision)!==String(settings.revision))throw new Error('Settings changed on another device. Press Refresh first.');
+ if(!['week','hold','resume'].includes(data.mode)||!Number.isInteger(data.day)||data.day<20000||data.day>50000)throw new Error('Invalid motivation setting.');
+ const day=Math.floor(Date.parse(Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')+'T00:00Z')/86400000);
+ if(Math.abs(data.day-day)>1)throw new Error('Check your device date, then refresh.');
+ let until='';if(data.mode==='week'){const date=new Date(day*86400000),weekday=date.getUTCDay(),days=(8-weekday)%7||7;until=new Date((day+days)*86400000).toISOString().slice(0,10);}
+ const previousUntil=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity,heldDay=settings.frozen&&day<previousUntil?settings.day:day;
+ settings={frozen:data.mode!=='resume',day:heldDay,until,revision:Utilities.getUuid()};PropertiesService.getScriptProperties().setProperty('SB_DAILY_MOTIVATION_SETTINGS',JSON.stringify(settings));
+ }return response({ok:true,settings});}

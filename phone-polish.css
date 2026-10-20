@@ -23,3 +23,23 @@ main>#page-back-arrow{left:2%;right:auto;width:28px}
  #daily-quote .motivation-page-heading{font-size:23px!important;max-width:100%}
  .teacher-voice-note{gap:10px;padding:13px}.teacher-voice-note svg{width:58px;height:76px}.teacher-voice-note em{font-size:19px}
 }
+
+@media(max-width:760px){
+ .motivation-freeze-body{padding:0 16px 18px;min-width:0}.motivation-freeze-body .detail-actions{display:grid;grid-template-columns:1fr;gap:10px}.motivation-freeze-body button{width:100%;min-height:44px;white-space:normal}
+ #admin-dashboard .instructor-tool-cards>details[open]>*:not(summary){width:auto!important;max-width:100%!important;margin-left:0;margin-right:0;box-sizing:border-box}
+ #admin-dashboard .instructor-tool-cards>details[open]{overflow:visible}
+ .admin-metrics{gap:10px!important}.admin-metrics>article{padding:14px!important;min-width:0!important}.admin-metrics strong{font-size:26px!important}.instructor-teaching-quote{font-size:19px!important;line-height:1.5!important;margin:12px 0 22px!important}
+ .admin-clients-heading{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.admin-clients-heading h4{flex:1;min-width:130px}.admin-client-actions{display:flex;flex-wrap:wrap;gap:8px}.admin-client-actions button{min-height:40px}
+ #admin-calendar .calendar-toolbar{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px;align-items:center}
+ #admin-calendar .calendar-toolbar h4{min-width:0!important;font-size:17px!important;text-align:center;margin:0!important}
+ #admin-calendar .calendar-view-switch,#admin-calendar .calendar-jump-label{grid-column:1/-1;width:100%;box-sizing:border-box}
+ #admin-calendar .calendar-view-switch{display:flex;justify-content:space-between}#admin-calendar .calendar-view-switch button{flex:1;min-height:40px}
+ #admin-calendar .calendar-toolbar>button{min-width:0;padding:8px!important}
+ .calendar-day{min-width:0}.calendar-session,.calendar-slot{max-width:100%;overflow-wrap:anywhere;white-space:normal}
+ dialog.action-popup{width:calc(100vw - 28px)!important;max-width:calc(100vw - 28px)!important;box-sizing:border-box;padding:24px 18px!important;margin:auto;max-height:calc(100dvh - 36px);overflow-y:auto}
+ dialog.action-popup h2{font-size:23px!important;line-height:1.35!important;padding-right:26px}
+ .client-authorization-actions{display:grid;grid-template-columns:1fr;gap:10px}.client-authorization-actions button{width:100%;min-height:44px;white-space:normal}
+ .confirmation-session-details{display:grid;grid-template-columns:1fr!important;gap:5px;margin:18px 0}.confirmation-session-details dd{margin:0 0 10px;overflow-wrap:anywhere}
+ #client-authorization-name{overflow-wrap:anywhere;font-size:14px;line-height:1.6}
+ #portal-content .portal-panel:not([hidden]){min-width:0;max-width:100%}#portal-content .portal-panel iframe,#portal-content .portal-panel canvas{max-width:100%}
+}

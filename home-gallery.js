@@ -1,3 +1,4 @@
+import {motivationDay,refreshMotivationSettings} from './motivation-settings.js?v=1';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
  { image: './images/daily-motivation-1.png', alt: 'A notebook and phone, ready for a fresh start', quote: 'Make time for what matters.' },
@@ -26,7 +27,7 @@ export function cairoDayNumber(now = new Date()) {
 }
 // One-time exception: keep 15 October's message through Sunday in Cairo.
 export function motivationIndexForDate(now = new Date()) {
- const day=cairoDayNumber(now),start=Math.floor(Date.UTC(2026,9,15)/86400000),end=Math.floor(Date.UTC(2026,9,19)/86400000);
+ const day=motivationDay(now,cairoDayNumber),start=Math.floor(Date.UTC(2026,9,15)/86400000),end=Math.floor(Date.UTC(2026,9,19)/86400000);
  if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
  if(day>=end){
   // A fixed seed gives every device the same shuffled daily schedule.
@@ -100,7 +101,7 @@ export function motivationShareUrl(entry,base='https://loudandconfident.github.i
  const name=entry.image.split('/').pop().replace(/\.png$/,'.html');return new URL('./motivation/'+name,base).href;
 }
 export function clientDailyMotivation(now=new Date()){
- const day=cairoDayNumber(now),index=day%dailyQuotes.length,entry=dailyQuotes[index],details=quoteDetails[index];
+ const day=motivationDay(now,cairoDayNumber),index=motivationIndexForDate(now),entry=dailyQuotes[index],details=quoteDetails[index];
  return {day,quote:entry.quote,image:new URL(entry.image,'https://loudandconfident.github.io/Speakboldly/').href,paragraphs:details.paragraphs||[details.reflection,dailyPractice[index]],url:motivationShareUrl(entry)};
 }
 export function initializeGallery(doc, win) {
@@ -109,7 +110,7 @@ export function initializeGallery(doc, win) {
  page.dataset.galleryInitialized='true';
  let day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,shareStatus);page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationShareUrl(currentEntry,doc.baseURI);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
  function refresh() {
-  const now = new win.Date(), nextDay = cairoDayNumber(now);
+  const now = new win.Date(), nextDay = motivationDay(now,cairoDayNumber);
   if (day === nextDay) return;
   day = nextDay;
   const index = motivationIndexForDate(now), entry = dailyQuotes[index], details = quoteDetails[index];currentEntry=entry;shareFile=null;shareStatus.textContent='';
@@ -126,13 +127,15 @@ export function initializeGallery(doc, win) {
   reflection.replaceChildren(...(details.paragraphs||[details.reflection,dailyPractice[index]]).map(text=>{const paragraph=doc.createElement('p');if(text.startsWith('Cambridge Dictionary meaning')){const definition=doc.createElement('em');definition.textContent=text;paragraph.append(definition);}else paragraph.textContent=text;return paragraph;}));
  }
  refresh();
+ const check=()=>refreshMotivationSettings(doc).then(()=>{day=null;refresh();});check();doc.addEventListener('daily-motivation-settings-changed',()=>{day=null;refresh();});
  let interval;
- function start() { win.clearInterval(interval); interval = win.setInterval(refresh, 1000); refresh(); }
+ function start() { win.clearInterval(interval); interval = win.setInterval(()=>{refresh();if(!doc.hidden)check();}, 60000); refresh(); }
  start();
  win.addEventListener('hashchange', refresh);
- doc.addEventListener('visibilitychange', () => { if (!doc.hidden) refresh(); });
+ doc.addEventListener('visibilitychange', () => { if (!doc.hidden) {refresh();check();} });
  win.addEventListener('pagehide', () => win.clearInterval(interval));
  win.addEventListener('pageshow', start);
 }
 if (typeof document !== 'undefined') initializeGallery(document, window);
+
 
