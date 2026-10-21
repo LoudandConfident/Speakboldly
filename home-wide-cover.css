@@ -71,3 +71,21 @@ main #home>.home-bottom-row{padding:17px 0 7px!important;margin:0!important}
 }
 @media(max-width:360px){main #home .hero-copy{padding:24px 20px 20px!important}#home .home-kicker{font-size:9px!important;letter-spacing:1.1px!important}#home .home-title-bottom{font-size:20px!important}}
 @media(max-width:680px){#home .home-speech-bubble>.home-bubble-shape{display:none!important}}
+
+/* Carry the brand green through the full home view. */
+body:has(#home:not([hidden])){background:#193c32;color:#faf9f4}
+body:has(#home:not([hidden])) main{background:#193c32}
+main #home,main #home .hero,main #home .hero-copy{background:#193c32!important;color:#faf9f4!important}
+main #home .hero-copy .home-slogan,main #home .home-title-bottom,main #home .home-pricing-note{color:#faf9f4!important}
+main #home .home-kicker,main #home .home-pricing-note strong:before{color:#d5ed98!important}
+main #home>.home-cover-benefits{background:#234b3e!important;border-color:#64836d!important;color:#faf9f4!important}
+main #home>.home-cover-benefits>span{border-color:#64836d!important}
+main #home .home-bottom-row .page-signature,
+main #home .home-bottom-row .page-signature span,
+main #home .home-bottom-row .page-signature small{color:#faf9f4!important}
+main #home .home-bottom-row>.review-link,main #home .home-mobile-primary{background:#edf0e6!important;color:#193c32!important;border-color:#b7cda1!important}
+main #home .home-bottom-row>.review-link:hover,main #home .home-mobile-primary:hover{background:#d5ed98!important}
+@media(max-width:680px){
+ main #home .home-speech-bubble,main #home .home-speech-bubble:nth-child(2){color:#faf9f4!important;border-color:#b7cda1!important}
+ main #home .home-speech-bubble:hover{background:#234b3e!important}
+}
