@@ -13,7 +13,7 @@ import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=m
 import {initializeWeeklyPortalPasswords} from './weekly-portal-passwords.js?v=horizontal-cards';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
 import {initializePortalSwitches} from './portal-switches.js?v=parallel-files-1';
-import {initializeTeacherDocuments} from './teacher-documents.js?v=fit-report';
+import {initializeTeacherDocuments} from './teacher-documents.js?v=full-width-report';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
 import {initializeAdminCalendar} from './admin-calendar.js?v=level-hours-4';

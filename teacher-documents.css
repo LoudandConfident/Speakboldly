@@ -24,3 +24,20 @@
 
 /* PDF fields must retain the size of their printed rectangles. */
 .teacher-pdf-page>.teacher-pdf-overlay{min-height:0!important;max-height:none!important;margin:0!important;padding:1px 2px!important;line-height:1.2!important;letter-spacing:normal!important;box-sizing:border-box!important;white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal;overflow:hidden;pointer-events:auto;touch-action:auto}.teacher-pdf-pages{justify-items:center}.teacher-pdf-fields textarea{white-space:pre-wrap;overflow-wrap:anywhere;resize:vertical;min-height:100px}
+
+/* Shared report workspace: controls have their own surface, separate from the PDF. */
+body:has(.teacher-report-page[open]){overflow:auto!important}
+#teacher-pdf-editor.teacher-report-page{padding:0!important;border:1px solid #cbd6ca!important;border-radius:14px!important;box-shadow:none!important;background:#f5f6ef!important;overflow:visible!important}
+#teacher-pdf-editor .teacher-report-header{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:20px;background:#edf0e6;border-bottom:1px solid #cbd6ca;border-radius:14px 14px 0 0;box-sizing:border-box}
+#teacher-pdf-editor .teacher-report-header h2{margin:0!important;padding:0!important;font-size:24px!important;line-height:1.35;overflow-wrap:anywhere}
+#teacher-pdf-editor .teacher-report-header>.popup-close{position:static!important;float:none!important;align-self:start;border:1px solid #b9cbb6!important;border-radius:8px!important;background:#faf9f4!important;padding:10px 14px!important;font:500 14px/1.4 'DM Sans',sans-serif!important;min-height:40px;color:#193c32;white-space:nowrap}
+#teacher-pdf-editor .teacher-report-header .teacher-pdf-tools{grid-column:1/-1;margin:0!important;gap:12px}
+#teacher-pdf-editor .teacher-report-header .teacher-pdf-tools .button{font-size:13px;min-height:40px;padding:9px 14px}
+#teacher-pdf-editor .teacher-pdf-pages{padding:12px!important;background:#dfe5dc;box-sizing:border-box;width:100%;max-width:100%;align-items:start;justify-items:center}
+#teacher-pdf-editor .teacher-pdf-fields{padding:0 20px}
+#teacher-pdf-editor .teacher-document-actions{position:sticky!important;bottom:0!important;z-index:5;box-sizing:border-box;display:flex;flex-wrap:wrap;gap:10px;width:100%;padding:14px 20px!important;margin:0!important;background:#edf0e6!important;border-top:1px solid #b9cbb6;border-radius:0 0 14px 14px;box-shadow:0 -4px 14px #193c320a}
+#teacher-pdf-editor .teacher-document-actions .button{box-sizing:border-box;min-height:42px;font-size:13px;line-height:1.4;padding:10px 14px;white-space:normal;margin:0}
+#teacher-pdf-editor #teacher-pdf-status{padding:0 20px;overflow-wrap:anywhere}
+@media(max-width:680px){#teacher-pdf-editor .teacher-report-header{padding:14px;gap:12px}#teacher-pdf-editor .teacher-report-header h2{font-size:20px!important}#teacher-pdf-editor .teacher-document-actions{padding:12px!important;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#teacher-pdf-editor .teacher-document-actions .button{width:100%;font-size:12px;padding:9px 8px}#teacher-pdf-editor .teacher-pdf-fields{padding:0 12px}}
+
+#teacher-pdf-editor .teacher-report-header{height:auto!important;min-height:0!important;width:100%;max-width:none;margin:0}#teacher-pdf-editor .teacher-report-header .teacher-document-actions{grid-column:1/-1;position:static!important;padding:14px 0 0!important;box-shadow:none;border-radius:0;background:transparent!important}#teacher-pdf-editor .teacher-report-header .button{display:inline-flex!important}

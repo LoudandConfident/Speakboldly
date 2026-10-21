@@ -123,4 +123,6 @@ Daily Challenge includes its daily expandable idiom and a Fun circle. Real Engli
 
 Paragraph correction includes additional local rules for perfect tenses, irregular past forms, modals, gerunds, plurals, prepositions, contractions and common spelling errors. Question punctuation uses a separate character-level edit so other grammar feedback does not suppress it. Valid-usage regression examples accompany the added checks; this is still a pattern-based checker.
 
-Reports open at a reduced fit-page zoom with 50% and 75% options. Overlay comments wrap and shrink within their printed rectangles, while Edit fields provides larger writing controls. Exported PDFs auto-size text and remove the templates’ obsolete 100-character limits. Client rows keep Action plan within Actions.
+Reports open in an editable PDF view fitted to the available width, with 50%, 75% and larger zoom options. Overlay comments wrap and shrink within their printed rectangles, while Edit fields provides larger writing controls. Exported PDFs auto-size text and remove the templates’ obsolete 100-character limits. Client rows keep Action plan within Actions.
+
+All three report templates share a toolbar containing title, close/navigation, zoom, save, download, preview and send controls on one background above the document. Report pages scroll normally and the controls do not float over editable rectangles.
