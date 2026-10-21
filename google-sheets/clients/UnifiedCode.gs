@@ -1000,7 +1000,13 @@ function sbApplySessionHours(book){
   for(const h of missing)h.hours=0;missing[missing.length-1].hours=Math.round(remaining*100)/100;
   person[10]=JSON.stringify(history);person[12]=0;clients.getRange(i+2,11).setValue(person[10]);clients.getRange(i+2,13,1,2).setValues([[0,new Date().toISOString()]]);
  }
- for(let i=0;i<people.length;i++){const person=people[i];if(!person[0])continue;const hours=sbCountedSessionHours(book,String(person[0]));const total=Math.round((Number(person[12])+hours)*100)/100;if(Number(person[7])!==total)clients.getRange(i+2,8).setValue(total);}
+ // Explicit one-time correction requested for Monica; never reapply to future rounds.
+ const exceptionMatches=people.filter(p=>String(p[1]).trim().replace(/\s+/g,' ').toLowerCase()==='monica sabry');
+ for(let i=0;i<people.length;i++){const person=people[i];if(!person[0])continue;const hours=sbCountedSessionHours(book,String(person[0])),exceptionKey='SB_ONE_TIME_ZERO_HOURS_'+String(person[0]),reset=exceptionMatches.length===1&&person===exceptionMatches[0]&&props.getProperty(exceptionKey)!=='1';
+  if(reset){person[12]=-hours;clients.getRange(i+2,13,1,2).setValues([[-hours,new Date().toISOString()]]);}
+  const total=Math.max(0,Math.round((Number(person[12])+hours)*100)/100);if(Number(person[7])!==total)clients.getRange(i+2,8).setValue(total);
+  if(reset)props.setProperty(exceptionKey,'1');
+ }
 }
 function sbSetClientHours(book,sheet,row,input){
  if(row>sheet.getLastRow())return Number(input.hours);

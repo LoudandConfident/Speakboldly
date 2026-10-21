@@ -98,7 +98,13 @@ function sbApplySessionHours(book){
  const rows=sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,14).getValues():[];
  for(let i=0;i<rows.length;i++){const row=rows[i];if(row[0]&&/^\d{4}-\d{2}-\d{2}$/.test(String(row[3]))&&String(row[3])<today&&!row[12]){row[12]=String(row[3])<'2026-10-14'?'baseline':'counted';sessions.getRange(i+2,13).setValue(row[12]);}}
  props.setProperty('SB_SESSION_HOURS_READY','1');
- for(let i=0;i<people.length;i++){const person=people[i];if(!person[0])continue;const hours=sbCountedSessionHours(book,String(person[0]));const total=Math.round((Number(person[12])+hours)*100)/100;if(Number(person[7])!==total)clients.getRange(i+2,8).setValue(total);}
+ // Explicit one-time correction requested for Monica; never reapply to future rounds.
+ const exceptionMatches=people.filter(p=>String(p[1]).trim().replace(/\s+/g,' ').toLowerCase()==='monica sabry');
+ for(let i=0;i<people.length;i++){const person=people[i];if(!person[0])continue;const hours=sbCountedSessionHours(book,String(person[0])),exceptionKey='SB_ONE_TIME_ZERO_HOURS_'+String(person[0]),reset=exceptionMatches.length===1&&person===exceptionMatches[0]&&props.getProperty(exceptionKey)!=='1';
+  if(reset){person[12]=-hours;clients.getRange(i+2,13,1,2).setValues([[-hours,new Date().toISOString()]]);}
+  const total=Math.max(0,Math.round((Number(person[12])+hours)*100)/100);if(Number(person[7])!==total)clients.getRange(i+2,8).setValue(total);
+  if(reset)props.setProperty(exceptionKey,'1');
+ }
 }
 function sbSetClientHours(book,sheet,row,input){
  if(row>sheet.getLastRow())return Number(input.hours);

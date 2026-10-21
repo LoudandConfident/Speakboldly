@@ -130,3 +130,5 @@ All three report templates share a toolbar containing title, close/navigation, z
 Reports use a dark green background with cream text and lighter green fields in the editor and exported PDFs. Notes and Action Plan PDF exports share that theme. `scripts/darken-teacher-reports.py` applies the theme to existing templates while preserving field names and positions.
 
 Each current client row includes “Payment reminder for new round”. The owner reviews the recipient before sending. The Apps Script `paymentReminder` email uses the saved client address, requires owner authentication and logs request IDs to prevent duplicate sends on retry. Deploy the updated UnifiedCode.gs to enable this new email kind.
+
+The hours update includes a one-time, uniquely matched client correction. Once applied, a persistent per-client script property prevents it from running again; completed future appointments count normally and the original manual-hours safeguards remain. Deploy the updated script and refresh Clients to apply the correction.
