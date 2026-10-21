@@ -1,4 +1,4 @@
-import {createPaymentReminder} from './payment-reminder.js?v=1';
+import {createPaymentReminder} from './payment-reminder.js?v=compatible-payment';
 import {initializeInstructorResources} from './instructor-resources.js?v=library-folders';
 import {initializeHubAccessEditor} from './hub-access-editor.js?v=1';
 import {initializeMotivationFreeze} from './motivation-freeze-editor.js?v=1';

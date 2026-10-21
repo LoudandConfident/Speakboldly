@@ -68,7 +68,7 @@ function handleClientEmail(p){
   const labels={confirmation:'Email confirmation',progress:'Progress report',final:'Final report',registration:'Payment and registration confirmation',notes:'Notes',actionplan:'Action plan',paymentReminder:'Payment reminder for new round'};
   let message;
   if(kind==='paymentReminder'){
-   const text='Please complete payment for your next round and email your payment screenshot, name and program to speakboldly16@gmail.com.';
+   const text='Kindly complete the payment for your course before your new round begins. Thank you for your continued trust in Speak Boldly—we look forward to supporting your progress. Please email your payment screenshot, name and program to speakboldly16@gmail.com.';
    message={body:'Hello '+client[1]+',\n\n'+text+'\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly',htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p><p>'+sbEmailEscape(text)+'</p><p>If you have any questions, reply to this email.</p>')};
   }else if(kind==='confirmation'){
    const meetings=sbUpcomingClientMeetings(book,id).slice(0,1);if(!meetings.length)throw new Error('No upcoming calendar sessions are saved for this client. Add or sync their appointments first.');
