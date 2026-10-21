@@ -1,4 +1,4 @@
-import {buildClientNotesPdf} from './notes-pdf.js?v=action-plan-1';
+import {buildClientNotesPdf} from './notes-pdf.js?v=dark-reports';
 import {buildClientNotesWord} from './word-notes.js?v=action-plan-1';
 import {clientSheetConnected,sendSheetClientEmail} from './client-sheet.js?v=level-history';
 import {confirmClientEmail} from './client-email-confirmation.js';

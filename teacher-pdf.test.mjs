@@ -20,3 +20,12 @@ test('long report comments are preserved and auto-sized instead of rejected at 1
  const appearance=field.acroField.getDefaultAppearance();const size=Number(appearance.match(/([\d.]+)\s+Tf/)[1]);assert(size>0&&size<8,appearance);
  const final=await PDFDocument.load(await fillTeacherPdf(bytes,{[meta.name]:value},{fontBytes,flatten:true}));assert.equal(final.getForm().getFields().length,0);
 });
+
+test('every report template uses the dark green theme and light field text',async()=>{
+ for(const template of Object.values(catalog)){
+  const pdf=await PDFDocument.load(readFileSync(new URL(template.url,import.meta.url)));
+  assert.match(pdf.getKeywords(),/sb-dark-report-v1/);
+  const field=pdf.getForm().getTextField(template.pages[0].fields[0].name);
+  assert.match(field.acroField.getDefaultAppearance(),/0\.980/);
+ }
+});

@@ -126,3 +126,5 @@ Paragraph correction includes additional local rules for perfect tenses, irregul
 Reports open in an editable PDF view fitted to the available width, with 50%, 75% and larger zoom options. Overlay comments wrap and shrink within their printed rectangles, while Edit fields provides larger writing controls. Exported PDFs auto-size text and remove the templates’ obsolete 100-character limits. Client rows keep Action plan within Actions.
 
 All three report templates share a toolbar containing title, close/navigation, zoom, save, download, preview and send controls on one background above the document. Report pages scroll normally and the controls do not float over editable rectangles.
+
+Reports use a dark green background with cream text and lighter green fields in the editor and exported PDFs. Notes and Action Plan PDF exports share that theme. `scripts/darken-teacher-reports.py` applies the theme to existing templates while preserving field names and positions.

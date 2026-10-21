@@ -1,6 +1,6 @@
-import {initializeClientNotes} from './client-notes.js?v=action-plan-fast-1';
+import {initializeClientNotes} from './client-notes.js?v=dark-reports';
 import {readReportTab} from './report-tabs.js?v=action-plan-1';
-import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=full-width-report';
+import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=dark-reports';
 import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=level-history';
 const status=document.querySelector('#report-tab-status'),back=document.querySelector('#report-tab-return');
 const payload=readReportTab(window);
