@@ -1,5 +1,5 @@
 import {initializePersonalCalendar} from './personal-calendar.js';
-import './admin-portal.js?v=compact-payment-roomy-time';
+import './admin-portal.js?v=reminder-label';
 import {clientSheetConnected} from './client-sheet.js?v=level-history';
 const SESSION='speak-boldly-instructor-app-session-v1';
 const dashboard=document.querySelector('#admin-dashboard'),clientPage=document.querySelector('#admin-client-page'),login=document.querySelector('#admin-login-form'),dialog=document.querySelector('#teacher-login-dialog'),nav=document.querySelector('.app-nav'),lock=document.querySelector('#app-lock'),message=document.querySelector('#app-locked-message');
