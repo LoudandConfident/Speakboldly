@@ -89,3 +89,25 @@ main #home .home-bottom-row>.review-link:hover,main #home .home-mobile-primary:h
  main #home .home-speech-bubble,main #home .home-speech-bubble:nth-child(2){color:#faf9f4!important;border-color:#b7cda1!important}
  main #home .home-speech-bubble:hover{background:#234b3e!important}
 }
+
+/* Use the original speech-bubble artwork for both homepage links. */
+main #home .hero .home-speech-links{gap:12px!important;flex-wrap:wrap!important}
+main #home .hero .home-speech-links .home-speech-bubble,
+main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){
+ position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ flex:0 1 156px!important;width:156px!important;min-width:0!important;height:70px!important;min-height:70px!important;
+ box-sizing:border-box!important;padding:10px 15px 20px!important;border:0!important;border-radius:0!important;
+ background:transparent!important;color:#193c32!important;box-shadow:none!important;overflow:visible!important;
+}
+main #home .hero .home-speech-links .home-speech-bubble>.home-bubble-shape{
+ display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+ fill:#edf0e6!important;stroke:none!important;pointer-events:none;
+}
+main #home .hero .home-speech-links .home-speech-bubble>span{position:relative;z-index:1;color:#193c32!important;font-size:12px!important;line-height:1.4!important;white-space:normal!important;text-align:center}
+main #home .hero .home-speech-links .home-speech-bubble:hover>.home-bubble-shape{fill:#d5ed98!important}
+main #home .hero .home-speech-links .home-speech-bubble:focus-visible{outline:3px solid #d5ed98;outline-offset:4px;border-radius:12px!important}
+@media(max-width:680px){
+ main #home .hero .home-speech-links{margin-top:0!important}
+ main #home .hero .home-speech-links .home-speech-bubble,
+ main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){flex:1 1 0!important;width:auto!important;max-width:170px!important;height:70px!important}
+}
