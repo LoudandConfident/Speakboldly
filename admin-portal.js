@@ -6,7 +6,7 @@ import {clientDailyMotivation} from './home-gallery.js?v=freeze-1';
 import {initializeInstructorFrench} from './instructor-french.js?v=toolbar-v2';
 import {initializeInstructorBackups} from './instructor-backups.js?v=reliability';
 import {initializeNativeEnglishEditor} from './native-english-editor.js?v=real-english-label-2';
-import {initializeInstructorOverview} from './instructor-overview.js?v=requests-only-v2';
+import {initializeInstructorOverview} from './instructor-overview.js?v=visible-loading';
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
 import {openClientReportTab} from './report-tabs.js?v=action-plan-1';
 import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=momentum-and-uploads';
