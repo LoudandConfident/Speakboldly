@@ -45,3 +45,39 @@ test('checks common paragraph agreement, missing auxiliaries and verb patterns',
  assert.equal(checkWriting(input).suggestedText,'I go to school. She is happy. They are ready. We are studying English. I want to improve. He can go home.');
  for(const sentence of ['If I were ready, I would go.','I wish she were here.','They study English.','She is ready.'])assert.deepEqual(checkWriting(sentence).issues,[],sentence);
 });
+
+test('covers perfect tenses, irregular verbs, gerunds, articles and prepositions',()=>{
+ for(const [source,expected]of [
+ ['I have went home.','I have gone home.'],
+ ['She has already ate.','She has already eaten.'],
+ ['We buyed books.','We bought books.'],
+ ['They avoid to swim.','They avoid swimming.'],
+ ['I look forward to meet you.','I look forward to meeting you.'],
+ ['There is many books.','There are many books.'],
+ ['Everyone are ready.','Everyone is ready.'],
+ ['These book are useful.','These books are useful.'],
+ ['I am interested about music.','I am interested in music.'],
+ ['It depends of the weather.','It depends on the weather.'],
+ ['I listen music.','I listen to music.'],
+ ['I will not went home.','I will not go home.'],
+ ['She doesnt know.','She doesn\'t know.'],
+ ['This is more easier.','This is easier.'],
+ ['I have an oportunity.','I have an opportunity.']
+ ])assert.equal(checkWriting(source).suggestedText,expected,source);
+});
+test('question punctuation is checked even when grammar also needs correction',()=>{
+ const source='Do you has a book.';const result=checkWriting(source);
+ assert.equal(result.suggestedText,'Do you have a book?');
+ for(const item of result.issues)assert.equal(source.slice(item.start,item.end),item.original);
+});
+test('keeps valid variants, hypothetical forms, nouns and clauses intact',()=>{
+ for(const source of [
+ 'I have a car.','I had lunch.','They have gone home.','She enjoys swimming.',
+ 'I look forward to seeing you.','The Indigenous peoples have distinct traditions.',
+ 'I wish she were here.','If I were you, I would study.','They had had enough.',
+ 'She said that that was correct.','I am writing to my teacher.',
+ 'This is a useful course.','It takes an hour.','I need two books.',
+ 'I believe in what he says.','Ill health kept him home.','May I go home?',
+ 'I am good in this role.','I have been studying English.'
+ ])assert.deepEqual(checkWriting(source).issues,[],source);
+});

@@ -1,6 +1,6 @@
 import {openDailyFun} from './daily-fun.js?v=fun-corner';
 import {idiomForDate} from './daily-idiom.js?v=seven-side-3';
-import {createWritingPractice} from './writing-practice.js?v=feedback-only';
+import {createWritingPractice} from './writing-practice.js?v=broad-checks-1';
 import {minimumDailySentences,grammarName,completionTasks,normalizePractice} from './daily-challenge-tools.js?v=oct21-1';
 import {dailyMissionSet} from './daily-mission-set.js?v=level-topics-3';
 import {cairoMissionDate,missionLevels,readMissionState,writeMissionState} from './daily-mission-data.js?v=five-practices';
