@@ -1,4 +1,4 @@
-import {learningDocumentCategory} from './learning-document-cards.js?v=exam-rebuild';
+import {learningDocumentCategory} from './learning-document-cards.js?v=library-folders';
 export const LEARNING_HUB_SECTIONS=[
  {id:'exams',title:'Examinations'},
  {id:'exercises',title:'Activity'},

@@ -1,5 +1,46 @@
 export const courses = [
   {
+  "id": "reclaim-focus",
+  "title": "Reclaim your focus workshop",
+  "level": "For learners who want better focus and study habits",
+  "duration": "8 sessions",
+  "category": "Others",
+  "comingSoon": true,
+  "dimmed": true,
+  "art": "general",
+  "summary": "Build practical habits for a calmer, more focused learning routine.",
+  "description": "Explore distractions, attention and the habits that make it easier to begin and continue meaningful work. Practise small changes that support learning without expecting constant productivity.",
+  "viewDescription": "Across eight sessions, explore how to organise your time, reduce everyday distractions and create realistic study routines. Try practical approaches to starting tasks, taking breaks and returning your attention when it drifts.",
+  "outcomes": "You’ll build a personal toolkit for more intentional learning and work. You’ll also learn to adjust your routines around your needs and responsibilities.",
+  "topics": [
+    "Understanding everyday distractions",
+    "Planning manageable tasks and study time",
+    "Building supportive routines and breaks",
+    "Reviewing and adjusting your approach"
+  ]
+},
+  {
+  "id": "write-boldly",
+  "title": "Write Boldly!",
+  "level": "All levels · tailored to your needs",
+  "duration": "4 sessions",
+  "category": "Workshops",
+  "comingSoon": true,
+  "dimmed": true,
+  "art": "writing",
+  "summary": "Turn your ideas into clear, confident writing.",
+  "description": "Explore how to organise your thoughts, build clear paragraphs and choose words that express what you mean. Practise drafting and editing with guidance tailored to your level.",
+  "viewDescription": "Develop your writing across four focused sessions, from shaping an idea to revising a finished paragraph. Work with practical prompts and feedback suited to your level and goals.",
+  "detailDescription": "Build a repeatable writing routine: plan, draft, review and refine. Explore sentence variety, paragraph structure and the choices that make your voice clearer.",
+  "outcomes": "You’ll learn to connect your ideas and express them with greater clarity. You’ll also develop an editing routine you can use independently.",
+  "topics": [
+    "Planning and organising ideas",
+    "Clear sentences and connected paragraphs",
+    "Tone and vocabulary choices",
+    "Editing your own writing"
+  ]
+},
+  {
     "id": "general-8",
     "title": "General English — 8 sessions",
     "level": "Beginner, Intermediate, Advanced",

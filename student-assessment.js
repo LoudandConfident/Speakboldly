@@ -1,16 +1,16 @@
+import {renderMaterialLibrary} from './material-library.js?v=program-folders';
 import {createLoadingNotice} from './loading-notice.js?v=visible-loading';
 import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=fresh-access-reuse';
 import {withBerlitzBooks} from './berlitz-material.js?v=dim-default-1';
-import {initializeMonthlyLearning} from './monthly-learning.js?v=fun-only';
+import {initializeMonthlyLearning} from './monthly-learning.js?v=library-folders';
 import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=private-library-files';
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=exam-rebuild';
 import {initializeStudentContact} from './student-contact.js?v=inline-faq-1';
 import {chooseLearningLevel} from './learning-level-dialog.js?v=password-free-1';
-import {learningDocumentTitle,learningDocumentLevel,learningDocumentCategory,learningDocumentPart,createLearningDocumentCard} from './learning-document-cards.js?v=resource-partitions';
+import {learningDocumentTitle,learningDocumentLevel,learningDocumentCategory,learningDocumentPart,createLearningDocumentCard} from './learning-document-cards.js?v=library-folders';
 import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v=learning-space';
 import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=folder-popups';
-import {materialProgram} from './material-program-folders.js?v=comprehension-listening';
 import {initializeStudentBooking} from './student-booking.js?v=december-oct17';
 import {createExamForm} from './exam-form.js?v=exam-rebuild';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
@@ -71,7 +71,7 @@ export function initializeStudentAssessment(doc) {
    if(id==='monthly'){if(!await enterHubLevel(doc,'monthly'))return;status.textContent='';select(id);monthly.open();return;}
    if(id==='contact'){status.textContent='';delete root.querySelector('#portal-contact').dataset.passwordLocked;select(id);contact.open();return;}
    if(id==='calendar'){status.textContent='';select(id);await booking.open();return;}
-   if(['exercises','material','listening','exams'].includes(id)){learningLevel=null;activeLearningSection=id;assessmentUnlocked=id==='exams';exercisesUnlocked=id==='exercises';select(id);if(id==='exams')showAssessment(latestItems);else renderFiles(latestItems);await reloadFiles();profile.hidden=true;return;}
+   if(['exercises','material','listening','exams'].includes(id)){learningLevel=null;if(id==='material')libraryFolder=null;activeLearningSection=id;assessmentUnlocked=id==='exams';exercisesUnlocked=id==='exercises';select(id);if(id==='exams')showAssessment(latestItems);else renderFiles(latestItems);await reloadFiles();profile.hidden=true;return;}
   }catch(error){status.textContent=error.message;}finally{endLoading();}
  });
  tabs.forEach((tab,index)=>tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();tabs[next].focus();}));
@@ -121,8 +121,11 @@ export function initializeStudentAssessment(doc) {
  }
  const sectionNames={material:'Learning Library',listening:'Listening Lab',exercises:'Practice Zone'};
  function matchingFiles(id,level,items){return items.filter(item=>(learningDocumentLevel(item)===level||(id==='exercises'&&!learningDocumentLevel(item)))&&(learningDocumentCategory(item)===id||(id==='material'&&learningDocumentCategory(item)==='listening')));}
+ let libraryFolder=null;
  function renderFiles(items){latestItems=items;
   for(const id of ['material','listening','exercises']){const target=root.querySelector('#portal-'+id);delete target.dataset.passwordLocked;target.replaceChildren(text('h3',sectionNames[id]));
+   if(id==='material'){renderMaterialLibrary(doc,target,{folder:libraryFolder,level:learningLevel,items:learningLevel?matchingFiles(id,learningLevel,items):[],enabled:n=>hubEntry('material:'+n)?.enabled,chooseFolder:async key=>{if(key==='general'){libraryFolder=key;learningLevel=null;renderFiles(latestItems);return;}try{if(!await enterHubLevel(doc,'material:1'))return;await reloadFiles();libraryFolder=key;learningLevel=1;activeLearningSection='material';renderFiles(latestItems);select('material');}catch(e){status.textContent=e.message;}},chooseLevel:async n=>{try{if(!await enterHubLevel(doc,'material:'+n))return;await reloadFiles();learningLevel=n;activeLearningSection='material';renderFiles(latestItems);select('material');}catch(e){status.textContent=e.message;}},back:()=>{if(libraryFolder==='general'&&learningLevel)learningLevel=null;else{libraryFolder=null;learningLevel=null;}renderFiles(latestItems);},open:openDocument});continue;}
+
    if(activeLearningSection===id&&learningLevel){target.dataset.learningLevel=learningLevel;target.dataset.learningCategory=id;const back=text('button','Choose another level');back.type='button';back.className='button light small';back.onclick=()=>{learningLevel=null;renderFiles(latestItems);};target.append(text('p','Level '+learningLevel),back);const grid=doc.createElement('div');grid.className='learning-document-grid';const matched=matchingFiles(id,learningLevel,items);if(id==='material'){for(const [part,label]of [['book','Main book'],['activity','Activities'],['audio','Audio']]){const section=doc.createElement('section');section.className='library-level-part';section.dataset.libraryPart=part;section.append(text('h4',label));const files=doc.createElement('div');files.className='learning-document-grid';for(const item of matched.filter(i=>learningDocumentPart(i)===part))files.append(createLearningDocumentCard(doc,item,event=>openDocument(item,event)));if(!files.children.length)files.append(text('p','No files uploaded yet.'));section.append(files);grid.append(section);}grid.className='library-level-parts';}else for(const item of matched)grid.append(createLearningDocumentCard(doc,item,event=>openDocument(item,event)));target.append(grid);continue;}
    delete target.dataset.learningLevel;target.append(text('p','Choose your level. Closed levels will be opened by your instructor.'));const grid=doc.createElement('div');grid.className='portal-level-menu';grid.setAttribute('aria-label',sectionNames[id]+' levels');
    for(let n=1;n<=12;n++){const button=text('button','Level '+n);button.type='button';button.className='portal-level-button';button.disabled=!hubEntry(id+':'+n)?.enabled;button.setAttribute('aria-label',sectionNames[id]+' Level '+n+(button.disabled?' — currently closed':''));button.onclick=async()=>{try{if(!await enterHubLevel(doc,id+':'+n))return;await reloadFiles();learningLevel=n;activeLearningSection=id;renderFiles(latestItems);select(id);}catch(e){status.textContent=e.message;}};grid.append(button);}target.append(grid);

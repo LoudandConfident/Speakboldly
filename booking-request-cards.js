@@ -1,4 +1,4 @@
-import {SESSION_PROGRAMS} from './session-programs.js?v=momentum-and-uploads';
+import {SESSION_PROGRAMS} from './session-programs.js?v=library-folders';
 import {sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
 export function renderBookingRequestCards(doc,root,requests,isUnlocked,clients=[]){

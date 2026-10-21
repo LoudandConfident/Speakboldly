@@ -1,4 +1,4 @@
-import {renderBookingRequestCards} from './booking-request-cards.js?v=reliability';
+import {renderBookingRequestCards} from './booking-request-cards.js?v=library-folders';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
 import {clockText12} from './platform-time.js';
 export function initializeInstructorOverview(doc,isUnlocked,actions={}){
