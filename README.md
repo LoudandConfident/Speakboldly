@@ -128,3 +128,5 @@ Reports open in an editable PDF view fitted to the available width, with 50%, 75
 All three report templates share a toolbar containing title, close/navigation, zoom, save, download, preview and send controls on one background above the document. Report pages scroll normally and the controls do not float over editable rectangles.
 
 Reports use a dark green background with cream text and lighter green fields in the editor and exported PDFs. Notes and Action Plan PDF exports share that theme. `scripts/darken-teacher-reports.py` applies the theme to existing templates while preserving field names and positions.
+
+Each current client row includes “Payment reminder for new round”. The owner reviews the recipient before sending. The Apps Script `paymentReminder` email uses the saved client address, requires owner authentication and logs request IDs to prevent duplicate sends on retry. Deploy the updated UnifiedCode.gs to enable this new email kind.
