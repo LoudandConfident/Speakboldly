@@ -1,4 +1,4 @@
-import {createRealEnglishExtras} from './real-english-extras.js?v=real-side';
+import {createRealEnglishExtras} from './real-english-extras.js?v=fun-only';
 // Curated listening pages from different sources. Rotation uses Cairo calendar months, not elapsed days.
 export const MONTHLY_LEARNING_PAGES=[
   {

@@ -16,6 +16,14 @@ export function checkWriting(value){const text=String(value).slice(0,12000),issu
  rule(/\b(did|didn['’]t|doesn['’]t|don['’]t|can|could|must|should|will|would)\s+([a-z]+)\b/gi,m=>baseVerbs[m[2].toLowerCase()]?m[1]+' '+baseVerbs[m[2].toLowerCase()]:m[0],'Use the base verb after this auxiliary or modal.');
  rule(/\bwould\s+like\s+(learn|go|speak|write|study|work|visit|try|buy|read)\b/gi,m=>caps(m[0],'would like to '+m[1]),'Use “would like to” before a verb.');
  rule(/\b(he|she|it)\s+(go|do|want|like|need|work|speak|live|play|eat|study|learn)\b/gi,m=>{if(/\b(?:does|did|can|could|should|will|would|may|might|must|that)\s*$/i.test(text.slice(0,m.index)))return m[0];const v=m[2].toLowerCase();return caps(m[1],m[1].toLowerCase()+' '+(v==='go'?'goes':v==='do'?'does':v==='study'?'studies':v+'s'));},'In the present simple, use -s or -es with he, she and it.');
+
+ // High-confidence agreement, auxiliary and verb-pattern errors in free paragraphs.
+ rule(/\b(I|you|we|they)\s+(goes|does|wants|likes|needs|works|speaks|lives|plays|eats|studies|learns)\b/gi,m=>caps(m[1],m[1].toLowerCase()+' '+({goes:'go',does:'do',studies:'study'}[m[2].toLowerCase()]||m[2].toLowerCase().slice(0,-1))),'Use the base present-tense verb with I, you, we and they.');
+ rule(/\b(am|is|are|was|were)\s+(go|work|study|play|speak|eat|watch|wait)\b/gi,m=>m[1]+' '+({study:'studying'}[m[2].toLowerCase()]||m[2].toLowerCase()+'ing'),'Use an -ing verb after “be” for an action in progress.');
+ rule(/\b(I|you|he|she|it|we|they)\s+(happy|tired|hungry|ready|afraid|angry)\b/gi,m=>caps(m[1],m[1].toLowerCase()+' '+(m[1].toLowerCase()==='i'?'am':/^(he|she|it)$/i.test(m[1])?'is':'are')+' '+m[2]),'A statement with a subject and an adjective needs a form of “be”.');
+ rule(/\b(childs|childrens|womans|mans|foots|tooths)\b/gi,m=>caps(m[0],({childs:'children',childrens:'children',peoples:'people',womans:'women',mans:'men',foots:'feet',tooths:'teeth'})[m[0].toLowerCase()]),'Check this irregular plural. Keep “peoples” if you mean distinct ethnic or national groups.');
+ rule(/\b(want|wants|wanted|need|needs|needed|decide|decides|decided)\s+(learn|study|speak|improve|visit|buy|go|eat)\b/gi,m=>m[1]+' to '+m[2],'Use “to” before the following verb with want, need and decide.');
+ rule(/\b(can|could|should|would|will|must)\s+(?:not\s+)?(went|gone|ate|eaten|wrote|written|spoke|spoken|took|taken|bought|made|did|done|had)\b/gi,m=>m[0].slice(0,-m[2].length)+baseVerbs[m[2].toLowerCase()],'Use the base verb after a modal.');
  // Contextual suggestions preserve legitimate uses such as “writing to my teacher”.
  category='Vocabulary';
  rule(/\b(like|likes|love|loves|eat|eats|ate|eating|cook|cooks|cooking)\s+fishes\b/gi,m=>m[1]+' fish','Usually use “fish” for food or fish in general. “Fishes” can refer to different species; keep it if that is your meaning.');

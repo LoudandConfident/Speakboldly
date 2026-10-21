@@ -39,3 +39,9 @@ test('accepts full stops, exclamation marks and question marks',()=>{
  assert.equal(checkWriting(text).sentenceCount,1);assert.deepEqual(checkWriting(text).issues,[]);
  }
 });
+
+test('checks common paragraph agreement, missing auxiliaries and verb patterns',()=>{
+ const input='I goes to school. She happy. They is ready. We are study English. I want improve. He can went home.';
+ assert.equal(checkWriting(input).suggestedText,'I go to school. She is happy. They are ready. We are studying English. I want to improve. He can go home.');
+ for(const sentence of ['If I were ready, I would go.','I wish she were here.','They study English.','She is ready.'])assert.deepEqual(checkWriting(sentence).issues,[],sentence);
+});
