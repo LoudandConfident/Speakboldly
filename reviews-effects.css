@@ -116,3 +116,9 @@
  #reviews .reviews-album-area .review-card.is-next{height:265px!important;max-height:265px!important;padding:20px 17px!important}
  #reviews .reviews-album-area .review-card blockquote{font-size:14px!important;line-height:1.75!important}
 }
+
+/* Anchor the desktop deck at its centre before applying its depth transforms. */
+@media(min-width:681px){
+ #reviews .reviews-album-area #review-cards{position:relative!important;min-width:0;overflow:hidden!important}
+ #reviews .reviews-album-area #review-cards>.review-card{position:absolute!important;top:50%!important;left:50%!important;width:90%!important;max-width:430px!important;margin:0!important}
+}
