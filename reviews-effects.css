@@ -80,13 +80,39 @@
  #reviews .reviews-album-area .review-card blockquote{font-size:15px!important;line-height:1.7!important}
 }
 
-/* Original sage backdrop beside the review album. */
-#reviews .reviews-copy{position:relative!important;isolation:isolate;box-sizing:border-box;min-width:0;padding:25px 28px 30px 0!important}
-#reviews .reviews-copy:before{content:''!important;display:block!important;position:absolute;inset:45px 20px 0 -25px;border-radius:45% 45% 10px 10px;background:#edf0e6;z-index:-1;transform:rotate(-4deg);pointer-events:none}
-#reviews .reviews-spark-art{display:block!important;width:72px;height:62px;margin:0 0 20px auto;color:#193c32;transform:rotate(7deg)}
-#reviews .reviews-copy #review-open{position:relative;max-width:100%}
+
+/* Two overlapping speech shapes, with the eyebrow outside the panel. */
+#reviews .reviews-introduction{min-width:0;padding:0 8px 10px}
+#reviews .reviews-introduction>.eyebrow{margin:0 0 24px!important;line-height:1.6;font-size:10px;letter-spacing:1.4px;padding:0}
+#reviews .reviews-copy{position:relative!important;isolation:isolate;box-sizing:border-box;min-width:0;padding:32px 32px 38px!important;background:transparent!important;border:0!important}
+#reviews .reviews-copy:before{content:''!important;display:block!important;position:absolute;inset:9px 0 0 9px;background:#edf0e6;border:1px solid #bfceb3;border-radius:34px 34px 34px 8px;z-index:-2;transform:rotate(3deg);pointer-events:none}
+#reviews .reviews-copy:after{content:''!important;display:block!important;position:absolute;inset:0 10px 10px 0;background:#faf9f4;border:1px solid #bfceb3;border-radius:34px 34px 34px 8px;z-index:-1;transform:rotate(-1deg);pointer-events:none}
+#reviews .reviews-copy>h2{font-size:clamp(30px,3vw,40px)!important;line-height:1.16!important;margin:0 0 20px!important;max-width:100%;letter-spacing:-1px;overflow-wrap:normal}
+#reviews .reviews-copy .review-intro{font-size:15px!important;line-height:1.8!important;margin:0 0 20px!important;max-width:100%;overflow-wrap:anywhere}
+#reviews .reviews-copy #review-open{position:relative;max-width:100%;white-space:normal;margin:0!important}
+#reviews .reviews-spark-art{display:block!important;width:58px;height:50px;margin:0 0 18px auto;color:#193c32;transform:rotate(5deg)}
+#reviews .reviews-album-area .review-cards{height:325px!important;min-height:325px!important}
+#reviews .reviews-album-area .review-card,
+#reviews .reviews-album-area .review-card.is-selected,
+#reviews .reviews-album-area .review-card.is-previous,
+#reviews .reviews-album-area .review-card.is-next{height:280px!important;max-height:280px!important;background:#faf9f4!important;border:1px solid #bdcbb3!important;color:#193c32!important;padding:23px!important}
+#reviews .reviews-album-area .review-card-content{color:#193c32!important;scrollbar-color:#a8bd99 #faf9f4}
+#reviews .reviews-album-area .review-card h3,
+#reviews .reviews-album-area .review-card p,
+#reviews .reviews-album-area .review-card blockquote{color:#193c32!important;max-width:100%!important}
+#reviews .reviews-album-area .review-card h3{font-size:17px!important}
+#reviews .reviews-album-area .review-card blockquote{font-size:16px!important;line-height:1.75!important;margin-top:15px!important}
 @media(max-width:680px){
- #reviews .reviews-copy{padding:24px 22px 28px!important}
- #reviews .reviews-copy:before{inset:30px 8px 5px;border-radius:42% 42% 14px 14px;transform:rotate(-2deg)}
- #reviews .reviews-spark-art{width:60px;height:52px;margin-bottom:16px}
+ #reviews .reviews-introduction{padding:0 5px 8px}
+ #reviews .reviews-introduction>.eyebrow{margin-bottom:21px!important;font-size:9px}
+ #reviews .reviews-copy{padding:27px 27px 33px!important}
+ #reviews .reviews-copy>h2{font-size:30px!important;margin-bottom:18px!important}
+ #reviews .reviews-copy .review-intro{font-size:14px!important;line-height:1.75!important}
+ #reviews .reviews-spark-art{width:50px;height:43px;margin-bottom:16px}
+ #reviews .reviews-album-area .review-cards{height:295px!important;min-height:295px!important}
+ #reviews .reviews-album-area .review-card,
+ #reviews .reviews-album-area .review-card.is-selected,
+ #reviews .reviews-album-area .review-card.is-previous,
+ #reviews .reviews-album-area .review-card.is-next{height:265px!important;max-height:265px!important;padding:20px 17px!important}
+ #reviews .reviews-album-area .review-card blockquote{font-size:14px!important;line-height:1.75!important}
 }
