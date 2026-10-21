@@ -54,3 +54,22 @@ main #home .hero .home-speech-links .home-speech-bubble:hover>.home-bubble-shape
  main #home>.home-cover-benefits>span+span{border-left:1px solid #c7d2bc!important}
  main #home>.home-bottom-row{padding:16px 0 8px!important}
 }
+
+/* A contained cover with light space above and below in browsers and the app. */
+main #home:not([hidden]){
+ display:block!important;
+ min-height:0!important;
+ box-sizing:border-box;
+ padding:clamp(22px,3vw,40px) 0 clamp(28px,3.5vw,48px)!important;
+ background:#faf9f4!important;
+}
+main #home .hero{
+ flex:none!important;
+ box-sizing:border-box;
+ width:100%!important;
+ max-width:1120px!important;
+ margin:0 auto!important;
+ container-type:inline-size;
+}
+main #home>.home-cover-benefits{box-sizing:border-box;width:100%;max-width:1120px;margin:18px auto 0!important}
+main #home>.home-bottom-row{box-sizing:border-box;width:100%;max-width:1120px;margin:0 auto!important}
