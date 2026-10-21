@@ -6,9 +6,10 @@ export function missionPositionForDate(day){
  const ordinal=Math.round((stamp-Date.UTC(2026,9,15))/86400000),scenario=ordinal%2===0,poolSize=scenario?183:182,poolIndex=((Math.floor(ordinal/2)%poolSize)+poolSize)%poolSize,index=poolIndex*2+(scenario?0:1);
  return {index,chunk:String(Math.floor(index/MISSION_CHUNK_SIZE)+1).padStart(2,'0'),offset:index%MISSION_CHUNK_SIZE};
 }
+export function missionPositionForLevel(day,level){const offset={foundation:0,developing:122,stretching:244}[level]||0;return missionPositionForDate(new Date(Date.parse(day+'T00:00:00Z')+offset*86400000).toISOString().slice(0,10));}
 export async function dailyMissionSet(day,level='foundation',fetcher=globalThis.fetch){
  if(!levels.includes(level))level='foundation';
- const position=missionPositionForDate(day),key=level+'/'+position.chunk;
+ const position=missionPositionForLevel(day,level),key=level+'/'+position.chunk;
  let cache=caches.get(fetcher);if(!cache){cache=new Map();caches.set(fetcher,cache);}
  if(!cache.has(key))cache.set(key,(async()=>{
   const response=await fetcher(new URL('./daily-missions/'+key+'.json?v='+MISSION_VERSION,import.meta.url));

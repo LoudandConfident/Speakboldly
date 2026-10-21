@@ -18,10 +18,10 @@ export function validateClient(input,clients=[],editingId=null,{allowLegacy=fals
  const hours=Number(input.hours);if(input.hours===''||!Number.isFinite(hours)||hours<0||hours>100000||Math.abs(hours*100-Math.round(hours*100))>0.000001)throw new Error('Enter hours from 0 to 100000, with up to two decimal places.');
  const amountPaid=Number(input.amountPaid??0);if(input.amountPaid===''||!Number.isFinite(amountPaid)||amountPaid<0||amountPaid>100000000||Math.abs(amountPaid*100-Math.round(amountPaid*100))>0.000001)throw new Error('Enter an amount paid from 0 to 100000000, with up to two decimal places.');
  const program=String(input.program||'').trim();if(program.length>150)throw new Error('Check the program.');
- const enrollmentHistory=Array.isArray(input.enrollmentHistory)?input.enrollmentHistory.filter(entry=>entry&&typeof entry.id==='string'&&typeof entry.level==='string').map(({id,level,program,closedAt,reason})=>({id,level,program:String(program||''),closedAt:String(closedAt||''),...(reason?{reason:String(reason)}:{})})):[];
+ const enrollmentHistory=Array.isArray(input.enrollmentHistory)?input.enrollmentHistory.filter(entry=>entry&&typeof entry.id==='string'&&typeof entry.level==='string').map(({id,level,program,closedAt,reason,hours})=>({id,level,program:String(program||''),closedAt:String(closedAt||''),...(reason?{reason:String(reason)}:{}),...(Number.isFinite(Number(hours))&&hours!==undefined?{hours:Number(hours)}:{})})):[];
  return{name,email,level,payment,amountPaid,hours,code,permissions,...(input.program!==undefined?{program}:{}),...(input.enrollmentHistory!==undefined?{enrollmentHistory}:{})};
 }
-export function clientTotals(clients){return{clients:clients.length,hours:Math.round(clients.reduce((sum,c)=>sum+c.hours,0)*100)/100};}
+export function clientTotals(clients){return{clients:clients.length,hours:Math.round(clients.reduce((sum,c)=>sum+c.hours+(c.enrollmentHistory||[]).reduce((n,h)=>n+(Number(h.hours)||0),0),0)*100)/100};}
 export function removeBrowserClient(storage,id) {
  const clientKey='speak-boldly-admin-clients-v1',sessionKey='speak-boldly-admin-sessions-v1';
  const oldClients=storage.getItem(clientKey),oldSessions=storage.getItem(sessionKey);

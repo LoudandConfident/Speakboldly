@@ -82,15 +82,15 @@ function removeCarolinePreviousLevel(){
 }
 function sbClientEnrollmentChange(previous,input){
  const program=input.program===undefined?String(previous?.[11]||'').replace(/^'/,''):String(input.program||'').trim();if(program.length>150)throw new Error('Check the program.');
- const history=previous?.[10]?JSON.parse(String(previous[10])):[];if(!Array.isArray(history))throw new Error('Check client level history. Existing data was kept.');
- if(input.historyEdit){const edit=input.historyEdit,entry=history.find(item=>item.id===edit.id);if(!entry||typeof edit.level!=='string'||!edit.level||edit.level.length>100||typeof edit.program!=='string'||edit.program.length>150)throw new Error('Check the previous level.');entry.level=edit.level;entry.program=edit.program.trim();}
+ let advanced=false;const history=previous?.[10]?JSON.parse(String(previous[10])):[];if(!Array.isArray(history))throw new Error('Check client level history. Existing data was kept.');
+ if(input.historyEdit){const edit=input.historyEdit,entry=history.find(item=>item.id===edit.id);if(!entry||typeof edit.level!=='string'||!edit.level||edit.level.length>100||typeof edit.program!=='string'||edit.program.length>150)throw new Error('Check the previous level.');entry.level=edit.level;entry.program=edit.program.trim();if(edit.hours!==undefined){const hours=Number(edit.hours);if(!Number.isFinite(hours)||hours<0||hours>100000)throw new Error('Check previous-level hours.');entry.hours=hours;}}
  if(input.deleteHistoryId){const index=history.findIndex(entry=>entry.id===input.deleteHistoryId);if(index<0)throw new Error('Previous level not found. Refresh clients.');history.splice(index,1);}
  if(input.advanceLevel===true){
   if(!previous||input.historyEdit||input.deleteHistoryId)throw new Error('Choose the current client to move to the next level.');
   if(String(previous[4])===String(input.level)){const last=history[history.length-1];if(!last||last.reason!=='advanced'||last.level!==input.advanceFromLevel)throw new Error('Choose a different level to move this client.');}
-  else{if(input.advanceFromLevel!==String(previous[4]))throw new Error('This client’s level changed on another device. Refresh clients first.');history.push({id:'advanced-'+Utilities.getUuid(),level:String(previous[4]),program:String(previous[11]||'').replace(/^'/,''),closedAt:new Date().toISOString(),reason:'advanced'});}
+  else{if(input.advanceFromLevel!==String(previous[4]))throw new Error('This client’s level changed on another device. Refresh clients first.');history.push({id:'advanced-'+Utilities.getUuid(),level:String(previous[4]),program:String(previous[11]||'').replace(/^'/,''),closedAt:new Date().toISOString(),reason:'advanced',hours:Number(previous[7])||0});advanced=true;}
  }
- if(history.length>500)throw new Error('Ask your instructor to archive older level history.');return {program,enrollmentHistory:history};
+ if(history.length>500)throw new Error('Ask your instructor to archive older level history.');return {program,enrollmentHistory:history,advanced};
 }
 
 function doGet(event) {
@@ -284,9 +284,13 @@ function sbUpsertConnectedClient(data, sheetId, sheet, lock) {
   const safe = value =>
     /^[=+\-@\t\r]/.test(value) ? "'" + value : value;
 
-  hours=sbSetClientHours(SpreadsheetApp.openById(sheetId),sheet,targetRow,client);
   const previous=targetRow<=sheet.getLastRow()?sheet.getRange(targetRow,1,1,12).getValues()[0]:null;
-  const {program,enrollmentHistory}=sbClientEnrollmentChange(previous,client);
+  const {program,enrollmentHistory,advanced}=sbClientEnrollmentChange(previous,client);
+  if(advanced){
+   const appointments=SpreadsheetApp.openById(sheetId).getSheetByName('Sessions');
+   if(appointments&&appointments.getLastRow()>1){const saved=appointments.getRange(2,1,appointments.getLastRow()-1,12).getValues();for(let i=0;i<saved.length;i++)if(String(saved[i][1])===id&&!String(saved[i][11]||'').trim())appointments.getRange(i+2,12).setValue(String(previous[4]));}
+   hours=0;sheet.getRange(targetRow,13,1,2).setValues([[0,new Date().toISOString()]]);
+  }else hours=sbSetClientHours(SpreadsheetApp.openById(sheetId),sheet,targetRow,client);
   sheet.getRange(targetRow, 4).setNumberFormat('@');
   sheet.getRange(targetRow, 1, 1, 9).setValues([[
     id,
@@ -965,7 +969,16 @@ function sbSessionHasFinished(row,now){
  const today=Utilities.formatDate(new Date(now),'Africa/Cairo','yyyy-MM-dd');
  return /^\d{4}-\d{2}-\d{2}$/.test(String(row[3]))&&String(row[3])<today;
 }
-function sbCountedSessionHours(book,id){const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return 0;const rows=sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues(),ids=new Map(),now=Date.now();for(const row of rows)if(String(row[1])===id&&String(row[7])!=='cancelled'&&row[12]==='counted'&&sbSessionHasFinished(row,now))ids.set(String(row[0]),sbSessionDuration(row)/60);return [...ids.values()].reduce((sum,value)=>sum+value,0);}
+function sbCountedSessionHours(book,id){
+ const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return 0;
+ const people=book.getSheetByName('Clients'),records=people&&people.getLastRow()>1?people.getRange(2,1,people.getLastRow()-1,12).getValues():[],person=records.find(row=>String(row[0])===id),history=person?.[10]?JSON.parse(String(person[10])):[],moved=history.filter(h=>h.reason==='advanced'||String(h.id).startsWith('advanced-')),latest=moved.at(-1),level=String(person?.[4]||'').replace(/^'/,''),cutoff=latest?Date.parse(latest.closedAt):0;
+ const rows=sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues(),ids=new Map(),now=Date.now();
+ for(const row of rows){if(String(row[1])!==id||String(row[7])==='cancelled'||row[12]!=='counted'||!sbSessionHasFinished(row,now))continue;
+  if(latest){const savedLevel=String(row[11]||'').replace(/^'/,'');if(savedLevel&&savedLevel!==level)continue;if(!savedLevel&&(!Number.isFinite(cutoff)||Date.parse(row[5])<cutoff))continue;}
+  ids.set(String(row[0]),sbSessionDuration(row)/60);
+ }
+ return [...ids.values()].reduce((sum,value)=>sum+value,0);
+}
 function sbApplySessionHours(book){
  const sessions=book.getSheetByName('Sessions'),clients=book.getSheetByName('Clients');if(!sessions||!clients)return;
  const props=PropertiesService.getScriptProperties(),first=props.getProperty('SB_SESSION_HOURS_READY')!=='1',today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');
@@ -975,6 +988,13 @@ function sbApplySessionHours(book){
  const rows=sessions.getLastRow()>1?sessions.getRange(2,1,sessions.getLastRow()-1,14).getValues():[];
  for(let i=0;i<rows.length;i++){const row=rows[i];if(row[0]&&/^\d{4}-\d{2}-\d{2}$/.test(String(row[3]))&&sbSessionHasFinished(row,Date.now())&&!row[12]){row[12]=String(row[3])<'2026-10-14'?'baseline':'counted';sessions.getRange(i+2,13).setValue(row[12]);}}
  props.setProperty('SB_SESSION_HOURS_READY','1');
+ // Older level moves did not snapshot hours. Keep the recorded lifetime total in history
+ // and rebuild the new level only from its completed, non-cancelled appointments.
+ for(let i=0;i<people.length;i++){const person=people[i];if(!person[0]||!person[10])continue;const history=JSON.parse(String(person[10])),advanced=history.filter(h=>h.reason==='advanced'||String(h.id).startsWith('advanced-')),missing=advanced.filter(h=>h.hours===undefined);if(!missing.length)continue;
+  const current=sbCountedSessionHours(book,String(person[0])),known=advanced.reduce((sum,h)=>sum+(Number(h.hours)||0),0),remaining=Math.max(0,(Number(person[7])||0)-current-known);
+  for(const h of missing)h.hours=0;missing[missing.length-1].hours=Math.round(remaining*100)/100;
+  person[10]=JSON.stringify(history);person[12]=0;clients.getRange(i+2,11).setValue(person[10]);clients.getRange(i+2,13,1,2).setValues([[0,new Date().toISOString()]]);
+ }
  for(let i=0;i<people.length;i++){const person=people[i];if(!person[0])continue;const hours=sbCountedSessionHours(book,String(person[0]));const total=Math.round((Number(person[12])+hours)*100)/100;if(Number(person[7])!==total)clients.getRange(i+2,8).setValue(total);}
 }
 function sbSetClientHours(book,sheet,row,input){
@@ -1175,7 +1195,7 @@ function sbDisplayTime(value){const match=String(value||'').match(/^(\d{1,2}):(\
 function sbSaveSessionSeries(p){
  if(!Array.isArray(p.sessions)||p.sessions.length<1||p.sessions.length>52)throw new Error('Choose between 1 and 52 weekly appointments.');
  const sheet=sbSessionsSheet(),existing=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[],clients=sbExamBook().getSheetByName('Clients'),ids=clients&&clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,1).getValues().map(row=>String(row[0])):[],seen=new Set();
- const first=p.sessions[0],planned=p.sessions.map((input,index)=>{const record={...input,clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||''),level:String(input.level||'')};const date=new Date(String(first.date)+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+index*7);if(record.clientId!==first.clientId||record.program!==first.program||record.time!==first.time||record.level!==String(first.level||'')||record.number!==Number(first.number)+index||record.date!==date.toISOString().slice(0,10))throw new Error('Use the same client, program, weekday and time with consecutive session numbers.');if(!ids.includes(record.clientId)||!Number.isInteger(record.number)||record.number<1||record.number>9999||!SB_SESSION_PROGRAMS.includes(record.program))throw new Error('Check the client, program and session numbers.');if(record.level&&!/^[1-9]\d{0,3}$/.test(record.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(record.level))throw new Error('Choose a valid session level.');if(record.course&&(!SB_SESSION_PROGRAMS.includes(record.course)||['Assessment','Trial session'].includes(record.course)))throw new Error('Choose a valid course.');const id=sbSessionId(record),start=sbCairoTimestamp(record.date,record.time),duration=record.program==='Assessment'?30:['Trial session','English Momentum'].includes(record.program)?60:90;if(seen.has(id))throw new Error('Duplicate appointment.');seen.add(id);const saved=existing.find(row=>String(row[0])===id);if(saved){if(String(saved[7])==='cancelled')throw new Error('A planned appointment was cancelled. Refresh before booking this series.');return record;}if(start<=Date.now()||sbCalendarDateBlocked(record.date))throw new Error(record.date+' is past or dimmed. No new appointments were added.');if(existing.some(row=>String(row[7])!=='cancelled'&&start<Date.parse(row[5])+sbSessionDuration(row)*60000&&start+duration*60000>Date.parse(row[5])))throw new Error('An appointment overlaps on '+record.date+'. No new appointments were added.');if(existing.some(row=>String(row[1])===record.clientId&&Number(row[2])===record.number&&String(row[10])===record.program&&String(row[0])!==id&&String(row[7])!=='cancelled'))throw new Error('Session '+record.number+' already exists for this client and program.');return record;});
+ const first=p.sessions[0],planned=p.sessions.map((input,index)=>{const record={...input,clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||''),level:String(input.level||'')};const date=new Date(String(first.date)+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+index*7);if(record.clientId!==first.clientId||record.program!==first.program||record.time!==first.time||record.level!==String(first.level||'')||record.number!==Number(first.number)+index||record.date!==date.toISOString().slice(0,10))throw new Error('Use the same client, program, weekday and time with consecutive session numbers.');if(!ids.includes(record.clientId)||!Number.isInteger(record.number)||record.number<1||record.number>9999||!SB_SESSION_PROGRAMS.includes(record.program))throw new Error('Check the client, program and session numbers.');if(record.level&&!/^[1-9]\d{0,3}$/.test(record.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(record.level))throw new Error('Choose a valid session level.');if(record.course&&(!SB_SESSION_PROGRAMS.includes(record.course)||['Assessment','Trial session'].includes(record.course)))throw new Error('Choose a valid course.');const id=sbSessionId(record),start=sbCairoTimestamp(record.date,record.time),duration=record.program==='Assessment'?30:['Trial session','English Momentum'].includes(record.program)?60:90;if(seen.has(id))throw new Error('Duplicate appointment.');seen.add(id);const saved=existing.find(row=>String(row[0])===id);if(saved){if(String(saved[7])==='cancelled')throw new Error('A planned appointment was cancelled. Refresh before booking this series.');return record;}if(start<=Date.now()||sbCalendarDateBlocked(record.date))throw new Error(record.date+' is past or dimmed. No new appointments were added.');if(existing.some(row=>String(row[7])!=='cancelled'&&start<Date.parse(row[5])+sbSessionDuration(row)*60000&&start+duration*60000>Date.parse(row[5])))throw new Error('An appointment overlaps on '+record.date+'. No new appointments were added.');if(existing.some(row=>String(row[1])===record.clientId&&Number(row[2])===record.number&&String(row[10])===record.program&&String(row[11]||'')===record.level&&String(row[0])!==id&&String(row[7])!=='cancelled'))throw new Error('Session '+record.number+' already exists for this client and program.');return record;});
  // Complete validation happens before any write. Stable IDs make a retry safe after a partial Sheets failure.
  for(const record of planned)sbSaveSheetSession(record);return planned.length;
 }

@@ -1,0 +1,113 @@
+/* Final responsive layout rules; brand colours remain unchanged. */
+#portal-monthly .section-guide{position:static!important;float:none!important;display:flex!important;width:fit-content!important;max-width:100%!important;margin:18px 0 22px!important;transform:none!important}
+#portal-monthly>h3,#portal-monthly>p{padding-right:0!important;max-width:100%}
+#portal-monthly .monthly-learning-feature{min-width:0;max-width:100%;padding:22px!important}
+#portal-monthly .monthly-learning-feature>.button,#portal-monthly .monthly-novels>.button{position:static!important;inset:auto!important;transform:none!important;display:inline-flex!important;width:fit-content!important;max-width:100%!important;white-space:normal!important;text-align:center;box-sizing:border-box;line-height:1.5!important;margin:18px 0!important}
+#portal-monthly .native-listening-part,#portal-monthly .monthly-novels{min-width:0;overflow-wrap:anywhere}
+#reviews .review-cards{height:410px!important;min-height:410px!important;overflow:hidden!important;position:relative!important}
+#reviews .review-card{display:block!important;box-sizing:border-box!important;width:min(430px,88%)!important;height:360px!important;max-height:none!important;background:#193c32!important;border:1px solid #193c32!important;border-radius:32px 32px 32px 8px!important;padding:28px!important;overflow:hidden!important;position:absolute!important;left:50%!important;top:50%!important;margin:0!important;animation:none!important}
+#reviews .review-card.is-selected{z-index:3;transform:translate(-50%,-50%) scale(1)!important;opacity:1!important;filter:none!important}
+#reviews .review-card.is-previous{z-index:1;transform:translate(-63%,-50%) scale(.88)!important;opacity:.25!important;filter:none!important;pointer-events:none}
+#reviews .review-card.is-next{z-index:1;transform:translate(-37%,-50%) scale(.88)!important;opacity:.25!important;filter:none!important;pointer-events:none}
+#reviews .review-card-content{height:100%!important;max-height:100%!important;min-width:0;overflow-y:auto!important;overflow-x:hidden!important;overflow-wrap:anywhere;box-sizing:border-box;padding-right:4px;scrollbar-width:thin;scrollbar-color:#b7cda1 #193c32}
+#reviews .review-card h3,#reviews .review-card p,#reviews .review-card blockquote{color:#faf9f4!important;max-width:100%;overflow-wrap:anywhere}
+#reviews .review-card blockquote{font-size:17px!important;line-height:1.8!important;margin:18px 0 0!important}
+#reviews .review-card-details{font-size:12px!important;line-height:1.7!important}
+@media(prefers-reduced-motion:no-preference){
+ #reviews .review-card{transition:transform .35s ease,opacity .35s ease!important}
+ #reviews .review-card.is-selected.review-enter-next{animation:sb-review-enter .3s ease both!important}
+ #reviews .review-card.is-selected.review-enter-previous{animation:sb-review-enter .3s ease both!important}
+ @keyframes sb-review-enter{from{opacity:.4}to{opacity:1}}
+}
+#students-portal #portal-studio.studio-open{display:block;max-width:none!important;width:100%!important;box-sizing:border-box;border:0!important;background:transparent!important;padding:14px 0!important}
+#students-portal #portal-studio.studio-open[hidden]{display:none!important}
+#portal-studio .studio-workspace{box-sizing:border-box;width:100%;max-width:none;padding:38px!important;background:#fffefa;border:1px solid #d1dac9;border-radius:24px;margin:24px 0}
+#portal-studio .studio-tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:0 0 30px}
+#portal-studio .studio-tabs [aria-selected=true]{background:#193c32!important;color:#faf9f4!important}
+#portal-studio .studio-microphone{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto;min-height:58px}
+#portal-studio .studio-microphone svg{width:30px;height:36px;flex:none}
+#portal-studio .studio-voice>h4,#portal-studio .studio-voice>p{text-align:center}
+#portal-studio .studio-roleplay{text-align:center;padding:30px 0}
+#portal-studio .studio-roleplay>strong{display:block;font-size:30px;font-weight:500;margin:20px 0}
+#portal-studio .studio-roleplay>.studio-big-mic{width:78px;height:96px;display:block;margin:0 auto;color:#193c32}
+.voice-transcription-controls{display:grid;justify-items:center;gap:18px;margin:24px 0}
+.voice-transcription-controls label{max-width:240px;font-size:12px}
+.voice-transcription-controls [role=status]{font-size:13px;line-height:1.6;text-align:center;margin:0}
+.writing-practice{min-width:0;width:100%;max-width:100%}
+.writing-practice label{display:grid;gap:12px;font-size:14px;line-height:1.7}
+.writing-practice textarea,.daily-two-exercise input{width:100%;max-width:100%;box-sizing:border-box;border:1px solid #b8c7ad;border-radius:12px;padding:13px;background:#fffefa;color:#193c32;font:inherit;line-height:1.8}
+.writing-practice textarea{min-height:165px;resize:vertical}
+.writing-count{font-size:12px!important;line-height:1.6;color:#5f6d61}
+.writing-feedback{font-size:14px;line-height:1.8;overflow-wrap:anywhere}
+.writing-feedback li{padding:7px 0}
+.writing-feedback li p{margin:5px 0}
+.writing-feedback blockquote{margin:16px 0;padding:18px;border-left:2px solid #b7cba4;white-space:pre-wrap}
+.writing-practice .button{max-width:100%;white-space:normal}
+#students-portal:has(#daily-mission:not([hidden])){padding-top:20px!important}
+#students-portal #daily-mission.daily-seven:not([hidden]){display:grid!important;grid-template-columns:minmax(0,1fr) 160px!important;gap:16px 26px!important;margin-top:0!important;padding-top:0!important;align-items:start}
+#students-portal #daily-mission.daily-seven>*{grid-column:1!important;grid-row:auto!important;min-width:0;order:initial!important;width:auto!important}
+#daily-mission.daily-seven>h3{margin:0!important}
+#daily-mission.daily-seven>.daily-task-intro{margin:0 0 8px!important;padding:10px 17px!important;background:#d5ed98!important;border-radius:23px 23px 23px 5px!important;font-style:italic;font-size:15px!important;width:fit-content!important}
+#daily-mission.daily-seven>label{max-width:360px;margin:0!important}
+#daily-mission.daily-seven>.daily-side{grid-column:2!important;grid-row:1 / span 5!important;display:flex;flex-direction:column;align-items:center;gap:25px}
+#daily-mission.daily-seven .daily-idiom{width:100%!important;max-width:160px!important;margin:0!important;background:transparent!important;border:0!important}
+#daily-mission.daily-seven .daily-idiom summary{display:grid;place-content:center;box-sizing:border-box;width:124px!important;height:124px!important;padding:20px!important;border:1px solid #adbea2!important;border-radius:50%!important;background:#edf0e6!important;text-align:center;font-size:13px!important;line-height:1.5!important;list-style:none;margin:0 auto!important;cursor:pointer}
+#daily-mission.daily-seven .daily-idiom summary::-webkit-details-marker{display:none}
+#daily-mission.daily-seven .daily-idiom summary:after{content:'+';font-size:20px}
+#daily-mission.daily-seven .daily-idiom[open] summary:after{content:'−'}
+#daily-mission.daily-seven .daily-idiom h4,#daily-mission.daily-seven .daily-idiom p{font-size:12px!important;line-height:1.7!important;padding:0!important;border:0!important;margin:12px 0!important}
+.daily-side-note{display:grid;place-content:center;box-sizing:border-box;width:124px;min-height:105px;padding:20px;text-align:center;font-size:13px;line-height:1.6;background:#d5ed98;border:1px solid #a6bc90;border-radius:28px 28px 28px 5px;margin:0}
+.daily-side-note.note-circle{border-radius:50%;aspect-ratio:1}
+#daily-mission.daily-seven .daily-task-heading{position:static!important;display:block!important;background:transparent!important;padding:0!important;margin:0 0 24px!important;border:0!important;min-height:0!important}
+.daily-task-heading .eyebrow{font-size:10px!important;margin:0 0 10px!important}
+.daily-task-heading h4{font-size:24px!important;font-weight:500;margin:0!important;line-height:1.4}
+#daily-mission.daily-seven .mission-practices{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:20px!important;margin:0!important}
+#daily-mission.daily-seven .mission-practice{padding:24px!important;border:1px solid #d1dac9!important;border-radius:20px!important;background:#faf9f4!important;margin:0!important;min-width:0}
+#daily-mission.daily-seven .mission-practice:nth-child(even){background:#edf0e6!important}
+#daily-mission.daily-seven .mission-practice>h4{margin:0 0 15px!important;padding:0!important;font-size:20px!important;font-weight:500}
+#daily-mission.daily-seven .mission-paragraphs p{font-size:15px;line-height:1.85;margin:0 0 16px}
+#daily-mission.daily-seven mark{background:#d5ed98;color:#193c32;border-radius:5px;padding:2px 5px;font-weight:600}
+.daily-language-item{margin:0 0 20px}
+.daily-language-item p{font-size:14px;line-height:1.7;margin:8px 0}
+.daily-language-example{font-style:italic;border-left:2px solid #b3c79e;padding-left:12px}
+.daily-two-exercise label{display:grid;gap:10px;font-size:14px;line-height:1.7;margin:18px 0 0}
+.daily-two-exercise [role=status]{font-size:13px;line-height:1.6}
+#daily-mission .mission-tomorrow{font-size:16px;font-style:italic;margin:28px 0 0}
+#daily-mission.daily-seven .practice-section-art,#daily-mission.daily-seven .practice-art,#daily-mission.daily-seven .section-guide{display:none!important}
+@media(max-width:760px){
+ #portal-studio .studio-workspace{padding:25px 18px!important}
+ #portal-monthly .section-guide{margin:14px 0 22px!important;align-self:flex-start!important}
+ #students-portal #daily-mission.daily-seven:not([hidden]){grid-template-columns:minmax(0,1fr)!important;gap:15px!important}
+ #daily-mission.daily-seven>.daily-side{grid-column:1!important;grid-row:4!important;flex-direction:row!important;justify-content:space-between;align-items:flex-start;gap:16px}
+ #daily-mission.daily-seven>.daily-content{grid-row:5!important}
+ #daily-mission.daily-seven .daily-side .daily-idiom{width:calc(50% - 8px)!important;max-width:160px!important}
+ #daily-mission.daily-seven .daily-idiom summary{width:100px!important;height:100px!important;padding:15px!important;font-size:12px!important}
+ .daily-side-note{width:100px;min-height:90px;padding:14px;font-size:11px}
+ #daily-mission.daily-seven .mission-practice{padding:20px!important}
+}
+@media(max-width:680px){
+ main #home .hero{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;height:auto!important;min-height:0!important;padding:0!important;overflow:visible!important;background:#faf9f4!important}
+ main #home .hero:before{display:none!important}
+ #home .home-picture-and-reviews{position:relative!important;inset:auto!important;order:0!important;z-index:0!important;width:100%!important;height:auto!important;aspect-ratio:12/5!important}
+ #home .home-picture-and-reviews .coaching-photo{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;background:#193c32!important}
+ main #home .home-picture-and-reviews .coaching-photo img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
+ main #home .hero-copy{order:1!important;box-sizing:border-box;width:100%!important;padding:23px 6% 20px!important;color:#193c32!important}
+ #home .home-kicker{color:#193c32!important;font-size:8px!important;margin:0 0 12px!important}
+ main #home .hero-copy .home-slogan,#home .home-title-main{color:#193c32!important;font-size:29px!important;line-height:1.18!important;letter-spacing:-.7px!important;margin-bottom:16px!important}
+ #home .home-title-bottom{font-size:21px!important;margin-top:7px!important}
+ #home .home-pricing-note{display:flex!important;flex-wrap:wrap;gap:7px 15px;font-size:10px!important;color:#193c32!important;margin:0 0 16px!important}
+ #home .home-pricing-note br{display:none!important}
+ #home .home-pricing-note strong:before{color:#193c32!important;width:12px!important}
+ #home .home-speech-links{gap:10px!important}
+ #home .home-speech-bubble,#home .home-speech-bubble:nth-child(2){width:auto!important;min-width:0!important;padding:11px 15px!important;border-radius:18px 18px 18px 4px!important}
+ #home .home-speech-bubble>span{font-size:12px!important}
+ #home .hero>.benefits{position:static!important;inset:auto!important;order:2!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;width:auto!important;padding:14px 0!important;margin:0 6%!important;gap:8px!important;color:#193c32!important;border-top:1px solid #c9d3bf!important;font-size:8px!important;line-height:1.6!important}
+ #home .hero>.benefits>span{min-width:0;text-align:center;overflow-wrap:normal}
+ #reviews .review-cards{display:flex!important;height:380px!important;min-height:380px!important;gap:12px!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory}
+ #reviews .review-card,#reviews .review-card.is-selected,#reviews .review-card.is-previous,#reviews .review-card.is-next{display:block!important;position:relative!important;left:auto!important;top:auto!important;flex:0 0 100%!important;width:100%!important;min-width:0!important;height:360px!important;margin:0!important;transform:none!important;filter:none!important;opacity:1!important;animation:none!important;pointer-events:auto!important;padding:23px 18px!important;scroll-snap-align:start}
+ #reviews .review-card blockquote{font-size:15px!important;line-height:1.75!important}
+}
+
+#portal-studio .section-guide{position:static!important;float:none!important;transform:none!important;display:flex!important;margin:0 0 20px auto!important;width:fit-content!important;max-width:100%!important}
+#portal-studio.studio-open{grid-column:1/-1!important}
+#portal-studio .studio-workspace{max-width:100%!important}

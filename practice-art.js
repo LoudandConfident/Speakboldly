@@ -1,4 +1,4 @@
-import {idiomForDate} from './daily-idiom.js?v=daily-1';
+import {idiomForDate} from './daily-idiom.js?v=seven-side-3';
 const icons={
  say:'<path d="M9 12h40v25H29L16 48V37H9ZM18 22h22M18 29h15"/>',
  hear:'<path d="M10 33V24a20 20 0 0 1 40 0v9M10 27h9v20h-9ZM41 27h9v20h-9Z"/>',
@@ -52,5 +52,4 @@ Se creuser la tête|Réfléchir avec beaucoup d’effort.|Je me suis creusé la 
 function frenchCard(host){const day=idiomForDate().key,index=Math.floor(Date.parse(day+'T00:00:00Z')/86400000)%french.length,item=french[index];let card=host.querySelector(':scope>.french-idiom');if(card?.dataset.day===day)return;if(!card){card=document.createElement('details');card.className='daily-idiom french-idiom';host.querySelector(':scope>.daily-task-intro')?.after(card);}card.dataset.day=day;card.replaceChildren();const summary=document.createElement('summary');summary.innerHTML=picture('expressions');const label=document.createElement('span');label.textContent='L’expression du jour';summary.append(label);card.append(summary);for(const [tag,text]of [['h4',item.expression],['p',item.meaning],['p',item.example]]){const el=document.createElement(tag);el.textContent=text;card.append(el);}}
 function polish(host,isFrench=false){if(!host)return;if(isFrench)frenchCard(host);const headings=host.querySelectorAll('.mission-practice h4,[data-french-stage] h4,.mission-reading h4');for(const heading of headings){if(heading.querySelector('.practice-heading-icon'))continue;const text=heading.textContent.toLowerCase();const key=/hear|écout|entend/.test(text)?'hear':/say|dis-le|dis le|pronon/.test(text)?'say':/build|constr/.test(text)?'build':/fix|corrig/.test(text)?'fix':/expression|use|utilis/.test(text)?'expressions':'book';const mark=document.createElement('span');mark.className='practice-heading-icon';mark.innerHTML=picture(key);heading.prepend(mark);}}
 
-const daily=document.querySelector('#daily-mission');if(daily){polish(daily);new MutationObserver(()=>polish(daily)).observe(daily,{childList:true,subtree:true});}
 const admin=document.querySelector('#admin-dashboard');if(admin){const apply=()=>polish(admin.querySelector('#instructor-french-view'),true);apply();new MutationObserver(apply).observe(admin,{childList:true,subtree:true});}
