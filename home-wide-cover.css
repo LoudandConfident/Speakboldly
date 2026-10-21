@@ -40,3 +40,34 @@ main #home>.home-bottom-row{padding:17px 0 7px!important;margin:0!important}
  main #home>.home-bottom-row{padding:15px 0 4px!important}
 }
 @media(max-width:360px){main #home .hero-copy{padding:18px 16px!important}main #home .hero-copy .home-slogan{font-size:25px!important}#home .home-pricing-note{font-size:8px!important;margin-bottom:11px!important;gap:3px 9px!important}#home .home-speech-bubble,#home .home-speech-bubble:nth-child(2){padding:9px 12px!important}#home>.home-cover-benefits{font-size:8px}#home>.home-cover-benefits>span{padding:0 6px}}
+
+.home-mobile-primary{display:none!important}
+/* A readable mobile introduction followed by the full coaching photograph. */
+@media(max-width:680px){
+ main #home .hero{display:flex!important;flex-direction:column!important;aspect-ratio:auto!important;height:auto!important;min-height:0!important;border-radius:20px!important;background:#edf0e6!important}
+ main #home .hero:before{display:none!important}
+ main #home .hero-copy{position:relative!important;inset:auto!important;width:100%!important;height:auto!important;order:0;display:flex!important;align-items:flex-start!important;padding:28px 24px 24px!important;color:#193c32!important;background:#edf0e6!important}
+ #home .home-kicker{font-size:10px!important;letter-spacing:1.4px!important;line-height:1.6!important;max-width:none!important;color:#52694e!important;margin:0 0 16px!important}
+ main #home .hero-copy .home-slogan{font-size:clamp(34px,9.5vw,44px)!important;line-height:1.1!important;letter-spacing:-1.3px!important;max-width:100%!important;color:#193c32!important;margin:0 0 20px!important}
+ #home .home-title-bottom{font-size:22px!important;line-height:1.35!important;letter-spacing:-.3px!important;margin-top:10px!important;color:#193c32!important}
+ #home .home-pricing-note{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:5px!important;font-size:13px!important;line-height:1.6!important;max-width:100%!important;margin:0 0 22px!important;color:#435b4c!important}
+ #home .home-pricing-note strong{display:flex;align-items:center;gap:9px;font-weight:400!important}
+ #home .home-pricing-note strong:before{content:'•'!important;display:inline-block;color:#66803e;font-size:16px;line-height:1}
+ #home .home-mobile-primary{display:inline-flex!important;justify-content:center;align-items:center;min-height:48px!important;width:100%;box-sizing:border-box;padding:12px 20px!important;background:#193c32!important;color:#faf9f4!important;border:1px solid #193c32!important;border-radius:12px!important;font:600 14px/1.5 'DM Sans',sans-serif!important;margin:0!important}
+ #home .home-speech-links{display:flex!important;flex-wrap:wrap!important;gap:10px!important;margin:14px 0 0!important;width:100%!important}
+ #home .home-speech-bubble,#home .home-speech-bubble:nth-child(2){flex:1 1 auto!important;min-height:44px!important;box-sizing:border-box;padding:10px 12px!important;border-radius:10px!important;background:transparent!important;border-color:#b8c8ad!important}
+ #home .home-speech-bubble>span{font-size:12px!important;line-height:1.4!important}
+ #home .home-picture-and-reviews{position:relative!important;inset:auto!important;order:1;z-index:auto!important;width:100%!important;height:auto!important;aspect-ratio:12/5!important;overflow:hidden}
+ #home .home-picture-and-reviews .coaching-photo{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;aspect-ratio:12/5!important}
+ main #home .home-picture-and-reviews .coaching-photo img{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;aspect-ratio:12/5!important;object-fit:cover!important;object-position:center!important}
+ #home>.home-cover-benefits{grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin:16px 0 0;padding:0;border-radius:16px;background:transparent;font-size:12px;line-height:1.6;text-align:left;border-color:#d5decd}
+ #home>.home-cover-benefits>span{display:flex;align-items:center;min-height:64px;padding:14px 16px;box-sizing:border-box}
+ #home>.home-cover-benefits>span+span{border-left:0}
+ #home>.home-cover-benefits>span:nth-child(even){border-left:1px solid #d5decd}
+ #home>.home-cover-benefits>span:nth-child(n+3){border-top:1px solid #d5decd}
+ main #home>.home-bottom-row{padding:24px 0 12px!important}
+ #home .home-bottom-row .page-signature{font-size:12px!important;line-height:1.7!important}
+ #home .home-bottom-row .page-signature small{font-size:11px!important}
+}
+@media(max-width:360px){main #home .hero-copy{padding:24px 20px 20px!important}#home .home-kicker{font-size:9px!important;letter-spacing:1.1px!important}#home .home-title-bottom{font-size:20px!important}}
+@media(max-width:680px){#home .home-speech-bubble>.home-bubble-shape{display:none!important}}
