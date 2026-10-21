@@ -33,3 +33,49 @@
  #reviews .review-card.is-selected{--review-drag:0px!important;--review-lift:0px!important;--review-tilt-x:0deg!important;--review-tilt-y:0deg!important}
  #reviews .review-cards{scroll-behavior:auto}
 }
+
+/* Keep the album's final colours and text bounds together. */
+#reviews .review-album[hidden]{display:none!important}
+#reviews .reviews-album-area .review-card{
+ background:#193c32!important;
+ border:1px solid #476b5b!important;
+ color:#faf9f4!important;
+ box-sizing:border-box!important;
+ padding:26px!important;
+ overflow:hidden!important;
+}
+#reviews .reviews-album-area .review-card-content{
+ display:block;
+ box-sizing:border-box!important;
+ width:100%;
+ min-width:0;
+ min-height:0;
+ height:100%!important;
+ max-height:100%!important;
+ padding:0 8px 4px 0;
+ overflow-y:auto!important;
+ overflow-x:hidden!important;
+ overflow-wrap:anywhere;
+ white-space:normal;
+ scrollbar-width:thin;
+ scrollbar-color:#b7cda1 #193c32;
+}
+#reviews .reviews-album-area .review-card h3,
+#reviews .reviews-album-area .review-card p,
+#reviews .reviews-album-area .review-card blockquote{
+ color:#faf9f4!important;
+ max-width:100%!important;
+ overflow-wrap:anywhere;
+ word-break:normal;
+}
+#reviews .reviews-album-area .review-card h3{font-size:18px!important;line-height:1.4!important;margin:0 0 8px!important}
+#reviews .reviews-album-area .review-card-details{font-size:12px!important;line-height:1.65!important;margin:0!important}
+#reviews .reviews-album-area .review-card blockquote{font-size:17px!important;line-height:1.75!important;margin:18px 0 0!important;white-space:pre-wrap}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+ #reviews .reviews-album-area .review-card.is-selected:hover{--review-lift:-6px;border-color:#b7cda1!important;box-shadow:0 24px 42px #193c3240!important}
+}
+@media(max-width:680px){
+ #reviews .reviews-album-area .review-cards{height:380px!important;min-height:380px!important;align-items:center}
+ #reviews .reviews-album-area .review-card{height:350px!important;max-height:350px!important;padding:22px 18px!important}
+ #reviews .reviews-album-area .review-card blockquote{font-size:15px!important;line-height:1.7!important}
+}
