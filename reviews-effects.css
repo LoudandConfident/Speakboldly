@@ -1,0 +1,35 @@
+/* Restore the review album's depth, movement and interaction. */
+#reviews .review-cards{perspective:1000px!important;isolation:isolate}
+#reviews .review-card{box-shadow:0 16px 32px #193c3224!important;backface-visibility:hidden;transform-style:preserve-3d}
+#reviews .review-card.is-selected{transform:translate(calc(-50% + var(--review-drag,0px)),calc(-50% + var(--review-lift,0px))) rotateX(var(--review-tilt-x,0deg)) rotateY(var(--review-tilt-y,0deg)) scale(1)!important}
+#reviews .review-card.is-previous{transform:translate(-73%,-50%) scale(.86) rotate(-4deg)!important;filter:blur(2px)!important;opacity:.43!important}
+#reviews .review-card.is-next{transform:translate(-27%,-50%) scale(.86) rotate(4deg)!important;filter:blur(2px)!important;opacity:.43!important}
+#reviews .review-arrow{transition:transform .2s ease,background-color .2s ease,box-shadow .2s ease!important}
+#reviews .review-arrow:hover:not(:disabled){transform:scale(1.08)!important;background:#d5ed98!important;box-shadow:0 5px 12px #193c321a}
+#reviews .review-arrow:active:not(:disabled){transform:scale(.95)!important}
+@media(prefers-reduced-motion:no-preference){
+ #reviews .review-card{transition:transform .32s cubic-bezier(.22,.61,.36,1),filter .32s,opacity .32s,box-shadow .25s!important}
+ #reviews .review-card.is-selected.review-enter-next{animation:sb-review-slide-forward .4s cubic-bezier(.22,.61,.36,1) both!important}
+ #reviews .review-card.is-selected.review-enter-previous{animation:sb-review-slide-back .4s cubic-bezier(.22,.61,.36,1) both!important}
+ @keyframes sb-review-slide-forward{from{translate:65px 0}to{translate:0 0}}
+ @keyframes sb-review-slide-back{from{translate:-65px 0}to{translate:0 0}}
+}
+@media(hover:hover) and (pointer:fine){
+ #reviews .review-card.is-selected:hover{--review-lift:-5px;box-shadow:0 24px 42px #193c3238!important}
+}
+#reviews .review-cards.is-dragging .review-card.is-selected{transition:none!important;animation:none!important;translate:none!important;--review-lift:0px!important;--review-tilt-x:0deg!important;--review-tilt-y:0deg!important}
+@media(max-width:680px){
+ #reviews .review-card,#reviews .review-card.is-selected,#reviews .review-card.is-previous,#reviews .review-card.is-next{transform:none!important;filter:none!important;opacity:1!important;box-shadow:0 5px 14px #193c3217!important}
+ #reviews .review-cards{scroll-behavior:smooth;perspective:none!important}
+ @media(prefers-reduced-motion:no-preference){
+  #reviews .review-card.is-selected.review-enter-next{animation:sb-review-phone-forward .3s ease both!important}
+  #reviews .review-card.is-selected.review-enter-previous{animation:sb-review-phone-back .3s ease both!important}
+  @keyframes sb-review-phone-forward{from{translate:22px 0}to{translate:0 0}}
+  @keyframes sb-review-phone-back{from{translate:-22px 0}to{translate:0 0}}
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ #reviews .review-card,#reviews .review-arrow{animation:none!important;transition:none!important}
+ #reviews .review-card.is-selected{--review-drag:0px!important;--review-lift:0px!important;--review-tilt-x:0deg!important;--review-tilt-y:0deg!important}
+ #reviews .review-cards{scroll-behavior:auto}
+}

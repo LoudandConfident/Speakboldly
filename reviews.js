@@ -66,6 +66,8 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   cards.querySelector('.is-selected')?.classList.add(direction>0?'review-enter-next':'review-enter-previous');
   restartRotation();
  }
+ const reviewViewport=doc.defaultView.matchMedia?.('(max-width: 680px)');
+ reviewViewport?.addEventListener?.('change',()=>{render();restartRotation();});
  previous?.addEventListener('click',()=>moveReview(-1));
  next?.addEventListener('click',()=>moveReview(1));
  cards?.addEventListener('scroll',()=>{if(!mobileReviews()||!cards.children.length)return;const first=cards.children[0].offsetLeft;let closest=0,distance=Infinity;for(let i=0;i<cards.children.length;i++){const delta=Math.abs(cards.children[i].offsetLeft-first-cards.scrollLeft);if(delta<distance){distance=delta;closest=i;}}selected=closest;position.textContent='Review '+(selected+1)+' of '+reviews.length;restartRotation();},{passive:true});
@@ -85,16 +87,20 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   }
   event.preventDefault();drag.dx=dx;
   const card=cards.querySelector('.is-selected');
-  if(card){card.style.animation='none';card.style.transition='none';card.style.transform='translate(calc(-50% + '+Math.max(-150,Math.min(150,dx))+'px), -50%)';}
+  if(card){card.style.animation='none';card.style.transition='none';card.style.setProperty('--review-drag',Math.max(-150,Math.min(150,dx))+'px');}
  });
  function finishDrag(event,cancelled=false){
   if(!drag||event.pointerId!==drag.id)return;
   const gesture=drag;drag=null;cards.classList.remove('is-dragging');
-  const card=cards.querySelector('.is-selected');if(card){card.style.animation='';card.style.transition='';card.style.transform='';}
+  const card=cards.querySelector('.is-selected');if(card){card.style.animation='';card.style.transition='';card.style.transform='';card.style.removeProperty('--review-drag');}
   if(cards.hasPointerCapture?.(event.pointerId))cards.releasePointerCapture(event.pointerId);
   if(!cancelled&&gesture.horizontal&&Math.abs(gesture.dx)>=40)moveReview(gesture.dx<0?1:-1);
   else restartRotation();
  }
+ const allowDepth=()=>!mobileReviews()&&doc.defaultView.matchMedia('(hover: hover) and (pointer: fine)').matches&&!doc.defaultView.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function resetDepth(){const card=cards.querySelector('.is-selected');card?.style.removeProperty('--review-tilt-x');card?.style.removeProperty('--review-tilt-y');}
+ cards?.addEventListener('pointermove',event=>{if(drag||!allowDepth())return;const card=cards.querySelector('.is-selected');if(!card)return;const rect=card.getBoundingClientRect(),x=Math.max(-1,Math.min(1,(event.clientX-rect.left)/rect.width*2-1)),y=Math.max(-1,Math.min(1,(event.clientY-rect.top)/rect.height*2-1));card.style.setProperty('--review-tilt-x',(-y*2)+'deg');card.style.setProperty('--review-tilt-y',(x*2)+'deg');});
+ cards?.addEventListener('pointerleave',resetDepth);
  cards?.addEventListener('pointerup',event=>finishDrag(event));
  cards?.addEventListener('pointercancel',event=>finishDrag(event,true));
  cards?.addEventListener('lostpointercapture',event=>finishDrag(event,true));
