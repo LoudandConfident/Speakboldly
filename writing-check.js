@@ -26,8 +26,7 @@ export function checkWriting(value){const text=String(value).slice(0,12000),issu
  category='Grammar';
  rule(/\b(enjoy|enjoys|enjoyed)\s+to\s+(learn|swim|read|write|work|play|cook)\b/gi,m=>m[1]+' '+({swim:'swimming',write:'writing'}[m[2].toLowerCase()]||m[2].toLowerCase()+'ing'),'After “enjoy”, use the -ing form.');
  rule(/\b(informations|advices|homeworks|equipments)\b/gi,m=>caps(m[0],m[0].toLowerCase().slice(0,-1)),'This noun is normally uncountable in English; use its singular form.');
- category='Punctuation';
- rule(/\bi\b/g,'I','Capitalize the pronoun “I”.');
+ category='Grammar';
  rule(/\ba\s+(apple|orange|egg|umbrella|hour|honest|idea|example|interesting|important|English)\b/gi,m=>caps(m[0],'an '+m[1]),'Use “an” before a vowel sound.');
  rule(/\ban\s+(university|uniform|European|useful|user)\b/gi,m=>caps(m[0],'a '+m[1]),'Use “a” before this consonant sound.');
  rule(/\bmuch\s+(people|friends|books|students|things)\b/gi,m=>caps(m[0],'many '+m[1]),'Use “many” with plural countable nouns.');
@@ -37,10 +36,19 @@ export function checkWriting(value){const text=String(value).slice(0,12000),issu
  for(const m of text.matchAll(/\b[A-Za-z]+\b/g)){const word=spellings[m[0].toLowerCase()];if(word)add(m.index,m.index+m[0].length,caps(m[0],word),'Check the spelling of this word.');}
  rule(/\b([A-Za-z]+)\s+\1\b/gi,m=>/^(had|that)$/i.test(m[1])?m[0]:m[1],'This word may have been repeated accidentally.');
  category='Punctuation';
- for(const m of text.matchAll(/(?:^|[.!?][”"’']?\s+)([a-z])/g)){const p=m.index+m[0].length-1,existing=issues.find(i=>i.start===p);if(existing)existing.suggestion=existing.suggestion[0].toUpperCase()+existing.suggestion.slice(1);else add(p,p+1,m[1].toUpperCase(),'Start a sentence with a capital letter.');}
+ const capitalize=(start,end,suggestion,explanation)=>{const existing=issues.find(i=>start>=i.start&&end<=i.end);if(existing){const original=text.slice(start,end);existing.suggestion=existing.suggestion.replace(new RegExp('\\b'+original+'\\b','u'),suggestion);existing.explanation+=' '+explanation;}else add(start,end,suggestion,explanation);};
+ category='Capitalization';
+ for(const m of text.matchAll(/\bi\b/g))capitalize(m.index,m.index+1,'I','The pronoun “I” always wears a capital letter—even in contractions like “I’m”.');
+ const properNames={ahmed:'Ahmed',mohamed:'Mohamed',mohammed:'Mohammed',sara:'Sara',sarah:'Sarah',omar:'Omar',nora:'Nora',mira:'Mira',john:'John',mary:'Mary',london:'London',cairo:'Cairo',egypt:'Egypt',english:'English',french:'French',monday:'Monday',tuesday:'Tuesday',wednesday:'Wednesday',thursday:'Thursday',friday:'Friday',saturday:'Saturday',sunday:'Sunday'};
+ for(const m of text.matchAll(/\b[A-Za-z]+\b/g)){const name=properNames[m[0].toLowerCase()];if(name&&name!==m[0])capitalize(m.index,m.index+m[0].length,name,'Names, places, languages and days begin with a capital letter. Give this one its name badge!');}
+ // Names after explicit introductions can be unfamiliar; do not guess from every noun.
+ for(const m of text.matchAll(/\b(?:my name is|his name is|her name is|their name is|my friend is called|mr\.|mrs\.|ms\.|dr\.)\s+([\p{Ll}][\p{L}’'-]*)/giu)){const word=m[1];if(!/^(?:a|an|the)$/i.test(word)){const start=m.index+m[0].length-word.length;capitalize(start,start+word.length,word[0].toUpperCase()+word.slice(1),'A person’s name starts with a capital letter. Tiny name, VIP entrance!');}}
+ for(const m of text.matchAll(/(?:^\s*[“"‘']?|[.!?][”"’']?\s+[“"‘']?|\n\s*[“"‘']?)([a-z])/g)){const p=m.index+m[0].length-1;capitalize(p,p+1,m[1].toUpperCase(),'Start a sentence with a capital letter. Let the first letter stand tall!');}
+ category='Punctuation';
  rule(/[^.!?\n]*[.!?]/g,m=>{const sentence=m[0];return /^\s*(?:do|does|did|is|are|am|was|were|can|could|will|would|should|have|has)\s+(?:I|you|he|she|it|we|they)\b/i.test(sentence)&&sentence.endsWith('.')?sentence.slice(0,-1)+'?':sentence;},'End a direct question with a question mark.');
  rule(/\s+([,;:!?])/g,m=>m[1],'Remove the space before punctuation.');
  rule(/([,;:!?])([A-Za-z])/g,m=>m[1]+' '+m[2],'Add a space after punctuation.');
  if(text.trim()&&!/[.!?][”"’']?$/.test(text.trim())){const end=text.trimEnd().length;issues.push({start:end,end,original:'',suggestion:'.',category:'Punctuation',explanation:'Finish the last sentence with punctuation.'});}
+ for(const issue of issues){const openers={Grammar:'Grammar gremlin spotted!',Vocabulary:'Word wardrobe check!',Punctuation:'Punctuation pit stop!',Capitalization:'Capital letters to the rescue!'};issue.explanation=(openers[issue.category]||'Tiny tune-up!')+' '+issue.explanation;}
  issues.sort((a,b)=>a.start-b.start);let suggestedText=text;for(const item of [...issues].reverse())suggestedText=suggestedText.slice(0,item.start)+item.suggestion+suggestedText.slice(item.end);return {issues,suggestedText,sentenceCount:countSentences(text)};
 }

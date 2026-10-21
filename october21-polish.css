@@ -57,7 +57,7 @@
 #daily-mission.daily-seven .daily-idiom[open] summary:after{content:'−'}
 #daily-mission.daily-seven .daily-idiom h4,#daily-mission.daily-seven .daily-idiom p{font-size:12px!important;line-height:1.7!important;padding:0!important;border:0!important;margin:12px 0!important}
 .daily-side-note{display:grid;place-content:center;box-sizing:border-box;width:124px;min-height:105px;padding:20px;text-align:center;font-size:13px;line-height:1.6;background:#d5ed98;border:1px solid #a6bc90;border-radius:28px 28px 28px 5px;margin:0}
-.daily-side-note.note-circle{border-radius:50%;aspect-ratio:1}
+.daily-side-note.note-ticket{border-radius:8px 28px 8px 28px;transform:rotate(-3deg)}
 #daily-mission.daily-seven .daily-task-heading{position:static!important;display:block!important;background:transparent!important;padding:0!important;margin:0 0 24px!important;border:0!important;min-height:0!important}
 .daily-task-heading .eyebrow{font-size:10px!important;margin:0 0 10px!important}
 .daily-task-heading h4{font-size:24px!important;font-weight:500;margin:0!important;line-height:1.4}
@@ -111,3 +111,11 @@
 #portal-studio .section-guide{position:static!important;float:none!important;transform:none!important;display:flex!important;margin:0 0 20px auto!important;width:fit-content!important;max-width:100%!important}
 #portal-studio.studio-open{grid-column:1/-1!important}
 #portal-studio .studio-workspace{max-width:100%!important}
+
+/* Motivation is decoration; only the round idiom card opens. */
+#daily-mission.daily-seven .daily-side-note{cursor:default;box-shadow:none;aspect-ratio:auto;min-height:105px}
+#daily-mission.daily-seven .daily-side-note.note-bubble{border-radius:26px 26px 26px 3px}
+#daily-mission.daily-seven .daily-side-note.note-ticket{border-radius:8px 28px 8px 28px}
+.writing-feedback ul,.daily-two-exercise ul{list-style:disc;padding-left:22px}
+.mistake-explanation{padding:12px 14px;background:#edf0e6;border-left:3px solid #adbea2;border-radius:0 10px 10px 0}
+.mistake-explanation[hidden]{display:none!important}

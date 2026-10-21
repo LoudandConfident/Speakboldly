@@ -19,3 +19,9 @@ test('writing UI highlights both mistakes and labels vocabulary feedback',()=>{
  const output=text(practice.root);assert.match(output,/Write at least 2/);assert.match(output,/Grammar/);assert.match(output,/Punctuation/);assert.match(output,/Finish the last sentence/);
  const feedback=practice.root.children[0].children.at(-1);const apply=feedback.children.at(-1);apply.onclick();assert.equal(practice.input.value,'She is happy.');
 });
+test('each mistake has a button that reveals and hides its explanation',()=>{
+ const doc={createElement:tag=>new Node(tag),createTextNode:t=>new Node('#text',t),addEventListener(){},removeEventListener(){},defaultView:{addEventListener(){},removeEventListener(){},clearTimeout(){}}};
+ const practice=createWritingPractice(doc);practice.input.value='i met ahmed.';practice.review();
+ const list=find(practice.root,'ul');assert.equal(list.children.length,2);
+ for(const item of list.children){const button=find(item,'button'),explanation=item.children.at(-1);assert.equal(button.textContent,'Explain my mistake');assert.equal(explanation.hidden,true);button.onclick();assert.equal(explanation.hidden,false);button.onclick();assert.equal(explanation.hidden,true);}
+});

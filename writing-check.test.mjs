@@ -21,3 +21,21 @@ test('suggestions retain exact source offsets and can be checked again',()=>{
  assert.equal(result.suggestedText,'I enjoy writing. She has information.');
  assert.deepEqual(checkWriting(result.suggestedText).issues,[]);
 });
+test('capitalizes names, sentence beginnings and I including contractions',()=>{
+ for(const [source,expected] of [
+ ['my name is zain. i live in cairo! do you speak english?','My name is Zain. I live in Cairo! Do you speak English?'],
+ ['I met ahmed and sarah.','I met Ahmed and Sarah.'],
+ ["i’m happy! i like fish?", "I’m happy! I like fish?"],
+ ['  “hello there!”\nwe are ready.', '  “Hello there!”\nWe are ready.'],
+ ['i has a book.', 'I have a book.']
+ ]){
+ const result=checkWriting(source);assert.equal(result.suggestedText,expected,source);
+ assert(result.issues.every(i=>i.explanation.length>20));
+ assert.deepEqual(checkWriting(expected).issues,[],expected);
+ }
+});
+test('accepts full stops, exclamation marks and question marks',()=>{
+ for(const text of ['I like fish.','I like fish!','Do you like fish?']){
+ assert.equal(checkWriting(text).sentenceCount,1);assert.deepEqual(checkWriting(text).issues,[]);
+ }
+});
