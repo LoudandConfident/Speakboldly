@@ -12,3 +12,11 @@ test('all three supplied PDF templates remain editable and agree with their on-s
 test('PDF filling preserves editable values; final exports flatten filled fields for sending',async()=>{
  for(const template of Object.values(catalog)){const bytes=readFileSync(new URL(template.url,import.meta.url)),field=template.pages[0].fields[0],values={[field.name]:'Test Student — French café'};const editable=await PDFDocument.load(await fillTeacherPdf(bytes,values,{fontBytes}));assert.equal(editable.getForm().getTextField(field.name).getText(),values[field.name]);assert.equal(editable.getPageCount(),template.pages.length);const final=await PDFDocument.load(await fillTeacherPdf(bytes,values,{fontBytes,flatten:true}));assert.equal(final.getForm().getFields().length,0);assert.equal(final.getPageCount(),template.pages.length);}
 });
+
+test('long report comments are preserved and auto-sized instead of rejected at 100 characters',async()=>{
+ const template=catalog.progress,meta=template.pages[0].fields.find(f=>f.multiline),value='The learner speaks clearly and confidently. '.repeat(20),bytes=readFileSync(new URL(template.url,import.meta.url));
+ const pdf=await PDFDocument.load(await fillTeacherPdf(bytes,{[meta.name]:value},{fontBytes}));
+ const field=pdf.getForm().getTextField(meta.name);assert.equal(field.getText(),value);assert.equal(field.getMaxLength(),undefined);
+ const appearance=field.acroField.getDefaultAppearance();const size=Number(appearance.match(/([\d.]+)\s+Tf/)[1]);assert(size>0&&size<8,appearance);
+ const final=await PDFDocument.load(await fillTeacherPdf(bytes,{[meta.name]:value},{fontBytes,flatten:true}));assert.equal(final.getForm().getFields().length,0);
+});

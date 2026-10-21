@@ -122,3 +122,5 @@ Real English keeps its daily idiom in a compact expandable side card, with Fun a
 Daily Challenge includes its daily expandable idiom and a Fun circle. Real English retains Fun and the illustrated quote. Paragraph feedback covers additional common agreement and verb-pattern errors; suggestions never replace the learner’s writing automatically. These remain local pattern checks rather than a complete language review.
 
 Paragraph correction includes additional local rules for perfect tenses, irregular past forms, modals, gerunds, plurals, prepositions, contractions and common spelling errors. Question punctuation uses a separate character-level edit so other grammar feedback does not suppress it. Valid-usage regression examples accompany the added checks; this is still a pattern-based checker.
+
+Reports open at a reduced fit-page zoom with 50% and 75% options. Overlay comments wrap and shrink within their printed rectangles, while Edit fields provides larger writing controls. Exported PDFs auto-size text and remove the templates’ obsolete 100-character limits. Client rows keep Action plan within Actions.
