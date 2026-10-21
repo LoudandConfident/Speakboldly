@@ -75,3 +75,32 @@ main #home .hero{
 }
 main #home>.home-cover-benefits{box-sizing:border-box;width:100%;max-width:1120px;margin:18px auto 0!important}
 main #home>.home-bottom-row{box-sizing:border-box;width:100%;max-width:1120px;margin:0 auto!important}
+
+/* Small white footer text directly on the photograph, without panels. */
+main #home .hero{aspect-ratio:2.65!important}
+main #home .hero-copy{height:calc(100% - 68px)!important}
+main #home .hero>.home-cover-benefits{
+ position:absolute!important;z-index:2;left:6%;right:6%;bottom:37px;
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important;
+ width:auto!important;max-width:none!important;margin:0!important;padding:0!important;
+ background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+ color:#fff!important;font-size:10px!important;line-height:1.5!important;text-align:center!important;
+}
+main #home .hero>.home-cover-benefits>span{min-height:0!important;padding:0!important;border:0!important;color:#fff!important;background:transparent!important;font-weight:400!important}
+main #home .hero>.home-bottom-row{
+ position:absolute!important;z-index:2;left:6%;right:6%;bottom:10px;
+ width:auto!important;max-width:none!important;margin:0!important;padding:0!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;
+}
+main #home .hero .page-signature,
+main #home .hero .page-signature>span,
+main #home .hero .page-signature>small{color:#fff!important;font-size:8px!important;font-weight:400!important;line-height:1.4!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important}
+@media(max-width:680px){
+ main #home .hero-copy{height:calc(100% - 9cqw)!important;padding:2cqw 3.5cqw!important}
+ main #home .home-kicker{margin-bottom:1.2cqw!important}
+ main #home .hero-copy .home-slogan{font-size:4.9cqw!important;margin-bottom:1.2cqw!important}
+ main #home .home-pricing-note{margin-bottom:1cqw!important}
+ main #home .hero>.home-cover-benefits{left:4%;right:4%;bottom:5.5cqw;gap:2cqw!important;font-size:1.4cqw!important;line-height:1.4!important}
+ main #home .hero>.home-bottom-row{left:4%;right:4%;bottom:1.2cqw}
+ main #home .hero .page-signature,main #home .hero .page-signature>span,main #home .hero .page-signature>small{font-size:1.2cqw!important;line-height:1.3!important}
+}
