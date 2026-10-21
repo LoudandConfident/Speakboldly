@@ -180,3 +180,6 @@ html.app-pull-refresh-enabled,html.app-pull-refresh-enabled body{overscroll-beha
 
 
 #daily-mission .mission-expression-entry+.mission-expression-entry{border-top:1px solid var(--line);margin-top:12px;padding-top:8px}#daily-mission .daily-grammar-card .daily-grammar-body{padding:0}#daily-mission .daily-grammar-card .grammar-nuance{color:var(--muted)}
+
+/* Daily Motivation is available from its homepage button on phones. */
+@media(max-width:680px){header #main-navigation [data-open-view="daily-quote"],header #main-navigation [aria-controls="daily-quote"],header #main-navigation a[href="#daily-quote"]{display:none!important}}
