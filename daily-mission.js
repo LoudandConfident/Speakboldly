@@ -1,4 +1,4 @@
-import {createWritingPractice} from './writing-practice.js?v=oct21-1';
+import {createWritingPractice} from './writing-practice.js?v=writing-review-2';
 import {minimumDailySentences,grammarName,completionTasks,normalizePractice} from './daily-challenge-tools.js?v=oct21-1';
 import {idiomForDate} from './daily-idiom.js?v=seven-side-3';
 import {dailyMissionSet} from './daily-mission-set.js?v=level-topics-3';

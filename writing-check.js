@@ -3,7 +3,7 @@ const baseVerbs={goes:'go',went:'go',gone:'go',has:'have',had:'have',does:'do',d
 const spellings={recieve:'receive',recieved:'received',becuase:'because',beacuse:'because',definately:'definitely',seperate:'separate',alot:'a lot',enviroment:'environment',freind:'friend',wierd:'weird',langauge:'language',grammer:'grammar',sentance:'sentence',begining:'beginning',untill:'until',succesful:'successful',writting:'writing',studing:'studying',tommorow:'tomorrow',tommorrow:'tomorrow',yestarday:'yesterday',intresting:'interesting',pronounciation:'pronunciation'};
 const caps=(source,target)=>(/^[A-Z]/.test(source)||source==='i')?target[0].toUpperCase()+target.slice(1):target;
 export function countSentences(value){const source=String(value).replace(/\b(?:Mr|Mrs|Ms|Dr|Prof|e\.g|i\.e)\./gi,m=>m.replaceAll('.','')).replace(/(\d)\.(\d)/g,'$1$2');return (source.match(/[^.!?]+[.!?]+(?:[”"’']|$)?/g)||[]).filter(s=>(s.match(/[A-Za-z]+(?:['’][A-Za-z]+)*/g)||[]).length>=2).length;}
-export function checkWriting(value){const text=String(value).slice(0,12000),issues=[];const add=(start,end,suggestion,explanation)=>{if(text.slice(start,end)===suggestion||issues.some(i=>start<i.end&&end>i.start))return;issues.push({start,end,original:text.slice(start,end),suggestion,explanation});};const rule=(pattern,replacement,why)=>{for(const m of text.matchAll(pattern))add(m.index,m.index+m[0].length,typeof replacement==='function'?replacement(m):replacement,why);};
+export function checkWriting(value){const text=String(value).slice(0,12000),issues=[];let category='Grammar';const add=(start,end,suggestion,explanation)=>{if(text.slice(start,end)===suggestion||issues.some(i=>start<i.end&&end>i.start))return;issues.push({start,end,original:text.slice(start,end),suggestion,explanation,category});};const rule=(pattern,replacement,why)=>{for(const m of text.matchAll(pattern))add(m.index,m.index+m[0].length,typeof replacement==='function'?replacement(m):replacement,why);};
  rule(/\bi\s+(?:is|are)\b/gi,'I am','Use “am” with “I”.');
  rule(/\b(he|she|it)\s+(?:are|am)\b/gi,m=>caps(m[1],m[1].toLowerCase()+' is'),'Use “is” with he, she and it.');
  rule(/\b(you|we|they)\s+(?:is|am)\b/gi,m=>caps(m[1],m[1].toLowerCase()+' are'),'Use “are” with you, we and they.');
@@ -16,17 +16,31 @@ export function checkWriting(value){const text=String(value).slice(0,12000),issu
  rule(/\b(did|didn['’]t|doesn['’]t|don['’]t|can|could|must|should|will|would)\s+([a-z]+)\b/gi,m=>baseVerbs[m[2].toLowerCase()]?m[1]+' '+baseVerbs[m[2].toLowerCase()]:m[0],'Use the base verb after this auxiliary or modal.');
  rule(/\bwould\s+like\s+(learn|go|speak|write|study|work|visit|try|buy|read)\b/gi,m=>caps(m[0],'would like to '+m[1]),'Use “would like to” before a verb.');
  rule(/\b(he|she|it)\s+(go|do|want|like|need|work|speak|live|play|eat|study|learn)\b/gi,m=>{if(/\b(?:does|did|can|could|should|will|would|may|might|must|that)\s*$/i.test(text.slice(0,m.index)))return m[0];const v=m[2].toLowerCase();return caps(m[1],m[1].toLowerCase()+' '+(v==='go'?'goes':v==='do'?'does':v==='study'?'studies':v+'s'));},'In the present simple, use -s or -es with he, she and it.');
+ // Contextual suggestions preserve legitimate uses such as “writing to my teacher”.
+ category='Vocabulary';
+ rule(/\b(like|likes|love|loves|eat|eats|ate|eating|cook|cooks|cooking)\s+fishes\b/gi,m=>m[1]+' fish','Usually use “fish” for food or fish in general. “Fishes” can refer to different species; keep it if that is your meaning.');
+ rule(/\b(writing|write|writes|wrote)\s+to\s+((?:my|your|his|her|our|their|the)\s+(?:tasks?|homework|assignments?))\b/gi,m=>caps(m[1],{writing:'doing',write:'do',writes:'does',wrote:'did'}[m[1].toLowerCase()])+' '+m[2],'For completing tasks or homework, use “do”, not “write to”. If you mean composing an assignment, use “write my assignment” without “to”.');
+ rule(/\b(do|does|did|doing)\s+(a\s+mistake|mistakes)\b/gi,m=>({do:'make',does:'makes',did:'made',doing:'making'}[m[1].toLowerCase()]?caps(m[1],{do:'make',does:'makes',did:'made',doing:'making'}[m[1].toLowerCase()]):m[1])+' '+m[2],'Use “make a mistake”, rather than “do a mistake”.');
+ rule(/\b(say|says|said|saying)\s+me\b/gi,m=>caps(m[1],({say:'tell',says:'tells',said:'told',saying:'telling'})[m[1].toLowerCase()])+' me','Use “tell me”, or “say something to me”.');
+ rule(/\b(discuss|discusses|discussed|discussing)\s+about\b/gi,m=>m[1],'Use “discuss something” without “about”.');
+ category='Grammar';
+ rule(/\b(enjoy|enjoys|enjoyed)\s+to\s+(learn|swim|read|write|work|play|cook)\b/gi,m=>m[1]+' '+({swim:'swimming',write:'writing'}[m[2].toLowerCase()]||m[2].toLowerCase()+'ing'),'After “enjoy”, use the -ing form.');
+ rule(/\b(informations|advices|homeworks|equipments)\b/gi,m=>caps(m[0],m[0].toLowerCase().slice(0,-1)),'This noun is normally uncountable in English; use its singular form.');
+ category='Punctuation';
  rule(/\bi\b/g,'I','Capitalize the pronoun “I”.');
  rule(/\ba\s+(apple|orange|egg|umbrella|hour|honest|idea|example|interesting|important|English)\b/gi,m=>caps(m[0],'an '+m[1]),'Use “an” before a vowel sound.');
  rule(/\ban\s+(university|uniform|European|useful|user)\b/gi,m=>caps(m[0],'a '+m[1]),'Use “a” before this consonant sound.');
  rule(/\bmuch\s+(people|friends|books|students|things)\b/gi,m=>caps(m[0],'many '+m[1]),'Use “many” with plural countable nouns.');
  rule(/\bsince\s+(\d+|two|three|four|five|six|several)\s+(days|weeks|months|years)\b/gi,m=>caps(m[0],'for '+m[1]+' '+m[2]),'Use “for” with a duration.');
  rule(/\b(go|goes|went|going|come|came)\s+to\s+home\b/gi,m=>m[1]+' home','Do not use “to” before “home” after these movement verbs.');
+ category='Vocabulary';
  for(const m of text.matchAll(/\b[A-Za-z]+\b/g)){const word=spellings[m[0].toLowerCase()];if(word)add(m.index,m.index+m[0].length,caps(m[0],word),'Check the spelling of this word.');}
  rule(/\b([A-Za-z]+)\s+\1\b/gi,m=>/^(had|that)$/i.test(m[1])?m[0]:m[1],'This word may have been repeated accidentally.');
+ category='Punctuation';
  for(const m of text.matchAll(/(?:^|[.!?][”"’']?\s+)([a-z])/g)){const p=m.index+m[0].length-1,existing=issues.find(i=>i.start===p);if(existing)existing.suggestion=existing.suggestion[0].toUpperCase()+existing.suggestion.slice(1);else add(p,p+1,m[1].toUpperCase(),'Start a sentence with a capital letter.');}
+ rule(/[^.!?\n]*[.!?]/g,m=>{const sentence=m[0];return /^\s*(?:do|does|did|is|are|am|was|were|can|could|will|would|should|have|has)\s+(?:I|you|he|she|it|we|they)\b/i.test(sentence)&&sentence.endsWith('.')?sentence.slice(0,-1)+'?':sentence;},'End a direct question with a question mark.');
  rule(/\s+([,;:!?])/g,m=>m[1],'Remove the space before punctuation.');
  rule(/([,;:!?])([A-Za-z])/g,m=>m[1]+' '+m[2],'Add a space after punctuation.');
- if(text.trim()&&!/[.!?][”"’']?$/.test(text.trim())){const end=text.trimEnd().length;issues.push({start:end,end,original:'',suggestion:'.',explanation:'Finish the last sentence with punctuation.'});}
+ if(text.trim()&&!/[.!?][”"’']?$/.test(text.trim())){const end=text.trimEnd().length;issues.push({start:end,end,original:'',suggestion:'.',category:'Punctuation',explanation:'Finish the last sentence with punctuation.'});}
  issues.sort((a,b)=>a.start-b.start);let suggestedText=text;for(const item of [...issues].reverse())suggestedText=suggestedText.slice(0,item.start)+item.suggestion+suggestedText.slice(item.end);return {issues,suggestedText,sentenceCount:countSentences(text)};
 }
