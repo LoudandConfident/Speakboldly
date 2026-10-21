@@ -565,6 +565,7 @@ function sbLibraryFolder(section){
 function sbLibraryItem(file){return{id:file.getId(),title:file.getName(),mimeType:file.getMimeType(),url:file.getUrl(),size:file.getSize()};}
 function handleLibraryAction(p){
  const respond=typeof response==='function'?response:clientSyncResponse;
+ if(['listLibrary','uploadLibraryFile'].includes(p.action)&&SB_LIBRARY_SECTIONS[String(p.section||'')]&&!PropertiesService.getScriptProperties().getProperty('SB_LIBRARY_'+String(p.section)))setupFullLibrary();
  const folder=sbLibraryFolder(String(p.section||''));
  if(p.action==='listLibrary'){const files=folder.getFiles(),items=[];while(files.hasNext())items.push(sbLibraryItem(files.next()));return respond({ok:true,items,folderUrl:folder.getUrl()});}
  if(p.action==='uploadLibraryFile'){
@@ -603,7 +604,7 @@ function handleLibraryAction(p){
 const SB_EXAM_HEADERS = ['Attempt ID','Client ID','Name','Level','Status','Opened at','Submitted at','Answers','Marks','Score','Feedback','Reviewed at','Version','Program','Deadline','Notification status','Notification error','Age'];
 const SB_PORTAL_ACCESS_HEADERS = ['Item ID','Section','Title','URL','Enabled'];
 const SB_EXAM_SESSION_HEADERS = ['Token hash','Visitor ID','Name','Program','Expires at','Age'];
-const SB_STUDENT_EXAM_ACTIONS = ['studentPortalAccess','studentFolderLogin','studentExamLogin','studentExamGet','studentExamDraft','studentExamSubmit'];
+const SB_STUDENT_EXAM_ACTIONS = ['studentPortalAccess','studentLibraryRead','studentFolderLogin','studentExamLogin','studentExamGet','studentExamDraft','studentExamSubmit'];
 const SB_INSTRUCTOR_EXAM_ACTIONS = ['learningLevelAccess','saveLearningLevelAccess','weeklyPortalPasswords','monthlyPortalPasswords','saveMonthlyPortalPassword','listExamAttempts','reviewExamAttempt','listPortalAccess','savePortalAccess','retryExamNotification'];
 function setupStudentExams() {
   const id = PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID');
@@ -736,6 +737,7 @@ function handleStudentExam(data) {
   try {
     const book=sbExamBook(),items=sbPortalItems(book);
     if(data.action==='studentPortalAccess')return sbExamResponse({ok:true,passwordFreeFiles:true,hubAccess:sbHubSnapshot(false),items:items.map(item=>{const key=sbHubItemKey(item)||(item.section==='exercises'?sbHubKeys().find(k=>k.startsWith('exercises:')&&sbHubAllowed(k,(data.hubGrants||{})[k])):null),entry=key?sbHubEntry(key):null,enabled=item.enabled&&(!entry||entry.enabled);const grant=(data.hubGrants||{})[key];return {...item,enabled,url:enabled&&key&&sbHubAllowed(key,grant)?item.url:'',requiresAccess:Boolean(entry&&entry.protected)};})});
+    if(data.action==='studentLibraryRead')return sbExamResponse(sbReadStudentLibraryFile(data,items));
     if(data.action==='studentFolderLogin'){
       sbPortalFolderGroup(data.folder);return sbExamResponse({ok:true,passwordFreeFiles:true});
     }
@@ -1302,3 +1304,20 @@ function sbHubSetLevelFiles(book,key,enabled,state){const parts=key.split(':'),s
 
 let SB_HUB_PASSWORDS_CACHE;
 function sbHubMonthlyPasswords(state){const month=sbHubMonth(),secret=PropertiesService.getScriptProperties().getProperty('CLIENT_SYNC_KEY');if(!secret)throw new Error('Connect your Clients sheet first.');const stamp=month+':'+(state.revision||'0')+':'+sbExamHash(secret);if(SB_HUB_PASSWORDS_CACHE&&SB_HUB_PASSWORDS_CACHE.stamp===stamp)return SB_HUB_PASSWORDS_CACHE.values;const values={},used=new Set();for(const key of sbHubKeys()){const saved=(state.entries||{})[key]||{};if(saved.passwordMonth===month&&/^\d{4}$/.test(saved.password)){values[key]=saved.password;used.add(saved.password);}}for(const key of sbHubKeys()){if(values[key])continue;const bytes=Utilities.computeHmacSha256Signature('SB hub:'+month+':'+key,secret);let number=0;for(const byte of bytes)number=(number*256+(byte&255))%10000;while(used.has(String(number).padStart(4,'0')))number=(number+1)%10000;values[key]=String(number).padStart(4,'0');used.add(values[key]);}SB_HUB_PASSWORDS_CACHE={stamp,values};return values;}
+
+// Read an enabled uploaded resource without exposing its private Drive file to the public.
+function sbReadStudentLibraryFile(data,items){
+ const item=items.find(entry=>entry.id===String(data.itemId||''));
+ if(!item||!item.enabled||!['levels','exercises'].includes(item.section))throw new Error('This file is currently closed by your instructor.');
+ const key=sbHubItemKey(item);
+ if(!key||!sbHubAllowed(key,(data.hubGrants||{})[key]))throw new Error('Enter the current password for this level before opening its files.');
+ const match=String(item.url||'').match(/^https:\/\/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)(?:\/|$|\?)/);
+ if(!match)throw new Error('This resource is not an uploaded library file.');
+ const file=DriveApp.getFileById(match[1]),allowed=(item.section==='exercises'?['exercises']:['material','listening']).map(section=>sbLibraryFolder(section).getId()),parents=file.getParents();let found=false;
+ while(parents.hasNext())if(allowed.includes(parents.next().getId()))found=true;
+ if(!found||file.isTrashed())throw new Error('This file is no longer in the learning library.');
+ const mime=file.getMimeType();if(!/^(application\/pdf|image\/(png|jpeg|webp|gif)|audio\/[\w.+-]+|video\/(mp4|webm))$/.test(mime))throw new Error('This file type cannot be opened inside the portal.');
+ if(file.getSize()>7000000)throw new Error('This file is too large for the portal. Ask your instructor for a smaller version.');
+ const blob=file.getBlob(),bytes=blob.getBytes();if(bytes.length>7000000)throw new Error('This file is too large for the portal.');
+ return {ok:true,base64:Utilities.base64Encode(bytes),mimeType:mime};
+}

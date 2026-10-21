@@ -18,7 +18,8 @@ export function learningDocumentEmbed(value,base){
 export function closeLearningDocument(doc){doc.querySelector('#learning-document-viewer')?.close();}
 export function updateLearningDocumentAccess(doc,items){const viewer=doc.querySelector('#learning-document-viewer');if(viewer&&!items.some(item=>item.id===viewer.dataset.documentId&&item.enabled))viewer.close();}
 export function openLearningDocument(doc,item){
- const source=learningDocumentEmbed(item.url,doc.baseURI);closeLearningDocument(doc);
+ let objectUrl=null,source;
+ if(item.inline){const mime=String(item.inline.mimeType||'');if(!/^(application\/pdf|image\/(png|jpeg|webp|gif)|audio\/[\w.+-]+|video\/(mp4|webm))$/.test(mime)||typeof item.inline.base64!=='string')throw Error('This file type cannot be displayed.');const bytes=Uint8Array.from(doc.defaultView.atob(item.inline.base64),c=>c.charCodeAt(0));objectUrl=doc.defaultView.URL.createObjectURL(new Blob([bytes],{type:mime}));source={kind:mime==='application/pdf'?'pdf':mime.startsWith('image/')?'image':mime.startsWith('audio/')?'audio':'video',url:objectUrl};}else source=learningDocumentEmbed(item.url,doc.baseURI);closeLearningDocument(doc);
  const dialog=doc.createElement('dialog');dialog.id='learning-document-viewer';dialog.className='action-popup learning-document-viewer';dialog.dataset.documentId=item.id;dialog.setAttribute('aria-labelledby','learning-document-viewer-title');
  const bar=doc.createElement('div');bar.className='learning-document-viewer-bar';const title=doc.createElement('h2');title.id='learning-document-viewer-title';title.textContent=item.title;
  const close=doc.createElement('button');close.type='button';close.className='button light small';close.textContent='Back to files';close.onclick=()=>dialog.close();bar.append(title,close);
@@ -29,7 +30,7 @@ export function openLearningDocument(doc,item){
  else if(source.kind!=='pdf'){media.controls=true;media.preload='metadata';media.setAttribute('controlsList','nodownload');}
  body.append(media);dialog.append(bar,body);
  const onExit=()=>dialog.close(),onHash=()=>{if(!doc.defaultView.location.hash.startsWith('#students-portal'))dialog.close();};
- dialog.addEventListener('close',()=>{doc.removeEventListener('student-portal-locking',onExit);doc.removeEventListener('portal-sign-out',onExit);doc.defaultView.removeEventListener('hashchange',onHash);media.removeAttribute('src');dialog.remove();},{once:true});
+ dialog.addEventListener('close',()=>{doc.removeEventListener('student-portal-locking',onExit);doc.removeEventListener('portal-sign-out',onExit);doc.defaultView.removeEventListener('hashchange',onHash);media.removeAttribute('src');if(objectUrl)doc.defaultView.URL.revokeObjectURL(objectUrl);dialog.remove();},{once:true});
  doc.addEventListener('student-portal-locking',onExit);doc.addEventListener('portal-sign-out',onExit);doc.defaultView.addEventListener('hashchange',onHash);
  doc.body.append(dialog);dialog.showModal();close.focus();if(source.kind==='pdf')renderPdf(doc,media,source.url);
 }
