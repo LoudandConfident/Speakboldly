@@ -46,7 +46,7 @@ export function initializeTeacherDocuments(doc,isUnlocked,getClients,loader,{pag
    const drafts=read(DRAFT_KEY,{});for(const [key,value]of Object.entries(drafts)){const id='draft:'+key;if(DOCUMENT_TEMPLATES[key]&&!ids.has(id))pending.push({id,type:key,values:value});}
    const records=read(READY_KEY,[]);if(Array.isArray(records))for(const r of records){const id='document:'+r.id;if(DOCUMENT_TEMPLATES[r.type]&&!ids.has(id))pending.push({...r,id});}
    const errors=[];for(const record of pending){if(!isUnlocked()||epoch!==sharedEpoch)return;try{await saveSheetTeacherDocument(record,0);}catch(error){errors.push(error.message);}}
-   result=await loadSheetTeacherDocuments();if(!isUnlocked()||epoch!==sharedEpoch)return;applyShared(result);
+   if(pending.length)result=await loadSheetTeacherDocuments();if(!isUnlocked()||epoch!==sharedEpoch)return;applyShared(result);
    syncNotice.textContent='Saved report fields are synced with your sheet.'+(errors.length?' Some local reports could not upload: '+errors[0]:'');
   }catch(error){if(isUnlocked()&&epoch===sharedEpoch)syncNotice.textContent='Reports could not sync: '+error.message;}
   finally{sharedLoading=false;}
@@ -74,5 +74,5 @@ emailRequestId ||= doc.defaultView.crypto.randomUUID();note.textContent='Sending
  function closeEditor(){targetClient=null;emailRequestId=null;++session;++renderGeneration;busy=false;if(pdf){pdf.loadingTask.destroy().catch(()=>{});pdf=null;}templateBytes=null;values={};inputs.clear();pages.replaceChildren();fieldList.replaceChildren();if(recipientDialog.open)recipientDialog.close();if(previewDialog.open)previewDialog.close();}
  editor.addEventListener('close',closeEditor);
  if(pageMode)editor.addEventListener('close',()=>{if(returnUrl){doc.defaultView.location.href=returnUrl;return;}doc.defaultView.close();doc.querySelector('#report-tab-status').hidden=false;doc.querySelector('#report-tab-status').textContent='Report closed.';doc.querySelector('#report-tab-return').hidden=false;});
- return {async openForClient(key,client){if(!isUnlocked()||!DOCUMENT_TEMPLATES[key])return;await refreshShared();const records=read(READY_KEY,[]),saved=Array.isArray(records)?records.filter(r=>r.type===key&&r.client?.id===client.id).at(-1):null;targetClient={...client};emailRequestId=null;await openTemplate(key,saved);},lock(){sharedEpoch++;sharedVersions.clear();syncNotice.textContent='';if(editor.open)editor.close();else closeEditor();section.open=false;savedDocuments.replaceChildren();},refresh(){renderSaved();refreshShared();}};
+ return {async openForClient(key,client){if(!isUnlocked()||!DOCUMENT_TEMPLATES[key])return;await Promise.all([refreshShared(),getCatalog()]);const records=read(READY_KEY,[]),saved=Array.isArray(records)?records.filter(r=>r.type===key&&r.client?.id===client.id).at(-1):null;targetClient={...client};emailRequestId=null;await openTemplate(key,saved);},lock(){sharedEpoch++;sharedVersions.clear();syncNotice.textContent='';if(editor.open)editor.close();else closeEditor();section.open=false;savedDocuments.replaceChildren();},refresh(){renderSaved();if(!section.hidden&&section.open)refreshShared();}};
 }

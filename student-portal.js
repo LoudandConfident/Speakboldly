@@ -7,7 +7,7 @@ import {showTextExam} from './text-exams.js';
 import {backendBase,loginStudent,clearStudent,fileBytes} from './exam-api.js';
 import {findStudentAccess,canOpenSection,canOpenFile} from './portal-access.js?v=four-digit-restored';
 import {portalResources} from './portal-config.js';
-import {loadPortalMaterials} from './portal-materials.js';
+import {loadPortalMaterials} from './portal-materials.js?v=parallel-files-1';
 export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMaterials){
  const root=doc.querySelector('#students-portal');if(!root)return;
  if(root.hasAttribute('data-global-portal'))return initializeStudentAssessment(doc);

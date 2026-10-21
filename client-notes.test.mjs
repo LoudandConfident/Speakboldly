@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 import {buildClientNotesWord} from './word-notes.js';
-import {createSheetExamFixture} from './sheet-exams.test.mjs';
+import {createSheetExamFixture} from './sheet-exam-fixture.mjs';
 export function wordParts(bytes){const buffer=Buffer.from(bytes),parts=new Map();let offset=0;while(buffer.readUInt32LE(offset)===0x04034b50){const size=buffer.readUInt32LE(offset+18),nameLength=buffer.readUInt16LE(offset+26),extra=buffer.readUInt16LE(offset+28),name=buffer.subarray(offset+30,offset+30+nameLength).toString(),start=offset+30+nameLength+extra;parts.set(name,buffer.subarray(start,start+size).toString());offset=start+size;}return parts;}
 test('notes produce an editable Word package with escaped text, metadata and footer',()=>{
  const parts=wordParts(buildClientNotesWord({name:'Test Student',level:'2',program:'General English'},'French café & practice <speaking>.\nملاحظات الطالب',{date:'2026-10-13'}));assert(parts.has('[Content_Types].xml'));assert(parts.has('word/document.xml'));assert.match(parts.get('word/document.xml'),/French café &amp; practice &lt;speaking&gt;/);assert.match(parts.get('word/document.xml'),/ملاحظات الطالب/);assert.match(parts.get('word/document.xml'),/Level: 2/);assert.match(parts.get('word/footer1.xml'),/Prepared by Mira Nasser Louis/);assert.match(parts.get('[Content_Types].xml'),/wordprocessingml.document.main/);
@@ -19,3 +19,4 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': notes ema
  assert.equal(f.request({...payload,key:'private-test-key'}).ok,true);assert.equal(f.emails.length,1);
  assert.equal(f.request({...payload,key:'private-test-key',clientId:'student-2'}).ok,false);
 });
+test('editable Action plan Word file carries the correct title and client',()=>{const parts=wordParts(buildClientNotesWord({name:'Sara',level:'3'},'Weekly practice: ten minutes a day.',{title:'Action plan',date:'2026-10-21'}));assert.match(parts.get('word/document.xml'),/Speak Boldly — Action plan/);assert.match(parts.get('word/document.xml'),/Sara/);assert.match(parts.get('docProps/core.xml'),/Sara — Action plan/);});

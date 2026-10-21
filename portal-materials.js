@@ -18,4 +18,4 @@ async function loadPublicMaterials(section,fetcher=fetch){
  return section==='exams'?combineExams(items):items;
 }
 
-export async function loadPortalMaterials(section,fetcher=fetch){const privateItems=await privateFiles(section);let publicItems;try{publicItems=await loadPublicMaterials(section,fetcher);}catch(error){if(privateItems.length)return privateItems;throw error;}return [...publicItems,...privateItems];}
+export async function loadPortalMaterials(section,fetcher=fetch){const [privateResult,publicResult]=await Promise.allSettled([privateFiles(section),loadPublicMaterials(section,fetcher)]);if(privateResult.status==='rejected')throw privateResult.reason;const privateItems=privateResult.value;if(publicResult.status==='rejected'){if(privateItems.length)return privateItems;throw publicResult.reason;}return [...publicResult.value,...privateItems];}
