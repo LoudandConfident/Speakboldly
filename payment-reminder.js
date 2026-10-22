@@ -1,4 +1,4 @@
-import {clientSheetConnected,sendSheetClientEmail} from './client-sheet.js?v=level-history';
+import {clientSheetConnected,sendSheetClientEmail} from './client-sheet.js?v=client-status-motivations';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
 export function paymentRequestId(win){
  if(typeof win.crypto?.randomUUID==='function')return win.crypto.randomUUID();

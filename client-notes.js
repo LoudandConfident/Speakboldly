@@ -1,6 +1,6 @@
 import {buildClientNotesPdf} from './notes-pdf.js?v=dark-reports';
 import {buildClientNotesWord} from './word-notes.js?v=action-plan-1';
-import {clientSheetConnected,sendSheetClientEmail} from './client-sheet.js?v=level-history';
+import {clientSheetConnected,sendSheetClientEmail} from './client-sheet.js?v=client-status-motivations';
 import {confirmClientEmail} from './client-email-confirmation.js';
 import {documentDate,studentDocumentFilename} from './student-document-filenames.js';
 export function initializeClientNotes(doc,isUnlocked,{pageMode=false,returnUrl='./#students-portal/teacher',documentKind='notes'}={}){

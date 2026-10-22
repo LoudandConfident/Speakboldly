@@ -10,12 +10,19 @@ test('Monica is reset automatically once, then future finished sessions count no
  sessions.push(row('past','2026-10-21','2026-10-21T08:00:00Z'),row('next','2026-10-22','2026-10-22T08:00:00Z'));
  f.context.updateSessionHours();assert.equal(client[7],0);assert.equal(client[12],-1.5);assert.equal(sessions.length,3);assert.equal(sessions[1][7],'');
  f.context.updateSessionHours();assert.equal(client[7],0);f.advance(86400000);f.context.updateSessionHours();assert.equal(client[7],1.5);f.context.updateSessionHours();assert.equal(client[7],1.5);
- assert.throws(()=>f.context.sbSetClientHours(f.context.SpreadsheetApp.openById('fixture'),f.sheets.get('Clients'),2,{hours:0,hoursChanged:true}),/Hours include completed sessions/);
+ const before=JSON.stringify(sessions);client[7]=f.context.sbSetClientHours(f.context.SpreadsheetApp.openById('fixture'),f.sheets.get('Clients'),2,{hours:0,hoursChanged:true});f.context.updateSessionHours();assert.equal(client[7],0);assert.equal(JSON.stringify(sessions),before);
 });
 test('cancelling offset appointments cannot make Monica’s hours negative',()=>{
  const f=fixture();f.advance(Date.parse('2026-10-21T12:00:00Z')-f.context.Date.now());const client=f.sheets.get('Clients').rows[1],sessions=f.sheets.get('Sessions').rows;client[1]='Monica Sabry';sessions.push(row('past','2026-10-21','2026-10-21T08:00:00Z'));f.context.updateSessionHours();sessions[1][7]='cancelled';f.context.updateSessionHours();assert.equal(client[7],0);
 });
-test('other clients retain their hours and cannot override completed sessions',()=>{
+test('manual edits for any client update hours without changing session records',()=>{
  const f=fixture();f.advance(Date.parse('2026-10-21T12:00:00Z')-f.context.Date.now());const client=f.sheets.get('Clients').rows[1],sessions=f.sheets.get('Sessions').rows;client[7]=6;sessions.push(row('past','2026-10-21','2026-10-21T08:00:00Z'));f.context.updateSessionHours();assert.equal(client[7],7.5);
- assert.throws(()=>f.context.sbSetClientHours(f.context.SpreadsheetApp.openById('fixture'),f.sheets.get('Clients'),2,{hours:0,hoursChanged:true}),/Hours include completed sessions/);
+ const before=JSON.stringify(sessions);client[7]=f.context.sbSetClientHours(f.context.SpreadsheetApp.openById('fixture'),f.sheets.get('Clients'),2,{hours:0,hoursChanged:true});f.context.updateSessionHours();assert.equal(client[7],0);assert.equal(JSON.stringify(sessions),before);
+});
+
+test('a reduced manual total survives refresh and future sessions add their actual hours',()=>{
+ const f=fixture();f.advance(Date.parse('2026-10-21T12:00:00Z')-f.context.Date.now());const client=f.sheets.get('Clients').rows[1],sessions=f.sheets.get('Sessions').rows;
+ sessions.push(row('past-a','2026-10-21','2026-10-21T07:00:00Z'),row('past-b','2026-10-21','2026-10-21T09:00:00Z'),row('future','2026-10-22','2026-10-22T08:00:00Z'));f.context.updateSessionHours();assert.equal(client[7],3);
+ const before=JSON.stringify(sessions);client[7]=f.context.sbSetClientHours(f.context.SpreadsheetApp.openById('fixture'),f.sheets.get('Clients'),2,{hours:0.75,hoursChanged:true});f.context.updateSessionHours();assert.equal(client[7],0.75);assert.equal(JSON.stringify(sessions),before);
+ f.advance(86400000);f.context.updateSessionHours();assert.equal(client[7],2.25);assert.equal(sessions.length,4);assert.deepEqual(sessions.slice(1).map(r=>r[2]),[1,1,1]);
 });

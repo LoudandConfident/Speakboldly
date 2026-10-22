@@ -1,5 +1,5 @@
 import {resetPortalAttempts} from './student-portal-attempts.js?v=six-sections';
-import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
+import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=client-status-motivations';
 export function initializeWeeklyPortalPasswords(doc,isUnlocked){
  const root=doc.querySelector('#weekly-portal-passwords'),status=root.querySelector('[role=status]');let generation=0,timer,loading=false;
  const format=day=>new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'Africa/Cairo'}).format(new Date(day+'T12:00:00Z'));

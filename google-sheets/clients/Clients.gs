@@ -62,13 +62,14 @@ function handleClientSync(e){
  try{
   if(!e?.postData?.contents||e.postData.contents.length>8000000)throw new Error('Invalid request.');
   const p=JSON.parse(e.postData.contents),props=PropertiesService.getScriptProperties();
+  if(p.action==='dailyMotivationSettings')return clientSyncResponse({ok:true,settings:sbPublishedMotivationSettings(typeof sbDailyMotivationSettings==='function'?sbDailyMotivationSettings():{frozen:false,revision:'0'},p.date)});
   if(p.action==='nativeEnglishPage'){if(e.postData.contents.length>4000)throw new Error('Request too large.');return sbNativeEnglishRead(p);}
   if(p.action==='studentInstructorContact'){if(e.postData.contents.length>16000)throw new Error('Request too large.');if(typeof handleStudentInstructorContact!=='function')throw new Error('Add StudentContact.gs and deploy a New version.');return handleStudentInstructorContact(p);}
   if(typeof SB_PUBLIC_BOOKING_ACTIONS!=='undefined'&&SB_PUBLIC_BOOKING_ACTIONS.includes(p.action)){if(e.postData.contents.length>20000)throw new Error('Request too large.');return handlePublicBooking(p);}
   if(typeof SB_STUDENT_EXAM_ACTIONS!=='undefined'&&SB_STUDENT_EXAM_ACTIONS.includes(p.action)){if(e.postData.contents.length>65000)throw new Error('Request too large.');return handleStudentExam(p);}
   const key=props.getProperty('CLIENT_SYNC_KEY');
   if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
-  if(!['sendClientEmail','uploadLibraryFile'].includes(p.action)&&e.postData.contents.length>20000)throw new Error('Request too large.');
+  if(!['sendClientEmail','uploadLibraryFile','saveMotivationMessage'].includes(p.action)&&e.postData.contents.length>20000)throw new Error('Request too large.');
   if(['exportOwnerBackup','saveOwnerBackup'].includes(p.action))return sbOwnerBackupAction(p,sbExamBook());
   if(['nativeEnglishEdit','saveNativeEnglish'].includes(p.action))return sbNativeEnglishOwner(p);
   if(typeof SB_OWNER_BOOKING_ACTIONS!=='undefined'&&SB_OWNER_BOOKING_ACTIONS.includes(p.action))return handleOwnerBooking(p);
@@ -76,6 +77,8 @@ function handleClientSync(e){
   if(['personalCalendarSettings','resetPersonalCalendarLink'].includes(p.action)){if(typeof sbPersonalCalendarSettings!=='function')throw new Error('Add PersonalCalendar.gs for calendar subscriptions.');return clientSyncResponse(sbPersonalCalendarSettings(p));}
   if(p.action==='sendClientEmail'){if(typeof handleClientEmail!=='function')throw new Error('Add EmailActions.gs and authorizeClientEmails, then deploy a New version to enable email sending.');return handleClientEmail(p);}
   if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(p.action)){if(typeof handleLibraryAction!=='function')throw new Error('Add LibraryActions.gs to enable library sharing.');return handleLibraryAction(p);}
+  if(['listMotivationMessages','saveMotivationMessage'].includes(p.action))return clientSyncResponse(sbMotivationMessagesOwner(p));
+  if(p.action==='setClientActive')return clientSyncResponse(sbSetClientActive(p,SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID'))));
   if(p.action==='deleteClient')return clientSyncResponse(sbDeleteClientRecord(p));
   if(p.action==='checkConnection')return clientSyncResponse({ok:true,connected:true});
   if(['listTeacherDocuments','saveTeacherDocument'].includes(p.action)){if(typeof handleSheetDocumentAction!=='function')throw new Error('Add TeacherDocuments.gs to enable shared reports.');return handleSheetDocumentAction(p);}
@@ -84,10 +87,10 @@ function handleClientSync(e){
    lock.waitLock(20000);if(typeof sbApplySessionHours==='function')sbApplySessionHours(SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')));
    const sheet=SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID')).getSheetByName('Clients');
    if(!sheet)throw new Error('Clients tab not found. Run setupClientSync first.');
-   const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues():[];
+   const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[];
    const clients=rows.filter(row=>String(row[0]).trim()).map(row=>{
     let permissions=[];if(row[9]){permissions=JSON.parse(String(row[9]));if(!Array.isArray(permissions))throw new Error('Invalid Permissions column.');}
-    return {id:String(row[0]),name:String(row[1]),email:String(row[2]),code:String(row[3]).padStart(4,'0'),level:String(row[4]),payment:String(row[5]),amountPaid:Number(row[6]||0),hours:Number(row[7]||0),permissions,...(row[11]?{program:String(row[11]).replace(/^'/,'')}:{}),...(row[10]?{enrollmentHistory:JSON.parse(String(row[10]))}:{})};
+    return {id:String(row[0]),name:String(row[1]),email:String(row[2]),code:String(row[3]).padStart(4,'0'),level:String(row[4]),payment:String(row[5]),amountPaid:Number(row[6]||0),hours:Number(row[7]||0),active:row[14]!==false&&String(row[14]).toLowerCase()!=='false',permissions,...(row[11]?{program:String(row[11]).replace(/^'/,'')}:{}),...(row[10]?{enrollmentHistory:JSON.parse(String(row[10]))}:{})};
    });
    return clientSyncResponse({ok:true,clients});
   }
@@ -133,3 +136,10 @@ function doPost(e) {
 }
 
 function doGet(event){if(event?.parameter?.calendarFeed&&typeof sbPersonalCalendarFeed==='function')return sbPersonalCalendarFeed(event.parameter.calendarFeed);return clientSyncResponse({ok:true,service:'Speak Boldly Clients'});}
+
+function sbSetClientActive(data,book){
+ if(typeof data.active!=='boolean'||typeof data.clientId!=='string')throw new Error('Invalid client status.');
+ const lock=LockService.getScriptLock();lock.waitLock(20000);const sheet=book.getSheetByName('Clients'),rows=sheet&&sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,1).getValues():[],index=rows.findIndex(r=>String(r[0])===data.clientId);
+ if(index<0)throw new Error('Client not found. Refresh Clients first.');
+ sheet.getRange(1,15).setValue('Active');sheet.getRange(index+2,15).setValue(data.active);return {ok:true,clientId:data.clientId,active:data.active};
+}

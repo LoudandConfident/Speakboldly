@@ -1,4 +1,4 @@
-import {motivationDay,refreshMotivationSettings} from './motivation-settings.js?v=1';
+import {motivationDay,refreshMotivationSettings,motivationSettings} from './motivation-settings.js?v=client-status-motivations';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
  { image: './images/daily-motivation-1.png', alt: 'A notebook and phone, ready for a fresh start', quote: 'Make time for what matters.' },
@@ -98,9 +98,11 @@ dailyQuotes.push({"image": "./images/daily-motivation-learned-through-love.png",
 quoteDetails.push({"support": [], "reflection": "I didn’t learn English from a teacher. I loved the language—and Hannah Montana had a lot to do with it. Yes, really!", "paragraphs": ["I didn’t learn English from a teacher. I loved the language—and Hannah Montana had a lot to do with it. Yes, really!", "I spent hours alone in my room watching English series and films, listening to songs, and reading the full English novels from my own and my older sister’s school curriculum. I even wrote my own short stories!", "In preparatory school, I started volunteering as a translator. In my first year of university, I started teaching.", "You, too, can go further than you ever imagined by enjoying what you do—and becoming disciplined about making time for it. Find something you love, keep showing up, and give it room to take you somewhere new."]});
 dailyPractice.push("You, too, can go further than you ever imagined by enjoying what you do—and becoming disciplined about making time for it. Find something you love, keep showing up, and give it room to take you somewhere new.");
 export function motivationShareUrl(entry,base='https://loudandconfident.github.io/Speakboldly/'){
+ if(entry.customDate)return new URL('./?motivation='+entry.customDate+'#daily-quote',base).href;
  const name=entry.image.split('/').pop().replace(/\.png$/,'.html');return new URL('./motivation/'+name,base).href;
 }
 export function clientDailyMotivation(now=new Date()){
+ const custom=motivationSettings().message;if(custom)return {day:motivationDay(now,cairoDayNumber),quote:custom.quote,image:custom.image,paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[],url:motivationShareUrl({customDate:custom.date})};
  const day=motivationDay(now,cairoDayNumber),index=motivationIndexForDate(now),entry=dailyQuotes[index],details=quoteDetails[index];
  return {day,quote:entry.quote,image:new URL(entry.image,'https://loudandconfident.github.io/Speakboldly/').href,paragraphs:details.paragraphs||[details.reflection,dailyPractice[index]],url:motivationShareUrl(entry)};
 }
@@ -113,7 +115,7 @@ export function initializeGallery(doc, win) {
   const now = new win.Date(), nextDay = motivationDay(now,cairoDayNumber);
   if (day === nextDay) return;
   day = nextDay;
-  const index = motivationIndexForDate(now), entry = dailyQuotes[index], details = quoteDetails[index];currentEntry=entry;shareFile=null;shareStatus.textContent='';
+  const index = motivationIndexForDate(now),custom=motivationSettings().message,entry=custom?{quote:custom.quote,image:custom.image,alt:custom.quote,customDate:custom.date}:dailyQuotes[index],details=custom?{paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[]}:quoteDetails[index];currentEntry=entry;shareFile=null;shareStatus.textContent='';
   if(win.navigator.canShare&&win.File&&win.fetch)win.fetch(new URL(entry.image,doc.baseURI)).then(response=>{if(!response.ok)throw Error('Image unavailable');return response.blob();}).then(blob=>{if(currentEntry===entry)shareFile=new win.File([blob],entry.image.split('/').pop(),{type:blob.type||'image/png'});}).catch(()=>{});
   page.querySelector('#daily-quote-image').src = entry.image;
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');

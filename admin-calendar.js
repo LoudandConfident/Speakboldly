@@ -1,10 +1,10 @@
 import {weeklySessionPlan,programSessionCount} from './session-series.js?v=library-folders';
 import {bookingClock} from './student-booking.js?v=december-oct17';
-import {initializeCalendarSlotEditor} from './calendar-slot-editor.js?v=shared-slots';
+import {initializeCalendarSlotEditor} from './calendar-slot-editor.js?v=client-status-motivations';
 import {removedPortalClientIds} from './requested-client-cleanup.js';
 import {confirmClientEmail} from './client-email-confirmation.js?v=calendar-popup';
 import {SESSION_PROGRAMS,SESSION_TYPES,calendarProgramForType,nextSessionNumber,suggestedSessionProgram} from './session-programs.js?v=library-folders';
-import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession,sheetLibraryRequest} from './client-sheet.js?v=level-history';
+import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession,sheetLibraryRequest} from './client-sheet.js?v=client-status-motivations';
 import {ownerConnected,request} from './exam-api.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 const STORAGE_KEY='speak-boldly-admin-sessions-v1';
@@ -52,7 +52,7 @@ export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient,onR
  viewport.className='calendar-viewport';viewport.tabIndex=0;viewport.setAttribute('role','region');viewport.setAttribute('aria-label','Monthly calendar. Open a day to see all appointments and available slots.');
  hint.className='calendar-scroll-hint';hint.textContent='Choose a day to manage appointments or send a confirmation.';
  const availabilityNote=doc.createElement('p');availabilityNote.className='calendar-availability-note';availabilityNote.textContent='Dimmed days are closed to new bookings. Existing appointments stay saved.';grid.parentNode.insertBefore(availabilityNote,weekdays||grid);grid.parentNode.insertBefore(hint,weekdays||grid);grid.parentNode.insertBefore(viewport,weekdays||grid);if(weekdays)viewport.append(weekdays);viewport.append(grid);
- function populateClients(){const previous=chooser.value;chooser.replaceChildren();const placeholder=doc.createElement('option');placeholder.value='';placeholder.textContent='Choose a client';chooser.append(placeholder);for(const client of getClients()){const option=doc.createElement('option');option.value=client.id;option.textContent=client.name+' — '+client.level;chooser.append(option);}chooser.value=previous;root.querySelector('.calendar-no-clients').hidden=getClients().length>0;}
+ function populateClients(){const previous=chooser.value;chooser.replaceChildren();const placeholder=doc.createElement('option');placeholder.value='';placeholder.textContent='Choose a client';chooser.append(placeholder);for(const client of getClients().filter(c=>c.active!==false)){const option=doc.createElement('option');option.value=client.id;option.textContent=client.name+' — '+client.level;chooser.append(option);}chooser.value=previous;root.querySelector('.calendar-no-clients').hidden=getClients().length>0;}
  let blockedDates=new Set(),availabilityReady=false,availabilitySaving=false,sharedSlots={},slotRevisions={};const slotEditor=initializeCalendarSlotEditor(doc,isUnlocked,()=>load(true));
  let sessions=[],selected=cairoToday(),month=selected.slice(0,7),storageReadable=true,calendarView='month';
  const isClosed=date=>date.startsWith('2026-12-')||blockedDates.has(date);

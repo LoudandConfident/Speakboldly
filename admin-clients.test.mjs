@@ -30,3 +30,8 @@ test('deleting a browser client removes their calendar sessions and preserves ot
  assert.deepEqual(JSON.parse(data.get(clientKey)),[{id:'two'}]);
  assert.deepEqual(JSON.parse(data.get(sessionKey)),[{clientId:'two'}]);
 });
+
+test('previous level rows contribute hours but never inflate the client count',()=>{
+ const clients=[{id:'one',hours:3,enrollmentHistory:[{id:'old-one',hours:6},{id:'old-two',hours:4.5}]},{id:'two',hours:2,enrollmentHistory:[]}];assert.deepEqual(clientTotals(clients),{clients:2,hours:15.5});
+ clients[0].hours=0.5;assert.deepEqual(clientTotals(clients),{clients:2,hours:13});
+});

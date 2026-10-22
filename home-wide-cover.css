@@ -118,3 +118,5 @@ main #home:not([hidden])>.home-bottom-row{margin:0 auto!important;padding:7px 0 
 #home:not([hidden]) .hero-copy{transform:none!important}
 
 main #home .home-pricing-note{display:flex!important;flex-direction:column!important;align-items:flex-start!important}main #home .home-free-offers{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}main #home .home-free-offers>strong{font-size:inherit!important}@media(max-width:680px){main #home .home-free-offers{font-size:clamp(9px,2.55vw,12px);gap:5px}}
+
+main #home .home-free-offers{display:flex!important;flex-direction:column!important;align-items:flex-start;gap:4px!important;font-size:inherit!important;white-space:normal}main #home .home-free-offers>[aria-hidden=true]{display:none!important}

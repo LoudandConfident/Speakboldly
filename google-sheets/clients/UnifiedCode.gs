@@ -113,7 +113,7 @@ function doPost(event) {
     const data = request.data;
     if(data.action==='programConsultation'){if(request.size>2900000)throw new Error('Pictures are too large. Use up to 2 pictures, 1 MB each.');return handleStudentInstructorContact(data);}
     if(['hubAccessSettings','hubLevelLogin'].includes(data.action)){if(request.size>4000)throw new Error('Request too large.');return sbHubPublic(data);}
-    if(data.action==='dailyMotivationSettings')return response({ok:true,settings:sbDailyMotivationSettings()});
+    if(data.action==='dailyMotivationSettings')return response({ok:true,settings:sbPublishedMotivationSettings(sbDailyMotivationSettings(),data.date)});
     if(data.action==='nativeEnglishPage'){if(request.size>4000)throw new Error('Request too large.');return sbNativeEnglishRead(data);}
     if (data.action === 'studentInstructorContact') {
       if (request.size > 16000) throw new Error('Request too large.');
@@ -128,7 +128,7 @@ function doPost(event) {
       return handleStudentExam(data);
     }
     const connection = sbRequireClientConnection(data);
-    if (!['sendClientEmail', 'uploadLibraryFile'].includes(data.action) && request.size > 20000) {
+    if (!['sendClientEmail', 'uploadLibraryFile','saveMotivationMessage'].includes(data.action) && request.size > 20000) {
       throw new Error('Request too large.');
     }
     return sbRouteInstructorRequest(data, connection, lock);
@@ -165,6 +165,8 @@ function sbRequireClientConnection(data) {
 }
 
 function sbRouteInstructorRequest(data, connection, lock) {
+  if(['listMotivationMessages','saveMotivationMessage'].includes(data.action))return response(sbMotivationMessagesOwner(data));
+  if(data.action==='setClientActive')return response(sbSetClientActive(data,connection.book));
   if(['exportOwnerBackup','saveOwnerBackup'].includes(data.action))return sbOwnerBackupAction(data,connection.book);
   if(['hubAccessOwnerSettings','saveHubAccessSetting'].includes(data.action))return sbHubOwner(data,connection.book);
   if(['dailyMotivationOwnerSettings','saveDailyMotivationSettings'].includes(data.action))return sbDailyMotivationOwner(data);
@@ -200,14 +202,14 @@ function sbListConnectedClients(sheetId, sheet, lock) {
   lock.waitLock(20000);
   sbApplySessionHours(SpreadsheetApp.openById(sheetId));
   const rows = sheet.getLastRow() > 1
-    ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 12).getValues()
+    ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 15).getValues()
     : [];
   const clients = rows.filter(row => row[0] && row[1] && row[2]).map(row => ({
     id: String(row[0]), name: String(row[1]).trim(),
     email: String(row[2]).trim().toLowerCase(),
     code: String(row[3]).padStart(4, '0'), level: String(row[4]),
     payment: String(row[5]), amountPaid: Number(row[6] || 0),
-    hours: Number(row[7] || 0),
+    hours: Number(row[7] || 0), active:row[14]!==false&&String(row[14]).toLowerCase()!=='false',
     permissions: row[9] ? JSON.parse(String(row[9])) : [],...(row[11]?{program:String(row[11]).replace(/^'/,'')}:{}),...(row[10]?{enrollmentHistory:JSON.parse(String(row[10]))}:{})
   }));
   return response({ ok: true, clients });
@@ -537,8 +539,8 @@ function handleClientEmail(p){
    }
    message=sbCalendarEmail(client,meetings);
   }else if(kind==='motivation'){
-   const m=p.motivation||{},quote=String(m.quote||'').trim(),paragraphs=m.paragraphs,image=String(m.image||''),url=String(m.url||'');
-   if(!quote||quote.length>1200||!Array.isArray(paragraphs)||paragraphs.length>25||paragraphs.some(t=>typeof t!=='string'||t.length>5000)||paragraphs.join('').length>20000||!/^https:\/\/loudandconfident\.github\.io\/Speakboldly\/images\/daily-motivation-[a-z0-9-]+\.png$/.test(image)||!/^https:\/\/loudandconfident\.github\.io\/Speakboldly\/motivation\/daily-motivation-[a-z0-9-]+\.html$/.test(url))throw new Error('Invalid daily motivation content.');
+   const savedCustom=sbPublishedMotivationSettings(sbDailyMotivationSettings()).message,m=p.motivation||{},customAllowed=savedCustom&&m.quote===savedCustom.quote&&m.image===savedCustom.image&&m.url==='https://loudandconfident.github.io/Speakboldly/?motivation='+savedCustom.date+'#daily-quote',quote=String(m.quote||'').trim(),paragraphs=m.paragraphs,image=String(m.image||''),url=String(m.url||'');
+   if(!quote||quote.length>1200||!Array.isArray(paragraphs)||paragraphs.length>25||paragraphs.some(t=>typeof t!=='string'||t.length>5000)||paragraphs.join('').length>20000||(!customAllowed&&!/^https:\/\/loudandconfident\.github\.io\/Speakboldly\/images\/daily-motivation-[a-z0-9-]+\.png$/.test(image))||(!customAllowed&&!/^https:\/\/loudandconfident\.github\.io\/Speakboldly\/motivation\/daily-motivation-[a-z0-9-]+\.html$/.test(url)))throw new Error('Invalid daily motivation content.');
    message={body:'Hello '+client[1]+',\n\n'+quote+'\n\n'+paragraphs.join('\n\n')+'\n\n'+url+'\n\nSpeak Boldly',htmlBody:sbBrandedEmail('A little motivation for today','<p>Hello '+sbEmailEscape(client[1])+',</p><img src="'+sbEmailEscape(image)+'" alt="Today’s daily motivation" width="480" style="display:block;width:100%;max-width:480px;height:auto;border-radius:16px"><h2 style="font-size:22px;line-height:1.5">'+sbEmailEscape(quote)+'</h2>'+paragraphs.map(t=>'<p>'+sbEmailEscape(t).replace(/\n/g,'<br>')+'</p>').join('')+'<p><a href="'+sbEmailEscape(url)+'">View today’s motivation</a></p>')};
   }else{
    const course=sbEmailProgramName(client[11]||''),level=String(client[4]||'');
@@ -1011,7 +1013,8 @@ function sbApplySessionHours(book){
 function sbSetClientHours(book,sheet,row,input){
  if(row>sheet.getLastRow())return Number(input.hours);
  const previous=sheet.getRange(row,1,1,14).getValues()[0];if(input.hoursChanged===false)return Number(previous[7]);
- const baseline=Number(input.hours)-sbCountedSessionHours(book,String(previous[0]));if(baseline<0)throw new Error('Hours include completed sessions. Cancel an incorrect session before reducing its counted hours.');sheet.getRange(row,13,1,2).setValues([[baseline,new Date().toISOString()]]);return Number(input.hours);
+ // Manual hours are an adjustment to the total, not an edit to calendar sessions.
+ const baseline=Number(input.hours)-sbCountedSessionHours(book,String(previous[0]));sheet.getRange(row,13,1,2).setValues([[baseline,new Date().toISOString()]]);return Number(input.hours);
 }
 function updateSessionHours(){const lock=LockService.getScriptLock();lock.waitLock(20000);try{sbApplySessionHours(SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')));}finally{lock.releaseLock();}}
 function enableAutomaticSessionHours(){updateSessionHours();if(!ScriptApp.getProjectTriggers().some(trigger=>trigger.getHandlerFunction()==='updateSessionHours'))ScriptApp.newTrigger('updateSessionHours').timeBased().everyDays(1).atHour(0).nearMinute(15).inTimezone('Africa/Cairo').create();}
@@ -1276,7 +1279,7 @@ function sbNativeSettingsOwner(data){
 
 
 // Shared Daily Motivation controls. Public reads, private owner writes.
-function sbDailyMotivationSettings(){const raw=PropertiesService.getScriptProperties().getProperty('SB_DAILY_MOTIVATION_SETTINGS');if(raw){try{return JSON.parse(raw);}catch{}}return {frozen:true,day:20746,until:'2026-10-26',revision:'0'};}
+function sbDailyMotivationSettings(){const raw=PropertiesService.getScriptProperties().getProperty('SB_DAILY_MOTIVATION_SETTINGS');if(raw){try{const value=JSON.parse(raw),props=PropertiesService.getScriptProperties();if(props.getProperty('SB_MOTIVATION_SUNDAY_2026_APPLIED')!=='1'){if(value.frozen){value.until='2026-10-25';props.setProperty('SB_DAILY_MOTIVATION_SETTINGS',JSON.stringify(value));}props.setProperty('SB_MOTIVATION_SUNDAY_2026_APPLIED','1');}return value;}catch{}}PropertiesService.getScriptProperties().setProperty('SB_MOTIVATION_SUNDAY_2026_APPLIED','1');return {frozen:true,day:20746,until:'2026-10-25',revision:'0'};}
 function sbDailyMotivationOwner(data){const lock=LockService.getScriptLock();lock.waitLock(20000);let settings=sbDailyMotivationSettings();if(data.action==='saveDailyMotivationSettings'){
  if(String(data.revision)!==String(settings.revision))throw new Error('Settings changed on another device. Press Refresh first.');
  if(!['week','hold','resume'].includes(data.mode)||!Number.isInteger(data.day)||data.day<20000||data.day>50000)throw new Error('Invalid motivation setting.');
@@ -1285,7 +1288,7 @@ function sbDailyMotivationOwner(data){const lock=LockService.getScriptLock();loc
  let until='';if(data.mode==='week'){const date=new Date(day*86400000),weekday=date.getUTCDay(),days=(8-weekday)%7||7;until=new Date((day+days)*86400000).toISOString().slice(0,10);}
  const previousUntil=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity,heldDay=settings.frozen&&day<previousUntil?settings.day:day;
  settings={frozen:data.mode!=='resume',day:heldDay,until,revision:Utilities.getUuid()};PropertiesService.getScriptProperties().setProperty('SB_DAILY_MOTIVATION_SETTINGS',JSON.stringify(settings));
- }return response({ok:true,settings});}
+ }return response({ok:true,settings:sbPublishedMotivationSettings(settings)});}
 
 
 
@@ -1329,4 +1332,29 @@ function sbReadStudentLibraryFile(data,items){
  if(file.getSize()>7000000)throw new Error('This file is too large for the portal. Ask your instructor for a smaller version.');
  const blob=file.getBlob(),bytes=blob.getBytes();if(bytes.length>7000000)throw new Error('This file is too large for the portal.');
  return {ok:true,base64:Utilities.base64Encode(bytes),mimeType:mime};
+}
+
+function sbSetClientActive(data,book){
+ if(typeof data.active!=='boolean'||typeof data.clientId!=='string')throw new Error('Invalid client status.');
+ const lock=LockService.getScriptLock();lock.waitLock(20000);const sheet=book.getSheetByName('Clients'),rows=sheet&&sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,1).getValues():[],index=rows.findIndex(r=>String(r[0])===data.clientId);
+ if(index<0)throw new Error('Client not found. Refresh Clients first.');
+ sheet.getRange(1,15).setValue('Active');sheet.getRange(index+2,15).setValue(data.active);return {ok:true,clientId:data.clientId,active:data.active};
+}
+
+// Instructor-authored daily motivations. Published pictures are intentionally public.
+function sbMotivationMessagesSheet(){const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID'));let sheet=book.getSheetByName('Motivation messages');if(!sheet){sheet=book.insertSheet('Motivation messages');sheet.appendRow(['Date (Cairo)','Quote','Reflection','Picture URL','Updated at (UTC)']);}return sheet;}
+function sbMotivationMessageForDay(day){const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')),sheet=book.getSheetByName('Motivation messages');if(!sheet||sheet.getLastRow()<2)return null;const date=new Date(day*86400000).toISOString().slice(0,10),row=sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues().find(r=>String(r[0]).replace(/^'/,'')===date);return row?{date,quote:String(row[1]).replace(/^'/,''),reflection:String(row[2]).replace(/^'/,''),image:String(row[3])}:null;}
+function sbMotivationMessagesOwner(data){
+ const lock=LockService.getScriptLock();lock.waitLock(20000);const sheet=sbMotivationMessagesSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues():[];
+ if(data.action==='listMotivationMessages')return {ok:true,messages:rows.map(r=>({date:String(r[0]).replace(/^'/,''),quote:String(r[1]).replace(/^'/,''),reflection:String(r[2]).replace(/^'/,''),image:String(r[3])})).sort((a,b)=>a.date.localeCompare(b.date))};
+ const date=String(data.date||''),quote=String(data.quote||'').trim(),reflection=String(data.reflection||'').trim();if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(Date.parse(date+'T00:00Z'))||new Date(Date.parse(date+'T00:00Z')).toISOString().slice(0,10)!==date||!quote||quote.length>1200||reflection.length>10000)throw Error('Choose a valid date and enter a quote (up to 1,200 characters).');
+ const index=rows.findIndex(r=>String(r[0]).replace(/^'/,'')===date),previous=index>=0?rows[index]:null;let image=previous?String(previous[3]):'';
+ if(data.picture){const picture=data.picture,mime=String(picture.mimeType||''),encoded=String(picture.base64||'');if(!['image/jpeg','image/png','image/webp'].includes(mime)||encoded.length>2800000||! /^[A-Za-z0-9+/]*={0,2}$/.test(encoded))throw Error('Use a JPG, PNG or WebP picture, up to 2 MB.');const bytes=Utilities.base64Decode(encoded);if(!bytes.length||bytes.length>2000000)throw Error('Picture must be 2 MB or smaller.');const header=bytes.slice(0,12).map(n=>n&255),valid=mime==='image/png'?header[0]===137&&header[1]===80&&header[2]===78&&header[3]===71:mime==='image/jpeg'?header[0]===255&&header[1]===216&&header[2]===255:String.fromCharCode(...header.slice(0,4))==='RIFF'&&String.fromCharCode(...header.slice(8,12))==='WEBP';if(!valid)throw Error('The file does not match its image format.');const props=PropertiesService.getScriptProperties();let folder;const folderId=props.getProperty('SB_MOTIVATION_PICTURES_FOLDER');if(folderId)folder=DriveApp.getFolderById(folderId);else{folder=DriveApp.createFolder('Speak Boldly — Published motivation pictures');props.setProperty('SB_MOTIVATION_PICTURES_FOLDER',folder.getId());}const file=folder.createFile(Utilities.newBlob(bytes,mime,'motivation-'+date+(mime==='image/png'?'.png':mime==='image/webp'?'.webp':'.jpg')));file.setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);image='https://drive.google.com/thumbnail?id='+encodeURIComponent(file.getId())+'&sz=w1200';}
+ if(!image)throw Error('Choose a picture for this motivation.');const safe=value=>/^[=+\-@\t\r]/.test(value)?"'"+value:value;sheet.getRange(index<0?sheet.getLastRow()+1:index+2,1,1,5).setValues([["'"+date,safe(quote),safe(reflection),image,new Date().toISOString()]]);return {ok:true,message:{date,quote,reflection,image}};
+}
+
+function sbPublishedMotivationSettings(settings,requestedDate){
+ const today=Math.floor(Date.parse(Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')+'T00:00Z')/86400000),until=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity;let day=settings.frozen&&today<until?settings.day:today;
+ if(typeof requestedDate==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)){const requested=Math.floor(Date.parse(requestedDate+'T00:00Z')/86400000);if(Number.isFinite(requested)&&requested<=today)day=requested;}
+ return {...settings,message:sbMotivationMessageForDay(day)};
 }

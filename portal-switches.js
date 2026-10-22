@@ -1,5 +1,5 @@
 import {learningHubItemSection} from './learning-hub-sections.js?v=exam-rebuild';
-import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
+import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=client-status-motivations';
 export function initializePortalSwitches(doc,isUnlocked,loader) {
  const root=doc.querySelector('#portal-switches');if(!root)return;
  const list=root.querySelector('.portal-switch-list'),status=root.querySelector('[role=status]');let generation=0,loading=false;

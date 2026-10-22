@@ -1,5 +1,5 @@
-import {renderBookingRequestCards} from './booking-request-cards.js?v=library-folders';
-import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=level-history';
+import {renderBookingRequestCards} from './booking-request-cards.js?v=client-status-motivations';
+import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=client-status-motivations';
 import {clockText12} from './platform-time.js';
 export function initializeInstructorOverview(doc,isUnlocked,actions={}){
  const host=doc.querySelector('#admin-overview');if(!host)return;

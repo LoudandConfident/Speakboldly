@@ -8,6 +8,7 @@ export function validateClient(input,clients=[],editingId=null,{allowLegacy=fals
  if(!(allowLegacy&&!code)&&!/^\d{4}$/.test(code))throw new Error('Choose a 4-digit Student Code.');
  if(code==='1962'&&!allowLegacy)throw new Error('1962 is reserved for full portal access. Choose another client code.');
  if(code&&clients.some(c=>c.id!==editingId&&c.code===code))throw new Error('That Student Code is already assigned. Choose a different code.');
+ if(input.active!==undefined&&typeof input.active!=='boolean')throw new Error('Check the client status.');
  const permissions=Array.isArray(input.permissions)?[...new Set(input.permissions.filter(p=>typeof p==='string'&&(p.startsWith('section:')||p.startsWith('file:'))))]:[];
  if(!name||name.length>100)throw new Error('Enter a client name (up to 100 characters).');
  const normalizedName=value=>String(value||'').normalize('NFKC').trim().replace(/\s+/gu,' ').toLocaleLowerCase();
@@ -19,9 +20,9 @@ export function validateClient(input,clients=[],editingId=null,{allowLegacy=fals
  const amountPaid=Number(input.amountPaid??0);if(input.amountPaid===''||!Number.isFinite(amountPaid)||amountPaid<0||amountPaid>100000000||Math.abs(amountPaid*100-Math.round(amountPaid*100))>0.000001)throw new Error('Enter an amount paid from 0 to 100000000, with up to two decimal places.');
  const program=String(input.program||'').trim();if(program.length>150)throw new Error('Check the program.');
  const enrollmentHistory=Array.isArray(input.enrollmentHistory)?input.enrollmentHistory.filter(entry=>entry&&typeof entry.id==='string'&&typeof entry.level==='string').map(({id,level,program,closedAt,reason,hours})=>({id,level,program:String(program||''),closedAt:String(closedAt||''),...(reason?{reason:String(reason)}:{}),...(Number.isFinite(Number(hours))&&hours!==undefined?{hours:Number(hours)}:{})})):[];
- return{name,email,level,payment,amountPaid,hours,code,permissions,...(input.program!==undefined?{program}:{}),...(input.enrollmentHistory!==undefined?{enrollmentHistory}:{})};
+ return{name,email,level,payment,amountPaid,hours,code,permissions,...(input.active!==undefined?{active:input.active!==false}:{}),...(input.program!==undefined?{program}:{}),...(input.enrollmentHistory!==undefined?{enrollmentHistory}:{})};
 }
-export function clientTotals(clients){return{clients:clients.length,hours:Math.round(clients.reduce((sum,c)=>sum+c.hours+(c.enrollmentHistory||[]).reduce((n,h)=>n+(Number(h.hours)||0),0),0)*100)/100};}
+export function clientTotals(clients){return{clients:clients.filter(c=>c.active!==false).length,hours:Math.round(clients.reduce((sum,c)=>sum+c.hours+(c.enrollmentHistory||[]).reduce((n,h)=>n+(Number(h.hours)||0),0),0)*100)/100};}
 export function removeBrowserClient(storage,id) {
  const clientKey='speak-boldly-admin-clients-v1',sessionKey='speak-boldly-admin-sessions-v1';
  const oldClients=storage.getItem(clientKey),oldSessions=storage.getItem(sessionKey);
