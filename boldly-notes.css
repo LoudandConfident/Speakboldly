@@ -25,3 +25,11 @@ main #home .home-kicker{position:relative;top:5px}
 /* Let the second home bubble fit its label on one line. */
 main #home .hero .home-speech-links .home-speech-bubble[data-open-view="daily-quote"]{flex:0 0 auto!important;width:max-content!important;padding-left:18px!important;padding-right:18px!important}
 main #home .hero .home-speech-links .home-speech-bubble[data-open-view="daily-quote"]>span{max-width:none!important;white-space:nowrap!important}
+/* Bring Programs up and keep the two side circles compact. */
+main>#courses[data-view]{padding-top:48px!important}
+#courses .course-booking-note{width:190px!important;max-width:190px!important;padding-top:20px!important;gap:10px!important}
+#courses .course-fees-open{width:168px!important;height:168px!important;min-height:168px!important;padding:20px!important;font-size:13px!important}
+#courses .course-fees-open .pricing-circle-art{width:42px;height:42px}
+#courses .consultation-open{width:144px!important;height:144px!important;min-height:144px!important;padding:20px!important;font-size:12px!important}
+@media(max-width:760px){main>#courses[data-view]{padding-top:38px!important}#courses .courses-introduction{grid-template-columns:minmax(0,1fr) 142px!important}#courses .course-booking-note{width:142px!important;max-width:142px!important;padding-top:20px!important}#courses .course-fees-open{width:142px!important;height:142px!important;min-height:142px!important;padding:18px!important;font-size:11px!important}#courses .course-fees-open .pricing-circle-art{width:33px;height:33px}#courses .consultation-open{width:120px!important;height:120px!important;min-height:120px!important;padding:17px!important;font-size:11px!important}}
+@media(max-width:380px){#courses .courses-introduction{grid-template-columns:minmax(0,1fr) 124px!important}#courses .course-booking-note{width:124px!important;max-width:124px!important}#courses .course-fees-open{width:124px!important;height:124px!important;min-height:124px!important;padding:15px!important;font-size:10px!important}#courses .consultation-open{width:108px!important;height:108px!important;min-height:108px!important;padding:14px!important;font-size:10px!important}}
