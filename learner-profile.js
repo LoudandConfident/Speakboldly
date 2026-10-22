@@ -1,4 +1,4 @@
-import {learnerCourseGuidance} from './assessment-guidance.js';
+import {learnerCourseGuidance,learnerQuickPractice} from './assessment-guidance.js?v=bold-blog-simple-results';
 import {addResultImageButton,addResultBranding} from './result-image.js?v=page-capture-v2';
 import {learnerProfiles,learnerQuestions,scoreLearnerProfile,learnerQuestionOrder} from './learner-profile-data.js?v=short-shuffled-v2';
 export function initializeLearnerProfile(doc,win){
@@ -14,10 +14,10 @@ export function initializeLearnerProfile(doc,win){
  previous.onclick=()=>{if(page>0){page--;showPage();progress.focus();}};
  next.onclick=()=>{if(pageValid()){page++;showPage();progress.focus();}};
  function renderResult(score){result.classList.add('assessment-result');result.replaceChildren(el('h2','Your learning profile'));
- const title=score.strongest.length===1?learnerProfiles[score.strongest[0]].name:'Your preferences are a blend';result.append(el('h3',title),el('p','This reflects the activities you chose today, not your ability or a fixed personality type.'));
+ const title=score.strongest.length===1?learnerProfiles[score.strongest[0]].name:'Your preferences are a blend';result.append(el('h3',title),el('p','Your preferences today—not a fixed learning type.'));
  const table=el('table');table.append(el('caption','Your learning preferences'));for(const key of Object.keys(learnerProfiles)){const row=el('tr');const name=el('th',learnerProfiles[key].name);name.scope='row';row.append(name,el('td',Math.round(score.counts[key]/score.total*100)+'%'));table.append(row);}result.append(table);
- for(const key of score.strongest){const profile=learnerProfiles[key],section=el('section');section.append(el('h3',profile.name),el('p',profile.summary),el('h4','What helps you practise English'),el('p',profile.routine),el('h4','What to look for in a course'));const courseList=el('ul');learnerCourseGuidance[key].forEach(tip=>courseList.append(el('li',tip)));section.append(courseList,el('h4','On your own'));const list=el('ul');profile.tips.forEach(tip=>list.append(el('li',tip)));section.append(list);result.append(section);}
- result.append(el('h3','Whatever your preferences'),el('p','Mix listening, reading, speaking, and writing. Try to recall useful language without looking, use it in real situations, review feedback, and return to it over several days. Choose a routine you can repeat, then adjust it based on your progress.'));
+ for(const key of score.strongest){const section=el('section');section.append(el('h3',learnerProfiles[key].name),el('h4','In a course'),el('p',learnerCourseGuidance[key][0]),el('h4','Try this on your own'),el('p',learnerQuickPractice[key]));result.append(section);}
+ result.append(el('p','Practise for 10 minutes a day. Mix listening, reading, speaking, and writing, and keep what helps you improve.'));
  addResultBranding(doc,result);
  addResultImageButton(doc,win,result,'Your learning profile',{learnerCard:true});
  const restart=el('button','Retake the learner test','button light');restart.type='button';restart.onclick=()=>{form.reset();shuffleQuestions();page=0;form.hidden=false;result.hidden=true;doc.querySelector('.learner-results-empty').hidden=false;showPage();win.location.hash='learner-profile';};result.append(restart);form.hidden=false;result.hidden=false;doc.querySelector('.learner-results-empty').hidden=true;win.location.hash='learner-results';

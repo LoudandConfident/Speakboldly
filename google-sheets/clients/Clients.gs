@@ -62,6 +62,7 @@ function handleClientSync(e){
  try{
   if(!e?.postData?.contents||e.postData.contents.length>8000000)throw new Error('Invalid request.');
   const p=JSON.parse(e.postData.contents),props=PropertiesService.getScriptProperties();
+  if(p.action==='boldlyNotes'){if(e.postData.contents.length>4000)throw Error('Request too large.');return clientSyncResponse(sbNotesPublic(p));}
   if(p.action==='dailyMotivationSettings')return clientSyncResponse({ok:true,settings:sbPublishedMotivationSettings(typeof sbDailyMotivationSettings==='function'?sbDailyMotivationSettings():{frozen:false,revision:'0'},p.date)});
   if(p.action==='nativeEnglishPage'){if(e.postData.contents.length>4000)throw new Error('Request too large.');return sbNativeEnglishRead(p);}
   if(p.action==='studentInstructorContact'){if(e.postData.contents.length>16000)throw new Error('Request too large.');if(typeof handleStudentInstructorContact!=='function')throw new Error('Add StudentContact.gs and deploy a New version.');return handleStudentInstructorContact(p);}
@@ -69,7 +70,7 @@ function handleClientSync(e){
   if(typeof SB_STUDENT_EXAM_ACTIONS!=='undefined'&&SB_STUDENT_EXAM_ACTIONS.includes(p.action)){if(e.postData.contents.length>65000)throw new Error('Request too large.');return handleStudentExam(p);}
   const key=props.getProperty('CLIENT_SYNC_KEY');
   if(!key||typeof p.key!=='string'||p.key!==key)throw new Error('Not authorized.');
-  if(!['sendClientEmail','uploadLibraryFile','saveMotivationMessage'].includes(p.action)&&e.postData.contents.length>20000)throw new Error('Request too large.');
+  if(!['sendClientEmail','uploadLibraryFile','saveMotivationMessage','saveBoldlyNote'].includes(p.action)&&e.postData.contents.length>20000)throw new Error('Request too large.');
   if(['exportOwnerBackup','saveOwnerBackup'].includes(p.action))return sbOwnerBackupAction(p,sbExamBook());
   if(['nativeEnglishEdit','saveNativeEnglish'].includes(p.action))return sbNativeEnglishOwner(p);
   if(typeof SB_OWNER_BOOKING_ACTIONS!=='undefined'&&SB_OWNER_BOOKING_ACTIONS.includes(p.action))return handleOwnerBooking(p);
@@ -77,6 +78,7 @@ function handleClientSync(e){
   if(['personalCalendarSettings','resetPersonalCalendarLink'].includes(p.action)){if(typeof sbPersonalCalendarSettings!=='function')throw new Error('Add PersonalCalendar.gs for calendar subscriptions.');return clientSyncResponse(sbPersonalCalendarSettings(p));}
   if(p.action==='sendClientEmail'){if(typeof handleClientEmail!=='function')throw new Error('Add EmailActions.gs and authorizeClientEmails, then deploy a New version to enable email sending.');return handleClientEmail(p);}
   if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(p.action)){if(typeof handleLibraryAction!=='function')throw new Error('Add LibraryActions.gs to enable library sharing.');return handleLibraryAction(p);}
+  if(['listBoldlyNotes','saveBoldlyNote'].includes(p.action)){if(e.postData.contents.length>65000)throw Error('Request too large.');return clientSyncResponse(sbNotesOwner(p));}
   if(['listMotivationMessages','saveMotivationMessage'].includes(p.action))return clientSyncResponse(sbMotivationMessagesOwner(p));
   if(p.action==='setClientActive')return clientSyncResponse(sbSetClientActive(p,SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID'))));
   if(p.action==='deleteClient')return clientSyncResponse(sbDeleteClientRecord(p));

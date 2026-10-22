@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {practiceForLevel,learnerCourseGuidance} from './assessment-guidance.js';
+import {practiceForLevel,learnerCourseGuidance,learnerQuickPractice} from './assessment-guidance.js';
 import {scoreAnswers,answerKey} from './placement-scoring.js';
 import {learnerProfiles} from './learner-profile-data.js';
 test('every placement band produces relevant structure, vocabulary, use and independent practice guidance',()=>{
@@ -14,7 +14,8 @@ test('every placement band produces relevant structure, vocabulary, use and inde
 });
 test('every learner preference has course guidance and independent practice',()=>{
  for(const [key,profile] of Object.entries(learnerProfiles)){
-  assert(learnerCourseGuidance[key].length>=2);
+  assert.equal(learnerCourseGuidance[key].length,1);
+  assert(learnerQuickPractice[key].length>30&&learnerQuickPractice[key].length<160);
   assert(profile.tips.length>=2&&profile.routine);
  }
 });
