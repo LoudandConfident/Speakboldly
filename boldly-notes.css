@@ -19,3 +19,5 @@ main #home .home-free-offers>[aria-hidden=true]{display:inline!important}
 main #home .home-kicker{position:relative;top:5px}
 #boldly-notes>.eyebrow{font-size:10px;line-height:1.6;letter-spacing:.08em;text-transform:none;max-width:480px}
 @media(max-width:680px){main #home .hero .home-speech-links .home-speech-bubble,main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){flex:0 0 62px!important;width:62px!important;height:66px!important;padding:8px 5px 17px!important}main #home .hero .home-speech-links .home-speech-bubble>span{font-size:9px!important}main #home .home-free-offers{font-size:clamp(9px,2.7vw,11px)!important;gap:5px!important}}
+
+#placement .assessment-options{margin-top:14px}#placement .assessment-options>article>.hub-free-badge{position:absolute;top:-13px;right:14px;display:inline-flex;align-items:center;border:1px solid #bdcbb1;border-radius:999px;padding:4px 9px;background:#d5ed98;color:#193c32;font-size:10px;font-weight:600;line-height:1.3;z-index:1}#placement .learner-visual svg{overflow:visible}
