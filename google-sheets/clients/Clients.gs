@@ -78,7 +78,7 @@ function handleClientSync(e){
   if(['personalCalendarSettings','resetPersonalCalendarLink'].includes(p.action)){if(typeof sbPersonalCalendarSettings!=='function')throw new Error('Add PersonalCalendar.gs for calendar subscriptions.');return clientSyncResponse(sbPersonalCalendarSettings(p));}
   if(p.action==='sendClientEmail'){if(typeof handleClientEmail!=='function')throw new Error('Add EmailActions.gs and authorizeClientEmails, then deploy a New version to enable email sending.');return handleClientEmail(p);}
   if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(p.action)){if(typeof handleLibraryAction!=='function')throw new Error('Add LibraryActions.gs to enable library sharing.');return handleLibraryAction(p);}
-  if(['listBoldlyNotes','saveBoldlyNote'].includes(p.action)){if(e.postData.contents.length>65000)throw Error('Request too large.');return clientSyncResponse(sbNotesOwner(p));}
+  if(['listBoldlyNotes','saveBoldlyNote'].includes(p.action)){if(e.postData.contents.length>7500000)throw Error('Request too large.');return clientSyncResponse(sbNotesOwner(p));}
   if(['listMotivationMessages','saveMotivationMessage'].includes(p.action))return clientSyncResponse(sbMotivationMessagesOwner(p));
   if(p.action==='setClientActive')return clientSyncResponse(sbSetClientActive(p,SpreadsheetApp.openById(props.getProperty('CLIENT_SHEET_ID'))));
   if(p.action==='deleteClient')return clientSyncResponse(sbDeleteClientRecord(p));

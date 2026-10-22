@@ -142,3 +142,5 @@ Manual client-hour edits now adjust the dashboard total independently of calenda
 ### Bold Blog and shorter assessment feedback
 
 The home page has three compact speech-bubble links: Reviews, Daily motivation, and Bold Blog. The instructor dashboard includes a Bold Blog editor for 1–5 text pages per topic, drafts, published posts, and future publish dates in Cairo time. Articles are stored in the Bold Blog sheet; private drafts and future posts are excluded from public reads. Deploy the updated `google-sheets/clients/UnifiedCode.gs` as a New version to enable the editor and reader (split-file installations also need `BoldlyNotes.gs`). Assessment feedback now gives shorter level-specific actions and concise course / independent-practice advice.
+
+Bold Blog now appears in the main menu immediately before Join us. Posts display as continuous scrollable articles. The instructor can upload up to five JPG/PNG/WebP pictures per post (2 MB each, 5 MB total), retain or remove saved pictures, and keep posts private until their publish date. Text sections are joined into the article with pictures between them.

@@ -1,4 +1,4 @@
-import {initializeBoldlyNotesEditor} from './boldly-notes-editor.js?v=bold-blog-simple-results';
+import {initializeBoldlyNotesEditor} from './boldly-notes-editor.js?v=blog-tab-pictures';
 import {initializeMotivationMessages} from './motivation-message-editor.js?v=client-status-motivations';
 import {createPaymentReminder} from './payment-reminder.js?v=client-status-motivations';
 import {initializeInstructorResources} from './instructor-resources.js?v=client-status-motivations';
