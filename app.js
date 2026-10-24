@@ -1,6 +1,6 @@
 import {CEFR_LEVELS} from './cefr-levels.js';
 import {practiceForLevel} from './assessment-guidance.js?v=bold-blog-simple-results';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=page-capture-v2';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=documents-sessions-1';
 import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } from './assessment-time.js';
 import { questions, TEST_VERSION } from './placement-questions.js?v=balanced-v3';
 import { scoreAnswers, placementCorrections } from './placement-scoring.js?v=balanced-v3';

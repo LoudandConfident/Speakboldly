@@ -12,7 +12,7 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': shared da
  assert.equal(owner({action:'saveCalendarDay',date:'2026-02-30',available:false}).ok,false);
  const saved=owner({action:'saveSession',session:{clientId:'student-1',number:1,date:slot.date,time:slot.time}});assert.equal(saved.ok,true);
  assert.equal(owner({action:'saveCalendarDay',date:slot.date,available:false}).ok,true);
- assert.equal(owner({action:'saveCalendarDay',date:slot.date,available:false}).blockedDates.length,1);
+ assert.equal(owner({action:'saveCalendarDay',date:slot.date,available:false}).blockedDates.filter(date=>date===slot.date).length,1);
  const dimmed=get('2026-10').days.find(d=>d.date===slot.date);assert.equal(dimmed.available,false);assert(dimmed.slots.some(s=>s.status==='taken'));assert(dimmed.slots.every(s=>['taken','past','unavailable'].includes(s.status)));
  const rowCount=f.sheets.get('Sessions').rows.length;
  assert.equal(owner({action:'saveSession',session:{clientId:'student-1',number:1,date:slot.date,time:slot.time}}).ok,true);
@@ -22,7 +22,7 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': shared da
  assert.equal(f.sheets.get('Sessions').rows.length,rowCount);assert.equal(f.sheets.get('Sessions').rows[1][7],'pending');
  assert.equal(owner({action:'saveCalendarDay',date:slot.date,available:true}).ok,true);
  assert.equal(get('2026-10').days.find(d=>d.date===slot.date).slots.find(s=>s.time===free.time).status,'available');
- const december=get('2026-12');assert(december.days.find(d=>d.date==='2026-12-03').slots.some(s=>s.status==='available'));assert(december.days.filter(d=>d.date>'2026-12-03').every(d=>!d.available&&d.slots.every(s=>s.status==='unavailable')));
+ assert.equal(owner({action:'saveCalendarDay',date:'2026-12-03',available:true}).ok,true);const december=get('2026-12');assert(december.days.find(d=>d.date==='2026-12-03').slots.some(s=>s.status==='available'));assert(december.days.filter(d=>d.date>'2026-12-03').every(d=>!d.available&&d.slots.every(s=>s.status==='unavailable')));
  assert.equal(f.request({action:'studentBookSlots',token,name:'Other Student',requestId:'too-far',slots:[{date:'2026-12-05',time:'10:00'}]}).ok,false);
  assert.equal(get('2027-01').ok,false);
  assert.equal(f.request({action:'instructorOverview'}).ok,false);

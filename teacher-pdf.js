@@ -1,3 +1,4 @@
+import {DOCUMENT_BRAND} from './document-branding.js';
 export async function fillTeacherPdf(bytes, values, {flatten=false,fontBytes=null}={}) {
  const {PDFDocument,StandardFonts}=await import('./vendor/pdf-lib.esm.min.js');
  const pdf=await PDFDocument.load(bytes),form=pdf.getForm();
@@ -17,6 +18,6 @@ export async function fillTeacherPdf(bytes, values, {flatten=false,fontBytes=nul
  }
  form.updateFieldAppearances(font);
  if(flatten)form.flatten();
- pdf.setAuthor('Mira Nasser Louis');pdf.setCreator('Speak Boldly Teacher Portal');
+ pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setCreator('Speak Boldly Teacher Portal');
  return pdf.save();
 }

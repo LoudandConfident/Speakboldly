@@ -373,14 +373,15 @@ function sbSessionId(c){
  const bytes=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,[c.clientId,c.number,c.date,c.time,...(c.program?[c.program]:[])].join('|'));
  return bytes.map(b=>(b&255).toString(16).padStart(2,'0')).join('');
 }
-function sbSessionDuration(row){const explicit=Number(row[13]);return explicit===30||explicit===60||explicit===90?explicit:90;}
+function sbSessionDuration(row){const explicit=Number(row[13]);return [30,60,90,120,150,180].includes(explicit)?explicit:90;}
 function sbListSheetSessions(){
  const sheet=sbSessionsSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[];
  return rows.filter(r=>r[0]).map(r=>({id:String(r[0]),clientId:String(r[1]),number:Number(r[2]),date:String(r[3]),time:String(r[4]),name:'',program:String(r[10]||'').replace(/^'/,''),level:String(r[11]||'').replace(/^'/,''),startsAt:String(r[5]),duration:sbSessionDuration(r),course:String(r[14]||'').replace(/^'/,''),endsAt:new Date(Date.parse(r[5])+sbSessionDuration(r)*60000).toISOString(),reminderStatus:String(r[7]),reminderAt:new Date(r[6]).toISOString(),sentAt:r[8]?new Date(r[8]).toISOString():null}));
 }
+function sbRequestedSessionDuration(input){const duration=input.duration===undefined?(input.program==='Assessment'?30:['Trial session','English Momentum'].includes(input.program)?60:90):Number(input.duration);if(![30,60,90,120,150,180].includes(duration))throw new Error('Choose a valid session duration.');return duration;}
 function sbSaveSheetSession(input,allowPast=false){
  const c={clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||'').trim(),course:String(input.course||'').trim(),level:String(input.level||'').trim()};
- const duration=c.program==='Assessment'?30:['English Momentum','Trial session'].includes(c.program)?60:90;
+ const duration=sbRequestedSessionDuration(input);
  if(c.course&&(!SB_SESSION_PROGRAMS.includes(c.course)||['Assessment','Trial session'].includes(c.course)))throw new Error('Choose a valid registered course.');
  if(c.program&&!SB_SESSION_PROGRAMS.includes(c.program))throw new Error('Choose a valid program.');
  if(c.level&&!/^[1-9]\d{0,3}$/.test(c.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(c.level))throw new Error('Choose a valid session level.');
@@ -388,7 +389,7 @@ function sbSaveSheetSession(input,allowPast=false){
  const starts=sbCairoTimestamp(c.date,c.time),id=sbSessionId(c),sheet=sbSessionsSheet();
  const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[];
  const existing=rows.find(r=>String(r[0])===id);
- if(existing)return id; // Retries never create duplicate reminders or restore cancelled classes.
+ if(existing){if(sbSessionDuration(existing)!==duration)throw new Error('This appointment already has a different duration. Cancel it before rebooking.');return id;} // Retries never create duplicate reminders or restore cancelled classes.
  if(starts>Date.now()&&typeof sbCalendarDateBlocked==='function'&&sbCalendarDateBlocked(c.date))throw new Error('This day is dimmed. Undim the date before adding a new appointment.');
  if(starts<=Date.now()&&!allowPast)throw new Error('Choose a future session.');
  if(starts>Date.now()&&rows.some(row=>String(row[7])!=='cancelled'&&starts<Date.parse(row[5])+sbSessionDuration(row)*60000&&starts+duration*60000>Date.parse(row[5])))throw new Error('This time overlaps an existing appointment.');
@@ -415,7 +416,7 @@ function handleSheetSessionAction(p){
   const props=PropertiesService.getScriptProperties();
   const ready=typeof handleClientEmail==='function';
   const respond=typeof clientSyncResponse==='function'?clientSyncResponse:response;
-  return respond({ok:true,classes:sbListSheetSessions(),blockedDates:typeof sbCalendarAvailability==='function'?sbCalendarAvailability(sbExamBook()):[],calendarAvailabilityReady:typeof sbCalendarAvailability==='function',emailReady:ready});
+  return respond({ok:true,classes:sbListSheetSessions(),blockedDates:typeof sbCalendarAvailability==='function'?sbCalendarAvailability(sbExamBook()):[],calendarAvailabilityReady:typeof sbCalendarAvailability==='function',sessionDurationReady:true,emailReady:ready});
  }finally{lock.releaseLock();}
 }
 // Kept as a no-op so old scheduled triggers cannot send emails after this update.
@@ -466,12 +467,13 @@ function retryPermissions(){
  console.log('Spreadsheet and email access confirmed. Deploy a New version with Execute as: Me.');
 }
 
-const SB_EMAIL_LOGO='https://loudandconfident.github.io/Speakboldly/speak-boldly-preview-dark-green.png';
+const SB_DOCUMENT_CREDENTIALS="English Language Coaching · Founded by Mira Nossr-Luis · © 2026";
+const SB_EMAIL_LOGO='https://loudandconfident.github.io/Speakboldly/document-templates/sb-policy-logo.png';
 const SB_ZOOM_URL=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_URL')||'';
 const SB_ZOOM_PASSCODE=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_PASSCODE')||'';
 function sbEmailEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function sbBrandedEmail(title,content){
- return '<!doctype html><html><body style="margin:0;background:#faf9f4;font-family:Arial,sans-serif;color:#193c32"><table role="presentation" style="width:100%;max-width:600px;margin:auto;background:#fffef9;border-collapse:collapse"><tr><td style="padding:28px 28px 12px"><img src="'+SB_EMAIL_LOGO+'" width="58" height="58" alt="Speak Boldly logo" style="display:block;border-radius:10px"><h1 style="font-size:24px;margin:18px 0">'+sbEmailEscape(title)+'</h1></td></tr><tr><td style="padding:0 28px 28px;font-size:15px;line-height:1.7">'+content+'<p style="margin-top:28px">Speak Boldly</p></td></tr></table></body></html>';
+ return '<!doctype html><html><body style="margin:0;background:#faf9f4;font-family:Arial,sans-serif;color:#193c32"><table role="presentation" style="width:100%;max-width:600px;margin:auto;background:#fffef9;border-collapse:collapse"><tr><td style="padding:28px 28px 12px"><img src="'+SB_EMAIL_LOGO+'" width="58" height="58" alt="Speak Boldly logo" style="display:block;border-radius:10px"><h1 style="font-size:24px;margin:18px 0">'+sbEmailEscape(title)+'</h1></td></tr><tr><td style="padding:0 28px 28px;font-size:15px;line-height:1.7">'+content+'<p style="margin-top:28px">'+sbEmailEscape(SB_DOCUMENT_CREDENTIALS)+'</p></td></tr></table></body></html>';
 }
 function sbUpcomingClientMeetings(book,clientId){
  const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return [];
@@ -913,16 +915,17 @@ function handlePublicBooking(data){
  finally{if(lock.hasLock())lock.releaseLock();}
 }
 function sbCalendarAvailability(book) {
- const december=Array.from({length:31},(_,i)=>'2026-12-'+String(i+1).padStart(2,'0'));
- const sheet=book.getSheetByName('Calendar availability');
- if(!sheet||sheet.getLastRow()<2)return december;
- return december.concat(sheet.getRange(2,1,sheet.getLastRow()-1,3).getValues().filter(row=>row[0]&&(row[1]===false||String(row[1]).toLowerCase()==='false')).map(row=>row[0] instanceof Date?Utilities.formatDate(row[0],'Africa/Cairo','yyyy-MM-dd'):String(row[0])).filter(date=>/^\d{4}-\d{2}-\d{2}$/.test(date)));
+ const blocked=new Set(Array.from({length:31},(_,i)=>'2026-12-'+String(i+1).padStart(2,'0'))),sheet=book.getSheetByName('Calendar availability');
+ if(sheet&&sheet.getLastRow()>1)for(const row of sheet.getRange(2,1,sheet.getLastRow()-1,3).getValues()){
+  const date=row[0] instanceof Date?Utilities.formatDate(row[0],'Africa/Cairo','yyyy-MM-dd'):String(row[0]);if(!/^\d{4}-\d{2}-\d{2}$/.test(date))continue;
+  if(row[1]===true||String(row[1]).toLowerCase()==='true')blocked.delete(date);else if(row[1]===false||String(row[1]).toLowerCase()==='false')blocked.add(date);
+ }
+ return [...blocked].sort();
 }
 function sbCalendarDateBlocked(date,book){return sbCalendarAvailability(book||sbExamBook()).includes(String(date));}
 function sbSaveCalendarDay(book,data) {
  const date=String(data.date||''),parsed=new Date(date+'T12:00:00Z');
  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!Number.isFinite(parsed.getTime())||parsed.toISOString().slice(0,10)!==date||typeof data.available!=='boolean')throw new Error('Choose a valid date and availability.');
- if(date.startsWith('2026-12-')&&data.available)throw new Error('December 2026 is closed for new bookings.');
  if(date<sbBookingToday())throw new Error('Only today and future dates can be changed.');
  const lock=LockService.getScriptLock();lock.waitLock(20000);
  try{
@@ -1211,7 +1214,7 @@ function sbDisplayTime(value){const match=String(value||'').match(/^(\d{1,2}):(\
 function sbSaveSessionSeries(p){
  if(!Array.isArray(p.sessions)||p.sessions.length<1||p.sessions.length>52)throw new Error('Choose between 1 and 52 weekly appointments.');
  const sheet=sbSessionsSheet(),existing=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,15).getValues():[],clients=sbExamBook().getSheetByName('Clients'),ids=clients&&clients.getLastRow()>1?clients.getRange(2,1,clients.getLastRow()-1,1).getValues().map(row=>String(row[0])):[],seen=new Set();
- const first=p.sessions[0],planned=p.sessions.map((input,index)=>{const record={...input,clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||''),level:String(input.level||'')};const date=new Date(String(first.date)+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+index*7);if(record.clientId!==first.clientId||record.program!==first.program||record.time!==first.time||record.level!==String(first.level||'')||record.number!==Number(first.number)+index||record.date!==date.toISOString().slice(0,10))throw new Error('Use the same client, program, weekday and time with consecutive session numbers.');if(!ids.includes(record.clientId)||!Number.isInteger(record.number)||record.number<1||record.number>9999||!SB_SESSION_PROGRAMS.includes(record.program))throw new Error('Check the client, program and session numbers.');if(record.level&&!/^[1-9]\d{0,3}$/.test(record.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(record.level))throw new Error('Choose a valid session level.');if(record.course&&(!SB_SESSION_PROGRAMS.includes(record.course)||['Assessment','Trial session'].includes(record.course)))throw new Error('Choose a valid course.');const id=sbSessionId(record),start=sbCairoTimestamp(record.date,record.time),duration=record.program==='Assessment'?30:['Trial session','English Momentum'].includes(record.program)?60:90;if(seen.has(id))throw new Error('Duplicate appointment.');seen.add(id);const saved=existing.find(row=>String(row[0])===id);if(saved){if(String(saved[7])==='cancelled')throw new Error('A planned appointment was cancelled. Refresh before booking this series.');return record;}if(start<=Date.now()||sbCalendarDateBlocked(record.date))throw new Error(record.date+' is past or dimmed. No new appointments were added.');if(existing.some(row=>String(row[7])!=='cancelled'&&start<Date.parse(row[5])+sbSessionDuration(row)*60000&&start+duration*60000>Date.parse(row[5])))throw new Error('An appointment overlaps on '+record.date+'. No new appointments were added.');if(existing.some(row=>String(row[1])===record.clientId&&Number(row[2])===record.number&&String(row[10])===record.program&&String(row[11]||'')===record.level&&String(row[0])!==id&&String(row[7])!=='cancelled'))throw new Error('Session '+record.number+' already exists for this client and program.');return record;});
+ const first=p.sessions[0],planned=p.sessions.map((input,index)=>{const record={...input,clientId:String(input.clientId||''),number:Number(input.number),date:String(input.date||''),time:String(input.time||''),program:String(input.program||''),level:String(input.level||'')};const date=new Date(String(first.date)+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+index*7);if(record.clientId!==first.clientId||record.program!==first.program||record.time!==first.time||record.level!==String(first.level||'')||record.number!==Number(first.number)+index||record.date!==date.toISOString().slice(0,10))throw new Error('Use the same client, program, weekday and time with consecutive session numbers.');if(!ids.includes(record.clientId)||!Number.isInteger(record.number)||record.number<1||record.number>9999||!SB_SESSION_PROGRAMS.includes(record.program))throw new Error('Check the client, program and session numbers.');if(record.level&&!/^[1-9]\d{0,3}$/.test(record.level)&&!['Not assessed','A1','A2','B1','B2','C1','C2'].includes(record.level))throw new Error('Choose a valid session level.');if(record.course&&(!SB_SESSION_PROGRAMS.includes(record.course)||['Assessment','Trial session'].includes(record.course)))throw new Error('Choose a valid course.');const id=sbSessionId(record),start=sbCairoTimestamp(record.date,record.time),duration=sbRequestedSessionDuration(record);if(seen.has(id))throw new Error('Duplicate appointment.');seen.add(id);const saved=existing.find(row=>String(row[0])===id);if(saved){if(String(saved[7])==='cancelled')throw new Error('A planned appointment was cancelled. Refresh before booking this series.');if(sbSessionDuration(saved)!==duration)throw new Error('A planned appointment already has a different duration.');return record;}if(start<=Date.now()||sbCalendarDateBlocked(record.date))throw new Error(record.date+' is past or dimmed. No new appointments were added.');if(existing.some(row=>String(row[7])!=='cancelled'&&start<Date.parse(row[5])+sbSessionDuration(row)*60000&&start+duration*60000>Date.parse(row[5])))throw new Error('An appointment overlaps on '+record.date+'. No new appointments were added.');if(existing.some(row=>String(row[1])===record.clientId&&Number(row[2])===record.number&&String(row[10])===record.program&&String(row[11]||'')===record.level&&String(row[0])!==id&&String(row[7])!=='cancelled'))throw new Error('Session '+record.number+' already exists for this client and program.');return record;});
  // Complete validation happens before any write. Stable IDs make a retry safe after a partial Sheets failure.
  for(const record of planned)sbSaveSheetSession(record);return planned.length;
 }

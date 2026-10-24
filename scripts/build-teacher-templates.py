@@ -76,3 +76,7 @@ for key,title,filename in [('progress','Progress report','progress-report.pdf'),
  metadata[key]={'title':title,'url':'./document-templates/'+filename,'pages':pages}
 (OUT/'templates.json').write_text(json.dumps(metadata,ensure_ascii=False,indent=2))
 print('Generated three editable one-page documents. English-only progress report; no signatures.')
+
+# Always finish with the same logo position and credentials used by generated exports.
+import subprocess
+subprocess.run([sys.executable,str(ROOT/"scripts/apply-document-branding.py"),"--reports-only"],check=True)

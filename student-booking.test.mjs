@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
-import {createSheetExamFixture} from './sheet-exams.test.mjs';
+import {createSheetExamFixture} from './sheet-exam-fixture.mjs';
 export function createBookingFixture(filename='UnifiedCode.gs'){
  const f=createSheetExamFixture(filename);
  if(filename==='Clients.gs')for(const file of ['Sessions.gs','BookingActions.gs','RegistrationActions.gs'])vm.runInContext(readFileSync(new URL('./google-sheets/clients/'+file,import.meta.url),'utf8'),f.context);

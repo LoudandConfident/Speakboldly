@@ -1,3 +1,4 @@
+import {DOCUMENT_BRAND,drawDocumentBranding} from '../document-branding.js';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {PDFDocument,rgb,PDFName,PDFString,StandardFonts} from '../vendor/pdf-lib.esm.min.js';
 import fontkit from '../vendor/fontkit.es.min.js';
@@ -10,7 +11,7 @@ const green=rgb(25/255,60/255,50/255),cream=rgb(1,1,1),lime=rgb(213/255,237/255,
 const page=pdf.addPage([595.28,841.89]),width=595.28,left=44,right=551.28;
 page.drawRectangle({x:0,y:0,width,height:841.89,color:cream});
 // Editorial header: website typography, restrained lime accent and a light clock drawing.
-page.drawImage(logo,{x:left,y:754,width:45,height:45});
+
 page.drawText('Speak Boldly',{x:106,y:774,size:27,font:bold,color:green});
 page.drawText(policy.title,{x:106,y:743,size:23,font:regular,color:green});
 page.drawText(policy.subtitle,{x:left,y:713,size:11,font:regular,color:muted});
@@ -35,9 +36,10 @@ page.drawRectangle({x:left,y:y-bandHeight+10,width:right-left,height:bandHeight,
 let closingY=y-6;for(const line of closingLines){page.drawText(line,{x:left+15,y:closingY,size:9.5,font:regular,color:green});closingY-=15;}
 page.drawLine({start:{x:left,y:79},end:{x:right,y:79},color:muted,thickness:.5});
 page.drawText(policy.email,{x:left,y:59,size:9,font:regular,color:green});page.drawText(policy.phone,{x:right-90,y:59,size:9,font:regular,color:green});
-page.drawText('Speak Boldly · English Language Coaching',{x:left,y:36,size:8,font:regular,color:muted});
-page.drawText('1 / 1',{x:right-22,y:36,size:8,font:regular,color:muted});
+
+
 function link(rect,uri){const ref=pdf.context.register(pdf.context.obj({Type:PDFName.of('Annot'),Subtype:PDFName.of('Link'),Rect:rect,Border:[0,0,0],A:{Type:PDFName.of('Action'),S:PDFName.of('URI'),URI:PDFString.of(uri)}}));page.node.addAnnot(ref);}
 link([left,56,left+215,70],'mailto:'+policy.email);link([right-94,56,right,70],'tel:+201283786904');
-pdf.setTitle('SB Policy — Speak Boldly');pdf.setAuthor('Mira Nasser Louis');pdf.setCreator('Speak Boldly');pdf.setSubject('Registration, payment, cancellations, rescheduling and attendance');
+pdf.setTitle('SB Policy — Speak Boldly');pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setCreator('Speak Boldly');pdf.setSubject('Registration, payment, cancellations, rescheduling and attendance');
+await drawDocumentBranding(pdf,{font:regular,logo});
 writeFileSync(new URL('brochures/SB-Policy.pdf',root),await pdf.save());console.log('Created one-page SB Policy PDF.');
