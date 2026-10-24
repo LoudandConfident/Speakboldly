@@ -1915,3 +1915,14 @@ main>#courses[data-view]{padding-top:48px!important}
 #how .how-policy-content a.sb-policy-link:hover{background:#e3f5ba;color:#193c32!important}
 #how .how-policy-content a.sb-policy-link:focus-visible{outline:2px solid #faf9f4;outline-offset:4px}
 #how .sb-policy-link .sb-policy-icon{display:block;width:27px;height:27px;flex:none;color:#193c32}
+
+/* Compact stacked course actions beside the introduction. */
+main>#courses[data-view]{padding-top:24px!important}
+#courses .courses-introduction{grid-template-columns:minmax(0,1fr) 108px!important;gap:24px!important;align-items:start!important;border:0!important;padding-bottom:0!important;margin-bottom:20px!important}
+#courses .course-booking-note{flex-direction:column!important;width:108px!important;max-width:108px!important;padding:0!important;gap:8px!important}
+#courses .course-booking-note .course-fees-open,#courses .course-booking-note .consultation-open{width:104px!important;height:104px!important;min-height:104px!important;padding:12px!important;font-size:10px!important;line-height:1.4;box-sizing:border-box}
+#courses .course-fees-open .pricing-circle-art{width:25px;height:25px}
+#courses .catalog-controls{border:0!important;padding-top:0!important;margin-top:0!important}
+@media(max-width:760px){main>#courses[data-view]{padding-top:18px!important}#courses .courses-introduction{grid-template-columns:minmax(0,1fr) 88px!important;gap:12px!important}#courses .course-booking-note{width:88px!important;max-width:88px!important}#courses .course-booking-note .course-fees-open,#courses .course-booking-note .consultation-open{width:86px!important;height:86px!important;min-height:86px!important;padding:10px!important;font-size:9px!important}#courses .course-fees-open .pricing-circle-art{width:21px;height:21px}}
+
+#courses .catalog-controls .search{border:0!important;box-shadow:none!important}
