@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node server.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "build:seo": "node scripts/build-search-assets.mjs && node scripts/build-public-pages.mjs"
   },
   "type": "module",
   "engines": {
@@ -15,5 +16,8 @@
     "nodemailer": "^10.0.16",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^6.4.299"
+  },
+  "devDependencies": {
+    "clean-css": "^5.3.3"
   }
 }

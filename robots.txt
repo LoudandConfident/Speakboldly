@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /student-files/
+Disallow: /document-templates/
+Disallow: /novels/
+Disallow: /google-sheets/
+Disallow: /content/
+Disallow: /daily-missions/
+Disallow: /scripts/
 
 Sitemap: https://speakboldly.space/sitemap.xml

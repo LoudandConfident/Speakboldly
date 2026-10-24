@@ -1926,3 +1926,13 @@ main>#courses[data-view]{padding-top:24px!important}
 @media(max-width:760px){main>#courses[data-view]{padding-top:18px!important}#courses .courses-introduction{grid-template-columns:minmax(0,1fr) 88px!important;gap:12px!important}#courses .course-booking-note{width:88px!important;max-width:88px!important}#courses .course-booking-note .course-fees-open,#courses .course-booking-note .consultation-open{width:86px!important;height:86px!important;min-height:86px!important;padding:10px!important;font-size:9px!important}#courses .course-fees-open .pricing-circle-art{width:21px;height:21px}}
 
 #courses .catalog-controls .search{border:0!important;box-shadow:none!important}
+
+/* Crawlable links retain the existing tab and card appearance. */
+#main-navigation a.nav-tab{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-family:inherit}
+#courses .course-body h3 a{color:inherit;text-decoration:none}
+#courses .course-body h3 a:hover{text-decoration:underline;text-underline-offset:4px}
+.seo-resource-directory{font-size:12px;line-height:1.9;margin:25px 0}
+.seo-resource-directory a{text-decoration:underline;text-underline-offset:3px}
+.seo-skip-link{position:fixed;top:-100px;left:20px;z-index:100;background:#193c32;color:white;padding:12px 20px}
+.seo-skip-link:focus{top:12px}
+.course-public-page{display:inline-block;margin-top:22px;font-size:13px}

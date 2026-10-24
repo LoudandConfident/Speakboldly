@@ -35,7 +35,7 @@ export function initializeNavigation(doc,win){
    current.finished.catch(()=>{}).finally(()=>{if(transition===current)transition=null;});
   }else{update();if(animate)next.classList.add('view-enter');}
  }
- doc.querySelectorAll('[data-open-view]').forEach(b=>b.addEventListener('click',()=>{win.location.hash=b.dataset.openView;closeMenu();}));
+ doc.querySelectorAll('[data-open-view]').forEach(b=>b.addEventListener('click',event=>{if(b.tagName==='A'){if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();}win.location.hash=b.dataset.openView;closeMenu();}));
  win.addEventListener('hashchange',showView);showView();
  return showView;
 }
