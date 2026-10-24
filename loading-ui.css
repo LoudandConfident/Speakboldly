@@ -1,0 +1,9 @@
+.sb-loading,.portal-loading-notice[aria-busy=true]{display:flex!important;align-items:center;justify-content:center;min-height:36px;padding:8px!important;margin:8px 0!important;border:0!important;background:transparent!important;box-shadow:none!important;font-size:0!important;line-height:0!important;color:transparent!important}
+.sb-loading::before,.portal-loading-notice[aria-busy=true]::before{content:''!important;display:block!important;width:24px!important;height:24px!important;flex:0 0 24px!important;box-sizing:border-box!important;border:3px solid #d5e3cf!important;border-top-color:#3f7657!important;border-radius:50%!important;background:transparent!important;opacity:1!important;animation:sb-green-spin .85s linear infinite!important}
+.sb-loading::after,.portal-loading-notice[aria-busy=true]::after{display:none!important}
+@keyframes sb-green-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.sb-loading::before,.portal-loading-notice[aria-busy=true]::before{animation-duration:2s!important}}
+#portal-contact>.portal-interior-art{display:none!important}
+.whatsapp-contact:disabled,.join-sb-whatsapp:disabled,#booking-whatsapp:disabled{opacity:.55;cursor:default}
+
+.sb-loading[hidden]{display:none!important}

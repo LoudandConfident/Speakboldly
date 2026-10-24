@@ -8,7 +8,7 @@ import { scoreAnswers, placementCorrections } from './placement-scoring.js?v=bal
 import {courses,matches} from './courses.js?v=library-folders';
 const $=s=>document.querySelector(s);
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const chat=message=>'https://wa.me/201050226476?text='+encodeURIComponent(message);
+const chat=message=>'mailto:speakboldly16@gmail.com?subject='+encodeURIComponent('English coaching enquiry')+'&body='+encodeURIComponent(message+'\n\nContact number: 01283786904');
 const scenes={
 momentum:'<path d="M42 156h43v-35h42V87h42V50h36"/><path d="m187 33 18 17-18 17"/><circle cx="70" cy="65" r="25"/><path d="M70 51v15l10 7M43 173h162"/><path d="M36 92h14M27 107h25"/>',
 

@@ -1,0 +1,7 @@
+// Keep readable loading announcements for assistive technology; show a quiet ring visually.
+export function isLoadingMessage(text){return /^(?:loading(?:\b|…)|still loading\b|connecting\b|opening (?:report|document|calendar)|checking (?:your |the )?(?:connection|sheet))/i.test(String(text||'').trim())&&!/could not|failed|error|too long|try again|unavailable/i.test(text)&&/(?:…|\.{3})$/.test(String(text||'').trim());}
+export function initializeLoadingUI(doc){
+ const update=element=>{if(!element?.querySelectorAll)return;for(const node of [element,...element.querySelectorAll('[role="status"],p')]){if(!node.matches?.('[role="status"],p'))continue;const active=node.dataset.loading==='true'||isLoadingMessage(node.textContent);node.classList.toggle('sb-loading',active);if(active){node.setAttribute('aria-label','Loading');node.dataset.spinnerLabel='true';}else if(node.dataset.spinnerLabel){node.removeAttribute('aria-label');delete node.dataset.spinnerLabel;}}};
+ let scheduled=false;const pending=new Set();new doc.defaultView.MutationObserver(records=>{for(const record of records){const target=record.target.nodeType===1?record.target:record.target.parentElement;if(target)pending.add(target);}if(scheduled)return;scheduled=true;doc.defaultView.requestAnimationFrame(()=>{scheduled=false;for(const target of pending)update(target);pending.clear();});}).observe(doc.documentElement,{childList:true,characterData:true,subtree:true});update(doc.documentElement);
+}
+if(typeof document!=='undefined')initializeLoadingUI(document);
