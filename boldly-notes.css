@@ -47,3 +47,9 @@ main>#courses[data-view]{padding-top:48px!important}
 
 /* SB Policy uses the same lime pill treatment as the illustrated SB Method link. */
 #how .sb-policy-link{display:inline-flex;align-items:center;justify-content:center;border:1px solid #193c32;border-radius:999px;background:#d5ed98;color:#193c32;padding:10px 20px;font:500 14px/1.4 Arial,sans-serif;text-decoration:none;min-height:42px;box-sizing:border-box}#how .sb-policy-link:hover{background:#e3f5ba}#how .sb-policy-link:focus-visible{outline:2px solid #193c32;outline-offset:4px}
+
+/* Match the SB Method pill and keep its label legible on the green panel. */
+#how .how-policy-content a.sb-policy-link{display:inline-flex;gap:12px;align-items:center;justify-content:center;background:#d5ed98;color:#193c32!important;border:1px solid #193c32;border-radius:999px;padding:9px 20px;min-height:45px;font:500 15px/1.4 Arial,sans-serif;text-decoration:none;box-sizing:border-box}
+#how .how-policy-content a.sb-policy-link:hover{background:#e3f5ba;color:#193c32!important}
+#how .how-policy-content a.sb-policy-link:focus-visible{outline:2px solid #faf9f4;outline-offset:4px}
+#how .sb-policy-link .sb-policy-icon{display:block;width:27px;height:27px;flex:none;color:#193c32}
