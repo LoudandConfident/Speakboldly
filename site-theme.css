@@ -508,6 +508,8 @@ main #home>.home-bottom-row{margin:0;padding:19px 6% 8px}
 #contact>.page-signature{margin-top:65px}
 @media(max-width:760px){#contact.contact-section{padding-top:40px;min-height:0}#contact>h2{font-size:39px;letter-spacing:-1.3px}#contact .contact-orbit{position:relative;top:auto;right:auto;width:155px;margin:0 0 25px auto}#contact>.intro{font-size:15px}#contact>.page-signature{margin-top:45px}}
 
+#contact .contact-whatsapp-actions{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin:20px 0}#contact .contact-whatsapp-actions .button{margin:0;max-width:100%;white-space:normal}#contact .contact-whatsapp-pending{font-size:11px;color:var(--muted);line-height:1.5}
+
 /* student-polish.css */
 /* Consistent type scale, quiet palette and compact page rhythm. */
 main [data-view]>h2,main .courses-heading h2,main .quote-editorial-title,main .join-editorial-title,main #contact>h2{font-size:clamp(28px,3.6vw,45px)!important;line-height:1.16!important;letter-spacing:-1.1px!important}
