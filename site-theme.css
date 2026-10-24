@@ -1898,3 +1898,14 @@ main>#courses[data-view]{padding-top:48px!important}
 .whatsapp-contact:disabled,.join-sb-whatsapp:disabled,#booking-whatsapp:disabled{opacity:.55;cursor:default}
 
 .sb-loading[hidden]{display:none!important}
+
+/* Keep the personal reflection beside the original journey photos. */
+#vision.vision-editorial .vision-opening-copy .vision-need-band{margin:8px 0 0!important;padding:0!important;border:0;grid-template-columns:minmax(0,1fr) 52px;gap:14px 18px}
+#vision .vision-opening-copy .vision-need-band>p{margin:0;font-size:14px;line-height:1.8}
+#vision .vision-opening-copy .vision-need-band>div[aria-hidden]{width:52px;height:60px;color:var(--ink)}
+#vision .vision-opening-copy .vision-need-reflection p{font-size:14px;line-height:1.8;margin:0 0 12px}
+#vision.vision-editorial .vision-purpose{border-top:1px solid #cbd6c7;padding-top:22px!important}
+#vision .vision-purpose .vision-enrollment-promise{margin-bottom:10px}
+#vision .vision-purpose .vision-enrollment-promise h3{margin-bottom:0}
+#vision .vision-purpose-community{align-items:start}
+@media(max-width:680px){#vision.vision-editorial .vision-opening-copy .vision-need-band{margin-top:4px!important;grid-template-columns:minmax(0,1fr) 40px}#vision .vision-opening-copy .vision-need-band>div[aria-hidden]{width:40px;height:48px}#vision.vision-editorial .vision-purpose{padding-top:18px!important}}
