@@ -1,6 +1,10 @@
 name: Check custom domain
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: [pages build and deployment]
+    types: [completed]
+    branches: [main]
   push:
     branches: [main]
     paths:
@@ -13,6 +17,7 @@ permissions:
   pages: read
 jobs:
   check:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

@@ -20,7 +20,7 @@ test('sitemap excludes previews, drafts, hash links and legacy duplicate motivat
 });
 test('generated local navigation resolves, including course and resource discovery without JavaScript',()=>{
  for(const file of manifest.files){const html=read('./'+file);for(const [,href] of html.matchAll(/href="(\/[^"#]*)(?:#[^"]*)?"/g)){const pathname=href.split('?')[0];assert(existsSync(new URL('.'+pathname+(pathname.endsWith('/')?'index.html':''),import.meta.url)),file+' broken link '+href);}}
- const html=read('./index.html');for(const path of ['/programs/','/assessments/','/blog/'])assert(html.includes('href="'+path+'"'));assert(!html.includes('speakboldly16@gmail.com'));assert(html.includes('property="og:title" content="English Speaking &amp;')||html.includes('property="og:title" content="English Speaking & Communication'));
+ const html=read('./index.html');for(const path of ['/programs/','/assessments/','/blog/'])assert(html.includes('href="'+path+'"'));assert(!html.includes('speakboldly16@gmail.com'));assert(html.includes('property="og:title" content="Speak Boldly | English Language Coaching"'));
 });
 test('blog refresh uses only the public API and honours the Stay tuned gate',()=>{
  const script=read('./scripts/sync-public-blog.mjs');assert(script.includes("action:'boldlyNotes'"));assert(script.includes('data-stay-tuned'));assert(!/listBoldlyNotes|CLIENT_SHEET_KEY|sendClientEmail|sendEmail/.test(script));

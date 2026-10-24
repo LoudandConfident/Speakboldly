@@ -5,9 +5,9 @@ import {takeStudentAttempt} from './student-attempts.js';
 import {showInteractiveExam} from './interactive-exams.js';
 import {showTextExam} from './text-exams.js';
 import {backendBase,loginStudent,clearStudent,fileBytes} from './exam-api.js';
-import {findStudentAccess,canOpenSection,canOpenFile} from './portal-access.js?v=four-digit-restored';
+import {findStudentAccess,canOpenSection,canOpenFile} from './portal-access.js?v=custom-domain-1';
 import {portalResources} from './portal-config.js';
-import {loadPortalMaterials} from './portal-materials.js?v=parallel-files-1';
+import {loadPortalMaterials} from './portal-materials.js?v=custom-domain-1';
 export function initializeStudentPortal(doc,lookup,resources,loader=loadPortalMaterials){
  const root=doc.querySelector('#students-portal');if(!root)return;
  if(root.hasAttribute('data-global-portal'))return initializeStudentAssessment(doc);

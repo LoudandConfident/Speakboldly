@@ -5,7 +5,7 @@ export const MATERIAL_FOLDERS = {
  reports:'student-files/reports',
  material:'student-files/material',final:'student-files/final',listening:'student-files/listening'
 };
-export const LEVEL_EXAMS=Array.from({length:6},(_,i)=>({title:'Level '+(i+1)+' Exam',url:new URL('student-files/exams/Level-'+(i+1)+'-Exam.pdf','https://loudandconfident.github.io/Speakboldly/').href}));
+export const LEVEL_EXAMS=Array.from({length:6},(_,i)=>({title:'Level '+(i+1)+' Exam',url:new URL('student-files/exams/Level-'+(i+1)+'-Exam.pdf','https://speakboldly.space/').href}));
 function combineExams(items){return [...new Map([...LEVEL_EXAMS,...items].map(item=>[item.url,item])).values()].sort((a,b)=>a.title.localeCompare(b.title));}
 // GitHub provides an authenticated owner upload interface; visitors need no token to list public materials.
 async function loadPublicMaterials(section,fetcher=fetch){
@@ -14,7 +14,7 @@ async function loadPublicMaterials(section,fetcher=fetch){
  if(response.status===404)return section==='exams'?combineExams([]):[];
  if(!response.ok){if(section==='exams')return combineExams([]);throw new Error('Materials are unavailable');}
  const data=await response.json();if(!Array.isArray(data))throw new Error('Invalid materials list');
- const items=data.filter(item=>item.type==='file'&&typeof item.name==='string'&&!item.name.startsWith('.')&&typeof item.path==='string'&&item.path.startsWith(folder+'/')).map(item=>({title:item.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' '),url:new URL('./'+item.path.split('/').map(encodeURIComponent).join('/'), 'https://loudandconfident.github.io/Speakboldly/').href})).sort((a,b)=>a.title.localeCompare(b.title));
+ const items=data.filter(item=>item.type==='file'&&typeof item.name==='string'&&!item.name.startsWith('.')&&typeof item.path==='string'&&item.path.startsWith(folder+'/')).map(item=>({title:item.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' '),url:new URL('./'+item.path.split('/').map(encodeURIComponent).join('/'), 'https://speakboldly.space/').href})).sort((a,b)=>a.title.localeCompare(b.title));
  return section==='exams'?combineExams(items):items;
 }
 

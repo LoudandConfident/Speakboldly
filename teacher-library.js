@@ -1,6 +1,6 @@
 import {confirmClientEmail} from './client-email-confirmation.js';
 import {clientSheetConnected as defaultConnected,sheetLibraryRequest as defaultRequest} from './client-sheet.js?v=domain-email-routing';
-import {PORTAL_SECTIONS} from './portal-access.js?v=four-digit-restored';
+import {PORTAL_SECTIONS} from './portal-access.js?v=custom-domain-1';
 import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
 export function initializeTeacherLibrary(doc,isUnlocked,getClients,loader,options={}){
  const clientSheetConnected=options.connected||defaultConnected,sheetLibraryRequest=options.request||defaultRequest,sections=options.sections||PORTAL_SECTIONS;

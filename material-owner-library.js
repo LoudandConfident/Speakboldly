@@ -1,5 +1,5 @@
 import {initializeTeacherLibrary} from './teacher-library.js?v=domain-email-routing';
-import {loadPortalMaterials} from './portal-materials.js?v=parallel-files-1';
+import {loadPortalMaterials} from './portal-materials.js?v=custom-domain-1';
 export function initializeMaterialOwnerLibrary(doc){
  const root=doc.querySelector('#teacher-full-library'),expected=doc.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;let clients=[];
  function connection(){try{const saved=JSON.parse(doc.defaultView.localStorage.getItem('speak-boldly-client-sheet-connection-v1')||'null');return saved?.endpoint===expected&&typeof saved.key==='string'&&saved.key?saved:null;}catch{return null;}}

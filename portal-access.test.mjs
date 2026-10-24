@@ -30,3 +30,9 @@ test('renaming material books preserves previously assigned file permissions',()
  assert.equal(canOpenFile(access,'material','https://loudandconfident.github.io/Speakboldly/student-files/material/B-Level-5-Book.pdf'),true);
  assert.equal(canOpenFile(access,'material','https://loudandconfident.github.io/Speakboldly/student-files/material/B-Level-6-Book.pdf'),false);
 });
+
+test('custom-domain resource links preserve old grants without widening access',()=>{
+ const old='https://loudandconfident.github.io/Speakboldly/student-files/material/B-Level-2-Book.pdf',current='https://speakboldly.space/student-files/material/B-Level-2-Book.pdf';
+ const access={permissions:['section:material',filePermission('material',old)]};
+ assert.equal(filePermission('material',old),filePermission('material',current));assert(canOpenFile(access,'material',current));assert(!canOpenFile(access,'material',current.replace('Level-2','Level-3')));
+});

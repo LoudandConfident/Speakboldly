@@ -1,4 +1,4 @@
-import {MATERIAL_PROGRAM_FOLDERS} from './material-program-folders.js?v=comprehension-listening';
+import {MATERIAL_PROGRAM_FOLDERS} from './material-program-folders.js?v=retire-it-program-1';
 // Temporary instructor upload controls. Remove this module when setup is finished.
 export function getTemporaryOwnerConnection(doc){
  const expected=doc.querySelector('#client-sheet-connect')?.elements.endpoint.defaultValue;

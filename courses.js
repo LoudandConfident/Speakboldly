@@ -264,6 +264,7 @@ export const courses = [
   },
   {
     "id": "information-technology",
+    "catalogHidden": true,
     "title": "English for Information Technology",
     "level": "Beginner, Intermediate, Advanced",
     "duration": "8 sessions",

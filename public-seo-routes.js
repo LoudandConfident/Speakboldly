@@ -8,7 +8,6 @@ export const coursePaths={
  speaking:'/programs/meetings-presentations-public-speaking/',
  ielts:'/programs/ielts-preparation/',
  pronunciation:'/programs/english-pronunciation/',
- 'information-technology':'/programs/english-for-it/',
  kids:'/programs/english-for-kids/',
  'different-learners':'/programs/supporting-different-learners/',
  'instructor-training':'/programs/instructor-training/',

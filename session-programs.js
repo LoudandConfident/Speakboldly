@@ -1,4 +1,4 @@
-import {courses} from './courses.js?v=focus-illustration';
+import {courses} from './courses.js?v=retire-it-program-1';
 export const SESSION_PROGRAMS=[{id:'trial',title:'Trial session'},...courses.map(({id,title})=>({id,title}))];
 export const CLIENT_PROGRAMS=SESSION_PROGRAMS.filter(({id})=>!['urgent-session','make-up-revision','instructor-training','different-learners'].includes(id));
 export const SESSION_TYPES=[{id:'session',title:'Session'},{id:'trial',title:'Trial session'},{id:'assessment',title:'Assessment'}];
