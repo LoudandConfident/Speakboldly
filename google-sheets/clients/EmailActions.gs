@@ -1,5 +1,5 @@
 // Run once in Apps Script to grant email permission. This does not send an email.
-function authorizeClientEmails(){MailApp.getRemainingDailyQuota();}
+function authorizeClientEmails(){MailApp.getRemainingDailyQuota();GmailApp.getAliases();}
 // Run resetPermissions once, then retryPermissions in the Apps Script editor.
 function resetPermissions(){ScriptApp.invalidateAuth();}
 function retryPermissions(){
@@ -7,11 +7,12 @@ function retryPermissions(){
  if(!id)throw new Error('CLIENT_SHEET_ID is missing. Keep your existing script properties.');
  SpreadsheetApp.openById(id).getName();
  MailApp.getRemainingDailyQuota();
+ GmailApp.getAliases();
  console.log('Spreadsheet and email access confirmed. Deploy a New version with Execute as: Me.');
 }
 
 const SB_DOCUMENT_CREDENTIALS="English Language Coaching · Founded by Mira Nossr-Luis · © 2026";
-const SB_EMAIL_LOGO='https://loudandconfident.github.io/Speakboldly/document-templates/sb-policy-logo.png';
+const SB_EMAIL_LOGO='https://speakboldly.space/document-templates/sb-policy-logo.png';
 const SB_ZOOM_URL=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_URL')||'';
 const SB_ZOOM_PASSCODE=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_PASSCODE')||'';
 function sbEmailEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -69,7 +70,7 @@ function handleClientEmail(p){
   const labels={confirmation:'Email confirmation',progress:'Progress report',final:'Final report',registration:'Payment and registration confirmation',notes:'Notes',actionplan:'Action plan',paymentReminder:'Payment reminder for new round'};
   let message;
   if(kind==='paymentReminder'){
-   const text='Kindly complete the payment for your course before your new round begins. Thank you for your continued trust in Speak Boldly—we look forward to supporting your progress. Please email your payment screenshot, name and program to speakboldly16@gmail.com.';
+   const text='Kindly complete the payment for your course before your new round begins. Thank you for your continued trust in Speak Boldly—we look forward to supporting your progress. Please email your payment screenshot, name and program to billing@speakboldly.space.';
    message={body:'Hello '+client[1]+',\n\n'+text+'\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly',htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p><p>'+sbEmailEscape(text)+'</p><p>If you have any questions, reply to this email.</p>')};
   }else if(kind==='confirmation'){
    const meetings=sbUpcomingClientMeetings(book,id).slice(0,1);if(!meetings.length)throw new Error('No upcoming calendar sessions are saved for this client. Add or sync their appointments first.');
@@ -81,8 +82,9 @@ function handleClientEmail(p){
    const body='Hello '+client[1]+',\n\n'+(details?details+'\n\n':'')+'Please find your '+labels[kind].toLowerCase()+' attached.\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
    message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p>'+(details?'<p>'+sbEmailEscape(details).replace(/\n/g,'<br>')+'</p>':'')+'<p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p><p>If you have any questions, reply to this email.</p>')};
   }
+  const sender=sbDomainEmailRoute(kind),verifiedFrom=sbVerifiedFrom(sender.from);
   const row=log.getLastRow()+1;log.getRange(row,1,1,7).setValues([[requestId,id,kind,String(client[2]),'sending','','']]);SpreadsheetApp.flush();
-  try{MailApp.sendEmail({to:String(client[2]),subject:(kind==='confirmation'?'Your class confirmation':labels[kind])+' — Speak Boldly',...message,name:'Speak Boldly',replyTo:'speakboldly16@gmail.com',...(attachment?{attachments:[attachment]}:{})});log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}
+  try{sbSendDomainEmail({to:String(client[2]),subject:(kind==='confirmation'?'Your class confirmation':labels[kind])+' — Speak Boldly',...message,name:'Speak Boldly',replyTo:sender.replyTo,...(attachment?{attachments:[attachment]}:{})},verifiedFrom);log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}
   catch(error){log.getRange(row,5).setValue('delivery_unknown');log.getRange(row,7).setValue(String(error.message||error));throw new Error('Email delivery could not be confirmed. Check EmailLog before trying another send.');}
  }finally{lock.releaseLock();}
 }

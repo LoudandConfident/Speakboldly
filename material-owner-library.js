@@ -1,4 +1,4 @@
-import {initializeTeacherLibrary} from './teacher-library.js?v=client-status-motivations';
+import {initializeTeacherLibrary} from './teacher-library.js?v=domain-email-routing';
 import {loadPortalMaterials} from './portal-materials.js?v=parallel-files-1';
 export function initializeMaterialOwnerLibrary(doc){
  const root=doc.querySelector('#teacher-full-library'),expected=doc.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;let clients=[];

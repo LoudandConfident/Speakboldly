@@ -1,6 +1,6 @@
 import {CEFR_LEVELS} from './cefr-levels.js';
 import {practiceForLevel} from './assessment-guidance.js?v=bold-blog-simple-results';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=documents-sessions-1';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=domain-email-routing';
 import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } from './assessment-time.js';
 import { questions, TEST_VERSION } from './placement-questions.js?v=balanced-v3';
 import { scoreAnswers, placementCorrections } from './placement-scoring.js?v=balanced-v3';
@@ -8,7 +8,7 @@ import { scoreAnswers, placementCorrections } from './placement-scoring.js?v=bal
 import {courses,matches} from './courses.js?v=distinct-workshop-art';
 const $=s=>document.querySelector(s);
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const chat=message=>'mailto:speakboldly16@gmail.com?subject='+encodeURIComponent('English coaching enquiry')+'&body='+encodeURIComponent(message+'\n\nContact number: 01283786904');
+const chat=message=>'mailto:Contactus@speakboldly.space?subject='+encodeURIComponent('English coaching enquiry')+'&body='+encodeURIComponent(message+'\n\nContact number: 01283786904');
 const scenes={
 story:'<path d="M54 28h94l30 30v116H54Z" fill="#f7faf3"/><path d="M148 28v31h30M73 83h68M73 101h59M73 119h46M73 147q14-18 28-6t27-5"/><path d="m166 89 13-13 24 24-13 13-24-24Zm-5 5-39 39-7 23 23-7 39-39" fill="#d5ed98"/><path d="m122 133 16 16M190 43v17M182 51h17M29 110v13M23 116h13"/>',
 

@@ -53,7 +53,7 @@ function sbBookingOverlap(start,busy,ownIds=[],duration=90){return busy.some(ite
 function sbBookingNotify(sheet,index,row){
  if(['sent','sending'].includes(String(row[7])))return;
  try{
-  const to=PropertiesService.getScriptProperties().getProperty('SB_EXAM_NOTIFY_EMAIL');if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_EXAM_NOTIFY_EMAIL to your notification address.');
+  const to=PropertiesService.getScriptProperties().getProperty('SB_BOOKING_NOTIFY_EMAIL');if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_BOOKING_NOTIFY_EMAIL to your notification address.');
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
   row[7]='sending';row[8]='';sheet.getRange(index+2,1,1,9).setValues([row]);
   const lines=JSON.parse(String(row[3])).map(item=>'Session '+item.number+' — '+item.date+' — '+sbDisplayTime(item.time)+' (Cairo time)');
@@ -123,15 +123,15 @@ function handleOwnerBooking(data){
   if(data.action==='calendarSlots')return sbExamResponse(sbOwnerCalendarSlots(data));
   if(data.action==='saveCalendarSlots')return sbExamResponse(sbSaveCalendarSlots(data));
   if(data.action==='saveCalendarDay')return sbExamResponse(sbSaveCalendarDay(book,data));
-  if(data.action==='checkStudentPortal')return sbExamResponse({ok:true,examsReady:['Exam attempts','Exam sessions','Portal access'].every(name=>Boolean(book.getSheetByName(name))),bookingReady:['Sessions','Booking requests'].every(name=>Boolean(book.getSheetByName(name))),notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||'',remainingEmailQuota:MailApp.getRemainingDailyQuota()});
+  if(data.action==='checkStudentPortal')return sbExamResponse({ok:true,examsReady:['Exam attempts','Exam sessions','Portal access'].every(name=>Boolean(book.getSheetByName(name))),bookingReady:['Sessions','Booking requests'].every(name=>Boolean(book.getSheetByName(name))),notificationEmail:props.getProperty('SB_BOOKING_NOTIFY_EMAIL')||'',remainingEmailQuota:MailApp.getRemainingDailyQuota()});
   if(data.action==='saveBookingSettings'){
    const email=String(data.notificationEmail||'').trim();
    if(typeof data.enabled!=='boolean')throw new Error('Choose whether booking is open.');
    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Enter your notification email address.');
    if(!book.getSheetByName('Booking requests'))throw new Error('Run setupStudentPortal first.');
-   props.setProperty('SB_BOOKING_ENABLED',String(data.enabled));props.setProperty('SB_EXAM_NOTIFY_EMAIL',email);
+   props.setProperty('SB_BOOKING_ENABLED',String(data.enabled));props.setProperty('SB_BOOKING_NOTIFY_EMAIL',email);
   }
-  return sbExamResponse({ok:true,enabled:props.getProperty('SB_BOOKING_ENABLED')==='true',passcode:sbWeeklyPortalPasswords().passwords.calendar,notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||''});
+  return sbExamResponse({ok:true,enabled:props.getProperty('SB_BOOKING_ENABLED')==='true',passcode:sbWeeklyPortalPasswords().passwords.calendar,notificationEmail:props.getProperty('SB_BOOKING_NOTIFY_EMAIL')||''});
  }catch(error){return sbExamResponse({ok:false,error:error.message});}
 }
 

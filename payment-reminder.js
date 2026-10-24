@@ -1,11 +1,11 @@
-import {clientSheetConnected,sendSheetClientEmail} from './client-sheet.js?v=client-status-motivations';
+import {clientSheetConnected,sendSheetClientEmail} from './client-sheet.js?v=domain-email-routing';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
 export function paymentRequestId(win){
  if(typeof win.crypto?.randomUUID==='function')return win.crypto.randomUUID();
  if(typeof win.crypto?.getRandomValues!=='function')throw Error('This browser cannot prepare the reminder. Update your browser and try again.');
  const bytes=win.crypto.getRandomValues(new Uint8Array(16));bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128;const hex=[...bytes].map(n=>n.toString(16).padStart(2,'0')).join('');return hex.slice(0,8)+'-'+hex.slice(8,12)+'-'+hex.slice(12,16)+'-'+hex.slice(16,20)+'-'+hex.slice(20);
 }
-export const PAYMENT_REMINDER_MESSAGE='Kindly complete the payment for your course before your new round begins. Thank you for your continued trust in Speak Boldly—we look forward to supporting your progress. Please email your payment screenshot, name and program to speakboldly16@gmail.com.';
+export const PAYMENT_REMINDER_MESSAGE='Kindly complete the payment for your course before your new round begins. Thank you for your continued trust in Speak Boldly—we look forward to supporting your progress. Please email your payment screenshot, name and program to billing@speakboldly.space.';
 export function createPaymentReminder(doc,getClient,isUnlocked,{connected=clientSheetConnected,send=sendSheetClientEmail,confirm=confirmClientEmail,label='Reminder'}={}){
  const wrap=doc.createElement('div'),button=doc.createElement('button'),note=doc.createElement('p');wrap.className='client-payment-reminder';button.type='button';button.className='button light small';button.textContent=label;button.setAttribute('aria-label',label);note.setAttribute('role','status');note.className='client-payment-reminder-status';note.hidden=true;wrap.append(button,note);let requestId=null;
  button.onclick=async()=>{

@@ -5,7 +5,7 @@ export function addResultBranding(doc,result) {
  const logo=doc.createElement('img');logo.className='result-logo';logo.src=new URL(DOCUMENT_BRAND.logo,doc.baseURI).href;logo.alt='Speak Boldly logo';logo.width=64;logo.height=64;
  const name=doc.createElement('span');name.textContent='Speak Boldly';brand.append(logo,name);result.prepend(brand);
  const contact=doc.createElement('p');contact.className='result-contact';contact.append(doc.createTextNode('If you need any guidance, contact us through: '));
- const email=doc.createElement('a');email.href='mailto:speakboldly16@gmail.com';email.textContent='speakboldly16@gmail.com';contact.append(email);result.append(contact);const footer=doc.createElement('div');footer.className='result-copyright';footer.style.cssText='display:flex;align-items:center;gap:12px;margin-top:24px;font-size:13px';footer.append(doc.createTextNode(copyrightText()));result.append(footer);
+ const email=doc.createElement('a');email.href='mailto:Contactus@speakboldly.space';email.textContent='Contactus@speakboldly.space';contact.append(email);result.append(contact);const footer=doc.createElement('div');footer.className='result-copyright';footer.style.cssText='display:flex;align-items:center;gap:12px;margin-top:24px;font-size:13px';footer.append(doc.createTextNode(copyrightText()));result.append(footer);
 }
 export function resultImageBlocks(result) {
  return [...result.querySelectorAll('h2,h3,h4,p,li,tr,.cefr-level')]

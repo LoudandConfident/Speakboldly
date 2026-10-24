@@ -1,4 +1,4 @@
-import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=client-status-motivations';
+import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {cairoMissionDate} from './daily-mission-data.js?v=five-practices';
 export function initializeBoldlyNotesEditor(doc,isUnlocked){
  const host=doc.querySelector('#motivation-freeze-editor');if(!host)return {lock(){}};

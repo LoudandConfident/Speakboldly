@@ -1,4 +1,4 @@
-import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=client-status-motivations';
+import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {MONTHLY_LEARNING_PAGES,monthlyFeature,monthlyLearningPage} from './monthly-learning.js?v=library-folders';
 import {MONTHLY_NOVELS} from './novels-catalog.js?v=24-classics';
 export function initializeNativeEnglishEditor(doc,isUnlocked){

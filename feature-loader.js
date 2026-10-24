@@ -1,11 +1,11 @@
 // Large portal and practice modules are fetched only when their page is opened.
 export function initializeFeatureLoader(doc,win){
  const groups={
-  'students-portal':['./daily-mission.js?v=library-folders','./student-portal.js?v=documents-sessions-1','./admin-portal.js?v=report-return-1'],
+  'students-portal':['./daily-mission.js?v=library-folders','./student-portal.js?v=documents-sessions-1','./admin-portal.js?v=domain-email-routing'],
   'reviews':['./reviews.js?v=library-folders'],
-  'daily-quote':['./home-gallery.js?v=motivation-paused'],
-  'learner-profile':['./learner-profile.js?v=documents-sessions-1'],
-  'learner-results':['./learner-profile.js?v=documents-sessions-1'],
+  'daily-quote':['./home-gallery.js?v=domain-email-routing'],
+  'learner-profile':['./learner-profile.js?v=domain-email-routing'],
+  'learner-results':['./learner-profile.js?v=domain-email-routing'],
   'boldly-notes':[]
  };
  const pending=new Map();

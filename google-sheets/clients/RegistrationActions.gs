@@ -1,6 +1,6 @@
 // Included in UnifiedCode.gs. Registration requests are private until approved.
 const SB_REGISTRATION_HEADERS=['Request ID','Name','Email','Program','Payment claimed','Appointment type','Date (Cairo)','Time (Cairo)','Duration (minutes)','Status','Created at (UTC)','Client ID','Session ID','Decided at (UTC)','Notification status','Notification error'];
-const SB_PAYMENT_EMAIL='speakboldly16@gmail.com';
+const SB_PAYMENT_EMAIL='billing@speakboldly.space';
 function sbRegistrationType(kind,program){
  const types={placement:{title:'Placement test',duration:30,program:'Assessment'},session:{title:'Session',duration:90},workshop:{title:'Workshop',duration:90},trial:{title:'Trial session',duration:60,program:'Trial session'}};
  if(!Object.prototype.hasOwnProperty.call(types,String(kind)))throw new Error('Choose Session, Workshop, Placement test, or Trial session.');
@@ -31,10 +31,11 @@ function sbRegistrationNotify(sheet,index,row){
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_EXAM_NOTIFY_EMAIL to your notification address.');
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
   const item=sbRegistrationView(row),type=sbRegistrationType(item.kind,item.program),slot=sbRegistrationSlots(item.date,item.kind,item.program).find(slot=>slot.time===item.time);
-  const url='https://loudandconfident.github.io/Speakboldly/instructor.html?bookingRequest='+encodeURIComponent(item.id);
+  const url='https://speakboldly.space/instructor.html?bookingRequest='+encodeURIComponent(item.id);
   const lines=['Name: '+item.name,'Email: '+item.email,'Program: '+item.program,'Appointment: '+type.title,'Date: '+item.date,'Time: '+sbDisplayTime(item.time)+'–'+sbDisplayTime(slot?.endTime||'')+' (Cairo time)','Duration: '+type.duration+' minutes','Payment reported by student: '+item.paid,'',item.kind==='trial'?'Trial session: no payment screenshot required.':'Payment screenshots are sent separately to '+SB_PAYMENT_EMAIL+'. Check payment before approving.','','Accept: '+url+'&decision=accept','Decline: '+url+'&decision=decline','','Sign in to the Instructor Portal and confirm your decision. The slot is not reserved until accepted.','','Speak Boldly'];
+  const verifiedFrom=sbVerifiedFrom('billing@speakboldly.space');
   row[14]='sending';row[15]='';sheet.getRange(index+2,1,1,16).setValues([row]);
-  MailApp.sendEmail({to,subject:'Registration request — '+type.title+' — '+item.name,body:lines.join('\n'),name:'Speak Boldly'});row[14]='sent';
+  sbSendDomainEmail({to,subject:'Registration request — '+type.title+' — '+item.name,body:lines.join('\n'),name:'Speak Boldly',replyTo:'billing@speakboldly.space'},verifiedFrom);row[14]='sent';
  }catch(error){row[14]=row[14]==='sending'?'delivery_unknown':'failed';row[15]=sbExamSafe(error.message);}
  sheet.getRange(index+2,1,1,16).setValues([row]);
 }

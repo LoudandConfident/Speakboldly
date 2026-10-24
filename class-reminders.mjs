@@ -21,7 +21,7 @@ export function reminderMessage({name,number,startsAt,id,duration=90}){
 export function createReminderMailer(env){
  if(!env.SMTP_HOST||!env.SMTP_USER||!env.SMTP_PASSWORD)return null;
  const port=Number(env.SMTP_PORT||587),transport=nodemailer.createTransport({host:env.SMTP_HOST,port,secure:port===465,requireTLS:port!==465,auth:{user:env.SMTP_USER,pass:env.SMTP_PASSWORD},connectionTimeout:10000,greetingTimeout:10000,socketTimeout:15000});
- return async record=>{const result=await transport.sendMail({from:env.SMTP_FROM||'speakboldly16@gmail.com',replyTo:'speakboldly16@gmail.com',to:record.to,...reminderMessage(record)});if(!result.accepted?.length||result.rejected?.length)throw new Error('Recipient was not accepted.');};
+ return async record=>{const result=await transport.sendMail({from:env.SMTP_NOREPLY_FROM||'noreply@speakboldly.space',replyTo:'Askcoach@speakboldly.space',to:record.to,...reminderMessage(record)});if(!result.accepted?.length||result.rejected?.length)throw new Error('Recipient was not accepted.');};
 }
 export function createClassReminders({db,getClient,now=()=>Date.now(),sendEmail=null}){
  db.exec(`CREATE TABLE IF NOT EXISTS class_sessions(id TEXT PRIMARY KEY,client_id TEXT NOT NULL REFERENCES clients(id),number INTEGER NOT NULL,date TEXT NOT NULL,time TEXT NOT NULL,starts_at INTEGER NOT NULL,remind_at INTEGER NOT NULL,status TEXT NOT NULL DEFAULT 'pending',attempts INTEGER NOT NULL DEFAULT 0,retry_at INTEGER NOT NULL DEFAULT 0,sent_at INTEGER);`);

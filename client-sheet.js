@@ -91,6 +91,12 @@ export async function cancelSheetSession(sessionId,fetcher=globalThis.fetch){if(
 export async function loadSheetTeacherDocuments(fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'listTeacherDocuments'},fetcher);}
 export async function saveSheetTeacherDocument(record,expectedVersion=0,fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'saveTeacherDocument',record,expectedVersion},fetcher);}
 
-export async function sendSheetClientEmail(clientId,kind,{pdfBase64,docxBase64,requestId,sessionId}={},fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your Clients sheet first.');return sheetRequest(endpoint,key,{action:'sendClientEmail',clientId,kind,pdfBase64,docxBase64,sessionId,requestId:requestId||crypto.randomUUID()},fetcher);}
+export async function sendSheetClientEmail(clientId,kind,{pdfBase64,docxBase64,requestId,sessionId}={},fetcher=globalThis.fetch){
+ if(!clientSheetConnected())throw new Error('Connect your Clients sheet first.');
+ let routing;try{routing=await sheetRequest(endpoint,key,{action:'emailRoutingSettings'},fetcher);}catch(error){throw new Error(/Invalid action|Unknown action|not supported/i.test(error.message)?'Deploy the updated UnifiedCode.gs and verify Billing/Noreply aliases before sending. No email was sent.':error.message);}
+ const expected=['registration','paymentReminder'].includes(kind)?'billing@speakboldly.space':'noreply@speakboldly.space';
+ if(routing.version!=='domain-email-2026-10-24'||routing.routes?.[kind]?.from?.toLowerCase()!==expected)throw new Error('Deploy the updated UnifiedCode.gs before sending from your domain. No email was sent.');
+ return sheetRequest(endpoint,key,{action:'sendClientEmail',clientId,kind,pdfBase64,docxBase64,sessionId,requestId:requestId||crypto.randomUUID()},fetcher);
+}
 
 export async function sheetLibraryRequest(action,data={},fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your Clients sheet first.');return sheetRequest(endpoint,key,{action,...data},fetcher);}

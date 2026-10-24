@@ -1,6 +1,6 @@
 import {initializePersonalCalendar} from './personal-calendar.js?v=client-status-motivations';
-import './admin-portal.js?v=report-return-1';
-import {clientSheetConnected} from './client-sheet.js?v=client-status-motivations';
+import './admin-portal.js?v=domain-email-routing';
+import {clientSheetConnected} from './client-sheet.js?v=domain-email-routing';
 const SESSION='speak-boldly-instructor-app-session-v1';
 const dashboard=document.querySelector('#admin-dashboard'),clientPage=document.querySelector('#admin-client-page'),login=document.querySelector('#admin-login-form'),dialog=document.querySelector('#teacher-login-dialog'),nav=document.querySelector('.app-nav'),lock=document.querySelector('#app-lock'),message=document.querySelector('#app-locked-message');
 if(!location.hash.startsWith('#students-portal')){const url=new URL(location.href);url.hash='students-portal/teacher';history.replaceState(null,'',url);}

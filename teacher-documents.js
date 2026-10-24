@@ -2,7 +2,7 @@ import {finishSentReport} from './report-send-complete.js';
 import {fitReportInput,reportPageScale} from './report-field-fit.js?v=centered-small-report';
 import {studentDocumentFilename} from './student-document-filenames.js';
 import {confirmClientEmail} from './client-email-confirmation.js';
-import {clientSheetConnected,loadSheetTeacherDocuments,saveSheetTeacherDocument,sendSheetClientEmail} from './client-sheet.js?v=client-status-motivations';
+import {clientSheetConnected,loadSheetTeacherDocuments,saveSheetTeacherDocument,sendSheetClientEmail} from './client-sheet.js?v=domain-email-routing';
 import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
 import {fillTeacherPdf} from './teacher-pdf.js?v=documents-sessions-1';
 export const DOCUMENT_TEMPLATES={progress:{title:'Progress report'},final:{title:'Final exam report'},registration:{title:'Registration & payment confirmation'}};

@@ -62,6 +62,7 @@ function handleClientSync(e){
  try{
   if(!e?.postData?.contents||e.postData.contents.length>8000000)throw new Error('Invalid request.');
   const p=JSON.parse(e.postData.contents),props=PropertiesService.getScriptProperties();
+  if(typeof sbEnsureDomainMailSettings==='function')sbEnsureDomainMailSettings();
   if(p.action==='boldlyNotes'){if(e.postData.contents.length>4000)throw Error('Request too large.');return clientSyncResponse(sbNotesPublic(p));}
   if(p.action==='dailyMotivationSettings')return clientSyncResponse({ok:true,settings:sbPublishedMotivationSettings(typeof sbDailyMotivationSettings==='function'?sbDailyMotivationSettings():{frozen:false,revision:'0'},p.date)});
   if(p.action==='nativeEnglishPage'){if(e.postData.contents.length>4000)throw new Error('Request too large.');return sbNativeEnglishRead(p);}
@@ -76,6 +77,7 @@ function handleClientSync(e){
   if(typeof SB_OWNER_BOOKING_ACTIONS!=='undefined'&&SB_OWNER_BOOKING_ACTIONS.includes(p.action))return handleOwnerBooking(p);
   if(typeof SB_INSTRUCTOR_EXAM_ACTIONS!=='undefined'&&SB_INSTRUCTOR_EXAM_ACTIONS.includes(p.action))return handleInstructorExam(p);
   if(['personalCalendarSettings','resetPersonalCalendarLink'].includes(p.action)){if(typeof sbPersonalCalendarSettings!=='function')throw new Error('Add PersonalCalendar.gs for calendar subscriptions.');return clientSyncResponse(sbPersonalCalendarSettings(p));}
+  if(p.action==='emailRoutingSettings')return clientSyncResponse(sbDomainEmailRoutingStatus());
   if(p.action==='sendClientEmail'){if(typeof handleClientEmail!=='function')throw new Error('Add EmailActions.gs and authorizeClientEmails, then deploy a New version to enable email sending.');return handleClientEmail(p);}
   if(['listLibrary','uploadLibraryFile','readLibraryFile','sendLibraryFile'].includes(p.action)){if(typeof handleLibraryAction!=='function')throw new Error('Add LibraryActions.gs to enable library sharing.');return handleLibraryAction(p);}
   if(['listBoldlyNotes','saveBoldlyNote'].includes(p.action)){if(e.postData.contents.length>7500000)throw Error('Request too large.');return clientSyncResponse(sbNotesOwner(p));}

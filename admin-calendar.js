@@ -1,10 +1,10 @@
 import {weeklySessionPlan,programSessionCount} from './session-series.js?v=library-folders';
-import {bookingClock} from './student-booking.js?v=documents-sessions-1';
-import {initializeCalendarSlotEditor} from './calendar-slot-editor.js?v=client-status-motivations';
+import {bookingClock} from './student-booking.js?v=domain-email-routing';
+import {initializeCalendarSlotEditor} from './calendar-slot-editor.js?v=domain-email-routing';
 import {removedPortalClientIds} from './requested-client-cleanup.js';
 import {confirmClientEmail} from './client-email-confirmation.js?v=calendar-popup';
 import {SESSION_PROGRAMS,INSTRUCTOR_APPOINTMENT_TYPES,appointmentDurationForType,calendarProgramForType,nextSessionNumber,suggestedSessionProgram} from './session-programs.js?v=four-appointments-1';
-import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession,sheetLibraryRequest} from './client-sheet.js?v=client-status-motivations';
+import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {ownerConnected,request} from './exam-api.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 export const SESSION_DURATIONS=[30,60,90,120,150,180];

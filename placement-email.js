@@ -5,7 +5,7 @@ export function buildResultEmail(record) {
   _subject:'Someone scored '+result.level+' — Speak Boldly',
   _template:'table',
   _captcha:'false',
-  _url:'https://loudandconfident.github.io/Speakboldly/',
+  _url:'https://speakboldly.space/',
   'Test version':record.version,
   'Attempt ID':record.attemptId,
   'Submitted at (UTC)':record.submittedAt,

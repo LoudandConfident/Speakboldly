@@ -156,3 +156,5 @@ Registration & payment links to `brochures/SB-Policy.pdf` in a new browser tab, 
 Daily motivation is paused indefinitely from the October 24 update: the currently held quote remains selected, including its dated custom picture/reflection. Old automatic Sunday-expiry responses are kept on hold; an explicit owner Resume daily changes action is still respected.
 
 Custom domain: `speakboldly.space`. DNS records, HTTPS steps, redirect checks and device-storage notes are documented in [CUSTOM-DOMAIN-SETUP.md](CUSTOM-DOMAIN-SETUP.md).
+
+Domain email addresses and sender setup are documented in [DOMAIN-EMAIL-SETUP.md](DOMAIN-EMAIL-SETUP.md). Learning reports use Noreply; financial mail uses Billing. Run the alias authorization/check and deploy a New version of UnifiedCode.gs to activate the live backend routes.

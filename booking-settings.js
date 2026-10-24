@@ -1,5 +1,5 @@
 import {resetPortalAttempts} from './student-portal-attempts.js?v=weekly-passwords';
-import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=client-status-motivations';
+import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 export function initializeBookingSettings(doc,isUnlocked){
  const root=doc.querySelector('#booking-settings');if(!root)return{lock(){}};const form=root.querySelector('form'),status=root.querySelector('[role=status]');let generation=0;
  async function refresh(){if(!isUnlocked())return;if(!clientSheetConnected()){status.textContent='Connect your Clients sheet first.';return;}const current=generation;status.textContent='Loading booking settings…';try{const result=await sheetLibraryRequest('bookingSettings');if(current!==generation||!isUnlocked())return;form.elements.enabled.checked=result.enabled;form.elements.notificationEmail.value=result.notificationEmail;status.textContent=result.passcode?'Share this week’s calendar password after payment, placement and registration.':'Run setupStudentPortal in Google Apps Script, then deploy a New version.';}catch(error){if(current===generation)status.textContent=error.message;}}

@@ -111,6 +111,7 @@ function doPost(event) {
   try {
     const request = sbParseWebRequest(event);
     const data = request.data;
+    sbEnsureDomainMailSettings();
     if(data.action==='programConsultation'){if(request.size>2900000)throw new Error('Pictures are too large. Use up to 2 pictures, 1 MB each.');return handleStudentInstructorContact(data);}
     if(['hubAccessSettings','hubLevelLogin'].includes(data.action)){if(request.size>4000)throw new Error('Request too large.');return sbHubPublic(data);}
     if(data.action==='boldlyNotes'){if(request.size>4000)throw Error('Request too large.');return response(sbNotesPublic(data));}
@@ -166,6 +167,7 @@ function sbRequireClientConnection(data) {
 }
 
 function sbRouteInstructorRequest(data, connection, lock) {
+  if(data.action==='emailRoutingSettings')return response(sbDomainEmailRoutingStatus());
   if(['listBoldlyNotes','saveBoldlyNote'].includes(data.action)){if(JSON.stringify(data).length>7500000)throw Error('Request too large.');return response(sbNotesOwner(data));}
   if(['listMotivationMessages','saveMotivationMessage'].includes(data.action))return response(sbMotivationMessagesOwner(data));
   if(data.action==='setClientActive')return response(sbSetClientActive(data,connection.book));
@@ -456,7 +458,7 @@ function handleSheetDocumentAction(p){
 
 
 // Run once to grant email permission. This does not send an email.
-function authorizeClientEmails(){MailApp.getRemainingDailyQuota();}
+function authorizeClientEmails(){MailApp.getRemainingDailyQuota();GmailApp.getAliases();}
 // Run resetPermissions once, then retryPermissions in the Apps Script editor.
 function resetPermissions(){ScriptApp.invalidateAuth();}
 function retryPermissions(){
@@ -464,11 +466,12 @@ function retryPermissions(){
  if(!id)throw new Error('CLIENT_SHEET_ID is missing. Keep your existing script properties.');
  SpreadsheetApp.openById(id).getName();
  MailApp.getRemainingDailyQuota();
+ GmailApp.getAliases();
  console.log('Spreadsheet and email access confirmed. Deploy a New version with Execute as: Me.');
 }
 
 const SB_DOCUMENT_CREDENTIALS="English Language Coaching · Founded by Mira Nossr-Luis · © 2026";
-const SB_EMAIL_LOGO='https://loudandconfident.github.io/Speakboldly/document-templates/sb-policy-logo.png';
+const SB_EMAIL_LOGO='https://speakboldly.space/document-templates/sb-policy-logo.png';
 const SB_ZOOM_URL=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_URL')||'';
 const SB_ZOOM_PASSCODE=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_PASSCODE')||'';
 function sbEmailEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -526,7 +529,7 @@ function handleClientEmail(p){
   const labels={confirmation:'Email confirmation',progress:'Progress report',final:'Final report',registration:'Payment and registration confirmation',notes:'Notes',actionplan:'Action plan',paymentReminder:'Payment reminder for new round',motivation:'Daily motivation'};
   let message;
   if(kind==='paymentReminder'){
-   const text='Kindly complete the payment for your course before your new round begins. Thank you for your continued trust in Speak Boldly—we look forward to supporting your progress. Please email your payment screenshot, name and program to speakboldly16@gmail.com.';
+   const text='Kindly complete the payment for your course before your new round begins. Thank you for your continued trust in Speak Boldly—we look forward to supporting your progress. Please email your payment screenshot, name and program to billing@speakboldly.space.';
    message={body:'Hello '+client[1]+',\n\n'+text+'\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly',htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p><p>'+sbEmailEscape(text)+'</p><p>If you have any questions, reply to this email.</p>')};
   }else if(kind==='confirmation'){
    let meetings;
@@ -543,8 +546,8 @@ function handleClientEmail(p){
    }
    message=sbCalendarEmail(client,meetings);
   }else if(kind==='motivation'){
-   const savedCustom=sbPublishedMotivationSettings(sbDailyMotivationSettings()).message,m=p.motivation||{},customAllowed=savedCustom&&m.quote===savedCustom.quote&&m.image===savedCustom.image&&m.url==='https://loudandconfident.github.io/Speakboldly/?motivation='+savedCustom.date+'#daily-quote',quote=String(m.quote||'').trim(),paragraphs=m.paragraphs,image=String(m.image||''),url=String(m.url||'');
-   if(!quote||quote.length>1200||!Array.isArray(paragraphs)||paragraphs.length>25||paragraphs.some(t=>typeof t!=='string'||t.length>5000)||paragraphs.join('').length>20000||(!customAllowed&&!/^https:\/\/loudandconfident\.github\.io\/Speakboldly\/images\/daily-motivation-[a-z0-9-]+\.png$/.test(image))||(!customAllowed&&!/^https:\/\/loudandconfident\.github\.io\/Speakboldly\/motivation\/daily-motivation-[a-z0-9-]+\.html$/.test(url)))throw new Error('Invalid daily motivation content.');
+   const savedCustom=sbPublishedMotivationSettings(sbDailyMotivationSettings()).message,m=p.motivation||{},customAllowed=savedCustom&&m.quote===savedCustom.quote&&m.image===savedCustom.image&&['https://speakboldly.space/?motivation='+savedCustom.date+'#daily-quote','https://loudandconfident.github.io/Speakboldly/?motivation='+savedCustom.date+'#daily-quote'].includes(m.url),quote=String(m.quote||'').trim(),paragraphs=m.paragraphs,image=String(m.image||''),url=String(m.url||'');
+   if(!quote||quote.length>1200||!Array.isArray(paragraphs)||paragraphs.length>25||paragraphs.some(t=>typeof t!=='string'||t.length>5000)||paragraphs.join('').length>20000||(!customAllowed&&!/^https:\/\/(?:speakboldly\.space\/|loudandconfident\.github\.io\/Speakboldly\/)images\/daily-motivation-[a-z0-9-]+\.png$/.test(image))||(!customAllowed&&!/^https:\/\/(?:speakboldly\.space\/|loudandconfident\.github\.io\/Speakboldly\/)motivation\/daily-motivation-[a-z0-9-]+\.html$/.test(url)))throw new Error('Invalid daily motivation content.');
    message={body:'Hello '+client[1]+',\n\n'+quote+'\n\n'+paragraphs.join('\n\n')+'\n\n'+url+'\n\nSpeak Boldly',htmlBody:sbBrandedEmail('A little motivation for today','<p>Hello '+sbEmailEscape(client[1])+',</p><img src="'+sbEmailEscape(image)+'" alt="Today’s daily motivation" width="480" style="display:block;width:100%;max-width:480px;height:auto;border-radius:16px"><h2 style="font-size:22px;line-height:1.5">'+sbEmailEscape(quote)+'</h2>'+paragraphs.map(t=>'<p>'+sbEmailEscape(t).replace(/\n/g,'<br>')+'</p>').join('')+'<p><a href="'+sbEmailEscape(url)+'">View today’s motivation</a></p>')};
   }else{
    const course=sbEmailProgramName(client[11]||''),level=String(client[4]||'');
@@ -552,8 +555,9 @@ function handleClientEmail(p){
    const body='Hello '+client[1]+',\n\n'+(details?details+'\n\n':'')+'Please find your '+labels[kind].toLowerCase()+' attached.\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
    message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p>'+(details?'<p>'+sbEmailEscape(details).replace(/\n/g,'<br>')+'</p>':'')+'<p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p><p>If you have any questions, reply to this email.</p>')};
   }
+  const sender=sbDomainEmailRoute(kind),verifiedFrom=sbVerifiedFrom(sender.from);
   const row=log.getLastRow()+1;log.getRange(row,1,1,7).setValues([[requestId,id,kind,String(client[2]),'sending','','']]);SpreadsheetApp.flush();
-  try{MailApp.sendEmail({to:String(client[2]),subject:(kind==='confirmation'?'Your class confirmation':labels[kind])+' — Speak Boldly',...message,name:'Speak Boldly',replyTo:'speakboldly16@gmail.com',...(attachment?{attachments:[attachment]}:{})});log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}
+  try{sbSendDomainEmail({to:String(client[2]),subject:(kind==='confirmation'?'Your class confirmation':labels[kind])+' — Speak Boldly',...message,name:'Speak Boldly',replyTo:sender.replyTo,...(attachment?{attachments:[attachment]}:{})},verifiedFrom);log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}
   catch(error){log.getRange(row,5).setValue('delivery_unknown');log.getRange(row,7).setValue(String(error.message||error));throw new Error('Email delivery could not be confirmed. Check EmailLog before trying another send.');}
  }finally{lock.releaseLock();}
 }
@@ -598,10 +602,11 @@ function handleLibraryAction(p){
     throw new Error('Delivery is uncertain. Check LibrarySendLog before trying again.');
    }
    if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
+   const verifiedFrom=sbVerifiedFrom('noreply@speakboldly.space');
    const row=log.getLastRow()+1;log.getRange(row,1,1,6).setValues([[requestId,String(p.clientId),file.getId(),'sending','','']]);SpreadsheetApp.flush();
    try{
     file.addViewer(String(client[2]));
-    MailApp.sendEmail({to:String(client[2]),subject:'Your learning material — Speak Boldly',body:'Hello '+client[1]+',\n\nYour teacher has shared '+file.getName()+' with you.\n\nView it here:\n'+file.getUrl()+'\n\nOpen the link while signed in to Google using '+client[2]+'. You have viewer access.\n\nSpeak Boldly',name:'Speak Boldly',replyTo:'speakboldly16@gmail.com'});
+    sbSendDomainEmail({to:String(client[2]),subject:'Your learning material — Speak Boldly',body:'Hello '+client[1]+',\n\nYour teacher has shared '+file.getName()+' with you.\n\nView it here:\n'+file.getUrl()+'\n\nOpen the link while signed in to Google using '+client[2]+'. You have viewer access.\n\nSpeak Boldly',name:'Speak Boldly',replyTo:'Askcoach@speakboldly.space'},verifiedFrom);
     log.getRange(row,4,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,recipient:String(client[2]),url:file.getUrl()});
    }catch(error){log.getRange(row,4).setValue('delivery_unknown');log.getRange(row,6).setValue(String(error.message||error));throw new Error('Sharing or delivery could not be confirmed. Check LibrarySendLog before sending again.');}
   }finally{lock.releaseLock();}
@@ -893,7 +898,7 @@ function sbBookingOverlap(start,busy,ownIds=[],duration=90){return busy.some(ite
 function sbBookingNotify(sheet,index,row){
  if(['sent','sending'].includes(String(row[7])))return;
  try{
-  const to=PropertiesService.getScriptProperties().getProperty('SB_EXAM_NOTIFY_EMAIL');if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_EXAM_NOTIFY_EMAIL to your notification address.');
+  const to=PropertiesService.getScriptProperties().getProperty('SB_BOOKING_NOTIFY_EMAIL');if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_BOOKING_NOTIFY_EMAIL to your notification address.');
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
   row[7]='sending';row[8]='';sheet.getRange(index+2,1,1,9).setValues([row]);
   const lines=JSON.parse(String(row[3])).map(item=>'Session '+item.number+' — '+item.date+' — '+sbDisplayTime(item.time)+' (Cairo time)');
@@ -963,15 +968,15 @@ function handleOwnerBooking(data){
   if(data.action==='calendarSlots')return sbExamResponse(sbOwnerCalendarSlots(data));
   if(data.action==='saveCalendarSlots')return sbExamResponse(sbSaveCalendarSlots(data));
   if(data.action==='saveCalendarDay')return sbExamResponse(sbSaveCalendarDay(book,data));
-  if(data.action==='checkStudentPortal')return sbExamResponse({ok:true,examsReady:['Exam attempts','Exam sessions','Portal access'].every(name=>Boolean(book.getSheetByName(name))),bookingReady:['Sessions','Booking requests'].every(name=>Boolean(book.getSheetByName(name))),notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||'',remainingEmailQuota:MailApp.getRemainingDailyQuota()});
+  if(data.action==='checkStudentPortal')return sbExamResponse({ok:true,examsReady:['Exam attempts','Exam sessions','Portal access'].every(name=>Boolean(book.getSheetByName(name))),bookingReady:['Sessions','Booking requests'].every(name=>Boolean(book.getSheetByName(name))),notificationEmail:props.getProperty('SB_BOOKING_NOTIFY_EMAIL')||'',remainingEmailQuota:MailApp.getRemainingDailyQuota()});
   if(data.action==='saveBookingSettings'){
    const email=String(data.notificationEmail||'').trim();
    if(typeof data.enabled!=='boolean')throw new Error('Choose whether booking is open.');
    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254)throw new Error('Enter your notification email address.');
    if(!book.getSheetByName('Booking requests'))throw new Error('Run setupStudentPortal first.');
-   props.setProperty('SB_BOOKING_ENABLED',String(data.enabled));props.setProperty('SB_EXAM_NOTIFY_EMAIL',email);
+   props.setProperty('SB_BOOKING_ENABLED',String(data.enabled));props.setProperty('SB_BOOKING_NOTIFY_EMAIL',email);
   }
-  return sbExamResponse({ok:true,enabled:props.getProperty('SB_BOOKING_ENABLED')==='true',passcode:sbWeeklyPortalPasswords().passwords.calendar,notificationEmail:props.getProperty('SB_EXAM_NOTIFY_EMAIL')||''});
+  return sbExamResponse({ok:true,enabled:props.getProperty('SB_BOOKING_ENABLED')==='true',passcode:sbWeeklyPortalPasswords().passwords.calendar,notificationEmail:props.getProperty('SB_BOOKING_NOTIFY_EMAIL')||''});
  }catch(error){return sbExamResponse({ok:false,error:error.message});}
 }
 
@@ -1077,7 +1082,7 @@ function handleStudentInstructorContact(data) {
   const content='<p><strong>Name:</strong> '+escape(name)+'<br><strong>Reply email:</strong> '+escape(email)+'</p><p style="white-space:pre-wrap">'+escape(message)+'</p>';
   const htmlBody=typeof sbBrandedEmail==='function'?sbBrandedEmail(consultation?'Program consultation':'Learning Hub request',content):'<html><body style="font-family:Arial,sans-serif;color:#193c32"><h2>Learning Hub request</h2>'+content+'<p>Speak Boldly</p></body></html>';
   try{
-   MailApp.sendEmail({to:'speakboldly16@gmail.com',replyTo:email,name:'Speak Boldly',attachments,subject:(consultation?'Program consultation — ':'Learning Hub request — ')+name,body:(consultation?'Program consultation':'How can I help you?')+'\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
+   MailApp.sendEmail({to:consultation?'Contactus@speakboldly.space':'Askcoach@speakboldly.space',replyTo:email,name:'Speak Boldly',attachments,subject:(consultation?'Program consultation — ':'Learning Hub request — ')+name,body:(consultation?'Program consultation':'How can I help you?')+'\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
    sheet.getRange(rowNumber,6,1,2).setValues([['sent','']]);return respond({ok:true,status:'sent'});
   }catch(error){sheet.getRange(rowNumber,6,1,2).setValues([['delivery_unknown',String(error.message||error)]]);throw new Error('Your note is saved, but email delivery could not be confirmed. Please wait for your instructor to check it before sending again.');}
  }finally{lock.releaseLock();}
@@ -1085,7 +1090,7 @@ function handleStudentInstructorContact(data) {
 
 // Included in UnifiedCode.gs. Registration requests are private until approved.
 const SB_REGISTRATION_HEADERS=['Request ID','Name','Email','Program','Payment claimed','Appointment type','Date (Cairo)','Time (Cairo)','Duration (minutes)','Status','Created at (UTC)','Client ID','Session ID','Decided at (UTC)','Notification status','Notification error'];
-const SB_PAYMENT_EMAIL='speakboldly16@gmail.com';
+const SB_PAYMENT_EMAIL='billing@speakboldly.space';
 function sbRegistrationType(kind,program){
  const types={placement:{title:'Placement test',duration:30,program:'Assessment'},session:{title:'Session',duration:90},workshop:{title:'Workshop',duration:90},trial:{title:'Trial session',duration:60,program:'Trial session'}};
  if(!Object.prototype.hasOwnProperty.call(types,String(kind)))throw new Error('Choose Session, Workshop, Placement test, or Trial session.');
@@ -1116,10 +1121,11 @@ function sbRegistrationNotify(sheet,index,row){
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to||''))throw new Error('Set SB_EXAM_NOTIFY_EMAIL to your notification address.');
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
   const item=sbRegistrationView(row),type=sbRegistrationType(item.kind,item.program),slot=sbRegistrationSlots(item.date,item.kind,item.program).find(slot=>slot.time===item.time);
-  const url='https://loudandconfident.github.io/Speakboldly/instructor.html?bookingRequest='+encodeURIComponent(item.id);
+  const url='https://speakboldly.space/instructor.html?bookingRequest='+encodeURIComponent(item.id);
   const lines=['Name: '+item.name,'Email: '+item.email,'Program: '+item.program,'Appointment: '+type.title,'Date: '+item.date,'Time: '+sbDisplayTime(item.time)+'–'+sbDisplayTime(slot?.endTime||'')+' (Cairo time)','Duration: '+type.duration+' minutes','Payment reported by student: '+item.paid,'',item.kind==='trial'?'Trial session: no payment screenshot required.':'Payment screenshots are sent separately to '+SB_PAYMENT_EMAIL+'. Check payment before approving.','','Accept: '+url+'&decision=accept','Decline: '+url+'&decision=decline','','Sign in to the Instructor Portal and confirm your decision. The slot is not reserved until accepted.','','Speak Boldly'];
+  const verifiedFrom=sbVerifiedFrom('billing@speakboldly.space');
   row[14]='sending';row[15]='';sheet.getRange(index+2,1,1,16).setValues([row]);
-  MailApp.sendEmail({to,subject:'Registration request — '+type.title+' — '+item.name,body:lines.join('\n'),name:'Speak Boldly'});row[14]='sent';
+  sbSendDomainEmail({to,subject:'Registration request — '+type.title+' — '+item.name,body:lines.join('\n'),name:'Speak Boldly',replyTo:'billing@speakboldly.space'},verifiedFrom);row[14]='sent';
  }catch(error){row[14]=row[14]==='sending'?'delivery_unknown':'failed';row[15]=sbExamSafe(error.message);}
  sheet.getRange(index+2,1,1,16).setValues([row]);
 }
@@ -1409,4 +1415,40 @@ function sbNotesPictures(data,existing,id){
  if(!files.length)return keep.map(image=>({url:image.url}));
  const props=PropertiesService.getScriptProperties();let folder;const folderId=props.getProperty('SB_BLOG_PICTURES_FOLDER');if(folderId)folder=DriveApp.getFolderById(folderId);else{folder=DriveApp.createFolder('Speak Boldly — Blog pictures');props.setProperty('SB_BLOG_PICTURES_FOLDER',folder.getId());}
  return keep.map(image=>({url:image.url})).concat(files.map((image,index)=>{const file=folder.createFile(Utilities.newBlob(image.bytes,image.mime,'blog-'+id+'-'+index+(image.mime==='image/png'?'.png':image.mime==='image/webp'?'.webp':'.jpg')));file.setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);return {url:'https://drive.google.com/thumbnail?id='+encodeURIComponent(file.getId())+'&sz=w1600'};}));
+}
+
+// Domain mail routing. Gmail send-as aliases must be verified in the deploying account.
+const SB_DOMAIN_EMAILS={general:'Contactus@speakboldly.space',team:'Joinus@speakboldly.space',student:'Askcoach@speakboldly.space',billing:'billing@speakboldly.space',automated:'noreply@speakboldly.space'};
+function sbDomainEmailRoute(kind){
+ const financial=kind==='registration'||kind==='paymentReminder';
+ return {from:financial?SB_DOMAIN_EMAILS.billing:SB_DOMAIN_EMAILS.automated,replyTo:financial?SB_DOMAIN_EMAILS.billing:SB_DOMAIN_EMAILS.student};
+}
+function sbVerifiedFrom(address){
+ if(!/^[^\s@]+@speakboldly\.space$/i.test(address))throw Error('Use a speakboldly.space sender address.');
+ let aliases;try{aliases=GmailApp.getAliases();}catch(error){throw Error('Run authorizeClientEmails, approve Gmail access, and deploy a New version before sending from your domain.');}
+ const alias=aliases.find(value=>String(value).toLowerCase()===address.toLowerCase());
+ if(alias)return alias;
+ const primary=String(Session.getEffectiveUser().getEmail()||'');if(primary.toLowerCase()===address.toLowerCase())return '';
+ throw Error('Verify '+address+' under Gmail Settings → Accounts and Import → Send mail as. No email was sent.');
+}
+function sbSendDomainEmail(message,verifiedFrom){
+ const {to,subject,body,...options}=message;
+ GmailApp.sendEmail(to,subject,body||'',{...options,...(verifiedFrom?{from:verifiedFrom}:{})});
+}
+function checkDomainEmailSenders(){
+ const routes=['registration','paymentReminder','progress','final','actionplan','notes'].map(kind=>({kind,...sbDomainEmailRoute(kind)}));
+ sbVerifiedFrom(SB_DOMAIN_EMAILS.billing);sbVerifiedFrom(SB_DOMAIN_EMAILS.automated);
+ console.log('Billing and Noreply sender aliases are verified. No email was sent.');return routes;
+}
+function sbEnsureDomainMailSettings(){
+ const props=PropertiesService.getScriptProperties();if(props.getProperty('SB_DOMAIN_MAIL_ROUTING_VERSION')==='2026-10-24')return;
+ props.setProperty('SB_EXAM_NOTIFY_EMAIL',SB_DOMAIN_EMAILS.student);
+ props.setProperty('SB_BOOKING_NOTIFY_EMAIL',SB_DOMAIN_EMAILS.general);
+ props.setProperty('SB_DOMAIN_MAIL_ROUTING_VERSION','2026-10-24');
+}
+
+function sbDomainEmailRoutingStatus(){
+ const routes={};for(const kind of ['confirmation','progress','final','registration','notes','actionplan','paymentReminder','motivation'])routes[kind]=sbDomainEmailRoute(kind);
+ sbVerifiedFrom(SB_DOMAIN_EMAILS.billing);sbVerifiedFrom(SB_DOMAIN_EMAILS.automated);
+ return {ok:true,version:'domain-email-2026-10-24',routes};
 }

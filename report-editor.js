@@ -1,7 +1,7 @@
-import {initializeClientNotes} from './client-notes.js?v=report-return-1';
+import {initializeClientNotes} from './client-notes.js?v=domain-email-routing';
 import {readReportTab} from './report-tabs.js?v=action-plan-1';
 import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=report-return-1';
-import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=client-status-motivations';
+import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=domain-email-routing';
 const status=document.querySelector('#report-tab-status'),back=document.querySelector('#report-tab-return');
 const payload=readReportTab(window);
 if(!payload){status.textContent='Open a client’s report from Authorize in the teacher dashboard.';back.hidden=false;}

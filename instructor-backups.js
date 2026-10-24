@@ -1,4 +1,4 @@
-import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=client-status-motivations';
+import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 export function initializeInstructorBackups(doc,isUnlocked){
  const host=doc.querySelector('#admin-overview');if(!host)return;
  const section=doc.createElement('details');section.className='admin-detail instructor-backups';section.id='instructor-backups';
