@@ -7,7 +7,7 @@ export function initializeLearnerProfile(doc,win){
  let page=0;const pageSize=5;const pageCount=Math.ceil(learnerQuestions.length/pageSize);const fields=[];
  const el=(tag,text,className)=>{const node=doc.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
  learnerQuestions.forEach((question,index)=>{const field=el('fieldset');field.append(el('legend',(index+1)+'. '+question.prompt));question.options.forEach(option=>{const label=el('label'),input=el('input');input.type='radio';input.name='learner-'+index;input.value=option.profile;input.required=true;label.append(input,el('span',option.text));field.append(label);});questions.append(field);fields.push(field);});
- const originalFields=[...fields];function shuffleQuestions(){const order=learnerQuestionOrder();fields.splice(0,fields.length,...order.map(index=>originalFields[index]));for(const field of fields)questions.append(field);}
+ const originalFields=[...fields];function shuffleQuestions(){const order=learnerQuestionOrder();fields.splice(0,fields.length,...order.map(index=>originalFields[index]));fields.forEach((field,index)=>{field.querySelector('legend').textContent=(index+1)+'. '+learnerQuestions[order[index]].prompt;questions.append(field);});}
  shuffleQuestions();
  function showPage(){fields.forEach((field,index)=>{const active=Math.floor(index/pageSize)===page;field.hidden=!active;field.disabled=!active;});progress.textContent='Step '+(page+1)+' of '+pageCount;previous.disabled=page===0;next.hidden=page===pageCount-1;submit.hidden=page!==pageCount-1;error.textContent='';}
  const pageValid=()=>fields.filter(field=>!field.disabled).every(field=>{const input=field.querySelector('input');return input.reportValidity();});
