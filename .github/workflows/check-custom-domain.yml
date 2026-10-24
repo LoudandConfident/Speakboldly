@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - CNAME
+      - googlef6de591683171555.html
       - .github/workflows/check-custom-domain.yml
       - scripts/check-custom-domain.mjs
 permissions:
