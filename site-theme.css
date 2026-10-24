@@ -1936,3 +1936,5 @@ main>#courses[data-view]{padding-top:24px!important}
 .seo-skip-link{position:fixed;top:-100px;left:20px;z-index:100;background:#193c32;color:white;padding:12px 20px}
 .seo-skip-link:focus{top:12px}
 .course-public-page{display:inline-block;margin-top:22px;font-size:13px}
+
+#home .coaching-photo picture{display:contents}
