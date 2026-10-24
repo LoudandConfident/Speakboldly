@@ -5,11 +5,13 @@ import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } f
 import { questions, TEST_VERSION } from './placement-questions.js?v=balanced-v3';
 import { scoreAnswers, placementCorrections } from './placement-scoring.js?v=balanced-v3';
 
-import {courses,matches} from './courses.js?v=focus-illustration';
+import {courses,matches} from './courses.js?v=distinct-workshop-art';
 const $=s=>document.querySelector(s);
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const chat=message=>'mailto:speakboldly16@gmail.com?subject='+encodeURIComponent('English coaching enquiry')+'&body='+encodeURIComponent(message+'\n\nContact number: 01283786904');
 const scenes={
+story:'<path d="M54 28h94l30 30v116H54Z" fill="#f7faf3"/><path d="M148 28v31h30M73 83h68M73 101h59M73 119h46M73 147q14-18 28-6t27-5"/><path d="m166 89 13-13 24 24-13 13-24-24Zm-5 5-39 39-7 23 23-7 39-39" fill="#d5ed98"/><path d="m122 133 16 16M190 43v17M182 51h17M29 110v13M23 116h13"/>',
+
 focus:'<rect x="30" y="99" width="112" height="65" rx="7"/><path d="M43 116h66M43 130h49M43 144h59M18 166h137"/><circle cx="164" cy="72" r="45" fill="#f7faf3"/><circle cx="164" cy="72" r="29"/><circle cx="164" cy="72" r="12" fill="#d5ed98"/><path d="m164 72 35-35m-5-10 1 14 14 1M78 39h24M90 27v24"/><circle cx="173" cy="146" r="26"/><path d="M173 131v16l10 6M164 116h18M173 116v4"/>',
 
 momentum:'<path d="M42 156h43v-35h42V87h42V50h36"/><path d="m187 33 18 17-18 17"/><circle cx="70" cy="65" r="25"/><path d="M70 51v15l10 7M43 173h162"/><path d="M36 92h14M27 107h25"/>',

@@ -5,17 +5,14 @@ const root=new URL('../',import.meta.url),policy=JSON.parse(readFileSync(new URL
 const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);
 const regular=await pdf.embedFont(readFileSync(new URL('document-templates/DejaVuSans.ttf',root)),{subset:true});
 const bold=await pdf.embedFont(StandardFonts.HelveticaBold);
-const italic=await pdf.embedFont(StandardFonts.TimesRomanItalic);
 const logo=await pdf.embedPng(readFileSync(new URL('document-templates/sb-policy-logo.png',root)));
 const green=rgb(25/255,60/255,50/255),cream=rgb(1,1,1),lime=rgb(213/255,237/255,152/255),muted=rgb(.36,.43,.39);
 const page=pdf.addPage([595.28,841.89]),width=595.28,left=44,right=551.28;
 page.drawRectangle({x:0,y:0,width,height:841.89,color:cream});
 // Editorial header: website typography, restrained lime accent and a light clock drawing.
 page.drawImage(logo,{x:left,y:754,width:45,height:45});
-page.drawText('SPEAK BOLDLY',{x:106,y:788,size:8,font:bold,color:green});
-page.drawLine({start:{x:164,y:742},end:{x:263,y:744},color:lime,thickness:6});
-page.drawText('SB',{x:106,y:750,size:34,font:bold,color:green});
-page.drawText('Policy',{x:163,y:749,size:39,font:italic,color:green});
+page.drawText('Speak Boldly',{x:106,y:774,size:27,font:bold,color:green});
+page.drawText(policy.title,{x:106,y:743,size:23,font:regular,color:green});
 page.drawText(policy.subtitle,{x:left,y:713,size:11,font:regular,color:muted});
 page.drawCircle({x:493,y:756,size:29,borderColor:green,borderWidth:.8});
 page.drawLine({start:{x:493,y:756},end:{x:493,y:774},color:green,thickness:1.3});

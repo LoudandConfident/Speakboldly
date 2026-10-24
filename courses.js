@@ -27,7 +27,7 @@ export const courses = [
   "category": "Workshops",
   "comingSoon": true,
   "dimmed": true,
-  "art": "writing",
+  "art": "story",
   "summary": "Turn your ideas into clear, confident writing.",
   "description": "Explore how to organise your thoughts, build clear paragraphs and choose words that express what you mean. Practise drafting and editing with guidance tailored to your level.",
   "viewDescription": "Develop your writing across four focused sessions, from shaping an idea to revising a finished paragraph. Work with practical prompts and feedback suited to your level and goals.",
