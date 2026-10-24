@@ -1,12 +1,12 @@
 // Large portal and practice modules are fetched only when their page is opened.
 export function initializeFeatureLoader(doc,win){
  const groups={
-  'students-portal':['./daily-mission.js?v=library-folders','./student-portal.js?v=spinner-load','./admin-portal.js?v=blog-tab-pictures','./sb-studio.js?v=broad-checks-1'],
+  'students-portal':['./daily-mission.js?v=library-folders','./student-portal.js?v=spinner-load','./admin-portal.js?v=blog-tab-pictures'],
   'reviews':['./reviews.js?v=library-folders'],
   'daily-quote':['./home-gallery.js?v=client-status-motivations'],
   'learner-profile':['./learner-profile.js?v=bold-blog-simple-results'],
   'learner-results':['./learner-profile.js?v=bold-blog-simple-results'],
-  'boldly-notes':['./boldly-notes.js?v=blog-tab-pictures']
+  'boldly-notes':[]
  };
  const pending=new Map();
  async function load(){const key=win.location.hash.slice(1).split('/')[0],modules=groups[key];if(!modules||pending.has(key))return;const root=doc.getElementById(key);if(!root)return;const spinner=doc.createElement('p');spinner.className='sb-loading';spinner.dataset.loading='true';spinner.setAttribute('role','status');spinner.setAttribute('aria-label','Loading');root.prepend(spinner);const buttons=key==='students-portal'?[...root.querySelectorAll('[data-portal-area]')]:[];buttons.forEach(b=>b.disabled=true);

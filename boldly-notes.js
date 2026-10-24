@@ -1,5 +1,5 @@
 export function initializeBoldlyNotes(doc,win){
- const root=doc.querySelector('#boldly-notes');if(!root)return;
+ const root=doc.querySelector('#boldly-notes');if(!root||root.dataset.stayTuned==='true')return;
  const list=root.querySelector('[data-notes-list]'),reader=root.querySelector('[data-notes-reader]'),status=root.querySelector('[role=status]');let generation=0,posts=[],post=null;
  const el=(tag,text)=>{const e=doc.createElement(tag);e.textContent=text;return e;};
  async function request(id){const endpoint=doc.querySelector('#client-sheet-connect')?.elements.endpoint.defaultValue;if(!endpoint)throw Error('Notes are not available yet.');const controller=new win.AbortController(),timer=win.setTimeout(()=>controller.abort(),15000);try{const r=await win.fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action:'boldlyNotes',...(id?{id}:{})}),signal:controller.signal});const d=await r.json();if(!r.ok||!d.ok)throw Error(d.error||'Could not load notes.');return d;}finally{win.clearTimeout(timer);}}
