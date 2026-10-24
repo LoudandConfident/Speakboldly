@@ -4,7 +4,7 @@ import {questions,TEST_VERSION,QUESTION_ORDER} from './placement-questions.js';
 import {answerKey,scoreAnswers,placementCorrections} from './placement-scoring.js';
 const answersFor=score=>Object.fromEntries(answerKey.map((answer,i)=>['q'+(i+1),String(i<score?answer:(answer+1)%4)]));
 test('50 original placement questions balance vocabulary and grammar with unique answers',()=>{
- assert.equal(TEST_VERSION,'speak-boldly-balanced-50-v3');assert.equal(questions.length,50);assert.equal(answerKey.length,50);
+ assert.equal(TEST_VERSION,'speak-boldly-balanced-50-v4');assert.equal(questions.length,50);assert.equal(answerKey.length,50);
  assert.deepEqual(questions.map(q=>q.number),Array.from({length:50},(_,i)=>i+1));
  assert.equal(new Set(questions.map(q=>q.id)).size,50);assert.equal(new Set(questions.map(q=>q.question)).size,50);
  for(const q of questions){assert.ok(q.question.includes('_____'));assert.equal(q.options.length,4);assert.equal(new Set(q.options).size,4);assert.ok(q.options.every(o=>typeof o==='string'&&o.length));assert(Number.isInteger(answerKey[q.number-1]));assert(q.options[answerKey[q.number-1]]);}
@@ -29,8 +29,8 @@ test('estimated range boundaries are consistent and invalid choices fail',()=>{
 
 
 test('exactly five challenge items have stronger grammar and vocabulary with keyed answers',()=>{
- const changed=questions.filter(q=>q.id.startsWith('sb-balanced-v3-'));assert.deepEqual(changed.map(q=>q.number),[10,20,28,30,48]);assert.equal(changed.filter(q=>q.skill==='grammar').length,3);assert.equal(changed.filter(q=>q.skill==='vocabulary').length,2);
- for(const [number,answer]of [[10,'was the team granted'],[20,'would be working'],[28,'deflect'],[30,'to fail'],[48,'tacit']])assert.equal(questions[number-1].options[answerKey[number-1]],answer);
+ const changed=questions.filter(q=>q.id.startsWith('sb-balanced-v4-'));assert.deepEqual(changed.map(q=>q.number),[10,20,28,30,48]);assert.equal(changed.filter(q=>q.skill==='grammar').length,3);assert.equal(changed.filter(q=>q.skill==='vocabulary').length,2);
+ for(const [number,answer]of [[10,'had the auditor presented'],[20,'would not have been disclosed'],[28,'obviate'],[30,'Convincing'],[48,'specious']])assert.equal(questions[number-1].options[answerKey[number-1]],answer);
 });
 test('answer review lists only wrong or unanswered items with the keyed correct choice',()=>{
  assert.deepEqual(placementCorrections(answersFor(50)),[]);const answers=answersFor(50);answers.q10='0';delete answers.q48;assert.deepEqual(placementCorrections(answers),[{number:10,selected:0,correct:1},{number:48,selected:null,correct:0}]);assert.equal(placementCorrections({}).length,50);assert.throws(()=>placementCorrections({q1:'invalid'}));
