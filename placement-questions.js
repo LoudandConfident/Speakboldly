@@ -1,4 +1,4 @@
-export const TEST_VERSION = "speak-boldly-balanced-50-v3";
+export const TEST_VERSION = "speak-boldly-balanced-50-v4";
 export const QUESTION_ORDER = "mixed";
 // Original Speak Boldly questions. Difficulty labels are editorial estimates.
 export const questions = [
@@ -130,16 +130,16 @@ export const questions = [
   },
   {
     "number": 10,
-    "id": "sb-balanced-v3-10",
+    "id": "sb-balanced-v4-10",
     "difficulty": "C1",
     "skill": "grammar",
-    "focus": "negative inversion with a delayed main clause",
-    "question": "Not until the figures had been independently verified _____ permission to publish them.",
+    "focus": "negative inversion after no sooner",
+    "question": "No sooner _____ the confidential findings than the committee demanded an independent inquiry.",
     "options": [
-      "the team was granted",
-      "was the team granted",
-      "did the team granted",
-      "was granted the team"
+      "the auditor had presented",
+      "had the auditor presented",
+      "did the auditor presented",
+      "the auditor has presented"
     ]
   },
   {
@@ -270,16 +270,16 @@ export const questions = [
   },
   {
     "number": 20,
-    "id": "sb-balanced-v3-20",
+    "id": "sb-balanced-v4-20",
     "difficulty": "C1",
     "skill": "grammar",
-    "focus": "mixed past and present conditional",
-    "question": "Had she accepted the overseas post last year, she _____ in Cairo at this very moment.",
+    "focus": "modal perfect passive for an unreal past",
+    "question": "The breach was entirely avoidable: had the warning been acted on, confidential records _____.",
     "options": [
-      "would have worked",
-      "would be working",
-      "will be working",
-      "had been working"
+      "would not disclose",
+      "would not have been disclosed",
+      "had not been disclosed",
+      "will not have been disclosed"
     ]
   },
   {
@@ -382,16 +382,16 @@ export const questions = [
   },
   {
     "number": 28,
-    "id": "sb-balanced-v3-28",
+    "id": "sb-balanced-v4-28",
     "difficulty": "C1",
     "skill": "vocabulary",
-    "focus": "precise verbs for responding to criticism",
-    "question": "A spokesperson tried to _____ the criticism by pointing to unrelated improvements rather than addressing the complaint.",
+    "focus": "distinguishing prevention from mitigation",
+    "question": "The automated checks do not merely reduce the need for manual reconciliation; they _____ it altogether.",
     "options": [
-      "rebut",
-      "refute",
-      "invalidate",
-      "deflect"
+      "alleviate",
+      "exacerbate",
+      "corroborate",
+      "obviate"
     ]
   },
   {
@@ -410,16 +410,16 @@ export const questions = [
   },
   {
     "number": 30,
-    "id": "sb-balanced-v3-30",
+    "id": "sb-balanced-v4-30",
     "difficulty": "C1",
     "skill": "grammar",
-    "focus": "formal hypothetical conditional inversion",
-    "question": "Were the safety system _____, the entire plant would have to shut down.",
+    "focus": "concessive inversion with a fronted adjective",
+    "question": "_____ though the proposal may appear, its underlying assumptions remain untested.",
     "options": [
-      "fail",
-      "fails",
-      "to fail",
-      "had failed"
+      "Convincingly",
+      "However convincing",
+      "Convincing",
+      "Despite convincing"
     ]
   },
   {
@@ -662,16 +662,16 @@ export const questions = [
   },
   {
     "number": 48,
-    "id": "sb-balanced-v3-48",
+    "id": "sb-balanced-v4-48",
     "difficulty": "C1",
     "skill": "vocabulary",
-    "focus": "nuance of implicit approval",
-    "question": "His approval was _____ rather than explicit: he never said yes, but allowed the plan to proceed without objection.",
+    "focus": "distinguishing apparent credibility from sound reasoning",
+    "question": "The argument was _____: superficially convincing, but based on a misleading comparison.",
     "options": [
-      "tacit",
-      "overt",
-      "categorical",
-      "provisional"
+      "specious",
+      "cogent",
+      "tenable",
+      "scrupulous"
     ]
   },
   {
