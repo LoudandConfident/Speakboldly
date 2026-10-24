@@ -4,7 +4,7 @@ import {studentDocumentFilename} from './student-document-filenames.js';
 import {confirmClientEmail} from './client-email-confirmation.js';
 import {clientSheetConnected,loadSheetTeacherDocuments,saveSheetTeacherDocument,sendSheetClientEmail} from './client-sheet.js?v=domain-email-routing';
 import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
-import {fillTeacherPdf} from './teacher-pdf.js?v=documents-sessions-1';
+import {fillTeacherPdf} from './teacher-pdf.js?v=signature-mira-nasser';
 export const DOCUMENT_TEMPLATES={progress:{title:'Progress report'},final:{title:'Final exam report'},registration:{title:'Registration & payment confirmation'}};
 const DRAFT_KEY='speak-boldly-teacher-pdf-drafts-v1',READY_KEY='speak-boldly-teacher-pdf-documents-v1';
 export function initializeTeacherDocuments(doc,isUnlocked,getClients,loader,{pageMode=false,returnUrl=null}={}){

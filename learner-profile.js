@@ -1,5 +1,5 @@
 import {learnerCourseGuidance,learnerQuickPractice} from './assessment-guidance.js?v=bold-blog-simple-results';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=domain-email-routing';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=signature-mira-nasser';
 import {learnerProfiles,learnerQuestions,scoreLearnerProfile,learnerQuestionOrder} from './learner-profile-data.js?v=short-shuffled-v2';
 export function initializeLearnerProfile(doc,win){
  const root=doc.querySelector('#learner-profile');if(!root)return;

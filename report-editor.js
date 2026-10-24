@@ -1,4 +1,4 @@
-import {initializeClientNotes} from './client-notes.js?v=domain-email-routing';
+import {initializeClientNotes} from './client-notes.js?v=signature-mira-nasser';
 import {readReportTab} from './report-tabs.js?v=action-plan-1';
 import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=report-return-1';
 import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=domain-email-routing';

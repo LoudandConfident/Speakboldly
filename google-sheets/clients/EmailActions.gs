@@ -11,13 +11,13 @@ function retryPermissions(){
  console.log('Spreadsheet and email access confirmed. Deploy a New version with Execute as: Me.');
 }
 
-const SB_DOCUMENT_CREDENTIALS="English Language Coaching · Founded by Mira Nossr-Luis · © 2026";
+const SB_DOCUMENT_CREDENTIALS="© 2026 English Language Coaching\nFounded by Mira Nasser";
 const SB_EMAIL_LOGO='https://speakboldly.space/document-templates/sb-policy-logo.png';
 const SB_ZOOM_URL=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_URL')||'';
 const SB_ZOOM_PASSCODE=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_PASSCODE')||'';
 function sbEmailEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function sbBrandedEmail(title,content){
- return '<!doctype html><html><body style="margin:0;background:#faf9f4;font-family:Arial,sans-serif;color:#193c32"><table role="presentation" style="width:100%;max-width:600px;margin:auto;background:#fffef9;border-collapse:collapse"><tr><td style="padding:28px 28px 12px"><img src="'+SB_EMAIL_LOGO+'" width="58" height="58" alt="Speak Boldly logo" style="display:block;border-radius:10px"><h1 style="font-size:24px;margin:18px 0">'+sbEmailEscape(title)+'</h1></td></tr><tr><td style="padding:0 28px 28px;font-size:15px;line-height:1.7">'+content+'<p style="margin-top:28px">'+sbEmailEscape(SB_DOCUMENT_CREDENTIALS)+'</p></td></tr></table></body></html>';
+ return '<!doctype html><html><body style="margin:0;background:#faf9f4;font-family:Arial,sans-serif;color:#193c32"><table role="presentation" style="width:100%;max-width:600px;margin:auto;background:#fffef9;border-collapse:collapse"><tr><td style="padding:28px 28px 12px"><img src="'+SB_EMAIL_LOGO+'" width="58" height="58" alt="Speak Boldly logo" style="display:block;border-radius:10px"><h1 style="font-size:24px;margin:18px 0">'+sbEmailEscape(title)+'</h1></td></tr><tr><td style="padding:0 28px 28px;font-size:15px;line-height:1.7">'+content+'<p style="margin-top:28px">'+sbEmailEscape(SB_DOCUMENT_CREDENTIALS).replace(/\n/g,'<br>')+'</p></td></tr></table></body></html>';
 }
 function sbUpcomingClientMeetings(book,clientId){
  const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return [];

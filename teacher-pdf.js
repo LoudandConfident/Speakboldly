@@ -1,4 +1,4 @@
-import {DOCUMENT_BRAND} from './document-branding.js';
+import {DOCUMENT_BRAND} from './document-branding.js?v=signature-mira-nasser';
 export async function fillTeacherPdf(bytes, values, {flatten=false,fontBytes=null}={}) {
  const {PDFDocument,StandardFonts}=await import('./vendor/pdf-lib.esm.min.js');
  const pdf=await PDFDocument.load(bytes),form=pdf.getForm();

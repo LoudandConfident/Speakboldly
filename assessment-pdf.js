@@ -1,4 +1,4 @@
-import {drawDocumentBranding} from './document-branding.js';
+import {drawDocumentBranding} from './document-branding.js?v=signature-mira-nasser';
 import {getLevelExamText} from './exam-questions.js';
 export async function buildAssessmentPdf(attempt,fontBytes,logoBytes){
  const [{PDFDocument,rgb},{default:fontkit}]=await Promise.all([import('./vendor/pdf-lib.esm.min.js'),import('./vendor/fontkit.es.min.js')]);
