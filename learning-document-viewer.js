@@ -1,6 +1,7 @@
+import {publicDocumentUrl} from './public-document-url.js?v=custom-domain';
 import {renderPdf} from './portal-document.js?v=embedded-books';
 export function learningDocumentEmbed(value,base){
- const url=new URL(value,base);if(url.protocol!=='https:'&&!(url.origin===new URL(base).origin&&['localhost','127.0.0.1'].includes(url.hostname)))throw new Error('This document cannot be displayed.');
+ const url=publicDocumentUrl(value,base);if(url.protocol!=='https:'&&!(url.origin===new URL(base).origin&&['localhost','127.0.0.1'].includes(url.hostname)))throw new Error('This document cannot be displayed.');
  if(url.hostname==='drive.google.com'){
   const id=url.pathname.match(/\/d\/([a-zA-Z0-9_-]+)/)?.[1]||url.searchParams.get('id');if(!id||!/^[a-zA-Z0-9_-]+$/.test(id))throw new Error('This document link is not supported.');
   const preview=new URL('https://drive.google.com/file/d/'+id+'/preview');if(url.searchParams.has('resourcekey'))preview.searchParams.set('resourcekey',url.searchParams.get('resourcekey'));return {kind:'frame',url:preview.href};

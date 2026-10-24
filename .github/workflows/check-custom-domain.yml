@@ -1,0 +1,23 @@
+name: Check custom domain
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - CNAME
+      - .github/workflows/check-custom-domain.yml
+      - scripts/check-custom-domain.mjs
+permissions:
+  contents: read
+  pages: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check DNS, Pages configuration, HTTPS and old URL redirect
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+        run: node scripts/check-custom-domain.mjs

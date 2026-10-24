@@ -154,3 +154,5 @@ Portal, reviews, learner-profile, motivation and blog modules load when their se
 Registration & payment links to `brochures/SB-Policy.pdf` in a new browser tab, matching the SB Method link. Edit `content/sb-policy.json` and run `node scripts/build-sb-policy.mjs` to rebuild the one-page white document with the SB logo. It includes the existing payment, refund, round and cancellation rules; 24-hour advance notice; rescheduling subject to instructor agreement/availability; and the 15-minute lateness cutoff with 15 minutes deducted. Reclaim Your Focus has its own focus/target/timer illustration and remains Stay tuned.
 
 Daily motivation is paused indefinitely from the October 24 update: the currently held quote remains selected, including its dated custom picture/reflection. Old automatic Sunday-expiry responses are kept on hold; an explicit owner Resume daily changes action is still respected.
+
+Custom domain: `speakboldly.space`. DNS records, HTTPS steps, redirect checks and device-storage notes are documented in [CUSTOM-DOMAIN-SETUP.md](CUSTOM-DOMAIN-SETUP.md).
