@@ -1,4 +1,4 @@
-import {motivationDay,refreshMotivationSettings,motivationSettings} from './motivation-settings.js?v=motivation-paused';
+import {motivationDay,refreshMotivationSettings,motivationSettings} from './motivation-settings.js?v=current-motivation-1';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
  { image: './images/daily-motivation-1.png', alt: 'A notebook and phone, ready for a fresh start', quote: 'Make time for what matters.' },
@@ -110,8 +110,9 @@ export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
  if (!page||page.dataset.galleryInitialized) return;
  page.dataset.galleryInitialized='true';
- let day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,shareStatus);page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationShareUrl(currentEntry,doc.baseURI);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
+ let ready=false,day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,shareStatus);page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationShareUrl(currentEntry,doc.baseURI);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
  function refresh() {
+  if(!ready)return;
   const now = new win.Date(), nextDay = motivationDay(now,cairoDayNumber);
   if (day === nextDay) return;
   day = nextDay;
@@ -128,8 +129,7 @@ export function initializeGallery(doc, win) {
   const reflection=page.querySelector('#daily-quote-reflection');
   reflection.replaceChildren(...(details.paragraphs||[details.reflection,dailyPractice[index]]).map(text=>{const paragraph=doc.createElement('p');if(text.startsWith('Cambridge Dictionary meaning')){const definition=doc.createElement('em');definition.textContent=text;paragraph.append(definition);}else paragraph.textContent=text;return paragraph;}));
  }
- refresh();
- const check=()=>refreshMotivationSettings(doc).then(()=>{day=null;refresh();});check();doc.addEventListener('daily-motivation-settings-changed',()=>{day=null;refresh();});
+ const check=()=>refreshMotivationSettings(doc).then(()=>{ready=true;day=null;refresh();});check();doc.addEventListener('daily-motivation-settings-changed',()=>{day=null;refresh();});
  let interval;
  function start() { win.clearInterval(interval); interval = win.setInterval(()=>{refresh();if(!doc.hidden)check();}, 60000); refresh(); }
  start();
