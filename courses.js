@@ -7,7 +7,7 @@ export const courses = [
   "category": "Others",
   "comingSoon": true,
   "dimmed": true,
-  "art": "general",
+  "art": "focus",
   "summary": "Build practical habits for a calmer, more focused learning routine.",
   "description": "Explore distractions, attention and the habits that make it easier to begin and continue meaningful work. Practise small changes that support learning without expecting constant productivity.",
   "viewDescription": "Across eight sessions, explore how to organise your time, reduce everyday distractions and create realistic study routines. Try practical approaches to starting tasks, taking breaks and returning your attention when it drifts.",

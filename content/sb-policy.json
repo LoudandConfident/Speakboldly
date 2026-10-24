@@ -1,0 +1,29 @@
+{
+  "title": "SB Policy",
+  "subtitle": "Clear expectations. Better learning.",
+  "email": "speakboldly16@gmail.com",
+  "phone": "01283786904",
+  "sections": [
+    {
+      "title": "Registration & payment",
+      "text": "Once you receive your plan and scheduled days, complete payment within 24 hours. Email your payment screenshot, name and program type to speakboldly16@gmail.com. Your payment and registration confirmation will follow within 24 hours."
+    },
+    {
+      "title": "Refunds & course rounds",
+      "text": "Payments are non-refundable. A round lasts four weeks, with no freeze option during the round."
+    },
+    {
+      "title": "Cancellations",
+      "text": "Same-day cancellations are not permitted. Request any cancellation or change at least 24 hours before your session. Only one cancellation is allowed every two rounds (eight weeks)."
+    },
+    {
+      "title": "Rescheduling",
+      "text": "A replacement session must be agreed with your instructor and depends on availability. Our schedule is tight and instructor availability is limited. If no suitable slot is available, the session will be postponed to the following week, which may leave you with a week without practice."
+    },
+    {
+      "title": "Late arrivals: the 15-minute limit",
+      "text": "Please arrive on time; lateness reduces your scheduled session time. If you are more than 15 minutes late, the session is automatically cancelled and 15 minutes are deducted from your balance. These minutes cannot be made up later. We stop the wait at 15 minutes to limit further loss of your session time."
+    }
+  ],
+  "closing": "These policies respect your time, your instructor’s time, and other learners waiting for a session. Thank you for helping us keep learning consistent."
+}

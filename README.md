@@ -148,3 +148,7 @@ Bold Blog now appears in the main menu immediately before Join us. Posts display
 ### Lighter loading and contact number
 
 Portal, reviews, learner-profile, motivation and blog modules load when their section opens. Homepage checks reduced JavaScript requests from 108 to 29 (679,326 to 165,801 uncompressed bytes). The continuous tail of the website stylesheets is bundled into `site-theme.css` in its original order. After editing a stylesheet listed in `site-theme-files.json`, run `node scripts/build-site-theme.mjs` and update the bundle cache query in index.html. Loading announcements remain accessible while a green rotating ring replaces their visible text. Errors remain readable. Contact number: 01283786904; WhatsApp buttons remain inactive pending activation.
+
+### Public SB Policy
+
+Registration & payment links to `brochures/SB-Policy.pdf` through the shared in-page document viewer, with a Save PDF option. Edit `content/sb-policy.json` and run `node scripts/build-sb-policy.mjs` to rebuild the one-page dark-green document. It includes the existing payment, refund, round and cancellation rules; 24-hour advance notice; rescheduling subject to instructor agreement/availability; and the 15-minute lateness cutoff with 15 minutes deducted. Reclaim Your Focus has its own focus/target/timer illustration and remains Stay tuned.
