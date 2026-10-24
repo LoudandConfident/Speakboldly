@@ -1,4 +1,4 @@
-import {motivationDay,refreshMotivationSettings,motivationSettings} from './motivation-settings.js?v=client-status-motivations';
+import {motivationDay,refreshMotivationSettings,motivationSettings} from './motivation-settings.js?v=motivation-paused';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
  { image: './images/daily-motivation-1.png', alt: 'A notebook and phone, ready for a fresh start', quote: 'Make time for what matters.' },
