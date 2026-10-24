@@ -4,8 +4,8 @@ export function initializeFeatureLoader(doc,win){
   'students-portal':['./daily-mission.js?v=library-folders','./student-portal.js?v=documents-sessions-1','./admin-portal.js?v=domain-email-routing'],
   'reviews':['./reviews.js?v=library-folders'],
   'daily-quote':['./home-gallery.js?v=domain-email-routing'],
-  'learner-profile':['./learner-profile.js?v=domain-email-routing'],
-  'learner-results':['./learner-profile.js?v=domain-email-routing'],
+  'learner-profile':['./learner-profile.js?v=ordered-question-numbers-1'],
+  'learner-results':['./learner-profile.js?v=ordered-question-numbers-1'],
   'boldly-notes':[]
  };
  const pending=new Map();
