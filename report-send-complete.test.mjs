@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {finishSentReport} from './report-send-complete.js';
+function windowStub(href='https://example.com/Speakboldly/report-editor.html#private-token'){const navigations=[];return{navigations,location:{href,replace:url=>navigations.push(url)}};}
+test('successful report delivery redirects website reports to the homepage',()=>{const win=windowStub();assert.equal(finishSentReport(win,{status:'sent'}),true);assert.deepEqual(win.navigations,['https://example.com/Speakboldly/']);});
+test('instructor app reports return to their dashboard',()=>{const win=windowStub();finishSentReport(win,{status:'sent'},'./instructor.html#students-portal/teacher');assert.deepEqual(win.navigations,['https://example.com/Speakboldly/instructor.html#students-portal/teacher']);});
+test('pending, failed and cancelled sends never close or redirect the report',()=>{const win=windowStub();for(const result of [null,{}, {status:'queued'},{status:'failed'},{status:'cancelled'}])assert.equal(finishSentReport(win,result),false);assert.deepEqual(win.navigations,[]);});
+test('custom-domain home is respected and external return URLs cannot redirect clients away',()=>{const win=windowStub('https://speakboldly.space/report-editor.html#token');finishSentReport(win,{status:'sent'},'https://outside.example/');assert.deepEqual(win.navigations,['https://speakboldly.space/']);});
+test('a navigation failure does not turn a delivered email into a failed send',()=>{const win=windowStub();win.location.replace=()=>{throw new Error('navigation blocked');};assert.doesNotThrow(()=>finishSentReport(win,{status:'sent'}));});

@@ -16,10 +16,10 @@ import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=l
 import {initializeWeeklyPortalPasswords} from './weekly-portal-passwords.js?v=client-status-motivations';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
 import {initializePortalSwitches} from './portal-switches.js?v=client-status-motivations';
-import {initializeTeacherDocuments} from './teacher-documents.js?v=documents-sessions-1';
+import {initializeTeacherDocuments} from './teacher-documents.js?v=report-return-1';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=client-status-motivations';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=documents-sessions-1';
+import {initializeAdminCalendar} from './admin-calendar.js?v=four-appointments-1';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=client-status-motivations';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=four-digit-restored';
 import {loadPortalMaterials} from './portal-materials.js?v=parallel-files-1';
