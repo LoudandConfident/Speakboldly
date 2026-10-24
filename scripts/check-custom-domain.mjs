@@ -14,3 +14,15 @@ for(const base of ['https://speakboldly.space/','https://www.speakboldly.space/'
 }
 console.log(JSON.stringify(report,null,2));
 if(process.env.GITHUB_STEP_SUMMARY)appendFileSync(process.env.GITHUB_STEP_SUMMARY,'## speakboldly.space setup status\n\n```json\n'+JSON.stringify(report,null,2)+'\n```\n\nPending DNS or certificates are reported above; this check does not change any site or account settings.\n');
+// Inspect both hostnames without following the first response so consolidation
+// can be distinguished from two independent copies of the website.
+const consolidation={};
+for(const path of ['/','/programs/general-english/','/assessments/','/?source=domain-check']){
+ const url='https://loudandconfident.github.io/Speakboldly'+path;
+ try{const r=await fetch(url,{redirect:'manual',signal:AbortSignal.timeout(20000)});consolidation[url]={status:r.status,location:r.headers.get('location')};if(r.status===200){const html=await r.text();consolidation[url].title=html.match(/<title>(.*?)<\/title>/)?.[1];consolidation[url].canonical=html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];}}catch(e){consolidation[url]={error:e.message};}
+}
+for(const path of ['/','/programs/general-english/','/assessments/','/sitemap.xml','/robots.txt']){
+ try{const r=await fetch('https://'+domain+path,{signal:AbortSignal.timeout(20000)}),body=await r.text();const item={status:r.status,finalURL:r.url};if(path==='/sitemap.xml'){const urls=[...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);item.urlCount=urls.length;item.allCustomDomain=urls.length>0&&urls.every(url=>url.startsWith('https://'+domain+'/'));}else if(path==='/robots.txt'){item.robots=body;}else{item.title=body.match(/<title>(.*?)<\/title>/)?.[1];item.canonical=body.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];item.noindex=/<meta[^>]*name="robots"[^>]*content="[^"]*noindex/.test(body);}consolidation['https://'+domain+path]=item;}catch(e){consolidation['https://'+domain+path]={error:e.message};}
+}
+console.log('DOMAIN_CONSOLIDATION '+JSON.stringify(consolidation));
+if(process.env.GITHUB_STEP_SUMMARY)appendFileSync(process.env.GITHUB_STEP_SUMMARY,'\n## Canonical and redirect evidence\n\n```json\n'+JSON.stringify(consolidation,null,2)+'\n```\n');
