@@ -34,7 +34,7 @@ Automatic 24-hour emails are disabled in this version. After updating the script
 
 ## Learning Hub contact notes
 
-The complete script includes the public `studentInstructorContact` endpoint. Requests go only to `speakboldly16@gmail.com`; the supplied email is used as Reply-To. The private `Instructor requests` sheet records notes and email status. Contact Instructor and Calendar do not require student passwords. Calendar sessions renew automatically after expiry.
+The complete script includes the public `studentInstructorContact` endpoint. Requests go only to `Askcoach@speakboldly.space`; the supplied email is used as Reply-To. The private `Instructor requests` sheet records notes and email status. Contact Instructor and Calendar do not require student passwords. Calendar sessions renew automatically after expiry.
 
 Replace the existing single complete script, preserve your Script Properties, run `authorizeClientEmails`, and deploy a New version of the existing Web app. For the modular combined Reviews/Clients setup, include `StudentContact.gs` alongside the updated `Clients.gs` and `BookingActions.gs`. Do not add those modules beside the complete unified script.
 

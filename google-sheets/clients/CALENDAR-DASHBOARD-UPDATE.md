@@ -6,7 +6,7 @@
 2. Choose Placement test (30 minutes), Session (90 minutes, or 60 minutes for English Momentum), or Trial session (90 minutes).
 3. Choose a date and start time within the rolling six-week window. Placement start times are 30 minutes apart inside your existing available hours.
 4. Enter their name, email, program and payment status.
-5. Send the payment screenshot separately to **speakboldly16@gmail.com**, including name, program, date and time. If payment is not required, they can select that answer.
+5. Send the payment screenshot separately to **billing@speakboldly.space**, including name, program, date and time. If payment is not required, they can select that answer.
 6. Submit the registration request. A request does not reserve the time until you accept it.
 
 ## What you do

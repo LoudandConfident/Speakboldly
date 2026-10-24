@@ -50,7 +50,7 @@ Each code identifies its assigned client account; it does not prove the physical
 
 ## Score emails after review
 
-Set SMTP_HOST, SMTP_PORT (587 with STARTTLS or 465 with TLS), SMTP_USER, SMTP_PASSWORD, and SMTP_FROM in the private host's secure environment settings. SMTP_FROM must be an address approved by your sending provider. Replies go to speakboldly16@gmail.com. No password belongs in GitHub or chat.
+Set SMTP_HOST, SMTP_PORT (587 with STARTTLS or 465 with TLS), SMTP_USER, SMTP_PASSWORD, and SMTP_FROM in the private host's secure environment settings. SMTP_FROM must be an address approved by your sending provider. Replies go to Askcoach@speakboldly.space. No password belongs in GitHub or chat.
 
 Saving a review sends the final percentage and feedback to the email registered for that client. The dashboard reports sent, failed, or not configured. Sent means the mail provider accepted the message; inbox delivery is not guaranteed. Saving unchanged marks again does not duplicate a successfully sent email; saving changed marks sends an updated result. If delivery failed, saving again retries. Marks remain saved even if mail fails. Restarting during delivery may leave a sending status; check delivery with the provider before retrying.
 
