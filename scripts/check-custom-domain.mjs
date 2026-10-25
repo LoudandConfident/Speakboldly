@@ -40,3 +40,10 @@ for(let attempt=0;attempt<24;attempt++){
 }
 console.log('FAVICON_VERIFICATION '+JSON.stringify(faviconReport));
 if(!faviconReport.declared||faviconReport.iconStatus!==200||faviconReport.width!==192||faviconReport.height!==192)throw Error('The SB search icon is not live yet.');
+
+try{
+ const html=await (await fetch('https://speakboldly.space/')).text();
+ const form=html.split('id="client-sheet-connect"')[1]?.split('</form>')[0];
+ const endpoint=form?.match(/name="endpoint"[^>]*value="([^"]+)"/)?.[1];
+ if(endpoint){const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action:'dailyMotivationSettings',date:'2026-10-24'})});console.log('PUBLIC_MOTIVATION_PREVIEW '+JSON.stringify(await r.json()));}
+}catch(e){console.log('PUBLIC_MOTIVATION_PREVIEW_ERROR '+e.message);}
