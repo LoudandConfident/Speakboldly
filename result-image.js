@@ -1,4 +1,4 @@
-import {DOCUMENT_BRAND} from './document-branding.js?v=classic-footer-booking-1';
+import {DOCUMENT_BRAND} from './document-branding.js?v=two-line-footer-1';
 const copyrightText=()=> DOCUMENT_BRAND.credentials;
 export function addResultBranding(doc,result) {
  const brand=doc.createElement('div');brand.className='result-brand';

@@ -1,4 +1,4 @@
-import {DOCUMENT_BRAND,drawDocumentBranding} from './document-branding.js?v=classic-footer-booking-1';
+import {DOCUMENT_BRAND,drawDocumentBranding} from './document-branding.js?v=two-line-footer-1';
 import {documentDate} from './student-document-filenames.js';
 export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date=documentDate(),title='Notes'}={}){
  const {PDFDocument,rgb}=await import('./vendor/pdf-lib.esm.min.js');const {default:fontkit}=await import('./vendor/fontkit.es.min.js');

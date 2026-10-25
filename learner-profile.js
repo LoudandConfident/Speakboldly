@@ -1,6 +1,6 @@
 import {createPlacementBookingRemark} from './placement-booking-remark.js?v=personalised-placement-1';
 import {learnerCourseGuidance,learnerQuickPractice} from './assessment-guidance.js?v=bold-blog-simple-results';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=classic-footer-booking-1';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=two-line-footer-1';
 import {learnerProfiles,learnerQuestions,scoreLearnerProfile,learnerQuestionOrder} from './learner-profile-data.js?v=short-shuffled-v2';
 export function initializeLearnerProfile(doc,win){
  const root=doc.querySelector('#learner-profile');if(!root)return;

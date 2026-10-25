@@ -2,7 +2,7 @@ import {createPlacementBookingRemark} from './placement-booking-remark.js?v=pers
 import {coursePaths} from './public-seo-routes.js';
 import {CEFR_LEVELS} from './cefr-levels.js';
 import {practiceForLevel} from './assessment-guidance.js?v=bold-blog-simple-results';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=classic-footer-booking-1';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=two-line-footer-1';
 import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } from './assessment-time.js';
 import { questions, TEST_VERSION } from './placement-questions.js?v=balanced-v4';
 import {placementExplanations} from './placement-explanations.js?v=mistake-explanations-1';

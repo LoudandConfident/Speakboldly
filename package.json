@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server.mjs",
     "test": "node --test",
-    "build:seo": "node scripts/build-search-assets.mjs && node scripts/build-public-pages.mjs"
+    "build:seo": "node scripts/build-motivation-previews.mjs && node scripts/build-search-assets.mjs && node scripts/build-public-pages.mjs"
   },
   "type": "module",
   "engines": {

@@ -1,3 +1,4 @@
+import {motivationPreviews} from './motivation-preview-images.js?v=small-picture-preview-2';
 import {motivationDay,refreshMotivationSettings,motivationSettings} from './motivation-settings.js?v=freeze-24-oct-1';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
@@ -101,7 +102,7 @@ export function motivationShareUrl(entry,base='https://speakboldly.space/'){
  if(entry.customDate)return new URL('./?motivation='+entry.customDate+'#daily-quote',base).href;
  const name=entry.image.split('/').pop().replace(/\.png$/,'.html');return new URL('./motivation/'+name,base).href;
 }
-export function motivationCopyUrl(entry){if(entry.customDate)return motivationShareUrl(entry);const name=entry.image.split('/').pop().replace(/\.png$/,'.html');return new URL('/motivation/share/'+name,'https://speakboldly.space/').href;}
+export function motivationCopyUrl(entry){if(entry.customDate)return motivationShareUrl(entry);const name=entry.image.split('/').pop().replace(/\.png$/,'.html');const url=new URL('/motivation/share/'+name,'https://speakboldly.space/');const preview=motivationPreviews[entry.image];if(preview)url.searchParams.set('image',preview.version);return url.href;}
 export async function copyMotivationLink(win,entry){
  const url=motivationCopyUrl(entry);
  await win.navigator.clipboard.writeText(url);

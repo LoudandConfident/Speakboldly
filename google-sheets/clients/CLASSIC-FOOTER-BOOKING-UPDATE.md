@@ -1,10 +1,9 @@
 # Restored document footer and coach requests
 
-Website pages, generated PDF/Word documents, supplied report templates, and both Speak Boldly brochures use the original three-line footer:
+Website pages, generated PDF/Word documents, supplied report templates, and both Speak Boldly brochures use the requested two-line footer:
 
 English Language Coaching  
-Founded by Mira Nasser Louis  
-© 2026 Mira Nasser Louis. All rights reserved.
+© 2026 Founded by Mira Nasser Louis.
 
 The logo remains at the top left. Editable report field names and coordinates are unchanged.
 
@@ -12,10 +11,6 @@ The website's two assessment results now link directly to Calendar with Placemen
 
 Ask your coach sends public contact requests to askcoach@speakboldly.space, with the visitor's address as Reply-To. Requests cannot override the recipient, and retries do not duplicate a delivered request.
 
-## Apps Script deployment
+## Email signatures
 
-The website and document downloads deploy automatically through GitHub Pages. To use the restored footer inside emails sent by Apps Script, replace the deployed code with the current `UnifiedCode.gs`, then choose **Deploy → Manage deployments → Edit → New version → Deploy**. Keep the existing web app URL, connection key and Script Properties.
-
-For a split-file setup, update `EmailActions.gs`, `StudentContact.gs`, `EmailRouting.gs` and `LibraryActions.gs` instead of also adding UnifiedCode. Do not install both combined and split copies.
-
-The website update does not create or change mailboxes or SMTP credentials. No live emails were sent during validation.
+Email signatures are unchanged. The website, report PDFs and Word exports deploy automatically. No Apps Script deployment is needed for the two-line footer update.

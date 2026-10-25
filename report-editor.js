@@ -1,6 +1,6 @@
-import {initializeClientNotes} from './client-notes.js?v=classic-footer-booking-1';
+import {initializeClientNotes} from './client-notes.js?v=two-line-footer-1';
 import {readReportTab} from './report-tabs.js?v=action-plan-1';
-import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=classic-footer-booking-1';
+import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=two-line-footer-1';
 import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=domain-email-routing';
 const status=document.querySelector('#report-tab-status'),back=document.querySelector('#report-tab-return');
 const payload=readReportTab(window);

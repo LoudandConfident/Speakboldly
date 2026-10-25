@@ -7,6 +7,7 @@ import {coursePaths} from '../public-seo-routes.js';
 import {idioms} from '../daily-idiom.js';
 import {dailyQuotes,quoteDetails,quoteForDate} from '../home-gallery.js';
 import {publicSiteShell} from './public-site-shell.mjs';
+import {motivationPreviews} from '../motivation-preview-images.js';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),origin='https://speakboldly.space';
 const e=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ld=value=>JSON.stringify(value).replace(/</g,'\\u003c');
@@ -33,7 +34,7 @@ function page(path,{title,description,heading,body,eyebrow='Speak Boldly',noinde
   const view=path==='/learn/daily-quotes/'?'daily-quote':'courses';
   const course=path==='/programs/'?'':Object.keys(coursePaths).find(id=>coursePaths[id]===path)||'';
   const selected=path==='/learn/daily-quotes/'?quoteForDate():null;
-  html=publicSiteShell(readFileSync(resolve(root,'index.html'),'utf8'),{path,title:fullTitle,description,graph,view,course,image:selected?selected.image:image,fallback:body,noindex});
+  html=publicSiteShell(readFileSync(resolve(root,'index.html'),'utf8'),{path,title:fullTitle,description,graph,view,course,image:selected?(motivationPreviews[selected.image]?.image||selected.image):image,imageAlt:selected?.alt||heading,fallback:body,noindex});
  }
  const relative=path.slice(1)+'index.html';mkdirSync(dirname(resolve(root,relative)),{recursive:true});writeFileSync(resolve(root,relative),html);generated.push(relative);if(!noindex)indexable.push(path);
 }
@@ -79,6 +80,12 @@ for(const [index,q] of dailyQuotes.entries()){
  if(!existsSync(file))continue;
  let html=readFileSync(file,'utf8');const url=origin+'/motivation/'+name;
  html=html.replace(/<link\b[^>]*rel="icon"[^>]*>/g,'<link rel="icon" type="image/png" sizes="192x192" href="/app-icons/icon-192.png">');
+ const preview=motivationPreviews[q.image],previewUrl=new URL(preview?.image||q.image,origin).href;
+ html=html.replace(/<meta property="og:image"[^>]*>/,'<meta property="og:image" content="'+previewUrl+'">');
+ html=html.replace(/<meta property="og:image:secure_url"[^>]*>/,'<meta property="og:image:secure_url" content="'+previewUrl+'">');
+ html=html.replace(/<meta property="og:image:type"[^>]*>/,'<meta property="og:image:type" content="'+(preview?'image/jpeg':'image/png')+'">');
+ if(preview){html=html.replace(/<meta property="og:image:width"[^>]*>/,'<meta property="og:image:width" content="'+preview.width+'">').replace(/<meta property="og:image:height"[^>]*>/,'<meta property="og:image:height" content="'+preview.height+'">');}
+ html=html.replace(/<meta name="twitter:image"[^>]*>/,'<meta name="twitter:image" content="'+previewUrl+'">');
  const title=q.quote.length>75?q.quote.slice(0,72).trim()+'…':q.quote;
  const details=quoteDetails[index],reflection=details?.reflection||details?.paragraphs?.[0]||q.quote;
  const description=reflection.replace(/\s+/g,' ').slice(0,157).trim()+'…';
@@ -89,7 +96,7 @@ for(const [index,q] of dailyQuotes.entries()){
  if(!html.includes('href="/learn/daily-quotes/"'))html=html.replace('</main>','<p><a href="/learn/daily-quotes/">More English learning motivation</a></p></main>');
  writeFileSync(file,html);motivationPaths.push('/motivation/'+name);
  // Fresh picture-specific share URLs avoid cached homepage-logo previews.
- const shareUrl=origin+'/motivation/share/'+name;
+ const shareUrl=origin+'/motivation/share/'+name+(preview?'?image='+preview.version:'');
  let shareHtml=html.replace(/<meta property="og:url"[^>]*>/,'<meta property="og:url" content="'+shareUrl+'">');
  shareHtml=shareHtml.replace(/<meta name="twitter:card"[^>]*>/,'<meta name="twitter:card" content="summary_large_image">');
  shareHtml=shareHtml.replace('<img class="picture"','<img fetchpriority="high" class="picture"');

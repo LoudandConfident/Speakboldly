@@ -1,4 +1,4 @@
-import {DOCUMENT_BRAND} from './document-branding.js?v=classic-footer-booking-1';
+import {DOCUMENT_BRAND} from './document-branding.js?v=two-line-footer-1';
 import {documentDate} from './student-document-filenames.js';
 const xml=value=>String(value||'').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g,'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[char]));
 function crc32(bytes){let crc=0xffffffff;for(const byte of bytes){crc^=byte;for(let bit=0;bit<8;bit++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);}return (crc^0xffffffff)>>>0;}

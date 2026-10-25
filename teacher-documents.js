@@ -4,7 +4,7 @@ import {studentDocumentFilename} from './student-document-filenames.js';
 import {confirmClientEmail} from './client-email-confirmation.js';
 import {clientSheetConnected,loadSheetTeacherDocuments,saveSheetTeacherDocument,sendSheetClientEmail} from './client-sheet.js?v=domain-email-routing';
 import {renderPdf} from './portal-document.js?v=pdf-lifecycle';
-import {fillTeacherPdf} from './teacher-pdf.js?v=classic-footer-booking-1';
+import {fillTeacherPdf} from './teacher-pdf.js?v=two-line-footer-1';
 export const DOCUMENT_TEMPLATES={progress:{title:'Progress report'},final:{title:'Final exam report'},registration:{title:'Registration & payment confirmation'}};
 const DRAFT_KEY='speak-boldly-teacher-pdf-drafts-v1',READY_KEY='speak-boldly-teacher-pdf-documents-v1';
 export function initializeTeacherDocuments(doc,isUnlocked,getClients,loader,{pageMode=false,returnUrl=null}={}){
@@ -28,8 +28,8 @@ export function initializeTeacherDocuments(doc,isUnlocked,getClients,loader,{pag
  const syncNotice=doc.createElement('p');syncNotice.className='demo-note';syncNotice.setAttribute('role','status');section.append(syncNotice);
  function read(key,fallback){try{const value=JSON.parse(doc.defaultView.localStorage.getItem(key)||'null');return value||fallback;}catch{return fallback;}}
  function save(key,value){doc.defaultView.localStorage.setItem(key,JSON.stringify(value));}
- async function bytes(url){const response=await fetch(new URL(url+(url.includes('?')?'&':'?')+'v=dark-reports',doc.baseURI));if(!response.ok)throw new Error('The PDF template could not be loaded. Please try again.');return new Uint8Array(await response.arrayBuffer());}
- async function getCatalog(){if(catalog)return catalog;const response=await fetch(new URL('./document-templates/templates.json?v=consistent-brand-1',doc.baseURI));if(!response.ok)throw new Error('Document templates could not load.');catalog=await response.json();for(const template of Object.values(catalog)){const url=new URL(template.url,doc.baseURI);url.searchParams.set('v','consistent-brand-1');template.url=url.href;}return catalog;}
+ async function bytes(url){const response=await fetch(new URL(url+(url.includes('?')?'&':'?')+'v=two-line-footer-1',doc.baseURI));if(!response.ok)throw new Error('The PDF template could not be loaded. Please try again.');return new Uint8Array(await response.arrayBuffer());}
+ async function getCatalog(){if(catalog)return catalog;const response=await fetch(new URL('./document-templates/templates.json?v=two-line-footer-1',doc.baseURI));if(!response.ok)throw new Error('Document templates could not load.');catalog=await response.json();for(const template of Object.values(catalog)){const url=new URL(template.url,doc.baseURI);url.searchParams.set('v','two-line-footer-1');template.url=url.href;}return catalog;}
  function setValue(name,value){values[name]=value;for(const input of inputs.get(name)||[]){if(input.value!==value)input.value=value;fitReportInput(input);}}
  function inputFor(field){const input=doc.createElement(field.multiline?'textarea':'input');if(!field.multiline)input.type='text';else{input.rows=3;input.wrap='soft';}input.name=field.name;input.maxLength=field.maxLength;input.value=values[field.name]||'';input.setAttribute('aria-label',field.label);input.autocomplete='off';input.spellcheck=true;input.oninput=()=>setValue(field.name,input.value);if(!inputs.has(field.name))inputs.set(field.name,[]);inputs.get(field.name).push(input);return input;}
  function setMode(showFields){easy=showFields;pages.hidden=easy;fieldList.hidden=!easy;zoom.closest('label').hidden=easy;mode.textContent=easy?'PDF view':'Edit fields';if(!easy)for(const input of pages.querySelectorAll('.teacher-pdf-overlay'))fitReportInput(input);}
