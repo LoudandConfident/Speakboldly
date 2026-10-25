@@ -1888,6 +1888,12 @@ main>#courses[data-view]{padding-top:48px!important}
 /* SB Policy uses the same lime pill treatment as the illustrated SB Method link. */
 #how .sb-policy-link{display:inline-flex;align-items:center;justify-content:center;border:1px solid #193c32;border-radius:999px;background:#d5ed98;color:#193c32;padding:10px 20px;font:500 14px/1.4 Arial,sans-serif;text-decoration:none;min-height:42px;box-sizing:border-box}#how .sb-policy-link:hover{background:#e3f5ba}#how .sb-policy-link:focus-visible{outline:2px solid #193c32;outline-offset:4px}
 
+/* Match the SB Method pill and keep its label legible on the green panel. */
+#how .how-policy-content a.sb-policy-link{display:inline-flex;gap:12px;align-items:center;justify-content:center;background:#d5ed98;color:#193c32!important;border:1px solid #193c32;border-radius:999px;padding:9px 20px;min-height:45px;font:500 15px/1.4 Arial,sans-serif;text-decoration:none;box-sizing:border-box}
+#how .how-policy-content a.sb-policy-link:hover{background:#e3f5ba;color:#193c32!important}
+#how .how-policy-content a.sb-policy-link:focus-visible{outline:2px solid #faf9f4;outline-offset:4px}
+#how .sb-policy-link .sb-policy-icon{display:block;width:27px;height:27px;flex:none;color:#193c32}
+
 /* loading-ui.css */
 .sb-loading,.portal-loading-notice[aria-busy=true]{display:flex!important;align-items:center;justify-content:center;min-height:36px;padding:8px!important;margin:8px 0!important;border:0!important;background:transparent!important;box-shadow:none!important;font-size:0!important;line-height:0!important;color:transparent!important}
 .sb-loading::before,.portal-loading-notice[aria-busy=true]::before{content:''!important;display:block!important;width:24px!important;height:24px!important;flex:0 0 24px!important;box-sizing:border-box!important;border:3px solid #d5e3cf!important;border-top-color:#3f7657!important;border-radius:50%!important;background:transparent!important;opacity:1!important;animation:sb-green-spin .85s linear infinite!important}
@@ -1899,42 +1905,18 @@ main>#courses[data-view]{padding-top:48px!important}
 
 .sb-loading[hidden]{display:none!important}
 
-/* Keep the personal reflection beside the original journey photos. */
-#vision.vision-editorial .vision-opening-copy .vision-need-band{margin:8px 0 0!important;padding:0!important;border:0;grid-template-columns:minmax(0,1fr) 52px;gap:14px 18px}
-#vision .vision-opening-copy .vision-need-band>p{margin:0;font-size:14px;line-height:1.8}
-#vision .vision-opening-copy .vision-need-band>div[aria-hidden]{width:52px;height:60px;color:var(--ink)}
-#vision .vision-opening-copy .vision-need-reflection p{font-size:14px;line-height:1.8;margin:0 0 12px}
-#vision.vision-editorial .vision-purpose{border-top:1px solid #cbd6c7;padding-top:22px!important}
-#vision .vision-purpose .vision-enrollment-promise{margin-bottom:10px}
-#vision .vision-purpose .vision-enrollment-promise h3{margin-bottom:0}
-#vision .vision-purpose-community{align-items:start}
-@media(max-width:680px){#vision.vision-editorial .vision-opening-copy .vision-need-band{margin-top:4px!important;grid-template-columns:minmax(0,1fr) 40px}#vision .vision-opening-copy .vision-need-band>div[aria-hidden]{width:40px;height:48px}#vision.vision-editorial .vision-purpose{padding-top:18px!important}}
-
-/* Match the SB Method pill and keep its label legible on the green panel. */
-#how .how-policy-content a.sb-policy-link{display:inline-flex;gap:12px;align-items:center;justify-content:center;background:#d5ed98;color:#193c32!important;border:1px solid #193c32;border-radius:999px;padding:9px 20px;min-height:45px;font:500 15px/1.4 Arial,sans-serif;text-decoration:none;box-sizing:border-box}
-#how .how-policy-content a.sb-policy-link:hover{background:#e3f5ba;color:#193c32!important}
-#how .how-policy-content a.sb-policy-link:focus-visible{outline:2px solid #faf9f4;outline-offset:4px}
-#how .sb-policy-link .sb-policy-icon{display:block;width:27px;height:27px;flex:none;color:#193c32}
-
-/* Compact stacked course actions beside the introduction. */
-main>#courses[data-view]{padding-top:24px!important}
-#courses .courses-introduction{grid-template-columns:minmax(0,1fr) 108px!important;gap:24px!important;align-items:start!important;border:0!important;padding-bottom:0!important;margin-bottom:20px!important}
-#courses .course-booking-note{flex-direction:column!important;width:108px!important;max-width:108px!important;padding:0!important;gap:8px!important}
-#courses .course-booking-note .course-fees-open,#courses .course-booking-note .consultation-open{width:104px!important;height:104px!important;min-height:104px!important;padding:12px!important;font-size:10px!important;line-height:1.4;box-sizing:border-box}
-#courses .course-fees-open .pricing-circle-art{width:25px;height:25px}
-#courses .catalog-controls{border:0!important;padding-top:0!important;margin-top:0!important}
-@media(max-width:760px){main>#courses[data-view]{padding-top:18px!important}#courses .courses-introduction{grid-template-columns:minmax(0,1fr) 88px!important;gap:12px!important}#courses .course-booking-note{width:88px!important;max-width:88px!important}#courses .course-booking-note .course-fees-open,#courses .course-booking-note .consultation-open{width:86px!important;height:86px!important;min-height:86px!important;padding:10px!important;font-size:9px!important}#courses .course-fees-open .pricing-circle-art{width:21px;height:21px}}
-
-#courses .catalog-controls .search{border:0!important;box-shadow:none!important}
-
-/* Crawlable links retain the existing tab and card appearance. */
-#main-navigation a.nav-tab{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-family:inherit}
-#courses .course-body h3 a{color:inherit;text-decoration:none}
-#courses .course-body h3 a:hover{text-decoration:underline;text-underline-offset:4px}
-.seo-resource-directory{font-size:12px;line-height:1.9;margin:25px 0}
-.seo-resource-directory a{text-decoration:underline;text-underline-offset:3px}
-.seo-skip-link{position:fixed;top:-100px;left:20px;z-index:100;background:#193c32;color:white;padding:12px 20px}
-.seo-skip-link:focus{top:12px}
-.course-public-page{display:inline-block;margin-top:22px;font-size:13px}
-
-#home .coaching-photo picture{display:contents}
+/* brand-footer.css */
+/* The original, small three-line identity, shared by pages and saved results. */
+body .page-signature,body .result-copyright{font-family:'DM Sans',Arial,sans-serif!important;font-size:11px!important;font-style:normal!important;font-weight:400!important;line-height:1.45!important;text-align:left!important;background:transparent!important;border:0!important;box-shadow:none!important;color:#193c32}
+body .page-signature>span,body .page-signature>small{display:block!important;margin:0!important;padding:0!important;line-height:1.45!important}
+body .page-signature>span{font-size:12px!important;font-weight:600!important}
+body .page-signature>small{font-size:10px!important;font-weight:400!important}
+body main #home>.home-bottom-row .page-signature>span{font-size:12px!important;font-weight:600!important;line-height:1.45!important}
+body main #home>.home-bottom-row .page-signature>small{font-size:10px!important;font-weight:400!important;line-height:1.45!important}
+body .public-page .page-signature{margin:0}
+#how .how-policy-content a.sb-policy-link{width:114px;max-width:100%;height:28px;min-height:28px;padding:3px 9px;gap:6px;font-size:10px;line-height:1.25;border-width:1px}
+#how .sb-policy-link .sb-policy-icon{width:16px;height:16px}
+/* Keep a touch-friendly hit area around the smaller visible pill. */
+#how .how-policy-content a.sb-policy-link{position:relative}
+#how .how-policy-content a.sb-policy-link:after{content:'';position:absolute;inset:-8px 0}
+@media(max-width:680px){#how .how-policy-content a.sb-policy-link{width:89px;height:22px;min-height:22px;padding:2px 6px;gap:4px;font-size:9px}#how .sb-policy-link .sb-policy-icon{width:13px;height:13px}#how .how-policy-content a.sb-policy-link:after{inset:-11px 0}}

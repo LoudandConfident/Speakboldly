@@ -31,7 +31,7 @@ for filename,title in paths:
         page.insert_text((left+size+16,61),'Speak Boldly',fontname='hebo',fontsize=22,color=ink)
         page.insert_text((left+size+16,86),title,fontname='helv',fontsize=13,color=ink)
         y=page.rect.height-brand['footerY']
-        page.insert_text((left,y-10),brand['credentials'],fontname='helv',fontsize=brand['footerSize'],color=ink)
+        page.insert_text((left,y),brand['credentials'],fontname='helv',fontsize=brand['footerSize'],lineheight=brand['footerLineHeight']/brand['footerSize'],color=ink)
         number=f'{index+1} / {len(doc)}'
         page.insert_text((page.rect.width-left-fitz.get_text_length(number,fontsize=brand['footerSize']),y),number,fontsize=brand['footerSize'],color=ink)
     meta=doc.metadata;meta['author']=brand['founder'];doc.set_metadata(meta)

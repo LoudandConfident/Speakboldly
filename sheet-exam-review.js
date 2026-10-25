@@ -1,5 +1,5 @@
-import {DOCUMENT_BRAND} from './document-branding.js?v=signature-mira-nasser';
-import {buildAssessmentPdf} from './assessment-pdf.js?v=signature-mira-nasser';
+import {DOCUMENT_BRAND} from './document-branding.js?v=classic-footer-booking-1';
+import {buildAssessmentPdf} from './assessment-pdf.js?v=classic-footer-booking-1';
 import {studentDocumentFilename,documentDate} from './student-document-filenames.js';
 import {clientSheetConnected,sheetLibraryRequest as sheetExamRequest} from './client-sheet.js?v=domain-email-routing';
 import {getLevelExamText} from './exam-questions.js';

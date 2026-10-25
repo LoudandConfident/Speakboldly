@@ -1,7 +1,8 @@
+import {createPlacementBookingRemark} from './placement-booking-remark.js?v=personalised-placement-1';
 import {coursePaths} from './public-seo-routes.js';
 import {CEFR_LEVELS} from './cefr-levels.js';
 import {practiceForLevel} from './assessment-guidance.js?v=bold-blog-simple-results';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=signature-mira-nasser';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=classic-footer-booking-1';
 import { ASSESSMENT_DURATION_MS, remainingSeconds, formatTime, offerIsActive } from './assessment-time.js';
 import { questions, TEST_VERSION } from './placement-questions.js?v=balanced-v4';
 import {placementExplanations} from './placement-explanations.js?v=mistake-explanations-1';
@@ -103,10 +104,9 @@ function finish(record){
  priorities.innerHTML='<h3>What to work on next</h3><p>Start here. A speaking and listening check will help refine your plan.</p>'+[['Structure of language',guidance.structure],['Vocabulary and meaning',guidance.vocabulary],['Using English',guidance.use],['On your own',guidance.routine]].map(([heading,text])=>'<h4>'+escape(heading)+'</h4><p>'+escape(text)+'</p>').join('');result.append(priorities);
  const estimate=document.createElement('p');estimate.textContent='This grammar and vocabulary test gives a provisional estimate, not a certified CEFR level.';result.append(estimate);
  const corrections=placementCorrections(record.answers),review=document.createElement('section');review.className='placement-answer-review';review.setAttribute('aria-label','Answer review');const reviewTitle=document.createElement('h3');reviewTitle.textContent=corrections.length?'Questions to review · '+corrections.length:'All answers correct';review.append(reviewTitle);if(!corrections.length){const message=document.createElement('p');message.textContent='You answered all 50 questions correctly.';const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Check your mistakes and why';summary.className='button light';details.append(summary,message);review.append(details);}else{const list=document.createElement('ol');list.style.paddingLeft='24px';for(const item of corrections){const q=questions[item.number-1],row=document.createElement('li');row.value=item.number;row.style.marginBottom='22px';const prompt=document.createElement('p'),chosen=document.createElement('p'),correct=document.createElement('p');prompt.textContent=q.question;chosen.textContent='Your answer: '+(item.selected===null?'Not answered':q.options[item.selected]);correct.textContent='Correct answer: '+q.options[item.correct];correct.style.fontWeight='600';const why=document.createElement('p');why.className='placement-mistake-explanation';why.textContent='Why: '+placementExplanations[item.number-1];row.append(prompt,chosen,correct,why);list.append(row);}const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Check your mistakes and why';summary.className='button light';details.append(summary,list);review.append(details);}result.append(review);
+ result.append(createPlacementBookingRemark(document,window));
  addResultBranding(document,result);
  addResultImageButton(document,window,result,'Speak Boldly — English assessment');
- const note=document.createElement('p');note.textContent='Send a voice note for your speaking assessment before starting your course.';result.append(note);
- const contact=document.createElement('a');contact.className='button';contact.href='#contact';contact.textContent='Contact us';result.append(contact);
  locked=true;confirmation.hidden=true;submitNotice.textContent='Assessment submitted. Your results are below.';removeAssessmentDraft();clearInterval(timerInterval);timerInterval=null;form.querySelectorAll('input,button').forEach(e=>{if(!['test-prev','test-next'].includes(e.id))e.disabled=true;});renderPage();const viewResults=document.createElement('button');viewResults.id='placement-view-results';viewResults.type='button';viewResults.className='button light';viewResults.textContent='View results';viewResults.onclick=()=>result.scrollIntoView({behavior:'smooth'});form.querySelector('.test-submit-bar').append(viewResults);return record;
 }
 function submitAssessment(timedOut=false,confirmed=false){

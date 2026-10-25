@@ -24,7 +24,7 @@ function handleStudentInstructorContact(data) {
   const content='<p><strong>Name:</strong> '+escape(name)+'<br><strong>Reply email:</strong> '+escape(email)+'</p><p style="white-space:pre-wrap">'+escape(message)+'</p>';
   const htmlBody=typeof sbBrandedEmail==='function'?sbBrandedEmail('Learning Hub request',content):'<html><body style="font-family:Arial,sans-serif;color:#193c32"><h2>Learning Hub request</h2>'+content+'<p>Speak Boldly</p></body></html>';
   try{
-   MailApp.sendEmail({to:'Askcoach@speakboldly.space',replyTo:email,name:'Speak Boldly',subject:'Learning Hub request — '+name,body:'How can I help you?\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
+   MailApp.sendEmail({to:'askcoach@speakboldly.space',replyTo:email,name:'Speak Boldly',subject:'Learning Hub request — '+name,body:'How can I help you?\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
    sheet.getRange(rowNumber,6,1,2).setValues([['sent','']]);return respond({ok:true,status:'sent'});
   }catch(error){sheet.getRange(rowNumber,6,1,2).setValues([['delivery_unknown',String(error.message||error)]]);throw new Error('Your note is saved, but email delivery could not be confirmed. Please wait for your instructor to check it before sending again.');}
  }finally{lock.releaseLock();}

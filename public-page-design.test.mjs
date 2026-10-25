@@ -1,3 +1,8 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 const read=path=>readFileSync(path,'utf8');
-test('search pages share the website brand and accessible mobile navigation',()=>{const files=JSON.parse(read('content/public-pages-manifest.json')).files;for(const file of files){const html=read(file);for(const asset of ['assets/site-base.min.css','assets/site-theme.min.css','assets/public-pages.css','assets/public-navigation.js'])assert(html.includes('/'+asset),file+' misses '+asset);assert(html.includes('class="logo speak-logo"'));assert(html.includes('id="main-navigation"'));assert(html.includes('aria-controls="main-navigation"'));assert(!html.includes('data-open-view='));assert(html.includes('DM+Sans'));}const script=read('assets/public-navigation.js');assert(script.includes('mobile-open'));assert(script.includes("event.key==='Escape'"));assert(!read('index.html').includes('class="seo-resource-directory"'));});
+test('Programs and Daily Motivation use the original website screens, not a separate layout',()=>{
+ for(const [file,view,course]of [['programs/index.html','courses',''],['programs/general-english/index.html','courses','general-8'],['learn/daily-quotes/index.html','daily-quote','']]){
+ const html=read(file);assert(html.includes('data-public-site-view="'+view+'"'));assert(html.includes('data-public-course="'+course+'"'));assert(html.includes('<base href="/">'));assert(html.includes('class="logo speak-logo"'));assert(html.includes('id="main-navigation"'));assert(html.includes('/assets/public-site-route.js'));assert(html.includes('app.js?v='));assert(!html.includes('class="public-page"'));assert(html.includes('<noscript>'));assert(html.includes('class="page-signature"'));
+ }
+ assert(!read('index.html').includes('class="seo-resource-directory"'));
+});

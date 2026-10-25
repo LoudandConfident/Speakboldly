@@ -5,7 +5,7 @@ import {initializeInstructorResources} from './instructor-resources.js?v=client-
 import {initializeHubAccessEditor} from './hub-access-editor.js?v=client-status-motivations';
 import {initializeMotivationFreeze} from './motivation-freeze-editor.js?v=picture-preview-links-1';
 import {refreshMotivationSettings} from './motivation-settings.js?v=freeze-24-oct-1';
-import {clientDailyMotivation} from './home-gallery.js?v=picture-preview-links-1';
+import {clientDailyMotivation} from './home-gallery.js?v=classic-footer-booking-1';
 import {initializeInstructorFrench} from './instructor-french.js?v=toolbar-v2';
 import {initializeInstructorBackups} from './instructor-backups.js?v=client-status-motivations';
 import {initializeNativeEnglishEditor} from './native-english-editor.js?v=client-status-motivations';
@@ -16,7 +16,7 @@ import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=l
 import {initializeWeeklyPortalPasswords} from './weekly-portal-passwords.js?v=client-status-motivations';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
 import {initializePortalSwitches} from './portal-switches.js?v=client-status-motivations';
-import {initializeTeacherDocuments} from './teacher-documents.js?v=report-return-1';
+import {initializeTeacherDocuments} from './teacher-documents.js?v=classic-footer-booking-1';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
 import {initializeAdminCalendar} from './admin-calendar.js?v=domain-email-routing';

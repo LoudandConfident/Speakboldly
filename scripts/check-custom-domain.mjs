@@ -41,9 +41,17 @@ for(let attempt=0;attempt<24;attempt++){
 console.log('FAVICON_VERIFICATION '+JSON.stringify(faviconReport));
 if(!faviconReport.declared||faviconReport.iconStatus!==200||faviconReport.width!==192||faviconReport.height!==192)throw Error('The SB search icon is not live yet.');
 
-try{
- const html=await (await fetch('https://speakboldly.space/')).text();
- const form=html.split('id="client-sheet-connect"')[1]?.split('</form>')[0];
- const endpoint=form?.match(/name="endpoint"[^>]*value="([^"]+)"/)?.[1];
- if(endpoint){const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action:'dailyMotivationSettings',date:'2026-10-24'})});console.log('PUBLIC_MOTIVATION_PREVIEW '+JSON.stringify(await r.json()));}
-}catch(e){console.log('PUBLIC_MOTIVATION_PREVIEW_ERROR '+e.message);}
+let restoredUI;
+for(let attempt=0;attempt<24;attempt++){
+ restoredUI={};
+ for(const [path,view] of [['/programs/','courses'],['/programs/general-english/','courses'],['/learn/daily-quotes/','daily-quote']]){
+  const r=await fetch('https://speakboldly.space'+path),html=await r.text();
+  restoredUI[path]={status:r.status,originalWebsite:html.includes('data-public-site-view="'+view+'"'),classicFooter:html.includes('© 2026 Mira Nasser Louis. All rights reserved.')};
+ }
+ const shareResponse=await fetch('https://speakboldly.space/motivation/share/daily-motivation-french-clean.html'),shareHtml=await shareResponse.text();
+ restoredUI.motivationPreview={status:shareResponse.status,correctPicture:shareHtml.includes('property="og:image" content="https://speakboldly.space/images/daily-motivation-french-clean.png"')};
+ if(Object.values(restoredUI).every(item=>item.status===200&&Object.entries(item).every(([key,value])=>key==='status'||value===true)))break;
+ await new Promise(resolve=>setTimeout(resolve,5000));
+}
+console.log('RESTORED_UI_VERIFICATION '+JSON.stringify(restoredUI));
+if(!Object.values(restoredUI).every(item=>item.status===200&&Object.entries(item).every(([key,value])=>key==='status'||value===true)))throw Error('Restored pages are not live yet.');

@@ -1,5 +1,5 @@
 // Domain mail routing. Gmail send-as aliases must be verified in the deploying account.
-const SB_DOMAIN_EMAILS={general:'Contactus@speakboldly.space',team:'Joinus@speakboldly.space',student:'Askcoach@speakboldly.space',billing:'billing@speakboldly.space',automated:'noreply@speakboldly.space'};
+const SB_DOMAIN_EMAILS={general:'Contactus@speakboldly.space',team:'Joinus@speakboldly.space',student:'askcoach@speakboldly.space',billing:'billing@speakboldly.space',automated:'noreply@speakboldly.space'};
 function sbDomainEmailRoute(kind){
  const financial=kind==='registration'||kind==='paymentReminder';
  return {from:financial?SB_DOMAIN_EMAILS.billing:SB_DOMAIN_EMAILS.automated,replyTo:financial?SB_DOMAIN_EMAILS.billing:SB_DOMAIN_EMAILS.student};

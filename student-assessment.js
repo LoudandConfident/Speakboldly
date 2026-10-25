@@ -5,13 +5,13 @@ import {withBerlitzBooks} from './berlitz-material.js?v=custom-domain-1';
 import {initializeMonthlyLearning} from './monthly-learning.js?v=library-folders';
 import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=custom-domain';
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=exam-rebuild';
-import {initializeStudentContact} from './student-contact.js?v=domain-email-routing';
+import {initializeStudentContact} from './student-contact.js?v=classic-footer-booking-1';
 import {chooseLearningLevel} from './learning-level-dialog.js?v=password-free-1';
 import {learningDocumentTitle,learningDocumentLevel,learningDocumentCategory,learningDocumentPart,createLearningDocumentCard} from './learning-document-cards.js?v=library-folders';
 import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v=learning-space';
 import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=folder-popups';
-import {initializeStudentBooking} from './student-booking.js?v=domain-email-routing';
+import {initializeStudentBooking} from './student-booking.js?v=classic-footer-booking-1';
 import {createExamForm} from './exam-form.js?v=exam-rebuild';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 

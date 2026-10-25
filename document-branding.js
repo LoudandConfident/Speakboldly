@@ -1,9 +1,9 @@
 // One identity and placement for every generated document.
 export const DOCUMENT_BRAND={
- founder:'Mira Nasser',
- credentials:'© 2026 English Language Coaching\nFounded by Mira Nasser',
+ founder:'Mira Nasser Louis',
+ credentials:"English Language Coaching\nFounded by Mira Nasser Louis\n© 2026 Mira Nasser Louis. All rights reserved.",
  logo:'./document-templates/sb-policy-logo.png',
- left:44,top:42,logoSize:44,footerY:34,footerSize:7.5
+ left:44,top:42,logoSize:44,footerY:44,footerSize:7.5,footerLineHeight:10
 };
 export async function drawDocumentBranding(pdf,{font,logoBytes,logo,light=false}){
  const {rgb}=await import('./vendor/pdf-lib.esm.min.js');
@@ -11,8 +11,8 @@ export async function drawDocumentBranding(pdf,{font,logoBytes,logo,light=false}
  pdf.getPages().forEach((page,index)=>{
   const {width,height}=page.getSize();
   page.drawImage(mark,{x:DOCUMENT_BRAND.left,y:height-DOCUMENT_BRAND.top-DOCUMENT_BRAND.logoSize,width:DOCUMENT_BRAND.logoSize,height:DOCUMENT_BRAND.logoSize});
-  page.drawText(DOCUMENT_BRAND.credentials,{x:DOCUMENT_BRAND.left,y:DOCUMENT_BRAND.footerY,font,size:DOCUMENT_BRAND.footerSize,lineHeight:11,color:ink});
-  const number=(index+1)+' / '+pdf.getPageCount();page.drawText(number,{x:width-DOCUMENT_BRAND.left-font.widthOfTextAtSize(number,DOCUMENT_BRAND.footerSize),y:DOCUMENT_BRAND.footerY,font,size:DOCUMENT_BRAND.footerSize,lineHeight:11,color:ink});
+  page.drawText(DOCUMENT_BRAND.credentials,{x:DOCUMENT_BRAND.left,y:DOCUMENT_BRAND.footerY,font,size:DOCUMENT_BRAND.footerSize,lineHeight:DOCUMENT_BRAND.footerLineHeight,color:ink});
+  const number=(index+1)+' / '+pdf.getPageCount();page.drawText(number,{x:width-DOCUMENT_BRAND.left-font.widthOfTextAtSize(number,DOCUMENT_BRAND.footerSize),y:DOCUMENT_BRAND.footerY,font,size:DOCUMENT_BRAND.footerSize,lineHeight:DOCUMENT_BRAND.footerLineHeight,color:ink});
  });
  pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setCreator('Speak Boldly');
 }

@@ -1,5 +1,5 @@
 import {weeklySessionPlan,programSessionCount} from './session-series.js?v=library-folders';
-import {bookingClock} from './student-booking.js?v=domain-email-routing';
+import {bookingClock} from './student-booking.js?v=classic-footer-booking-1';
 import {initializeCalendarSlotEditor} from './calendar-slot-editor.js?v=domain-email-routing';
 import {removedPortalClientIds} from './requested-client-cleanup.js';
 import {confirmClientEmail} from './client-email-confirmation.js?v=calendar-popup';

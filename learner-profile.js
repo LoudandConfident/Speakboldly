@@ -1,5 +1,6 @@
+import {createPlacementBookingRemark} from './placement-booking-remark.js?v=personalised-placement-1';
 import {learnerCourseGuidance,learnerQuickPractice} from './assessment-guidance.js?v=bold-blog-simple-results';
-import {addResultImageButton,addResultBranding} from './result-image.js?v=signature-mira-nasser';
+import {addResultImageButton,addResultBranding} from './result-image.js?v=classic-footer-booking-1';
 import {learnerProfiles,learnerQuestions,scoreLearnerProfile,learnerQuestionOrder} from './learner-profile-data.js?v=short-shuffled-v2';
 export function initializeLearnerProfile(doc,win){
  const root=doc.querySelector('#learner-profile');if(!root)return;
@@ -18,6 +19,7 @@ export function initializeLearnerProfile(doc,win){
  const table=el('table');table.append(el('caption','Your learning preferences'));for(const key of Object.keys(learnerProfiles)){const row=el('tr');const name=el('th',learnerProfiles[key].name);name.scope='row';row.append(name,el('td',Math.round(score.counts[key]/score.total*100)+'%'));table.append(row);}result.append(table);
  for(const key of score.strongest){const section=el('section');section.append(el('h3',learnerProfiles[key].name),el('h4','In a course'),el('p',learnerCourseGuidance[key][0]),el('h4','Try this on your own'),el('p',learnerQuickPractice[key]));result.append(section);}
  result.append(el('p','Practise for 10 minutes a day. Mix listening, reading, speaking, and writing, and keep what helps you improve.'));
+ result.append(createPlacementBookingRemark(doc,win));
  addResultBranding(doc,result);
  addResultImageButton(doc,win,result,'Your learning profile',{learnerCard:true});
  const restart=el('button','Retake the learner test','button light');restart.type='button';restart.onclick=()=>{form.reset();shuffleQuestions();page=0;form.hidden=false;result.hidden=true;doc.querySelector('.learner-results-empty').hidden=false;showPage();win.location.hash='learner-profile';};result.append(restart);form.hidden=false;result.hidden=false;doc.querySelector('.learner-results-empty').hidden=true;win.location.hash='learner-results';

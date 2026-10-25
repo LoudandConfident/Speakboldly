@@ -40,7 +40,7 @@ function handleLibraryAction(p){
    const row=log.getLastRow()+1;log.getRange(row,1,1,6).setValues([[requestId,String(p.clientId),file.getId(),'sending','','']]);SpreadsheetApp.flush();
    try{
     file.addViewer(String(client[2]));
-    sbSendDomainEmail({to:String(client[2]),subject:'Your learning material — Speak Boldly',body:'Hello '+client[1]+',\n\nYour teacher has shared '+file.getName()+' with you.\n\nView it here:\n'+file.getUrl()+'\n\nOpen the link while signed in to Google using '+client[2]+'. You have viewer access.\n\nSpeak Boldly',name:'Speak Boldly',replyTo:'Askcoach@speakboldly.space'},verifiedFrom);
+    sbSendDomainEmail({to:String(client[2]),subject:'Your learning material — Speak Boldly',body:'Hello '+client[1]+',\n\nYour teacher has shared '+file.getName()+' with you.\n\nView it here:\n'+file.getUrl()+'\n\nOpen the link while signed in to Google using '+client[2]+'. You have viewer access.\n\nSpeak Boldly',name:'Speak Boldly',replyTo:'askcoach@speakboldly.space'},verifiedFrom);
     log.getRange(row,4,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,recipient:String(client[2]),url:file.getUrl()});
    }catch(error){log.getRange(row,4).setValue('delivery_unknown');log.getRange(row,6).setValue(String(error.message||error));throw new Error('Sharing or delivery could not be confirmed. Check LibrarySendLog before sending again.');}
   }finally{lock.releaseLock();}
