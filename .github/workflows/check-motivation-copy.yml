@@ -1,0 +1,25 @@
+name: Check actual motivation copy button
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/check-live-motivation-copy.cjs
+      - .github/workflows/check-motivation-copy.yml
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install isolated browser driver
+        run: npm install --prefix "$RUNNER_TEMP/motivation-check" playwright --no-save --ignore-scripts --no-audit --no-fund
+      - name: Read the public picture and click Copy motivation link
+        env:
+          NODE_PATH: ${{ runner.temp }}/motivation-check/node_modules
+        run: node scripts/check-live-motivation-copy.cjs
