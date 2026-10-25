@@ -97,7 +97,8 @@ for(const [index,q] of dailyQuotes.entries()){
 
  html=html.replace(/<meta name="robots"[^>]*>/,'<meta name="robots" content="index,follow,max-image-preview:large">');
  const metadata='<script type="application/ld+json">'+ld({'@context':'https://schema.org','@type':'WebPage',name:title,description,url,isPartOf:{'@id':origin+'/#website'},publisher:{'@id':org['@id']}})+'</script>';html=html.includes('application/ld+json')?html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/,()=>metadata):html.replace('</head>',metadata+'</head>');
- if(!html.includes('href="/learn/daily-quotes/"'))html=html.replace('</main>','<p><a href="/learn/daily-quotes/">More English learning motivation</a></p></main>');
+ // The shared page is the content itself; do not send readers through another motivation landing page.
+ html=html.replace(/<a class="return"[^>]*>[\s\S]*?<\/a>/g,'').replace(/<p><a href="\/learn\/daily-quotes\/">More English learning motivation<\/a><\/p>/g,'');
  writeFileSync(file,html);motivationPaths.push('/motivation/'+name);
  // Fresh picture-specific share URLs avoid cached homepage-logo previews.
  const shareUrl=origin+'/motivation/share/'+name+(preview?'?daily-motivation='+preview.version:'');
