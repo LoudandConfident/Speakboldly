@@ -123,7 +123,8 @@ export function initializeGallery(doc, win) {
   const now = new win.Date(), nextDay = motivationDay(now,cairoDayNumber);
   if (day === nextDay) return;
   day = nextDay;
-  const index = motivationIndexForDate(now),custom=motivationSettings().message,entry=custom?{quote:custom.quote,image:custom.image,alt:custom.quote,customDate:custom.date}:dailyQuotes[index],details=custom?{paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[]}:quoteDetails[index];currentEntry=entry;copy.disabled=false;copyField.hidden=true;shareFile=null;shareStatus.textContent='';
+  const sharedName=new URL(win.location.href).searchParams.get('motivation-entry'),sharedIndex=dailyQuotes.findIndex(q=>q.image.split('/').pop().replace(/\.png$/,'')===sharedName);
+  const index = sharedIndex>=0?sharedIndex:motivationIndexForDate(now),custom=sharedIndex>=0?null:motivationSettings().message,entry=custom?{quote:custom.quote,image:custom.image,alt:custom.quote,customDate:custom.date}:dailyQuotes[index],details=custom?{paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[]}:quoteDetails[index];currentEntry=entry;copy.disabled=false;copyField.hidden=true;shareFile=null;shareStatus.textContent='';
   if(win.navigator.canShare&&win.File&&win.fetch)win.fetch(new URL(entry.image,doc.baseURI)).then(response=>{if(!response.ok)throw Error('Image unavailable');return response.blob();}).then(blob=>{if(currentEntry===entry)shareFile=new win.File([blob],entry.image.split('/').pop(),{type:blob.type||'image/png'});}).catch(()=>{});
   page.querySelector('#daily-quote-image').src = entry.image;
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');

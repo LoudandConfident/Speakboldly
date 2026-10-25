@@ -106,6 +106,9 @@ for(const [index,q] of dailyQuotes.entries()){
  shareHtml=shareHtml.replace(/<meta name="twitter:card"[^>]*>/,'<meta name="twitter:card" content="summary_large_image">');
  shareHtml=shareHtml.replace('<img class="picture"','<img fetchpriority="high" class="picture"');
  shareHtml=shareHtml.replaceAll('href="../"','href="/"').replaceAll('src="../sb-logo-green.svg"','src="/sb-logo-green.svg"').replaceAll('href="../#daily-quote"','href="/learn/daily-quotes/"');
+ // Social crawlers read the picture metadata; people open the real website view automatically.
+ const websiteTarget='/?motivation-entry='+encodeURIComponent(name.replace(/\.html$/,''))+'#daily-quote';
+ shareHtml=shareHtml.replace('</head>','<script>location.replace('+JSON.stringify(websiteTarget)+');</script></head>');
  mkdirSync(resolve(root,'motivation/share'),{recursive:true});writeFileSync(resolve(root,'motivation/share',name),shareHtml);
 
 }
