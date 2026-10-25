@@ -24,6 +24,7 @@ const org={'@type':'EducationalOrganization','@id':origin+'/#organization',name:
 const link=(path,text)=>'<a href="'+e(path)+'">'+e(text)+'</a>';
 const resources=()=>'<div class="resource-links" aria-label="Explore free English resources">'+link('/learn/daily-idioms/','Daily idioms')+link('/learn/daily-challenges/','Daily English challenges')+link('/learn/daily-quotes/','Learning motivation')+link('/assessments/','Free assessments')+'</div>';
 function page(path,{title,description,heading,body,eyebrow='Speak Boldly',noindex=false,schema=[],image='/speak-boldly-preview-dark-green.png',parent='/'}={}){
+ if(path==='/learn/daily-quotes/')title='Daily Motivation';
  const url=origin+path,fullTitle=title+' | Speak Boldly';
  const crumbs=[{'@type':'ListItem',position:1,name:'Home',item:origin+'/'}];
  if(parent!=='/')crumbs.push({'@type':'ListItem',position:2,name:parent==='/programs/'?'Programs':parent==='/blog/'?'Bold Blog':'Free English practice',item:origin+parent});
@@ -89,14 +90,17 @@ for(const [index,q] of dailyQuotes.entries()){
  const title=q.quote.length>75?q.quote.slice(0,72).trim()+'…':q.quote;
  const details=quoteDetails[index],reflection=details?.reflection||details?.paragraphs?.[0]||q.quote;
  const description=reflection.replace(/\s+/g,' ').slice(0,157).trim()+'…';
- html=html.replace(/<title>[\s\S]*?<\/title>/,'<title>'+e(title)+' | Speak Boldly</title>');
+ html=html.replace(/<title>[\s\S]*?<\/title>/,'<title>Daily Motivation — '+e(title)+' | Speak Boldly</title>');
  html=html.replace(/<meta name="description"[^>]*>/,'<meta name="description" content="'+e(description)+'">');
+ html=html.replace(/<meta property="og:title"[^>]*>/,'<meta property="og:title" content="Daily Motivation | Speak Boldly">').replace(/<meta name="twitter:title"[^>]*>/,'<meta name="twitter:title" content="Daily Motivation | Speak Boldly">');
+ html=html.replace(/<p class="eyebrow">[^<]*<\/p>/,'<p class="eyebrow">Daily Motivation</p>');
+
  html=html.replace(/<meta name="robots"[^>]*>/,'<meta name="robots" content="index,follow,max-image-preview:large">');
  const metadata='<script type="application/ld+json">'+ld({'@context':'https://schema.org','@type':'WebPage',name:title,description,url,isPartOf:{'@id':origin+'/#website'},publisher:{'@id':org['@id']}})+'</script>';html=html.includes('application/ld+json')?html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/,()=>metadata):html.replace('</head>',metadata+'</head>');
  if(!html.includes('href="/learn/daily-quotes/"'))html=html.replace('</main>','<p><a href="/learn/daily-quotes/">More English learning motivation</a></p></main>');
  writeFileSync(file,html);motivationPaths.push('/motivation/'+name);
  // Fresh picture-specific share URLs avoid cached homepage-logo previews.
- const shareUrl=origin+'/motivation/share/'+name+(preview?'?image='+preview.version:'');
+ const shareUrl=origin+'/motivation/share/'+name+(preview?'?daily-motivation='+preview.version:'');
  let shareHtml=html.replace(/<meta property="og:url"[^>]*>/,'<meta property="og:url" content="'+shareUrl+'">');
  shareHtml=shareHtml.replace(/<meta name="twitter:card"[^>]*>/,'<meta name="twitter:card" content="summary_large_image">');
  shareHtml=shareHtml.replace('<img class="picture"','<img fetchpriority="high" class="picture"');

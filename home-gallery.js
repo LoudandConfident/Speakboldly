@@ -102,7 +102,7 @@ export function motivationShareUrl(entry,base='https://speakboldly.space/'){
  if(entry.customDate)return new URL('./?motivation='+entry.customDate+'#daily-quote',base).href;
  const name=entry.image.split('/').pop().replace(/\.png$/,'.html');return new URL('./motivation/'+name,base).href;
 }
-export function motivationCopyUrl(entry){if(entry.customDate)return motivationShareUrl(entry);const name=entry.image.split('/').pop().replace(/\.png$/,'.html');const url=new URL('/motivation/share/'+name,'https://speakboldly.space/');const preview=motivationPreviews[entry.image];if(preview)url.searchParams.set('image',preview.version);return url.href;}
+export function motivationCopyUrl(entry){if(entry.customDate)return motivationShareUrl(entry);const name=entry.image.split('/').pop().replace(/\.png$/,'.html');const url=new URL('/motivation/share/'+name,'https://speakboldly.space/');const preview=motivationPreviews[entry.image];if(preview)url.searchParams.set('daily-motivation',preview.version);return url.href;}
 export async function copyMotivationLink(win,entry){
  const url=motivationCopyUrl(entry);
  await win.navigator.clipboard.writeText(url);
