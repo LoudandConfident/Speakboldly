@@ -1,7 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {createSheetExamFixture} from './sheet-exam-fixture.mjs';import {setMotivationSettings,motivationDay,INITIAL_MOTIVATION_FREEZE} from './motivation-settings.js';
 const day=d=>Math.floor(Date.parse(d)/86400000);
 test('daily rotation stays paused until the owner resumes, including stale Sunday settings',()=>{
- setMotivationSettings(INITIAL_MOTIVATION_FREEZE);assert.equal(motivationDay(new Date('2026-10-25T12:00Z'),day),20746);assert.equal(motivationDay(new Date('2026-11-01T12:00Z'),day),20746);
+ setMotivationSettings(INITIAL_MOTIVATION_FREEZE);assert.equal(motivationDay(new Date('2026-10-25T12:00Z'),day),20750);assert.equal(motivationDay(new Date('2026-11-01T12:00Z'),day),20750);
  setMotivationSettings({frozen:true,day:20746,until:'2026-10-25',revision:'old-server'});assert.equal(motivationDay(new Date('2026-10-26T12:00Z'),day),20746);
  setMotivationSettings({frozen:false,day:20746,until:'',revision:'owner-resumed'});assert.equal(motivationDay(new Date('2026-10-26T12:00Z'),day),day('2026-10-26'));
 });
@@ -13,4 +13,11 @@ test('owner can schedule and edit a quote with a public picture; public readers 
  const edited=f.request({...p,picture:undefined,quote:'Keep growing.',key:'private-test-key'});assert.equal(edited.ok,true,edited.error);assert.equal(pictures,1);assert.equal(f.request({action:'listMotivationMessages',key:'private-test-key'}).messages.length,1);
  f.request({...p,date:'2026-10-26',quote:'Tomorrow only.',key:'private-test-key'});assert.equal(f.request({action:'dailyMotivationSettings',date:'2026-10-26'}).settings.message.quote,'Keep growing.');
  assert.equal(f.request({...p,date:'2026-02-31',key:'private-test-key'}).ok,false);
+});
+
+test('requested 24 October freeze survives old server state and a new owner revision releases it',()=>{
+ setMotivationSettings({frozen:false,day:20746,until:'',revision:'213c7c67-d6c4-4afe-aa73-494b6a8c9630'});
+ assert.equal(motivationDay(new Date('2026-11-05T12:00Z'),day),20750);
+ setMotivationSettings({frozen:false,day:20751,until:'',revision:'owner-resumed-after-24-oct-pin'});
+ assert.equal(motivationDay(new Date('2026-11-05T12:00Z'),day),day('2026-11-05'));
 });
