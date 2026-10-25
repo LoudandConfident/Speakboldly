@@ -101,6 +101,11 @@ export function motivationShareUrl(entry,base='https://speakboldly.space/'){
  if(entry.customDate)return new URL('./?motivation='+entry.customDate+'#daily-quote',base).href;
  const name=entry.image.split('/').pop().replace(/\.png$/,'.html');return new URL('./motivation/'+name,base).href;
 }
+export async function copyMotivationLink(win,entry){
+ const url=motivationShareUrl(entry);
+ await win.navigator.clipboard.writeText(url);
+ return url;
+}
 export function clientDailyMotivation(now=new Date()){
  const custom=motivationSettings().message;if(custom)return {day:motivationDay(now,cairoDayNumber),quote:custom.quote,image:custom.image,paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[],url:motivationShareUrl({customDate:custom.date})};
  const day=motivationDay(now,cairoDayNumber),index=motivationIndexForDate(now),entry=dailyQuotes[index],details=quoteDetails[index];
@@ -110,13 +115,13 @@ export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
  if (!page||page.dataset.galleryInitialized) return;
  page.dataset.galleryInitialized='true';
- let ready=false,day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,shareStatus);page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationShareUrl(currentEntry,doc.baseURI);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
+ let ready=false,day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const copy=doc.createElement('button');copy.type='button';copy.className='button light small';copy.textContent='Copy motivation link';copy.disabled=true;const copyField=doc.createElement('input');copyField.type='text';copyField.readOnly=true;copyField.hidden=true;copyField.setAttribute('aria-label','Motivation link');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,copy,copyField,shareStatus);copy.onclick=async()=>{if(!currentEntry)return;try{await copyMotivationLink(win,currentEntry);copyField.hidden=true;shareStatus.textContent='Link copied. Paste it into WhatsApp or another app to load the picture preview.';}catch{copyField.value=motivationShareUrl(currentEntry);copyField.hidden=false;copyField.focus();copyField.select();shareStatus.textContent='Copy the selected link to share this motivation.';}};page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationShareUrl(currentEntry,doc.baseURI);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
  function refresh() {
   if(!ready)return;
   const now = new win.Date(), nextDay = motivationDay(now,cairoDayNumber);
   if (day === nextDay) return;
   day = nextDay;
-  const index = motivationIndexForDate(now),custom=motivationSettings().message,entry=custom?{quote:custom.quote,image:custom.image,alt:custom.quote,customDate:custom.date}:dailyQuotes[index],details=custom?{paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[]}:quoteDetails[index];currentEntry=entry;shareFile=null;shareStatus.textContent='';
+  const index = motivationIndexForDate(now),custom=motivationSettings().message,entry=custom?{quote:custom.quote,image:custom.image,alt:custom.quote,customDate:custom.date}:dailyQuotes[index],details=custom?{paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[]}:quoteDetails[index];currentEntry=entry;copy.disabled=false;copyField.hidden=true;shareFile=null;shareStatus.textContent='';
   if(win.navigator.canShare&&win.File&&win.fetch)win.fetch(new URL(entry.image,doc.baseURI)).then(response=>{if(!response.ok)throw Error('Image unavailable');return response.blob();}).then(blob=>{if(currentEntry===entry)shareFile=new win.File([blob],entry.image.split('/').pop(),{type:blob.type||'image/png'});}).catch(()=>{});
   page.querySelector('#daily-quote-image').src = entry.image;
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');
