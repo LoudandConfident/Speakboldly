@@ -27,5 +27,10 @@ for(const path of ['/','/programs/general-english/','/assessments/','/sitemap.xm
 console.log('DOMAIN_CONSOLIDATION '+JSON.stringify(consolidation));
 if(process.env.GITHUB_STEP_SUMMARY)appendFileSync(process.env.GITHUB_STEP_SUMMARY,'\n## Canonical and redirect evidence\n\n```json\n'+JSON.stringify(consolidation,null,2)+'\n```\n');
 
-// Read the public motivation selection; no private owner action or email is sent.
-try{const html=await (await fetch('https://speakboldly.space/')).text();const form=html.match(/<form[^>]*id="client-sheet-connect"[\\s\\S]*?<\\/form>/)?.[0];const endpoint=form?.match(/name="endpoint"[^>]*value="([^"]+)"/)?.[1];if(endpoint){const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action:'dailyMotivationSettings'})});const d=await r.json();console.log('PUBLIC_MOTIVATION_SELECTION '+JSON.stringify(d));}}catch(e){console.log('PUBLIC_MOTIVATION_READ_ERROR '+e.message);}
+try{
+ const html=await (await fetch('https://speakboldly.space/')).text();
+ const form=html.split('id="client-sheet-connect"')[1]?.split('</form>')[0];
+ const endpoint=form?.match(/name="endpoint"[^>]*value="([^"]+)"/)?.[1];
+ if(endpoint){const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action:'dailyMotivationSettings'})});console.log('PUBLIC_MOTIVATION_SELECTION '+JSON.stringify(await r.json()));}
+ else console.log('PUBLIC_MOTIVATION_READ_ERROR Endpoint not found');
+}catch(e){console.log('PUBLIC_MOTIVATION_READ_ERROR '+e.message);}
