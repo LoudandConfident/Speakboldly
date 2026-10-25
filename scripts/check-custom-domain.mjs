@@ -26,3 +26,17 @@ for(const path of ['/','/programs/general-english/','/assessments/','/sitemap.xm
 }
 console.log('DOMAIN_CONSOLIDATION '+JSON.stringify(consolidation));
 if(process.env.GITHUB_STEP_SUMMARY)appendFileSync(process.env.GITHUB_STEP_SUMMARY,'\n## Canonical and redirect evidence\n\n```json\n'+JSON.stringify(consolidation,null,2)+'\n```\n');
+
+const faviconExpected='/app-icons/icon-192.png';
+let faviconReport;
+for(let attempt=0;attempt<24;attempt++){
+ try{
+  const homeResponse=await fetch('https://speakboldly.space/'),html=await homeResponse.text();
+  const response=await fetch('https://speakboldly.space'+faviconExpected),bytes=Buffer.from(await response.arrayBuffer());
+  faviconReport={homepageStatus:homeResponse.status,declared:html.includes('sizes="192x192" href="'+faviconExpected+'"'),iconStatus:response.status,contentType:response.headers.get('content-type'),width:bytes.length>=24?bytes.readUInt32BE(16):null,height:bytes.length>=24?bytes.readUInt32BE(20):null};
+  if(faviconReport.declared&&faviconReport.iconStatus===200&&faviconReport.width===192&&faviconReport.height===192)break;
+ }catch(e){faviconReport={error:e.message};}
+ await new Promise(resolve=>setTimeout(resolve,5000));
+}
+console.log('FAVICON_VERIFICATION '+JSON.stringify(faviconReport));
+if(!faviconReport.declared||faviconReport.iconStatus!==200||faviconReport.width!==192||faviconReport.height!==192)throw Error('The SB search icon is not live yet.');
