@@ -17,5 +17,5 @@ export function publicSiteShell(shell,{path,title,description,graph,view,course=
  html=html.replace('<body>','<body data-public-site-view="'+view+'" data-public-course="'+escape(course)+'">');
  html=html.replace(/<([a-z]+)\b([^>]*\bdata-view\b[^>]*)>/g,(whole,tag,attributes)=>{const id=attributes.match(/\bid="([^"]+)"/)?.[1];attributes=attributes.replace(/\s+hidden(?:="")?/g,'');return '<'+tag+attributes+(id===view?'':' hidden')+'>';});
  html=html.replace('</main>','<noscript><section class="catalog">'+fallback+'</section></noscript></main>');
- return html.replace('</body>','<script type="module" src="/assets/public-site-route.js?v=original-views-1"></script></body>');
+ return html.replace('</body>','<script type="module" src="/assets/public-site-route.js?v=website-tabs-2"></script></body>');
 }
