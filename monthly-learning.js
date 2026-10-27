@@ -74,10 +74,10 @@ export const MONTHLY_LEARNING_PAGES=[
     "brief": "You do not have to practise everything at once. Choose a free lesson that answers one question you have, and finish by making your own example."
   }
 ].map(page=>Object.freeze(page));
-export const NATIVE_ROTATION_START='2027-01-15';
+export const NATIVE_ROTATION_START='2027-02-01';
 export function nativeSelection(now=new Date(),settings={}){
  const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now),get=key=>parts.find(part=>part.type===key).value,day=get('year')+'-'+get('month')+'-'+get('day'),actualMonth=day.slice(0,7),frozen=day<NATIVE_ROTATION_START;
- const manual=settings.mode==='manual',offset=frozen?0:Math.max(0,(Number(get('year'))-2027)*12+Number(get('month'))-1)+1;
+ const manual=settings.mode==='manual',offset=frozen?0:Math.max(0,(Number(get('year'))-2027)*12+Number(get('month'))-2)+1;
  return {key:!manual&&frozen?'2026-10':actualMonth,link:manual?Math.max(0,Math.min(11,Number(settings.manualLink)||0)):offset%12,novel:manual?Math.max(0,Math.min(23,Number(settings.manualNovel)||0)):offset%24,mode:manual?'manual':'automatic',frozen};
 }
 export function monthlyLearningPage(now=new Date(),settings={}){const selected=nativeSelection(now,settings);return {...MONTHLY_LEARNING_PAGES[selected.link],...selected,label:selected.mode==='manual'?'Selected by your instructor':selected.frozen?'Selected for you':new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',month:'long',year:'numeric'}).format(now)};}

@@ -12,7 +12,7 @@ No setup function or new Script Properties are needed for these additions. The f
 ## What changes
 
 - Programs has a Request consultation email composer. The subject includes the visitor’s name. The recipient is fixed to Contactus@speakboldly.space. Up to two JPG/PNG/WebP pictures, 1 MB each, can be attached. Requests are logged in Instructor requests and repeated submissions with the same request ID do not send twice.
-- Automatic Native English content remains on the current selection through 14 January 2027 in Cairo. It changes on 15 January, then on the first of each month. Existing October custom content is preserved through the freeze. Manual selections stay fixed until you change them or return to Automatic.
+- Automatic Native English content remains on the current selection through 31 January 2027 in Cairo. It changes on 1 February 2027, then on the first of each month. Existing October custom content is preserved through the freeze. Manual selections stay fixed until you change them or return to Automatic.
 - Jane Eyre is the initial monthly novel. The 24 public-domain novels open inside the website. Each book remembers its page on the same browser/device; no account or cross-device reading-position sync is added.
 - SB Studio has 365 daily roleplay briefs. The free Roleplay Room copies a prompt to use in the student’s own ChatGPT account. Voice Lab provides model audio, local recording/playback and word recognition where the browser supports it. Recordings are not uploaded to Speak Boldly. Model voices, microphone access and recognition depend on the device/browser.
 - Circular section guides explain each Learning Hub destination.
