@@ -1,6 +1,7 @@
-const view=document.body.dataset.publicSiteView,course=document.body.dataset.publicCourse;
+const view=document.body.dataset.publicSiteView,course=document.body.dataset.publicCourse,post=document.body.dataset.publicPost;
+const initialHash='#'+view+(post?'/'+post:'');
 // Return to the normal root URL when navigating to another website section.
-window.addEventListener('hashchange',()=>{if(location.hash!=='#'+view)history.replaceState(null,'','/'+location.search+location.hash);});
+window.addEventListener('hashchange',()=>{if(location.hash!==initialHash)history.replaceState(null,'','/'+location.search+location.hash);});
 if(course&&location.hash==='#courses'){
  const grid=document.querySelector('#course-grid');
  let observer;

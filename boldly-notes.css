@@ -53,3 +53,42 @@ main>#courses[data-view]{padding-top:48px!important}
 #how .how-policy-content a.sb-policy-link:hover{background:#e3f5ba;color:#193c32!important}
 #how .how-policy-content a.sb-policy-link:focus-visible{outline:2px solid #faf9f4;outline-offset:4px}
 #how .sb-policy-link .sb-policy-icon{display:block;width:27px;height:27px;flex:none;color:#193c32}
+
+/* Bold Blog’s own brushstroke-lion palette. */
+#boldly-notes{--blog-ink:#064d3e;--blog-green:#659b64;--blog-soft:#e6efdf;--blog-line:#bed2b7;color:var(--blog-ink)}
+#boldly-notes .bold-blog-brand{display:flex;align-items:center;justify-content:flex-start;margin:0 0 12px;min-width:0}
+#boldly-notes .bold-blog-brand img{display:block;width:112px;height:112px;max-width:100%;object-fit:contain}
+#boldly-notes .coming-preview{padding-top:4px}
+#boldly-notes .coming-preview-copy>h2{color:var(--blog-ink)}
+#boldly-notes .coming-preview-copy>h2::after{content:'';display:block;width:74px;height:4px;margin-top:15px;background:var(--blog-green);border-radius:50% 12% 50% 12%}
+#boldly-notes .coming-preview-copy>.eyebrow,#boldly-notes [data-notes-reader]>.eyebrow{color:var(--blog-green)}
+#boldly-notes .coming-preview-art{color:var(--blog-ink)}
+#boldly-notes .coming-preview-watermark{color:rgba(6,77,62,.65)}
+#boldly-notes .boldly-note-link{background:var(--blog-soft);border-color:var(--blog-line);color:var(--blog-ink)}
+#boldly-notes .boldly-note-link:hover{background:#d7e7ce;border-color:var(--blog-green)}
+#boldly-notes .button{background:var(--blog-ink);color:#fff}
+#boldly-notes .button.light{background:var(--blog-soft);color:var(--blog-ink)}
+#boldly-notes mark{background:#c9ddbf;color:var(--blog-ink)}
+@media(max-width:680px){#boldly-notes .bold-blog-brand{margin-bottom:10px}#boldly-notes .bold-blog-brand img{width:86px;height:86px}#boldly-notes .coming-preview-copy>h2::after{width:58px;height:3px;margin-top:12px}}
+
+#boldly-notes .bold-blog-heading h2{font-size:clamp(34px,4.5vw,52px);color:var(--blog-ink);margin:12px 0 16px}
+#boldly-notes .bold-blog-heading h2::after{content:'';display:block;width:74px;height:4px;margin-top:15px;background:var(--blog-green);border-radius:50% 12% 50% 12%}
+#boldly-notes [hidden]{display:none!important}
+#boldly-notes [data-notes-reader]>h2{font-size:clamp(30px,4vw,48px);line-height:1.2;letter-spacing:-1px;color:var(--blog-ink);max-width:780px;margin:20px 0 12px}
+#boldly-notes .boldly-note-date{font-size:12px;color:#65765d;margin:0 0 12px}
+#boldly-notes .boldly-note-page{max-width:740px;padding:12px 0 24px}
+#boldly-notes .boldly-note-page p{font-size:17px;line-height:1.9;margin:0 0 20px}
+#boldly-notes .boldly-note-page .boldly-note-subtitle{font-size:22px;line-height:1.6;color:var(--blog-green);font-weight:500;margin-bottom:28px}
+#boldly-notes .boldly-note-page h3{font-size:25px;line-height:1.45;letter-spacing:-.4px;margin:42px 0 20px;color:var(--blog-ink)}
+#boldly-notes .bold-question{border-left:3px solid var(--blog-green);padding:20px 24px 4px;background:var(--blog-soft);border-radius:0 14px 14px 0;margin-top:36px}
+#boldly-notes .bold-question h3{margin-top:0}
+#boldly-notes .page-signature{margin-top:28px;padding:20px 0 4px;border-top:1px solid var(--blog-line)!important}
+body:has(#boldly-notes:not([hidden])) #main-navigation [data-open-view="boldly-notes"]{background:#064d3e;border-color:#659b64}
+@media(max-width:680px){#boldly-notes .boldly-note-page p{font-size:16px;line-height:1.85}#boldly-notes .boldly-note-page h3{font-size:22px}#boldly-notes .boldly-note-page .boldly-note-subtitle{font-size:19px}#boldly-notes .bold-question{padding:18px 16px 2px}}
+
+#boldly-notes .bold-blog-masthead{display:flex;align-items:center;justify-content:space-between;gap:24px}
+#boldly-notes .bold-blog-masthead h2{margin:0;min-width:0}
+#boldly-notes .bold-blog-masthead .bold-blog-brand{margin:0;flex:none}
+#boldly-notes .bold-blog-tagline{font-size:21px;line-height:1.5;color:var(--blog-green);margin:18px 0 8px;font-weight:500}
+#boldly-notes .boldly-notes-intro{max-width:650px;margin:0 0 28px;font-size:15px;line-height:1.8}
+@media(max-width:680px){#boldly-notes .bold-blog-masthead{gap:16px}#boldly-notes .bold-blog-tagline{font-size:19px;margin-top:14px}}
