@@ -36,3 +36,6 @@ export function removeBrowserClient(storage,id) {
   throw new Error('Browser storage could not be updated. The client was not deleted.');
  }
 }
+
+// Actual recorded payments for the current client rounds; do not count history twice.
+export function clientCashReceived(clients){return Math.round(clients.reduce((sum,client)=>sum+(Number.isFinite(Number(client.amountPaid))?Number(client.amountPaid):0),0)*100)/100;}

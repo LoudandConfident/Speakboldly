@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {clientCashReceived} from './admin-clients.js';
+test('cash received uses actual Amount paid entries for current rounds, excluding historical duplicates',()=>{assert.equal(clientCashReceived([{amountPaid:850,enrollmentHistory:[{amountPaid:700}]},{amountPaid:3500},{amountPaid:500,active:false},{amountPaid:0}]),4850);assert.equal(clientCashReceived([]),0);assert.equal(clientCashReceived([{amountPaid:10.1},{amountPaid:0.2}]),10.3);});

@@ -1,6 +1,7 @@
+import {appendTaskPages} from './notes-task-pdf.js';
 import {DOCUMENT_BRAND,drawDocumentBranding} from './document-branding.js?v=two-line-footer-1';
 import {documentDate} from './student-document-filenames.js';
-export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date=documentDate(),title='Notes'}={}){
+export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date=documentDate(),title='Notes',taskAttachments=[],answerPages=true}={}){
  const {PDFDocument,rgb}=await import('./vendor/pdf-lib.esm.min.js');const {default:fontkit}=await import('./vendor/fontkit.es.min.js');
  const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);const font=await pdf.embedFont(fontBytes,{subset:true}),logo=await pdf.embedPng(logoBytes);pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setTitle(client.name+' — '+title+(client.sessionNumber?' — Session '+client.sessionNumber:''));pdf.setCreator('Speak Boldly');
  const width=595.28,height=841.89,left=DOCUMENT_BRAND.left,maxWidth=width-88,ink=rgb(.98,.976,.957);let page,y;
@@ -14,6 +15,7 @@ export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date
  }
  }
  paragraph('Speak Boldly — '+title,19);y-=8;paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);if(client.sessionNumber)paragraph('Session: '+client.sessionNumber);paragraph('Date: '+date);y-=18;paragraph(notes);
+ await appendTaskPages(pdf,taskAttachments,{font,rgb,client,newPage:()=>{newPage();return page;},answerPages});
  await drawDocumentBranding(pdf,{font,logo,light:true});
  return pdf.save();
 }

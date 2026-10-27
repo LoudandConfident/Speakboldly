@@ -67,6 +67,7 @@ function sbSaveSheetSession(input,allowPast=false){
 function handleSheetSessionAction(p){
  const lock=LockService.getScriptLock();lock.waitLock(20000);
  try{
+  if(p.action==='editSession')sbEditSheetSession(p);
   if(p.action==='saveSessionSeries')sbSaveSessionSeries(p);
   if(p.action==='saveSession'){if(!p.session)throw new Error('Session missing.');sbSaveSheetSession(p.session,p.importPast===true);}
   if(p.action==='cancelSession'){
@@ -79,7 +80,7 @@ function handleSheetSessionAction(p){
   const props=PropertiesService.getScriptProperties();
   const ready=typeof handleClientEmail==='function';
   const respond=typeof clientSyncResponse==='function'?clientSyncResponse:response;
-  return respond({ok:true,classes:sbListSheetSessions(),blockedDates:typeof sbCalendarAvailability==='function'?sbCalendarAvailability(sbExamBook()):[],calendarAvailabilityReady:typeof sbCalendarAvailability==='function',sessionDurationReady:true,emailReady:ready});
+  return respond({ok:true,classes:sbListSheetSessions(),blockedDates:typeof sbCalendarAvailability==='function'?sbCalendarAvailability(sbExamBook()):[],calendarAvailabilityReady:typeof sbCalendarAvailability==='function',sessionDurationReady:true,sessionEditingReady:typeof sbEditSheetSession==='function',emailReady:ready});
  }finally{lock.releaseLock();}
 }
 // Kept as a no-op so old scheduled triggers cannot send emails after this update.

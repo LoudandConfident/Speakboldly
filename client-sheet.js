@@ -1,5 +1,5 @@
 // Connection details stay in this owner's browser; never put the key in published code.
-import {validateClient} from './admin-clients.js?v=client-status-motivations';
+import {validateClient} from './admin-clients.js?v=tasks-calendar-cash-1';
 const CONNECTION_STORAGE_KEY = 'speak-boldly-client-sheet-connection-v1';
 let endpoint = '', key = '';
 export const clientSheetConnected = () => !!(endpoint && key);

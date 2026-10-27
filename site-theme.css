@@ -1906,7 +1906,7 @@ main>#courses[data-view]{padding-top:48px!important}
 .sb-loading[hidden]{display:none!important}
 
 /* brand-footer.css */
-/* The original, small three-line identity, shared by pages and saved results. */
+/* The original, small two-line identity, shared by pages and saved results. */
 body .page-signature,body .result-copyright{font-family:'DM Sans',Arial,sans-serif!important;font-size:11px!important;font-style:normal!important;font-weight:400!important;line-height:1.45!important;text-align:left!important;background:transparent!important;border:0!important;box-shadow:none!important;color:#193c32}
 body .page-signature>span,body .page-signature>small{display:block!important;margin:0!important;padding:0!important;line-height:1.45!important}
 body .page-signature>span{font-size:12px!important;font-weight:600!important}
@@ -1920,6 +1920,14 @@ body .public-page .page-signature{margin:0}
 #how .how-policy-content a.sb-policy-link{position:relative}
 #how .how-policy-content a.sb-policy-link:after{content:'';position:absolute;inset:-8px 0}
 @media(max-width:680px){#how .how-policy-content a.sb-policy-link{width:89px;height:22px;min-height:22px;padding:2px 6px;gap:4px;font-size:9px}#how .sb-policy-link .sb-policy-icon{width:13px;height:13px}#how .how-policy-content a.sb-policy-link:after{inset:-11px 0}}
+
+/* Keep the full signature within narrow screens and phone safe areas. */
+body .page-signature,body .result-copyright{box-sizing:border-box;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+body .page-signature>span,body .page-signature>small{white-space:normal!important;overflow-wrap:anywhere}
+@media(max-width:680px){
+ body main #home:not([hidden])>.home-bottom-row{box-sizing:border-box!important;width:100%!important;min-width:0!important;flex-wrap:wrap!important;gap:10px!important;padding-left:max(16px,env(safe-area-inset-left))!important;padding-right:max(16px,env(safe-area-inset-right))!important}
+ body main #home:not([hidden])>.home-bottom-row .page-signature{flex:1 1 205px!important;min-width:0!important;max-width:100%!important}
+}
 
 /* button-hover.css */
 /* Buttons change appearance on hover without underlining their labels. */
