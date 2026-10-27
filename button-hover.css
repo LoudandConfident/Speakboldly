@@ -1,0 +1,14 @@
+/* Buttons change appearance on hover without underlining their labels. */
+button, a.button, a[role="button"], a[role="tab"], nav a, .text-link {
+ text-decoration: none !important;
+}
+@media (hover: hover) {
+ button:not(:disabled):not([aria-disabled="true"]):hover,
+ a.button:not([aria-disabled="true"]):hover,
+ a[role="button"]:not([aria-disabled="true"]):hover,
+ a[role="tab"]:not([aria-disabled="true"]):hover,
+ nav a:hover, .text-link:hover {
+  text-decoration: none !important;
+  filter: brightness(.88);
+ }
+}
