@@ -1,3 +1,3 @@
-import {courses} from './courses.js?v=retire-it-program-1';
+import {courses} from './courses.js?v=prices-oct-27-2026';
 export function programSessionCount(program){const course=courses.find(course=>course.title===program);return course?Number(course.duration.match(/^\d+/)?.[0]||1):null;}
 export function weeklySessionPlan(record,mode){const total=programSessionCount(record.program),count=mode==='six'?6:mode==='course'?(total-Number(record.number)+1):1;if(!Number.isInteger(count)||count<1||count>52)throw new Error('This session number is outside the selected program. Choose this session only or six weeks.');return Array.from({length:count},(_,week)=>{const date=new Date(record.date+'T12:00:00Z');date.setUTCDate(date.getUTCDate()+week*7);return {...record,date:date.toISOString().slice(0,10),number:Number(record.number)+week};});}

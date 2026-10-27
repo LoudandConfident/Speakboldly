@@ -1,4 +1,4 @@
-import {courses} from './courses.js?v=retire-it-program-1';
+import {courses} from './courses.js?v=prices-oct-27-2026';
 export const MATERIAL_PROGRAM_FOLDERS=courses.filter(course=>course.id!=='information-technology'&&course.category!=='General English'&&course.id!=='instructor-training').map(course=>({id:course.id,title:course.title})).concat([{id:'comprehension',title:'Comprehension'},{id:'listening',title:'Listening'}]);
 export function materialProgram(item){
  const value=String(item.title||'').toLowerCase();

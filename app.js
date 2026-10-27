@@ -8,7 +8,7 @@ import { questions, TEST_VERSION } from './placement-questions.js?v=balanced-v4'
 import {placementExplanations} from './placement-explanations.js?v=mistake-explanations-1';
 import { scoreAnswers, placementCorrections } from './placement-scoring.js?v=balanced-v3';
 
-import {courses,matches} from './courses.js?v=retire-it-program-1';
+import {courses,matches} from './courses.js?v=prices-oct-27-2026';
 const $=s=>document.querySelector(s);
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const chat=message=>'mailto:Contactus@speakboldly.space?subject='+encodeURIComponent('English coaching enquiry')+'&body='+encodeURIComponent(message+'\n\nContact number: 01283786904');

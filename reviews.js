@@ -1,5 +1,5 @@
 import {openPopup} from './popups.js?v=mobile-assessment-page';
-import {courses} from './courses.js?v=retire-it-program-1';
+import {courses} from './courses.js?v=prices-oct-27-2026';
 import {reviewsConnected,reviewRequest} from './reviews-api.js?v=separate-review-sheet';
 export function initializeReviews(doc, api = reviewRequest, connected = reviewsConnected) {
  const opener = doc.querySelector('#review-open'), form = doc.querySelector('#review-form');
