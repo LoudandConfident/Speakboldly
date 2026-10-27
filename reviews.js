@@ -1,3 +1,4 @@
+import {reviewSubmission} from './review-validation.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {courses} from './courses.js?v=prices-oct-27-2026';
 import {reviewsConnected,reviewRequest} from './reviews-api.js?v=separate-review-sheet';
@@ -130,7 +131,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   button.disabled = true;status.textContent = 'Sharing your review…';
   submissionId ||= doc.defaultView.crypto.randomUUID();
   try {
-   const data = {submissionId,name:form.elements.name.value.trim(),age:form.elements.age.value,program:form.elements.program.value,level:form.elements.level.value.trim(),message:form.elements.message.value.trim()};
+   const data = reviewSubmission(form,submissionId);
    const result = await api('reviews',{method:'POST',data});
    ++loadVersion;
    reviews = [result.review,...reviews.filter(review=>review.id!==result.review.id)];lastLoaded=Date.now();cacheReviews();selected=0;render();listStatus.textContent='';
@@ -142,7 +143,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
     dialog.close();doc.defaultView.location.hash='reviews';
     listStatus.textContent='Thank you for submitting your review!';restartRotation();
    },1400);
-  } catch (error) {status.textContent = error.message || 'Your review could not be shared. Please try again.';}
+  } catch (error) {status.textContent = /check your review/i.test(error.message||'') ? 'The review service rejected these details. Your review has not been posted, and your text is still here. Please contact Speak Boldly if this continues.' : error.message || 'Your review could not be shared. Please try again.';if(error.field)form.elements[error.field]?.focus();}
   finally {button.disabled = false;}
  });
  doc.addEventListener('reviews-changed',()=>load({force:true}));
