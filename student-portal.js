@@ -1,4 +1,4 @@
-import {initializeStudentAssessment} from './student-assessment.js?v=success-return-1';
+import {initializeStudentAssessment} from './student-assessment.js?v=practice-zone-monthly-1';
 import {renderPdf} from './portal-document.js?v=embedded-books';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {takeStudentAttempt} from './student-attempts.js';
