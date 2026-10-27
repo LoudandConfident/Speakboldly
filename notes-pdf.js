@@ -2,7 +2,7 @@ import {DOCUMENT_BRAND,drawDocumentBranding} from './document-branding.js?v=two-
 import {documentDate} from './student-document-filenames.js';
 export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date=documentDate(),title='Notes'}={}){
  const {PDFDocument,rgb}=await import('./vendor/pdf-lib.esm.min.js');const {default:fontkit}=await import('./vendor/fontkit.es.min.js');
- const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);const font=await pdf.embedFont(fontBytes,{subset:true}),logo=await pdf.embedPng(logoBytes);pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setTitle(client.name+' — '+title);pdf.setCreator('Speak Boldly');
+ const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);const font=await pdf.embedFont(fontBytes,{subset:true}),logo=await pdf.embedPng(logoBytes);pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setTitle(client.name+' — '+title+(client.sessionNumber?' — Session '+client.sessionNumber:''));pdf.setCreator('Speak Boldly');
  const width=595.28,height=841.89,left=DOCUMENT_BRAND.left,maxWidth=width-88,ink=rgb(.98,.976,.957);let page,y;
  const newPage=()=>{page=pdf.addPage([width,height]);page.drawRectangle({x:0,y:0,width,height,color:rgb(.098,.235,.196)});y=height-124;};newPage();
  function line(text,size=11){if(y<106)newPage();page.drawText(text,{x:left,y,font,size,color:ink});y-=size*1.6;}
@@ -13,7 +13,7 @@ export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date
  if(current)line(current,size);
  }
  }
- paragraph('Speak Boldly — '+title,19);y-=8;paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);paragraph('Date: '+date);y-=18;paragraph(notes);
+ paragraph('Speak Boldly — '+title,19);y-=8;paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);if(client.sessionNumber)paragraph('Session: '+client.sessionNumber);paragraph('Date: '+date);y-=18;paragraph(notes);
  await drawDocumentBranding(pdf,{font,logo,light:true});
  return pdf.save();
 }

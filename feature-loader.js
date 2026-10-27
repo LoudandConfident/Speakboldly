@@ -1,7 +1,7 @@
 // Large portal and practice modules are fetched only when their page is opened.
 export function initializeFeatureLoader(doc,win){
  const groups={
-  'students-portal':['./daily-mission.js?v=dictation-per-sentence-1','./student-portal.js?v=two-line-footer-1','./admin-portal.js?v=shared-instructor-login-1'],
+  'students-portal':['./daily-mission.js?v=dictation-per-sentence-1','./student-portal.js?v=two-line-footer-1','./admin-portal.js?v=manual-hours-notes-1'],
   'reviews':['./reviews.js?v=library-folders'],
   'daily-quote':['./home-gallery.js?v=website-motivation-1'],
   'learner-profile':['./learner-profile.js?v=two-line-footer-1'],

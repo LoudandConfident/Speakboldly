@@ -1,4 +1,4 @@
-import {initializeClientNotes} from './client-notes.js?v=two-line-footer-1';
+import {initializeClientNotes} from './client-notes.js?v=session-number-1';
 import {readReportTab} from './report-tabs.js?v=action-plan-1';
 import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=two-line-footer-1';
 import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=domain-email-routing';
