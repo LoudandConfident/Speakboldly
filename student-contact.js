@@ -1,3 +1,4 @@
+import {showSubmissionSuccess} from './submission-success.js';
 export function initializeStudentContact(doc) {
  const win=doc.defaultView,root=doc.querySelector('#portal-contact');
  const endpoint=doc.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
@@ -17,7 +18,7 @@ export function initializeStudentContact(doc) {
    const response=await win.fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action:'studentInstructorContact',requestId,name:form.elements.name.value.trim(),email:form.elements.email.value.trim(),message:'Topic: '+form.elements.topic.value+'\n\n'+form.elements.message.value.trim(),website:form.elements.website.value}),signal:controller.signal});
    const result=await response.json();if(current!==generation)return;
    if(!response.ok||!result.ok||result.status!=='sent')throw new Error(/Incorrect connection key|Not authorized|Invalid action/.test(result.error||'')?'Your instructor needs to deploy the updated contact script before this note can be emailed.':result.error||'Your request could not be sent.');
-   sent=true;status.textContent='Your request has been emailed to askcoach@speakboldly.space.';
+   sent=true;showSubmissionSuccess(doc,{status,isCurrent:()=>current===generation,onReturn:()=>doc.dispatchEvent(new win.Event('student-contact-sent-return'))});
   }catch(error){if(current===generation)status.textContent=error.name==='AbortError'?'The response took too long. Retry with the same note; an already sent request will not be sent twice.':error.message;}
   finally{win.clearTimeout(timer);if(current===generation){busy=false;send.disabled=sent;form.querySelectorAll('input,textarea,select').forEach(input=>input.disabled=false);}}
  };

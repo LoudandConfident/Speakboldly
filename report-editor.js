@@ -1,6 +1,7 @@
-import {initializeClientNotes} from './client-notes.js?v=session-number-1';
-import {readReportTab} from './report-tabs.js?v=action-plan-1';
-import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=two-line-footer-1';
+import {submissionReturnUrl} from './submission-success.js';
+import {initializeClientNotes} from './client-notes.js?v=success-return-1';
+import {readReportTab} from './report-tabs.js?v=success-return-1';
+import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=success-return-1';
 import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=domain-email-routing';
 const status=document.querySelector('#report-tab-status'),back=document.querySelector('#report-tab-return');
 const payload=readReportTab(window);
@@ -9,7 +10,7 @@ else{
  window.opener=null;
  const freeform=payload.type==='notes'||payload.type==='actionplan';const title=freeform?(payload.type==='actionplan'?'Action plan':'Notes'):DOCUMENT_TEMPLATES[payload.type].title;document.title=title+' — '+payload.client.name+' — Speak Boldly';document.querySelector('#report-tab-client').textContent=payload.client.name+' · '+payload.client.email;
  let active=true,client=payload.client;
- const returnUrl=payload.appMode?'./instructor.html#students-portal/teacher':null;if(returnUrl){back.href=returnUrl;back.textContent='Dashboard';back.hidden=false;document.documentElement.classList.add('instructor-report');}
+ const returnUrl=submissionReturnUrl(window,payload.returnUrl||(payload.appMode?'./instructor.html#students-portal/teacher':'./#students-portal/teacher'));if(returnUrl){back.href=returnUrl;back.textContent='Dashboard';back.hidden=false;document.documentElement.classList.add('instructor-report');}
  const endpoint=document.querySelector('#client-sheet-connect').elements.endpoint;endpoint.defaultValue=payload.endpointDefault;
  initializeClientSheet(document)?.restore();
  const documents=freeform?initializeClientNotes(document,()=>active,{documentKind:payload.type,pageMode:true,...(returnUrl?{returnUrl}:{})}):initializeTeacherDocuments(document,()=>active,()=>[client],undefined,{pageMode:true,...(returnUrl?{returnUrl}:{})});

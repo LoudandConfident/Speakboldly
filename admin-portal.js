@@ -1,8 +1,9 @@
+import {showSubmissionSuccess} from './submission-success.js';
 import {initializeHoursAdjustment} from './client-hours-adjustment.js';
 import {initializeBoldlyNotesEditor} from './boldly-notes-editor.js?v=blog-tab-pictures';
 import {initializeMotivationMessages} from './motivation-message-editor.js?v=freeze-24-oct-1';
-import {createPaymentReminder} from './payment-reminder.js?v=domain-email-routing';
-import {initializeInstructorResources} from './instructor-resources.js?v=client-status-motivations';
+import {createPaymentReminder} from './payment-reminder.js?v=success-return-1';
+import {initializeInstructorResources} from './instructor-resources.js?v=success-return-1';
 import {initializeHubAccessEditor} from './hub-access-editor.js?v=client-status-motivations';
 import {initializeMotivationFreeze} from './motivation-freeze-editor.js?v=daily-motivation-label-1';
 import {refreshMotivationSettings} from './motivation-settings.js?v=freeze-24-oct-1';
@@ -12,15 +13,15 @@ import {initializeInstructorBackups} from './instructor-backups.js?v=client-stat
 import {initializeNativeEnglishEditor} from './native-english-editor.js?v=client-status-motivations';
 import {initializeInstructorOverview} from './instructor-overview.js?v=client-status-motivations';
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
-import {openClientReportTab} from './report-tabs.js?v=bold-blog-simple-results';
+import {openClientReportTab} from './report-tabs.js?v=success-return-1';
 import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=library-folders';
 import {initializeWeeklyPortalPasswords} from './weekly-portal-passwords.js?v=client-status-motivations';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
 import {initializePortalSwitches} from './portal-switches.js?v=client-status-motivations';
-import {initializeTeacherDocuments} from './teacher-documents.js?v=two-line-footer-1';
+import {initializeTeacherDocuments} from './teacher-documents.js?v=success-return-1';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=domain-email-routing';
+import {initializeAdminCalendar} from './admin-calendar.js?v=success-return-1';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=client-status-motivations';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=custom-domain-1';
 import {loadPortalMaterials} from './portal-materials.js?v=custom-domain-1';
@@ -59,7 +60,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
     if(!approved||!unlocked||authorizationClientId!==target)return;
     if(!motivationRequests.has(signature))motivationRequests.set(signature,doc.defaultView.crypto.randomUUID());note.textContent='Sending daily motivation…';
     const result=await sheetLibraryRequest('sendClientEmail',{clientId:target,kind:'motivation',requestId:motivationRequests.get(signature),motivation});
-    if(unlocked&&authorizationClientId===target)note.textContent='Daily motivation emailed to '+result.recipient+'.';
+    if(unlocked&&authorizationClientId===target&&result.status==='sent')showSubmissionSuccess(doc,{status:note,isCurrent:()=>unlocked&&authorizationClientId===target&&authorization.open,onReturn:()=>authorization.close()});
    }catch(error){if(unlocked&&authorizationClientId===target)note.textContent=/Invalid email request|Invalid action/.test(error.message)?'Update UnifiedCode.gs and deploy a New version to enable daily motivation emails.':error.message;}finally{button.disabled=false;}return;
   }
   if(action!=='confirmation'){try{openClientReportTab(doc.defaultView,action,client,root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue);authorization.close();}catch(error){note.textContent=error.message;}return;}
@@ -72,7 +73,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
    const approved=await confirmClientEmail(doc,'Send class confirmation to '+client.name+' ('+client.email+')?',{details:{Program:next.course||next.program||client.program||'Session',Appointment:next.program||'Session',Duration:(next.duration||90)+' minutes',Level:next.level||client.level,Session:next.number,Date:next.date,Time:next.time+' · Cairo'}});
    if(!approved||!unlocked||authorizationClientId!==previewClientId){if(unlocked&&authorizationClientId===previewClientId)note.textContent='';return;}
    note.textContent='Sending confirmation…';confirmationId ||= doc.defaultView.crypto.randomUUID();
-   const result=await sheetLibraryRequest('sendClientEmail',{clientId:client.id,kind:'confirmation',requestId:confirmationId,sessionId:next.id});note.textContent='Email sent to '+result.recipient+'.';
+   const result=await sheetLibraryRequest('sendClientEmail',{clientId:client.id,kind:'confirmation',requestId:confirmationId,sessionId:next.id});if(result.status==='sent')showSubmissionSuccess(doc,{status:note,isCurrent:()=>unlocked&&authorizationClientId===previewClientId&&authorization.open,onReturn:()=>authorization.close()});
   }catch(error){note.textContent=error.message;}finally{button.disabled=false;}
 
  }));

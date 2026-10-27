@@ -1,3 +1,4 @@
+import {showSubmissionSuccess,SUBMISSION_SUCCESS_MESSAGE} from './submission-success.js';
 import {reviewSubmission} from './review-validation.js';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {courses} from './courses.js?v=prices-oct-27-2026';
@@ -8,7 +9,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  const album = doc.querySelector('#review-album'), cards = doc.querySelector('#review-cards');
  const listStatus = doc.querySelector('#review-list-status'), position = doc.querySelector('#review-position');
  const previous = doc.querySelector('#review-previous'), next = doc.querySelector('#review-next');
- let reviews = [], selected = 0, submissionId = null, successTimer = null, loadVersion = 0;
+ let reviews = [], selected = 0, submissionId = null, successTimer = null, loadVersion = 0,returnUrl=doc.defaultView.location.href;
  const cacheKey='speak-boldly-public-reviews-v1';let loading=false,pendingReload=false,lastLoaded=0;
  function cacheReviews(){try{doc.defaultView.localStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),reviews}));}catch{}}
  let hovering = false, focused = false, rotationTimer, drag = null;
@@ -116,7 +117,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  },{passive:false});
  cards?.addEventListener('keydown',event=>{if (event.key === 'ArrowLeft') previous.click();if (event.key === 'ArrowRight') next.click();});
  opener.addEventListener('click', () => {
-  doc.defaultView.clearTimeout(successTimer);
+  doc.defaultView.clearTimeout(successTimer);doc.querySelector('#submission-success-notice')?.remove();returnUrl=doc.defaultView.location.href;
   doc.querySelector('#review-status').textContent = '';
   openPopup(doc.querySelector('#review-dialog'));
   form.querySelector('button[type=submit]').disabled = !connected();
@@ -135,14 +136,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
    const result = await api('reviews',{method:'POST',data});
    ++loadVersion;
    reviews = [result.review,...reviews.filter(review=>review.id!==result.review.id)];lastLoaded=Date.now();cacheReviews();selected=0;render();listStatus.textContent='';
-   status.textContent = 'Thank you for submitting your review!';form.reset();submissionId = null;
-   doc.defaultView.clearTimeout(successTimer);
-   successTimer=doc.defaultView.setTimeout(()=>{
-    const dialog=doc.querySelector('#review-dialog');
-    if(!dialog?.open)return;
-    dialog.close();doc.defaultView.location.hash='reviews';
-    listStatus.textContent='Thank you for submitting your review!';restartRotation();
-   },1400);
+   form.reset();submissionId=null;listStatus.textContent=SUBMISSION_SUCCESS_MESSAGE;successTimer=showSubmissionSuccess(doc,{status,returnUrl,isCurrent:()=>Boolean(doc.querySelector('#review-dialog')?.open),onReturn:()=>{doc.querySelector('#review-dialog')?.close();restartRotation();}});
   } catch (error) {status.textContent = /check your review/i.test(error.message||'') ? 'The review service rejected these details. Your review has not been posted, and your text is still here. Please contact Speak Boldly if this continues.' : error.message || 'Your review could not be shared. Please try again.';if(error.field)form.elements[error.field]?.focus();}
   finally {button.disabled = false;}
  });

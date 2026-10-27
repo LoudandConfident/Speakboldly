@@ -1,4 +1,4 @@
-import {finishSentReport} from './report-send-complete.js';
+import {finishSentReport} from './report-send-complete.js?v=success-return-1';
 import {DOCUMENT_BRAND} from './document-branding.js?v=two-line-footer-1';
 import {buildClientNotesPdf} from './notes-pdf.js?v=session-number-1';
 import {buildClientNotesWord} from './word-notes.js?v=session-number-1';

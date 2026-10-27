@@ -1,0 +1,9 @@
+export const SUBMISSION_SUCCESS_MESSAGE='Thank you for your submission. Sent.';
+export function submissionReturnUrl(win,value){const fallback=new URL('./',win.location.href);try{const target=new URL(value||win.location.href,win.location.href);return target.origin===fallback.origin&&['https:','http:'].includes(target.protocol)?target.href:fallback.href;}catch{return fallback.href;}}
+export function showSubmissionSuccess(doc,{status=null,returnUrl=null,onReturn=null,isCurrent=()=>true,delay=1400}={}){
+ const win=doc?.defaultView;if(!win)return false;const start=win.location.href,target=submissionReturnUrl(win,returnUrl||start);
+ if(status)status.textContent=SUBMISSION_SUCCESS_MESSAGE;
+ const go=()=>{if(!isCurrent()||win.location.href!==start)return;try{onReturn?.();if(win.location.href!==target)win.location.replace(target);}catch{}};
+ if(!doc.body?.append){go();return true;}
+ doc.querySelector('#submission-success-notice')?.remove();const notice=doc.createElement('div');notice.id='submission-success-notice';notice.setAttribute('role','status');notice.setAttribute('aria-live','polite');notice.textContent=SUBMISSION_SUCCESS_MESSAGE;notice.style.cssText='position:fixed;left:50%;top:24px;transform:translateX(-50%);z-index:2147483647;box-sizing:border-box;width:max-content;max-width:calc(100vw - 32px);padding:16px 22px;border:1px solid #a9b99b;border-radius:14px;background:#faf9f4;color:#193c32;box-shadow:0 8px 30px #193c3226;font:500 16px/1.6 Arial,sans-serif;text-align:center;';const host=doc.querySelectorAll?[...doc.querySelectorAll('dialog[open]')].at(-1)||doc.body:doc.body;host.append(notice);let cancelled=false;const cancel=()=>{cancelled=true;notice.remove();};doc.addEventListener?.('input',cancel,{once:true,capture:true});return win.setTimeout(()=>{doc.removeEventListener?.('input',cancel,true);notice.remove();if(!cancelled)go();},delay);
+}

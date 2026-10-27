@@ -1,4 +1,4 @@
-import {finishSentReport} from './report-send-complete.js';
+import {finishSentReport} from './report-send-complete.js?v=success-return-1';
 import {fitReportInput,reportPageScale} from './report-field-fit.js?v=centered-small-report';
 import {studentDocumentFilename} from './student-document-filenames.js';
 import {confirmClientEmail} from './client-email-confirmation.js';

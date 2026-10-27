@@ -1,5 +1,5 @@
 import {sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
-import {bookingClock} from './student-booking.js?v=classic-footer-booking-1';
+import {bookingClock} from './student-booking.js?v=success-return-1';
 export function initializeCalendarSlotEditor(doc,isUnlocked,onChanged){
  let generation=0;const el=(tag,value)=>{const n=doc.createElement(tag);n.textContent=value;return n;};
  return {open(date,initial,revision){if(!isUnlocked())return;doc.querySelector('#calendar-slot-editor')?.close();const current=++generation,dialog=el('dialog','');dialog.id='calendar-slot-editor';dialog.className='action-popup';dialog.setAttribute('aria-label','Edit available slots');const close=el('button','×');close.type='button';close.className='popup-close';close.setAttribute('aria-label','Close slot editor');const list=el('div',''),form=el('form',''),status=el('p','');status.setAttribute('role','status');let slots=initial.map(slot=>({...slot,endTime:slot.endTime||(()=>{const [h,m]=slot.time.split(':').map(Number),end=h*60+m+90;return String(Math.floor(end/60)).padStart(2,'0')+':'+String(end%60).padStart(2,'0');})(),enabled:slot.enabled!==false})),busy=false;

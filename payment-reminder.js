@@ -1,3 +1,4 @@
+import {showSubmissionSuccess} from './submission-success.js';
 import {clientSheetConnected,sendSheetClientEmail} from './client-sheet.js?v=domain-email-routing';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
 export function paymentRequestId(win){
@@ -17,7 +18,7 @@ export function createPaymentReminder(doc,getClient,isUnlocked,{connected=client
    if(!approved||!isUnlocked()){note.hidden=true;return;}
    requestId ||= paymentRequestId(doc.defaultView);note.textContent='Sending payment reminder…';
    const result=await send(client.id,'paymentReminder',{requestId});
-   if(isUnlocked()){note.textContent='Payment reminder emailed to '+result.recipient+'.';requestId=null;}
+   if(isUnlocked()){if(result.status==='sent')showSubmissionSuccess(doc,{status:note,isCurrent:isUnlocked});requestId=null;}
   }catch(error){if(isUnlocked())note.textContent=/Invalid email request|Invalid action|does not support email/.test(error.message)?'Update UnifiedCode.gs and deploy a New version to enable payment reminders. No reminder was sent.':error.message;}
   finally{button.disabled=false;button.setAttribute('aria-busy','false');}
  };

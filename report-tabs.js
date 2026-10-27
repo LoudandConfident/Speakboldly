@@ -4,7 +4,7 @@ export function openClientReportTab(win,type,client,endpointDefault=''){
  if(!TYPES.has(type)||!client?.id)throw new Error('Choose a client and report first.');
  const token=win.crypto.randomUUID(),key=REPORT_TAB_PREFIX+token;
  const appMode=new URL(win.location.href).pathname.endsWith('/instructor.html');
- const payload={type,client:{id:client.id,name:client.name,email:client.email},endpointDefault,createdAt:Date.now()};
+ const payload={type,returnUrl:win.location.href,client:{id:client.id,name:client.name,email:client.email},endpointDefault,createdAt:Date.now()};
  if(appMode)payload.appMode=true;
  win.sessionStorage.setItem(key,JSON.stringify(payload));
  const url=new URL('./report-editor.html',win.location.href);url.hash=token;
