@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {initializeClientSheet,clearClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js';
+function device(){const saved=new Map(),events=[];const form={elements:{endpoint:{value:'https://script.google.com/macros/s/test/exec',defaultValue:'https://script.google.com/macros/s/test/exec'},key:{value:''}},addEventListener(){}};const status={};const doc={querySelector:s=>s==='#client-sheet-connect'?form:s==='#client-sheet-status'?status:null,defaultView:{localStorage:{setItem:(k,v)=>saved.set(k,v),getItem:k=>saved.get(k)},Event:class{constructor(type){this.type=type;}}},dispatchEvent:e=>events.push(e.type)};return {connection:initializeClientSheet(doc),saved,events};}
+test('a fresh device signs into shared records with its private key, without separate setup',async()=>{
+ const old=globalThis.fetch;const remote=[{id:'shared-1',name:'Cloud Learner',email:'test@example.com',code:'0012',level:'2',payment:'Paid',amountPaid:0,hours:3,permissions:[]}];
+ globalThis.fetch=async(url,options)=>{const data=JSON.parse(options.body);assert.equal(data.key,'private-test-key');return {ok:true,json:async()=>data.action==='checkConnection'?{ok:true,connected:true}:{ok:true,clients:remote}};};
+ try{for(let i=0;i<2;i++){clearClientSheet();const d=device();assert(!clientSheetConnected());await d.connection.connect('private-test-key');assert(clientSheetConnected());assert.equal((await loadClientsFromSheet())[0].id,'shared-1');assert.equal(d.saved.size,1);assert(d.events.includes('client-sheet-configured'));}}finally{globalThis.fetch=old;clearClientSheet();}
+});
+test('invalid sign-in never establishes or saves a connection',async()=>{const old=globalThis.fetch;clearClientSheet();globalThis.fetch=async()=>({ok:true,json:async()=>({ok:false,error:'Incorrect connection key.'})});try{const d=device();await assert.rejects(d.connection.connect('wrong-key'),/Incorrect connection key/);assert(!clientSheetConnected());assert.equal(d.saved.size,0);assert.equal(d.events.length,0);}finally{globalThis.fetch=old;clearClientSheet();}});

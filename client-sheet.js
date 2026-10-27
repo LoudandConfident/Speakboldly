@@ -63,6 +63,18 @@ export function initializeClientSheet(doc) {
   }catch{}
  }
  change?.addEventListener('click',()=>{form.hidden = false;form.elements.endpoint.value = endpoint||form.elements.endpoint.defaultValue;form.elements.key.value = '';form.elements.key.focus();});
+ async function connect(secretValue){
+  const url=form.elements.endpoint.value.trim(),secret=String(secretValue||'').trim();
+  if(!validUrl(url)||!secret)throw new Error('Enter your private connection key.');
+  const result=await sheetRequest(url,secret,{action:'checkConnection'});
+  if(result.connected!==true)throw new Error('The Clients sheet did not confirm the connection.');
+  endpoint=url;key=secret;form.elements.key.value='';
+  try{doc.defaultView.localStorage.setItem(CONNECTION_STORAGE_KEY,JSON.stringify({endpoint,key}));}catch{}
+  form.hidden=true;if(change)change.hidden=false;
+  status.textContent='Sheet connected. Loading students…';
+  doc.dispatchEvent(new doc.defaultView.Event('client-sheet-configured'));
+  return true;
+ }
  form.addEventListener('submit',async event=>{
   event.preventDefault();
   const url = form.elements.endpoint.value.trim(), secret = form.elements.key.value.trim();
@@ -81,7 +93,7 @@ export function initializeClientSheet(doc) {
   form.hidden = true;if(change)change.hidden = false;
   doc.dispatchEvent(new doc.defaultView.Event('client-sheet-configured'));
  });
- return {restore,lock(){clearClientSheet();form.reset();form.hidden = false;if(change)change.hidden = true;status.textContent = '';}};
+ return {restore,connect,lock(){clearClientSheet();form.reset();form.hidden = false;if(change)change.hidden = true;status.textContent = '';}};
 }
 
 export async function loadSheetSessions(fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'listSessions'},fetcher);}
