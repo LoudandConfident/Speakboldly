@@ -1,11 +1,13 @@
+import {initializeReviewLevels,displayedReviewLevel} from './review-levels.js?v=course-levels-1';
 import {showSubmissionSuccess,SUBMISSION_SUCCESS_MESSAGE} from './submission-success.js';
-import {reviewSubmission} from './review-validation.js';
+import {reviewSubmission} from './review-validation.js?v=course-levels-1';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {courses} from './courses.js?v=prices-oct-27-2026';
 import {reviewsConnected,reviewRequest} from './reviews-api.js?v=separate-review-sheet';
 export function initializeReviews(doc, api = reviewRequest, connected = reviewsConnected) {
  const opener = doc.querySelector('#review-open'), form = doc.querySelector('#review-form');
  if (!opener || !form) return;
+ initializeReviewLevels(doc,form);
  const album = doc.querySelector('#review-album'), cards = doc.querySelector('#review-cards');
  const listStatus = doc.querySelector('#review-list-status'), position = doc.querySelector('#review-position');
  const previous = doc.querySelector('#review-previous'), next = doc.querySelector('#review-next');
@@ -44,7 +46,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
    if (side !== 'selected'&&!mobileReviews()) card.setAttribute('aria-hidden','true');
    const quote = doc.createElement('blockquote');quote.textContent = review.message;
    const name = doc.createElement('h3');name.textContent = review.name || 'Anonymous';
-   const detail = doc.createElement('p');detail.className = 'review-card-details';detail.textContent = [review.age ? 'Age: '+review.age : '',review.level ? 'Level: '+review.level : '',review.program ? 'Program: '+review.program : ''].filter(Boolean).join(' · ');
+   const detail = doc.createElement('p');detail.className = 'review-card-details';detail.textContent = [review.age ? 'Age: '+review.age : '',review.level ? 'Level: '+displayedReviewLevel(review) : '',review.program ? 'Program: '+review.program : ''].filter(Boolean).join(' · ');
    const content = doc.createElement('div');content.className = 'review-card-content';
    content.append(name,detail,quote);card.append(content);cards.append(card);
   }
