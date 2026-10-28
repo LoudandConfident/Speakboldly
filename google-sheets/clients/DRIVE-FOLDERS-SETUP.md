@@ -43,7 +43,7 @@ To preserve the website’s existing level access rules, general materials MUST 
 
 ```
 Learning Library/
-  SB General Conversation/
+  General English/
     Level 1/
       Main Book/book.pdf
       Activities/worksheet.pdf
@@ -55,7 +55,7 @@ Learning Library/
     worksheet.pdf
 ```
 
-Recognised program-folder names: Instructors training, E-mail and business writing workshop, Let the kids learn!, Pronunciation/intonation workshop, Meetings and presentation workshop, Write Boldly!, Different learners, Reclaim your focus workshop. They map to the existing website program folders and their current shared material:1 access rule. General files without a level are omitted rather than assigned to the wrong students. Program-folder files use level 1 internally, preserving the portal’s existing program-folder convention.
+Recognised learner program-folder names: English Momentum, Interview preparation workshop, IELTS preparation, E-mail and business writing workshop, Let the kids speak!, Pronunciation & intonation workshop, Meetings, presentation and public speaking workshop, Write Boldly!, Reclaim your focus workshop. Instructor-training folders are excluded. General English is one folder with Level 1 through Level 12 inside; four/eight-session plans do not have separate folders. They map to the existing website program folders and their current shared material:1 access rule. General files without a level are omitted rather than assigned to the wrong students. Program-folder files use level 1 internally, preserving the portal’s existing program-folder convention.
 
 Direct folder additions inherit their corresponding section/level access setting. They are visible immediately when that level is enabled and password-authorised. For individual files that already have an explicit Portal access dim setting, that setting is respected. Library files retain Dim/Undim controls in the instructor dashboard. Practice Zone has no individual dim controls. You can also manage availability through level access controls or move files outside the connected root. Existing file uploads and registered materials remain in place.
 
@@ -81,3 +81,7 @@ Set the script property `SB_DRIVE_FOLDERS_ENABLED` to `false` and deploy a New v
 5. A PDF larger than 7 MB finishes loading and displays; a changed file fails safely mid-download.
 6. Move a file out: its next read fails and it disappears on refresh.
 7. Existing bookings, calendar, client sync and email workflows still work.
+
+## Program-card update (28 October 2026)
+
+If you already installed DriveFolders.gs, replace ONLY that file with the updated version and deploy a New version of the same Clients web app. Keep the existing doPost routing block and Code.gs. No need to run setupDriveFolders again. This adds recognition for the new learner-program folders; General English level-password rules are unchanged. The program cards are updated automatically by the website deployment.

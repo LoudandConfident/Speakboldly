@@ -1,6 +1,6 @@
 import {readDriveFolderFile} from './drive-folder-files.js?v=1';
 import {renderPracticeZone,practiceAccessKey} from './practice-zone.js';
-import {renderMaterialLibrary} from './material-library.js?v=program-folders';
+import {renderMaterialLibrary} from './material-library.js?v=program-cards-1';
 import {createLoadingNotice} from './loading-notice.js?v=visible-loading';
 import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=practice-zone-monthly-1';
 import {withBerlitzBooks} from './berlitz-material.js?v=drive-folders-1';

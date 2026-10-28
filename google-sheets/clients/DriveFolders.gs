@@ -52,8 +52,9 @@ function sbDriveCatalog(){
 function sbDriveTitle(kind,path,name,mime){
  if(kind==='practice')return 'Level 1 — Practice — '+path.concat(name).join(' / ');
  const whole=path.concat(name).join(' / '),level=whole.match(/\blevel[\s_-]*(1[0-2]|[1-9])\b/i)?.[1];
- const folders={'instructor-training':/instructors?\s*training/i,'business-writing':/business.writing|e.mail/i,kids:/kids/i,pronunciation:/pronunciation|intonation/i,meetings:/meetings|presentation/i,'write-boldly':/write.boldly/i,'different-learners':/different.learners/i,focus:/reclaim.*focus|focus.workshop/i};
- const group=Object.keys(folders).find(key=>folders[key].test(whole))||'general';
+ if(/instructor|different.learners/i.test(path.join(' / ')))return null;
+ const folders={'english-momentum':/english.momentum/i,interview:/interview.preparation/i,ielts:/ielts/i,'business-writing':/business.writing|e.mail/i,kids:/kids/i,pronunciation:/pronunciation|intonation/i,meetings:/meetings|presentation|public.speaking/i,'write-boldly':/write.boldly/i,focus:/reclaim.*focus|focus.workshop/i};
+ const group=Object.keys(folders).find(key=>folders[key].test(path.join(' / ')))||Object.keys(folders).find(key=>folders[key].test(name))||'general';
  // Unclassified general materials are not assigned to an arbitrary level.
  if(group==='general'&&!level)return null;
  const part=/^(audio|video)\//.test(mime)||/\baudio\b/i.test(whole)?'Audio':/activit|worksheet|practice/i.test(whole)?'Activity':'Main Book';

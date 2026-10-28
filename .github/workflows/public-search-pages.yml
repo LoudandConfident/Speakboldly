@@ -44,7 +44,7 @@ jobs:
       - name: Sync only articles already published by the instructor
         run: node scripts/sync-public-blog.mjs
       - run: npm run build:seo
-      - run: node --test public-seo.test.mjs rewards-backend.test.mjs drive-folders.test.mjs
+      - run: node --test public-seo.test.mjs rewards-backend.test.mjs drive-folders.test.mjs material-program-cards.test.mjs
       - name: Save generated public pages and request a Pages build
         env:
           GH_TOKEN: ${{ github.token }}

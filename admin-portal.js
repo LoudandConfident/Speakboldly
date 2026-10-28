@@ -6,7 +6,7 @@ import {initializeHoursAdjustment} from './client-hours-adjustment.js';
 import {initializeBoldlyNotesEditor} from './boldly-notes-editor.js?v=blog-tab-pictures';
 import {initializeMotivationMessages} from './motivation-message-editor.js?v=freeze-24-oct-1';
 import {createPaymentReminder} from './payment-reminder.js?v=success-return-1';
-import {initializeInstructorResources} from './instructor-resources.js?v=drive-folders-1';
+import {initializeInstructorResources} from './instructor-resources.js?v=program-cards-1';
 import {initializeHubAccessEditor} from './hub-access-editor.js?v=practice-zone-monthly-1';
 import {initializeMotivationFreeze} from './motivation-freeze-editor.js?v=daily-motivation-label-1';
 import {refreshMotivationSettings} from './motivation-settings.js?v=freeze-24-oct-1';
