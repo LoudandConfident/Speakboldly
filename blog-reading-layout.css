@@ -1,0 +1,43 @@
+/* Full website-width blog and a denser, comfortable reading rhythm. */
+main>#boldly-notes{width:100%;max-width:none;margin:0;padding:48px 6%;min-height:calc(100dvh - 100px);background:#edf0e6;--blog-ink:#193c32;--blog-green:#41674e;--blog-soft:#e2ead8;--blog-line:#b9cbb0;color:#193c32}
+#boldly-notes .bold-blog-heading{max-width:none}
+#boldly-notes [data-notes-reader]{max-width:none;margin:22px 0 0}
+#boldly-notes .boldly-note-page{max-width:none;padding-top:4px;columns:auto;orphans:3;widows:3}
+#boldly-notes .boldly-note-page p{font-size:16px;line-height:1.65;margin:0 0 9px;white-space:normal}
+#boldly-notes .boldly-note-page h3{font-size:23px;line-height:1.35;margin:24px 0 12px;break-after:avoid}
+#boldly-notes .boldly-note-page .boldly-note-subtitle{font-size:20px;margin-bottom:16px;line-height:1.5}
+#boldly-notes .boldly-note-date{color:#53685b}
+#boldly-notes .bold-blog-tagline,#boldly-notes [data-notes-reader]>.eyebrow{color:#41674e}
+#boldly-notes .boldly-note-link{background:#faf9f4}
+#boldly-notes .bold-question{margin-top:22px;padding:16px 18px 6px;break-inside:avoid}
+#boldly-notes .blog-culture-art{position:relative;text-align:center;display:grid;justify-items:center;gap:6px;border:2px solid #41674e;border-radius:50% 38% 48% 28%;padding:18px 24px;background:#d5ed98;margin:0 0 18px;transform:rotate(-2deg);break-inside:avoid;color:#193c32}
+.blog-culture-art>span:first-child{font-size:25px;letter-spacing:18px}.blog-culture-art>span[lang]{font-size:32px;font-weight:700}.blog-culture-art small{font-size:12px;transform:rotate(2deg)}
+#boldly-notes .blog-share{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0 20px}
+#boldly-notes .blog-share .button{border:1px solid #a9bda1;background:#faf9f4;color:#193c32}
+.blog-share [role=status]{font-size:12px;overflow-wrap:anywhere}
+#boldly-notes .blog-word{display:inline!important;position:static;background:transparent!important;border:0;border-radius:0;padding:0;min-height:0;color:inherit;font:inherit;line-height:inherit;text-decoration:underline!important;text-decoration-style:dotted!important;text-underline-offset:4px;transform:none!important;cursor:help}
+.blog-word sup{font-size:9px;margin-left:2px;line-height:0}.blog-word-wrap{position:relative;display:inline}
+.blog-word-tip{display:none;position:absolute;left:0;bottom:calc(100% + 9px);width:240px;max-width:70vw;z-index:15;background:#193c32;color:#faf9f4;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.5;box-shadow:0 4px 18px #193c3233;text-align:left}
+.blog-word-wrap:hover .blog-word-tip,.blog-word-wrap:focus-within .blog-word-tip{display:block}
+.blog-word-dialog{width:calc(100% - 32px);max-width:540px;border:1px solid #b9cbb0;border-radius:22px;background:#faf9f4;color:#193c32;padding:26px}
+.blog-word-dialog::backdrop{background:#193c3277}.blog-word-dialog h2{font-size:28px;overflow-wrap:anywhere}.blog-word-dialog p,.blog-word-dialog blockquote{line-height:1.65}.blog-word-dialog blockquote{margin:18px 0;padding:16px;border-left:3px solid #41674e;background:#edf0e6}.blog-word-dialog>.button:first-child{float:right}
+#boldly-notes .blog-glossary{column-span:all;margin-top:24px;border-top:1px solid #b9cbb0;padding-top:18px}
+.blog-glossary summary{font-size:20px;font-weight:600;cursor:pointer;padding:10px 0}.blog-glossary-row{display:grid;grid-template-columns:180px minmax(0,1fr) auto;align-items:center;gap:16px;padding:13px 0;border-bottom:1px solid #c9d5c0;break-inside:avoid}
+#boldly-notes .blog-glossary-row p{margin:0}.blog-glossary-word{border:0;background:transparent;color:#193c32;font:inherit;font-weight:600;text-align:left;padding:8px 0}
+#boldly-notes .blog-glossary>.button{margin-top:16px}
+body:has(#boldly-notes:not([hidden])) #main-navigation [data-open-view=boldly-notes]{background:#193c32;border-color:#41674e}
+/* All three dashboard figures remain adjacent, with the reflection alongside. */
+#admin-dashboard .admin-metrics{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(220px,1.5fr)!important;gap:16px!important;max-width:none!important;width:100%;align-items:stretch;margin:22px 0!important}
+#admin-dashboard .admin-metrics>article{grid-row:1;min-width:0!important;width:auto!important;height:auto!important;aspect-ratio:1;max-height:210px;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:18px!important;border:1px solid #bed0b4;border-radius:18px;background:#edf0e6}
+#admin-dashboard .admin-metrics>article>span{font-size:12px!important;line-height:1.4}#admin-dashboard .admin-metrics>article>strong{font-size:clamp(24px,2.5vw,36px)!important;line-height:1.15;margin:0;overflow-wrap:anywhere}#admin-dashboard .admin-metrics small{font-size:10px;line-height:1.4}
+#admin-dashboard .admin-metrics>article:nth-of-type(1){grid-column:1}#admin-dashboard .admin-metrics>article:nth-of-type(2){grid-column:2}#admin-dashboard .admin-metrics>.admin-cash-metric{grid-column:3}
+#admin-dashboard .admin-metrics>.instructor-teaching-quote{grid-column:4!important;grid-row:1!important;max-width:none;margin:0!important;padding:16px 20px!important;display:flex;align-items:center;border-left:2px solid #b9cbb0}
+#admin-dashboard .instructor-teaching-quote p{font-size:20px!important;line-height:1.5!important}
+@media(max-width:1000px){#boldly-notes .boldly-note-page{columns:auto}#admin-dashboard .admin-metrics{grid-template-columns:repeat(3,minmax(0,1fr))!important}#admin-dashboard .admin-metrics>.instructor-teaching-quote{grid-column:1/-1!important;grid-row:2!important}}
+@media(max-width:680px){main>#boldly-notes{padding:30px 6%;min-height:calc(100dvh - 80px)}#boldly-notes .boldly-note-page p{font-size:16px;line-height:1.6;margin-bottom:8px}#boldly-notes .boldly-note-page h3{margin-top:22px}.blog-glossary-row{grid-template-columns:minmax(0,1fr) auto;gap:8px}.blog-glossary-row p{grid-column:1/-1;grid-row:2}.blog-word-tip{position:fixed;left:6%;right:6%;bottom:20px;max-width:none;width:auto;pointer-events:none}#admin-dashboard .admin-metrics{gap:8px!important}#admin-dashboard .admin-metrics>article{min-height:130px;aspect-ratio:auto;padding:10px!important;gap:7px}#admin-dashboard .admin-metrics>article>span{font-size:10px!important}#admin-dashboard .admin-metrics>article>strong{font-size:21px!important}#admin-dashboard .admin-metrics small{font-size:9px}#admin-dashboard .admin-metrics>.instructor-teaching-quote{padding:12px!important}header #main-navigation.mobile-open{justify-items:center;align-items:center;justify-content:center;gap:12px!important}header #main-navigation .nav-tab{display:flex;align-items:center;justify-content:center;text-align:center;border-radius:999px!important;width:100%;max-width:180px;min-height:48px;padding:12px!important}}
+
+#boldly-notes .bold-blog-brand img{filter:brightness(0) saturate(100%) invert(19%) sepia(18%) saturate(1092%) hue-rotate(109deg) brightness(92%) contrast(92%)}
+#boldly-notes .blog-culture-art{max-width:440px;min-height:150px;margin:4px 0 22px}
+#boldly-notes .boldly-notes-intro{margin-bottom:16px}
+#boldly-notes .blog-share{margin:12px 0 16px}
+#admin-dashboard .admin-metrics>article{width:100%!important;max-width:100%!important;min-inline-size:0!important;aspect-ratio:auto!important}
