@@ -19,7 +19,7 @@ function sbBlogCommentsHandleEvent(event){
   const postId=String(p.postId||'');if(p.action==='blogCommentDelete'){if(!/^[a-zA-Z0-9_-]{1,100}$/.test(postId))throw Error('Unknown blog post.');}else sbBlogCommentPostExists(postId);
   if(p.action==='blogComments'||p.action==='blogCommentReplies'){
    const before=p.before===undefined?Infinity:Number(p.before);if(before!==Infinity&&(!Number.isSafeInteger(before)||before<1))throw Error('Invalid conversation page.');
-   const revision=props.getProperty('SB_BLOG_COMMENTS_REV')||'0',cache=CacheService.getScriptCache(),cacheKey='blog-comments:'+sbExamHash(JSON.stringify([postId,p.action,p.rootId||'',before===Infinity?'latest':before,revision]));
+   const revision=props.getProperty('SB_BLOG_COMMENTS_REV')||'0',cache=CacheService.getScriptCache(),cacheKey='blog-comments-anonymous-v1:'+sbExamHash(JSON.stringify([postId,p.action,p.rootId||'',before===Infinity?'latest':before,revision]));
    let cached=null;try{cached=cache.get(cacheKey);}catch{}if(cached)return json({...JSON.parse(cached),enabled});
    const rows=sbBlogCommentRows(sheet).filter(x=>x.postId===postId);let result;
    if(p.action==='blogCommentReplies'){const root=rows.find(x=>x.id===p.rootId&&!x.rootId);if(!root)throw Error('This conversation could not be found.');const all=rows.filter(x=>x.rootId===root.id&&!x.deleted&&x.seq<before).sort((a,b)=>b.seq-a.seq),items=all.slice(0,10).reverse();result={ok:true,ready:true,root:sbBlogCommentPublic(root),items:items.map(sbBlogCommentPublic),more:all.length>10,nextBefore:items[0]?.seq||null};}
@@ -34,7 +34,7 @@ function sbBlogCommentsHandleEvent(event){
    props.setProperty('SB_BLOG_COMMENTS_REV',Utilities.getUuid());return json({ok:true,id:item.id});
   }
   if(!enabled&&!owner)throw Error('New comments are paused. You can still read the conversation.');
-  const requestId=String(p.requestId||''),name=owner?'Speak Boldly coach':String(p.name||'').trim()||'Anonymous reader',body=String(p.body||'').trim(),replyToId=String(p.replyToId||''),authorHash=owner?'coach':sbBlogCommentAuthor(p.authorToken);
+  const requestId=String(p.requestId||''),name=owner?'Speak Boldly coach':sbBlogCommentNickname(sbBlogCommentAuthor(p.authorToken)),body=String(p.body||'').trim(),replyToId=String(p.replyToId||''),authorHash=owner?'coach':sbBlogCommentAuthor(p.authorToken);
   if(p.website||! /^[a-zA-Z0-9-]{16,100}$/.test(requestId)||name.length>60||/[\r\n]/.test(name)||!body||body.length>1500||(body.match(/https?:\/\//gi)||[]).length>2)throw Error('Use up to 60 characters for a name, 1,500 for a comment and no more than two links.');
   const fingerprint=sbExamHash(JSON.stringify([postId,replyToId,name,body,authorHash,owner]));const existing=rows.find(x=>x.requestId===requestId);
   if(existing){if(existing.fingerprint!==fingerprint)throw Error('This comment changed. Please try a new comment.');if(existing.deleted)throw Error('This comment was removed.');return json({ok:true,comment:sbBlogCommentPublic(existing),thread:sbBlogCommentThreads(rows.filter(x=>x.postId===postId)).find(x=>x.root.id===(existing.rootId||existing.id))});}
@@ -56,8 +56,10 @@ function sbBlogCommentPostExists(id){
  throw Error('This blog post is not published.');
 }
 function sbBlogCommentRows(sheet){const plain=v=>String(v||'').replace(/^'(?=[=+\-@\t\r])/,'');return sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues().map((r,i)=>({id:String(r[0]),postId:String(r[1]),rootId:String(r[2]),replyToId:String(r[3]),name:plain(r[4]),body:plain(r[5]),createdAt:String(r[6]),authorHash:String(r[7]),deleted:String(r[8])==='deleted',coach:r[9]===true,requestId:String(r[10]),fingerprint:String(r[11]),seq:i+2,row:i+2})):[];}
-function sbBlogCommentPublic(item){return{id:item.id,postId:item.postId,rootId:item.rootId,replyToId:item.replyToId,name:item.deleted?'':item.name,body:item.deleted?'':item.body,createdAt:item.createdAt,deleted:item.deleted,coach:!item.deleted&&item.coach,seq:item.seq};}
+function sbBlogCommentPublic(item){return{id:item.id,postId:item.postId,rootId:item.rootId,replyToId:item.replyToId,name:item.deleted?'':item.coach?'Speak Boldly coach':sbBlogCommentNickname(item.authorHash),body:item.deleted?'':item.body,createdAt:item.createdAt,deleted:item.deleted,coach:!item.deleted&&item.coach,seq:item.seq};}
 function sbBlogCommentThreads(rows){
  const groups=new Map();for(const item of rows)if(item.rootId&&!item.deleted){if(!groups.has(item.rootId))groups.set(item.rootId,[]);groups.get(item.rootId).push(item);}
  return rows.filter(x=>!x.rootId).map(root=>{const replies=(groups.get(root.id)||[]).sort((a,b)=>a.seq-b.seq);return{root:sbBlogCommentPublic(root),replies:replies.slice(-3).map(sbBlogCommentPublic),replyCount:replies.length,moreReplies:replies.length>3,replyBefore:replies.slice(-3)[0]?.seq||null,activity:Math.max(root.seq,...replies.map(x=>x.seq))};}).filter(x=>!x.root.deleted||x.replyCount);
 }
+
+function sbBlogCommentNickname(hash){const adjectives=["Bold","Curious","Sunny","Brave","Clever","Cheerful","Dreamy","Friendly","Gentle","Happy","Jolly","Kind","Lively","Lucky","Merry","Playful","Thoughtful","Witty","Wondering","Daring","Bubbly","Cosy","Dancing","Fearless","Giggly","Hopeful","Joyful","Mighty","Peaceful","Sparkling","Spirited","Whimsical"],animals=["Lion","Panda","Otter","Penguin","Owl","Fox","Dolphin","Koala","Tiger","Rabbit","Falcon","Turtle","Badger","Bear","Butterfly","Cat","Deer","Elephant","Flamingo","Giraffe","Hedgehog","Lemur","Lynx","Meerkat","Narwhal","Parrot","Peacock","Puffin","Raccoon","Robin","Seal","Squirrel"];let value=2166136261;for(let i=0;i<hash.length;i++)value=Math.imul(value^hash.charCodeAt(i),16777619)>>>0;return adjectives[value%adjectives.length]+' '+animals[Math.floor(value/adjectives.length)%animals.length];}

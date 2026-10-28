@@ -34,7 +34,7 @@ Moderation is checked server-side with your existing private Clients connection 
 
 Readers can delete their own comments from the browser they used to post. A random browser secret is stored locally; its hash is stored in the sheet. No email is collected. Clearing browser storage loses the ability to delete earlier comments from that browser; the coach can still remove them. There are no accounts, private messages, email notifications or typing indicators.
 
-All comment text is rendered as plain text. HTML/scripts are not executed. Comments are public; the form says this before posting. Names are optional (60 characters); comments/replies can be up to 1,500 characters and contain up to two links. Limits allow 8 reader posts per 5 minutes / 50 per browser identity per day / 200 reader posts overall per day. These are lightweight controls, not a guarantee against spam from someone deliberately changing browser identities. The coach can pause posting or remove content.
+All comment text is rendered as plain text. HTML/scripts are not executed. Comments are public; the form says this before posting. Readers automatically receive a fun animal nickname (for example Curious Lion); there is no real-name field. The nickname stays the same in the same browser, including replies. Existing reader comments are displayed with anonymous nicknames too. Verified coach replies retain their Coach badge. Nicknames are not unique accounts and may repeat. comments/replies can be up to 1,500 characters and contain up to two links. Limits allow 8 reader posts per 5 minutes / 50 per browser identity per day / 200 reader posts overall per day. These are lightweight controls, not a guarantee against spam from someone deliberately changing browser identities. The coach can pause posting or remove content.
 
 Requests are idempotent: retrying the same comment cannot post it twice. Public reads are cached for up to 45 seconds and invalidated on comment changes. Comments load when the section approaches the viewport; they refresh every 30 seconds only while visible and connected to the current post, and while the reader is not composing a reply or browsing older history. Off-screen comment sections and hidden tabs do not poll. Posting a reply displays it immediately for that reader; others see it on refresh or the next background update.
 
@@ -50,3 +50,7 @@ This version caps the comments sheet at 4,000 records, including removed placeho
 4. The instructor can reply, remove comments and pause new reader posts.
 5. Refresh/reopen confirms shared persistence. Retrying a timed-out post does not duplicate it.
 6. Other blog posts keep separate threads; drafts and future posts reject public comment access.
+
+## Updating to anonymous animal names
+
+Replace only the contents of **BlogComments.gs** with this version. Keep Code.gs, its existing router and all other files unchanged. Choose Deploy → Manage deployments → pencil → New version → Deploy. Keep the same deployment URL. No setup rerun is needed, and existing comments are preserved.

@@ -1,4 +1,4 @@
-import {createBlogComments} from './blog-comments.js?v=2';
+import {createBlogComments} from './blog-comments.js?v=anonymous-1';
 import {paginateBlogContent,ensureBoldQuestion} from './blog-pagination.js?v=final-glossary-1';
 import {addReadingTools,addBlogSharing,BLOG_WORDS} from './blog-reading-tools.js?v=rewards-1';
 import {EDITORIAL_POSTS,mergeBlogPosts} from './bold-blog-posts.js';
