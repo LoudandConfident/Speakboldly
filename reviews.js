@@ -1,8 +1,9 @@
+import {learnerReviewPrograms} from './review-programs.js?v=learner-feedback-1';
 import {initializeReviewLevels,displayedReviewLevel} from './review-levels.js?v=course-levels-1';
 import {showSubmissionSuccess,SUBMISSION_SUCCESS_MESSAGE} from './submission-success.js';
 import {reviewSubmission} from './review-validation.js?v=course-levels-1';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
-import {courses} from './courses.js?v=prices-oct-27-2026';
+import {courses} from './courses.js?v=pronunciation-intonation-1';
 import {reviewsConnected,reviewRequest} from './reviews-api.js?v=separate-review-sheet';
 export function initializeReviews(doc, api = reviewRequest, connected = reviewsConnected) {
  const opener = doc.querySelector('#review-open'), form = doc.querySelector('#review-form');
@@ -31,7 +32,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  doc.defaultView.addEventListener('pagehide',()=>doc.defaultView.clearInterval(rotationTimer));
  doc.defaultView.addEventListener('pageshow',restartRotation);
  restartRotation();
- for (const course of courses) {const option = doc.createElement('option');option.value = option.textContent = course.title;form.elements.program.append(option);}
+ for (const course of learnerReviewPrograms(courses)) {const option = doc.createElement('option');option.value = course.title;option.textContent = course.displayTitle||course.title;form.elements.program.append(option);}
  function render() {
   if (!album) return;
   album.hidden = !reviews.length;

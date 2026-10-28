@@ -2,7 +2,7 @@
 export function initializeFeatureLoader(doc,win){
  const groups={
   'students-portal':['./daily-mission.js?v=dictation-per-sentence-1','./student-portal.js?v=practice-zone-monthly-1','./admin-portal.js?v=practice-zone-monthly-1'],
-  'reviews':['./reviews.js?v=course-levels-1'],
+  'reviews':['./reviews.js?v=honest-feedback-1'],
   'daily-quote':['./home-gallery.js?v=website-motivation-1'],
   'learner-profile':['./learner-profile.js?v=two-line-footer-1'],
   'learner-results':['./learner-profile.js?v=two-line-footer-1'],

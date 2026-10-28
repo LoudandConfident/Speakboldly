@@ -248,17 +248,20 @@ export const courses = [
   {
     "id": "pronunciation",
     "title": "Pronunciation workshop",
+    "displayTitle": "Pronunciation & intonation workshop",
     "level": "Advanced",
     "duration": "6 sessions",
     "category": "Workshops",
-    "description": "Develop clearer pronunciation through practice with English sounds, word stress, rhythm and intonation.",
+    "description": "Develop clearer pronunciation and your accent through focused practice with English sounds, word stress, rhythm and intonation.",
     "topics": [
-      "Accent and pronunciation development"
+      "Accent and pronunciation development",
+      "Word and sentence stress",
+      "Intonation, rhythm and connected speech"
     ],
     "art": "pronunciation",
     "comingSoon": true,
-    "summary": "Develop clearer sounds, stress, rhythm and intonation.",
-    "detailDescription": "Practise individual sounds alongside connected speech, word stress and sentence rhythm. The goal is clearer, more confident communication; your instructor helps you notice patterns and practise them in meaningful conversation.",
+    "summary": "Develop your accent, clear pronunciation, speech rhythm and intonation.",
+    "detailDescription": "Practise individual sounds alongside accent development, connected speech, word stress, sentence rhythm and intonation. The goal is clearer, more confident communication; your instructor helps you notice patterns and practise them in meaningful conversation.",
     "viewDescription": "Explore English sounds, word stress, rhythm, and intonation through six practical sessions. Apply pronunciation feedback to short exchanges and connected speech.",
     "outcomes": "You’ll develop greater awareness of the patterns that help make your speech clearer. You’ll also learn a listening-and-recording routine for reviewing and refining your pronunciation independently."
   },
