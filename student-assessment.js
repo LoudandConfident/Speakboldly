@@ -1,4 +1,4 @@
-import {initializeGeneralEnglishExams} from './general-english-exams.js?v=45-minute-1';
+import {initializeGeneralEnglishExams} from './general-english-exams.js?v=levels-12-1';
 import {readDriveFolderFile} from './drive-folder-files.js?v=1';
 import {renderPracticeZone,practiceAccessKey} from './practice-zone.js';
 import {renderMaterialLibrary} from './material-library.js?v=program-cards-1';
@@ -14,7 +14,7 @@ import {learningDocumentTitle,learningDocumentLevel,learningDocumentCategory,lea
 import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v=learning-space';
 import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=ask-coach-1';
-import {initializeStudentBooking} from './student-booking.js?v=success-return-1';
+import {initializeStudentBooking} from './student-booking.js?v=slot-request-1';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 
 const SESSION_KEY='speak-boldly-assessment-session-v1';

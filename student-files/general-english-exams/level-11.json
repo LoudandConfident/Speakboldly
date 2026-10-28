@@ -1,0 +1,225 @@
+{
+  "version": 4,
+  "level": 11,
+  "title": "General English — Level 11",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Level_11_Candidate_Paper.pdf",
+  "instructions": "Answer every question. Work independently without a dictionary, phone or outside assistance. Use your own words for reading answers where possible; short, accurate answers are acceptable. All situations and data are fictional assessment material. Your coach reads the listening text live twice; pause other work during the readings. Speaking is assessed separately and does not change the core total out of 100. The website time limit is 45 minutes.",
+  "sections": {
+    "A": {
+      "title": "A. Language in context and production",
+      "marks": 30,
+      "instruction": "Questions 1–10: choose one answer. Questions 11–15: write one sentence for each task. Each response earns up to 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Were funding to be withdrawn, we ___ the timetable.",
+          "options": [
+            "would revise",
+            "had revised",
+            "revise",
+            "are revising"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "The proposal is feasible only ___ security is confirmed.",
+          "options": [
+            "whereas",
+            "provided that",
+            "despite",
+            "even"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "The figures lend ___ to the case for a trial.",
+          "options": [
+            "support",
+            "supporting",
+            "supported",
+            "supports"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "What remains uncertain ___ whether staffing can be sustained.",
+          "options": [
+            "are",
+            "were",
+            "is",
+            "have"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "The team denied ___ the consultation findings.",
+          "options": [
+            "to ignore",
+            "having ignored",
+            "ignore",
+            "has ignored"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "Which statement distinguishes correlation from causation?",
+          "options": [
+            "Visits rose, so the hours caused it.",
+            "The changes coincided, but other factors may explain the increase.",
+            "A rise proves the policy worked.",
+            "There can be only one explanation."
+          ]
+        },
+        {
+          "number": 7,
+          "question": "The board recommended that the estimate ___ reviewed.",
+          "options": [
+            "is",
+            "was",
+            "be",
+            "being"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "No sooner had the meeting begun ___ an objection was raised.",
+          "options": [
+            "when",
+            "then",
+            "than",
+            "that"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "The decision is contingent ___ transport approval.",
+          "options": [
+            "on",
+            "of",
+            "at",
+            "by"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "Which response constructively mediates disagreement?",
+          "options": [
+            "Your concern is pointless.",
+            "We must choose without discussion.",
+            "Can we agree on the access criteria before comparing options?",
+            "The majority never needs evidence."
+          ]
+        },
+        {
+          "number": 11,
+          "question": "Rewrite with were: If the grant were reduced, we would shorten the pilot."
+        },
+        {
+          "number": 12,
+          "question": "Use a cleft beginning What: We need a confirmed security budget."
+        },
+        {
+          "number": 13,
+          "question": "Politely challenge this inference: Most feedback was positive, so all users support expansion."
+        },
+        {
+          "number": 14,
+          "question": "Summarise an agreement that depends on transport approval."
+        },
+        {
+          "number": 15,
+          "question": "Correct: The committee suggested to extend the pilot."
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Reading",
+      "marks": 20,
+      "instruction": "Read all three sources, then answer using evidence from the sources. Each answer earns up to 4 marks.",
+      "passage": "Source A Trial report Eastbank recorded 180 visits during a trial of longer opening hours. Sixty feedback forms were received, of which 48 were positive. The report does not identify repeat visitors or whether one person submitted more than one form. A class moved into the building during the trial and publicity increased. The report recommends investigating demand rather than treating the visit count as proof of the effect of longer hours.\n\nSource B Youth group The youth group wants a full year of evening access. It can provide an activity leader but cannot supply security staff. Twenty-two of thirty people consulted during a daytime session said they preferred evenings. The group recognises that those absent from that session may have different needs. It asks the board to involve other users before finalising a shared timetable.\n\nSource C Finance note Funding currently covers eight weeks. An additional security estimate of 900 units has been received but not approved. No year-long funding is committed. The board can approve a limited pilot subject to staffing and funding, or defer it while seeking further evidence. A decision must name an accountable coordinator, set review criteria, and explain how shared access will be protected.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Calculate the positive-feedback percentage and give three limitations on generalising it to all users."
+        },
+        {
+          "number": 2,
+          "question": "Give two factors other than added hours that may have affected visits and explain each."
+        },
+        {
+          "number": 3,
+          "question": "Compare the youth group's staffing offer with the finance constraint."
+        },
+        {
+          "number": 4,
+          "question": "Explain two limitations of the preference consultation."
+        },
+        {
+          "number": 5,
+          "question": "Give four safeguards for a responsible pilot decision."
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Listening",
+      "marks": 20,
+      "instruction": "Read the questions before the first reading. Your coach reads the passage live twice. You may take notes; pause other work during the readings. Each question earns 4 marks: two details worth 2 marks each.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "What was the delivery total, and why was the week unrepresentative?"
+        },
+        {
+          "number": 2,
+          "question": "How long is the proposed extension, and who keeps the log?"
+        },
+        {
+          "number": 3,
+          "question": "Which two approvals are needed?"
+        },
+        {
+          "number": 4,
+          "question": "What two types of service data must be recorded?"
+        },
+        {
+          "number": 5,
+          "question": "When will Noor contact transport, and what happens if approval is missing?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Writing",
+      "marks": 30,
+      "instruction": "Write a 300-350 word options brief for the Eastbank board. Compare a conditional eight-week pilot with deferral. Evaluate the evidence, distinguish stakeholder wishes from commitments, recommend one option, and specify implementation conditions and review criteria. Use Sources A-C. Add a separate 30-40 word note explaining one diplomatic language choice.",
+      "wordMin": 300,
+      "wordMax": 350,
+      "commentaryMin": 30,
+      "commentaryMax": 40,
+      "rubric": [
+        {
+          "criterion": "Task and evidence",
+          "marks": 10
+        },
+        {
+          "criterion": "Organisation",
+          "marks": 5
+        },
+        {
+          "criterion": "Language range",
+          "marks": 5
+        },
+        {
+          "criterion": "Accuracy",
+          "marks": 5
+        },
+        {
+          "criterion": "Audience and commentary",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}

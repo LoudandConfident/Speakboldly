@@ -1,6 +1,6 @@
 import {courseIllustration} from './course-illustrations.js?v=1';
 import {enterHubLevel} from './hub-level-access.js?v=practice-zone-monthly-1';
-import {createGeneralEnglishExamForm,collectGeneralEnglishAnswers} from './general-english-exam-form.js?v=1';
+import {createGeneralEnglishExamForm,collectGeneralEnglishAnswers} from './general-english-exam-form.js?v=levels-12-1';
 export function initializeGeneralEnglishExams(doc,{call,panel,setBusy=()=>{}}){
  const win=doc.defaultView;let generation=0,settings=null,pendingSettings=null,folderOpen=false,entering=false,active=null,queue=Promise.resolve(),tick=null,saveTimer=null;
  const text=(tag,value)=>{const n=doc.createElement(tag);n.textContent=value;return n;},button=(label,action)=>{const b=text('button',label);b.type='button';b.className='button light small';b.onclick=action;return b;};
@@ -18,7 +18,7 @@ export function initializeGeneralEnglishExams(doc,{call,panel,setBusy=()=>{}}){
    const form=createGeneralEnglishExamForm(doc,exam),timer=text('p','45:00 remaining');timer.className='student-assessment-timer';timer.setAttribute('role','timer');timer.setAttribute('aria-label','Time remaining');
    panel.replaceChildren(text('h3','General English — Level '+level),text('p',exam.instructions),text('p','45 minutes · 100 marks. The timer continues if you leave or refresh. Your coach reads the listening passage live.'),timer,form);
    for(const input of form.elements){const [section,number]=input.name.split('.'),value=number?attempt.answers[section]?.[number]:attempt.answers[section];if(value!==undefined){if(input.type==='radio')input.checked=input.value===String(value);else input.value=value;}}
-   form.querySelector('[name=E]')?.dispatchEvent(new win.Event('input'));
+   form.querySelectorAll('[name=E],[name=D],[name=commentary]').forEach(input=>input.dispatchEvent(new win.Event('input')));
    const note=text('p','Answers are saved as you work. At zero, only answers saved before the deadline are submitted.');note.setAttribute('role','status');const save=button('Save answers',()=>persist('geExamDraft').catch(()=>{})),submit=text('button','Submit examination');submit.type='submit';submit.className='button';const controls=doc.createElement('div');controls.className='assessment-save-controls';controls.append(save,submit);form.append(controls,note);
    active={attempt,accessToken,form,offset:attempt.serverNow-Date.now(),submitting:false,conflict:false};setBusy(true);
    const valid=()=>ticket===generation&&Boolean(active)&&form.isConnected;

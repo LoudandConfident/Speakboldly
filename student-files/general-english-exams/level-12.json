@@ -1,0 +1,225 @@
+{
+  "version": 4,
+  "level": 12,
+  "title": "General English — Level 12",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Level_12_Candidate_Paper.pdf",
+  "instructions": "Answer every question. Work independently without a dictionary, phone or outside assistance. Use your own words for reading answers where possible; short, accurate answers are acceptable. All situations and data are fictional assessment material. Your coach reads the listening text live twice; pause other work during the readings. Speaking is assessed separately and does not change the core total out of 100. The website time limit is 45 minutes.",
+  "sections": {
+    "A": {
+      "title": "A. Language in context and production",
+      "marks": 30,
+      "instruction": "Questions 1–10: choose one answer. Questions 11–15: write one sentence for each task. Each response earns up to 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Had the discrepancy been disclosed, the editor ___ publication.",
+          "options": [
+            "may delay",
+            "might have delayed",
+            "delays",
+            "will delay"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "The evidence is compatible with the claim, ___ it does not establish it.",
+          "options": [
+            "yet",
+            "because",
+            "so that",
+            "unless"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "Which wording preserves uncertainty accurately?",
+          "options": [
+            "The witnesses agree completely.",
+            "The date is unquestionably correct.",
+            "The accounts differ on the date.",
+            "The newsletter must be false."
+          ]
+        },
+        {
+          "number": 4,
+          "question": "Under no circumstances ___ an unverified quotation as confirmed.",
+          "options": [
+            "we should present",
+            "should we present",
+            "we present should",
+            "present we should"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "The archive contains accounts, the reliability of ___ varies.",
+          "options": [
+            "who",
+            "what",
+            "which",
+            "that"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "The report stops short of ___ a permanent service.",
+          "options": [
+            "recommend",
+            "to recommend",
+            "recommending",
+            "recommended"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "Which describes a source limitation rather than an attack on its author?",
+          "options": [
+            "The writer is foolish.",
+            "The account relies on one uncorroborated recollection.",
+            "The author should be ignored forever.",
+            "Everyone knows the writer is wrong."
+          ]
+        },
+        {
+          "number": 8,
+          "question": "The apparent consensus may be an artefact ___ the sampling method.",
+          "options": [
+            "of",
+            "to",
+            "with",
+            "by"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "It is essential that anonymity ___ preserved.",
+          "options": [
+            "is being",
+            "be",
+            "was",
+            "to be"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "Which distinction matters most when reporting submissions?",
+          "options": [
+            "Long submissions are always true.",
+            "Every submission is one resident.",
+            "Duplicate entries and group submissions affect the unit counted.",
+            "More entries eliminate bias."
+          ]
+        },
+        {
+          "number": 11,
+          "question": "Rewrite with inversion: We should never imply that silence means consent."
+        },
+        {
+          "number": 12,
+          "question": "Qualify this causal claim without dismissing the evidence: The archive proves the closure caused migration."
+        },
+        {
+          "number": 13,
+          "question": "Synthesize two conflicting accounts without choosing a date: Witness A says May; witness B says June."
+        },
+        {
+          "number": 14,
+          "question": "Draft a sentence distinguishing current funding from a future commitment."
+        },
+        {
+          "number": 15,
+          "question": "Correct: The evidence, together with the interviews, demonstrate consensus."
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Reading",
+      "marks": 20,
+      "instruction": "Read all three sources, then answer using evidence from the sources. Each answer earns up to 4 marks.",
+      "passage": "Source A Archive inventory River Memory holds eighty recordings. Forty have permission for public use; twenty have permission only if contributors remain anonymous; permission for the remaining twenty is unresolved. These categories do not overlap. Thirty recordings discuss the same factory closure. The collection was assembled through personal networks, not a representative sampling process. Frequency within the archive therefore need not reflect prevalence across the town.\n\nSource B Editorial note Two witnesses give different dates for a meeting. A newsletter supplies a third date but may refer to a different meeting. The editor proposes presenting the disagreement transparently and checking records before assigning one definitive date. Removing every contradiction would make the story smoother but could hide an important limit of the evidence. A searchable transcript can support access, but publication must respect each contributor's permission.\n\nSource C Project budget Web funding covers three months. Support beyond that period has not been committed. Searchable text is included in the budget; continued audio hosting has not been costed. Six people tested the prototype on desktop computers. No tests used phones or assistive technology. The board must decide whether to approve a limited text-first release, delay for further testing, or seek a revised budget. A release plan needs a review date and a clear policy for unresolved permissions.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Classify the eighty recordings by publication permission and explain why they cannot all be published immediately."
+        },
+        {
+          "number": 2,
+          "question": "Explain why thirty accounts of the closure do not establish its importance to every resident."
+        },
+        {
+          "number": 3,
+          "question": "Explain the date disagreement and propose an editorial response."
+        },
+        {
+          "number": 4,
+          "question": "Identify four distinct limits in the budget and testing evidence."
+        },
+        {
+          "number": 5,
+          "question": "Recommend a publication safeguard and justify it using three details across at least two sources."
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Listening",
+      "marks": 20,
+      "instruction": "Read the questions before the first reading. Your coach reads the passage live twice. You may take notes; pause other work during the readings. Each question earns 4 marks: two details worth 2 marks each.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Give the original and deduplicated submission totals."
+        },
+        {
+          "number": 2,
+          "question": "Why is the deduplicated total not a resident count, and what must be documented for audit?"
+        },
+        {
+          "number": 3,
+          "question": "Among supporters of later opening, how many named Friday and how many named no day?"
+        },
+        {
+          "number": 4,
+          "question": "What transport detail is unresolved, and what will the board do if it remains unresolved?"
+        },
+        {
+          "number": 5,
+          "question": "Who corrects the counts and who revises the wording?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Writing",
+      "marks": 30,
+      "instruction": "Write a 350-400 word publication proposal for the River Memory board. Synthesize Sources A-C, evaluate consent, source reliability, accessibility and sustainability, and recommend a defensible release strategy. Include a contingency and review criteria. Avoid presenting inference as established fact. Add a separate 50-60 word commentary explaining two editorial language choices.",
+      "wordMin": 350,
+      "wordMax": 400,
+      "commentaryMin": 50,
+      "commentaryMax": 60,
+      "rubric": [
+        {
+          "criterion": "Task and evidence",
+          "marks": 10
+        },
+        {
+          "criterion": "Organisation",
+          "marks": 5
+        },
+        {
+          "criterion": "Language range",
+          "marks": 5
+        },
+        {
+          "criterion": "Accuracy",
+          "marks": 5
+        },
+        {
+          "criterion": "Audience and commentary",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}

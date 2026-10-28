@@ -1,5 +1,5 @@
 import {initializeBlogCommentsAdmin} from './blog-comments-admin.js?v=1';
-import {initializeGeneralEnglishExamsAdmin} from './general-english-exams-admin.js?v=45-minute-1';
+import {initializeGeneralEnglishExamsAdmin} from './general-english-exams-admin.js?v=levels-12-1';
 import {initializeRewardsAdmin} from './rewards-admin.js?v=rewards-1';
 import {initializePracticeZoneSetup} from './practice-zone-setup.js';
 import {decorateClientActions,setClientStatusAction} from './client-actions.js';

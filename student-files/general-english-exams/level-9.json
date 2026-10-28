@@ -1,0 +1,225 @@
+{
+  "version": 4,
+  "level": 9,
+  "title": "General English — Level 9",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Level_9_Candidate_Paper.pdf",
+  "instructions": "Answer every question. Work independently without a dictionary, phone or outside assistance. Use your own words for reading answers where possible; short, accurate answers are acceptable. All situations and data are fictional assessment material. Your coach reads the listening text live twice; pause other work during the readings. Speaking is assessed separately and does not change the core total out of 100. The website time limit is 45 minutes.",
+  "sections": {
+    "A": {
+      "title": "A. Language in context and production",
+      "marks": 30,
+      "instruction": "Questions 1–10: choose one answer. Questions 11–15: write one sentence for each task. Each response earns up to 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "If the tutor confirms, we ___ the room.",
+          "options": [
+            "will book",
+            "would booked",
+            "had booked",
+            "booking"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "The room, ___ holds twenty people, is available on Thursdays.",
+          "options": [
+            "who",
+            "where",
+            "which",
+            "whose"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "We need to ___ a decision before Friday.",
+          "options": [
+            "do",
+            "make",
+            "have done",
+            "give"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "She asked whether I ___ attend the meeting the following day.",
+          "options": [
+            "can",
+            "will",
+            "could",
+            "may"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "The materials must ___ before the course begins.",
+          "options": [
+            "order",
+            "be ordered",
+            "ordering",
+            "have order"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "___ the low price, the course attracted only six students.",
+          "options": [
+            "Although",
+            "Because",
+            "Despite",
+            "However"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "I wish we ___ more time to advertise.",
+          "options": [
+            "have",
+            "had",
+            "will have",
+            "having"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "They have been discussing the proposal ___ Monday.",
+          "options": [
+            "for",
+            "during",
+            "since",
+            "until"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "The centre is responsible ___ checking the equipment.",
+          "options": [
+            "for",
+            "to",
+            "with",
+            "of"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "Which sentence makes a cautious recommendation?",
+          "options": [
+            "This will certainly work.",
+            "There is no possible risk.",
+            "You must agree with me.",
+            "It might be worth running a trial."
+          ]
+        },
+        {
+          "number": 11,
+          "question": "Politely ask the library to confirm its staffing arrangements by Friday."
+        },
+        {
+          "number": 12,
+          "question": "Combine with although: The room is cheap. It is too small for all twenty learners."
+        },
+        {
+          "number": 13,
+          "question": "Report this statement: Sara said, \"I can help next week.\""
+        },
+        {
+          "number": 14,
+          "question": "Explain one condition for booking the library room, using provided that."
+        },
+        {
+          "number": 15,
+          "question": "Correct this sentence: We look forward to hear from you."
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Reading",
+      "marks": 20,
+      "instruction": "Read all three sources, then answer using evidence from the sources. Each answer earns up to 4 marks.",
+      "passage": "Source A The coordinator Twenty residents have expressed interest in a digital skills course. The community centre offers twelve seats on Tuesday at no charge. The library can seat twenty on Thursday, but its manager cannot confirm staffing until Friday. Both venues have the computers required. We should not assume that a room offer includes a tutor.\n\nSource B The survey Sixteen of the twenty interested residents answered a short survey. Twelve said they could attend on Thursday; four could not. The remaining four residents have not responded. The survey did not ask about Tuesday availability. A volunteer has offered to help learners practise, but has not agreed to lead the course or committed to every session.\n\nSource C The committee The total budget is 300 units. The library room would cost 240 and printed materials would cost 40. No payment is needed for the centre room. The committee may recommend a venue, but only the director can sign a booking. It cannot promise extra funding. The committee must send its recommendation on Monday. A smaller pilot is possible, provided the selection process is fair and applicants understand that further places are not guaranteed.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Compare the capacity and room cost of the two venues."
+        },
+        {
+          "number": 2,
+          "question": "Explain two reasons why the survey cannot show which venue all twenty residents prefer."
+        },
+        {
+          "number": 3,
+          "question": "Calculate the library option total and remaining budget. Explain one staffing uncertainty."
+        },
+        {
+          "number": 4,
+          "question": "State what the volunteer offered, what commitment is missing, and two limits on the committee."
+        },
+        {
+          "number": 5,
+          "question": "Recommend a next step and justify it with three relevant details from the sources."
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Listening",
+      "marks": 20,
+      "instruction": "Read the questions before the first reading. Your coach reads the passage live twice. You may take notes; pause other work during the readings. Each question earns 4 marks: two details worth 2 marks each.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "How many items were returned on time, and how many borrowers returned items late?"
+        },
+        {
+          "number": 2,
+          "question": "What happened to the Wednesday collection proposal, and why?"
+        },
+        {
+          "number": 3,
+          "question": "Who will draft the reminder, and by when?"
+        },
+        {
+          "number": 4,
+          "question": "Who will review the results, and when?"
+        },
+        {
+          "number": 5,
+          "question": "What happens to the deposit, and what action was approved today?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Writing",
+      "marks": 30,
+      "instruction": "Write a 230-260 word email to the director recommending a venue or a conditional pilot for the digital skills course. Use Sources A-C. Compare the options, explain two uncertainties, and request a clear next action. Do not treat unconfirmed arrangements as facts. After the email, add a separate 30-40 word note explaining one language choice you made for a polite professional tone.",
+      "wordMin": 230,
+      "wordMax": 260,
+      "commentaryMin": 30,
+      "commentaryMax": 40,
+      "rubric": [
+        {
+          "criterion": "Task and evidence",
+          "marks": 10
+        },
+        {
+          "criterion": "Organisation",
+          "marks": 5
+        },
+        {
+          "criterion": "Language range",
+          "marks": 5
+        },
+        {
+          "criterion": "Accuracy",
+          "marks": 5
+        },
+        {
+          "criterion": "Audience and commentary",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}

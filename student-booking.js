@@ -1,3 +1,4 @@
+import {initializeSlotRequest} from './slot-request.js?v=1';
 import {showSubmissionSuccess} from './submission-success.js';
 import {createBookingNotice} from './booking-notice.js?v=personalised-placement-1';
 export function bookingClock(value){const [hour,minute]=String(value).split(':').map(Number);return (hour%12||12)+':'+String(minute).padStart(2,'0')+' '+(hour<12?'AM':'PM');}
@@ -18,6 +19,7 @@ export function initializeStudentBooking(doc){
  const weekdays=el('div',''),grid=el('div','');weekdays.className='calendar-weekdays';grid.className='calendar-grid booking-day-grid';for(const d of ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'])weekdays.append(el('span',d));content.append(toolbar,weekdays,grid);
  for(const [id,label,duration]of [['session','Session',90],['workshop','Workshop',90],['placement','Placement test',30],['trial','Trial session',60]]){const b=el('button',label+' · '+duration+' minutes');b.type='button';b.className='button light';b.dataset.bookingType=id;b.setAttribute('aria-pressed','false');b.onclick=()=>{if(busy)return;kind=id;if(kind==='workshop'&&!/workshop/i.test(courseChoice.value))courseChoice.value='';if(kind==='session'&&/workshop/i.test(courseChoice.value))courseChoice.value='';courseLabel.hidden=true;types.querySelectorAll('button').forEach(n=>n.setAttribute('aria-pressed',String(n===b)));content.hidden=false;load();};types.append(b);}
  root.replaceChildren(el('h3','Calendar'),el('p','What are you booking? Choose an appointment type, then a date and time. All times are in Cairo.'),types,courseLabel,status,content);
+ const slotRequest=initializeSlotRequest(doc,{endpoint,today,getKind:()=>kind});const alternative=el('div','');alternative.className='detail-actions';alternative.append(el('p','Can’t find a time that works?'),slotRequest.button);root.append(alternative);
  const dialog=el('dialog','');dialog.id='booking-registration-dialog';dialog.className='action-popup booking-registration-dialog';dialog.setAttribute('aria-labelledby','booking-registration-title');
  const close=el('button','×');close.type='button';close.className='popup-close';close.setAttribute('aria-label','Close registration');
  const title=el('h2','Register your appointment');title.id='booking-registration-title';const summary=el('p',''),form=el('form','');form.className='booking-registration-form';
@@ -54,7 +56,7 @@ export function initializeStudentBooking(doc){
   catch(e){if(current===epoch){note.textContent=e.message;form.querySelectorAll('input,select,button').forEach(n=>n.disabled=false);program.disabled=kind==='session';}}finally{if(current===epoch){busy=false;close.disabled=false;}}
  };
  const refreshVisible=()=>{if(!doc.hidden&&token&&!root.hidden&&!dialog.open)load();};doc.addEventListener('calendar-availability-changed',refreshVisible);doc.addEventListener('visibilitychange',refreshVisible);
- function lock(){epoch++;loadId++;token='';kind='';requestId=null;selectedDay=null;busy=false;sent=false;form.reset();if(dialog.open)dialog.close();close.disabled=false;content.hidden=true;courseLabel.hidden=true;grid.replaceChildren();status.textContent='';note.textContent='';types.querySelectorAll('button').forEach(n=>n.setAttribute('aria-pressed','false'));}
+ function lock(){slotRequest.lock();epoch++;loadId++;token='';kind='';requestId=null;selectedDay=null;busy=false;sent=false;form.reset();if(dialog.open)dialog.close();close.disabled=false;content.hidden=true;courseLabel.hidden=true;grid.replaceChildren();status.textContent='';note.textContent='';types.querySelectorAll('button').forEach(n=>n.setAttribute('aria-pressed','false'));}
  return{lock,open};
 }
 

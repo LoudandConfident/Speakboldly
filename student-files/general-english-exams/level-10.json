@@ -1,0 +1,225 @@
+{
+  "version": 4,
+  "level": 10,
+  "title": "General English — Level 10",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Level_10_Candidate_Paper.pdf",
+  "instructions": "Answer every question. Work independently without a dictionary, phone or outside assistance. Use your own words for reading answers where possible; short, accurate answers are acceptable. All situations and data are fictional assessment material. Your coach reads the listening text live twice; pause other work during the readings. Speaking is assessed separately and does not change the core total out of 100. The website time limit is 45 minutes.",
+  "sections": {
+    "A": {
+      "title": "A. Language in context and production",
+      "marks": 30,
+      "instruction": "Questions 1–10: choose one answer. Questions 11–15: write one sentence for each task. Each response earns up to 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Had the council consulted residents, it ___ the access problem earlier.",
+          "options": [
+            "would identify",
+            "would have identified",
+            "will identify",
+            "has identified"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "Not only ___ the figures, but she also corrected the headline.",
+          "options": [
+            "she checked",
+            "checked she",
+            "did she check",
+            "she did check"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "The poll is informative; ___, it does not represent every resident.",
+          "options": [
+            "therefore",
+            "however",
+            "because",
+            "unless"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "The trial is said ___ public interest last month.",
+          "options": [
+            "to attract",
+            "attracting",
+            "to have attracted",
+            "attracted"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "Which is a concession?",
+          "options": [
+            "The cost is irrelevant.",
+            "Only one view matters.",
+            "Admittedly, access remains a concern.",
+            "There is no disagreement."
+          ]
+        },
+        {
+          "number": 6,
+          "question": "We objected to the claim ___ the poll proved universal support.",
+          "options": [
+            "what",
+            "that",
+            "who",
+            "whose"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "The phrase \"a perfectly relaxing trip\" describes a journey full of breakdowns. Its likely purpose is ___.",
+          "options": [
+            "literal praise",
+            "irony",
+            "a legal definition",
+            "a timetable"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "The committee insisted that the route ___ accessible.",
+          "options": [
+            "be",
+            "being",
+            "was being",
+            "to be"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "The increase coincided ___ a music event.",
+          "options": [
+            "at",
+            "for",
+            "with",
+            "on"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "Which claim is best supported by 120 positive responses out of 150 online respondents?",
+          "options": [
+            "All residents support the plan.",
+            "Eighty percent of respondents supported it.",
+            "Most residents voted.",
+            "No one opposed it."
+          ]
+        },
+        {
+          "number": 11,
+          "question": "Rewrite with inversion: We had rarely seen such strong opposition."
+        },
+        {
+          "number": 12,
+          "question": "Make this claim appropriately cautious: The trial caused the increase in visits."
+        },
+        {
+          "number": 13,
+          "question": "Acknowledge a benefit, then raise an access concern in one sentence."
+        },
+        {
+          "number": 14,
+          "question": "Report: The chair said, \"We approved the trial yesterday.\""
+        },
+        {
+          "number": 15,
+          "question": "Correct: Despite the route was popular, it remained temporary."
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Reading",
+      "marks": 20,
+      "instruction": "Read all three sources, then answer using evidence from the sources. Each answer earns up to 4 marks.",
+      "passage": "Source A Campaign bulletin Harbour Walk campaigners favour a weekend car-free trial. An online poll promoted through the campaign network received 150 responses, of which 120 supported the idea. Respondents were not asked where they lived. The campaign headline says that the town has spoken. Organisers acknowledge that people without internet access may not have seen the poll.\n\nSource B Access panel The access panel has not endorsed the plan. It wants a safe drop-off point, a continuous accessible route and a named contact for problems. It welcomes the aim of a more pleasant walking environment but says that support for an aim is not approval of a particular design. The campaign bulletin quoted its welcome without including this qualification.\n\nSource C Council note Visits to the area rose from 400 to 480 during the first demonstration weekend. These are recorded visits, not unique visitors. The weather was unusually fine and a music event took place nearby. The council has funds for signs for an eight-week trial, but no permanent scheme has been approved. A decision is due on Monday. Any announcement must describe the duration accurately and explain the access arrangements.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Calculate the poll support percentage and explain why it cannot establish town-wide support."
+        },
+        {
+          "number": 2,
+          "question": "Give three access requirements and explain the panel's actual position."
+        },
+        {
+          "number": 3,
+          "question": "Give the numerical and percentage increase in visits, and two reasons not to attribute it solely to the scheme."
+        },
+        {
+          "number": 4,
+          "question": "Identify two ways a headline could overstate the council note."
+        },
+        {
+          "number": 5,
+          "question": "Write a responsible two-sentence replacement for \"The whole town approves a permanent car-free zone.\""
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Listening",
+      "marks": 20,
+      "instruction": "Read the questions before the first reading. Your coach reads the passage live twice. You may take notes; pause other work during the readings. Each question earns 4 marks: two details worth 2 marks each.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "State the change in weekly visits and the percentage increase."
+        },
+        {
+          "number": 2,
+          "question": "How many registered members were there, and what extra provision complicates the comparison?"
+        },
+        {
+          "number": 3,
+          "question": "Where should the correction appear, and why?"
+        },
+        {
+          "number": 4,
+          "question": "What does \"a real adventure\" convey here, and what quotation permission exists?"
+        },
+        {
+          "number": 5,
+          "question": "Who prepares the revised draft, and by when?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Writing",
+      "marks": 30,
+      "instruction": "Write a 260-300 word balanced commentary for a local news website about Harbour Walk. Use Sources A-C. Evaluate the campaign headline, explain what the figures can and cannot show, include the access panel fairly, and give a qualified recommendation. Add a separate 30-40 word note explaining one rhetorical or tone choice.",
+      "wordMin": 260,
+      "wordMax": 300,
+      "commentaryMin": 30,
+      "commentaryMax": 40,
+      "rubric": [
+        {
+          "criterion": "Task and evidence",
+          "marks": 10
+        },
+        {
+          "criterion": "Organisation",
+          "marks": 5
+        },
+        {
+          "criterion": "Language range",
+          "marks": 5
+        },
+        {
+          "criterion": "Accuracy",
+          "marks": 5
+        },
+        {
+          "criterion": "Audience and commentary",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}
