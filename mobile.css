@@ -183,3 +183,9 @@ html.app-pull-refresh-enabled,html.app-pull-refresh-enabled body{overscroll-beha
 
 /* Daily Motivation is available from its homepage button on phones. */
 @media(max-width:680px){header #main-navigation [data-open-view="daily-quote"],header #main-navigation [aria-controls="daily-quote"],header #main-navigation a[href="#daily-quote"]{display:none!important}}
+
+/* Center every phone menu row, including an unpaired final tab. */
+@media(max-width:680px){
+ header #main-navigation.mobile-open{display:flex!important;flex-wrap:wrap;justify-content:center!important;align-items:center;gap:12px!important}
+ header #main-navigation .nav-tab{flex:0 1 calc(50% - 6px);width:calc(50% - 6px);max-width:180px;display:flex;align-items:center;justify-content:center;text-align:center;border-radius:999px!important;margin:0}
+}
