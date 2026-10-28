@@ -7,7 +7,7 @@ const text=node=>node.textContent+node.children.map(text).join('');
 test('both test results provide a placement booking remark and preselect the calendar appointment',()=>{
  const saved=new Map(),win={sessionStorage:{setItem:(key,value)=>saved.set(key,value)}};
  const section=createPlacementBookingRemark(doc,win),button=section.children[1];assert.equal(section.children[0].textContent,PLACEMENT_BOOKING_NOTE);assert.equal(button.href,'#students-portal/calendar');button.click();assert.equal(calendar.dataset.requestedBookingType,'placement');assert.equal(saved.get('speak-boldly-booking-type'),'placement');
- for(const path of ['app.js','learner-profile.js'])assert(readFileSync(path,'utf8').includes('result.append(createPlacementBookingRemark('));
+ for(const path of ['placement-assessment.js','learner-profile.js'])assert(readFileSync(path,'utf8').includes('result.append(createPlacementBookingRemark('));
 });
 test('placement booking shows payment, approval and confirmation details without the removed assessment prerequisite',()=>{
  const notice=createBookingNotice(doc,'placement'),body=text(notice);assert(body.includes('placement test fees'));assert(body.includes('requested date and time'));assert(body.includes('accept or decline'));assert(body.includes('confirmation e-mail within 24 hours'));assert(!body.includes('both assessments'));assert(!body.includes('before enrolling'));assert(notice.children[0].children.some(n=>n.href==='mailto:billing@speakboldly.space'));

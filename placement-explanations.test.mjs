@@ -10,8 +10,8 @@ test('all 50 questions have a specific explanation including the correct word or
  for(const q of questions){const text=placementExplanations[q.number-1];assert(text.length>70);assert(text.toLowerCase().includes(q.options[answerKey[q.number-1]].toLowerCase()),'Explanation must cover correct answer for '+q.number);}
 });
 test('results expose only mistakes with explanations and handle unanswered and perfect results',()=>{
- const source=readFileSync(new URL('./app.js',import.meta.url),'utf8');
- const block=source.slice(source.indexOf(' const corrections=placementCorrections(record.answers)'),source.indexOf(' addResultBranding(document,result);'));
+ const source=readFileSync(new URL('./placement-assessment.js',import.meta.url),'utf8');
+ const block=source.slice(source.indexOf(' const corrections=placementCorrections(record.answers)'),source.indexOf(' result.append(createPlacementBookingRemark('));
  const el=tag=>({tag,children:[],style:{},append(...children){this.children.push(...children)},setAttribute(){}});
  for(const corrections of [[],[{number:10,selected:0,correct:1},{number:48,selected:null,correct:0}]]){
   const result=el('section');const context={record:{answers:{}},placementCorrections:()=>corrections,questions,placementExplanations,result,document:{createElement:el}};

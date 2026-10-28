@@ -106,8 +106,8 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
   }catch(error){if(unlocked&&epoch===sheetGeneration)status.textContent='Students could not load. '+error.message;return false;}
   finally{if(epoch===sheetGeneration){sheetLoading=false;refreshClients.disabled=false;root.querySelector('#admin-add-client').disabled=false;}}
  }
- let syncTimer;
- function refreshConnected(){if(unlocked&&!doc.hidden&&clientSheetConnected()&&!editingId&&!form.dataset.saving&&!doc.querySelector('dialog[open]'))refreshSheetClients(true);}
+ let syncTimer,lastBackgroundSync=0;
+ function refreshConnected(){if(Date.now()-lastBackgroundSync<15000)return;if(unlocked&&!doc.hidden&&clientSheetConnected()&&!editingId&&!form.dataset.saving&&!doc.querySelector('dialog[open]')){lastBackgroundSync=Date.now();refreshSheetClients(true);}}
  doc.addEventListener('speak-boldly-app-resume',()=>{
   if(!unlocked||doc.hidden||editingId||form.dataset.saving||doc.querySelector('dialog[open]'))return;
   refreshConnected();
