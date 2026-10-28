@@ -2105,3 +2105,6 @@ body:has(#boldly-notes:not([hidden])) #main-navigation [data-open-view=boldly-no
 #boldly-notes .bold-question-today p{font-size:15px;line-height:1.65;margin:0}
 #vision .vision-opening{margin-bottom:32px}
 #vision .vision-story>.vision-need-band{margin-top:0}
+/* Give the lion a little more presence on the blog landing page. */
+main #boldly-notes:has([data-notes-reader][hidden]) .bold-blog-masthead .bold-blog-brand img{width:140px;height:140px}
+@media(max-width:680px){main #boldly-notes:has([data-notes-reader][hidden]) .bold-blog-masthead .bold-blog-brand img{width:108px;height:108px}}
