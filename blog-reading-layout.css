@@ -70,3 +70,10 @@ body:has(#boldly-notes:not([hidden])) #main-navigation [data-open-view=boldly-no
 @media(max-width:680px){#boldly-notes [data-notes-reader] nav.blog-pagination{gap:8px}.blog-pagination .button{font-size:11px;padding:10px 8px!important;gap:0}.blog-pagination>span{font-size:12px}.blog-glossary-sheet{grid-template-columns:1fr;gap:10px}.blog-glossary-entry{padding:16px}.blog-glossary-nav .button{font-size:11px;padding:10px!important}.blog-glossary-nav>span{font-size:11px}#boldly-notes .bold-question{grid-template-columns:minmax(0,1fr);padding:20px;gap:12px}#boldly-notes .bold-question-art{grid-column:1;grid-row:1;justify-self:center;width:145px}#boldly-notes .bold-question-art img{width:145px}#boldly-notes .bold-question>h3{font-size:29px;margin-bottom:8px}#boldly-notes .bold-question>p{font-size:16px}}
 #boldly-notes .bold-question>h3{font-family:Georgia,'Times New Roman',serif!important;font-weight:400!important;font-style:italic!important}
 #boldly-notes .blog-pagination button:disabled{opacity:.4;cursor:default;transform:none}
+/* The downloaded picture uses the same live glossary-card design. */
+#boldly-notes .blog-export-heading{display:block;position:relative;min-height:84px;padding:0 85px 12px 0;margin:0 0 16px;border-bottom:1px solid #b9cbb0}
+#boldly-notes .blog-export-heading>img{position:absolute;right:0;top:0;width:70px;height:70px;object-fit:contain}
+#boldly-notes .blog-export-heading>h3{font-size:25px;line-height:1.35;margin:0 0 8px;letter-spacing:-.5px}
+#boldly-notes .blog-export-heading>p{font-size:14px;line-height:1.5;margin:0;color:#53685b}
+#boldly-notes .blog-export-card .blog-glossary-word{font-size:19px;display:block;padding:0}
+#boldly-notes .blog-export-card .page-signature{margin:18px 0 0;padding:15px 0 0;font-size:12px}
