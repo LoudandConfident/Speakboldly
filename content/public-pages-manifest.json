@@ -1,5 +1,12 @@
 {
   "files": [
+    "reviews/index.html",
+    "student-portal/index.html",
+    "vision/index.html",
+    "how-it-works/index.html",
+    "contact/index.html",
+    "join-us/index.html",
+    "get-a-quote/index.html",
     "programs/index.html",
     "programs/reclaim-your-focus/index.html",
     "programs/write-boldly/index.html",
@@ -23,6 +30,13 @@
   ],
   "indexable": [
     "/",
+    "/reviews/",
+    "/student-portal/",
+    "/vision/",
+    "/how-it-works/",
+    "/contact/",
+    "/join-us/",
+    "/get-a-quote/",
     "/programs/",
     "/programs/general-english/",
     "/programs/english-momentum/",

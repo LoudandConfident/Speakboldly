@@ -3,10 +3,10 @@ export function initializeFeatureLoader(doc,win){
  const groups={
   'students-portal':['./daily-mission.js?v=dictation-per-sentence-1','./student-portal.js?v=practice-zone-monthly-1','./admin-portal.js?v=practice-zone-monthly-1'],
   'reviews':['./reviews.js?v=honest-feedback-1'],
-  'daily-quote':['./home-gallery.js?v=website-motivation-1'],
+  'daily-quote':['./home-gallery.js?v=address-previews-1'],
   'learner-profile':['./learner-profile.js?v=two-line-footer-1'],
   'learner-results':['./learner-profile.js?v=two-line-footer-1'],
-  'boldly-notes':['./boldly-notes.js?v=book-pages-1']
+  'boldly-notes':['./boldly-notes.js?v=share-only-1']
  };
  const pending=new Map();
  async function load(){const key=win.location.hash.slice(1).split('/')[0],modules=groups[key];if(!modules||pending.has(key))return;const root=doc.getElementById(key);if(!root)return;const spinner=doc.createElement('p');spinner.className='sb-loading';spinner.dataset.loading='true';spinner.setAttribute('role','status');spinner.setAttribute('aria-label','Loading');root.prepend(spinner);const buttons=key==='students-portal'?[...root.querySelectorAll('[data-portal-area]')]:[];buttons.forEach(b=>b.disabled=true);

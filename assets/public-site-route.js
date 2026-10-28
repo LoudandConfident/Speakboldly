@@ -1,7 +1,6 @@
 const view=document.body.dataset.publicSiteView,course=document.body.dataset.publicCourse,post=document.body.dataset.publicPost;
 const initialHash='#'+view+(post?'/'+post:'');
-// Return to the normal root URL when navigating to another website section.
-window.addEventListener('hashchange',()=>{if(location.hash!==initialHash)history.replaceState(null,'','/'+location.search+location.hash);});
+// The shared address controller keeps every tab on its own preview URL.
 if(course&&location.hash==='#courses'){
  const grid=document.querySelector('#course-grid');
  let observer;
