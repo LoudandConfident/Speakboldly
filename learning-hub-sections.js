@@ -5,7 +5,7 @@ export const LEARNING_HUB_SECTIONS=[
  {id:'listening',title:'Listening'},
  {id:'material',title:'Material'},
  {id:'practice',title:'Activities'},
- {id:'contact',title:'Contact Instructor'},
+ {id:'contact',title:'Ask your coach'},
  {id:'calendar',title:'Calendar'}
 ];
 export function learningHubItemSection(item){return item.section==='tests'?'exams':learningDocumentCategory(item);}

@@ -1,6 +1,6 @@
 import {cairoDay} from './student-attempts.js';
 export const PORTAL_ATTEMPT_KEY='speak-boldly-portal-password-attempts-v1';
-export const PORTAL_LOCK_MESSAGE='Three wrong passwords. Level folders are locked until midnight Cairo time. Contact Instructor and Calendar do not require passwords.';
+export const PORTAL_LOCK_MESSAGE='Three wrong passwords. Level folders are locked until midnight Cairo time. Ask your coach and Calendar do not require passwords.';
 const approved=new WeakMap();
 export function portalAttemptState(storage,now=new Date()){
  let saved;try{saved=JSON.parse(storage.getItem(PORTAL_ATTEMPT_KEY)||'null');}catch{throw new Error('Enable browser storage to use the Student Portal.');}

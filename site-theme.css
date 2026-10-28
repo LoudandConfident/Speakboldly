@@ -107,6 +107,8 @@ main>#students-portal.catalog.portal-session-active:not(#home){padding-top:16px!
 
 .material-folder-grid .portal-level-button{align-items:center;justify-content:flex-start;text-align:center;gap:10px;min-height:170px;padding:16px}.material-program-illustration{display:block;width:110px;max-width:100%;line-height:0}.material-program-illustration .course-illustration{display:block;width:100%;height:auto;border-radius:12px}.material-program-title{display:block;overflow-wrap:anywhere;line-height:1.4;font-weight:600}@media(max-width:680px){.material-folder-grid .portal-level-button{padding:12px;min-height:160px}.material-program-illustration{width:90px}}
 
+.student-submission-files{list-style:none;padding:0;margin:12px 0}.student-submission-files li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #d8dfd0}.student-submission-files li span{min-width:0;overflow-wrap:anywhere}.student-submission-files button{flex-shrink:0}.student-contact-form [data-submission-fields]{display:grid;gap:14px}.student-contact-form [data-submission-fields][hidden]{display:none}.student-contact-form input[readonly]{background:#edf1e6;color:#193c32}
+
 /* how-it-works.css */
 /* Speak Boldly · an editorial learning journey, using the existing brand palette. */
 #how.how-editorial{--how-ink:var(--ink,#193c32);--how-lime:#d5ed98;--how-paper:var(--cream,#faf9f4);max-width:1120px;margin:0 auto;padding-top:30px;color:var(--how-ink)}

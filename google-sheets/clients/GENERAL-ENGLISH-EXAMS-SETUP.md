@@ -62,3 +62,15 @@ Repeated Submit/timeout requests do not resend a sent notification. Saved answer
 7. Levels 9–12 remain unavailable until uploaded.
 
 The user-supplied PDFs contain the student papers only. No examiner material or answer keys are published. The public JSON templates contain questions only. Shared level passwords restrict starting the exam, not knowledge of its questions or verification of a student's legal identity.
+
+## Ask your coach → Submissions update
+
+If you already installed the exam script and its doPost routing block, replace ONLY your existing **GeneralEnglishExams.gs** file with the latest complete version. Do not create a duplicate copy, replace Code.gs or add another doPost block. Save, select **setupStudentSubmissions → Run**, approve permissions, then deploy a **New version of the same Clients web app**. Existing exam setup and its routing block stay as they are. For a new installation, follow the exam activation steps above and run setupStudentSubmissions as well.
+
+Ask your coach keeps its existing FAQ/question topics and askcoach@speakboldly.space destination. The new Submissions topic offers Assignment/Test, a read-only automatic subject, and up to 10 attachments (5 MB each; 15 MB combined). Files can be added in multiple picker selections and removed individually. Student name and email are required; a message or at least one file is required.
+
+Manual submissions go only to submissions@speakboldly.space, with the student's email as Reply-To. Namecheap forwarding for that alias should point to your private inbox. Gmail Send mail as is not needed to receive them. The public request cannot override the recipient or subject.
+
+setupStudentSubmissions creates only a **Student submissions** sheet and a separate **Speak Boldly — Private student submissions** Drive folder under the account running Apps Script. Attachments are archived privately there so the coach can recover them if email delivery is uncertain; they are never put in the student-visible Library/Practice Zone folders. These copies use your existing Google Drive storage. The sheet records private file IDs and delivery status.
+
+Retries with the same request ID never send a second confirmed email. If delivery is uncertain, check Sent Mail and the Student submissions sheet before trying to send the work again. The success notice/return to the previous portal section runs only on confirmed send. Daily limits are 3 submissions per email / 50 overall, within Apps Script mail and storage quotas. No real emails are sent by setup. No client/calendar/old-exam rows or existing email signatures are changed.
