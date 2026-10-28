@@ -1,5 +1,5 @@
 import {paginateBlogContent,ensureBoldQuestion} from './blog-pagination.js?v=final-glossary-1';
-import {addReadingTools,addBlogSharing,BLOG_WORDS} from './blog-reading-tools.js?v=styled-gallery-1';
+import {addReadingTools,addBlogSharing,BLOG_WORDS} from './blog-reading-tools.js?v=rewards-1';
 import {EDITORIAL_POSTS,mergeBlogPosts} from './bold-blog-posts.js';
 import {DOCUMENT_BRAND} from './document-branding.js?v=two-line-footer-1';
 export function initializeBoldlyNotes(doc,win){

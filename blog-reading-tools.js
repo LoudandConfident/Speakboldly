@@ -33,6 +33,6 @@ export function addReadingTools(doc,win,root,content){
 }
 export function addBlogSharing(doc,win,host,post){
  const box=doc.createElement('div');box.dataset.blogShare='';box.className='blog-share';const url='https://speakboldly.space/blog/'+(post?encodeURIComponent(post.id)+'/':''),title='Bold Blog from Speak Boldly English Language Coaching',text=post?post.title:'Read Bold Blog from Speak Boldly English Language Coaching.',status=doc.createElement('span');status.setAttribute('role','status');
- async function copy(){try{await win.navigator.clipboard.writeText(url);status.textContent='Link copied.';}catch{status.textContent='Copy this link: '+url;}}
- for(const [label,action]of [['Share Bold Blog',async()=>{if(win.navigator.share){try{await win.navigator.share({title,text,url});}catch(e){if(e.name!=='AbortError')await copy();}}else await copy();}]]){const b=doc.createElement('button');b.type='button';b.className='button small light';b.textContent=label;b.onclick=action;box.append(b);}box.append(status);host.append(box);return box;
+ async function copy(){try{await win.navigator.clipboard.writeText(url);status.textContent='Link copied.';doc.dispatchEvent(new win.CustomEvent('sb-reward-share',{detail:{source:url,host:box}}));}catch{status.textContent='Copy this link: '+url;}}
+ for(const [label,action]of [['Share Bold Blog',async()=>{if(win.navigator.share){try{await win.navigator.share({title,text,url});doc.dispatchEvent(new win.CustomEvent('sb-reward-share',{detail:{source:url,host:box}}));}catch(e){if(e.name!=='AbortError')await copy();}}else await copy();}]]){const b=doc.createElement('button');b.type='button';b.className='button small light';b.textContent=label;b.onclick=action;box.append(b);}box.append(status);host.append(box);return box;
 }
