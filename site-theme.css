@@ -2055,3 +2055,32 @@ body:has(#boldly-notes:not([hidden])) #main-navigation [data-open-view=boldly-no
 #boldly-notes .boldly-notes-intro{margin-bottom:16px}
 #boldly-notes .blog-share{margin:12px 0 16px}
 #admin-dashboard .admin-metrics>article{width:100%!important;max-width:100%!important;min-inline-size:0!important;aspect-ratio:auto!important}
+/* Book-like reading pages and picture cards replace the long saved-word list. */
+#boldly-notes [data-notes-reader] nav.blog-pagination{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;max-width:none;width:100%;margin:18px 0}
+.blog-pagination>button:first-child{justify-self:start}.blog-pagination>button:nth-of-type(2){justify-self:end}.blog-pagination>span{font-size:13px;white-space:nowrap;font-weight:600}
+.blog-pagination progress{grid-column:1/-1;width:100%;height:5px;accent-color:#41674e;border:0;border-radius:99px;overflow:hidden}
+.blog-pagination progress::-webkit-progress-bar{background:#d1ddc6}.blog-pagination progress::-webkit-progress-value{background:#41674e}
+#boldly-notes .blog-reading-page{min-height:200px;max-width:980px;margin:auto}
+#boldly-notes .blog-glossary-jump{margin:0 0 2px;border:1px solid #afc2a5;background:#faf9f4}
+#boldly-notes .blog-glossary{max-width:980px;margin:22px auto 0;padding:22px 0 0}
+#boldly-notes .blog-glossary>h3{font-size:26px;margin:0 0 12px}
+#boldly-notes .blog-glossary>p{font-size:14px;line-height:1.6}
+.blog-glossary-sheet{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.blog-glossary-entry{padding:18px;border:1px solid #bcccb2;border-radius:20px;background:#faf9f4;min-width:0}
+#boldly-notes .blog-glossary-entry .blog-glossary-word{display:block;padding:0;font-size:19px;font-weight:600}
+.blog-glossary-entry small{display:block;font-size:11px;color:#53685b;margin:7px 0}
+#boldly-notes .blog-glossary-entry p{font-size:15px;line-height:1.65;margin:8px 0}
+#boldly-notes .blog-glossary-entry .blog-glossary-example{font-style:italic;border-left:2px solid #b9cbb0;padding-left:12px}
+.blog-glossary-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:18px 0;font-size:12px}.blog-glossary-nav>span{text-align:center}
+.blog-glossary-actions{display:flex;gap:10px;flex-wrap:wrap}
+#boldly-notes .bold-question{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:0 20px;background:transparent;border:2px solid #79966b;border-radius:28px 14px 32px 12px;padding:28px;margin:18px 0;position:relative}
+#boldly-notes .bold-question>h3{grid-column:1;font-family:Georgia,serif;font-style:italic;font-size:34px;line-height:1.2;letter-spacing:-.5px;margin:0 0 20px}
+#boldly-notes .bold-question>p{grid-column:1;line-height:1.7;margin-bottom:12px}
+.bold-question-art{grid-column:2;grid-row:1/span 12;align-self:center;position:relative;text-align:center;min-width:0}
+.bold-question-art img{display:block;width:180px;max-width:100%;height:auto;margin:auto;object-fit:contain}
+.bold-question-art>span{position:absolute;top:-12px;right:0;font:italic 32px Georgia,serif;color:#41674e;transform:rotate(12deg)}
+#boldly-notes [data-notes-reader]>.blog-share{justify-content:center;border-top:1px solid #b9cbb0;padding-top:22px;margin-top:28px}
+#boldly-notes .blog-share[hidden],#boldly-notes .blog-glossary[hidden]{display:none!important}
+@media(max-width:680px){#boldly-notes [data-notes-reader] nav.blog-pagination{gap:8px}.blog-pagination .button{font-size:11px;padding:10px 8px!important;gap:0}.blog-pagination>span{font-size:12px}.blog-glossary-sheet{grid-template-columns:1fr;gap:10px}.blog-glossary-entry{padding:16px}.blog-glossary-nav .button{font-size:11px;padding:10px!important}.blog-glossary-nav>span{font-size:11px}#boldly-notes .bold-question{grid-template-columns:minmax(0,1fr);padding:20px;gap:12px}#boldly-notes .bold-question-art{grid-column:1;grid-row:1;justify-self:center;width:145px}#boldly-notes .bold-question-art img{width:145px}#boldly-notes .bold-question>h3{font-size:29px;margin-bottom:8px}#boldly-notes .bold-question>p{font-size:16px}}
+#boldly-notes .bold-question>h3{font-family:Georgia,'Times New Roman',serif!important;font-weight:400!important;font-style:italic!important}
+#boldly-notes .blog-pagination button:disabled{opacity:.4;cursor:default;transform:none}
