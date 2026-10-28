@@ -101,13 +101,12 @@ export function initializeStudentAssessment(doc) {
  function showAssessment(){profile.hidden=true;generalExams.show(activeLearningSection==='exams');}
  async function openStudent(){
   blocked.hidden=true;
-  const current=epoch,request=++catalogRequest;catalogInFlight++;content.hidden=false;root.classList.add('portal-session-active');root.querySelector('#student-folder-title').textContent='Welcome back!';select(doc.defaultView.location.hash.endsWith('/calendar')?'calendar':null);const endLoading=loadingNotice.start('Loading your dashboard…');if(doc.defaultView.location.hash.endsWith('/calendar'))booking.open();status.textContent='Loading available files and assessments…';renderFiles([]);showAssessment([],false);
-  try{const response=await call('studentPortalAccess');if(current!==epoch||request!==catalogRequest)return;updatePasswordMetadata(response);
-   let saved;try{saved=JSON.parse(doc.defaultView.sessionStorage.getItem(SESSION_KEY)||'null');}catch{}
-   if(saved?.token&&saved?.student){resumableSession=saved;student=saved.student;}
-   renderFiles(response.items);showAssessment(response.items);status.textContent='';
-   
-  }catch(error){if(current===epoch&&request===catalogRequest)fileLoadError(error);}finally{catalogInFlight--;endLoading();}
+  const current=epoch;content.hidden=false;root.classList.add('portal-session-active');root.querySelector('#student-folder-title').textContent='Welcome back!';select(doc.defaultView.location.hash.endsWith('/calendar')?'calendar':null);loadingNotice.clear();status.textContent='';renderFiles([]);showAssessment();
+  let saved;try{saved=JSON.parse(doc.defaultView.sessionStorage.getItem(SESSION_KEY)||'null');}catch{}
+  if(saved?.token&&saved?.student){resumableSession=saved;student=saved.student;}
+  // The landing cards do not need a recursive Drive/file scan. Refresh only access metadata here.
+  void refreshHubAccess(doc).catch(()=>{});
+  if(doc.defaultView.location.hash.endsWith('/calendar'))void booking.open();
   if(current!==epoch)return;clearInterval(accessTimer);accessTimer=setInterval(async()=>{if(current!==epoch||doc.hidden||busy||catalogInFlight)return;const freeTab=tabs.find(t=>['mission','monthly'].includes(t.dataset.portalTab)&&t.getAttribute('aria-selected')==='true');if(freeTab){try{await refreshHubAccess(doc,true);if(!hasHubGrant(freeTab.dataset.portalTab)){select(null);status.textContent='This section now needs the password shared by your instructor.';}}catch{}return;}if(publicSectionSelected())return;if(tabs.some(t=>t.dataset.portalTab==='exercises'&&t.getAttribute('aria-selected')==='true')&&!hasHubGrant('exercises:1')){select(null);status.textContent='Enter the current monthly Practice Zone password to continue.';return;}const filesOpen=tabs.some(tab=>['material','exercises','exams','listening'].includes(tab.dataset.portalTab)&&tab.getAttribute('aria-selected')==='true');if(!filesOpen)return;try{await reloadFiles(true);}catch{}},20000);
  }
  doc.addEventListener('portal-files-uploaded',async()=>{try{await reloadFiles();}catch{}});

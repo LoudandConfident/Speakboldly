@@ -1,5 +1,5 @@
 import {motivationPreviews} from './motivation-preview-images.js?v=small-picture-preview-2';
-import {motivationDay,refreshMotivationSettings,motivationSettings} from './motivation-settings.js?v=freeze-24-oct-1';
+import {motivationDay,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js?v=freeze-24-oct-1';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
  { image: './images/daily-motivation-1.png', alt: 'A notebook and phone, ready for a fresh start', quote: 'Make time for what matters.' },
@@ -117,7 +117,8 @@ export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
  if (!page||page.dataset.galleryInitialized) return;
  page.dataset.galleryInitialized='true';
- let ready=false,day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const copy=doc.createElement('button');copy.type='button';copy.className='button light small';copy.textContent='Copy motivation link';copy.disabled=true;const copyField=doc.createElement('input');copyField.type='text';copyField.readOnly=true;copyField.hidden=true;copyField.setAttribute('aria-label','Motivation link');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,copyField,shareStatus);copy.onclick=async()=>{if(!currentEntry)return;try{await copyMotivationLink(win,currentEntry);copyField.hidden=true;shareStatus.textContent='Link copied. Paste it into WhatsApp or another app to load the picture preview.';}catch{copyField.value=motivationCopyUrl(currentEntry);copyField.hidden=false;copyField.focus();copyField.select();shareStatus.textContent='Copy the selected link to share this motivation.';}};page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationCopyUrl(currentEntry);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}doc.dispatchEvent(new win.CustomEvent('sb-reward-share',{detail:{source:url,host:sharing}}));}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
+ const cacheKey='sb-public-motivation-v1:'+MOTIVATION_PIN.revision+':'+(new URL(win.location.href).searchParams.get('motivation')||'current');let restored=false;try{const cached=JSON.parse(win.localStorage.getItem(cacheKey)||'null');if(cached&&Date.now()-cached.savedAt<86400000&&cached.settings&&typeof cached.settings.frozen==='boolean'){setMotivationSettings(cached.settings);restored=true;}}catch{}
+ let ready=true,day = null,currentEntry,shareFile=null;const share=doc.createElement('button');share.type='button';share.className='button light small';share.textContent='Share today’s motivation';const shareStatus=doc.createElement('p');shareStatus.setAttribute('role','status');const copy=doc.createElement('button');copy.type='button';copy.className='button light small';copy.textContent='Copy motivation link';copy.disabled=true;const copyField=doc.createElement('input');copyField.type='text';copyField.readOnly=true;copyField.hidden=true;copyField.setAttribute('aria-label','Motivation link');const sharing=doc.createElement('div');sharing.className='motivation-sharing';sharing.append(share,copyField,shareStatus);copy.onclick=async()=>{if(!currentEntry)return;try{await copyMotivationLink(win,currentEntry);copyField.hidden=true;shareStatus.textContent='Link copied. Paste it into WhatsApp or another app to load the picture preview.';}catch{copyField.value=motivationCopyUrl(currentEntry);copyField.hidden=false;copyField.focus();copyField.select();shareStatus.textContent='Copy the selected link to share this motivation.';}};page.querySelector('#daily-quote-reflection').after(sharing);share.onclick=async()=>{if(!currentEntry)return;const url=motivationCopyUrl(currentEntry);try{if(win.navigator.share){const data=shareFile&&win.navigator.canShare?.({files:[shareFile]})?{title:currentEntry.quote,text:currentEntry.quote+'\n'+url,files:[shareFile]}:{title:currentEntry.quote,url};await win.navigator.share(data);}else{await win.navigator.clipboard.writeText(url);shareStatus.textContent='Link copied. Share it with today’s picture and motivation.';}doc.dispatchEvent(new win.CustomEvent('sb-reward-share',{detail:{source:url,host:sharing}}));}catch(error){if(error.name!=='AbortError')shareStatus.textContent='Share this link: '+url;}};
  function refresh() {
   if(!ready)return;
   const now = new win.Date(), nextDay = motivationDay(now,cairoDayNumber);
@@ -125,8 +126,9 @@ export function initializeGallery(doc, win) {
   day = nextDay;
   const sharedName=new URL(win.location.href).searchParams.get('motivation-entry'),sharedIndex=dailyQuotes.findIndex(q=>q.image.split('/').pop().replace(/\.png$/,'')===sharedName);
   const index = sharedIndex>=0?sharedIndex:motivationIndexForDate(now),custom=sharedIndex>=0?null:motivationSettings().message,entry=custom?{quote:custom.quote,image:custom.image,alt:custom.quote,customDate:custom.date}:dailyQuotes[index],details=custom?{paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[]}:quoteDetails[index];currentEntry=entry;page.dataset.publicShareUrl=motivationCopyUrl(entry);doc.dispatchEvent(new win.Event('sb-public-share-url'));copy.disabled=false;copyField.hidden=true;shareFile=null;shareStatus.textContent='';
-  if(win.navigator.canShare&&win.File&&win.fetch)win.fetch(new URL(entry.image,doc.baseURI)).then(response=>{if(!response.ok)throw Error('Image unavailable');return response.blob();}).then(blob=>{if(currentEntry===entry)shareFile=new win.File([blob],entry.image.split('/').pop(),{type:blob.type||'image/png'});}).catch(()=>{});
-  page.querySelector('#daily-quote-image').src = entry.image;
+  const displayImage=motivationPreviews[entry.image]?.image||entry.image;
+  if(win.navigator.canShare&&win.File&&win.fetch)win.fetch(new URL(displayImage,doc.baseURI)).then(response=>{if(!response.ok)throw Error('Image unavailable');return response.blob();}).then(blob=>{if(currentEntry===entry)shareFile=new win.File([blob],displayImage.split('/').pop(),{type:blob.type||'image/png'});}).catch(()=>{});
+  page.querySelector('#daily-quote-image').src = displayImage;
   page.querySelector('#daily-quote-image').alt = entry.alt + (entry.embedded ? '. ' + entry.quote : '');
   const headline = doc.createElement('strong');
   const heading = page.querySelector('#daily-quote-text');
@@ -137,12 +139,13 @@ export function initializeGallery(doc, win) {
   const reflection=page.querySelector('#daily-quote-reflection');
   reflection.replaceChildren(...(details.paragraphs||[details.reflection,dailyPractice[index]]).map(text=>{const paragraph=doc.createElement('p');if(text.startsWith('Cambridge Dictionary meaning')){const definition=doc.createElement('em');definition.textContent=text;paragraph.append(definition);}else paragraph.textContent=text;return paragraph;}));
  }
- const check=()=>refreshMotivationSettings(doc).then(()=>{ready=true;day=null;refresh();});check();doc.addEventListener('daily-motivation-settings-changed',()=>{day=null;refresh();});
+ const staticShared=dailyQuotes.some(q=>q.image.split('/').pop().replace(/\.png$/,'')===new URL(win.location.href).searchParams.get('motivation-entry'));
+ const check=()=>staticShared?Promise.resolve():refreshMotivationSettings(doc,{force:restored}).then(()=>{restored=false;ready=true;day=null;refresh();try{win.localStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),settings:motivationSettings()}));}catch{}});check();doc.addEventListener('daily-motivation-settings-changed',()=>{day=null;refresh();});
  let interval;
- function start() { win.clearInterval(interval); interval = win.setInterval(()=>{refresh();if(!doc.hidden)check();}, 60000); refresh(); }
+ function start() { win.clearInterval(interval); interval = win.setInterval(()=>{refresh();if(!doc.hidden&&!page.hidden)check();}, 60000); refresh(); }
  start();
  win.addEventListener('hashchange', refresh);
- doc.addEventListener('visibilitychange', () => { if (!doc.hidden) {refresh();check();} });
+ doc.addEventListener('visibilitychange', () => { if (!doc.hidden&&!page.hidden) {refresh();check();} });
  win.addEventListener('pagehide', () => win.clearInterval(interval));
  win.addEventListener('pageshow', start);
 }
