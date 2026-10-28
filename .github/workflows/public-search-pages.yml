@@ -20,6 +20,7 @@ on:
       - scripts/build-motivation-previews.mjs
       - images/daily-motivation-*.png
       - scripts/build-public-pages.mjs
+      - scripts/check-public-seo-live.mjs
       - scripts/sync-public-blog.mjs
       - scripts/build-search-assets.mjs
       - .github/workflows/public-search-pages.yml

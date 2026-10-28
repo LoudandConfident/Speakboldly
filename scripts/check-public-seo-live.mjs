@@ -2,9 +2,22 @@
 import {readFileSync,appendFileSync} from 'node:fs';
 const paths=JSON.parse(readFileSync(new URL('../content/public-pages-manifest.json',import.meta.url),'utf8')).indexable;
 const origin='https://speakboldly.space',report=[];
+const marker=(process.env.GITHUB_SHA||'public-pages').slice(0,12);
+const probes=['/programs/general-english/','/reviews/','/student-portal/','/blog/'].filter(path=>paths.includes(path));
 let ready=false;
 for(let attempt=0;attempt<24;attempt++){
- try{const r=await fetch(origin+'/programs/general-english/?seo-check=1',{signal:AbortSignal.timeout(15000)});const html=await r.text();if(r.ok&&html.includes('<link rel="canonical" href="'+origin+'/programs/general-english/">')){ready=true;break;}}catch{}
+ try{
+  const manifest=await fetch(origin+'/content/public-pages-manifest.json?seo-check='+marker,{signal:AbortSignal.timeout(15000)});
+  const deployed=manifest.ok?(await manifest.json()).indexable:[];
+  if(paths.every(path=>deployed.includes(path))){
+   const checks=await Promise.all(probes.map(async path=>{
+    const r=await fetch(origin+path+'?seo-check='+marker,{signal:AbortSignal.timeout(15000)}),html=await r.text(),local=readFileSync(new URL('..'+path+'index.html',import.meta.url),'utf8');
+    const tags=[...local.matchAll(/<meta property="og:(?:title|image)"[^>]*>/g)].map(match=>match[0]);
+    return r.ok&&html.includes('<link rel="canonical" href="'+origin+path+'">')&&tags.every(tag=>html.includes(tag));
+   }));
+   if(checks.every(Boolean)){ready=true;break;}
+  }
+ }catch{}
  await new Promise(resolve=>setTimeout(resolve,10000));
 }
 if(!ready)throw Error('The new public pages are not live yet. Check the Pages deployment.');
