@@ -2,7 +2,7 @@
 
 Readers can comment and reply publicly under each published post, without signing up or giving an email address. Display names are optional. Comments publish immediately; no approval queue is added. A server-verified Coach badge identifies replies posted through the private instructor dashboard. Reader display names are not verified identities.
 
-The discussion sits below the existing reading pages, above the credentials. The article/glossary page count stays unchanged. A “Join the conversation” button beneath A Bold Question for You opens it. Threads show the newest activity first; replies stay together. Longer conversations have Earlier conversations / Show earlier replies controls.
+The discussion sits below the existing reading pages, above the credentials. The article/glossary page count stays unchanged. The section is titled “Comments”, with “a safe space to share your bold opinion.” underneath. There is no separate invitation button or collapsed conversation panel. Threads show the newest activity first; replies stay together. Longer conversations have Earlier conversations / Show earlier replies controls.
 
 ## Activate once
 
@@ -20,7 +20,7 @@ The return statements must be inside doPost, never at the top of a file. Do not 
 
 3. Save → choose **setupBlogComments → Run**. This creates only a **Blog comments** sheet and enables comments. It does not send emails, edit blog articles or touch client/calendar/report/exam data. Re-running setup does not reopen comments you have paused.
 4. **Deploy → Manage deployments → existing Clients web app → pencil → New version → Deploy.** Keep the same URL, Execute as Me and the existing public access settings.
-5. Refresh the website. Open a blog post → **Join the conversation**. In the Instructor Dashboard open **Bold Blog · conversations → Refresh conversations**.
+5. Refresh the website. Open a blog post and scroll to **Comments**. In the Instructor Dashboard open **Bold Blog · conversations → Refresh conversations**.
 
 No billing account, new hosting service, Google API Console changes or email setup is required. This uses the existing Apps Script and Google Sheets quotas. Readers on different devices see the same shared discussions.
 
@@ -36,7 +36,7 @@ Readers can delete their own comments from the browser they used to post. A rand
 
 All comment text is rendered as plain text. HTML/scripts are not executed. Comments are public; the form says this before posting. Names are optional (60 characters); comments/replies can be up to 1,500 characters and contain up to two links. Limits allow 8 reader posts per 5 minutes / 50 per browser identity per day / 200 reader posts overall per day. These are lightweight controls, not a guarantee against spam from someone deliberately changing browser identities. The coach can pause posting or remove content.
 
-Requests are idempotent: retrying the same comment cannot post it twice. Public reads are cached for up to 45 seconds and invalidated on comment changes. Nothing loads until the conversation is opened; it refreshes every 30 seconds only while open, visible and connected to the current post, and while the reader is not composing a reply or browsing older history. Closed conversations and hidden tabs do not poll. Posting a reply displays it immediately for that reader; others see it on refresh or the next background update.
+Requests are idempotent: retrying the same comment cannot post it twice. Public reads are cached for up to 45 seconds and invalidated on comment changes. Comments load when the section approaches the viewport; they refresh every 30 seconds only while visible and connected to the current post, and while the reader is not composing a reply or browsing older history. Off-screen comment sections and hidden tabs do not poll. Posting a reply displays it immediately for that reader; others see it on refresh or the next background update.
 
 Only published posts accept comments. The first built-in article is supported directly; future instructor-published posts are checked against the existing Bold Blog sheet and Cairo publish date. Draft/future posts do not expose public conversations.
 
