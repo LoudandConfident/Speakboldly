@@ -27,7 +27,7 @@ const resources=()=>'<div class="resource-links" aria-label="Explore free Englis
 function page(path,{title,description,heading,body,eyebrow='Speak Boldly',noindex=false,schema=[],image='/speak-boldly-preview-dark-green.png',parent='/'}={}){
  if(path==='/learn/daily-quotes/')title='Daily Motivation';
  const previewViews={'/reviews/':'reviews','/student-portal/':'student-dashboard','/programs/':'programs','/assessments/':'assessments','/vision/':'vision','/how-it-works/':'method','/contact/':'contact','/join-us/':'join-us','/get-a-quote/':'quote','/learn/':'student-dashboard','/learn/daily-idioms/':'student-dashboard','/learn/daily-challenges/':'student-dashboard'};
- if(previewViews[path])image='/images/tab-previews/'+previewViews[path]+'-v1.jpg';else if(path.startsWith('/programs/'))image='/images/tab-previews/programs-v1.jpg';
+ if(previewViews[path])image='/images/tab-previews/'+previewViews[path]+(path==='/vision/'?'-v2.jpg':'-v1.jpg');else if(path.startsWith('/programs/'))image='/images/tab-previews/programs-v1.jpg';
  const url=origin+path,fullTitle=path.startsWith('/blog/')?'Bold Blog from Speak Boldly English Language Coaching'+(path==='/blog/'?'':' | '+title):title+' | Speak Boldly';
  const crumbs=[{'@type':'ListItem',position:1,name:'Home',item:origin+'/'}];
  if(parent!=='/')crumbs.push({'@type':'ListItem',position:2,name:parent==='/programs/'?'Programs':parent==='/blog/'?'Bold Blog':'Free English practice',item:origin+parent});

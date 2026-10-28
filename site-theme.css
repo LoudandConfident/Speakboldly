@@ -2094,3 +2094,14 @@ body:has(#boldly-notes:not([hidden])) #main-navigation [data-open-view=boldly-no
 #boldly-notes .blog-export-heading>p{font-size:14px;line-height:1.5;margin:0;color:#53685b}
 #boldly-notes .blog-export-card .blog-glossary-word{font-size:19px;display:block;padding:0}
 #boldly-notes .blog-export-card .page-signature{margin:18px 0 0;padding:15px 0 0;font-size:12px}
+#boldly-notes .blog-post-date{display:block;font-size:11px;line-height:1.5;color:#53685b;margin:0 0 15px}
+#boldly-notes .bold-question>:not(.bold-question-art){grid-column:1}
+#boldly-notes .bold-question-prompts,#boldly-notes .bold-question-responses{margin:0 0 16px;padding-left:24px;line-height:1.7}
+#boldly-notes .bold-question-prompts>li,#boldly-notes .bold-question-responses>li{padding-left:4px;margin:0 0 14px}
+#boldly-notes .bold-question-prompts em{font-style:italic!important}
+#boldly-notes .bold-question-prompts>li::marker,#boldly-notes .bold-question-responses>li::marker{font-weight:600;color:#41674e}
+#boldly-notes .bold-question-response-label,#boldly-notes .bold-question-today h4{font-size:16px;line-height:1.5;margin:0 0 12px;color:#193c32}
+#boldly-notes .bold-question-today{padding-top:16px;border-top:1px solid #b9cbb0;margin-top:4px}
+#boldly-notes .bold-question-today p{font-size:15px;line-height:1.65;margin:0}
+#vision .vision-opening{margin-bottom:32px}
+#vision .vision-story>.vision-need-band{margin-top:0}

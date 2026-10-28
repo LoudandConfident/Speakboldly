@@ -10,7 +10,14 @@ export function paginateBlogContent(doc,win,content,{glossary,sharing,articleTit
  draw();return {pageCount:panels.length};
 }
 export function ensureBoldQuestion(doc,content){
- let question=content.querySelector('.bold-question');if(!question){question=doc.createElement('section');question.className='bold-question';const h=doc.createElement('h3');h.textContent='A Bold Question for You';const p=doc.createElement('p');p.textContent='Which idea from this article stayed with you—and how could you use it in your own life?';question.append(h,p);content.append(question);}
+ let question=content.querySelector('.bold-question');if(!question){question=doc.createElement('section');question.className='bold-question';const h=doc.createElement('h3');h.textContent='A Bold Question for You';question.append(h);for(const text of ['Which idea from this article stayed with you?','How could you use that idea in your own life?']){const p=doc.createElement('p');p.textContent=text;question.append(p);}content.append(question);}
+ if(!question.dataset.reflectionFormatted){
+  const paragraphs=[...question.querySelectorAll(':scope > p')],prompts=[],responses=[];let collecting=true;
+  for(const p of paragraphs){if(collecting&&/\?\s*$/.test(p.textContent.trim()))prompts.push(p.textContent);else{collecting=false;responses.push(p.textContent);}p.remove();}
+  if(prompts.length){const list=doc.createElement('ol');list.className='bold-question-prompts';for(const text of prompts){const item=doc.createElement('li'),em=doc.createElement('em');em.textContent=text;item.append(em);list.append(item);}question.append(list);}
+  if(responses.length){const label=doc.createElement('h4');label.textContent='A thought for each question';label.className='bold-question-response-label';const list=doc.createElement('ol');list.className='bold-question-responses';for(const text of responses){const item=doc.createElement('li');item.textContent=text;list.append(item);}question.append(label,list);}
+  const today=doc.createElement('div');today.className='bold-question-today';const heading=doc.createElement('h4');heading.textContent='Try this today';const step=doc.createElement('p');step.textContent=prompts.some(text=>text.includes('judge your English'))?'Say one thing in English today without apologising for your accent. Focus on sharing your idea, not sounding perfect.':'Choose one idea from this article and put it into practice today. Notice what changes.';today.append(heading,step);question.append(today);question.dataset.reflectionFormatted='true';
+ }
  if(question.querySelector('.bold-question-art'))return question;
- const illustration=doc.createElement('div');illustration.className='bold-question-art';const lion=doc.createElement('img');lion.src='./images/bold-question-lion-outline.png';lion.alt='';lion.width=180;lion.height=180;lion.loading='lazy';const spark=doc.createElement('span');spark.textContent='?  ✦';spark.setAttribute('aria-hidden','true');illustration.append(lion,spark);question.prepend(illustration);return question;
+ const illustration=doc.createElement('div');illustration.className='bold-question-art';const lion=doc.createElement('img');lion.src='./images/bold-question-lion-outline.png';lion.alt='';lion.width=180;lion.height=180;lion.loading='lazy';illustration.append(lion);question.prepend(illustration);return question;
 }
