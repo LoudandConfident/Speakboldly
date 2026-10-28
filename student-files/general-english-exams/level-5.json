@@ -1,0 +1,238 @@
+{
+  "version": 3,
+  "level": 5,
+  "title": "General English — Level 5",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Speak_Boldly_GE_5_Exam.pdf",
+  "instructions": "Work independently without a dictionary or coursebooks. Read each instruction carefully. This is a course achievement exam; it does not certify a CEFR level. Speaking is assessed separately by your instructor. All cases are fictional.",
+  "sections": {
+    "A": {
+      "title": "A. Vocabulary in meaning",
+      "marks": 20,
+      "instruction": "Choose a word from the word bank for each definition. Use each word once. Each item is worth 2 marks.",
+      "wordBank": [
+        "inclusive",
+        "warranty",
+        "maintenance",
+        "rationale",
+        "forecast",
+        "recollection",
+        "respondent",
+        "likelihood",
+        "viewpoint",
+        "emphasis"
+      ],
+      "questions": [
+        {
+          "number": 1,
+          "question": "an estimate of a future result"
+        },
+        {
+          "number": 2,
+          "question": "work that keeps something in good condition"
+        },
+        {
+          "number": 3,
+          "question": "the position from which a story is told"
+        },
+        {
+          "number": 4,
+          "question": "a person who answers a survey"
+        },
+        {
+          "number": 5,
+          "question": "designed to involve different people"
+        },
+        {
+          "number": 6,
+          "question": "special attention given to something"
+        },
+        {
+          "number": 7,
+          "question": "the reason supporting a decision"
+        },
+        {
+          "number": 8,
+          "question": "the chance that something will happen"
+        },
+        {
+          "number": 9,
+          "question": "a promise about repair or replacement under stated terms"
+        },
+        {
+          "number": 10,
+          "question": "a remembered account of something"
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Grammar and intended meaning",
+      "marks": 20,
+      "instruction": "Choose the correct option. Where a meaning is specified, choose the form that expresses that meaning. Each item is worth 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "If the hours had not changed, the comparison ___ be clearer now.",
+          "options": [
+            "would",
+            "will"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "The system appears ___ help some users.",
+          "options": [
+            "to",
+            "for"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "Earlier, she had ___ away.",
+          "options": [
+            "move",
+            "moved"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "Each respondent ___ one form. (past)",
+          "options": [
+            "completed",
+            "complete"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "Having ___ the survey, she revised the claim.",
+          "options": [
+            "read",
+            "reading"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "What matters ___ the missing group.",
+          "options": [
+            "is",
+            "are"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "The team requested an ___ of the issue.",
+          "options": [
+            "explain",
+            "explanation"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "They should have ___ unsuccessful users.",
+          "options": [
+            "include",
+            "included"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "The finding is limited ___ the respondents.",
+          "options": [
+            "to",
+            "at"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "Four people had difficulty. These ___ matter.",
+          "options": [
+            "responses",
+            "response"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Reading",
+      "marks": 20,
+      "instruction": "Read the passage and answer using evidence from the text. Each question is worth 4 marks.",
+      "passage": "A local reading room reports that its new booking system has improved access. The evidence is a survey of sixteen volunteers, twelve of whom say that booking is easier. The remaining four report difficulty finding a suitable time. The survey does not include people who stopped trying to book. A reviewer accepts that the responses describe these volunteers’ experience, but questions the headline “Access improved for everyone.” She also notes that longer opening hours began in the same month. The records do not separate the effects of the system from the effect of those hours. A revised report names the respondents, describes the four difficulties and avoids claiming a single cause. Having examined the survey, the reviewer recommends collecting information from unsuccessful applicants. What the report needs is a clearer account of who is missing, rather than a more confident adjective. The team agrees to retain the positive responses while narrowing the conclusion.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "How many volunteers reported easier booking?"
+        },
+        {
+          "number": 2,
+          "question": "Which group is missing from the survey?"
+        },
+        {
+          "number": 3,
+          "question": "Which simultaneous change complicates a causal claim?"
+        },
+        {
+          "number": 4,
+          "question": "What does the reviewer accept?"
+        },
+        {
+          "number": 5,
+          "question": "What additional information is recommended?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Listening",
+      "marks": 20,
+      "instruction": "Read the questions for one minute. Your coach will read the passage live twice. Write short answers. Each question is worth 4 marks.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "When had the writer used the reading room regularly?"
+        },
+        {
+          "number": 2,
+          "question": "Which overbroad statement is revised?"
+        },
+        {
+          "number": 3,
+          "question": "Who helped her?"
+        },
+        {
+          "number": 4,
+          "question": "Why is the feeling of exclusion retained?"
+        },
+        {
+          "number": 5,
+          "question": "What practical change is suggested?"
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Writing",
+      "marks": 20,
+      "instruction": "Write an evaluation of the reading-room report. State what the survey supports, explain two limits, discuss an alternative explanation and make one justified recommendation. Keep the scope of every claim clear.",
+      "wordMin": 180,
+      "wordMax": 210,
+      "rubric": [
+        {
+          "criterion": "Task completion and relevant detail",
+          "marks": 5
+        },
+        {
+          "criterion": "Organisation and connection",
+          "marks": 5
+        },
+        {
+          "criterion": "Vocabulary appropriate to purpose",
+          "marks": 5
+        },
+        {
+          "criterion": "Grammar and written accuracy",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "version": 3,
+  "level": 2,
+  "title": "General English — Level 2",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Speak_Boldly_GE_2_Exam.pdf",
+  "instructions": "Work independently without a dictionary or coursebooks. Read each instruction carefully. This is a course achievement exam; it does not certify a CEFR level. Speaking is assessed separately by your instructor. All cases are fictional.",
+  "sections": {
+    "A": {
+      "title": "A. Vocabulary in meaning",
+      "marks": 20,
+      "instruction": "Choose a word from the word bank for each definition. Use each word once. Each item is worth 2 marks.",
+      "wordBank": [
+        "portion",
+        "furnished",
+        "deposit",
+        "experience",
+        "reservation",
+        "beginner",
+        "refund",
+        "platform",
+        "instructions",
+        "poster"
+      ],
+      "questions": [
+        {
+          "number": 1,
+          "question": "an arrangement to keep a place for you"
+        },
+        {
+          "number": 2,
+          "question": "money paid in advance as security"
+        },
+        {
+          "number": 3,
+          "question": "information explaining what to do"
+        },
+        {
+          "number": 4,
+          "question": "money returned after a purchase"
+        },
+        {
+          "number": 5,
+          "question": "an amount served to one person"
+        },
+        {
+          "number": 6,
+          "question": "a large printed notice"
+        },
+        {
+          "number": 7,
+          "question": "something that happens to you or that you do"
+        },
+        {
+          "number": 8,
+          "question": "the area beside a railway track for passengers"
+        },
+        {
+          "number": 9,
+          "question": "containing furniture"
+        },
+        {
+          "number": 10,
+          "question": "a person starting to learn something"
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Grammar and intended meaning",
+      "marks": 20,
+      "instruction": "Choose the correct option. Where a meaning is specified, choose the form that expresses that meaning. Each item is worth 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "We ___ the studio last week.",
+          "options": [
+            "visited",
+            "visit"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "The train is ___ than the bus.",
+          "options": [
+            "fast",
+            "faster"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "We are going ___ book tomorrow.",
+          "options": [
+            "to",
+            "for"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "There are not ___ chairs.",
+          "options": [
+            "enough",
+            "much"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "You must ___ closed shoes.",
+          "options": [
+            "wear",
+            "wearing"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "I have never ___ pottery.",
+          "options": [
+            "try",
+            "tried"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "She was ___ when he called.",
+          "options": [
+            "packing",
+            "packed"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "He enjoys ___ new skills.",
+          "options": [
+            "learning",
+            "learn"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "If it rains, we ___ stay inside.",
+          "options": [
+            "will",
+            "would"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "You do not ___ to bring tools.",
+          "options": [
+            "have",
+            "must"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Reading",
+      "marks": 20,
+      "instruction": "Read the passage and answer using evidence from the text. Each question is worth 4 marks.",
+      "passage": "Nour planned a weekend pottery course in a coastal town. She booked a room near the station because it was cheaper than the rooms beside the beach. On Friday evening, she was packing when the organiser called. The first session had moved from Saturday morning to Saturday afternoon. Nour kept her train ticket and decided to visit a market before the course. Participants must wear closed shoes and bring an old shirt. They do not have to bring tools because the studio provides them. Nour has tried painting before, but she has never made a bowl. If she enjoys the weekend, she will join the monthly course. She wants to practise regularly rather than buy lots of expensive equipment immediately.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Why did Nour choose the room near the station?"
+        },
+        {
+          "number": 2,
+          "question": "What was she doing when the organiser called?"
+        },
+        {
+          "number": 3,
+          "question": "When will the first session now take place?"
+        },
+        {
+          "number": 4,
+          "question": "What must participants wear and bring?"
+        },
+        {
+          "number": 5,
+          "question": "What will Nour do if she enjoys the weekend?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Listening",
+      "marks": 20,
+      "instruction": "Read the questions for one minute. Your coach will read the passage live twice. Write short answers. Each question is worth 4 marks.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "How many people have now registered?"
+        },
+        {
+          "number": 2,
+          "question": "Which food is needed?"
+        },
+        {
+          "number": 3,
+          "question": "By what time on Sunday should it arrive?"
+        },
+        {
+          "number": 4,
+          "question": "Who is supplying the drinks?"
+        },
+        {
+          "number": 5,
+          "question": "By when should volunteers tell Karim about limited availability?"
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Writing",
+      "marks": 20,
+      "instruction": "Write to a friend about a planned weekend course. Explain your choice, compare two options, describe a change to the plan and say what you will do if the course goes well.",
+      "wordMin": 80,
+      "wordMax": 100,
+      "rubric": [
+        {
+          "criterion": "Task completion and relevant detail",
+          "marks": 5
+        },
+        {
+          "criterion": "Organisation and connection",
+          "marks": 5
+        },
+        {
+          "criterion": "Vocabulary appropriate to purpose",
+          "marks": 5
+        },
+        {
+          "criterion": "Grammar and written accuracy",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}

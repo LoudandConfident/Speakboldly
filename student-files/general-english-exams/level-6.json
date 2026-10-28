@@ -1,0 +1,238 @@
+{
+  "version": 3,
+  "level": 6,
+  "title": "General English — Level 6",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Speak_Boldly_GE_6_Exam.pdf",
+  "instructions": "Work independently without a dictionary or coursebooks. Read each instruction carefully. This is a course achievement exam; it does not certify a CEFR level. Speaking is assessed separately by your instructor. All cases are fictional.",
+  "sections": {
+    "A": {
+      "title": "A. Vocabulary in meaning",
+      "marks": 20,
+      "instruction": "Choose a word from the word bank for each definition. Use each word once. Each item is worth 2 marks.",
+      "wordBank": [
+        "consent",
+        "method",
+        "causation",
+        "polarisation",
+        "premise",
+        "tradition",
+        "principle",
+        "inference",
+        "identity",
+        "attribution"
+      ],
+      "questions": [
+        {
+          "number": 1,
+          "question": "a starting statement supporting an argument"
+        },
+        {
+          "number": 2,
+          "question": "a relationship in which one factor produces another"
+        },
+        {
+          "number": 3,
+          "question": "a sense of who a person or group is"
+        },
+        {
+          "number": 4,
+          "question": "a general belief guiding decisions"
+        },
+        {
+          "number": 5,
+          "question": "agreement given with relevant understanding"
+        },
+        {
+          "number": 6,
+          "question": "identification of whose idea is being presented"
+        },
+        {
+          "number": 7,
+          "question": "movement towards strongly opposed positions"
+        },
+        {
+          "number": 8,
+          "question": "a conclusion drawn from information"
+        },
+        {
+          "number": 9,
+          "question": "the procedure used to investigate"
+        },
+        {
+          "number": 10,
+          "question": "a practice passed between generations"
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Grammar and intended meaning",
+      "marks": 20,
+      "instruction": "Choose the correct option. Where a meaning is specified, choose the form that expresses that meaning. Each item is worth 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Only after checking ___ she notice the problem. (past simple inversion)",
+          "options": [
+            "did",
+            "had"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "The label may ___ reduced confusion.",
+          "options": [
+            "have",
+            "has"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "Having ___ the interface, she wrote a report.",
+          "options": [
+            "examine",
+            "examined"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "They recommend that the setting ___ visible.",
+          "options": [
+            "be",
+            "being"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "The evidence applies ___ this trial.",
+          "options": [
+            "to",
+            "at"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "The reviewer is said ___ support clearer labels.",
+          "options": [
+            "to",
+            "for"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "Even ___ a default helps, alternatives still matter. (hypothetical)",
+          "options": [
+            "if",
+            "despite"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "This ___ needs explanation.",
+          "options": [
+            "finding",
+            "they"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "The report requests greater ___.",
+          "options": [
+            "visible",
+            "visibility"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "She can change it, and so ___ I.",
+          "options": [
+            "can",
+            "do"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Reading",
+      "marks": 20,
+      "instruction": "Read the passage and answer using evidence from the text. Each question is worth 4 marks.",
+      "passage": "A neighbourhood archive introduces an online catalogue and describes it as giving visitors complete control over their searches. The default display ranks results by an unexplained rule, and changing that order requires opening a separate menu. A reviewer argues that a choice can exist without being easy to notice. Only after examining the interface did she question the phrase complete control. She does not claim that all defaults are harmful: a starting arrangement can help new users. Her recommendation is that the active setting be visible and that the alternative be explained beside it. A small trial records fewer requests for help after a label is added, but the trial also coincides with extra staff support. The conclusion therefore distinguishes observed change from its uncertain cause. The archive’s summary attributes the recommendation to the reviewer rather than presenting it as the unanimous view of visitors. A further comparison is proposed before any broader claim about independent searching.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Why might an available choice still be difficult to use?"
+        },
+        {
+          "number": 2,
+          "question": "What benefit of defaults does the reviewer acknowledge?"
+        },
+        {
+          "number": 3,
+          "question": "What two changes does she recommend?"
+        },
+        {
+          "number": 4,
+          "question": "What complicates the causal interpretation of fewer help requests?"
+        },
+        {
+          "number": 5,
+          "question": "Why is attribution important in the summary?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Listening",
+      "marks": 20,
+      "instruction": "Read the questions for one minute. Your coach will read the passage live twice. Write short answers. Each question is worth 4 marks.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "What did the earlier version claim?"
+        },
+        {
+          "number": 2,
+          "question": "What distinction does the revision make?"
+        },
+        {
+          "number": 3,
+          "question": "Was the alternative still available?"
+        },
+        {
+          "number": 4,
+          "question": "Which preference does the group acknowledge?"
+        },
+        {
+          "number": 5,
+          "question": "What must remain clear in a non-endorsing summary?"
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Writing",
+      "marks": 20,
+      "instruction": "Write a critical summary of the archive case. Attribute the recommendation, acknowledge a benefit of defaults, evaluate the trial’s limit and propose wording that preserves both choice and uncertainty.",
+      "wordMin": 200,
+      "wordMax": 230,
+      "rubric": [
+        {
+          "criterion": "Task completion and relevant detail",
+          "marks": 5
+        },
+        {
+          "criterion": "Organisation and connection",
+          "marks": 5
+        },
+        {
+          "criterion": "Vocabulary appropriate to purpose",
+          "marks": 5
+        },
+        {
+          "criterion": "Grammar and written accuracy",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}

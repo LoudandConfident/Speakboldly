@@ -1,0 +1,238 @@
+{
+  "version": 3,
+  "level": 1,
+  "title": "General English — Level 1",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Speak_Boldly_GE_1_Exam.pdf",
+  "instructions": "Work independently without a dictionary or coursebooks. Read each instruction carefully. This is a course achievement exam; it does not certify a CEFR level. Speaking is assessed separately by your instructor. All cases are fictional.",
+  "sections": {
+    "A": {
+      "title": "A. Vocabulary in meaning",
+      "marks": 20,
+      "instruction": "Choose a word from the word bank for each definition. Use each word once. Each item is worth 2 marks.",
+      "wordBank": [
+        "station",
+        "colour",
+        "colleague",
+        "job",
+        "first name",
+        "read",
+        "flat",
+        "rice",
+        "phone",
+        "have breakfast"
+      ],
+      "questions": [
+        {
+          "number": 1,
+          "question": "the name people use to call you"
+        },
+        {
+          "number": 2,
+          "question": "a person you work with"
+        },
+        {
+          "number": 3,
+          "question": "a device used to call or message people"
+        },
+        {
+          "number": 4,
+          "question": "a home inside a larger building"
+        },
+        {
+          "number": 5,
+          "question": "a place where trains or buses stop"
+        },
+        {
+          "number": 6,
+          "question": "eat the first meal of the day"
+        },
+        {
+          "number": 7,
+          "question": "the work someone does to earn money"
+        },
+        {
+          "number": 8,
+          "question": "small grains cooked and eaten as food"
+        },
+        {
+          "number": 9,
+          "question": "red blue green and similar qualities"
+        },
+        {
+          "number": 10,
+          "question": "look at written words and understand them"
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Grammar and intended meaning",
+      "marks": 20,
+      "instruction": "Choose the correct option. Where a meaning is specified, choose the form that expresses that meaning. Each item is worth 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "My neighbours ___ friendly.",
+          "options": [
+            "is",
+            "are"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "She ___ a new bag.",
+          "options": [
+            "has",
+            "have"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "There ___ three chairs.",
+          "options": [
+            "is",
+            "are"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "I need ___ umbrella.",
+          "options": [
+            "a",
+            "an"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "He ___ at seven every day.",
+          "options": [
+            "start",
+            "starts"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "___ you work here?",
+          "options": [
+            "Do",
+            "Does"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "We do not have ___ milk.",
+          "options": [
+            "some",
+            "any"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "These ___ are blue.",
+          "options": [
+            "shirt",
+            "shirts"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "She is ___ dinner now.",
+          "options": [
+            "cook",
+            "cooking"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "They ___ the room yesterday.",
+          "options": [
+            "clean",
+            "cleaned"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Reading",
+      "marks": 20,
+      "instruction": "Read the passage and answer using evidence from the text. Each question is worth 4 marks.",
+      "passage": "My name is Hana. I live in a small flat with my sister. There are two bedrooms and a kitchen. Our flat is above a shop, next to the library. I work in a café from Monday to Friday. I start at eight and finish at three. My sister studies in the morning. We usually cook dinner at home. I like rice and vegetables, but my sister likes pasta. On Saturdays, we visit our parents. Yesterday was Sunday. We stayed at home and watched a film. Today I am cleaning the kitchen, and my sister is reading in her room.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Who lives with Hana?"
+        },
+        {
+          "number": 2,
+          "question": "Where is the flat? Give two details."
+        },
+        {
+          "number": 3,
+          "question": "What time does Hana finish work?"
+        },
+        {
+          "number": 4,
+          "question": "What did they do yesterday? Give two actions."
+        },
+        {
+          "number": 5,
+          "question": "What is Hana doing today?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Listening",
+      "marks": 20,
+      "instruction": "Read the questions for one minute. Your coach will read the passage live twice. Write short answers. Each question is worth 4 marks.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "On which day is the class?"
+        },
+        {
+          "number": 2,
+          "question": "What time does it start?"
+        },
+        {
+          "number": 3,
+          "question": "Which room do students need?"
+        },
+        {
+          "number": 4,
+          "question": "What two things should students bring?"
+        },
+        {
+          "number": 5,
+          "question": "Who can help at the front door?"
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Writing",
+      "marks": 20,
+      "instruction": "Write a message to a new classmate. Introduce yourself, describe where you live, give two details about your daily routine and say what you did yesterday. You may invent personal information.",
+      "wordMin": 50,
+      "wordMax": 70,
+      "rubric": [
+        {
+          "criterion": "Task completion and relevant detail",
+          "marks": 5
+        },
+        {
+          "criterion": "Organisation and connection",
+          "marks": 5
+        },
+        {
+          "criterion": "Vocabulary appropriate to purpose",
+          "marks": 5
+        },
+        {
+          "criterion": "Grammar and written accuracy",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}

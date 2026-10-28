@@ -1,0 +1,238 @@
+{
+  "version": 3,
+  "level": 8,
+  "title": "General English — Level 8",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Speak_Boldly_GE_8_Exam.pdf",
+  "instructions": "Work independently without a dictionary or coursebooks. Read each instruction carefully. This is a course achievement exam; it does not certify a CEFR level. Speaking is assessed separately by your instructor. All cases are fictional.",
+  "sections": {
+    "A": {
+      "title": "A. Vocabulary in meaning",
+      "marks": 20,
+      "instruction": "Choose a word from the word bank for each definition. Use each word once. Each item is worth 2 marks.",
+      "wordBank": [
+        "inference",
+        "commensurable",
+        "divergence",
+        "portfolio",
+        "precision",
+        "credibility",
+        "steelman",
+        "redundancy",
+        "qualification",
+        "granularity"
+      ],
+      "questions": [
+        {
+          "number": 1,
+          "question": "exactness in wording and meaning"
+        },
+        {
+          "number": 2,
+          "question": "movement towards difference"
+        },
+        {
+          "number": 3,
+          "question": "a limit placed on a claim"
+        },
+        {
+          "number": 4,
+          "question": "a strong and fair reconstruction of an opposing argument"
+        },
+        {
+          "number": 5,
+          "question": "a conclusion drawn from observed details"
+        },
+        {
+          "number": 6,
+          "question": "the level of detail used"
+        },
+        {
+          "number": 7,
+          "question": "a selected collection showing work and development"
+        },
+        {
+          "number": 8,
+          "question": "unnecessary repetition"
+        },
+        {
+          "number": 9,
+          "question": "capable of meaningful comparison"
+        },
+        {
+          "number": 10,
+          "question": "the quality of being believable for good reasons"
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Grammar and intended meaning",
+      "marks": 20,
+      "instruction": "Choose the correct option. Where a meaning is specified, choose the form that expresses that meaning. Each item is worth 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "The condition depends ___ approval.",
+          "options": [
+            "on",
+            "of"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "The interviews are reported ___ describe ease of use.",
+          "options": [
+            "to",
+            "for"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "Earlier, staff had ___ a guarantee.",
+          "options": [
+            "publish",
+            "published"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "Even ___ the form helps, it cannot guarantee timing. (hypothetical)",
+          "options": [
+            "if",
+            "despite"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "The editor revised the first sentence and the second ___.",
+          "options": [
+            "one",
+            "ones"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "Requests ___ during the trial were reviewed.",
+          "options": [
+            "received",
+            "receiving"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "The task involves selecting, editing and ___.",
+          "options": [
+            "reflecting",
+            "reflection"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "Staff checked ___ the trial requests, no others.",
+          "options": [
+            "only",
+            "all"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "They should have ___ the scope.",
+          "options": [
+            "check",
+            "checked"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "What matters ___ the evidence.",
+          "options": [
+            "is",
+            "are"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Reading",
+      "marks": 20,
+      "instruction": "Read the passage and answer using evidence from the text. Each question is worth 4 marks.",
+      "passage": "A regional service office publishes a guide saying that its new request form guarantees a reply within two days. The trial behind that statement involved ten requests: eight received a reply within two days and two took longer. A separate staff note records fewer clarification emails, while interviews with four applicants describe the form as easier to follow. The editor separates those outcomes rather than treating them as three proofs of the same claim. The office agrees to retract the guarantee. A proposed replacement says that replies may take longer, but the editor asks for the observed result as well, so that caution does not become vague. The revised guide states the trial figures and identifies the next action for applicants whose requests remain unanswered. A short public version and a longer explanatory note retain the same factual core. The longer note explains the trial’s limitations; neither version claims that the form alone caused faster replies. The editorial rationale records why the universal claim changed and why the distinction between ease of use and response time remained.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "What trial result contradicts the guarantee?"
+        },
+        {
+          "number": 2,
+          "question": "Which two other outcomes appear in the sources?"
+        },
+        {
+          "number": 3,
+          "question": "Why does may take longer alone not satisfy the editor?"
+        },
+        {
+          "number": 4,
+          "question": "What must the short and long versions share?"
+        },
+        {
+          "number": 5,
+          "question": "Which causal claim is avoided?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Listening",
+      "marks": 20,
+      "instruction": "Read the questions for one minute. Your coach will read the passage live twice. Write short answers. Each question is worth 4 marks.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Which three text types must be included?"
+        },
+        {
+          "number": 2,
+          "question": "What must accompany each final text?"
+        },
+        {
+          "number": 3,
+          "question": "What three elements should commentary contain?"
+        },
+        {
+          "number": 4,
+          "question": "What should at least one example retain?"
+        },
+        {
+          "number": 5,
+          "question": "What does the transfer task require?"
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Writing",
+      "marks": 20,
+      "instruction": "Write an editorial rationale for revising the service-office guide. Include an accurate replacement for the guarantee, distinguish the three source outcomes and explain how the short version can remain accessible without changing certainty or scope.",
+      "wordMin": 200,
+      "wordMax": 230,
+      "rubric": [
+        {
+          "criterion": "Task completion and relevant detail",
+          "marks": 5
+        },
+        {
+          "criterion": "Organisation and connection",
+          "marks": 5
+        },
+        {
+          "criterion": "Vocabulary appropriate to purpose",
+          "marks": 5
+        },
+        {
+          "criterion": "Grammar and written accuracy",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "version": 3,
+  "level": 4,
+  "title": "General English — Level 4",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Speak_Boldly_GE_4_Exam.pdf",
+  "instructions": "Work independently without a dictionary or coursebooks. Read each instruction carefully. This is a course achievement exam; it does not certify a CEFR level. Speaking is assessed separately by your instructor. All cases are fictional.",
+  "sections": {
+    "A": {
+      "title": "A. Vocabulary in meaning",
+      "marks": 20,
+      "instruction": "Choose a word from the word bank for each definition. Use each word once. Each item is worth 2 marks.",
+      "wordBank": [
+        "requirement",
+        "assumption",
+        "evidence",
+        "dependency",
+        "transition",
+        "accessible",
+        "routine",
+        "qualification",
+        "proposal",
+        "sequence"
+      ],
+      "questions": [
+        {
+          "number": 1,
+          "question": "a change from one situation to another"
+        },
+        {
+          "number": 2,
+          "question": "information used to support a claim"
+        },
+        {
+          "number": 3,
+          "question": "a suggested plan"
+        },
+        {
+          "number": 4,
+          "question": "a regular way of doing things"
+        },
+        {
+          "number": 5,
+          "question": "something that is needed or expected"
+        },
+        {
+          "number": 6,
+          "question": "the order in which things happen"
+        },
+        {
+          "number": 7,
+          "question": "something that relies on another condition"
+        },
+        {
+          "number": 8,
+          "question": "a recognised record of study or skill"
+        },
+        {
+          "number": 9,
+          "question": "something accepted without checking"
+        },
+        {
+          "number": 10,
+          "question": "easy for people to reach or use"
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Grammar and intended meaning",
+      "marks": 20,
+      "instruction": "Choose the correct option. Where a meaning is specified, choose the form that expresses that meaning. Each item is worth 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "If access were easier, more people ___ attend.",
+          "options": [
+            "would",
+            "will"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "She ___ be at work; I am not certain. (possibility)",
+          "options": [
+            "might",
+            "must"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "___ the room is larger, access is harder.",
+          "options": [
+            "Although",
+            "Despite"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "I am used to ___ early.",
+          "options": [
+            "arrive",
+            "arriving"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "The manager, ___ joined years ago, agreed.",
+          "options": [
+            "who",
+            "which"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "He said that the meeting ___ postponed.",
+          "options": [
+            "was",
+            "has"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "By Friday, we will have ___ the trial.",
+          "options": [
+            "finish",
+            "finished"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "If she had known, she would have ___.",
+          "options": [
+            "help",
+            "helped"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "We should have ___ the entrance.",
+          "options": [
+            "check",
+            "checked"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "We had the system ___.",
+          "options": [
+            "check",
+            "checked"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Reading",
+      "marks": 20,
+      "instruction": "Read the passage and answer using evidence from the text. Each question is worth 4 marks.",
+      "passage": "The community centre is considering moving its evening classes to a larger building. The new site has better equipment but is farther from the bus stop. A planning note says that the move must be popular because online comments are mostly positive. A volunteer challenges that inference: the comments come from people who chose to reply, and attendance records have not been examined. She acknowledges that the equipment would be useful, while arguing that access deserves a separate check. The manager, who has worked at the centre for nine years, proposes a four-week trial. By the end of the trial, the team will have compared attendance at both sites. One tutor says the old timetable should have been reviewed earlier. However, the group does not assume that an earlier review would necessarily have prevented the current difficulty. The final decision remains open pending the trial and transport information.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "What benefit and drawback does the new site have?"
+        },
+        {
+          "number": 2,
+          "question": "Why are positive comments insufficient to establish popularity?"
+        },
+        {
+          "number": 3,
+          "question": "What does the volunteer concede?"
+        },
+        {
+          "number": 4,
+          "question": "What will the team have compared by the end of the trial?"
+        },
+        {
+          "number": 5,
+          "question": "Which two sources of information will inform the final decision?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Listening",
+      "marks": 20,
+      "instruction": "Read the questions for one minute. Your coach will read the passage live twice. Write short answers. Each question is worth 4 marks.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "What did the tutor actually recommend?"
+        },
+        {
+          "number": 2,
+          "question": "What will be checked before the trial?"
+        },
+        {
+          "number": 3,
+          "question": "What drawback does the new room have?"
+        },
+        {
+          "number": 4,
+          "question": "Does earlier transport information guarantee a different decision?"
+        },
+        {
+          "number": 5,
+          "question": "When should comments reach the organiser?"
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Writing",
+      "marks": 20,
+      "instruction": "Write a recommendation about moving the classes described in the reading. Compare the benefits and limits, acknowledge one valid opposing point, distinguish evidence from inference and propose a reviewable next step.",
+      "wordMin": 150,
+      "wordMax": 180,
+      "rubric": [
+        {
+          "criterion": "Task completion and relevant detail",
+          "marks": 5
+        },
+        {
+          "criterion": "Organisation and connection",
+          "marks": 5
+        },
+        {
+          "criterion": "Vocabulary appropriate to purpose",
+          "marks": 5
+        },
+        {
+          "criterion": "Grammar and written accuracy",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}

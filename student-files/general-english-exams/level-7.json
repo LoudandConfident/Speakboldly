@@ -1,0 +1,238 @@
+{
+  "version": 3,
+  "level": 7,
+  "title": "General English — Level 7",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Speak_Boldly_GE_7_Exam.pdf",
+  "instructions": "Work independently without a dictionary or coursebooks. Read each instruction carefully. This is a course achievement exam; it does not certify a CEFR level. Speaking is assessed separately by your instructor. All cases are fictional.",
+  "sections": {
+    "A": {
+      "title": "A. Vocabulary in meaning",
+      "marks": 20,
+      "instruction": "Choose a word from the word bank for each definition. Use each word once. Each item is worth 2 marks.",
+      "wordBank": [
+        "focalisation",
+        "representation",
+        "stereotype",
+        "reversible",
+        "epistemic",
+        "rhetoric",
+        "hypothesis",
+        "provisional",
+        "agent",
+        "procedure"
+      ],
+      "questions": [
+        {
+          "number": 1,
+          "question": "connected with knowledge and certainty"
+        },
+        {
+          "number": 2,
+          "question": "an oversimplified belief about a group"
+        },
+        {
+          "number": 3,
+          "question": "the person or thing performing an action"
+        },
+        {
+          "number": 4,
+          "question": "a proposed explanation to be tested"
+        },
+        {
+          "number": 5,
+          "question": "the perspective through which events are perceived"
+        },
+        {
+          "number": 6,
+          "question": "an established sequence of actions"
+        },
+        {
+          "number": 7,
+          "question": "able to be undone"
+        },
+        {
+          "number": 8,
+          "question": "subject to further change or checking"
+        },
+        {
+          "number": 9,
+          "question": "the way people or ideas are portrayed"
+        },
+        {
+          "number": 10,
+          "question": "language chosen to influence an audience"
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Grammar and intended meaning",
+      "marks": 20,
+      "instruction": "Choose the correct option. Where a meaning is specified, choose the form that expresses that meaning. Each item is worth 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "The interviews are said ___ describe experience.",
+          "options": [
+            "to",
+            "for"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "The review involves checking, comparing and ___.",
+          "options": [
+            "recording",
+            "records"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "Publication requires clear ___.",
+          "options": [
+            "accountable",
+            "accountability"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "More visits ___ indicate interest, but do not prove accuracy.",
+          "options": [
+            "may",
+            "definitely"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "The entries ___ yesterday need review.",
+          "options": [
+            "added",
+            "adding"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "It is essential that errors ___ recorded.",
+          "options": [
+            "be",
+            "being"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "By Monday, staff will have ___ the section.",
+          "options": [
+            "check",
+            "checked"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "The claim must be consistent ___ the evidence.",
+          "options": [
+            "with",
+            "to"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "Only after approval ___ expansion begin.",
+          "options": [
+            "will",
+            "it will"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "The conclusion is limited ___ this section.",
+          "options": [
+            "to",
+            "at"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Reading",
+      "marks": 20,
+      "instruction": "Read the passage and answer using evidence from the text. Each question is worth 4 marks.",
+      "passage": "Three accounts of a local archive project reach different conclusions. Attendance records show more visits after a digital catalogue was introduced. Interviews describe easier searching for some visitors, while a review of twelve record entries finds two unresolved errors. A draft report calls the catalogue an unqualified success and proposes discarding the paper index. The editor rejects that conclusion. Increased use is not equivalent to reliable retrieval, and the sources answer different questions. The archive coordinator proposes digitising one further section while retaining the originals. Expansion will stop if the review finds unresolved mismatches in that section. The review team must define a mismatch before beginning so that the threshold is not adjusted to fit the result. By the next meeting, the team will have checked the new entries. The report will then distinguish the reversible trial from the later, harder-to-reverse disposal decision. Caution about disposal is compatible with a clear next action.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "What does the attendance source show?"
+        },
+        {
+          "number": 2,
+          "question": "How many reviewed entries have unresolved errors?"
+        },
+        {
+          "number": 3,
+          "question": "Why is unqualified success too strong?"
+        },
+        {
+          "number": 4,
+          "question": "What must be defined before review begins?"
+        },
+        {
+          "number": 5,
+          "question": "Why are trial expansion and disposal separated?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Listening",
+      "marks": 20,
+      "instruction": "Read the questions for one minute. Your coach will read the passage live twice. Write short answers. Each question is worth 4 marks.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "Who will publish the review?"
+        },
+        {
+          "number": 2,
+          "question": "When will it be published?"
+        },
+        {
+          "number": 3,
+          "question": "Who decides on wider expansion?"
+        },
+        {
+          "number": 4,
+          "question": "Why was improvements will be implemented removed?"
+        },
+        {
+          "number": 5,
+          "question": "Why are some details withheld?"
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Writing",
+      "marks": 20,
+      "instruction": "Write a recommendation to the archive committee. Synthesize the three sources, explain the risk of the proposed conclusion, distinguish reversible from irreversible action and set out a justified next step.",
+      "wordMin": 200,
+      "wordMax": 230,
+      "rubric": [
+        {
+          "criterion": "Task completion and relevant detail",
+          "marks": 5
+        },
+        {
+          "criterion": "Organisation and connection",
+          "marks": 5
+        },
+        {
+          "criterion": "Vocabulary appropriate to purpose",
+          "marks": 5
+        },
+        {
+          "criterion": "Grammar and written accuracy",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}

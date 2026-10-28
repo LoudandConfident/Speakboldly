@@ -1,0 +1,238 @@
+{
+  "version": 3,
+  "level": 3,
+  "title": "General English — Level 3",
+  "durationMinutes": 45,
+  "totalMarks": 100,
+  "sourceFile": "Speak_Boldly_GE_3_Exam.pdf",
+  "instructions": "Work independently without a dictionary or coursebooks. Read each instruction carefully. This is a course achievement exam; it does not certify a CEFR level. Speaking is assessed separately by your instructor. All cases are fictional.",
+  "sections": {
+    "A": {
+      "title": "A. Vocabulary in meaning",
+      "marks": 20,
+      "instruction": "Choose a word from the word bank for each definition. Use each word once. Each item is worth 2 marks.",
+      "wordBank": [
+        "storage",
+        "confirm",
+        "alternative",
+        "interview",
+        "settle in",
+        "appointment",
+        "strategy",
+        "commute",
+        "inspection",
+        "sort"
+      ],
+      "questions": [
+        {
+          "number": 1,
+          "question": "become comfortable in a new place"
+        },
+        {
+          "number": 2,
+          "question": "another possible choice"
+        },
+        {
+          "number": 3,
+          "question": "a careful check"
+        },
+        {
+          "number": 4,
+          "question": "a planned way of achieving something"
+        },
+        {
+          "number": 5,
+          "question": "space for keeping things"
+        },
+        {
+          "number": 6,
+          "question": "separate items into groups"
+        },
+        {
+          "number": 7,
+          "question": "a planned conversation for collecting information"
+        },
+        {
+          "number": 8,
+          "question": "travel regularly between home and work"
+        },
+        {
+          "number": 9,
+          "question": "state that an arrangement is certain"
+        },
+        {
+          "number": 10,
+          "question": "an arranged time to meet or receive a service"
+        }
+      ]
+    },
+    "B": {
+      "title": "B. Grammar and intended meaning",
+      "marks": 20,
+      "instruction": "Choose the correct option. Where a meaning is specified, choose the form that expresses that meaning. Each item is worth 2 marks.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "I have lived here ___ May.",
+          "options": [
+            "for",
+            "since"
+          ]
+        },
+        {
+          "number": 2,
+          "question": "If the form fails, staff ___ help.",
+          "options": [
+            "will",
+            "would"
+          ]
+        },
+        {
+          "number": 3,
+          "question": "Could you tell me where the office ___?",
+          "options": [
+            "is",
+            "does"
+          ]
+        },
+        {
+          "number": 4,
+          "question": "We have already ___ the request.",
+          "options": [
+            "send",
+            "sent"
+          ]
+        },
+        {
+          "number": 5,
+          "question": "Residents ___ need help can call.",
+          "options": [
+            "who",
+            "which"
+          ]
+        },
+        {
+          "number": 6,
+          "question": "The machine was ___ on Monday.",
+          "options": [
+            "repair",
+            "repaired"
+          ]
+        },
+        {
+          "number": 7,
+          "question": "She said that she ___ busy.",
+          "options": [
+            "was",
+            "has"
+          ]
+        },
+        {
+          "number": 8,
+          "question": "They have been ___ for an hour.",
+          "options": [
+            "wait",
+            "waiting"
+          ]
+        },
+        {
+          "number": 9,
+          "question": "Before the meeting, he had ___ the list.",
+          "options": [
+            "check",
+            "checked"
+          ]
+        },
+        {
+          "number": 10,
+          "question": "If I had more time, I ___ volunteer.",
+          "options": [
+            "will",
+            "would"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "title": "C. Reading",
+      "marks": 20,
+      "instruction": "Read the passage and answer using evidence from the text. Each question is worth 4 marks.",
+      "passage": "After moving to West Lane, Leila found that the shared laundry room was often crowded. She has lived in the building for six months and has been recording waiting times for the last two weeks. The manager suggested a booking system, but some residents cannot use the online form. Leila proposed keeping a paper list as well. Before the meeting, the caretaker had checked the machines and found that one had been out of use for three days. It was repaired on Monday. Residents who use the room after work still report long waits. The manager said that the paper list would be placed beside the door. Leila would prefer a longer trial before making the system permanent. She has asked whether the results can be reviewed after four weeks, using both waiting times and comments from residents.",
+      "questions": [
+        {
+          "number": 1,
+          "question": "How long has Leila lived in the building?"
+        },
+        {
+          "number": 2,
+          "question": "Why was a paper list proposed?"
+        },
+        {
+          "number": 3,
+          "question": "What had the caretaker discovered?"
+        },
+        {
+          "number": 4,
+          "question": "Where will the paper list be placed?"
+        },
+        {
+          "number": 5,
+          "question": "What two kinds of evidence should the review use?"
+        }
+      ]
+    },
+    "D": {
+      "title": "D. Listening",
+      "marks": 20,
+      "instruction": "Read the questions for one minute. Your coach will read the passage live twice. Write short answers. Each question is worth 4 marks.",
+      "delivery": "coach-live",
+      "questions": [
+        {
+          "number": 1,
+          "question": "When did testing begin?"
+        },
+        {
+          "number": 2,
+          "question": "What has been rewritten?"
+        },
+        {
+          "number": 3,
+          "question": "Does a request confirm an appointment?"
+        },
+        {
+          "number": 4,
+          "question": "What should people with a reference number avoid?"
+        },
+        {
+          "number": 5,
+          "question": "What feedback is specifically requested?"
+        }
+      ]
+    },
+    "E": {
+      "title": "E. Writing",
+      "marks": 20,
+      "instruction": "Write a request to the manager of a shared building. Describe a problem that has continued for some time, explain what has already been tried, propose a practical improvement and ask politely when it can be reviewed.",
+      "wordMin": 110,
+      "wordMax": 140,
+      "rubric": [
+        {
+          "criterion": "Task completion and relevant detail",
+          "marks": 5
+        },
+        {
+          "criterion": "Organisation and connection",
+          "marks": 5
+        },
+        {
+          "criterion": "Vocabulary appropriate to purpose",
+          "marks": 5
+        },
+        {
+          "criterion": "Grammar and written accuracy",
+          "marks": 5
+        }
+      ]
+    }
+  }
+}
