@@ -1,10 +1,11 @@
+import {readDriveFolderFile} from './drive-folder-files.js?v=1';
 import {renderPracticeZone,practiceAccessKey} from './practice-zone.js';
 import {renderMaterialLibrary} from './material-library.js?v=program-folders';
 import {createLoadingNotice} from './loading-notice.js?v=visible-loading';
 import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=practice-zone-monthly-1';
-import {withBerlitzBooks} from './berlitz-material.js?v=custom-domain-1';
+import {withBerlitzBooks} from './berlitz-material.js?v=drive-folders-1';
 import {initializeMonthlyLearning} from './monthly-learning.js?v=library-folders';
-import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=custom-domain';
+import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=drive-folders-1';
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=exam-rebuild';
 import {initializeStudentContact} from './student-contact.js?v=success-return-1';
 import {chooseLearningLevel} from './learning-level-dialog.js?v=password-free-1';
@@ -29,7 +30,7 @@ export function initializeStudentAssessment(doc) {
  initializePractice(doc);
 
  const tabs=[...root.querySelectorAll('[data-portal-tab]')].filter(el=>['exercises','material','exams','contact','calendar','practice','listening','monthly','mission','studio','accent'].includes(el.dataset.portalTab));
- let activeLearningSection=null;
+ let activeLearningSection=null,documentRequest=0;
  let learningLevel=null,learningPasscode='',examPasscode='',latestItems=[];
  let exercisesUnlocked=false;
  let passwordMetadata=null,assessmentUnlocked=false,resumableSession=null;
@@ -119,8 +120,8 @@ export function initializeStudentAssessment(doc) {
   }catch(error){if(current===epoch){status.textContent=error.message;busy=false;}}
  }
  async function openDocument(item,event){
-  event.preventDefault();const current=epoch;status.textContent='Opening document…';
-  try{if(learningDocumentCategory(item)==='exercises'&&(item.requiresAccess||!item.url)){const key=practiceAccessKey(item,hubEntry);if(!key)throw new Error('Practice Zone is currently closed by your instructor.');if(!await enterHubLevel(doc,key))return;}const response=await call('studentPortalAccess'),fresh=response.items.find(entry=>entry.id===item.id);if(current!==epoch)return;if(!fresh?.enabled){status.textContent='This document is currently closed by your instructor.';return;}if(/^https:\/\/drive\.google\.com\/file\/d\//.test(fresh.url)&&/^Level[\s_-]*(?:1[0-2]|[1-9])\s*[—:-]\s*(Main Book|Activity|Audio|Practice)\s*[—:-]/i.test(fresh.title)){const file=await call('studentLibraryRead',{itemId:fresh.id});if(current!==epoch)return;openLearningDocument(doc,{...fresh,title:learningDocumentTitle(fresh.title),inline:file});}else openLearningDocument(doc,{...fresh,title:learningDocumentTitle(fresh.title)});status.textContent='';}catch(error){if(current===epoch)status.textContent=error.message;}
+  event.preventDefault();const current=epoch,reading=++documentRequest;status.textContent='Opening document…';
+  try{if(learningDocumentCategory(item)==='exercises'&&(item.requiresAccess||!item.url)){const key=practiceAccessKey(item,hubEntry);if(!key)throw new Error('Practice Zone is currently closed by your instructor.');if(!await enterHubLevel(doc,key))return;}const response=await call('studentPortalAccess'),fresh=response.items.find(entry=>entry.id===item.id);if(current!==epoch)return;if(!fresh?.enabled){status.textContent='This document is currently closed by your instructor.';return;}if(fresh.driveFolder){const inline=await readDriveFolderFile(call,fresh,{valid:()=>current===epoch&&reading===documentRequest,progress:percent=>{status.textContent='Loading material… '+percent+'%';}});if(!inline)return;openLearningDocument(doc,{...fresh,title:learningDocumentTitle(fresh.title),inline});}else if(/^https:\/\/drive\.google\.com\/file\/d\//.test(fresh.url)&&/^Level[\s_-]*(?:1[0-2]|[1-9])\s*[—:-]\s*(Main Book|Activity|Audio|Practice)\s*[—:-]/i.test(fresh.title)){const file=await call('studentLibraryRead',{itemId:fresh.id});if(current!==epoch)return;openLearningDocument(doc,{...fresh,title:learningDocumentTitle(fresh.title),inline:file});}else openLearningDocument(doc,{...fresh,title:learningDocumentTitle(fresh.title)});status.textContent='';}catch(error){if(current===epoch)status.textContent=error.message;}
  }
  const sectionNames={material:'Learning Library',listening:'Listening Lab',exercises:'Practice Zone'};
  function matchingFiles(id,level,items){return items.filter(item=>(learningDocumentLevel(item)===level||(id==='exercises'&&!learningDocumentLevel(item)))&&(learningDocumentCategory(item)===id||(id==='material'&&learningDocumentCategory(item)==='listening')));}
