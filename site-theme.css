@@ -1750,6 +1750,13 @@ main #home .home-free-offers{display:flex!important;flex-direction:column!import
  main #home>.home-bottom-row{margin:0 auto!important}
 }
 
+/* Centre the copy vertically in the LEFT text area, not across the screen. */
+@media(max-width:680px){
+ main #home .hero-copy .home-slogan{left:18px!important;right:auto!important;transform:none!important;width:67%!important;max-width:290px!important;text-align:left!important}
+ main #home .hero-copy .home-pricing-note{left:18px!important;transform:none!important;width:67%!important;align-items:flex-start!important;text-align:left!important}
+ main #home .hero-copy .home-free-offers{align-items:flex-start!important;text-align:left!important}
+}
+
 /* reviews-effects.css */
 /* Restore the review album's depth, movement and interaction. */
 #reviews .review-cards{perspective:1000px!important;isolation:isolate}

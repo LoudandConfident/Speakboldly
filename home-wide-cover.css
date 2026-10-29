@@ -153,3 +153,10 @@ main #home .home-free-offers{display:flex!important;flex-direction:column!import
  main #home .hero .home-speech-links{position:absolute!important;top:auto!important;bottom:58px!important;left:50%!important;transform:translateX(-50%)!important;width:240px!important;justify-content:center!important;margin:0!important}
  main #home>.home-bottom-row{margin:0 auto!important}
 }
+
+/* Centre the copy vertically in the LEFT text area, not across the screen. */
+@media(max-width:680px){
+ main #home .hero-copy .home-slogan{left:18px!important;right:auto!important;transform:none!important;width:67%!important;max-width:290px!important;text-align:left!important}
+ main #home .hero-copy .home-pricing-note{left:18px!important;transform:none!important;width:67%!important;align-items:flex-start!important;text-align:left!important}
+ main #home .hero-copy .home-free-offers{align-items:flex-start!important;text-align:left!important}
+}
