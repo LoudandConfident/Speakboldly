@@ -13,7 +13,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
  const listStatus = doc.querySelector('#review-list-status'), position = doc.querySelector('#review-position');
  const previous = doc.querySelector('#review-previous'), next = doc.querySelector('#review-next');
  let reviews = [], selected = 0, submissionId = null, successTimer = null, loadVersion = 0,returnUrl=doc.defaultView.location.href;
- const cacheKey='speak-boldly-public-reviews-v1';let loading=false,pendingReload=false,lastLoaded=0;
+ const cacheKey='speak-boldly-public-reviews-v1';let loading=false,pendingReload=false,lastLoaded=0,hasLiveResponse=false;
  function cacheReviews(){try{doc.defaultView.localStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),reviews}));}catch{}}
  let hovering = false, focused = false, rotationTimer, drag = null;
  const view = doc.querySelector('#reviews');
@@ -61,7 +61,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   if(!force&&lastLoaded&&Date.now()-lastLoaded<300000)return;
   loading=true;const version=++loadVersion,selectedId=reviews[selected]?.id;
   listStatus.textContent=reviews.length?'':'Loading reviews…';
-  try{const result=await api('reviews');if(version!==loadVersion)return;if(!Array.isArray(result.reviews))throw new Error('Invalid reviews.');reviews=result.reviews;lastLoaded=Date.now();cacheReviews();const index=reviews.findIndex(review=>review.id===selectedId);selected=index<0?0:index;render();listStatus.textContent=reviews.length?'':'Be the first to share your experience.';}
+  try{const result=await api('reviews');if(version!==loadVersion)return;if(!Array.isArray(result.reviews))throw new Error('Invalid reviews.');hasLiveResponse=true;reviews=result.reviews;lastLoaded=Date.now();cacheReviews();const index=reviews.findIndex(review=>review.id===selectedId);selected=index<0?0:index;render();listStatus.textContent=reviews.length?'':'Be the first to share your experience.';}
   catch{if(version===loadVersion)listStatus.textContent=reviews.length?'Showing previously loaded reviews. Updates could not load yet.':'Reviews could not be loaded. Please try again later.';}
   finally{loading=false;if(pendingReload){pendingReload=false;load({force:true});}}
  }
@@ -138,14 +138,15 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
    const data = reviewSubmission(form,submissionId);
    const result = await api('reviews',{method:'POST',data});
    ++loadVersion;
-   reviews = [result.review,...reviews.filter(review=>review.id!==result.review.id)];lastLoaded=Date.now();cacheReviews();selected=0;render();listStatus.textContent='';
+   hasLiveResponse=true;reviews = [result.review,...reviews.filter(review=>review.id!==result.review.id)];lastLoaded=Date.now();cacheReviews();selected=0;render();listStatus.textContent='';
    form.reset();submissionId=null;listStatus.textContent=SUBMISSION_SUCCESS_MESSAGE;successTimer=showSubmissionSuccess(doc,{status,returnUrl,isCurrent:()=>Boolean(doc.querySelector('#review-dialog')?.open),onReturn:()=>{doc.querySelector('#review-dialog')?.close();restartRotation();}});
   } catch (error) {status.textContent = /check your review/i.test(error.message||'') ? 'The review service rejected these details. Your review has not been posted, and your text is still here. Please contact Speak Boldly if this continues.' : error.message || 'Your review could not be shared. Please try again.';if(error.field)form.elements[error.field]?.focus();}
   finally {button.disabled = false;}
  });
  doc.addEventListener('reviews-changed',()=>load({force:true}));
  doc.defaultView.addEventListener('hashchange',()=>{if(doc.defaultView.location.hash === '#reviews')load();});
- try{const cached=JSON.parse(doc.defaultView.localStorage.getItem(cacheKey)||'null');if(connected()&&Array.isArray(cached?.reviews)&&cached.reviews.every(review=>review&&typeof review.id==='string'&&typeof review.message==='string')){reviews=cached.reviews;lastLoaded=Number(cached.savedAt)||0;if(lastLoaded>Date.now())lastLoaded=0;render();listStatus.textContent=reviews.length?'':'Be the first to share your experience.';}}catch{}
+ try{const cached=JSON.parse(doc.defaultView.localStorage.getItem(cacheKey)||'null');if(connected()&&Array.isArray(cached?.reviews)&&cached.reviews.every(review=>review&&typeof review.id==='string'&&typeof review.message==='string')){reviews=cached.reviews;lastLoaded=Number(cached.savedAt)||0;if(lastLoaded>Date.now())lastLoaded=0,hasLiveResponse=false;render();listStatus.textContent=reviews.length?'':'Be the first to share your experience.';}}catch{}
+ if(!reviews.length){doc.defaultView.fetch(new URL('./content/public-reviews.json',import.meta.url)).then(r=>r.ok?r.json():null).then(data=>{if(hasLiveResponse||reviews.length||!Array.isArray(data?.reviews))return;reviews=data.reviews.filter(r=>r&&typeof r.id==='string'&&typeof r.message==='string');if(reviews.length){render();listStatus.textContent='';}}).catch(()=>{});}
  if(doc.defaultView.location.hash==='#reviews')load();
  return {load};
 }

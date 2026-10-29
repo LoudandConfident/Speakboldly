@@ -1,29 +1,26 @@
-import {initializeGeneralEnglishExams} from './general-english-exams.js?v=levels-12-1';
+import {deferredController} from './deferred-controller.js?v=1';
 import {readDriveFolderFile} from './drive-folder-files.js?v=1';
 import {renderPracticeZone,practiceAccessKey} from './practice-zone.js';
 import {renderMaterialLibrary} from './material-library.js?v=program-cards-1';
 import {createLoadingNotice} from './loading-notice.js?v=visible-loading';
 import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=practice-zone-monthly-1';
 import {withBerlitzBooks} from './berlitz-material.js?v=drive-folders-1';
-import {initializeMonthlyLearning} from './monthly-learning.js?v=library-folders';
 import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=drive-folders-1';
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=ask-coach-1';
-import {initializeStudentContact} from './student-contact.js?v=coach-sections-1';
 import {chooseLearningLevel} from './learning-level-dialog.js?v=password-free-1';
 import {learningDocumentTitle,learningDocumentLevel,learningDocumentCategory,learningDocumentPart,createLearningDocumentCard} from './learning-document-cards.js?v=library-folders';
 import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v=learning-space';
 import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=ask-coach-1';
-import {initializeStudentBooking} from './student-booking.js?v=slot-request-1';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 
 const SESSION_KEY='speak-boldly-assessment-session-v1';
 export function initializeStudentAssessment(doc) {
  const root=doc.querySelector('#students-portal'),content=root.querySelector('#portal-content'),status=root.querySelector('#portal-access-status'),panel=root.querySelector('#portal-exams');
  const blocked=doc.createElement('p');blocked.id='student-portal-lockout';blocked.hidden=true;blocked.setAttribute('role','alert');content.before(blocked);
- const booking=initializeStudentBooking(doc);
- const monthly=initializeMonthlyLearning(doc);
- const contact=initializeStudentContact(doc);
+ const booking=deferredController(()=>import('./student-booking.js?v=slot-request-1').then(m=>m.initializeStudentBooking(doc)),{doc,host:root.querySelector('#portal-calendar'),label:'Session calendar'});
+ const monthly=deferredController(()=>import('./monthly-learning.js?v=clear-reading-2').then(m=>m.initializeMonthlyLearning(doc)),{doc,host:root.querySelector('#portal-monthly'),label:'Real English'});
+ const contact=deferredController(()=>import('./student-contact.js?v=coach-sections-1').then(m=>m.initializeStudentContact(doc)),{doc,host:root.querySelector('#portal-contact'),label:'Ask your coach'});
  const profile=doc.createElement('section');profile.id='student-assessment-profile';profile.className='assessment-entry';profile.hidden=true;profile.setAttribute('aria-label','Assessment details');
  const endpoint=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
  const loadingNotice=createLoadingNotice(doc,root.querySelector('#client-portal'),'hub-loading-status'),pendingCatalog=new Map();
@@ -35,7 +32,7 @@ export function initializeStudentAssessment(doc) {
  let exercisesUnlocked=false;
  let passwordMetadata=null,assessmentUnlocked=false,resumableSession=null;
  let token='',student=null,epoch=0,saveTimer,tick,accessTimer,queue=Promise.resolve(),busy=false;
- const generalExams=initializeGeneralEnglishExams(doc,{call,panel,setBusy:value=>{busy=value;}});
+ const generalExams=deferredController(()=>import('./general-english-exams.js?v=levels-12-1').then(m=>m.initializeGeneralEnglishExams(doc,{call,panel,setBusy:value=>{busy=value;}})),{doc,host:panel,methods:['show'],label:'General English exams'});
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
  async function performCall(action,data={}) {
   
@@ -54,7 +51,7 @@ export function initializeStudentAssessment(doc) {
  function lock(){generalExams.lock();activeLearningSection=null;loadingNotice.clear();pendingCatalog.clear();crumbs.hidden=true;crumbs.replaceChildren();epoch++;doc.dispatchEvent(new doc.defaultView.Event('student-portal-locking'));clearFolderPasswords(doc);learningLevel=null;learningPasscode='';examPasscode='';exercisesUnlocked=false;delete root.querySelector('#portal-contact').dataset.passwordLocked;clearTimeout(saveTimer);clearInterval(tick);clearInterval(accessTimer);profile.hidden=true;booking.lock();contact.lock();monthly.lock();token='';student=null;assessmentUnlocked=false;resumableSession=null;busy=false;content.hidden=true;panel.replaceChildren();root.classList.remove('portal-session-active');}
  const crumbs=doc.createElement('nav');crumbs.className='learning-breadcrumbs';crumbs.setAttribute('aria-label','Learning Hub breadcrumb');crumbs.hidden=true;root.querySelector('[data-learning-back]')?.after(crumbs);
  function publicSectionSelected(){return tabs.some(tab=>['contact','calendar','monthly','mission','studio','accent'].includes(tab.dataset.portalTab)&&tab.getAttribute('aria-selected')==='true');}
- function select(id){if(id==='contact'){const previous=tabs.find(tab=>tab.getAttribute('aria-selected')==='true')?.dataset.portalTab;if(previous!=='contact')root.dataset.contactReturnPanel=previous||'';}loadingNotice.clear();retryFiles.hidden=true;if(['contact','calendar','monthly','mission','studio','accent'].includes(id))status.textContent='';root.classList.toggle('learning-section-open',Boolean(id));if(id!=='mission')doc.dispatchEvent(new doc.defaultView.Event('daily-mission-pause'));closeLearningDocument(doc);crumbs.replaceChildren();crumbs.hidden=!id;if(id){const home=text('button','Learning Hub');home.type='button';home.onclick=()=>select(null);crumbs.append(home,text('span',' → '+({exercises:'Practice Zone',material:'Learning Library',exams:'Test Yourself',practice:'Practice Zone',listening:'Listening Lab',calendar:'Session Calendar',contact:'Ask your coach',monthly:'Real English',mission:'Daily Challenge',studio:'SB Studio',accent:'Accent'}[id]||id)+(learningLevel&&!['calendar','contact','monthly','mission','studio','accent','exercises','practice','exams'].includes(id)?' → Level '+learningLevel:'')));}tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);const back=root.querySelector('[data-learning-back]');if(back)back.hidden=!id;if(id)doc.defaultView.scrollTo({top:0,behavior:'instant'});}
+ function select(id){if(id==='contact'){const previous=tabs.find(tab=>tab.getAttribute('aria-selected')==='true')?.dataset.portalTab;if(previous!=='contact')root.dataset.contactReturnPanel=previous||'';}loadingNotice.clear();retryFiles.hidden=true;if(['contact','calendar','monthly','mission','studio','accent'].includes(id))status.textContent='';root.classList.toggle('learning-section-open',Boolean(id));if(id!=='mission')doc.dispatchEvent(new doc.defaultView.Event('daily-mission-pause'));closeLearningDocument(doc);crumbs.replaceChildren();crumbs.hidden=!id;if(id){const home=text('button','Learning Hub');home.type='button';home.onclick=()=>select(null);crumbs.append(home,text('span',' → '+({exercises:'Practice Zone',material:'Learning Library',exams:'Test Yourself',practice:'Practice Zone',listening:'Listening Lab',calendar:'Session Calendar',contact:'Ask your coach',monthly:'Real English',mission:'Daily Idioms',studio:'SB Studio',accent:'Accent'}[id]||id)+(learningLevel&&!['calendar','contact','monthly','mission','studio','accent','exercises','practice','exams'].includes(id)?' → Level '+learningLevel:'')));}tabs.forEach((tab,index)=>{const active=tab.dataset.portalTab===id;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active||(!id&&index===0)?0:-1;});root.querySelectorAll('[data-portal-panel]').forEach(p=>p.hidden=p.dataset.portalPanel!==id);const back=root.querySelector('[data-learning-back]');if(back)back.hidden=!id;if(id)doc.defaultView.scrollTo({top:0,behavior:'instant'});}
  doc.addEventListener('student-contact-sent-return',()=>select(root.dataset.contactReturnPanel||null));
  doc.addEventListener('daily-mission-contact',event=>{status.textContent='';delete root.querySelector('#portal-contact').dataset.passwordLocked;select('contact');contact.open(event.detail?.message);});
  doc.addEventListener('daily-mission-home',()=>{select(null);root.querySelector('.learning-space-heading')?.scrollIntoView({block:'start',behavior:'auto'});});

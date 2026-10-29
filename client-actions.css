@@ -19,3 +19,5 @@
 #admin-dashboard .admin-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
 #admin-dashboard .admin-cash-metric{min-width:0}#admin-dashboard .admin-cash-metric strong{overflow-wrap:anywhere;font-size:clamp(20px,2.5vw,30px)}#admin-dashboard .admin-cash-metric small{display:block;font-size:11px;line-height:1.5;color:#65745b;margin-top:8px}
 @media(max-width:680px){#admin-dashboard .admin-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}#admin-dashboard .admin-cash-metric{grid-column:1/-1}}
+
+#client-authorization-dialog .client-action-group:not(:has(button)){display:none}

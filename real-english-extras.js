@@ -1,5 +1,6 @@
+import {openDailyFun} from './daily-fun.js?v=1';
 export function createRealEnglishExtras(doc){
  const el=(tag,text,cls)=>{const node=doc.createElement(tag);if(text)node.textContent=text;if(cls)node.className=cls;return node;},aside=el('aside',null,'real-english-side');aside.setAttribute('aria-label','English encouragement');
  const quote=el('figure',null,'real-english-quote');quote.innerHTML='<svg viewBox="0 0 220 155" fill="none" stroke="#193c32" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M26 58q40-16 79 3 42-19 83-3v68q-42-17-83 2-39-19-79-2Z" fill="#edf0e6"/><path d="M105 61v67M38 77q25-7 51 3M38 92q25-7 51 3M38 107q17-5 35 0M121 79q22-8 49-3M121 94q16-6 34-4M121 109q22-7 49-3M20 133q43-16 85 3 44-19 91-3"/><path d="m154 15 12-6 27 48-12 7Z" fill="#d5ed98"/><path d="m181 64 13 10-1-17M159 14l27 47M192 70l2 4"/><path d="m42 17 4 9 10 2-8 6 2 10-9-5-9 5 2-10-7-6 10-2Z" fill="#d5ed98"/><path d="M74 40q18-21 41-8" stroke-dasharray="3 5"/></svg>';
- const caption=el('figcaption');caption.append(el('span','Your words.'),el('em','Your way.'));quote.append(caption);aside.append(quote);return aside;
+ const caption=el('figcaption');caption.append(el('span','Your words.'),el('em','Your way.'));quote.append(caption);const fun=el('button','Fun Corner','button light real-english-fun');fun.type='button';fun.onclick=()=>openDailyFun(doc);aside.append(fun,quote);return aside;
 }

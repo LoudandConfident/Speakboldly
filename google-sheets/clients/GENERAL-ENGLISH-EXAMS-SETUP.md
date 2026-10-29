@@ -2,9 +2,9 @@
 
 ## What is included
 
-Eight student PDFs supplied on 28 October 2026 have been transcribed into interactive Levels 1–8. Test Yourself → General English → Levels 1–12. Levels 9–12 are visible but unavailable until their real papers are supplied. There is one General English exam program, no four/eight-session duplicate. All available levels require their existing, distinct monthly **exam** password, separate from the Learning Library passwords. The instructor can view/change those passwords in **General English exams · passwords and submissions**.
+Eight student PDFs supplied on 28 October 2026 have been transcribed into interactive Levels 1–8. Test Yourself → General English → Levels 1–12. Levels 9–12 are now also available from the supplied papers. There is one General English exam program, no four/eight-session duplicate. All available levels require their existing, distinct monthly **exam** password, separate from the Learning Library passwords. The instructor can view/change those passwords in **General English exams · passwords and submissions**.
 
-Every test has five sections worth 20 marks each: vocabulary (10 word-bank selections), grammar (10 choices), reading (5 written answers), listening (5 written answers), and writing (level-specific task, target length and rubric). Listening is read live twice by the coach, as requested; no recording or examiner script is invented. The website uses the requested **45 minutes**, overriding the 75–120 minutes printed on the original PDFs. All five sections await instructor marking because no examiner answer key was supplied.
+Levels 1–8 have five sections worth 20 marks each: vocabulary (10 word-bank selections), grammar (10 choices), reading (5 written answers), listening (5 written answers), and writing (level-specific task, target length and rubric). Listening is read live twice by the coach, as requested; no recording or examiner script is invented. The website uses the requested **45 minutes**, overriding the 75–120 minutes printed on the original PDFs. Levels 9–12 use language (30), reading (20), live listening (20) and writing (30), including commentary. Corrections are draft suggestions for the instructor; the learner sees a submission receipt only.
 
 ## Activate without replacing your original script
 
@@ -22,7 +22,7 @@ The block goes **inside** doPost, never at the top of the file. Do not add a sec
 
 3. Save. Select **setupGeneralEnglishExams → Run**, and approve permissions. Run this function only, not doPost or setupClientSync. It creates a new **GE exam attempts** sheet and one minute-based expiry trigger. On first setup it opens Levels 1–8 for exam passwords; it does not change Practice Zone/Library passwords, client/session rows, email signatures or historic exam attempts. Running it again preserves the current exam access choices.
 4. **Deploy → Manage deployments → existing Clients web app → pencil → New version → Deploy.** Keep the same endpoint URL, Execute as Me and existing access settings.
-5. Refresh the website. In the Instructor Dashboard open **General English exams · passwords and submissions → Refresh exams**. Check each password before sharing it. Levels 9–12 have reserved passwords but cannot be opened without their papers.
+5. Refresh the website. In the Instructor Dashboard open **General English exams · passwords and submissions → Refresh exams**. Check each password before sharing it. All 12 levels use separate exam passwords.
 
 No Cloud billing, new web server, service-account JSON key or Google student login is needed. Existing Apps Script/Sheets/email quotas apply. The mailbox **Submissions@speakboldly.space** must exist and accept mail. Setup sends no examination email.
 
@@ -79,3 +79,10 @@ Retries with the same request ID never send a second confirmed email. If deliver
 ## Levels 9–12 and Word review drafts
 
 The new candidate papers use four sections (30/20/20/30) and separate writing commentary. All 12 levels still use a 45-minute limit and live listening; speaking is separate. Use the supplied private GeneralEnglishExams.gs download, run setupGeneralEnglishExams9To12, and deploy a New version of the existing web app. Keep Code.gs and the existing router. The private download includes suggested answer guides; those guides are intentionally excluded from this public repository. Students receive only a submission receipt. Word corrections go only to the fixed instructor submission mailbox and are downloadable from the authenticated instructor dashboard. Writing suggestions are rule-based flags for coach review, not full AI proofreading or final marks. Listening answers require the coach’s live passage key. Saving instructor corrections updates the Word export without automatically emailing the learner.
+
+
+## Current private installer update
+
+The owner-supplied private GeneralEnglishExams.gs contains the review guides and all 12 private speaking packs. Replace only that existing Apps Script file, run **setupSpeakBoldlyUpdates**, then deploy a **New version** of the same web app. Keep Code.gs and its existing exam routing hook. The public source here intentionally excludes private answers and speaking passages. Do not replace the private installer with this public source if you need the suggested corrections and speaking packs.
+
+The instructor's speaking card provides four guided 25-mark steps, saved notes and marks across devices, a clean learner window, a two-minute speaking timer and editable Word reports. Speaking is separate from the timed written exam. No speaking score or report is automatically sent to the learner.
