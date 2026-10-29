@@ -1,5 +1,4 @@
-import {initializePersonalCalendar} from './personal-calendar.js?v=client-status-motivations';
-import './admin-portal.js?v=actions-route-4';
+import './admin-portal.js?v=calm-dashboard-5';
 import {clientSheetConnected} from './client-sheet.js?v=domain-email-routing';
 const SESSION='speak-boldly-instructor-app-session-v1';
 const dashboard=document.querySelector('#admin-dashboard'),clientPage=document.querySelector('#admin-client-page'),login=document.querySelector('#admin-login-form'),dialog=document.querySelector('#teacher-login-dialog'),nav=document.querySelector('.app-nav'),lock=document.querySelector('#app-lock'),message=document.querySelector('#app-locked-message');
@@ -17,7 +16,6 @@ let resume=false;try{resume=sessionStorage.getItem(SESSION)==='1';}catch{}
 if(resume){document.querySelector('#admin-code').value='16051962';login.requestSubmit();}else unlock();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./instructor-sw.js',{scope:'./',updateViaCache:'none'}).catch(()=>{});
 
-initializePersonalCalendar(document);
 
 
 

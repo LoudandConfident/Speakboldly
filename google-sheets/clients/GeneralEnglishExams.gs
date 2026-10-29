@@ -3,7 +3,10 @@
 const SB_GE_HEADERS=['ID','Created at','Level','Status','Record JSON'];
 const SB_GE_ACTIONS=['geExamSettings','geExamStart','geExamGet','geExamDraft','geExamSubmit','geExamOwnerSettings','geExamSaveSettings','geExamList','geExamReview','geExamRetry','geExamWord','geSpeakingList','geSpeakingStart','geSpeakingGet','geSpeakingSave','geSpeakingWord','geTaskReminder','geTaskReminderPreview'];
 function sbGeneralEnglishExamsHandleEvent(event){
+ sbInlineFolderInstall();
  let p;try{p=JSON.parse(event?.postData?.contents||'null');}catch{return null;}
+ if(p&&SB_INLINE_BLOG_COMMENT_ACTIONS.includes(p.action))return sbInlineBlogCommentsHandleEvent(event);
+ if(p?.action==='saveHubAccessSetting'&&sbInlineFolderKey(String(p.group||'')))return sbInlineFolderSave(p);
  if(p?.action==='listSessions'||p?.action==='sendClientEmail'&&p.kind==='confirmation'){if(event.postData.contents.length>20000)return ContentService.createTextOutput(JSON.stringify({ok:false,error:'Confirmation request too large.'})).setMimeType(ContentService.MimeType.JSON);return sbGeConfirmationEvent(p);}
  if(p?.action==='studentSubmission')return sbStudentSubmission(p,event.postData.contents.length);
  if(!p||!SB_GE_ACTIONS.includes(p.action))return null;
@@ -264,5 +267,90 @@ function sbGeConfirmationEvent(p){
  }catch(error){if(trackingSheet&&trackingRow){const email=book?.getSheetByName('EmailLog'),rows=email&&email.getLastRow()>1?email.getRange(2,1,email.getLastRow()-1,7).getValues():[],sent=rows.find(r=>String(r[0])===String(p.requestId)&&r[4]==='sent');if(sent){trackingSheet.getRange(trackingRow,4,1,5).setValues([['sent',String(sent[3]),String(sent[5]),String(p.clientId),'']]);return json({ok:true,status:'sent',recipient:String(sent[3]),sentAt:String(sent[5]),alreadySent:true});}trackingSheet.getRange(trackingRow,4).setValue(rows.some(r=>String(r[0])===String(p.requestId))?'delivery_unknown':'failed');trackingSheet.getRange(trackingRow,8).setValue(String(error.message||error).slice(0,1000));}return json({ok:false,error:String(error.message||error)});}
 }
 
-function setupSpeakBoldlyUpdates(){setupGeneralEnglishExams9To12();setupGeneralEnglishSpeaking();console.log("Updates ready. Deploy a New version of your existing web app. Code.gs and existing records remain unchanged. No emails sent by setup.");}
+function setupSpeakBoldlyUpdates(){setupGeneralEnglishExams9To12();setupGeneralEnglishSpeaking();setupFolderPasswords();setupInlineBlogComments();console.log("Updates ready. Deploy a New version of your existing web app. Code.gs and existing records remain unchanged. No emails sent by setup.");}
 
+
+// Folder passwords and file availability are independent. No file flags are changed here.
+const SB_INLINE_PROGRAM_FOLDERS=['focus','write-boldly','english-momentum','interview','business-writing','meetings','ielts','pronunciation','kids'];
+let SB_INLINE_FOLDER_INSTALLED=false;
+function sbInlineFolderKey(key){return /^(material|exercises|listening|exams):(?:[1-9]|1[0-2])$/.test(key)||SB_INLINE_PROGRAM_FOLDERS.some(id=>key==='library:'+id);}
+function sbInlineItemFolderKey(item){const id=String(item?.title||'').match(/\[SB-folder:([a-z-]+)\]/)?.[1];return SB_INLINE_PROGRAM_FOLDERS.includes(id)?'library:'+id:null;}
+function sbInlineFolderInstall(){
+ if(SB_INLINE_FOLDER_INSTALLED||typeof sbHubEntry!=='function'||typeof sbHubKeys!=='function'||typeof sbHubSnapshot!=='function')return;
+ const keys=sbHubKeys,entry=sbHubEntry,snapshot=sbHubSnapshot;sbHubKeys=function(){return [...new Set(keys().concat(SB_INLINE_PROGRAM_FOLDERS.map(id=>'library:'+id)))];};
+ sbHubEntry=function(key,state){const result=entry(key,state);if(sbInlineFolderKey(key)){result.enabled=true;if(key.startsWith('exams:')&&typeof SB_GE_CONTENT!=='undefined')result.available=Boolean(SB_GE_CONTENT[Number(key.split(':')[1])]);}return result;};
+ sbHubSnapshot=function(owner){return{...snapshot(owner),folderPasswordsOnly:true};};
+ if(typeof sbHubItemKey==='function'){const itemKey=sbHubItemKey;sbHubItemKey=function(item){return sbInlineItemFolderKey(item)||itemKey(item);};}
+ if(typeof sbDriveKey==='function'){const driveKey=sbDriveKey;sbDriveKey=function(item){return sbInlineItemFolderKey(item)||driveKey(item);};}
+ if(typeof SB_HUB_PASSWORDS_CACHE!=='undefined')SB_HUB_PASSWORDS_CACHE=null;SB_INLINE_FOLDER_INSTALLED=true;
+}
+function sbInlineFolderSave(p){
+ const json=x=>ContentService.createTextOutput(JSON.stringify(x)).setMimeType(ContentService.MimeType.JSON);try{sbRequireClientConnection(p);if(!sbHubKeys().includes(p.group)||!sbInlineFolderKey(p.group)||!/^\d{4}$/.test(String(p.password||'')))throw Error('Choose a folder and a four-digit password.');const lock=LockService.getScriptLock();lock.waitLock(20000);try{const state=sbHubState();if(String(p.revision)!==String(state.revision||'0'))throw Error('Settings changed on another device. Refresh before saving.');state.entries=state.entries||{};state.entries[p.group]={...(state.entries[p.group]||{}),enabled:true,password:String(p.password),passwordMonth:sbHubMonth(),mode:'password',revision:Utilities.getUuid()};state.revision=Utilities.getUuid();PropertiesService.getScriptProperties().setProperty('SB_HUB_ACCESS_V1',JSON.stringify(state));return json({ok:true,...sbHubSnapshot(true)});}finally{lock.releaseLock();}}catch(error){return json({ok:false,error:String(error.message||error)});}
+}
+function setupFolderPasswords(){sbInlineFolderInstall();const props=PropertiesService.getScriptProperties(),state=sbHubState();state.entries=state.entries||{};for(const key of sbHubKeys())if(sbInlineFolderKey(key))state.entries[key]={...(state.entries[key]||{}),enabled:true};state.revision=Utilities.getUuid();props.setProperty('SB_HUB_ACCESS_V1',JSON.stringify(state));console.log('Folder passwords ready. Existing passwords and individual file availability are preserved.');}
+
+// ADD as a separate BlogComments.gs file. Keep Code.gs and other feature files.
+const SB_INLINE_BLOG_COMMENT_HEADERS=['ID','Post ID','Thread ID','Reply to ID','Display name','Comment','Created at (UTC)','Author hash','Status','Coach','Request ID','Fingerprint'];
+const SB_INLINE_BLOG_COMMENT_ACTIONS=['blogComments','blogCommentReplies','blogCommentPost','blogCommentDelete','blogCommentsManage','blogCommentsSetEnabled'];
+function setupInlineBlogComments(){
+ const book=sbExamBook();let sheet=book.getSheetByName('Blog comments');if(!sheet)sheet=book.insertSheet('Blog comments');if(!sheet.getLastRow()){sheet.appendRow(SB_INLINE_BLOG_COMMENT_HEADERS);sheet.setFrozenRows(1);}else if(JSON.stringify(sheet.getRange(1,1,1,12).getValues()[0])!==JSON.stringify(SB_INLINE_BLOG_COMMENT_HEADERS))throw Error('Blog comment headers differ. Existing rows were not changed.');
+ const props=PropertiesService.getScriptProperties();if(props.getProperty('SB_BLOG_COMMENTS_READY')!=='true')props.setProperty('SB_BLOG_COMMENTS_ENABLED','true');props.setProperty('SB_BLOG_COMMENTS_READY','true');console.log('Blog comments ready. Deploy a New version of the existing web app. No emails sent; client, calendar, exam and report data were not changed.');
+}
+function sbInlineBlogCommentsHandleEvent(event){
+ let p;try{p=JSON.parse(event?.postData?.contents||'null');}catch{return null;}if(!p||!SB_INLINE_BLOG_COMMENT_ACTIONS.includes(p.action))return null;
+ const json=x=>ContentService.createTextOutput(JSON.stringify(x)).setMimeType(ContentService.MimeType.JSON),lock=LockService.getScriptLock();
+ try{
+  if(event.postData.contents.length>12000)throw Error('Your comment is too long.');
+  const owner=['blogCommentsManage','blogCommentsSetEnabled'].includes(p.action)||Boolean(p.coach);if(owner)sbRequireClientConnection(p);
+  const props=PropertiesService.getScriptProperties(),ready=props.getProperty('SB_BLOG_COMMENTS_READY')==='true',enabled=props.getProperty('SB_BLOG_COMMENTS_ENABLED')==='true';
+  if(!ready){if(p.action==='blogComments')return json({ok:true,ready:false,enabled:false,threads:[],commentCount:0});throw Error('The coach needs to run setupInlineBlogComments and deploy the new version.');}
+  const sheet=sbExamBook().getSheetByName('Blog comments');if(!sheet)throw Error('The Blog comments sheet is missing. Contact your coach.');
+  if(p.action==='blogCommentsManage'){const rows=sbInlineBlogCommentRows(sheet);return json({ok:true,enabled,items:rows.filter(x=>!x.deleted).slice(-100).reverse().map(sbInlineBlogCommentPublic)});}
+  if(p.action==='blogCommentsSetEnabled'){if(typeof p.enabled!=='boolean')throw Error('Choose whether comments are open.');props.setProperty('SB_BLOG_COMMENTS_ENABLED',String(p.enabled));return json({ok:true,enabled:p.enabled});}
+  const postId=String(p.postId||'');if(p.action==='blogCommentDelete'){if(!/^[a-zA-Z0-9_-]{1,100}$/.test(postId))throw Error('Unknown blog post.');}else sbInlineBlogCommentPostExists(postId);
+  if(p.action==='blogComments'||p.action==='blogCommentReplies'){
+   const before=p.before===undefined?Infinity:Number(p.before);if(before!==Infinity&&(!Number.isSafeInteger(before)||before<1))throw Error('Invalid conversation page.');
+   const revision=props.getProperty('SB_BLOG_COMMENTS_REV')||'0',cache=CacheService.getScriptCache(),cacheKey='blog-comments-anonymous-v1:'+sbExamHash(JSON.stringify([postId,p.action,p.rootId||'',before===Infinity?'latest':before,revision]));
+   let cached=null;try{cached=cache.get(cacheKey);}catch{}if(cached)return json({...JSON.parse(cached),enabled});
+   const rows=sbInlineBlogCommentRows(sheet).filter(x=>x.postId===postId);let result;
+   if(p.action==='blogCommentReplies'){const root=rows.find(x=>x.id===p.rootId&&!x.rootId);if(!root)throw Error('This conversation could not be found.');const all=rows.filter(x=>x.rootId===root.id&&!x.deleted&&x.seq<before).sort((a,b)=>b.seq-a.seq),items=all.slice(0,10).reverse();result={ok:true,ready:true,root:sbInlineBlogCommentPublic(root),items:items.map(sbInlineBlogCommentPublic),more:all.length>10,nextBefore:items[0]?.seq||null};}
+   else{const threads=sbInlineBlogCommentThreads(rows).filter(x=>x.activity<before).sort((a,b)=>b.activity-a.activity);result={ok:true,ready:true,threads:threads.slice(0,10),nextBefore:threads.length>10?threads[9].activity:null,commentCount:rows.filter(x=>!x.deleted).length};}
+   const encoded=JSON.stringify(result);try{if(encoded.length<45000)cache.put(cacheKey,encoded,45);}catch{}return json({...result,enabled});
+  }
+  lock.waitLock(20000);const rows=sbInlineBlogCommentRows(sheet);
+  if(p.action==='blogCommentDelete'){
+   const item=rows.find(x=>x.id===String(p.id||'')&&x.postId===postId);if(!item)throw Error('This comment could not be found.');
+   if(!owner&&item.authorHash!==sbInlineBlogCommentAuthor(p.authorToken))throw Error('You can remove only comments made from this browser.');
+   if(!item.deleted)sheet.getRange(item.row,5,1,5).setValues([['','',item.createdAt,item.authorHash,'deleted']]);
+   props.setProperty('SB_BLOG_COMMENTS_REV',Utilities.getUuid());return json({ok:true,id:item.id});
+  }
+  if(!enabled&&!owner)throw Error('New comments are paused. You can still read the conversation.');
+  const requestId=String(p.requestId||''),name=owner?'Speak Boldly coach':sbInlineBlogCommentNickname(sbInlineBlogCommentAuthor(p.authorToken)),body=String(p.body||'').trim(),replyToId=String(p.replyToId||''),authorHash=owner?'coach':sbInlineBlogCommentAuthor(p.authorToken);
+  if(p.website||! /^[a-zA-Z0-9-]{16,100}$/.test(requestId)||name.length>60||/[\r\n]/.test(name)||!body||body.length>1500||(body.match(/https?:\/\//gi)||[]).length>2)throw Error('Use up to 60 characters for a name, 1,500 for a comment and no more than two links.');
+  const fingerprint=sbExamHash(JSON.stringify([postId,replyToId,name,body,authorHash,owner]));const existing=rows.find(x=>x.requestId===requestId);
+  if(existing){if(existing.fingerprint!==fingerprint)throw Error('This comment changed. Please try a new comment.');if(existing.deleted)throw Error('This comment was removed.');return json({ok:true,comment:sbInlineBlogCommentPublic(existing),thread:sbInlineBlogCommentThreads(rows.filter(x=>x.postId===postId)).find(x=>x.root.id===(existing.rootId||existing.id))});}
+  let rootId='';if(replyToId){const parent=rows.find(x=>x.id===replyToId&&x.postId===postId&&!x.deleted);if(!parent)throw Error('That comment was removed. Choose another comment to reply to.');rootId=parent.rootId||parent.id;}
+  const now=Date.now(),today=Utilities.formatDate(new Date(now),'Africa/Cairo','yyyy-MM-dd'),daily=rows.filter(x=>Utilities.formatDate(new Date(x.createdAt),'Africa/Cairo','yyyy-MM-dd')===today);
+  if(!owner&&(daily.filter(x=>!x.coach).length>=200||daily.filter(x=>x.authorHash===authorHash).length>=50||rows.filter(x=>x.authorHash===authorHash&&Date.parse(x.createdAt)>now-300000).length>=8))throw Error('Give the conversation a little breathing room. Please try again later.');
+  if(rows.length>=4000)throw Error('Comments are full for now. Your coach needs to archive older conversations.');
+  const id=Utilities.getUuid(),createdAt=new Date(now).toISOString(),safe=v=>/^[=+\-@\t\r]/.test(v)?"'"+v:v,row=sheet.getLastRow()+1;
+  sheet.getRange(row,1,1,12).setValues([[id,postId,rootId,replyToId,safe(name),safe(body),createdAt,authorHash,'published',owner,requestId,fingerprint]]);
+  props.setProperty('SB_BLOG_COMMENTS_REV',Utilities.getUuid());const comment={id,postId,rootId,replyToId,name,body,createdAt,authorHash,deleted:false,coach:owner,requestId,fingerprint,seq:row,row};rows.push(comment);
+  return json({ok:true,comment:sbInlineBlogCommentPublic(comment),thread:sbInlineBlogCommentThreads(rows.filter(x=>x.postId===postId)).find(x=>x.root.id===(rootId||id))});
+ }catch(error){return json({ok:false,error:String(error.message||error)});}finally{if(lock.hasLock())lock.releaseLock();}
+}
+function sbInlineBlogCommentAuthor(value){if(typeof value!=='string'||! /^[a-zA-Z0-9-]{64,160}$/.test(value))throw Error('Reload the page before commenting.');return sbExamHash(value);}
+function sbInlineBlogCommentPostExists(id){
+ if(!/^[a-zA-Z0-9_-]{1,100}$/.test(id))throw Error('Unknown blog post.');const today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');
+ if(id==='your-english-is-not-your-worth'&&today>='2026-10-27')return;
+ const sheet=sbExamBook().getSheetByName('Bold Blog');if(sheet&&sheet.getLastRow()>1&&sheet.getRange(2,1,sheet.getLastRow()-1,8).getValues().some(r=>String(r[0])===id&&r[5]===true&&String(r[3]).replace(/^'/,'')<=today))return;
+ throw Error('This blog post is not published.');
+}
+function sbInlineBlogCommentRows(sheet){const plain=v=>String(v||'').replace(/^'(?=[=+\-@\t\r])/,'');return sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,12).getValues().map((r,i)=>({id:String(r[0]),postId:String(r[1]),rootId:String(r[2]),replyToId:String(r[3]),name:plain(r[4]),body:plain(r[5]),createdAt:String(r[6]),authorHash:String(r[7]),deleted:String(r[8])==='deleted',coach:r[9]===true,requestId:String(r[10]),fingerprint:String(r[11]),seq:i+2,row:i+2})):[];}
+function sbInlineBlogCommentPublic(item){return{id:item.id,postId:item.postId,rootId:item.rootId,replyToId:item.replyToId,name:item.deleted?'':item.coach?'Speak Boldly coach':sbInlineBlogCommentNickname(item.authorHash),body:item.deleted?'':item.body,createdAt:item.createdAt,deleted:item.deleted,coach:!item.deleted&&item.coach,seq:item.seq};}
+function sbInlineBlogCommentThreads(rows){
+ const groups=new Map();for(const item of rows)if(item.rootId&&!item.deleted){if(!groups.has(item.rootId))groups.set(item.rootId,[]);groups.get(item.rootId).push(item);}
+ return rows.filter(x=>!x.rootId).map(root=>{const replies=(groups.get(root.id)||[]).sort((a,b)=>a.seq-b.seq);return{root:sbInlineBlogCommentPublic(root),replies:replies.slice(-3).map(sbInlineBlogCommentPublic),replyCount:replies.length,moreReplies:replies.length>3,replyBefore:replies.slice(-3)[0]?.seq||null,activity:Math.max(root.seq,...replies.map(x=>x.seq))};}).filter(x=>!x.root.deleted||x.replyCount);
+}
+
+function sbInlineBlogCommentNickname(hash){const adjectives=["Bold","Curious","Sunny","Brave","Clever","Cheerful","Dreamy","Friendly","Gentle","Happy","Jolly","Kind","Lively","Lucky","Merry","Playful","Thoughtful","Witty","Wondering","Daring","Bubbly","Cosy","Dancing","Fearless","Giggly","Hopeful","Joyful","Mighty","Peaceful","Sparkling","Spirited","Whimsical"],animals=["Lion","Panda","Otter","Penguin","Owl","Fox","Dolphin","Koala","Tiger","Rabbit","Falcon","Turtle","Badger","Bear","Butterfly","Cat","Deer","Elephant","Flamingo","Giraffe","Hedgehog","Lemur","Lynx","Meerkat","Narwhal","Parrot","Peacock","Puffin","Raccoon","Robin","Seal","Squirrel"];let value=2166136261;for(let i=0;i<hash.length;i++)value=Math.imul(value^hash.charCodeAt(i),16777619)>>>0;return adjectives[value%adjectives.length]+' '+animals[Math.floor(value/adjectives.length)%animals.length];}

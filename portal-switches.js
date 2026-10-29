@@ -1,3 +1,4 @@
+import {learningDocumentTitle} from './learning-document-cards.js?v=exercise-titles-1';
 import {learningHubItemSection} from './learning-hub-sections.js?v=exam-rebuild';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 export function initializePortalSwitches(doc,isUnlocked,loader) {
@@ -5,10 +6,10 @@ export function initializePortalSwitches(doc,isUnlocked,loader) {
  const list=root.querySelector('.portal-switch-list'),status=root.querySelector('[role=status]');let generation=0,loading=false;
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
  function render(catalog,preview=false){const current=generation;list.replaceChildren();
-  for(const [section,title]of [['exams','Examinations'],['listening','Listening'],['material','Material']]) {
+  for(const [section,title]of [['material','Learning Library'],['listening','Audio files'],['exams','Exam files']]) {
     const group=doc.createElement('details'),summary=text('summary',title);group.append(summary);
-    for(const item of catalog.filter(item=>learningHubItemSection(item)===section)) {
-     const row=doc.createElement('div');row.className='portal-access-switch';const name=text('span',item.title),button=doc.createElement('button');button.type='button';button.className='button light small';button.disabled=preview;
+    for(const item of catalog.filter(item=>learningHubItemSection(item)===section&&!String(item.id||'').startsWith('test:')&&!item.isFolder&&!item.folder&&(item.driveFileId||item.url||String(item.id||'').startsWith('file:')))) {
+     const row=doc.createElement('div');row.className='portal-access-switch';const name=text('span',learningDocumentTitle(item.title)),button=doc.createElement('button');button.type='button';button.className='button light small';button.disabled=preview;
      function update(){row.classList.toggle('portal-item-dimmed',!item.enabled);button.textContent=item.enabled?'Dim':'Undim';button.setAttribute('aria-pressed',String(item.enabled));button.setAttribute('aria-label',(item.enabled?'Dim ':'Undim ')+item.title);}
      update();button.onclick=async()=>{
       if(!isUnlocked())return;button.disabled=true;status.textContent='Saving access…';
@@ -19,7 +20,7 @@ export function initializePortalSwitches(doc,isUnlocked,loader) {
     if(group.children.length===1)group.append(text('p','No files uploaded yet.'));list.append(group);
    }
  }
- const defaults=Array.from({length:8},(_,i)=>({id:'test:'+(i+1),section:'tests',title:'Level '+(i+1),url:'',enabled:false}));
+ const defaults=[];
  render(defaults,true);
  async function refresh() {
   if(!isUnlocked()||loading)return;const current=generation;loading=true;

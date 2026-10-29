@@ -23,5 +23,6 @@ export function createBlogComments(doc,win,post){
  const inView=()=>{const rect=details.getBoundingClientRect();return rect.bottom>0&&rect.top<win.innerHeight;};
  const start=()=>{if(dead||!details.isConnected)return;details.open=true;if(!loaded)load();if(!poll)poll=win.setInterval(()=>{if(valid()&&inView()&&!doc.hidden&&!posting&&!loading&&!browsingHistory&&!form.elements.body.value.trim())load(null,true);},30000);};
  let observer=null;if(win.IntersectionObserver){observer=new win.IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting))start();},{rootMargin:'200px'});observer.observe(details);}else win.setTimeout(start,0);
+ win.setTimeout(()=>{if(valid()&&!loaded&&!loading)void load();},0);
  const jump=()=>{details.open=true;details.scrollIntoView({block:'start',behavior:'smooth'});};return{element:details,jump,destroy(){dead=true;observer?.disconnect();win.clearInterval(poll);for(const c of controllers)c.abort();controllers.clear();details.remove();}};
 }
