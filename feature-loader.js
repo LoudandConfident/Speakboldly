@@ -1,7 +1,7 @@
 // Large portal and practice modules are fetched only when their page is opened.
 export function initializeFeatureLoader(doc,win){
  const groups={
-  'students-portal':['./learning-hub-entry.js?v=mobile-exams-3'],
+  'students-portal':['./learning-hub-entry.js?v=restored-challenge-1'],
   'assessment':['./placement-assessment.js?v=performance-1'],
   'reviews':['./reviews.js?v=fast-snapshot-2'],
   'daily-quote':['./home-gallery.js?v=fast-open-1'],
@@ -14,7 +14,7 @@ export function initializeFeatureLoader(doc,win){
  let adminPending=null,missionPending=null;
  async function ensureAdmin(){if(adminReady)return true;if(!adminPending)adminPending=optional('./admin-portal.js?v=mobile-exams-3','Instructor dashboard').then(ok=>{adminReady=ok;adminPending=null;return ok;});return adminPending;}
  doc.addEventListener('click',async event=>{const button=event.target.closest?.('[data-portal-area="admin"]');if(!button||adminReady)return;event.preventDefault();event.stopImmediatePropagation();if(await ensureAdmin()&&win.location.hash.startsWith('#students-portal'))button.click();},true);
- doc.addEventListener('daily-mission-open',async event=>{if(missionReady)return;event.stopImmediatePropagation();if(!missionPending)missionPending=optional('./daily-idioms-page.js?v=1','Daily Idioms').then(ok=>{missionReady=ok;missionPending=null;return ok;});if(await missionPending&&doc.querySelector('[data-portal-tab="mission"]')?.getAttribute('aria-selected')==='true')doc.dispatchEvent(new win.Event('daily-mission-open'));},true);
+ doc.addEventListener('daily-mission-open',async event=>{if(missionReady)return;event.stopImmediatePropagation();if(!missionPending)missionPending=optional('./daily-mission.js?v=restored-challenge-1','Daily Challenge').then(ok=>{missionReady=ok;missionPending=null;return ok;});if(await missionPending&&doc.querySelector('[data-portal-tab="mission"]')?.getAttribute('aria-selected')==='true')doc.dispatchEvent(new win.Event('daily-mission-open'));},true);
  async function assessment(){const root=doc.getElementById('assessment');if(!root)return;if(pending.has('assessment'))return;const note=doc.createElement('p');note.className='sb-loading';note.setAttribute('role','status');note.setAttribute('aria-label','Loading assessment');doc.getElementById('placement-form').prepend(note);const task=import('./placement-assessment.js?v=performance-1');pending.set('assessment',task);try{await task;note.remove();}catch{pending.delete('assessment');note.className='';note.textContent='The assessment could not load. ';const retry=doc.createElement('button');retry.type='button';retry.className='button light small';retry.textContent='Try again';retry.onclick=()=>{note.remove();assessment();};note.append(retry);}}
  doc.addEventListener('assessment-open',assessment);
 
