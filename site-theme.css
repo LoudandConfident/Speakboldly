@@ -514,6 +514,12 @@ main #home>.home-bottom-row{margin:0;padding:19px 6% 8px}
 
 #contact .contact-whatsapp-actions{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin:20px 0}#contact .contact-whatsapp-actions .button{margin:0;max-width:100%;white-space:normal}#contact .contact-whatsapp-pending{font-size:11px;color:var(--muted);line-height:1.5}
 
+#contact .contact-whatsapp-actions .instagram-contact{background:#edf0e6!important;color:#193c32!important;border:1px solid #cbd5c4!important;box-shadow:none;min-height:44px;text-decoration:none!important}
+#contact .contact-whatsapp-actions .instagram-contact:hover{background:#dfe7d6!important;border-color:#a7ba9b!important;color:#193c32!important;text-decoration:none!important}
+#contact .contact-whatsapp-actions .instagram-contact:focus-visible{outline:3px solid #8aab4f;outline-offset:4px}
+
+#contact .contact-whatsapp-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,max-content));align-items:stretch!important;gap:12px;max-width:100%}#contact .contact-whatsapp-actions .button{justify-content:center;text-align:center}#contact .contact-whatsapp-actions .whatsapp-contact{grid-column:1/-1;justify-self:start}@media(max-width:420px){#contact .contact-whatsapp-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#contact .contact-whatsapp-actions .button{font-size:12px;padding:12px 13px!important;line-height:1.5}}
+
 /* student-polish.css */
 /* Consistent type scale, quiet palette and compact page rhythm. */
 main [data-view]>h2,main .courses-heading h2,main .quote-editorial-title,main .join-editorial-title,main #contact>h2{font-size:clamp(28px,3.6vw,45px)!important;line-height:1.16!important;letter-spacing:-1.1px!important}
