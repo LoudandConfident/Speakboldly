@@ -1,1 +1,49 @@
-{"reviews":[]}
+{
+  "reviews": [
+    {
+      "id": "9be9413c-0ec3-4f9e-9cc7-9ac9bd3be2e4",
+      "createdAt": "2026-10-28T11:11:39.394Z",
+      "name": "Ahmed",
+      "age": "39",
+      "program": "General English — 8 sessions",
+      "level": "8",
+      "message": "An outstanding learning experience—10/10!\n\nA huge thank you to Ms. Mira for her dedication, professionalism, and all the effort she put into helping me improve. Her clear explanations, well-organized lessons, and constant encouragement made learning feel natural and enjoyable. Thanks to her, I can now speak with much greater ease and confidence.\n\nWhat truly sets her apart from other teachers I’ve learned with is her ability to make you love the language and look forward to every lesson. She genuinely cares about your progress, and it shows in everything she does.\n\nFrom my experience, the quality of teaching here far exceeds that of many big-name language centers. A famous name means little without skilled teachers who actually help you move forward.\n\nThank you, Ms. Mira, for making such a meaningful difference in my learning journey. I couldn’t recommend this course more highly."
+    },
+    {
+      "id": "6718f962-14a4-466b-b2af-feeab6062d94",
+      "createdAt": "2026-10-27T21:20:56.848Z",
+      "name": "Monica",
+      "age": "30",
+      "program": "General English — 8 sessions",
+      "level": "Level2",
+      "message": "I’m honestly getting so much out of this course! It’s helping me connect the dots and reach insights much faster than I expected. The material is really valuable, and the sessions are super practical, with things I can actually apply in real life.\nYou’re knowledgeable, trustworthy, always eager to learn and grow, and such a warm and approachable person. Your experience is truly valuable, and I love how much you share and how helpful it is to everyone around you. I’m really glad I got to learn from you! ❤️"
+    },
+    {
+      "id": "5d1d19ae-2f78-4cdd-aaaf-bab02a7a4be6",
+      "createdAt": "2026-10-27T17:30:02.901Z",
+      "name": "Mazen Ashraf Ahmed",
+      "age": "21",
+      "program": "General English — 8 sessions",
+      "level": "A2",
+      "message": "Honestly, it was one of the best English learning experiences I’ve ever had. The private sessions helped me focus on my needs and feel comfortable asking questions without feeling embarrassed or stressed.\n\nShe is very helpful, supportive, and always does her best to help you improve. She also creates an action plan that matches your level and helps you work on your weaknesses step by step. I really appreciate her effort and the way she makes learning English easier and more enjoyable. I highly recommend Speak Boldly to anyone who wants to improve their English and become more confident."
+    },
+    {
+      "id": "86a61874-1831-448e-8225-1277ed6182aa",
+      "createdAt": "2026-10-10T19:30:55.886Z",
+      "name": "Anonymous",
+      "age": "",
+      "program": "General English",
+      "level": "2",
+      "message": "Very good👍🏼"
+    },
+    {
+      "id": "c951b63f-77bd-4242-911d-b5e0b0abf61b",
+      "createdAt": "2026-10-10T11:01:57.332Z",
+      "name": "Anonymous",
+      "age": "",
+      "program": "Interview preparation workshop",
+      "level": "1",
+      "message": "Amazing! I love it"
+    }
+  ]
+}
