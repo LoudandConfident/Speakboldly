@@ -2,7 +2,7 @@ import {initializePersonalCalendar} from './personal-calendar.js?v=phone-sync-2'
 import {createTaskReminder} from './task-reminder.js?v=1';
 import {initializeRewardsAdmin} from './rewards-admin.js?v=contact-management-2';
 import {initializePracticeZoneSetup} from './practice-zone-setup.js';
-import {decorateClientActions,setClientStatusAction} from './client-actions.js?v=compact-3';
+import {decorateClientActions,setClientStatusAction} from './client-actions.js?v=linear-mini-4';
 import {showSubmissionSuccess} from './submission-success.js';
 import {initializeHoursAdjustment} from './client-hours-adjustment.js';
 import {initializeBoldlyNotesEditor} from './boldly-notes-editor.js?v=fast-open-1';
