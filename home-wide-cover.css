@@ -121,22 +121,3 @@ main #home .home-pricing-note{display:flex!important;flex-direction:column!impor
 
 main #home .home-free-offers{display:flex!important;flex-direction:column!important;align-items:flex-start;gap:4px!important;font-size:inherit!important;white-space:normal}main #home .home-free-offers>[aria-hidden=true]{display:none!important}
 
-/* Fit the original desktop scene on phones, including the teacher's screen. */
-@media(max-width:680px){main #home .home-picture-and-reviews .coaching-photo img{object-fit:contain!important;object-position:center center!important;transform:none!important}}
-
-/* Compact laptop composition on phones; never stretch the photo into a tall cover. */
-@media(max-width:680px){
- main #home:not([hidden]){display:block!important;height:auto!important;min-height:0!important;padding:24px 0!important;background:#faf9f4!important}
- main #home:not([hidden]) .hero{height:auto!important;max-height:none!important;aspect-ratio:12/5!important;width:100%!important}
- main #home .hero-copy{width:62%!important;height:calc(100% - 20px)!important;padding:2.5cqw 3.5cqw!important;justify-content:center!important}
- main #home .home-kicker{font-size:1.4cqw!important;line-height:1.3!important;letter-spacing:.12cqw!important;margin:0 0 1.1cqw!important}
- main #home .hero-copy .home-slogan{font-size:4.7cqw!important;line-height:1.08!important;letter-spacing:-.08cqw!important;margin:0 0 1.4cqw!important}
- main #home .home-title-bottom{font-size:2.8cqw!important;line-height:1.2!important;margin-top:.8cqw!important}
- main #home .home-pricing-note{font-size:1.8cqw!important;line-height:1.35!important;gap:.5cqw!important;margin:0 0 1.2cqw!important}
- main #home .home-free-offers{gap:.3cqw!important}
- main #home .hero .home-speech-links{flex-wrap:nowrap!important;gap:1.3cqw!important}
- main #home .hero .home-speech-links .home-speech-bubble,main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){flex:1 1 0!important;width:auto!important;height:44px!important;min-height:44px!important;padding:5px 6px 12px!important}
- main #home .hero .home-speech-links .home-speech-bubble>span{font-size:2.2cqw!important;line-height:1.2!important}
- main #home .hero>.home-cover-benefits{bottom:1.5cqw!important;padding-top:1cqw!important;font-size:1.3cqw!important;line-height:1.3!important}
- main #home:not([hidden])>.home-bottom-row{margin-top:16px!important;padding:0 4% 12px!important}
-}
