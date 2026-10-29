@@ -33,3 +33,7 @@ main>[data-view] .sb-page-intro-title{font:500 20px/1.35 'DM Sans',sans-serif!im
 main>[data-view]:not(#home) .sb-page-heading .sb-page-title{align-self:center!important}
 
 main>[data-view]:not(#home) .sb-page-heading .sb-page-title :is(em,strong,span){font-size:inherit!important;line-height:inherit!important;font-family:inherit!important;font-weight:inherit!important}
+
+/* Portal headings also use the compact page-title scale. */
+:is(#admin-portal,#students-portal) :is(.admin-dashboard-heading>h3,.learning-space-heading h3,#admin-client-page-title,.portal-panel>h2,.portal-panel>h3,.learning-panel>h3,.learning-panel>h2){font:600 20px/1.35 'DM Sans',sans-serif!important;letter-spacing:-.2px!important;margin:0!important}
+:is(#admin-portal,#students-portal) :is(.admin-dashboard-heading>h3,.learning-space-heading h3) :is(em,strong,span){font:inherit!important}
