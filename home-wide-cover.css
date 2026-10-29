@@ -160,3 +160,14 @@ main #home .home-free-offers{display:flex!important;flex-direction:column!import
  main #home .hero-copy .home-pricing-note{left:18px!important;transform:none!important;width:67%!important;align-items:flex-start!important;text-align:left!important}
  main #home .hero-copy .home-free-offers{align-items:flex-start!important;text-align:left!important}
 }
+
+/* A shorter mobile scene, with every text/action group on the left. */
+@media(max-width:680px){
+ main #home:not([hidden]) .hero{height:max(560px,calc(100svh - 210px))!important;min-height:560px!important}
+ main #home .home-picture-and-reviews .coaching-photo img{object-position:right center!important}
+ main #home .hero .home-speech-links{left:18px!important;transform:none!important;justify-content:flex-start!important}
+ main #home .home-pricing-note>strong,main #home .home-free-offers>strong{animation:home-offer-bounce 2.8s ease-in-out infinite}
+ main #home .home-free-offers>strong:first-child{animation-delay:.35s!important}main #home .home-free-offers>strong:last-child{animation-delay:.7s!important}
+}
+@keyframes home-offer-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@media(prefers-reduced-motion:reduce){main #home .home-pricing-note>strong,main #home .home-free-offers>strong{animation:none!important}}
