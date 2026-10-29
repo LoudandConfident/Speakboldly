@@ -1,13 +1,13 @@
 /* One consistent page title beside its Back arrow, without a reserved blank row. */
 main>[data-view]:not(#home){padding-top:16px!important}
 main>[data-view]:not(#home) .sb-page-heading{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;width:100%;min-width:0;margin:0 0 16px!important;padding:0!important;position:relative}
-main>[data-view]:not(#home) .sb-page-heading .sb-page-title{font:600 30px/1.2 'DM Sans',sans-serif!important;letter-spacing:-.6px!important;color:#193c32!important;margin:0!important;padding:0!important;min-width:0}
+main>[data-view]:not(#home) .sb-page-heading .sb-page-title{font:600 20px/1.35 'DM Sans',sans-serif!important;letter-spacing:-.2px!important;color:#193c32!important;margin:0!important;padding:0!important;min-width:0}
 main>[data-view]:not(#home) .sb-page-heading>#page-back-arrow{position:static!important;display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 40px;width:40px!important;min-height:44px!important;height:44px!important;max-width:40px;margin:0!important;padding:0!important;border:0;background:transparent;transform:none!important}
 main>[data-view]:not(#home) .sb-page-heading>#page-back-arrow[hidden]{display:none!important}
 main>[data-view]:not(#home) .sb-page-heading>#page-back-arrow svg{width:28px;height:22px}
 main>[data-view]:not(#home) .sb-page-heading>.bold-blog-brand{margin-left:auto;flex:none}
 main>[data-view]:not(#home) .sb-page-heading>.bold-blog-brand img{width:82px!important;height:82px!important;object-fit:contain}
-main>[data-view] .sb-page-intro-title{font:500 24px/1.35 'DM Sans',sans-serif!important;letter-spacing:-.3px!important;margin:0 0 14px!important}
+main>[data-view] .sb-page-intro-title{font:500 20px/1.35 'DM Sans',sans-serif!important;letter-spacing:-.3px!important;margin:0 0 14px!important}
 #daily-quote .motivation-page-tagline{font:400 13px/1.6 'DM Sans',sans-serif;margin:-6px 0 18px;color:#56715e}
 #boldly-notes .bold-blog-tagline{font:400 13px/1.6 'DM Sans',sans-serif!important;margin:0 0 8px!important}
 #boldly-notes .blog-article-toolbar,#boldly-notes .blog-article-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:8px;margin:14px 0!important;padding:0!important}
@@ -18,16 +18,18 @@ main>[data-view] .sb-page-intro-title{font:500 24px/1.35 'DM Sans',sans-serif!im
 #students-portal .learning-space-heading{display:grid!important;grid-template-columns:auto minmax(0,1fr);column-gap:10px;align-items:center;position:relative}
 #students-portal .learning-space-heading>[data-learning-back]{position:static!important;grid-column:1;grid-row:1;display:inline-flex;align-items:center;justify-content:center;margin:0!important;width:40px;min-height:44px;padding:0!important;border:0!important;background:transparent!important}
 #students-portal .learning-space-heading>[data-learning-back][hidden]{display:none!important}
-#students-portal .learning-space-heading>h3{grid-row:1;grid-column:2;font:600 30px/1.2 'DM Sans',sans-serif!important;letter-spacing:-.6px!important;margin:0!important;padding:0!important}
+#students-portal .learning-space-heading>h3{grid-row:1;grid-column:2;font:600 20px/1.35 'DM Sans',sans-serif!important;letter-spacing:-.2px!important;margin:0!important;padding:0!important}
 #students-portal .learning-space-heading:not(:has([data-learning-back]:not([hidden])))>h3{grid-column:1/-1}
 #students-portal .learning-space-heading>p{grid-column:1/-1;margin:8px 0!important;font-size:13px!important}
 #students-portal.portal-session-active>.sb-page-heading{display:none!important}
 #students-portal .learning-breadcrumbs{margin:8px 0 14px!important}
-@media(max-width:760px){main>[data-view]:not(#home){padding-top:12px!important}main>[data-view]:not(#home) .sb-page-heading{gap:7px!important;margin-bottom:12px!important}main>[data-view]:not(#home) .sb-page-heading .sb-page-title,#students-portal .learning-space-heading>h3{font-size:26px!important}main>[data-view] .sb-page-intro-title{font-size:21px!important}main>[data-view]:not(#home) .sb-page-heading>.bold-blog-brand img{width:64px!important;height:64px!important}#students-portal:has(#daily-mission:not([hidden])){padding-top:12px!important}}
+@media(max-width:760px){main>[data-view]:not(#home){padding-top:12px!important}main>[data-view]:not(#home) .sb-page-heading{gap:7px!important;margin-bottom:12px!important}main>[data-view]:not(#home) .sb-page-heading .sb-page-title,#students-portal .learning-space-heading>h3{font-size:20px!important}main>[data-view] .sb-page-intro-title{font-size:20px!important}main>[data-view]:not(#home) .sb-page-heading>.bold-blog-brand img{width:64px!important;height:64px!important}#students-portal:has(#daily-mission:not([hidden])){padding-top:12px!important}}
 
-:is(#courses,#vision,#reviews,#how,#contact,#quote,#join-team,#learner-profile,#learner-results,#placement) .sb-page-intro-title{font:500 24px/1.35 'DM Sans',sans-serif!important;letter-spacing:-.3px!important;margin:0 0 14px!important}
-#boldly-notes [data-notes-reader]>h2{font:600 26px/1.3 'DM Sans',sans-serif!important;margin:12px 0!important}
+:is(#courses,#vision,#reviews,#how,#contact,#quote,#join-team,#learner-profile,#learner-results,#placement) .sb-page-intro-title{font:500 20px/1.35 'DM Sans',sans-serif!important;letter-spacing:-.3px!important;margin:0 0 14px!important}
+#boldly-notes [data-notes-reader]>h2{font:600 20px/1.35 'DM Sans',sans-serif!important;margin:12px 0!important}
 #students-portal .daily-seven>h3:first-child,#students-portal #portal-monthly>h3:first-child{display:none!important}
-@media(max-width:760px){:is(#courses,#vision,#reviews,#how,#contact,#quote,#join-team,#learner-profile,#learner-results,#placement) .sb-page-intro-title{font-size:21px!important}}
+@media(max-width:760px){:is(#courses,#vision,#reviews,#how,#contact,#quote,#join-team,#learner-profile,#learner-results,#placement) .sb-page-intro-title{font-size:20px!important}}
 
 main>[data-view]:not(#home) .sb-page-heading .sb-page-title{align-self:center!important}
+
+main>[data-view]:not(#home) .sb-page-heading .sb-page-title :is(em,strong,span){font-size:inherit!important;line-height:inherit!important;font-family:inherit!important;font-weight:inherit!important}
