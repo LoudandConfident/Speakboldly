@@ -3,6 +3,7 @@
 const SB_GE_HEADERS=['ID','Created at','Level','Status','Record JSON'];
 const SB_GE_ACTIONS=['geExamSettings','geExamStart','geExamGet','geExamDraft','geExamSubmit','geExamOwnerSettings','geExamSaveSettings','geExamList','geExamReview','geExamRetry','geExamWord','geSpeakingList','geSpeakingStart','geSpeakingGet','geSpeakingSave','geSpeakingWord','geTaskReminder','geTaskReminderPreview'];
 function sbGeneralEnglishExamsHandleEvent(event){
+ if(typeof sbRewardsHandleEvent==='function'){const rewardResponse=sbRewardsHandleEvent(event);if(rewardResponse!==null)return rewardResponse;}
  sbInlineFolderInstall();
  let p;try{p=JSON.parse(event?.postData?.contents||'null');}catch{return null;}
  if(p&&SB_INLINE_BLOG_COMMENT_ACTIONS.includes(p.action))return sbInlineBlogCommentsHandleEvent(event);

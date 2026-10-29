@@ -8,18 +8,11 @@ Open the Google Sheet that contains **Clients** and **Sessions** → Extensions 
 
 This is the Clients project, **not the separate Reviews project**. Review rewards remain inactive.
 
-## 2. Add this small routing block inside the existing doPost
+## 2. Routing through the current portal update
 
-Find the existing `function doPost(...) {` in **Code.gs**. Paste the following block immediately after its opening `{`, before its current code:
+The latest supplied GeneralEnglishExams.gs forwards reward requests before private client authentication. Replace the contents of that existing file with the supplied private update. If the existing General English routing hook is already installed, no Code.gs edit is needed. Keep Code.gs and the current deployment URL.
 
-```js
-  if (typeof sbRewardsHandleEvent === 'function') {
-    const rewardResponse = sbRewardsHandleEvent(arguments[0]);
-    if (rewardResponse !== null) return rewardResponse;
-  }
-```
-
-The existing function parameter can be `event`, `e`, or another name: this block uses `arguments[0]`, so no renaming is needed. Keep everything else in `doPost` unchanged.
+For an installation without that existing General English hook, use the routing instructions in GENERAL-ENGLISH-EXAMS-SETUP.md first. Do not create another doPost.
 
 ## 3. Save and run setupRewards once
 
@@ -37,10 +30,9 @@ Refresh the website. The public reward sections activate only when this deployme
 
 ## Locations and qualification
 
-- **Contact**, above FAQ: Share & Save and Refer & Save.
-- **Student Dashboard**, below the learning-space cards: Your rewards.
-- After successfully opening Share or copying the share URL for a blog/motivation: optional Claim your 10% voucher.
-- **Instructor Dashboard → Rewards · claims and vouchers**: inspect proof, approve and email, decline, resend, or redeem.
+- **Contact Us**: public Share & Save and Refer & Save offers.
+- **Contact Us → Manage vouchers · instructor**: private claim checks, approval/email, decline, resend and redemption. Unlock with the existing instructor connection.
+- No reward cards in the student or instructor dashboards, and no extra claim button after blog/motivation sharing.
 
 Share claims require a shared-post URL or a JPG/PNG screenshot (up to 2 MB). Screenshots are kept in a private Drive folder. A Share click alone does not prove publication. Only the instructor can approve a claim.
 
