@@ -2209,7 +2209,6 @@ main>.upcoming-view .sb-page-heading .sb-page-title{opacity:.4!important}
 #students-portal.learning-section-open #portal-content [data-portal-panel]>h3:first-child{display:none!important}
 #students-portal.learning-section-open #portal-content [data-learning-back]{width:40px!important;min-width:40px!important;height:44px!important;min-height:44px!important;margin:0!important}
 #students-portal.learning-section-open #portal-content [data-learning-back] svg{width:28px!important;height:22px!important}
-#main-navigation [data-open-view=quote],#main-navigation [data-open-view=students-portal]{opacity:.45}
 #portal-studio{width:100%!important;max-width:none!important;padding:0!important;background:transparent!important;border:0!important}
 #portal-studio .studio-room-shapes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,4vw,50px);width:100%;padding:18px 0 30px;align-items:stretch}
 #portal-studio .studio-room-shape{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;min-height:320px;padding:32px 28px;background:#edf0e6;border:1px solid #bdcdb5;text-align:center;box-sizing:border-box}
