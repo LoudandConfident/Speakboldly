@@ -13,6 +13,8 @@ export function initializeNavigation(doc,win){
  win.addEventListener('scroll',updateDownArrow,{passive:true});win.addEventListener('resize',updateDownArrow);
  if(down&&win.ResizeObserver){const sizeObserver=new win.ResizeObserver(updateDownArrow);sizeObserver.observe(doc.querySelector('main')||doc.body);}
  const trail=[];const back=doc.createElement('a');back.id='page-back-arrow';back.className='plain-back-arrow';back.setAttribute('aria-label','Back to previous page');back.innerHTML='<svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M35 13H5m11-9L5 13l11 9"/></svg>';back.hidden=true;doc.querySelector('main')?.prepend(back);
+ const pageNames={vision:'Our Vision',how:'SB Method',courses:'Programs',programs:'Programs',reviews:'Reviews',contact:'Contact us',placement:'Assessments','learner-profile':'Learner Test','learner-results':'Your learning profile',quote:'Get a quote','students-portal':'Learning Hub','join-team':'Join us','boldly-notes':'Bold Blog','daily-quote':'Daily Motivation'};
+ const headings=new Map();for(const view of doc.querySelectorAll('[data-view]')){if(view.id==='home')continue;let row,title;const existing=view.querySelector('h2');if(view.id==='boldly-notes'){row=view.querySelector('.bold-blog-masthead');title=row?.querySelector('h2');}if(!row){row=doc.createElement('div');view.prepend(row);if(view.id==='daily-quote'||existing?.textContent.trim().toLowerCase()===pageNames[view.id]?.toLowerCase()){title=existing;row.append(title);}else{title=doc.createElement('h2');title.textContent=pageNames[view.id]||existing?.textContent||'Speak Boldly';row.append(title);if(existing)existing.classList.add('sb-page-intro-title');}}row.classList.add('sb-page-heading');title.classList.add('sb-page-title');headings.set(view.id,row);}
  let active=null,transition=null,request=0;
  function showView(){
   const views=[...doc.querySelectorAll('[data-view]')];
@@ -28,7 +30,7 @@ export function initializeNavigation(doc,win){
    doc.querySelectorAll('[data-open-view]').forEach(b=>{if(b.dataset.openView===(['assessment','learner-profile','learner-results'].includes(next.id)?'placement':next.id)||(b.closest('#main-navigation')&&b.dataset.openView==='programs'&&next.id==='courses'))b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
    if(trail.at(-1)!==next.id){if(trail.at(-2)===next.id)trail.pop();else trail.push(next.id);}
    const parent=['assessment','learner-profile','learner-results'].includes(next.id)?'placement':'home';back.href='#'+(trail.at(-2)||parent);back.hidden=next.id==='home';
-   active=next;const resetScroll=()=>{if(ticket===request)win.scrollTo({top:0,left:0,behavior:'instant'});};resetScroll();win.requestAnimationFrame(()=>win.requestAnimationFrame(resetScroll));updateDownArrow();
+   const heading=headings.get(next.id);if(heading)heading.prepend(back);else doc.querySelector('main')?.prepend(back);active=next;const resetScroll=()=>{if(ticket===request)win.scrollTo({top:0,left:0,behavior:'instant'});};resetScroll();win.requestAnimationFrame(()=>win.requestAnimationFrame(resetScroll));updateDownArrow();
   };
   if(animate&&typeof doc.startViewTransition==='function'){
    const current=doc.startViewTransition(update);transition=current;

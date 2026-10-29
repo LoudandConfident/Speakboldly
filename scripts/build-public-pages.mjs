@@ -6,7 +6,7 @@ import {courses} from '../courses.js';
 import {DOCUMENT_BRAND} from '../document-branding.js';
 import {coursePaths} from '../public-seo-routes.js';
 import {idioms} from '../daily-idiom.js';
-import {dailyQuotes,quoteDetails,quoteForDate} from '../home-gallery.js';
+import {dailyQuotes,quoteDetails,quoteForDate,dailyPractice} from '../home-gallery.js';
 import {publicSiteShell} from './public-site-shell.mjs';
 import {motivationPreviews} from '../motivation-preview-images.js';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),origin='https://speakboldly.space';
@@ -40,7 +40,7 @@ function page(path,{title,description,heading,body,eyebrow='Speak Boldly',noinde
   const post=path.startsWith('/blog/')&&path!=='/blog/'?path.split('/')[2]:'';
   const course=!path.startsWith('/programs/')||path==='/programs/'?'':Object.keys(coursePaths).find(id=>coursePaths[id]===path)||'';
   const selected=path==='/learn/daily-quotes/'?quoteForDate():null;
-  html=publicSiteShell(readFileSync(resolve(root,'index.html'),'utf8'),{path,title:fullTitle,description,graph,view,course,post,image:selected?(motivationPreviews[selected.image]?.image||selected.image):image,imageAlt:selected?.alt||heading,fallback:body,noindex});
+  html=publicSiteShell(readFileSync(resolve(root,'index.html'),'utf8'),{path,title:fullTitle,description,graph,view,course,post,image:selected?(motivationPreviews[selected.image]?.image||selected.image):image,imageAlt:selected?.alt||heading,fallback:body,motivation:selected?{quote:selected.quote,paragraphs:quoteDetails[dailyQuotes.indexOf(selected)].paragraphs||[quoteDetails[dailyQuotes.indexOf(selected)].reflection,dailyPractice[dailyQuotes.indexOf(selected)]]}:null,noindex});
   if(['/learn/daily-idioms/','/learn/daily-challenges/'].includes(path))html=html.replace('data-public-course=','data-public-panel="mission" data-public-idiom="'+(path.includes('idioms')?'true':'false')+'" data-public-course=');
  }
  const relative=path.slice(1)+'index.html';mkdirSync(dirname(resolve(root,relative)),{recursive:true});writeFileSync(resolve(root,relative),html);generated.push(relative);if(!noindex)indexable.push(path);

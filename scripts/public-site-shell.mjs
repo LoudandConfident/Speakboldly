@@ -1,5 +1,5 @@
 // These search URLs render the existing website, rather than a second design.
-export function publicSiteShell(shell,{path,title,description,graph,view,course='',post='',image='/speak-boldly-preview-dark-green.png',imageAlt='',fallback='',noindex=false}){
+export function publicSiteShell(shell,{path,title,description,graph,view,course='',post='',image='/speak-boldly-preview-dark-green.png',imageAlt='',fallback='',motivation=null,noindex=false}){
  const origin='https://speakboldly.space',url=origin+path;
  const escape=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
  let html=shell.replace(/<base href="\/">/g,'').replace(/<title>[\s\S]*?<\/title>/,'<title>'+escape(title)+'</title>');
@@ -12,6 +12,9 @@ export function publicSiteShell(shell,{path,title,description,graph,view,course=
  if(image.includes('/images/tab-previews/'))html=html.replace(/<meta property="og:image:type"[^>]*>/,'<meta property="og:image:type" content="image/jpeg">').replace(/<meta property="og:image:width"[^>]*>/,'<meta property="og:image:width" content="1200">').replace(/<meta property="og:image:height"[^>]*>/,'<meta property="og:image:height" content="630">').replace(/<meta property="og:image:alt"[^>]*>/,'<meta property="og:image:alt" content="'+escape(imageAlt)+'">');
  if(image.includes('/images/tab-previews/reviews-'))html=html.replace(/<meta property="og:image:width"[^>]*>/,'<meta property="og:image:width" content="600">');
  if(view==='daily-quote'){
+  html=html.replace(/<img id="daily-quote-image"[^>]*>/,'<img id="daily-quote-image" src="'+escape(image)+'" alt="'+escape(imageAlt)+'" width="600" height="600" decoding="async" fetchpriority="high">');
+  if(motivation){html=html.replace(/(<blockquote id="daily-quote-text"[^>]*>)[\s\S]*?<\/blockquote>/,'$1<strong>'+escape(motivation.quote)+'</strong></blockquote>').replace('<div id="daily-quote-reflection" class="motivation-reflection"></div>','<div id="daily-quote-reflection" class="motivation-reflection">'+motivation.paragraphs.map(p=>'<p>'+escape(p)+'</p>').join('')+'</div>');}
+  html=html.replace('</head>','<link rel="modulepreload" href="/home-gallery.js?v=instant-motivation-2"><link rel="preload" as="image" href="'+escape(image)+'"></head>');
   html=html.replace(/<meta property="og:image:type"[^>]*>/,'<meta property="og:image:type" content="image/jpeg">').replace(/<meta property="og:image:width"[^>]*>/,'<meta property="og:image:width" content="600">').replace(/<meta property="og:image:height"[^>]*>/,'<meta property="og:image:height" content="600">').replace(/<meta property="og:image:alt"[^>]*>/,'<meta property="og:image:alt" content="'+escape(imageAlt)+'">');
  }
  html=html.replace(/<script type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/g,'');

@@ -20,7 +20,7 @@ import {initializeInstructorBackups} from './instructor-backups.js?v=client-stat
 import {initializeNativeEnglishEditor} from './native-english-editor.js?v=client-status-motivations';
 import {initializeInstructorOverview} from './instructor-overview.js?v=client-status-motivations';
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
-import {openClientReportTab} from './report-tabs.js?v=success-return-1';
+import {openClientReportTab} from './report-tabs.js?v=route-safe-2';
 import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=library-folders';
 import {initializeWeeklyPortalPasswords} from './weekly-portal-passwords.js?v=client-status-motivations';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
