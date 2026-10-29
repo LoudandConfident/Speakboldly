@@ -40,3 +40,11 @@ main>[data-view]:not(#home) .sb-page-heading .sb-page-title :is(em,strong,span){
 
 /* The installed portal uses the same small heading scale as the website. */
 :is(#students-portal,#admin-portal) :is(h2,h3){font-family:'DM Sans',sans-serif!important;font-size:14px!important;line-height:1.4!important;letter-spacing:0!important}
+
+main>[data-view]:not(#home) .sb-page-heading .sb-page-title{text-transform:none!important;letter-spacing:0!important}
+main>[data-view]:not(#home) .sb-page-heading .sb-page-title br{display:none!important}
+#vision .vision-heading:empty{display:none!important}
+#vision .vision-story,#vision .vision-opening{margin-top:0!important;padding-top:0!important}
+#vision .vision-heading{height:auto!important;min-height:0!important;margin:0!important;padding:0!important}
+#vision .vision-opening-copy>p:first-child{margin-top:0!important}
+main>.upcoming-view .sb-page-heading .sb-page-title{opacity:.4!important}
