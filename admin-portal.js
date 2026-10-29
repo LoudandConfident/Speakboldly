@@ -2,7 +2,7 @@ import {initializeBlogCommentsAdmin} from './blog-comments-admin.js?v=1';
 import {initializeGeneralEnglishExamsAdmin} from './general-english-exams-admin.js?v=levels-12-1';
 import {initializeRewardsAdmin} from './rewards-admin.js?v=rewards-1';
 import {initializePracticeZoneSetup} from './practice-zone-setup.js';
-import {decorateClientActions,setClientStatusAction} from './client-actions.js';
+import {decorateClientActions,setClientStatusAction} from './client-actions.js?v=compact-2';
 import {showSubmissionSuccess} from './submission-success.js';
 import {initializeHoursAdjustment} from './client-hours-adjustment.js';
 import {initializeBoldlyNotesEditor} from './boldly-notes-editor.js?v=fast-open-1';
