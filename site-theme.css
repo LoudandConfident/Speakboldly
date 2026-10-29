@@ -520,6 +520,14 @@ main #home>.home-bottom-row{margin:0;padding:19px 6% 8px}
 
 #contact .contact-whatsapp-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,max-content));align-items:stretch!important;gap:12px;max-width:100%}#contact .contact-whatsapp-actions .button{justify-content:center;text-align:center}#contact .contact-whatsapp-actions .whatsapp-contact{grid-column:1/-1;justify-self:start}@media(max-width:420px){#contact .contact-whatsapp-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#contact .contact-whatsapp-actions .button{font-size:12px;padding:12px 13px!important;line-height:1.5}}
 
+/* One equal-sized column, in the requested Instagram/channel/contact order. */
+#contact .contact-whatsapp-actions{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:12px!important;width:100%;max-width:310px}
+#contact .contact-whatsapp-actions .button{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-height:48px!important;height:auto!important;box-sizing:border-box;padding:12px 16px!important;font-size:13px!important;line-height:1.5!important;text-align:center;margin:0!important}
+#contact .contact-whatsapp-actions .instagram-contact{background:#fffefa!important;border-color:#cbd5c4!important}
+#contact .contact-whatsapp-actions .instagram-contact:hover{background:#f1f3eb!important}
+#contact .contact-whatsapp-actions .whatsapp-channel{background:#dce8d8!important;border:1px solid #c4d5be!important;color:#193c32!important}
+#contact .contact-whatsapp-actions .whatsapp-channel:hover{background:#cbdcc5!important}
+
 /* student-polish.css */
 /* Consistent type scale, quiet palette and compact page rhythm. */
 main [data-view]>h2,main .courses-heading h2,main .quote-editorial-title,main .join-editorial-title,main #contact>h2{font-size:clamp(28px,3.6vw,45px)!important;line-height:1.16!important;letter-spacing:-1.1px!important}
@@ -2239,7 +2247,7 @@ main>#students-portal.portal-session-active:not(#home)>.sb-page-heading{display:
 main>[data-view]:not(#home) .sb-page-heading .sb-page-title,
 #students-portal #portal-content .learning-space-heading>h3,
 #students-portal.learning-section-open #portal-content .learning-space-heading>h3,
-#admin-portal .admin-dashboard-heading>h3{font:600 9px/1.6 'DM Sans',sans-serif!important;letter-spacing:1.6px!important;text-transform:uppercase!important;font-style:normal!important}
+#admin-portal .admin-dashboard-heading>h3{font:600 9px/1.6 'DM Sans',sans-serif!important;letter-spacing:.6px!important;text-transform:none!important;font-style:normal!important}
 main>[data-view]:not(#home) .sb-page-heading .sb-page-title :is(em,strong,span){font:inherit!important;letter-spacing:inherit!important;text-transform:inherit!important}
 main #vision.vision-editorial .vision-opening{align-items:center!important}
 main #vision.vision-editorial .vision-opening .vision-gallery-frame{margin-top:0!important}
@@ -2247,6 +2255,8 @@ main #vision.vision-editorial .vision-opening-copy{align-self:center!important}
 main #vision.vision-editorial .vision-opening-copy>p:last-child{margin-bottom:0!important}
 main #vision.vision-editorial .vision-enrollment-promise{padding-top:20px!important}
 @media(max-width:680px){main #vision.vision-editorial .vision-opening .vision-gallery-frame{order:0;margin:0 auto!important}main #vision.vision-editorial .vision-opening-copy{order:1}main #vision.vision-editorial .vision-enrollment-promise{padding-top:16px!important}}
+
+#placement .assessment-options>article>.eyebrow{font:600 9px/1.6 'DM Sans',sans-serif!important;letter-spacing:.6px!important;text-transform:none!important;margin:0 0 12px!important}
 
 /* instructor-calm.css */
 #admin-dashboard .instructor-tool-cards>details.admin-detail{border-radius:18px!important;min-height:0!important}#admin-dashboard .instructor-tool-cards>details.admin-detail>summary{padding:18px!important;line-height:1.5!important;white-space:normal!important;overflow-wrap:anywhere;gap:14px!important;font-size:15px!important;min-height:76px!important;height:auto!important}#admin-dashboard .instructor-tool-cards>details.admin-detail>summary svg{width:46px!important;height:46px!important;flex:none}#admin-dashboard .demo-note,#admin-calendar .calendar-scroll-hint{display:none!important}#admin-calendar .calendar-toolbar{justify-content:center;gap:12px!important;margin-bottom:16px!important}#admin-calendar .calendar-toolbar h4{flex:1 1 100%;text-align:center;margin:0 0 4px!important}#admin-calendar .calendar-primary-actions{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px;width:100%;margin:12px 0 20px}#admin-calendar .calendar-primary-actions>.button{margin:0!important;min-height:44px;padding:10px 17px!important;white-space:normal}#admin-calendar .calendar-primary-actions>div{flex-basis:100%;text-align:center}#admin-calendar .calendar-primary-actions>div .button{display:inline-flex;margin:6px;min-height:44px}.contact-owner-vouchers{padding:16px;border:1px solid #bdcdb5;border-radius:16px;margin:22px 0}.contact-owner-vouchers[hidden]{display:none!important}.contact-owner-vouchers summary{font-size:14px;cursor:pointer}.contact-owner-vouchers>p:empty{display:none}.hub-owner-row.folder-password-row{grid-template-columns:minmax(100px,1fr) minmax(105px,1fr) auto}.hub-owner-row.folder-password-row>p{grid-column:1/-1}#portal-switches .portal-access-switch{gap:12px;align-items:center;line-height:1.6;padding:12px 0}#portal-switches .portal-access-switch>span{min-width:0;overflow-wrap:anywhere}@media(max-width:600px){.hub-owner-row.folder-password-row{grid-template-columns:minmax(0,1fr) auto;gap:12px}.hub-owner-row.folder-password-row>strong{grid-column:1/-1}#admin-calendar .calendar-primary-actions{gap:10px}#admin-calendar .calendar-primary-actions>.button{font-size:13px;padding:10px 14px!important}#admin-dashboard .instructor-tool-cards>details.admin-detail>summary{padding:16px!important}}

@@ -19,3 +19,11 @@
 #contact .contact-whatsapp-actions .instagram-contact:focus-visible{outline:3px solid #8aab4f;outline-offset:4px}
 
 #contact .contact-whatsapp-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,max-content));align-items:stretch!important;gap:12px;max-width:100%}#contact .contact-whatsapp-actions .button{justify-content:center;text-align:center}#contact .contact-whatsapp-actions .whatsapp-contact{grid-column:1/-1;justify-self:start}@media(max-width:420px){#contact .contact-whatsapp-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}#contact .contact-whatsapp-actions .button{font-size:12px;padding:12px 13px!important;line-height:1.5}}
+
+/* One equal-sized column, in the requested Instagram/channel/contact order. */
+#contact .contact-whatsapp-actions{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:12px!important;width:100%;max-width:310px}
+#contact .contact-whatsapp-actions .button{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-height:48px!important;height:auto!important;box-sizing:border-box;padding:12px 16px!important;font-size:13px!important;line-height:1.5!important;text-align:center;margin:0!important}
+#contact .contact-whatsapp-actions .instagram-contact{background:#fffefa!important;border-color:#cbd5c4!important}
+#contact .contact-whatsapp-actions .instagram-contact:hover{background:#f1f3eb!important}
+#contact .contact-whatsapp-actions .whatsapp-channel{background:#dce8d8!important;border:1px solid #c4d5be!important;color:#193c32!important}
+#contact .contact-whatsapp-actions .whatsapp-channel:hover{background:#cbdcc5!important}
