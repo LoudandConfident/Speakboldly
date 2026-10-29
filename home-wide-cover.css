@@ -121,3 +121,22 @@ main #home .home-pricing-note{display:flex!important;flex-direction:column!impor
 
 main #home .home-free-offers{display:flex!important;flex-direction:column!important;align-items:flex-start;gap:4px!important;font-size:inherit!important;white-space:normal}main #home .home-free-offers>[aria-hidden=true]{display:none!important}
 
+
+/* Phone-specific photograph and readable copy, anchored near the top. */
+@media(max-width:680px){
+ main #home .home-picture-and-reviews .coaching-photo img{object-fit:cover!important;object-position:center center!important}
+ main #home .hero-copy{inset:0 auto auto 0!important;width:85%!important;height:auto!important;min-height:0!important;padding:30px 18px!important;justify-content:flex-start!important;align-items:flex-start!important}
+ main #home .home-kicker{font-size:9px!important;line-height:1.5!important;letter-spacing:1px!important;margin:0 0 22px!important}
+ main #home .hero-copy .home-slogan{font-size:28px!important;line-height:1.12!important;margin:0 0 26px!important;max-width:290px!important}
+ main #home .home-title-bottom{font-size:18px!important;line-height:1.35!important;margin-top:10px!important}
+ main #home .home-pricing-note{font-size:12px!important;line-height:1.5!important;gap:8px!important;margin:0 0 24px!important}
+ main #home .home-free-offers{gap:7px!important}
+ main #home .home-pricing-note>strong,main #home .home-free-offers>strong{animation:home-offer-drift 4s ease-in-out infinite}
+ main #home .home-free-offers>strong:first-child{animation-delay:.5s}main #home .home-free-offers>strong:last-child{animation-delay:1s}
+ main #home .hero .home-speech-links{width:240px!important;max-width:100%!important;flex-wrap:nowrap!important;gap:12px!important}
+ main #home .hero .home-speech-links .home-speech-bubble,main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){flex:1 1 0!important;width:auto!important;min-height:56px!important;height:64px!important;padding:10px 10px 20px!important}
+ main #home .hero .home-speech-links .home-speech-bubble>span{font-size:12px!important}
+}
+@keyframes home-offer-drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media(max-width:680px) and (max-height:700px){main #home .hero-copy{padding-top:22px!important}main #home .home-kicker{margin-bottom:16px!important}main #home .hero-copy .home-slogan{font-size:26px!important;margin-bottom:18px!important}main #home .home-pricing-note{gap:5px!important;margin-bottom:18px!important}main #home .home-free-offers{gap:4px!important}}
+@media(prefers-reduced-motion:reduce){main #home .home-pricing-note>strong,main #home .home-free-offers>strong{animation:none!important}}
