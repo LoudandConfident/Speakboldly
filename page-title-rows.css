@@ -70,3 +70,16 @@ main>.upcoming-view .sb-page-heading .sb-page-title{opacity:.4!important}
 main>#students-portal.portal-session-active:not(#home)>.sb-page-heading{display:none!important}
 #students-portal.learning-section-open #portal-content .learning-space-heading>.dashboard-help-circle{display:none!important}
 #students-portal.learning-section-open #portal-content .learning-space-heading>h3,#students-portal.learning-section-open #portal-content .learning-space-heading>[data-learning-back]{align-self:center!important;grid-row:1!important}
+
+/* Page labels match the homepage eyebrow: small, spaced, uppercase. */
+main>[data-view]:not(#home) .sb-page-heading .sb-page-title,
+#students-portal #portal-content .learning-space-heading>h3,
+#students-portal.learning-section-open #portal-content .learning-space-heading>h3,
+#admin-portal .admin-dashboard-heading>h3{font:600 9px/1.6 'DM Sans',sans-serif!important;letter-spacing:1.6px!important;text-transform:uppercase!important;font-style:normal!important}
+main>[data-view]:not(#home) .sb-page-heading .sb-page-title :is(em,strong,span){font:inherit!important;letter-spacing:inherit!important;text-transform:inherit!important}
+main #vision.vision-editorial .vision-opening{align-items:center!important}
+main #vision.vision-editorial .vision-opening .vision-gallery-frame{margin-top:0!important}
+main #vision.vision-editorial .vision-opening-copy{align-self:center!important}
+main #vision.vision-editorial .vision-opening-copy>p:last-child{margin-bottom:0!important}
+main #vision.vision-editorial .vision-enrollment-promise{padding-top:20px!important}
+@media(max-width:680px){main #vision.vision-editorial .vision-opening .vision-gallery-frame{order:0;margin:0 auto!important}main #vision.vision-editorial .vision-opening-copy{order:1}main #vision.vision-editorial .vision-enrollment-promise{padding-top:16px!important}}
