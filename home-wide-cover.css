@@ -180,3 +180,5 @@ main #home .home-free-offers{display:flex!important;flex-direction:column!import
  main #home .hero-copy .home-slogan{top:calc(37% - 10px)!important}
  main #home .hero-copy .home-pricing-note{top:calc(37% + 82px)!important}
 }
+
+@media(max-width:680px){main #home .hero-copy .home-slogan{top:calc(37% - 30px)!important}}
