@@ -89,3 +89,9 @@ main #vision.vision-editorial .vision-enrollment-promise{padding-top:20px!import
 #students-portal:not(.learning-section-open) #student-folder-title{display:none!important}
 main #vision.vision-editorial .vision-opening{margin-top:24px!important}
 @media(max-width:760px){#contact .contact-orbit{position:relative!important;inset:auto!important;float:none!important;width:100px!important;margin:0 0 22px auto!important;transform:rotate(-8deg)} main #vision.vision-editorial .vision-opening{margin-top:22px!important}}
+
+/* Equal inset between the section rules and the vision promise/map. */
+main #vision.vision-editorial .vision-need-band{margin-bottom:0!important}
+main #vision.vision-editorial .vision-purpose{padding:48px 0!important}
+main #vision.vision-editorial .vision-purpose .vision-enrollment-promise{padding-top:0!important}
+@media(max-width:680px){main #vision.vision-editorial .vision-purpose{padding:40px 0!important}}
