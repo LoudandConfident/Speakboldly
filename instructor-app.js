@@ -1,4 +1,4 @@
-import './admin-portal.js?v=linear-mini-6';
+import './admin-portal.js?v=promotion-tools-7';
 import {clientSheetConnected} from './client-sheet.js?v=domain-email-routing';
 const SESSION='speak-boldly-instructor-app-session-v1';
 const dashboard=document.querySelector('#admin-dashboard'),clientPage=document.querySelector('#admin-client-page'),login=document.querySelector('#admin-login-form'),dialog=document.querySelector('#teacher-login-dialog'),nav=document.querySelector('.app-nav'),lock=document.querySelector('#app-lock'),message=document.querySelector('#app-locked-message');
@@ -13,7 +13,8 @@ document.addEventListener('client-sheet-configured',state);
 function connection(){hidden(document.querySelector('#app-network'),navigator.onLine);}
 window.addEventListener('online',connection);window.addEventListener('offline',connection);connection();state();
 let resume=false;try{resume=sessionStorage.getItem(SESSION)==='1';}catch{}
-if(resume){document.querySelector('#admin-code').value='16051962';login.requestSubmit();}else unlock();
+let savedKey='';if(resume)try{savedKey=JSON.parse(localStorage.getItem('speak-boldly-client-sheet-connection-v1')||'null')?.key||'';}catch{}
+if(resume&&savedKey){document.querySelector('#admin-code').value=savedKey;login.requestSubmit();}else unlock();
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./instructor-sw.js',{scope:'./',updateViaCache:'none'}).catch(()=>{});
 
 

@@ -1,5 +1,5 @@
 import {courseIllustration} from './course-illustrations.js?v=1';
-import {enterHubLevel} from './hub-level-access.js?v=practice-zone-monthly-1';
+import {enterHubLevel} from './hub-level-access.js?v=reward-access-2';
 import {createGeneralEnglishExamForm,collectGeneralEnglishAnswers} from './general-english-exam-form.js?v=levels-12-1';
 export function initializeGeneralEnglishExams(doc,{call,panel,setBusy=()=>{}}){
  const win=doc.defaultView;let generation=0,settings=null,pendingSettings=null,folderOpen=false,entering=false,active=null,queue=Promise.resolve(),tick=null,saveTimer=null;

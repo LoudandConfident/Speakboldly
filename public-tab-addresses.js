@@ -7,7 +7,7 @@ export const PUBLIC_TAB_ROUTES={
  reviews:{path:'/reviews/',title:'Reviews | Speak Boldly'},
  'students-portal':{path:'/student-portal/',title:'Student Dashboard | Speak Boldly'},
  'boldly-notes':{path:'/blog/',title:'Bold Blog from Speak Boldly English Language Coaching'},
- 'daily-quote':{path:'/learn/daily-quotes/',title:'Daily Motivation | Speak Boldly'},
+ 'daily-quote':{path:'/learn/daily-quotes/',title:'Motivation | Speak Boldly'},
  quote:{path:'/get-a-quote/',title:'Get a Quote | Speak Boldly'},
  'join-team':{path:'/join-us/',title:'Join Us | Speak Boldly'},
  contact:{path:'/contact/',title:'Contact Speak Boldly'}

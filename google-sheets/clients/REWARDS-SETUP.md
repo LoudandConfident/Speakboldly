@@ -26,7 +26,7 @@ The existing email helpers `sbVerifiedFrom` and `sbSendDomainEmail` must still b
 
 **Deploy → Manage deployments → select the existing Clients Web app → pencil → New version → Deploy.** Keep the same deployment URL, execute as the owner, and retain public Web app access so claims can be submitted. Do not create a replacement deployment URL.
 
-Refresh the website. The public reward sections activate only when this deployment reports `enabled: true`. Before installation, visitors do not see non-working claim buttons. The instructor Rewards panel remains available with this setup link.
+Refresh the website. Contact Us shows a circular Share & earn button beside the social buttons. It opens the rules, evidence requirements and reward choices. Claims are accepted only when the deployment reports enabled: true; until then the window explains that claims are temporarily unavailable.
 
 ## Locations and qualification
 
@@ -61,3 +61,9 @@ Round eligibility is confirmed by the coach: a new monthly round can be at the s
 5. Confirm Reviews still publish normally without a reward option.
 
 To pause public rewards, set script property **SB_REWARDS_ENABLED** to **false**. This hides public offers; keep existing records. Do not delete the reward sheets.
+
+## Two-month book voucher
+
+A share/referral claim may choose a discount or a two-month Daily Challenge book voucher. Approval/email remain instructor-only after proof checking. Book vouchers include a named recipient, registered email, issue date and unique SBBOOK code. The email contains a book-cover JPEG and activation steps. Contact Us → Share & earn → Use my access voucher accepts the registered email/code. Two calendar months start at first activation; subsequent logins do not extend the period. A short-lived mission-only grant follows existing hub settings, including monthly password changes; it does not unlock Library, exams or other folders. An instructor pause remains respected. Expired book vouchers are rejected and cannot be redeemed as course discounts.
+
+For the supplied two-file update, run setupSpeakBoldlyPromotionsAndExams once and deploy a New version of the existing web app. Do not replace Code.gs or add another doPost.

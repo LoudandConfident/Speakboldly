@@ -3,7 +3,7 @@ import {readDriveFolderFile} from './drive-folder-files.js?v=1';
 import {renderPracticeZone,practiceAccessKey} from './practice-zone.js';
 import {renderMaterialLibrary} from './material-library.js?v=password-folders-2';
 import {createLoadingNotice} from './loading-notice.js?v=visible-loading';
-import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=practice-zone-monthly-1';
+import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=reward-access-2';
 import {withBerlitzBooks} from './berlitz-material.js?v=drive-folders-1';
 import {openLearningDocument,closeLearningDocument,updateLearningDocumentAccess} from './learning-document-viewer.js?v=drive-folders-1';
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=ask-coach-1';
@@ -32,7 +32,7 @@ export function initializeStudentAssessment(doc) {
  let exercisesUnlocked=false;
  let passwordMetadata=null,assessmentUnlocked=false,resumableSession=null;
  let token='',student=null,epoch=0,saveTimer,tick,accessTimer,queue=Promise.resolve(),busy=false;
- const generalExams=deferredController(()=>import('./general-english-exams.js?v=levels-12-1').then(m=>m.initializeGeneralEnglishExams(doc,{call,panel,setBusy:value=>{busy=value;}})),{doc,host:panel,methods:['show'],label:'General English exams'});
+ const generalExams=deferredController(()=>import('./general-english-exams.js?v=reward-access-2').then(m=>m.initializeGeneralEnglishExams(doc,{call,panel,setBusy:value=>{busy=value;}})),{doc,host:panel,methods:['show'],label:'General English exams'});
  const text=(tag,value)=>{const el=doc.createElement(tag);el.textContent=value;return el;};
  async function performCall(action,data={}) {
   

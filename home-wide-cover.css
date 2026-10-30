@@ -183,3 +183,11 @@ main #home .home-free-offers{display:flex!important;flex-direction:column!import
 
 @media(max-width:680px){main #home .hero-copy .home-slogan{top:calc(37% - 30px)!important}}
 
+
+@media(max-width:680px){main #home:not([hidden]) .hero{height:max(490px,calc(100svh - 280px))!important;min-height:490px!important}main #home .home-picture-and-reviews .coaching-photo img{height:calc(100% + 60px)!important}main #home>.home-bottom-row{padding-top:20px!important;padding-bottom:14px!important}}
+
+/* Offers rise and gently pop together, without alternating directions. */
+@keyframes home-offer-pop{0%,100%{transform:translateY(0) scale(1)}45%,55%{transform:translateY(-7px) scale(1.045)}}
+main #home .home-pricing-note>strong,main #home .home-free-offers>strong{animation:home-offer-pop 2.6s ease-in-out infinite!important;animation-delay:0s!important;transform-origin:left center}
+main #home .home-free-offers>strong:first-child,main #home .home-free-offers>strong:last-child{animation-delay:0s!important}
+@media(prefers-reduced-motion:reduce){main #home .home-pricing-note>strong,main #home .home-free-offers>strong{animation:none!important}}
