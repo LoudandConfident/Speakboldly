@@ -1,6 +1,15 @@
 {
   "reviews": [
     {
+      "id": "e78ab718-3f21-419e-8402-c63e2835910e",
+      "createdAt": "2026-10-30T05:42:32.535Z",
+      "name": "Anonymous",
+      "age": "",
+      "program": "General English — 4 sessions",
+      "level": "3",
+      "message": "One of the best things about this course is Mira's teaching style. She's really good at what she does\n\nShe makes you feel comfortable and never puts you under pressure. She doesn't interrupt you or correct every little mistake while you're speaking. She gives you the space to finish your sentence, then gently corrects you and helps you understand.\n\nShe has a beautiful way of delivering information that makes everything feel natural, as if the language is slowly becoming a part of you, not just something you're studying.\n\nThe material is fun, relatable, and easy to connect with. The whole learning experience is simply enjoyable.\n\nHighly recommended ❤️"
+    },
+    {
       "id": "9be9413c-0ec3-4f9e-9cc7-9ac9bd3be2e4",
       "createdAt": "2026-10-28T11:11:39.394Z",
       "name": "Ahmed",
