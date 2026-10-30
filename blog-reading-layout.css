@@ -96,3 +96,8 @@ main #boldly-notes:has([data-notes-reader][hidden]) .bold-blog-masthead .bold-bl
 #boldly-notes .blog-list-glossary{margin-top:18px;border:1px solid #afc2a5;background:#faf9f4}
 #boldly-notes .blog-reflection-glossary{display:inline-flex;margin:0 0 18px}
 #boldly-notes .blog-glossary-page>.blog-glossary{margin-top:0;border-top:0;padding-top:8px}
+
+/* Article first as a button; glossary second as the quiet arrow link. */
+#boldly-notes .blog-read-article{display:table;margin-top:18px;font-size:12px}
+#boldly-notes .blog-list-glossary{display:table;margin-top:16px;padding:0;border:0;background:transparent;color:#151b17;font-size:12px;line-height:1.6;font-weight:600;text-decoration:none}
+#boldly-notes .blog-list-glossary:hover{color:var(--blog-green,#193c32);text-decoration:none;transform:translateX(3px)}
