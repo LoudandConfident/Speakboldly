@@ -84,3 +84,8 @@ main #vision.vision-editorial .vision-enrollment-promise{padding-top:20px!import
 @media(max-width:680px){main #vision.vision-editorial .vision-opening .vision-gallery-frame{order:0;margin:0 auto!important}main #vision.vision-editorial .vision-opening-copy{order:1}main #vision.vision-editorial .vision-enrollment-promise{padding-top:16px!important}}
 
 #placement .assessment-options>article>.eyebrow{font:600 9px/1.6 'DM Sans',sans-serif!important;letter-spacing:.6px!important;text-transform:none!important;margin:0 0 12px!important}
+
+/* Keep the portal welcome uncluttered and give the vision photos breathing room. */
+#students-portal:not(.learning-section-open) #student-folder-title{display:none!important}
+main #vision.vision-editorial .vision-opening{margin-top:24px!important}
+@media(max-width:760px){#contact .contact-orbit{position:relative!important;inset:auto!important;float:none!important;width:100px!important;margin:0 0 22px auto!important;transform:rotate(-8deg)} main #vision.vision-editorial .vision-opening{margin-top:22px!important}}
