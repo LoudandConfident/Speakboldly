@@ -1,7 +1,7 @@
 import {appendTaskPages} from './notes-task-pdf.js';
 import {DOCUMENT_BRAND,drawDocumentBranding} from './document-branding.js?v=two-line-footer-1';
 import {documentDate} from './student-document-filenames.js';
-export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date=documentDate(),title='Notes',taskAttachments=[],answerPages=true}={}){
+export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date=documentDate(),title='Notes',taskAttachments=[],answerPages=true,welcomeText='',welcomeImages=[]}={}){
  const {PDFDocument,rgb}=await import('./vendor/pdf-lib.esm.min.js');const {default:fontkit}=await import('./vendor/fontkit.es.min.js');
  const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);const font=await pdf.embedFont(fontBytes,{subset:true}),logo=await pdf.embedPng(logoBytes);pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setTitle(client.name+' — '+title+(client.sessionNumber?' — Session '+client.sessionNumber:''));pdf.setCreator('Speak Boldly');
  const width=595.28,height=841.89,left=DOCUMENT_BRAND.left,maxWidth=width-88,ink=rgb(.98,.976,.957);let page,y;
@@ -14,7 +14,8 @@ export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date
  if(current)line(current,size);
  }
  }
- paragraph('Speak Boldly — '+title,19);y-=8;paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);if(client.sessionNumber)paragraph('Session: '+client.sessionNumber);paragraph('Date: '+date);y-=18;paragraph(notes);
+ paragraph('Speak Boldly — '+title,19);y-=8;paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);if(client.sessionNumber)paragraph('Session: '+client.sessionNumber);paragraph('Date: '+date);y-=18;
+ if(welcomeText||welcomeImages.length){paragraph('Welcome to the session',16);y-=6;paragraph(welcomeText);for(const illustration of welcomeImages){const image=illustration.type==='image/png'?await pdf.embedPng(illustration.bytes):await pdf.embedJpg(illustration.bytes);const scale=Math.min(maxWidth/image.width,240/image.height),w=image.width*scale,h=image.height*scale;if(y-h<106)newPage();page.drawImage(image,{x:left+(maxWidth-w)/2,y:y-h,width:w,height:h});y-=h+18;}if(y<160)newPage();paragraph('Session notes',16);y-=6;}paragraph(notes);
  await appendTaskPages(pdf,taskAttachments,{font,rgb,client,newPage:()=>{newPage();return page;},answerPages});
  await drawDocumentBranding(pdf,{font,logo,light:true});
  return pdf.save();

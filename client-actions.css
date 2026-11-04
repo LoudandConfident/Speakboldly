@@ -28,3 +28,28 @@
 .session-note-fields input,.session-note-fields textarea{width:100%;min-width:0;box-sizing:border-box;font:inherit;font-size:15px;padding:10px;border:1px solid #c2cfb8;border-radius:9px;background:#fff;color:#193c32}
 .session-note-fields .session-note-long{grid-column:1/-1}
 @media(max-width:480px){.session-note-fields{padding:12px;gap:12px}.session-note-fields input,.session-note-fields textarea{font-size:16px}.session-note-fields label:has(input[type=date]),.session-note-fields label:has(input[name=tracking_material]){grid-column:1/-1}}
+
+/* Session notes: clear, consistently sized export and send actions. */
+#client-notes-dialog .detail-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid #d4ddce}
+#client-notes-dialog .detail-actions .button{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;box-sizing:border-box;margin:0;padding:11px 14px;border-radius:10px;font:600 13px/1.4 'DM Sans',sans-serif;letter-spacing:0;text-align:center;white-space:normal;text-decoration:none;box-shadow:none}
+#client-notes-dialog .detail-actions .button.light{background:#f2f5ed;color:#193c32;border:1px solid #becdb3}
+#client-notes-dialog .detail-actions button[type=submit]{background:#193c32;color:#fff;border:1px solid #193c32}
+#client-notes-dialog .detail-actions .button:focus-visible{outline:3px solid #8daa60;outline-offset:3px}
+#client-notes-dialog .detail-actions .button:disabled{opacity:.55;cursor:wait}
+#client-notes-dialog .session-welcome{min-width:0;margin:18px 0;padding:16px;border:1px solid #c2cfb8;border-radius:14px}
+#client-notes-dialog .session-welcome legend{padding:0 6px;font-size:14px;font-weight:600}
+#client-notes-dialog .session-welcome textarea{width:100%;min-width:0;box-sizing:border-box;padding:12px;border:1px solid #c2cfb8;border-radius:9px;background:#fff;color:#193c32;font:inherit;line-height:1.6}
+#client-notes-dialog .session-welcome .notes-task-answer-option{display:none!important}
+#client-notes-dialog input[type=file]::file-selector-button{padding:9px 12px;margin-right:10px;border:1px solid #becdb3;border-radius:8px;background:#edf2e6;color:#193c32;font:inherit;cursor:pointer}
+@media(max-width:600px){#client-notes-dialog .detail-actions{grid-template-columns:1fr}#client-notes-dialog .detail-actions button[type=submit]{grid-row:1}#client-notes-dialog .session-welcome{padding:12px}#client-notes-dialog .session-welcome textarea{font-size:16px}}
+
+#client-notes-dialog .session-note-fields{display:block;padding:12px}
+#client-notes-dialog .session-note-section{border:1px solid #d4ddce;border-radius:10px;margin:10px 0;padding:0;background:#fafbf7}
+#client-notes-dialog .session-note-section>summary{padding:12px 14px;cursor:pointer;font-size:14px;font-weight:600;line-height:1.4}
+#client-notes-dialog .session-note-section>label{display:grid;gap:6px;margin:12px 14px}
+#client-notes-dialog .session-note-section>fieldset{margin:10px 12px}
+#client-notes-dialog .session-note-section textarea{width:100%;box-sizing:border-box;min-height:76px;max-height:260px;resize:vertical}
+#client-notes-dialog .session-note-section textarea[name=notes]{min-height:110px}
+#client-notes-dialog .session-note-section>label input{width:100%;box-sizing:border-box}
+#client-notes-dialog .session-welcome{border:0;padding:0}
+#client-notes-dialog .session-welcome>legend{display:none}

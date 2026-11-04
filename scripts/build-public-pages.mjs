@@ -112,7 +112,7 @@ for(const [index,q] of dailyQuotes.entries()){
  const description=reflection.replace(/\s+/g,' ').slice(0,157).trim()+'…';
  html=html.replace(/<title>[\s\S]*?<\/title>/,'<title>Motivation — '+e(title)+' | Speak Boldly</title>');
  html=html.replace(/<meta name="description"[^>]*>/,'<meta name="description" content="'+e(description)+'">');
- html=html.replace(/<meta property="og:title"[^>]*>/,'<meta property="og:title" content="Motivation | Speak Boldly">').replace(/<meta name="twitter:title"[^>]*>/,'<meta name="twitter:title" content="Motivation | Speak Boldly">');
+ html=html.replace(/<meta property="og:title"[^>]*>/,'<meta property="og:title" content="Daily Motivation — '+e(q.quote)+'">').replace(/<meta name="twitter:title"[^>]*>/,'<meta name="twitter:title" content="Daily Motivation — '+e(q.quote)+'">');
  html=html.replace(/<p class="eyebrow">[^<]*<\/p>/,'<p class="eyebrow">Motivation</p>');
 
  html=html.replace(/<meta name="robots"[^>]*>/,'<meta name="robots" content="index,follow,max-image-preview:large">');
@@ -121,7 +121,7 @@ for(const [index,q] of dailyQuotes.entries()){
  html=html.replace(/<a class="return"[^>]*>[\s\S]*?<\/a>/g,'').replace(/<p><a href="\/learn\/daily-quotes\/">More English learning motivation<\/a><\/p>/g,'');
  writeFileSync(file,html);motivationPaths.push('/motivation/'+name);
  // Fresh picture-specific share URLs avoid cached homepage-logo previews.
- const shareUrl=origin+'/motivation/share/'+name+(preview?'?daily-motivation='+preview.version:'');
+ const shareUrl=origin+'/motivation/share/'+name+(preview?'?daily-motivation='+preview.version+'&share=picture-title-2':'?share=picture-title-2');
  let shareHtml=html.replace(/<meta property="og:url"[^>]*>/,'<meta property="og:url" content="'+shareUrl+'">');
  shareHtml=shareHtml.replace(/<meta name="twitter:card"[^>]*>/,'<meta name="twitter:card" content="summary_large_image">');
  shareHtml=shareHtml.replace('<img class="picture"','<img fetchpriority="high" class="picture"');

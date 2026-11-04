@@ -20,6 +20,12 @@ export function initializeFeatureLoader(doc,win){
  let adminPending=null,missionPending=null;
  async function ensureAdmin(){if(adminReady)return true;if(!adminPending)adminPending=optional('./admin-portal.js?v=session-notes-17','Instructor dashboard').then(ok=>{adminReady=ok;adminPending=null;return ok;});return adminPending;}
  doc.addEventListener('click',async event=>{const button=event.target.closest?.('[data-portal-area="admin"]');if(!button||adminReady)return;event.preventDefault();event.stopImmediatePropagation();if(await ensureAdmin()&&win.location.hash.startsWith('#students-portal'))button.click();},true);
+ // Fetch the instructor modules while the portal chooser is visible, before a click.
+ const warmAdmin=()=>{if(win.location.hash.startsWith('#students-portal')&&!doc.hidden)void ensureAdmin();};
+ doc.addEventListener('pointerover',event=>{if(event.target.closest?.('[data-portal-area="admin"]'))void ensureAdmin();},{passive:true});
+ doc.addEventListener('focusin',event=>{if(event.target.closest?.('[data-portal-area="admin"]'))void ensureAdmin();});
+ win.addEventListener('hashchange',()=>{if(win.location.hash==='#students-portal')win.setTimeout(warmAdmin,100);});
+ if(win.location.hash==='#students-portal')win.setTimeout(warmAdmin,100);
  doc.addEventListener('daily-mission-open',async event=>{if(missionReady)return;event.stopImmediatePropagation();if(!missionPending)missionPending=optional('./daily-mission.js?v=familiar-headings-3','Daily Challenge').then(ok=>{missionReady=ok;missionPending=null;return ok;});if(await missionPending&&doc.querySelector('[data-portal-tab="mission"]')?.getAttribute('aria-selected')==='true')doc.dispatchEvent(new win.Event('daily-mission-open'));},true);
  async function assessment(){const root=doc.getElementById('assessment');if(!root)return;if(pending.has('assessment'))return;const note=doc.createElement('p');note.className='sb-loading';note.setAttribute('role','status');note.setAttribute('aria-label','Loading assessment');doc.getElementById('placement-form').prepend(note);const task=import('./placement-assessment.js?v=brief-personal-2');pending.set('assessment',task);try{await task;note.remove();}catch{pending.delete('assessment');note.className='';note.textContent='The assessment could not load. ';const retry=doc.createElement('button');retry.type='button';retry.className='button light small';retry.textContent='Try again';retry.onclick=()=>{note.remove();assessment();};note.append(retry);}}
  doc.addEventListener('assessment-open',assessment);
