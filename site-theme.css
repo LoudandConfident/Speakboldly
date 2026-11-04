@@ -2243,6 +2243,10 @@ main #boldly-notes:has([data-notes-reader][hidden]) .bold-blog-masthead .bold-bl
 #contact .contact-social-row{width:100%;max-width:none;justify-content:space-between;grid-template-columns:minmax(0,310px) 150px}
 @media(max-width:680px){#contact .contact-social-row{grid-template-columns:minmax(0,1fr) 88px;justify-content:space-between}}
 
+/* A compact rectangle on the existing far-right promotion rail. */
+#contact .reward-circle{width:150px;max-width:100%;height:48px;min-height:48px;box-sizing:border-box;border-radius:10px;padding:9px 12px;line-height:1.4}
+@media(max-width:680px){#contact .reward-circle{width:88px;height:48px;font-size:11px;padding:7px 8px}}
+
 /* general-english-exams.css */
 .ge-word-bank,.ge-reading-passage,.ge-listening-live{padding:18px;border:1px solid #c4d1b8;border-radius:16px;background:#edf1e6;color:#193c32;line-height:1.7}.ge-exam-form .exam-written-question{display:grid;gap:10px;margin:20px 0}.ge-exam-form select,.ge-exam-form textarea{width:100%;max-width:100%;box-sizing:border-box}.ge-reading-passage{font-size:1rem}.ge-time-low{color:#943b2e;font-weight:700}.ge-exam-owner-levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.ge-exam-owner-level{padding:16px;border:1px solid #c4d1b8;border-radius:16px;background:#f8f8f1;display:grid;gap:10px}.ge-exam-owner-level input[type=text]{width:100%;box-sizing:border-box;font-variant-numeric:tabular-nums;letter-spacing:.2em}.portal-level-button small{display:block;font-size:11px;line-height:1.4;margin-top:5px}.ge-writing-count{font-size:13px;color:#536455}@media(max-width:680px){.ge-exam-owner-levels{grid-template-columns:1fr}.ge-word-bank,.ge-reading-passage,.ge-listening-live{padding:13px}}
 

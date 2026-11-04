@@ -20,3 +20,7 @@
 
 #contact .contact-social-row{width:100%;max-width:none;justify-content:space-between;grid-template-columns:minmax(0,310px) 150px}
 @media(max-width:680px){#contact .contact-social-row{grid-template-columns:minmax(0,1fr) 88px;justify-content:space-between}}
+
+/* A compact rectangle on the existing far-right promotion rail. */
+#contact .reward-circle{width:150px;max-width:100%;height:48px;min-height:48px;box-sizing:border-box;border-radius:10px;padding:9px 12px;line-height:1.4}
+@media(max-width:680px){#contact .reward-circle{width:88px;height:48px;font-size:11px;padding:7px 8px}}
