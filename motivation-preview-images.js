@@ -156,11 +156,11 @@ export const motivationPreviews = {
     "emailImage": "./images/daily-motivation-small-steps-teacher.png"
   },
   "./images/daily-motivation-math-teacher-board.webp": {
-    "image": "./images/motivation-preview/daily-motivation-math-teacher-board-4f63b79b06fe.jpg",
+    "image": "./images/motivation-preview/daily-motivation-math-teacher-board-9735345bf5be.jpg",
     "width": 600,
     "height": 600,
-    "version": "4f63b79b06fe",
-    "bytes": 76521,
+    "version": "9735345bf5be",
+    "bytes": 69236,
     "emailImage": "./images/daily-motivation-math-teacher-board.png"
   }
 };
