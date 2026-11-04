@@ -14,7 +14,7 @@ export const SESSION_NOTE_FIELDS=[
  {key:'vocabulary',label:'Vocab',multiline:true,max:4000},
  {key:'grammar',label:'Grammar',multiline:true,max:4000},
  {key:'pronunciation',label:'Pronunciation / expressions',multiline:true,max:3000},
- {key:'homework',label:'Tasks / homework',multiline:true,max:4000}
+ {key:'homework',label:'Assignments',multiline:true,max:4000}
 ];
 export function composeSessionNotes(notes,tracking={}){
  const sections=SESSION_NOTE_FIELDS.map(field=>{const value=String(tracking[field.key]||'').trim();return value?field.label+':\n'+value:'';}).filter(Boolean);
@@ -22,9 +22,9 @@ export function composeSessionNotes(notes,tracking={}){
  return sections.join('\n\n');
 }
 export function initializeClientNotes(doc,isUnlocked,{pageMode=false,returnUrl=null,documentKind='notes'}={}){
- const actionPlan=documentKind==='actionplan',title=actionPlan?'Action plan':'Notes',kind=actionPlan?'actionplan':'notes';
- const dialog=doc.createElement(pageMode?'section':'dialog');dialog.id='client-notes-dialog';dialog.className=pageMode?'notes-editor-page':'action-popup';dialog.setAttribute('aria-label','Notes to client');dialog.hidden=pageMode;
- dialog.innerHTML='<button type="button" class="popup-close" aria-label="Close notes">×</button><h2>Notes</h2><p data-notes-recipient></p><form><label>Notes to attach<textarea name="notes" rows="10" maxlength="20000" required placeholder="Write your notes for this client"></textarea></label><div class="detail-actions"><button type="button" class="button light small" data-download-notes>Download Word file</button><button type="button" class="button light small" data-download-notes-pdf>Download final PDF</button><button type="submit" class="button small">Send notes to client</button></div></form><p role="status" aria-live="polite"></p>';doc.body.append(dialog);
+ const actionPlan=documentKind==='actionplan',title=actionPlan?'Action plan':'Session notes',kind=actionPlan?'actionplan':'notes';
+ const dialog=doc.createElement(pageMode?'section':'dialog');dialog.id='client-notes-dialog';dialog.className=pageMode?'notes-editor-page':'action-popup';dialog.setAttribute('aria-label',title+' to client');dialog.hidden=pageMode;
+ dialog.innerHTML='<button type="button" class="popup-close" aria-label="Close session notes">×</button><h2>Session notes</h2><p data-notes-recipient></p><form><label>Additional session notes<textarea name="notes" rows="10" maxlength="20000" required placeholder="Write your notes for this client"></textarea></label><div class="detail-actions"><button type="button" class="button light small" data-download-notes>Download Word file</button><button type="button" class="button light small" data-download-notes-pdf>Download final PDF</button><button type="submit" class="button small">Send session notes to client</button></div></form><p role="status" aria-live="polite"></p>';doc.body.append(dialog);
  if(actionPlan){dialog.setAttribute('aria-label','Action plan to client');dialog.querySelector('h2').textContent=title;dialog.querySelector('.popup-close').setAttribute('aria-label','Close action plan');const area=dialog.querySelector('textarea');area.placeholder='Goals, practice activities, schedule and next review';const label=area.closest('label');label.firstChild.textContent='Action plan to attach';dialog.querySelector('button[type=submit]').textContent='Send Action plan to client';}
  const sessionLabel=doc.createElement('label'),sessionNumber=doc.createElement('input');sessionLabel.textContent='Session number';sessionNumber.name='sessionNumber';sessionNumber.type='number';sessionNumber.min='1';sessionNumber.max='9999';sessionNumber.step='1';sessionNumber.required=!actionPlan;sessionLabel.hidden=actionPlan;sessionLabel.append(sessionNumber);dialog.querySelector('form').prepend(sessionLabel);
  const numberedTarget=target=>actionPlan?{...target}:{...target,sessionNumber:Number(sessionNumber.value)};
@@ -35,7 +35,7 @@ export function initializeClientNotes(doc,isUnlocked,{pageMode=false,returnUrl=n
  function updateNotesRequired(){form.elements.notes.required=actionPlan||(![...trackingInputs.values()].some(input=>input.value.trim())&&tasks.count()===0);}
  const tasks=actionPlan?{count:()=>0,signature:()=>'',read:async()=>[],answers:()=>false,reset(){},setBusy(){}}:createTaskPicker(doc,form,()=>{updateNotesRequired();requestSignature='';pdfSignature='';});
  const notesText=()=>(actionPlan?form.elements.notes.value.trim():composeSessionNotes(form.elements.notes.value,trackingValues()))||(tasks.count()?'Please complete the attached tasks and send your answers back.':'');
- if(!actionPlan){download.textContent='Download notes as Word';const link=doc.createElement('link');link.rel='stylesheet';link.href=new URL('./client-actions.css?v=session-record-2',import.meta.url).href;doc.head.append(link);}
+ if(!actionPlan){download.textContent='Download session notes as Word';const link=doc.createElement('link');link.rel='stylesheet';link.href=new URL('./client-actions.css?v=session-notes-3',import.meta.url).href;doc.head.append(link);}
  function lock(){generation++;client=null;busy=false;requestId=null;requestSignature='';drafts.clear();tasks.reset();pdfPromise=null;pdfSignature='';form.reset();status.textContent='';if(pageMode)dialog.hidden=true;else if(dialog.open)dialog.close();send.disabled=download.disabled=downloadPdf.disabled=false;}
  dialog.querySelector('.popup-close').onclick=()=>{if(pageMode)doc.defaultView.location.href=returnUrl||'./#students-portal/teacher';else dialog.close();};function rememberDraft(){if(client)drafts.set(client.id,{notes:form.elements.notes.value,sessionNumber:sessionNumber.value,tracking:trackingValues()});updateNotesRequired();requestSignature='';pdfSignature='';}form.addEventListener('input',rememberDraft);
  let logoPromise;const loadLogo=()=>logoPromise||=(doc.defaultView.fetch(new URL(DOCUMENT_BRAND.logo,doc.baseURI||doc.defaultView.location.href)).then(response=>{if(!response.ok)throw new Error('Could not load the document logo.');return response.arrayBuffer();}).catch(error=>{logoPromise=null;throw error;}));
