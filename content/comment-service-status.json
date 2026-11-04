@@ -1,9 +1,10 @@
 {
-  "checkedAt": "2026-11-04T14:21:05.523Z",
+  "checkedAt": "2026-11-04T14:33:34.281Z",
   "comments": {
     "reachable": true,
-    "ok": true,
-    "ready": true,
-    "enabled": true
+    "ok": false,
+    "ready": false,
+    "enabled": false,
+    "error": "Incorrect connection key."
   }
 }
