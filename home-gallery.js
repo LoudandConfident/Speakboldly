@@ -1,4 +1,4 @@
-import {motivationPreviews} from './motivation-preview-images.js?v=email-compatible-4';
+import {motivationPreviews} from './motivation-preview-images.js?v=unbranded-motivation-5';
 import {motivationDay,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js?v=weekly-2';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [

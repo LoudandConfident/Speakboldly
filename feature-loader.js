@@ -10,7 +10,7 @@ export function initializeFeatureLoader(doc,win){
   'students-portal':['./learning-hub-entry.js?v=reload-chooser-11'],
   'assessment':['./placement-assessment.js?v=brief-personal-2'],
   'reviews':['./reviews.js?v=complete-cards-4'],
-  'daily-quote':['./home-gallery.js?v=math-email-6'],
+  'daily-quote':['./home-gallery.js?v=unbranded-motivation-7'],
   'learner-profile':['./learner-profile.js?v=brief-personal-2'],
   'learner-results':['./learner-profile.js?v=brief-personal-2'],
   'boldly-notes':['./boldly-notes.js?v=consistency-words-5']
@@ -26,7 +26,7 @@ export function initializeFeatureLoader(doc,win){
 
  async function load(){const key=win.location.hash.slice(1).split('/')[0],modules=groups[key];if(key==='assessment'){void assessment();return;}if(key==='students-portal'&&win.location.hash.endsWith('/teacher'))void ensureAdmin();if(!modules||pending.has(key))return;const root=doc.getElementById(key);if(!root)return;const spinner=doc.createElement('p');if(key==='daily-quote')spinner.hidden=true;spinner.className='sb-loading';spinner.dataset.loading='true';spinner.setAttribute('role','status');spinner.setAttribute('aria-label','Loading');root.prepend(spinner);const buttons=key==='students-portal'?[...root.querySelectorAll('[data-portal-area]')]:[];buttons.forEach(b=>b.disabled=true);
  const task=Promise.all(modules.map(module=>import(module)));pending.set(key,task);try{await task;buttons.forEach(b=>b.disabled=false);if(key==='students-portal'&&['#students-portal/student','#students-portal/calendar'].includes(win.location.hash)&&root.querySelector('#client-portal')?.hidden)root.querySelector('[data-portal-area=client]')?.click();if(key==='students-portal'&&win.location.hash.endsWith('/teacher')&&await ensureAdmin())root.querySelector('[data-portal-area=admin]')?.click();spinner.remove();}catch{pending.delete(key);spinner.className='';delete spinner.dataset.loading;spinner.textContent='This section could not load. ';const retry=doc.createElement('button');retry.type='button';retry.className='button light small';retry.textContent='Try again';retry.onclick=()=>{spinner.remove();void load();};spinner.append(retry);}finally{buttons.forEach(b=>b.disabled=false);}}
- const warmMotivation=()=>{if((!win.location.hash||win.location.hash==='#home')&&!doc.hidden)void import('./home-gallery.js?v=math-email-6').catch(()=>{});};if(win.requestIdleCallback)win.requestIdleCallback(warmMotivation,{timeout:2000});else win.setTimeout(warmMotivation,1500);doc.addEventListener('pointerover',event=>{if(event.target.closest?.('[data-open-view="daily-quote"],a[href*="/learn/daily-quotes/"]'))warmMotivation();},{passive:true});
+ const warmMotivation=()=>{if((!win.location.hash||win.location.hash==='#home')&&!doc.hidden)void import('./home-gallery.js?v=unbranded-motivation-7').catch(()=>{});};if(win.requestIdleCallback)win.requestIdleCallback(warmMotivation,{timeout:2000});else win.setTimeout(warmMotivation,1500);doc.addEventListener('pointerover',event=>{if(event.target.closest?.('[data-open-view="daily-quote"],a[href*="/learn/daily-quotes/"]'))warmMotivation();},{passive:true});
  win.addEventListener('hashchange',load);void load();if(doc.querySelector('#assessment-dialog')?.open)void assessment();
 }
 if(typeof document!=='undefined')initializeFeatureLoader(document,window);
