@@ -1,4 +1,4 @@
-import {motivationPreviews} from './motivation-preview-images.js?v=math-board-3';
+import {motivationPreviews} from './motivation-preview-images.js?v=email-compatible-4';
 import {motivationDay,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js?v=weekly-2';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
@@ -121,7 +121,7 @@ export async function copyMotivationLink(win,entry){
 export function clientDailyMotivation(now=new Date()){
  const custom=motivationSettings().message;if(custom)return {day:motivationDay(now,cairoDayNumber),quote:custom.quote,image:custom.image,paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[],url:motivationShareUrl({customDate:custom.date})};
  const day=motivationDay(now,cairoDayNumber),index=motivationIndexForDate(now),entry=dailyQuotes[index],details=quoteDetails[index];
- return {day,quote:entry.quote,image:new URL(entry.image,'https://speakboldly.space/').href,paragraphs:details.paragraphs||[details.reflection,dailyPractice[index]],url:motivationShareUrl(entry)};
+ return {day,quote:entry.quote,image:new URL(motivationPreviews[entry.image]?.emailImage||entry.image,'https://speakboldly.space/').href,paragraphs:details.paragraphs||[details.reflection,dailyPractice[index]],url:motivationShareUrl(entry)};
 }
 export function initializeGallery(doc, win) {
  const page = doc.querySelector('#daily-quote');
