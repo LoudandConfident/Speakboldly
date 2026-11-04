@@ -40,3 +40,13 @@ main #vision.vision-editorial .vision-purpose .vision-enrollment-promise{padding
 
 #portal-monthly .real-english-layout:not(:has(.real-english-side:not([hidden]))){grid-template-columns:minmax(0,1fr)!important}
 #client-authorization-dialog [data-task-reminder-action]{width:100%;min-height:46px;padding:10px 14px;border:1px solid #c8d3bf;border-radius:12px;background:#edf0e6;color:#193c32;text-align:left;font-size:13px}
+
+/* Article titles and exact centering of the two homepage labels. */
+html body main #home .hero .home-speech-links .home-speech-bubble{position:relative!important;padding:0!important}
+html body main #home .hero .home-speech-links .home-speech-bubble>span{position:absolute!important;inset:0 0 8px!important;display:flex!important;align-items:center!important;justify-content:center!important;max-width:none!important;width:auto!important;margin:0!important;padding:0!important;transform:none!important;text-align:center!important;white-space:nowrap!important;font-size:14px!important;line-height:1.2!important}
+html body #boldly-notes [data-notes-reader]>h2{font-size:28px!important;line-height:1.25!important;letter-spacing:-.5px!important;margin:16px 0 18px!important}
+html body #boldly-notes .boldly-note-link h3{font-size:19px!important;line-height:1.35!important}
+html body #boldly-notes .boldly-note-page h3{font-size:20px!important;line-height:1.4!important;margin:24px 0 12px!important}
+.public-page:has(.reading) main>h1{font-size:28px!important;line-height:1.25!important}
+.public-page .grid article.card:has(a[href^="/blog/"]) h2{font-size:20px!important;line-height:1.35!important}
+@media(max-width:680px){html body #boldly-notes [data-notes-reader]>h2,.public-page:has(.reading) main>h1{font-size:24px!important}html body #boldly-notes .boldly-note-link h3{font-size:18px!important}html body main #home .hero .home-speech-links .home-speech-bubble>span{font-size:13px!important;bottom:6px!important}}
