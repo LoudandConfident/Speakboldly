@@ -369,6 +369,17 @@ main>#students-portal.catalog.portal-session-active:not(#home){padding-top:16px!
 #join-team .join-anatomical-heart>span{position:absolute;left:45px;top:124px;font-size:23px;line-height:1.15;transform:rotate(-6deg);background:#edf0e6;padding:5px 4px}
 @media(max-width:760px){#join-team .join-anatomical-heart{position:relative;top:auto;right:auto;width:170px;height:215px;margin:20px auto 28px}#join-team .join-anatomical-heart>span{left:38px;top:103px;font-size:20px}}
 
+#quote .quote-request-grid{display:grid!important;grid-template-columns:minmax(0,3fr) minmax(220px,1fr)!important;max-width:none!important;margin:28px 0!important;border:0!important;gap:26px!important;align-items:start}
+#quote .quote-personal-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #193c32;border-bottom:1px solid #193c32}
+#quote .quote-business-choices{display:grid;gap:18px}
+#quote .quote-personal-choices .quote-popup-choice{border-bottom:0!important;min-height:210px;aspect-ratio:1!important;padding:18px!important}
+#quote .quote-personal-choices .quote-popup-choice:last-child{border-right:0!important}
+#quote .quote-business-choices .quote-premium{aspect-ratio:auto!important;min-height:180px;border:1px solid #839782!important;border-radius:24px 4px 24px 4px!important;background:#dce8d8!important;padding:22px!important}
+#quote .quote-premium .quote-tile-number{font:500 10px/1.5 'DM Sans',sans-serif!important;letter-spacing:1px!important}
+#quote .quote-business-choices .quote-interpret{background:#edf0e6!important;border-radius:4px 24px 4px 24px!important}
+@media(max-width:900px){#quote .quote-request-grid{grid-template-columns:minmax(0,1fr)!important}#quote .quote-business-choices{grid-template-columns:repeat(2,minmax(0,1fr))}#quote .quote-personal-choices .quote-popup-choice{padding:12px!important;min-height:170px}#quote .quote-tile-label{font-size:15px!important}#quote .quote-tile-copy small{font-size:11px!important}}
+@media(max-width:420px){#quote .quote-business-choices{grid-template-columns:minmax(0,1fr)}#quote .quote-personal-choices .quote-popup-choice{min-height:160px;padding:9px!important}#quote .quote-tile-label{font-size:13px!important}}
+
 /* program-assessment.css */
 /* Course catalogue: editorial heading, clean comparison cards. */
 #courses .courses-introduction{align-items:flex-end;padding-bottom:30px;border-bottom:1px solid #b9c9b9}
@@ -2229,6 +2240,9 @@ main #boldly-notes:has([data-notes-reader][hidden]) .bold-blog-masthead .bold-bl
 .reward-voucher-book .reward-voucher-brand{font-size:25px;margin-bottom:34px}.reward-voucher-book .reward-voucher-body h2{font-size:35px;margin-bottom:24px}.reward-voucher-book .reward-voucher-off{font-size:64px;max-width:450px;margin-bottom:24px}
 .reward-voucher-book .reward-voucher-subtitle{border-bottom:1px solid #b6c3a7;padding-bottom:22px;margin-bottom:24px;font-size:21px}.reward-voucher-book .reward-voucher-fields p{margin:12px 0}
 
+#contact .contact-social-row{width:100%;max-width:none;justify-content:space-between;grid-template-columns:minmax(0,310px) 150px}
+@media(max-width:680px){#contact .contact-social-row{grid-template-columns:minmax(0,1fr) 88px;justify-content:space-between}}
+
 /* general-english-exams.css */
 .ge-word-bank,.ge-reading-passage,.ge-listening-live{padding:18px;border:1px solid #c4d1b8;border-radius:16px;background:#edf1e6;color:#193c32;line-height:1.7}.ge-exam-form .exam-written-question{display:grid;gap:10px;margin:20px 0}.ge-exam-form select,.ge-exam-form textarea{width:100%;max-width:100%;box-sizing:border-box}.ge-reading-passage{font-size:1rem}.ge-time-low{color:#943b2e;font-weight:700}.ge-exam-owner-levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.ge-exam-owner-level{padding:16px;border:1px solid #c4d1b8;border-radius:16px;background:#f8f8f1;display:grid;gap:10px}.ge-exam-owner-level input[type=text]{width:100%;box-sizing:border-box;font-variant-numeric:tabular-nums;letter-spacing:.2em}.portal-level-button small{display:block;font-size:11px;line-height:1.4;margin-top:5px}.ge-writing-count{font-size:13px;color:#536455}@media(max-width:680px){.ge-exam-owner-levels{grid-template-columns:1fr}.ge-word-bank,.ge-reading-passage,.ge-listening-live{padding:13px}}
 
@@ -2340,6 +2354,8 @@ main #vision.vision-editorial .vision-need-band{margin-bottom:0!important}
 main #vision.vision-editorial .vision-purpose{padding:48px 0!important}
 main #vision.vision-editorial .vision-purpose .vision-enrollment-promise{padding-top:0!important}
 @media(max-width:680px){main #vision.vision-editorial .vision-purpose{padding:40px 0!important}}
+
+.assessment-priority-list{padding-left:22px;font-size:14px;line-height:1.75}.assessment-priority-list li{margin:12px 0}.assessment-result>p{font-size:13px;line-height:1.7}.assessment-review-item{padding:18px 0;border-bottom:1px solid #cbd6c7}.assessment-review-item h3{font:600 14px/1.6 'DM Sans',sans-serif}.assessment-review-item p{font-size:13px;line-height:1.65;margin:6px 0}.assessment-result .placement-booking-remark{margin-top:20px}
 
 /* instructor-calm.css */
 #admin-dashboard .instructor-tool-cards>details.admin-detail{border-radius:18px!important;min-height:0!important}#admin-dashboard .instructor-tool-cards>details.admin-detail>summary{padding:18px!important;line-height:1.5!important;white-space:normal!important;overflow-wrap:anywhere;gap:14px!important;font-size:15px!important;min-height:76px!important;height:auto!important}#admin-dashboard .instructor-tool-cards>details.admin-detail>summary svg{width:46px!important;height:46px!important;flex:none}#admin-dashboard .demo-note,#admin-calendar .calendar-scroll-hint{display:none!important}#admin-calendar .calendar-toolbar{justify-content:center;gap:12px!important;margin-bottom:16px!important}#admin-calendar .calendar-toolbar h4{flex:1 1 100%;text-align:center;margin:0 0 4px!important}#admin-calendar .calendar-primary-actions{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px;width:100%;margin:12px 0 20px}#admin-calendar .calendar-primary-actions>.button{margin:0!important;min-height:44px;padding:10px 17px!important;white-space:normal}#admin-calendar .calendar-primary-actions>div{flex-basis:100%;text-align:center}#admin-calendar .calendar-primary-actions>div .button{display:inline-flex;margin:6px;min-height:44px}.contact-owner-vouchers{padding:16px;border:1px solid #bdcdb5;border-radius:16px;margin:22px 0}.contact-owner-vouchers[hidden]{display:none!important}.contact-owner-vouchers summary{font-size:14px;cursor:pointer}.contact-owner-vouchers>p:empty{display:none}.hub-owner-row.folder-password-row{grid-template-columns:minmax(100px,1fr) minmax(105px,1fr) auto}.hub-owner-row.folder-password-row>p{grid-column:1/-1}#portal-switches .portal-access-switch{gap:12px;align-items:center;line-height:1.6;padding:12px 0}#portal-switches .portal-access-switch>span{min-width:0;overflow-wrap:anywhere}@media(max-width:600px){.hub-owner-row.folder-password-row{grid-template-columns:minmax(0,1fr) auto;gap:12px}.hub-owner-row.folder-password-row>strong{grid-column:1/-1}#admin-calendar .calendar-primary-actions{gap:10px}#admin-calendar .calendar-primary-actions>.button{font-size:13px;padding:10px 14px!important}#admin-dashboard .instructor-tool-cards>details.admin-detail>summary{padding:16px!important}}

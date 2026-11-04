@@ -1,3 +1,4 @@
+import {learnerFeedback,addBriefPriorities,renderLearnerReview} from './assessment-feedback.js?v=brief-personal-1';
 import {createPlacementBookingRemark} from './placement-booking-remark.js?v=personalised-placement-1';
 import {learnerCourseGuidance,learnerQuickPractice} from './assessment-guidance.js?v=bold-blog-simple-results';
 import {addResultImageButton,addResultBranding} from './result-image.js?v=two-line-footer-1';
@@ -14,17 +15,15 @@ export function initializeLearnerProfile(doc,win){
  const pageValid=()=>fields.filter(field=>!field.disabled).every(field=>{const input=field.querySelector('input');return input.reportValidity();});
  previous.onclick=()=>{if(page>0){page--;showPage();progress.focus();}};
  next.onclick=()=>{if(pageValid()){page++;showPage();progress.focus();}};
- function renderResult(score){result.classList.add('assessment-result');result.replaceChildren(el('h2','Your learning profile'));
+ function renderResult(score,answers){result.classList.add('assessment-result');result.replaceChildren(el('h2','Your learning profile'));
  const title=score.strongest.length===1?learnerProfiles[score.strongest[0]].name:'Your preferences are a blend';result.append(el('h3',title),el('p','Your preferences today—not a fixed learning type.'));
- const table=el('table');table.append(el('caption','Your learning preferences'));for(const key of Object.keys(learnerProfiles)){const row=el('tr');const name=el('th',learnerProfiles[key].name);name.scope='row';row.append(name,el('td',Math.round(score.counts[key]/score.total*100)+'%'));table.append(row);}result.append(table);
- for(const key of score.strongest){const section=el('section');section.append(el('h3',learnerProfiles[key].name),el('h4','In a course'),el('p',learnerCourseGuidance[key][0]),el('h4','Try this on your own'),el('p',learnerQuickPractice[key]));result.append(section);}
- result.append(el('p','Practise for 10 minutes a day. Mix listening, reading, speaking, and writing, and keep what helps you improve.'));
+ const feedback=learnerFeedback(answers);addBriefPriorities(doc,result,feedback.priorities);renderLearnerReview(doc,feedback);const review=el('a','View my answers and why','button light');review.href='#learner-review';review.onclick=event=>{event.preventDefault();win.location.hash='learner-review';};result.append(review);
  result.append(createPlacementBookingRemark(doc,win));
  addResultBranding(doc,result);
  addResultImageButton(doc,win,result,'Your learning profile',{learnerCard:true});
  const restart=el('button','Retake the learner test','button light');restart.type='button';restart.onclick=()=>{form.reset();shuffleQuestions();page=0;form.hidden=false;result.hidden=true;doc.querySelector('.learner-results-empty').hidden=false;showPage();win.location.hash='learner-profile';};result.append(restart);form.hidden=false;result.hidden=false;doc.querySelector('.learner-results-empty').hidden=true;win.location.hash='learner-results';
  }
- form.onsubmit=event=>{event.preventDefault();if(page!==pageCount-1){next.click();return;}if(!pageValid())return;const answers=learnerQuestions.map((_,index)=>form.querySelector('[name="learner-'+index+'"]:checked')?.value);try{renderResult(scoreLearnerProfile(answers));}catch(e){error.textContent=e.message;const missing=answers.findIndex(answer=>!answer);if(missing>=0){page=Math.floor(fields.indexOf(originalFields[missing])/pageSize);showPage();error.textContent=e.message;progress.focus();}}};
+ form.onsubmit=event=>{event.preventDefault();if(page!==pageCount-1){next.click();return;}if(!pageValid())return;const answers=learnerQuestions.map((_,index)=>form.querySelector('[name="learner-'+index+'"]:checked')?.value);try{renderResult(scoreLearnerProfile(answers),answers);}catch(e){error.textContent=e.message;const missing=answers.findIndex(answer=>!answer);if(missing>=0){page=Math.floor(fields.indexOf(originalFields[missing])/pageSize);showPage();error.textContent=e.message;progress.focus();}}};
  showPage();
 }
 if(typeof document!=='undefined')initializeLearnerProfile(document,window);

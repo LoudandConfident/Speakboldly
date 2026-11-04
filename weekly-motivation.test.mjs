@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {quoteForDate} from './home-gallery.js';import {setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js?v=weekly-2';
+test('default and old held motivation now change only at the Cairo week boundary',()=>{setMotivationSettings({frozen:true,day:MOTIVATION_PIN.day,revision:'0'});const a=quoteForDate(new Date('2026-11-02T12:00:00Z'));assert.equal(quoteForDate(new Date('2026-11-08T18:00:00Z')),a);assert.notEqual(quoteForDate(new Date('2026-11-09T12:00:00Z')),a);});

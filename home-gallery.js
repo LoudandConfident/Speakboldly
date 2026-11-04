@@ -1,5 +1,5 @@
 import {motivationPreviews} from './motivation-preview-images.js?v=small-picture-preview-2';
-import {motivationDay,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js?v=freeze-24-oct-1';
+import {motivationDay,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js?v=weekly-2';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
  { image: './images/daily-motivation-1.png', alt: 'A notebook and phone, ready for a fresh start', quote: 'Make time for what matters.' },
@@ -27,6 +27,7 @@ export function cairoDayNumber(now = new Date()) {
  return Math.floor(Date.UTC(part('year'), part('month') - 1, part('day')) / 86400000);
 }
 // One-time exception: keep 15 October's message through Sunday in Cairo.
+const settingsFrozen=()=>motivationSettings().frozen;
 export function motivationIndexForDate(now = new Date()) {
  const day=motivationDay(now,cairoDayNumber),start=Math.floor(Date.UTC(2026,9,15)/86400000),end=Math.floor(Date.UTC(2026,9,19)/86400000);
  if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
@@ -36,7 +37,7 @@ export function motivationIndexForDate(now = new Date()) {
   for(let i=order.length-1;i>0;i--){seed=(Math.imul(1664525,seed)+1013904223)>>>0;const j=seed%(i+1);[order[i],order[j]]=[order[j],order[i]];}
   const held=dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
   if(order[0]===held)[order[0],order[1]]=[order[1],order[0]];
-  return order[(day-end)%order.length];
+  return order[((settingsFrozen()?day-end:Math.floor((day-end)/7))%order.length+order.length)%order.length];
  }
  return day%dailyQuotes.length;
 }

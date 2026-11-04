@@ -17,3 +17,6 @@
 .reward-voucher-book .reward-voucher-body{min-height:740px;padding:38px 34px;border-right:0;background:#fffef9}
 .reward-voucher-book .reward-voucher-brand{font-size:25px;margin-bottom:34px}.reward-voucher-book .reward-voucher-body h2{font-size:35px;margin-bottom:24px}.reward-voucher-book .reward-voucher-off{font-size:64px;max-width:450px;margin-bottom:24px}
 .reward-voucher-book .reward-voucher-subtitle{border-bottom:1px solid #b6c3a7;padding-bottom:22px;margin-bottom:24px;font-size:21px}.reward-voucher-book .reward-voucher-fields p{margin:12px 0}
+
+#contact .contact-social-row{width:100%;max-width:none;justify-content:space-between;grid-template-columns:minmax(0,310px) 150px}
+@media(max-width:680px){#contact .contact-social-row{grid-template-columns:minmax(0,1fr) 88px;justify-content:space-between}}

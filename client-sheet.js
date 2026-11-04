@@ -46,6 +46,7 @@ export function initializeClientSheet(doc) {
  const form = doc.querySelector('#client-sheet-connect');
  if (!form) return;
  const status = doc.querySelector('#client-sheet-status'), change = doc.querySelector('#client-sheet-change');
+ if(!doc.querySelector('#check-domain-mail')){const check=doc.createElement('button');check.id='check-domain-mail';check.type='button';check.className='button light small';check.textContent='Check email sending';form.after(check);check.onclick=async()=>{if(!clientSheetConnected()){status.textContent='Sign in or use your saved connection first.';return;}check.disabled=true;status.textContent='Checking sender setup. No emails will be sent…';const results=[];for(const [label,kind]of [['Reports','notes'],['Billing','registration']]){try{await sheetRequest(endpoint,key,{action:'emailRoutingSettings',kind});results.push(label+': ready.');}catch(error){results.push(label+': '+error.message);}}status.textContent=results.join(' ');check.disabled=false;};}
  const validUrl = url => /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(url);
  function restore() {
   try {
@@ -103,12 +104,12 @@ export async function cancelSheetSession(sessionId,fetcher=globalThis.fetch){if(
 export async function loadSheetTeacherDocuments(fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'listTeacherDocuments'},fetcher);}
 export async function saveSheetTeacherDocument(record,expectedVersion=0,fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'saveTeacherDocument',record,expectedVersion},fetcher);}
 
-export async function sendSheetClientEmail(clientId,kind,{pdfBase64,docxBase64,requestId,sessionId}={},fetcher=globalThis.fetch){
+export async function sendSheetClientEmail(clientId,kind,{pdfBase64,docxBase64,requestId,sessionId,sessionNumber}={},fetcher=globalThis.fetch){
  if(!clientSheetConnected())throw new Error('Connect your Clients sheet first.');
- let routing;try{routing=await sheetRequest(endpoint,key,{action:'emailRoutingSettings'},fetcher);}catch(error){throw new Error(/Invalid action|Unknown action|not supported/i.test(error.message)?'Deploy the updated UnifiedCode.gs and verify Billing/Noreply aliases before sending. No email was sent.':error.message);}
+ let routing;try{routing=await sheetRequest(endpoint,key,{action:'emailRoutingSettings',kind},fetcher);}catch(error){throw new Error(/Invalid action|Unknown action|not supported/i.test(error.message)?'Deploy the updated UnifiedCode.gs and verify Billing/Noreply aliases before sending. No email was sent.':error.message);}
  const expected=['registration','paymentReminder'].includes(kind)?'billing@speakboldly.space':'noreply@speakboldly.space';
  if(routing.version!=='domain-email-2026-10-24'||routing.routes?.[kind]?.from?.toLowerCase()!==expected)throw new Error('Deploy the updated UnifiedCode.gs before sending from your domain. No email was sent.');
- return sheetRequest(endpoint,key,{action:'sendClientEmail',clientId,kind,pdfBase64,docxBase64,sessionId,requestId:requestId||crypto.randomUUID()},fetcher);
+ return sheetRequest(endpoint,key,{action:'sendClientEmail',clientId,kind,pdfBase64,docxBase64,sessionId,sessionNumber,requestId:requestId||crypto.randomUUID()},fetcher);
 }
 
 export async function sheetLibraryRequest(action,data={},fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your Clients sheet first.');return sheetRequest(endpoint,key,{action,...data},fetcher);}

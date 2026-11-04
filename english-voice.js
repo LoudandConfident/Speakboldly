@@ -1,0 +1,1 @@
+export function americanVoice(synthesis){const voices=synthesis?.getVoices?.()||[];return voices.find(v=>/^en[-_]US$/i.test(v.lang)&&/Samantha|Jenny|Aria|Google US English/i.test(v.name))||voices.find(v=>/^en[-_]US$/i.test(v.lang))||null;}
