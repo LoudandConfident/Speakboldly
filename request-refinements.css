@@ -1,0 +1,42 @@
+#home .home-speech-bubble{display:grid!important;place-items:center!important;font-size:14px!important;line-height:1.25!important;padding:10px 16px!important}
+#home .home-speech-bubble span{display:block;text-align:center;align-self:center}
+main #vision.vision-editorial .vision-opening{align-items:start!important;gap:28px!important;margin-bottom:28px!important}
+main #vision.vision-editorial .vision-opening-copy{align-self:center!important;padding:0!important;margin:0!important;max-width:510px}
+main #vision.vision-editorial .vision-purpose .vision-enrollment-promise{padding-top:38px!important}
+#quote .quote-request-grid{column-gap:48px!important;row-gap:30px!important}
+#quote .quote-business-choices{margin-top:24px;padding-left:16px}
+#join-team .join-editorial-title{font-size:clamp(27px,3.2vw,41px)!important}
+#join-team p{font-size:14px!important;line-height:1.65!important}
+#join-team .join-sb-content{gap:20px!important}
+#speak-hub .upcoming-watermark,#portal-studio .upcoming-watermark,#portal-studio .studio-roleplay>strong{font-size:clamp(48px,7vw,82px)!important;line-height:1.05!important;font-weight:700!important}
+#boldly-notes .boldly-note-page p{font-size:15.5px!important;line-height:1.7!important;margin-bottom:16px!important}
+#boldly-notes .boldly-note-page h3{font-size:22px!important;line-height:1.4!important;margin:28px 0 14px!important}
+#portal-content .dashboard-help-circle,.section-guide{pointer-events:auto!important;cursor:pointer;z-index:5}
+#portal-monthly>.section-guide{display:none!important}
+#portal-monthly .real-english-fun{display:grid;place-items:center;width:112px;height:112px;border-radius:50%;padding:16px;font-size:17px;text-align:center;white-space:normal}
+#portal-monthly .culture-book-choices{display:flex;justify-content:center;align-items:stretch;gap:24px;margin:22px 0}
+#portal-monthly .culture-book-choice{display:flex;flex-direction:column;justify-content:center;gap:18px;width:190px;min-height:245px;padding:24px 20px;border:1px solid #193c32;border-left:9px solid #35594c;border-radius:3px 10px 10px 3px;background:#193c32;color:#fffef8;box-shadow:5px 5px 0 #d6dacd;font-family:Georgia,serif;cursor:pointer}
+#portal-monthly .culture-book-choice strong{font-size:25px;line-height:1.2}
+#portal-monthly .culture-book-choice small{font:12px/1.5 'DM Sans',sans-serif}
+#portal-monthly .culture-book-choice.is-simplified{background:#f6f2e6;color:#193c32}
+#portal-monthly .culture-book-choice:disabled{opacity:.45;cursor:default}
+#portal-monthly .culture-book-choices[hidden]{display:none!important}
+#portal-monthly .novel-reader canvas{display:block;max-width:100%;height:auto;user-select:none;-webkit-touch-callout:none}
+#portal-monthly img{-webkit-user-drag:none;-webkit-touch-callout:none;user-select:none}
+#portal-monthly .culture-film-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+#portal-monthly .culture-film-card,#portal-monthly .culture-adaptation{min-width:0}
+#portal-monthly .culture-film-poster{display:block;width:min(100%,240px);height:310px;object-fit:contain;object-position:center;background:#f3f1e9;border-radius:8px;margin:0 auto 16px}
+#portal-monthly .culture-film-card p,#portal-monthly .culture-adaptation p{font-size:14px;line-height:1.65}
+.calendar-send-confirmation:disabled{opacity:.45!important;cursor:default!important}
+@media(max-width:680px){#quote .quote-business-choices{padding-left:0;margin-top:28px}#portal-monthly .culture-book-choices{gap:16px}#portal-monthly .culture-book-choice{width:44%;min-height:210px;padding:18px 12px}#portal-monthly .culture-book-choice strong{font-size:21px}#portal-monthly .culture-film-grid{grid-template-columns:1fr}main #vision.vision-editorial .vision-opening-copy{text-align:center}#home .home-speech-bubble{font-size:13px!important}}
+@media print{#portal-monthly img,#portal-monthly canvas,#portal-monthly .culture-book-choice{display:none!important}}
+
+#portal-monthly .real-english-side[hidden]{display:none!important}
+#portal-studio{position:relative}#portal-studio .studio-room-status{display:none!important}
+#portal-studio>.upcoming-watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;pointer-events:none}
+#portal-studio .studio-room-shapes{opacity:.3;filter:grayscale(.4)}
+
+.public-page .reading p{font-size:15.5px;line-height:1.7;margin-bottom:16px}.public-page .reading h2,.public-page .reading h3{font-size:22px;line-height:1.4}
+
+#portal-monthly .real-english-layout:not(:has(.real-english-side:not([hidden]))){grid-template-columns:minmax(0,1fr)!important}
+#client-authorization-dialog [data-task-reminder-action]{width:100%;min-height:46px;padding:10px 14px;border:1px solid #c8d3bf;border-radius:12px;background:#edf0e6;color:#193c32;text-align:left;font-size:13px}

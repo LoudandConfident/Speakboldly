@@ -1,22 +1,22 @@
-import {appendTaskPages} from './notes-task-pdf.js';
+import {appendTaskPages} from './notes-task-pdf.js?v=white-notes-2';
 import {DOCUMENT_BRAND,drawDocumentBranding} from './document-branding.js?v=two-line-footer-1';
 import {documentDate} from './student-document-filenames.js';
 export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date=documentDate(),title='Notes',taskAttachments=[],answerPages=true,welcomeText='',welcomeImages=[]}={}){
  const {PDFDocument,rgb}=await import('./vendor/pdf-lib.esm.min.js');const {default:fontkit}=await import('./vendor/fontkit.es.min.js');
  const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);const font=await pdf.embedFont(fontBytes,{subset:true}),logo=await pdf.embedPng(logoBytes);pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setTitle(client.name+' — '+title+(client.sessionNumber?' — Session '+client.sessionNumber:''));pdf.setCreator('Speak Boldly');
- const width=595.28,height=841.89,left=DOCUMENT_BRAND.left,maxWidth=width-88,ink=rgb(.98,.976,.957);let page,y;
- const newPage=()=>{page=pdf.addPage([width,height]);page.drawRectangle({x:0,y:0,width,height,color:rgb(.098,.235,.196)});y=height-124;};newPage();
+ const width=595.28,height=841.89,left=DOCUMENT_BRAND.left,maxWidth=width-88,ink=rgb(.098,.235,.196);let page,y;
+ const newPage=()=>{page=pdf.addPage([width,height]);page.drawRectangle({x:0,y:0,width,height,color:rgb(1,1,1)});y=height-124;};newPage();
  function line(text,size=11){if(y<106)newPage();page.drawText(text,{x:left,y,font,size,color:ink});y-=size*1.6;}
  function paragraph(value,size=11){
  const text=String(value||'').replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g,'').replace(/\t/g,'    ');
- for(const raw of text.split(/\r?\n/)){if(!raw){line('',size);continue;}let current='';
+ for(const raw of text.split(/\r?\n/)){if(raw.trim().endsWith(':')&&raw.trim().length<90){if(y<150)newPage();y-=10;page.drawLine({start:{x:left,y:y+17},end:{x:width-left,y:y+17},thickness:.6,color:rgb(.78,.82,.77)});line(raw.trim().replace(/:$/,''),13);y-=4;continue;}if(!raw){line('',size);continue;}let current='';
  for(const word of raw.split(/\s+/)){const proposed=current?current+' '+word:word;if(font.widthOfTextAtSize(proposed,size)<=maxWidth){current=proposed;continue;}if(current){line(current,size);current='';}for(const char of word){if(current&&font.widthOfTextAtSize(current+char,size)>maxWidth){line(current,size);current='';}current+=char;}}
  if(current)line(current,size);
  }
  }
  paragraph('Speak Boldly — '+title,19);y-=8;paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);if(client.sessionNumber)paragraph('Session: '+client.sessionNumber);paragraph('Date: '+date);y-=18;
- if(welcomeText||welcomeImages.length){paragraph('Welcome to the session',16);y-=6;paragraph(welcomeText);for(const illustration of welcomeImages){const image=illustration.type==='image/png'?await pdf.embedPng(illustration.bytes):await pdf.embedJpg(illustration.bytes);const scale=Math.min(maxWidth/image.width,240/image.height),w=image.width*scale,h=image.height*scale;if(y-h<106)newPage();page.drawImage(image,{x:left+(maxWidth-w)/2,y:y-h,width:w,height:h});y-=h+18;}if(y<160)newPage();paragraph('Session notes',16);y-=6;}paragraph(notes);
+ if(welcomeText||welcomeImages.length){paragraph('Welcome to the session',16);y-=6;paragraph(welcomeText);for(const illustration of welcomeImages){const image=illustration.type==='image/png'?await pdf.embedPng(illustration.bytes):await pdf.embedJpg(illustration.bytes);const scale=Math.min(maxWidth/image.width,240/image.height),w=image.width*scale,h=image.height*scale;if(y-h<106)newPage();page.drawImage(image,{x:left+(maxWidth-w)/2,y:y-h,width:w,height:h});y-=h+18;}y-=14;if(y<160)newPage();paragraph('Session notes',16);y-=6;}paragraph(notes);
  await appendTaskPages(pdf,taskAttachments,{font,rgb,client,newPage:()=>{newPage();return page;},answerPages});
- await drawDocumentBranding(pdf,{font,logo,light:true});
+ await drawDocumentBranding(pdf,{font,logo,light:false});
  return pdf.save();
 }
