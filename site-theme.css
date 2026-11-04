@@ -2493,3 +2493,7 @@ main #vision.vision-editorial .vision-purpose .vision-enrollment-promise{padding
 @media(max-width:680px){#reviews .reviews-layout{gap:16px!important}#reviews .reviews-copy{padding:18px 23px 21px!important}#reviews .reviews-album-area .review-cards{height:var(--review-deck-height,460px)!important}#reviews .reviews-album-area .review-card{padding:23px 19px!important}}
 main #home .hero .home-speech-links .home-speech-bubble,main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important}
 main #home .hero .home-speech-links .home-speech-bubble>span{display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;inset:auto!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;text-align:center!important;transform:none!important}
+
+/* Keep the PC install action available without changing the existing phone controls. */
+header>.desktop-install-button{display:none;flex:none;margin-left:12px;white-space:nowrap;font-size:12px;min-height:36px;padding:7px 12px;border-radius:999px}
+@media(hover:hover) and (pointer:fine){header>.desktop-install-button:not([hidden]){display:inline-flex;align-items:center;justify-content:center}}

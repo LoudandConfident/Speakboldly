@@ -49,3 +49,7 @@ main #home>.home-bottom-row{margin:0;padding:19px 6% 8px}
 
 #home .home-title-main{color:#faf9f4}
 #home .home-speech-links{justify-content:flex-start}
+
+/* Keep the PC install action available without changing the existing phone controls. */
+header>.desktop-install-button{display:none;flex:none;margin-left:12px;white-space:nowrap;font-size:12px;min-height:36px;padding:7px 12px;border-radius:999px}
+@media(hover:hover) and (pointer:fine){header>.desktop-install-button:not([hidden]){display:inline-flex;align-items:center;justify-content:center}}
