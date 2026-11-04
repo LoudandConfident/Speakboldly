@@ -247,23 +247,26 @@ export const courses = [
   },
   {
     "id": "pronunciation",
-    "title": "Pronunciation workshop",
-    "displayTitle": "Pronunciation & intonation workshop",
+    "title": "Word Stress & Intonation Workshop",
+    "displayTitle": "Word Stress & Intonation Workshop",
     "level": "Advanced",
     "duration": "6 sessions",
     "category": "Workshops",
-    "description": "Develop clearer pronunciation and your accent through focused practice with English sounds, word stress, rhythm and intonation.",
+    "description": "Build natural English rhythm through practical exercises, speaking drills, real-life conversations and activities you can use beyond the lesson.",
     "topics": [
-      "Accent and pronunciation development",
-      "Word and sentence stress",
-      "Intonation, rhythm and connected speech"
+      "Word stress — stressed syllables, stress shifts and common pronunciation mistakes",
+      "Sentence stress — emphasising important words and changing meaning through stress",
+      "Intonation — rising, falling and fall-rise patterns in questions, statements and conversations",
+      "Rhythm and connected speech — joining words naturally",
+      "Emotional expression — confidence, uncertainty, excitement, politeness and sarcasm",
+      "Interactive practice — dialogues, listening discrimination, role-play, recording challenges and self-assessment"
     ],
     "art": "pronunciation",
     "comingSoon": true,
-    "summary": "Develop your accent, clear pronunciation, speech rhythm and intonation.",
-    "detailDescription": "Practise individual sounds alongside accent development, connected speech, word stress, sentence rhythm and intonation. The goal is clearer, more confident communication; your instructor helps you notice patterns and practise them in meaningful conversation.",
-    "viewDescription": "Explore English sounds, word stress, rhythm, and intonation through six practical sessions. Apply pronunciation feedback to short exchanges and connected speech.",
-    "outcomes": "You’ll develop greater awareness of the patterns that help make your speech clearer. You’ll also learn a listening-and-recording routine for reviewing and refining your pronunciation independently."
+    "summary": "Practical word stress, sentence stress, intonation and natural English rhythm.",
+    "detailDescription": "Practise stressed syllables and stress shifts, sentence emphasis, rising and falling intonation, and connected speech. Use your voice to express confidence, uncertainty, excitement, politeness and sarcasm through real-life conversations.",
+    "viewDescription": "Six practical sessions with speaking drills, dialogues, listening discrimination, role-play and recording challenges. Learn to stress important words and develop a more natural English rhythm.",
+    "outcomes": "You’ll learn to notice stress and intonation patterns, use your voice to change meaning and review your own recordings with a practical self-assessment routine."
   },
   {
     "id": "information-technology",

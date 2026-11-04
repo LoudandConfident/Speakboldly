@@ -390,6 +390,9 @@ main>#students-portal.catalog.portal-session-active:not(#home){padding-top:16px!
 @media(max-width:900px){#quote .quote-request-grid{grid-template-columns:minmax(0,1fr)!important;row-gap:38px!important}#quote .quote-business-choices .quote-premium{min-height:195px;padding:22px!important}#quote .quote-business-choices .quote-tile-label{font-size:19px!important}}
 @media(prefers-reduced-motion:reduce){#quote .quote-business-choices{animation:none!important}}
 
+@media(min-width:1101px){body>header{padding-left:3.5%!important;padding-right:3.5%!important;column-gap:34px!important}#main-navigation{gap:7px!important}#main-navigation .nav-tab{font-size:11px!important;padding-inline:11px!important}}
+#speak-hub .speak-hub-meeting{padding:28px;border:1px solid #b7c9aa;border-radius:28px;background:#edf0e6;max-width:650px;margin-top:28px}#speak-hub .stay-tuned-note{font:500 21px/1.4 Georgia,serif;color:#193c32;text-align:center;margin:24px auto}#speak-hub .upcoming-view-content{opacity:.4;filter:grayscale(.3);pointer-events:none}
+
 /* program-assessment.css */
 /* Course catalogue: editorial heading, clean comparison cards. */
 #courses .courses-introduction{align-items:flex-end;padding-bottom:30px;border-bottom:1px solid #b9c9b9}
@@ -2238,6 +2241,7 @@ main #boldly-notes:has([data-notes-reader][hidden]) .bold-blog-masthead .bold-bl
 #boldly-notes .blog-list-glossary{display:table;margin-top:16px;padding:0;border:0;background:transparent;color:#151b17;font-size:12px;line-height:1.6;font-weight:600;text-decoration:none}
 #boldly-notes .blog-list-glossary:hover{color:var(--blog-green,#193c32);text-decoration:none;transform:translateX(3px)}
 
+#boldly-notes .blog-expression{text-decoration-style:dashed!important;text-decoration-color:#64845b!important}.blog-expression sup{font-size:9px}.blog-glossary-sheet[data-glossary-kind="Useful expressions & idioms"] .blog-glossary-entry{border-color:#a6bc8b}
 
 /* rewards.css */
 .reward-panel{margin:28px 0;padding:24px;border:1px solid #b9cbb0;border-radius:26px;background:#edf0e6;color:#193c32}.reward-panel h3{font-size:23px;margin:0 0 10px}.reward-panel p{font-size:14px;line-height:1.7;max-width:700px}.reward-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.reward-dialog{max-width:620px}.reward-dialog form{display:grid;gap:14px}.reward-dialog label{display:grid;gap:6px;font-size:14px;font-weight:600}.reward-dialog input,.reward-dialog select{width:100%;max-width:100%;box-sizing:border-box;padding:11px;border:1px solid #b9cbb0;border-radius:9px;background:white;color:#193c32}.reward-dialog .reward-private{font-size:12px;line-height:1.6;margin:0;color:#53685b}.reward-dialog [data-share-fields],.reward-dialog [data-refer-fields]{display:grid;gap:14px}.reward-dialog [hidden],.reward-panel[hidden]{display:none!important}.reward-dialog .reward-consent{display:flex;align-items:flex-start;gap:10px;line-height:1.6;font-size:12px;font-weight:400}.reward-dialog .reward-consent input{width:20px;height:20px;flex:none}.reward-dialog .reward-honeypot{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.reward-admin-claim{border:1px solid #c2cfb8;border-radius:16px;padding:18px;margin:16px 0;overflow-wrap:anywhere}.reward-admin-claim h4{margin:0 0 9px}.reward-admin-claim>a{display:inline-block;margin-right:14px;margin-bottom:12px}.reward-admin-claim p{font-size:13px;line-height:1.6}.reward-referral-note{font-size:13px;line-height:1.5;background:#edf0e6;padding:12px;border-radius:12px;overflow-wrap:anywhere}

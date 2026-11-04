@@ -1,3 +1,4 @@
+import {learningForPost} from '../blog-learning-tools.js';
 import {mergeBlogPosts} from '../bold-blog-posts.js';
 // Read only the public blog endpoint. Never request private dashboard data or drafts.
 import {readFileSync,writeFileSync} from 'node:fs';
@@ -12,7 +13,7 @@ async function request(id){const response=await fetch(endpoint,{method:'POST',he
 try{
 const list=await request();if(!Array.isArray(list.posts)||list.posts.length>1000)throw Error('Invalid public blog list.');
 const posts=[];
-for(const item of list.posts){if(!/^[a-zA-Z0-9_-]{1,100}$/.test(item.id))throw Error('Invalid public article ID.');const {post}=await request(item.id);if(!post||post.id!==item.id||!Array.isArray(post.pages)||!post.pages.length||post.pages.length>5||post.pages.some(p=>typeof p!=='string'||p.length>60000)||typeof post.title!=='string'||post.title.length>140||!/^\d{4}-\d{2}-\d{2}$/.test(post.date))throw Error('Invalid public article.');posts.push({id:post.id,title:post.title,topic:String(post.topic||''),date:post.date,pages:post.pages,images:(post.images||[]).map(i=>({url:String(i.url||'')})),published:true});}
+for(const item of list.posts){if(!/^[a-zA-Z0-9_-]{1,100}$/.test(item.id))throw Error('Invalid public article ID.');const {post}=await request(item.id);if(!post||post.id!==item.id||!Array.isArray(post.pages)||!post.pages.length||post.pages.length>5||post.pages.some(p=>typeof p!=='string'||p.length>60000)||typeof post.title!=='string'||post.title.length>140||!/^\d{4}-\d{2}-\d{2}$/.test(post.date))throw Error('Invalid public article.');posts.push({id:post.id,title:post.title,topic:String(post.topic||''),date:post.date,pages:post.pages,images:(post.images||[]).map(i=>({url:String(i.url||'')})),published:true,learningTools:learningForPost(post)});}
 posts.sort((a,b)=>b.date.localeCompare(a.date)||a.id.localeCompare(b.id));
 writeFileSync(new URL('../content/bold-blog-public.json',import.meta.url),JSON.stringify({posts:mergeBlogPosts(posts)},null,2)+'\n');
 console.log('Synced '+posts.length+' already-public articles.');

@@ -146,5 +146,12 @@ export const motivationPreviews = {
     "height": 600,
     "version": "05e6797eccb9",
     "bytes": 92845
+  },
+  "./images/daily-motivation-small-steps-teacher.webp": {
+    "image": "./images/motivation-preview/daily-motivation-small-steps-teacher-ddb338b885c8.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "ddb338b885c8",
+    "bytes": 84787
   }
 };

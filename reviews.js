@@ -3,7 +3,7 @@ import {initializeReviewLevels,displayedReviewLevel} from './review-levels.js?v=
 import {showSubmissionSuccess,SUBMISSION_SUCCESS_MESSAGE} from './submission-success.js';
 import {reviewSubmission} from './review-validation.js?v=course-levels-1';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
-import {courses} from './courses.js?v=pronunciation-intonation-1';
+import {courses} from './courses.js?v=word-stress-2';
 import {reviewsConnected,reviewRequest} from './reviews-api.js?v=separate-review-sheet';
 export function initializeReviews(doc, api = reviewRequest, connected = reviewsConnected) {
  const opener = doc.querySelector('#review-open'), form = doc.querySelector('#review-form');

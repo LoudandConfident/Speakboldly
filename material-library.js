@@ -1,5 +1,5 @@
 import {learningDocumentPart,createLearningDocumentCard} from './learning-document-cards.js?v=library-folders';
-import {courses} from './courses.js?v=pronunciation-intonation-1';
+import {courses} from './courses.js?v=word-stress-2';
 import {courseIllustration} from './course-illustrations.js?v=1';
 const aliases={writing:'business-writing',speaking:'meetings','reclaim-focus':'focus'};
 const learnerPrograms=courses.filter(c=>!c.catalogHidden&&c.category!=='Training'&&!['general-4','general-8','information-technology'].includes(c.id));

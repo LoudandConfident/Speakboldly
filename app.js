@@ -2,7 +2,7 @@ import {offerIsActive} from './assessment-time.js';
 import {courseIllustration as art} from './course-illustrations.js?v=1';
 import {coursePaths} from './public-seo-routes.js';
 
-import {courses,matches} from './courses.js?v=pronunciation-intonation-1';
+import {courses,matches} from './courses.js?v=word-stress-2';
 const $=s=>document.querySelector(s);
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const chat=message=>'mailto:Contactus@speakboldly.space?subject='+encodeURIComponent('English coaching enquiry')+'&body='+encodeURIComponent(message+'\n\nContact number: 01283786904');

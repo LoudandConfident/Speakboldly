@@ -110,3 +110,6 @@
 @keyframes quote-business-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 @media(max-width:900px){#quote .quote-request-grid{grid-template-columns:minmax(0,1fr)!important;row-gap:38px!important}#quote .quote-business-choices .quote-premium{min-height:195px;padding:22px!important}#quote .quote-business-choices .quote-tile-label{font-size:19px!important}}
 @media(prefers-reduced-motion:reduce){#quote .quote-business-choices{animation:none!important}}
+
+@media(min-width:1101px){body>header{padding-left:3.5%!important;padding-right:3.5%!important;column-gap:34px!important}#main-navigation{gap:7px!important}#main-navigation .nav-tab{font-size:11px!important;padding-inline:11px!important}}
+#speak-hub .speak-hub-meeting{padding:28px;border:1px solid #b7c9aa;border-radius:28px;background:#edf0e6;max-width:650px;margin-top:28px}#speak-hub .stay-tuned-note{font:500 21px/1.4 Georgia,serif;color:#193c32;text-align:center;margin:24px auto}#speak-hub .upcoming-view-content{opacity:.4;filter:grayscale(.3);pointer-events:none}

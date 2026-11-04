@@ -101,3 +101,5 @@ main #boldly-notes:has([data-notes-reader][hidden]) .bold-blog-masthead .bold-bl
 #boldly-notes .blog-read-article{display:table;margin-top:18px;font-size:12px}
 #boldly-notes .blog-list-glossary{display:table;margin-top:16px;padding:0;border:0;background:transparent;color:#151b17;font-size:12px;line-height:1.6;font-weight:600;text-decoration:none}
 #boldly-notes .blog-list-glossary:hover{color:var(--blog-green,#193c32);text-decoration:none;transform:translateX(3px)}
+
+#boldly-notes .blog-expression{text-decoration-style:dashed!important;text-decoration-color:#64845b!important}.blog-expression sup{font-size:9px}.blog-glossary-sheet[data-glossary-kind="Useful expressions & idioms"] .blog-glossary-entry{border-color:#a6bc8b}

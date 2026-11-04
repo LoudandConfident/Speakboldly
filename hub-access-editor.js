@@ -1,4 +1,4 @@
-import {MATERIAL_FOLDERS} from './material-library.js?v=program-cards-1';
+import {MATERIAL_FOLDERS} from './material-library.js?v=word-stress-3';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 export function initializeHubAccessEditor(doc,isUnlocked){const host=doc.querySelector('#admin-dashboard');if(!host)return{lock(){}};const root=doc.createElement('details');root.id='hub-access-editor';root.className='admin-detail';root.innerHTML='<summary>Folder passwords</summary><div class="hub-owner-controls"><button type="button" class="button light small" data-refresh>Refresh</button><p role="status" aria-live="polite"></p><div data-settings></div></div>';host.append(root);const status=root.querySelector('[role=status]'),list=root.querySelector('[data-settings]');let generation=0,busy=false,snapshot;
  const labels={exercises:'Practice Zone',material:'General English · library levels',library:'Program folders',exams:'General English · exam levels',mission:'Daily Challenge',monthly:'Culture Corner',studio:'SB Studio'};

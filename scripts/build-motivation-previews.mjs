@@ -10,7 +10,7 @@ let previous={};if(existsSync(target)){const text=readFileSync(target,'utf8');tr
 const result={};
 for(const entry of dailyQuotes){
  const source=resolve(root,entry.image),version=createHash('sha256').update(readFileSync(source)).update('jpeg-600-v1').digest('hex').slice(0,12);
- const stem=entry.image.split('/').pop().replace(/\.png$/,''),image='./images/motivation-preview/'+stem+'-'+version+'.jpg',destination=resolve(root,image);
+ const stem=entry.image.split('/').pop().replace(/\.(?:png|webp)$/,''),image='./images/motivation-preview/'+stem+'-'+version+'.jpg',destination=resolve(root,image);
  if(previous[entry.image]?.version===version&&existsSync(destination)){result[entry.image]=previous[entry.image];continue;}
  const modern=spawnSync('magick',['-version'],{stdio:'ignore'}).status===0,command=modern?'magick':'convert';
  mkdirSync(dirname(destination),{recursive:true});
