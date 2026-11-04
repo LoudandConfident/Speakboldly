@@ -14,7 +14,7 @@ export function publicSiteShell(shell,{path,title,description,graph,view,course=
  if(view==='daily-quote'){
   html=html.replace(/<img id="daily-quote-image"[^>]*>/,'<img id="daily-quote-image" src="'+escape(image)+'" alt="'+escape(imageAlt)+'" width="600" height="600" decoding="async" fetchpriority="high">');
   if(motivation){html=html.replace(/(<blockquote id="daily-quote-text"[^>]*>)[\s\S]*?<\/blockquote>/,'$1<strong>'+escape(motivation.quote)+'</strong></blockquote>').replace('<div id="daily-quote-reflection" class="motivation-reflection"></div>','<div id="daily-quote-reflection" class="motivation-reflection">'+motivation.paragraphs.map(p=>'<p>'+escape(p)+'</p>').join('')+'</div>');}
-  html=html.replace('</head>','<link rel="modulepreload" href="/home-gallery.js?v=math-reflection-trim-9"><link rel="preload" as="image" href="'+escape(image)+'"></head>');
+  html=html.replace('</head>','<link rel="modulepreload" href="/home-gallery.js?v=stern-teacher-10"><link rel="preload" as="image" href="'+escape(image)+'"></head>');
   html=html.replace(/<meta property="og:image:type"[^>]*>/,'<meta property="og:image:type" content="image/jpeg">').replace(/<meta property="og:image:width"[^>]*>/,'<meta property="og:image:width" content="600">').replace(/<meta property="og:image:height"[^>]*>/,'<meta property="og:image:height" content="600">').replace(/<meta property="og:image:alt"[^>]*>/,'<meta property="og:image:alt" content="'+escape(imageAlt)+'">');
  }
  html=html.replace(/<script type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/g,'');

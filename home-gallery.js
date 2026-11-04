@@ -1,4 +1,4 @@
-import {motivationPreviews} from './motivation-preview-images.js?v=unbranded-motivation-5';
+import {motivationPreviews} from './motivation-preview-images.js?v=stern-teacher-6';
 import {motivationDay,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js?v=weekly-2';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
@@ -105,7 +105,7 @@ quoteDetails.push({support:[],reflection:'You do not need a perfect sentence to 
 dailyPractice.push('Your small step: write one new phrase in your notebook, make it about your own life and say it aloud. One phrase. One brave try.');
 // A new reflection requested by the owner; the earlier archived story remains unchanged.
 const mathTeacherOriginalIndex=dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-safe-learning-original.png');
-dailyQuotes.push({...dailyQuotes[mathTeacherOriginalIndex],image:'./images/daily-motivation-math-teacher-board.webp',alt:'A teacher gently encouraging a schoolgirl as they stand together at a maths blackboard',quote:'I hated my Math teacher, too!'});
+dailyQuotes.push({...dailyQuotes[mathTeacherOriginalIndex],image:'./images/daily-motivation-math-teacher-board.webp',alt:'A stern Math teacher scolding a worried schoolgirl beside an incorrect answer on the blackboard',quote:'I hated my Math teacher, too!'});
 quoteDetails.push({"support":[],"reflection":"Sometimes, what stays with us from a classroom has very little to do with the subject. We remember how it felt to hesitate, to ask a question, or to get an answer wrong while everyone was listening.","paragraphs":["Sometimes, what stays with us from a classroom has very little to do with the subject. We remember how it felt to hesitate, to ask a question, or to get an answer wrong while everyone was listening.","Over time, that feeling can become a belief about ourselves: ‘I’m bad at Math.’ ‘Languages just aren’t for me.’ We carry those conclusions into adulthood, often without questioning where they came from.","If English brings back that same fear, you deserve the chance to experience learning differently.","Give yourself permission to try in a space where questions are welcome. Start with one conversation, one useful sentence, or one question you would usually keep to yourself. Let that experience give you new evidence about what you can do.","And if you teach, remember the responsibility in your next response. The learner in front of you may carry your words long after they forget the lesson. Choose words that help them return with curiosity and the courage to try again."]});
 dailyPractice.push("Ask one question you would usually keep to yourself. Give yourself the chance to be supported.");
 export function motivationShareUrl(entry,base='https://speakboldly.space/'){
