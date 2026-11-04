@@ -50,3 +50,9 @@ html body #boldly-notes .boldly-note-page h3{font-size:20px!important;line-heigh
 .public-page:has(.reading) main>h1{font-size:28px!important;line-height:1.25!important}
 .public-page .grid article.card:has(a[href^="/blog/"]) h2{font-size:20px!important;line-height:1.35!important}
 @media(max-width:680px){html body #boldly-notes [data-notes-reader]>h2,.public-page:has(.reading) main>h1{font-size:24px!important}html body #boldly-notes .boldly-note-link h3{font-size:18px!important}html body main #home .hero .home-speech-links .home-speech-bubble>span{font-size:13px!important;bottom:6px!important}}
+
+/* Smaller homepage speech buttons; keep readable centered labels and phone tap targets. */
+html body main #home .hero .home-speech-links{width:240px!important;max-width:100%!important;gap:8px!important;flex-wrap:nowrap!important}
+html body main #home .hero .home-speech-links .home-speech-bubble,html body main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){flex:0 0 116px!important;width:116px!important;height:48px!important;min-height:44px!important;max-height:48px!important;padding:0!important;box-sizing:border-box!important}
+html body main #home .hero .home-speech-links .home-speech-bubble>span{font-size:12px!important;line-height:1.2!important;inset:0 0 6px!important}
+@media(max-width:680px){html body main #home .hero .home-speech-links{width:184px!important;gap:8px!important}html body main #home .hero .home-speech-links .home-speech-bubble,html body main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){flex:0 0 88px!important;width:88px!important;height:44px!important;min-height:44px!important;max-height:44px!important}html body main #home .hero .home-speech-links .home-speech-bubble>span{font-size:11px!important;inset:0 0 5px!important}}
