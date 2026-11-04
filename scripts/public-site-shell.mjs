@@ -24,5 +24,5 @@ export function publicSiteShell(shell,{path,title,description,graph,view,course=
  html=html.replace(/<([a-z]+)\b([^>]*\bdata-view\b[^>]*)>/g,(whole,tag,attributes)=>{const id=attributes.match(/\bid="([^"]+)"/)?.[1];attributes=attributes.replace(/\s+hidden(?:="")?/g,'');return '<'+tag+attributes+(id===view?'':' hidden')+'>';});
  if(view!=='home')html=html.replace(/(<img\b[^>]*src="\.\/home-coaching-wide\.webp[^"]*")([^>]*>)/,'$1 loading="lazy"$2').replace('fetchpriority="high"','fetchpriority="auto"');
  html=html.replace('</main>','<noscript><section class="catalog">'+fallback+'</section></noscript></main>');
- return html.replace('</body>','<script type="module" src="/assets/public-site-route.js?v=tab-previews-1"></script></body>');
+ return html.replace('</body>','<script type="module" src="/assets/public-site-route.js?v=portal-reload-2"></script></body>');
 }

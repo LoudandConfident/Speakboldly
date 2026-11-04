@@ -1,7 +1,13 @@
 // Large portal and practice modules are fetched only when their page is opened.
 export function initializeFeatureLoader(doc,win){
+ // A deliberate reload returns to the portal chooser; normal deep links still open their target.
+ const navigation=win.performance?.getEntriesByType?.('navigation')?.[0];
+ if(navigation?.type==='reload'&&win.location.hash.startsWith('#students-portal')&&!doc.querySelector('#students-portal')?.hasAttribute('data-instructor-only')){
+  const url=new URL(win.location.href);url.hash='students-portal';win.history.replaceState(null,'',url);
+ }
+
  const groups={
-  'students-portal':['./learning-hub-entry.js?v=simplified-reading-10'],
+  'students-portal':['./learning-hub-entry.js?v=reload-chooser-11'],
   'assessment':['./placement-assessment.js?v=brief-personal-2'],
   'reviews':['./reviews.js?v=complete-cards-4'],
   'daily-quote':['./home-gallery.js?v=math-email-6'],

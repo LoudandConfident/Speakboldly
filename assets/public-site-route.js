@@ -9,7 +9,7 @@ if(course&&location.hash==='#courses'){
 }
 
 // Open the existing Learning Hub controls, preserving their normal access checks.
-if(view==='students-portal'){
+if(view==='students-portal'&&performance.getEntriesByType('navigation')[0]?.type!=='reload'){
  let clientOpened=false,panelOpened=false;
  const panel=document.body.dataset.publicPanel;
  const observer=new MutationObserver(openHub);

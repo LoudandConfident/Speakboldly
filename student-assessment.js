@@ -134,7 +134,7 @@ export function initializeStudentAssessment(doc) {
  doc.defaultView.addEventListener('pagehide',lock);
  lock();
  if(doc.defaultView.location.hash.endsWith('/calendar'))Promise.resolve().then(openCalendarRoute);
- else if(new URL(doc.defaultView.location.href).searchParams.get('app')==='learner'&&(!doc.defaultView.location.hash||doc.defaultView.location.hash.startsWith('#students-portal')))Promise.resolve().then(()=>root.querySelector('[data-portal-area=client]').click());
+ else if(doc.defaultView.performance?.getEntriesByType?.('navigation')?.[0]?.type!=='reload'&&new URL(doc.defaultView.location.href).searchParams.get('app')==='learner'&&(!doc.defaultView.location.hash||doc.defaultView.location.hash.startsWith('#students-portal')))Promise.resolve().then(()=>root.querySelector('[data-portal-area=client]').click());
 }
 
 
