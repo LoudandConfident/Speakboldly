@@ -1,7 +1,7 @@
 export const EDITORIAL_POSTS = [
   {
     "id": "the-quiet-power-of-consistency",
-    "title": "The Quiet Power of Consistency: How English Slowly Changes the Way You Think",
+    "title": "Quiet Power of Consistency",
     "topic": "Consistency, confidence & everyday English",
     "date": "2026-11-04",
     "published": true,
@@ -267,4 +267,4 @@ export const EDITORIAL_POSTS = [
     }
   }
 ];
-export function mergeBlogPosts(remote=[]){const keys=new Set(remote.flatMap(p=>[p.id,String(p.title||'').trim().toLowerCase()]));return [...remote,...EDITORIAL_POSTS.filter(p=>p.published&&!keys.has(p.id)&&!keys.has(p.title.trim().toLowerCase()))].sort((a,b)=>String(b.date).localeCompare(String(a.date)));}
+export function mergeBlogPosts(remote=[]){remote=remote.map(p=>p.id==='the-quiet-power-of-consistency'?{...p,title:'Quiet Power of Consistency'}:p);const keys=new Set(remote.flatMap(p=>[p.id,String(p.title||'').trim().toLowerCase()]));return [...remote,...EDITORIAL_POSTS.filter(p=>p.published&&!keys.has(p.id)&&!keys.has(p.title.trim().toLowerCase()))].sort((a,b)=>String(b.date).localeCompare(String(a.date)));}
