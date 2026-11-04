@@ -9,6 +9,7 @@ export const MONTHLY_NOVELS=[
  },
  {
   "id": "1342",
+  "simplified": {"id":"1342-simplified","url":"./novels/simplified/pride-and-prejudice.pdf","pages":33,"language":"Simplified modern English · intermediate reading","abridged":true},
   "title": "Pride and Prejudice",
   "author": "Jane Austen",
   "url": "./novels/book-1342.pdf",
