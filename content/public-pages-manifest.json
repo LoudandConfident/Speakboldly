@@ -6,6 +6,7 @@
     "how-it-works/index.html",
     "contact/index.html",
     "join-us/index.html",
+    "speak-hub/index.html",
     "get-a-quote/index.html",
     "programs/index.html",
     "programs/reclaim-your-focus/index.html",
@@ -26,6 +27,7 @@
     "learn/daily-quotes/index.html",
     "assessments/index.html",
     "blog/index.html",
+    "blog/the-quiet-power-of-consistency/index.html",
     "blog/your-english-is-not-your-worth/index.html"
   ],
   "indexable": [
@@ -36,6 +38,7 @@
     "/how-it-works/",
     "/contact/",
     "/join-us/",
+    "/speak-hub/",
     "/get-a-quote/",
     "/programs/",
     "/programs/general-english/",
@@ -48,6 +51,7 @@
     "/learn/daily-quotes/",
     "/assessments/",
     "/blog/",
+    "/blog/the-quiet-power-of-consistency/",
     "/blog/your-english-is-not-your-worth/",
     "/motivation/daily-motivation-1.html",
     "/motivation/daily-motivation-2.html",
@@ -70,6 +74,7 @@
     "/motivation/daily-motivation-safe-learning-original.html",
     "/motivation/daily-motivation-live-to-learn-original.html",
     "/motivation/daily-motivation-learned-through-love.html",
+    "/motivation/daily-motivation-small-steps-teacher.html",
     "/brochures/Speak-Boldly-Method.pdf",
     "/brochures/SB-Policy.pdf"
   ]
