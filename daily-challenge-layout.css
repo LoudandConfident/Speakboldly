@@ -23,3 +23,5 @@
  #students-portal #daily-mission .daily-challenge-fun svg{width:65px;height:50px}
  #students-portal #daily-mission .daily-challenge-extras .daily-encouragement{display:none}
 }
+
+#daily-mission .challenge-step-heading{display:flex;align-items:center;gap:10px;margin-bottom:12px}#daily-mission .challenge-step-heading h4{margin:0!important}#daily-mission .challenge-step-help{display:inline-grid;place-items:center;flex:none;width:30px;height:30px;min-height:30px;border:1px solid #96ac8b;border-radius:50%;background:#edf0e6;color:#193c32;font:600 15px/1 sans-serif;cursor:pointer}#daily-mission .challenge-step-help:hover,#daily-mission .challenge-step-help[aria-expanded=true]{background:#d5ed98}#daily-mission .challenge-step-help:focus-visible{outline:2px solid #193c32;outline-offset:3px}#daily-mission .challenge-step-tip{padding:12px 15px;background:#edf0e6;border-radius:12px;font-size:13px;line-height:1.65}

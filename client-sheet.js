@@ -53,17 +53,17 @@ export function initializeClientSheet(doc) {
    const saved = JSON.parse(doc.defaultView.localStorage.getItem(CONNECTION_STORAGE_KEY)||'null');
    if(saved && saved.endpoint !== form.elements.endpoint.defaultValue) {
     clearClientSheet();doc.defaultView.localStorage.removeItem(CONNECTION_STORAGE_KEY);
-    form.elements.endpoint.value = form.elements.endpoint.defaultValue;form.hidden = false;
-    status.textContent = 'New Clients sheet ready. Enter its private connection key to connect.';return;
+    form.elements.endpoint.value = form.elements.endpoint.defaultValue;form.hidden = true;
+    status.textContent = 'Sign in with your instructor password to reconnect.';return;
    }
    if(saved && validUrl(saved.endpoint) && typeof saved.key === 'string' && saved.key) {
     endpoint = saved.endpoint;key = saved.key;form.elements.endpoint.value = endpoint;
-    form.hidden = true;if(change)change.hidden = false;
+    form.hidden = true;if(change)change.hidden = true;
     status.textContent = 'Saved sheet connection loaded.';
    }
   }catch{}
  }
- change?.addEventListener('click',()=>{form.hidden = false;form.elements.endpoint.value = endpoint||form.elements.endpoint.defaultValue;form.elements.key.value = '';form.elements.key.focus();});
+ change?.addEventListener('click',()=>{form.hidden = true;form.elements.endpoint.value = endpoint||form.elements.endpoint.defaultValue;form.elements.key.value = '';form.elements.key.focus();});
  async function connect(secretValue){
   const url=form.elements.endpoint.value.trim(),secret=String(secretValue||'').trim();
   if(!validUrl(url)||!secret)throw new Error('Enter your private connection key.');
@@ -91,10 +91,10 @@ export function initializeClientSheet(doc) {
   status.textContent = 'Sheet connected. Loading students…';
   try {doc.defaultView.localStorage.setItem(CONNECTION_STORAGE_KEY,JSON.stringify({endpoint,key}));}
   catch {status.textContent = 'Your browser could not remember the connection. It will work only for this visit.';}
-  form.hidden = true;if(change)change.hidden = false;
+  form.hidden = true;if(change)change.hidden = true;
   doc.dispatchEvent(new doc.defaultView.Event('client-sheet-configured'));
  });
- return {restore,connect,lock(){clearClientSheet();form.reset();form.hidden = false;if(change)change.hidden = true;status.textContent = '';}};
+ return {restore,connect,lock(){clearClientSheet();form.reset();form.hidden = true;if(change)change.hidden = true;status.textContent = '';}};
 }
 
 export async function loadSheetSessions(fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'listSessions'},fetcher);}
