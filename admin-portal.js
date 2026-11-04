@@ -1,7 +1,7 @@
 import {connectInstructor} from './instructor-login.js?v=password-only-2';
 import {initializePersonalCalendar} from './personal-calendar.js?v=phone-sync-2';
 import {createTaskReminder} from './task-reminder.js?v=1';
-import {initializeRewardsAdmin} from './rewards-admin.js?v=book-promotions-3';
+import {initializeRewardsAdmin} from './rewards-admin.js?v=manual-only-3';
 import {initializePracticeZoneSetup} from './practice-zone-setup.js';
 import {decorateClientActions,setClientStatusAction} from './client-actions.js?v=motivation-name-5';
 import {showSubmissionSuccess} from './submission-success.js';
@@ -14,7 +14,7 @@ import {initializeMotivationFreeze} from './motivation-freeze-editor.js?v=motiva
 import {refreshMotivationSettings} from './motivation-settings.js?v=freeze-24-oct-1';
 import {clientDailyMotivation} from './home-gallery.js?v=teacher-week-4';
 import {initializeInstructorFrench} from './instructor-french.js?v=toolbar-v2';
-import {initializeNativeEnglishEditor} from './native-english-editor.js?v=culture-films-2';
+import {initializeNativeEnglishEditor} from './native-english-editor.js?v=simplified-art-3';
 import {initializeInstructorOverview} from './instructor-overview.js?v=centered-actions-2';
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
 import {openClientReportTab} from './report-tabs.js?v=route-safe-2';

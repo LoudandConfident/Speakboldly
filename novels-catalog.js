@@ -1,6 +1,7 @@
 export const MONTHLY_NOVELS=[
  {
   "id": "1260",
+  "simplified": {"id":"1260-simplified","url":"./novels/simplified/jane-eyre.pdf","pages":43,"language":"Simplified modern English · intermediate reading","abridged":true},
   "title": "Jane Eyre",
   "author": "Charlotte Brontë",
   "url": "./novels/book-1260.pdf",
