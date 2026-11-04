@@ -153,5 +153,12 @@ export const motivationPreviews = {
     "height": 600,
     "version": "ddb338b885c8",
     "bytes": 84787
+  },
+  "./images/daily-motivation-math-teacher-board.webp": {
+    "image": "./images/motivation-preview/daily-motivation-math-teacher-board-4f63b79b06fe.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "4f63b79b06fe",
+    "bytes": 76521
   }
 };

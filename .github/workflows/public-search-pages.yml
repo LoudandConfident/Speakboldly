@@ -49,7 +49,7 @@ jobs:
       - name: Check public comment readiness without posting
         run: node scripts/check-comment-service.mjs
       - run: npm run build:seo
-      - run: node --test public-seo.test.mjs rewards-backend.test.mjs drive-folders.test.mjs material-program-cards.test.mjs general-english-exams.test.mjs general-english-speaking.test.mjs monthly-learning.test.mjs report-tabs.test.mjs folder-passwords.test.mjs student-submissions.test.mjs coach-routing.test.mjs blog-comments.test.mjs blog-reading-tools.test.mjs blog-learning-backend.test.mjs simplified-novel.test.mjs motivation-copy-link.test.mjs
+      - run: node --test public-seo.test.mjs rewards-backend.test.mjs drive-folders.test.mjs material-program-cards.test.mjs general-english-exams.test.mjs general-english-speaking.test.mjs monthly-learning.test.mjs report-tabs.test.mjs folder-passwords.test.mjs student-submissions.test.mjs coach-routing.test.mjs blog-comments.test.mjs blog-reading-tools.test.mjs blog-learning-backend.test.mjs simplified-novel.test.mjs motivation-copy-link.test.mjs motivation-author-text.test.mjs reviews-api.test.mjs
       - name: Save generated public pages and request a Pages build
         env:
           GH_TOKEN: ${{ github.token }}

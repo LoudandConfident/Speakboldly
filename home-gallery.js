@@ -1,4 +1,4 @@
-import {motivationPreviews} from './motivation-preview-images.js?v=small-picture-preview-2';
+import {motivationPreviews} from './motivation-preview-images.js?v=math-board-3';
 import {motivationDay,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js?v=weekly-2';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
@@ -30,11 +30,11 @@ export function cairoDayNumber(now = new Date()) {
 const settingsFrozen=()=>motivationSettings().frozen;
 export function motivationIndexForDate(now = new Date()) {
  const day=motivationDay(now,cairoDayNumber),start=Math.floor(Date.UTC(2026,9,15)/86400000),end=Math.floor(Date.UTC(2026,9,19)/86400000);
- if(day>=Math.floor(Date.UTC(2026,10,2)/86400000)&&day<Math.floor(Date.UTC(2026,10,9)/86400000)&&!settingsFrozen())return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-small-steps-teacher.webp');
+ if(day>=Math.floor(Date.UTC(2026,10,2)/86400000)&&day<Math.floor(Date.UTC(2026,10,9)/86400000)&&!settingsFrozen())return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-math-teacher-board.webp');
  if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
  if(day>=end){
   // A fixed seed gives every device the same shuffled daily schedule.
-  const order=Array.from({length:dailyQuotes.length},(_,index)=>index);let seed=20261019;
+  const order=Array.from({length:dailyQuotes.length},(_,index)=>index).filter(index=>!['./images/daily-motivation-small-steps-teacher.webp','./images/daily-motivation-math-teacher-board.webp'].includes(dailyQuotes[index].image));let seed=20261019;
   for(let i=order.length-1;i>0;i--){seed=(Math.imul(1664525,seed)+1013904223)>>>0;const j=seed%(i+1);[order[i],order[j]]=[order[j],order[i]];}
   const held=dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
   if(order[0]===held)[order[0],order[1]]=[order[1],order[0]];
@@ -103,6 +103,11 @@ dailyPractice.push("You, too, can go further than you ever imagined by enjoying 
 dailyQuotes.push({image:'./images/daily-motivation-small-steps-teacher.webp',alt:'An adult English teacher and learner smiling together as they practise a phrase from an open book',quote:'Small steps still count.',embedded:false});
 quoteDetails.push({support:[],reflection:'You do not need a perfect sentence to make progress. One useful phrase, spoken aloud and used again, is a small step worth keeping.',paragraphs:['You do not need a perfect sentence to make progress. One useful phrase, spoken aloud and used again, is a small step worth keeping.','A good learning space gives you room to pause, ask a question and try again. Your teacher can guide you, but the little moments when you choose to use your English are yours.','Today, borrow one phrase from something you read or watch. Say it once, change one detail, then use it in a message or conversation. Keep it simple enough to repeat tomorrow.']});
 dailyPractice.push('Your small step: write one new phrase in your notebook, make it about your own life and say it aloud. One phrase. One brave try.');
+// Keep the author's complete maths-teacher reflection unchanged; only its picture and title are refreshed.
+const mathTeacherOriginalIndex=dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-safe-learning-original.png');
+dailyQuotes.push({...dailyQuotes[mathTeacherOriginalIndex],image:'./images/daily-motivation-math-teacher-board.webp',alt:'A teacher gently encouraging a schoolgirl as they stand together at a maths blackboard',quote:'I hated my math teacher, too!'});
+quoteDetails.push({...quoteDetails[mathTeacherOriginalIndex],paragraphs:[...quoteDetails[mathTeacherOriginalIndex].paragraphs]});
+dailyPractice.push(dailyPractice[mathTeacherOriginalIndex]);
 export function motivationShareUrl(entry,base='https://speakboldly.space/'){
  if(entry.customDate)return new URL('./?motivation='+entry.customDate+'#daily-quote',base).href;
  const name=entry.image.split('/').pop().replace(/\.(?:png|webp)$/,'.html');return new URL('./motivation/'+name,base).href;

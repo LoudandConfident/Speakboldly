@@ -7,7 +7,7 @@ Keep Code.gs, GeneralEnglishExams.gs and your other existing files. No Sheet pas
 3. In Code.gs, find your existing function doPost(event) {. Add these lines FIRST INSIDE its opening brace:
 
   if (typeof sbSpeakBoldlyPortalEvent === 'function') {
-    const portalResponse = sbSpeakBoldlyPortalEvent(event);
+    const portalResponse = sbSpeakBoldlyPortalEvent(arguments[0]);
     if (portalResponse !== null) return portalResponse;
   }
 

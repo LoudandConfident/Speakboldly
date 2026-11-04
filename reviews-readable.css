@@ -1,0 +1,13 @@
+/* Review cards fit the entire selected message, with no inner vertical scroll. */
+#reviews .reviews-layout{align-items:start!important;margin-top:0!important}
+#reviews .reviews-introduction{padding-top:0!important;padding-bottom:0!important}
+#reviews .reviews-copy{min-height:0!important;padding:22px 26px 25px!important}
+#reviews .reviews-copy .review-intro{margin-bottom:14px!important}
+#reviews .reviews-spark-art{width:46px!important;height:37px!important;margin-bottom:10px!important}
+#reviews .reviews-album-area{padding-top:0!important;padding-bottom:0!important}
+#reviews .reviews-album-area .review-cards{height:var(--review-deck-height,420px)!important;min-height:0!important;align-items:flex-start!important}
+#reviews .reviews-album-area .review-card,#reviews .reviews-album-area .review-card.is-selected,#reviews .reviews-album-area .review-card.is-previous,#reviews .reviews-album-area .review-card.is-next{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}
+#reviews .reviews-album-area .review-card-content{height:auto!important;max-height:none!important;overflow:visible!important;padding-right:0!important}
+@media(max-width:680px){#reviews .reviews-layout{gap:16px!important}#reviews .reviews-copy{padding:18px 23px 21px!important}#reviews .reviews-album-area .review-cards{height:var(--review-deck-height,460px)!important}#reviews .reviews-album-area .review-card{padding:23px 19px!important}}
+main #home .hero .home-speech-links .home-speech-bubble,main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important}
+main #home .hero .home-speech-links .home-speech-bubble>span{display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;inset:auto!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;text-align:center!important;transform:none!important}

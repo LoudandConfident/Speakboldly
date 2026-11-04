@@ -1,4 +1,4 @@
-import {connectInstructor} from './instructor-login.js?v=password-only-2';
+import {connectInstructor} from './instructor-login.js?v=deployment-help-3';
 import {initializePersonalCalendar} from './personal-calendar.js?v=phone-sync-2';
 import {createTaskReminder} from './task-reminder.js?v=1';
 import {initializeRewardsAdmin} from './rewards-admin.js?v=manual-only-3';
@@ -12,7 +12,7 @@ import {createPaymentReminder} from './payment-reminder.js?v=success-return-1';
 import {initializeHubAccessEditor} from './hub-access-editor.js?v=word-stress-3';
 import {initializeMotivationFreeze} from './motivation-freeze-editor.js?v=motivation-label-2';
 import {refreshMotivationSettings} from './motivation-settings.js?v=freeze-24-oct-1';
-import {clientDailyMotivation} from './home-gallery.js?v=teacher-week-4';
+import {clientDailyMotivation} from './home-gallery.js?v=math-story-5';
 import {initializeInstructorFrench} from './instructor-french.js?v=toolbar-v2';
 import {initializeNativeEnglishEditor} from './native-english-editor.js?v=simplified-art-3';
 import {initializeInstructorOverview} from './instructor-overview.js?v=centered-actions-2';

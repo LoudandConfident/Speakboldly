@@ -2412,3 +2412,18 @@ main #vision.vision-editorial .vision-purpose .vision-enrollment-promise{padding
 @media(max-width:680px){#admin-dashboard .admin-metrics{gap:10px!important}#admin-dashboard .admin-metrics>article{grid-column:1/4!important;width:112px!important;max-width:calc(100% - 12px)!important;height:94px!important;padding:9px!important}#admin-dashboard .admin-metrics>article:nth-of-type(1){grid-row:1!important;grid-column:1/4!important}#admin-dashboard .admin-metrics>article:nth-of-type(2){grid-row:2!important;grid-column:1/4!important}#admin-dashboard .admin-metrics>.admin-cash-metric{grid-row:3!important;grid-column:1/4!important}#admin-dashboard .admin-metrics>.instructor-teaching-quote{grid-row:1/4!important;padding:12px 0 12px 18px!important;align-self:center}#admin-dashboard .admin-metrics>.instructor-teaching-quote p{font-size:15px!important;line-height:1.6!important}#admin-dashboard .admin-metrics>article>strong{font-size:22px!important}}
 
 #admin-dashboard .admin-metrics>article small{display:none!important}#admin-dashboard .admin-metrics>.admin-cash-metric>strong{font-size:18px!important;line-height:1.2!important}
+
+/* reviews-readable.css */
+/* Review cards fit the entire selected message, with no inner vertical scroll. */
+#reviews .reviews-layout{align-items:start!important;margin-top:0!important}
+#reviews .reviews-introduction{padding-top:0!important;padding-bottom:0!important}
+#reviews .reviews-copy{min-height:0!important;padding:22px 26px 25px!important}
+#reviews .reviews-copy .review-intro{margin-bottom:14px!important}
+#reviews .reviews-spark-art{width:46px!important;height:37px!important;margin-bottom:10px!important}
+#reviews .reviews-album-area{padding-top:0!important;padding-bottom:0!important}
+#reviews .reviews-album-area .review-cards{height:var(--review-deck-height,420px)!important;min-height:0!important;align-items:flex-start!important}
+#reviews .reviews-album-area .review-card,#reviews .reviews-album-area .review-card.is-selected,#reviews .reviews-album-area .review-card.is-previous,#reviews .reviews-album-area .review-card.is-next{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}
+#reviews .reviews-album-area .review-card-content{height:auto!important;max-height:none!important;overflow:visible!important;padding-right:0!important}
+@media(max-width:680px){#reviews .reviews-layout{gap:16px!important}#reviews .reviews-copy{padding:18px 23px 21px!important}#reviews .reviews-album-area .review-cards{height:var(--review-deck-height,460px)!important}#reviews .reviews-album-area .review-card{padding:23px 19px!important}}
+main #home .hero .home-speech-links .home-speech-bubble,main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important}
+main #home .hero .home-speech-links .home-speech-bubble>span{display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;inset:auto!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;text-align:center!important;transform:none!important}
