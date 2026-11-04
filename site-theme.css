@@ -380,6 +380,16 @@ main>#students-portal.catalog.portal-session-active:not(#home){padding-top:16px!
 @media(max-width:900px){#quote .quote-request-grid{grid-template-columns:minmax(0,1fr)!important}#quote .quote-business-choices{grid-template-columns:repeat(2,minmax(0,1fr))}#quote .quote-personal-choices .quote-popup-choice{padding:12px!important;min-height:170px}#quote .quote-tile-label{font-size:15px!important}#quote .quote-tile-copy small{font-size:11px!important}}
 @media(max-width:420px){#quote .quote-business-choices{grid-template-columns:minmax(0,1fr)}#quote .quote-personal-choices .quote-popup-choice{min-height:160px;padding:9px!important}#quote .quote-tile-label{font-size:13px!important}}
 
+/* Separate the two business services from the three personal requests. */
+#quote .quote-request-grid{grid-template-columns:minmax(0,2.5fr) minmax(270px,1.2fr)!important;column-gap:42px!important}
+#quote .quote-business-choices{padding-block:12px;gap:24px;animation:quote-business-float 3.6s ease-in-out infinite}
+#quote .quote-business-choices .quote-premium{min-height:205px;padding:26px!important}
+#quote .quote-business-choices .quote-tile-label{font-size:21px!important;line-height:1.25!important}
+#quote .quote-business-choices .quote-tile-copy small{font-size:13px!important;line-height:1.6!important}
+@keyframes quote-business-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@media(max-width:900px){#quote .quote-request-grid{grid-template-columns:minmax(0,1fr)!important;row-gap:38px!important}#quote .quote-business-choices .quote-premium{min-height:195px;padding:22px!important}#quote .quote-business-choices .quote-tile-label{font-size:19px!important}}
+@media(prefers-reduced-motion:reduce){#quote .quote-business-choices{animation:none!important}}
+
 /* program-assessment.css */
 /* Course catalogue: editorial heading, clean comparison cards. */
 #courses .courses-introduction{align-items:flex-end;padding-bottom:30px;border-bottom:1px solid #b9c9b9}
@@ -2218,6 +2228,7 @@ main #boldly-notes:has([data-notes-reader][hidden]) .bold-blog-masthead .bold-bl
 #boldly-notes .blog-read-article{display:table;margin-top:18px;font-size:12px}
 #boldly-notes .blog-list-glossary{display:table;margin-top:16px;padding:0;border:0;background:transparent;color:#151b17;font-size:12px;line-height:1.6;font-weight:600;text-decoration:none}
 #boldly-notes .blog-list-glossary:hover{color:var(--blog-green,#193c32);text-decoration:none;transform:translateX(3px)}
+
 
 /* rewards.css */
 .reward-panel{margin:28px 0;padding:24px;border:1px solid #b9cbb0;border-radius:26px;background:#edf0e6;color:#193c32}.reward-panel h3{font-size:23px;margin:0 0 10px}.reward-panel p{font-size:14px;line-height:1.7;max-width:700px}.reward-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.reward-dialog{max-width:620px}.reward-dialog form{display:grid;gap:14px}.reward-dialog label{display:grid;gap:6px;font-size:14px;font-weight:600}.reward-dialog input,.reward-dialog select{width:100%;max-width:100%;box-sizing:border-box;padding:11px;border:1px solid #b9cbb0;border-radius:9px;background:white;color:#193c32}.reward-dialog .reward-private{font-size:12px;line-height:1.6;margin:0;color:#53685b}.reward-dialog [data-share-fields],.reward-dialog [data-refer-fields]{display:grid;gap:14px}.reward-dialog [hidden],.reward-panel[hidden]{display:none!important}.reward-dialog .reward-consent{display:flex;align-items:flex-start;gap:10px;line-height:1.6;font-size:12px;font-weight:400}.reward-dialog .reward-consent input{width:20px;height:20px;flex:none}.reward-dialog .reward-honeypot{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.reward-admin-claim{border:1px solid #c2cfb8;border-radius:16px;padding:18px;margin:16px 0;overflow-wrap:anywhere}.reward-admin-claim h4{margin:0 0 9px}.reward-admin-claim>a{display:inline-block;margin-right:14px;margin-bottom:12px}.reward-admin-claim p{font-size:13px;line-height:1.6}.reward-referral-note{font-size:13px;line-height:1.5;background:#edf0e6;padding:12px;border-radius:12px;overflow-wrap:anywhere}

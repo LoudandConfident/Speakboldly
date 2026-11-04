@@ -100,3 +100,13 @@
 #quote .quote-business-choices .quote-interpret{background:#edf0e6!important;border-radius:4px 24px 4px 24px!important}
 @media(max-width:900px){#quote .quote-request-grid{grid-template-columns:minmax(0,1fr)!important}#quote .quote-business-choices{grid-template-columns:repeat(2,minmax(0,1fr))}#quote .quote-personal-choices .quote-popup-choice{padding:12px!important;min-height:170px}#quote .quote-tile-label{font-size:15px!important}#quote .quote-tile-copy small{font-size:11px!important}}
 @media(max-width:420px){#quote .quote-business-choices{grid-template-columns:minmax(0,1fr)}#quote .quote-personal-choices .quote-popup-choice{min-height:160px;padding:9px!important}#quote .quote-tile-label{font-size:13px!important}}
+
+/* Separate the two business services from the three personal requests. */
+#quote .quote-request-grid{grid-template-columns:minmax(0,2.5fr) minmax(270px,1.2fr)!important;column-gap:42px!important}
+#quote .quote-business-choices{padding-block:12px;gap:24px;animation:quote-business-float 3.6s ease-in-out infinite}
+#quote .quote-business-choices .quote-premium{min-height:205px;padding:26px!important}
+#quote .quote-business-choices .quote-tile-label{font-size:21px!important;line-height:1.25!important}
+#quote .quote-business-choices .quote-tile-copy small{font-size:13px!important;line-height:1.6!important}
+@keyframes quote-business-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@media(max-width:900px){#quote .quote-request-grid{grid-template-columns:minmax(0,1fr)!important;row-gap:38px!important}#quote .quote-business-choices .quote-premium{min-height:195px;padding:22px!important}#quote .quote-business-choices .quote-tile-label{font-size:19px!important}}
+@media(prefers-reduced-motion:reduce){#quote .quote-business-choices{animation:none!important}}
