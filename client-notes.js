@@ -6,6 +6,21 @@ import {buildClientNotesWord} from './word-notes.js?v=session-number-1';
 import {clientSheetConnected,sendSheetClientEmail} from './client-sheet.js?v=domain-email-routing';
 import {confirmClientEmail} from './client-email-confirmation.js';
 import {documentDate,studentDocumentFilename} from './student-document-filenames.js';
+export const SESSION_NOTE_FIELDS=[
+ {key:'sessionDate',label:'Session date',type:'date'},
+ {key:'material',label:'Book / learning material',max:250},
+ {key:'chapter',label:'Chapter / unit',max:120},
+ {key:'pages',label:'Page number(s)',max:120},
+ {key:'vocabulary',label:'Vocab',multiline:true,max:4000},
+ {key:'grammar',label:'Grammar',multiline:true,max:4000},
+ {key:'pronunciation',label:'Pronunciation / expressions',multiline:true,max:3000},
+ {key:'homework',label:'Tasks / homework',multiline:true,max:4000}
+];
+export function composeSessionNotes(notes,tracking={}){
+ const sections=SESSION_NOTE_FIELDS.map(field=>{const value=String(tracking[field.key]||'').trim();return value?field.label+':\n'+value:'';}).filter(Boolean);
+ const extra=String(notes||'').trim();if(extra)sections.push((sections.length?'Coach’s notes:\n':'')+extra);
+ return sections.join('\n\n');
+}
 export function initializeClientNotes(doc,isUnlocked,{pageMode=false,returnUrl=null,documentKind='notes'}={}){
  const actionPlan=documentKind==='actionplan',title=actionPlan?'Action plan':'Notes',kind=actionPlan?'actionplan':'notes';
  const dialog=doc.createElement(pageMode?'section':'dialog');dialog.id='client-notes-dialog';dialog.className=pageMode?'notes-editor-page':'action-popup';dialog.setAttribute('aria-label','Notes to client');dialog.hidden=pageMode;
@@ -14,11 +29,15 @@ export function initializeClientNotes(doc,isUnlocked,{pageMode=false,returnUrl=n
  const sessionLabel=doc.createElement('label'),sessionNumber=doc.createElement('input');sessionLabel.textContent='Session number';sessionNumber.name='sessionNumber';sessionNumber.type='number';sessionNumber.min='1';sessionNumber.max='9999';sessionNumber.step='1';sessionNumber.required=!actionPlan;sessionLabel.hidden=actionPlan;sessionLabel.append(sessionNumber);dialog.querySelector('form').prepend(sessionLabel);
  const numberedTarget=target=>actionPlan?{...target}:{...target,sessionNumber:Number(sessionNumber.value)};
  const form=dialog.querySelector('form'),status=dialog.querySelector('[role=status]'),send=form.querySelector('[type=submit]'),download=form.querySelector('[data-download-notes]');const downloadPdf=form.querySelector('[data-download-notes-pdf]');let client=null,generation=0,busy=false,requestId=null,requestSignature='';const drafts=new Map();
- const tasks=actionPlan?{count:()=>0,signature:()=>'',read:async()=>[],answers:()=>false,reset(){},setBusy(){}}:createTaskPicker(doc,form,()=>{form.elements.notes.required=tasks.count()===0;requestSignature='';pdfSignature='';});
- const notesText=()=>form.elements.notes.value.trim()||(tasks.count()?'Please complete the attached tasks and send your answers back.':'');
- if(!actionPlan){download.textContent='Download notes as Word';const link=doc.createElement('link');link.rel='stylesheet';link.href=new URL('./client-actions.css',import.meta.url).href;doc.head.append(link);}
+ const trackingInputs=new Map();
+ if(!actionPlan){const fields=doc.createElement('fieldset');fields.className='session-note-fields';const legend=doc.createElement('legend');legend.textContent='Session record';fields.append(legend);for(const field of SESSION_NOTE_FIELDS){const label=doc.createElement('label');label.textContent=field.label;const input=doc.createElement(field.multiline?'textarea':'input');input.name='tracking_'+field.key;if(field.multiline){input.rows=3;label.className='session-note-long';}else input.type=field.type||'text';if(field.max)input.maxLength=field.max;input.autocomplete='off';label.append(input);fields.append(label);trackingInputs.set(field.key,input);}sessionLabel.after(fields);}
+ const trackingValues=()=>Object.fromEntries([...trackingInputs].map(([key,input])=>[key,input.value]));
+ function updateNotesRequired(){form.elements.notes.required=actionPlan||(![...trackingInputs.values()].some(input=>input.value.trim())&&tasks.count()===0);}
+ const tasks=actionPlan?{count:()=>0,signature:()=>'',read:async()=>[],answers:()=>false,reset(){},setBusy(){}}:createTaskPicker(doc,form,()=>{updateNotesRequired();requestSignature='';pdfSignature='';});
+ const notesText=()=>(actionPlan?form.elements.notes.value.trim():composeSessionNotes(form.elements.notes.value,trackingValues()))||(tasks.count()?'Please complete the attached tasks and send your answers back.':'');
+ if(!actionPlan){download.textContent='Download notes as Word';const link=doc.createElement('link');link.rel='stylesheet';link.href=new URL('./client-actions.css?v=session-record-2',import.meta.url).href;doc.head.append(link);}
  function lock(){generation++;client=null;busy=false;requestId=null;requestSignature='';drafts.clear();tasks.reset();pdfPromise=null;pdfSignature='';form.reset();status.textContent='';if(pageMode)dialog.hidden=true;else if(dialog.open)dialog.close();send.disabled=download.disabled=downloadPdf.disabled=false;}
- dialog.querySelector('.popup-close').onclick=()=>{if(pageMode)doc.defaultView.location.href=returnUrl||'./#students-portal/teacher';else dialog.close();};form.elements.notes.oninput=()=>{if(client)drafts.set(client.id,form.elements.notes.value);};
+ dialog.querySelector('.popup-close').onclick=()=>{if(pageMode)doc.defaultView.location.href=returnUrl||'./#students-portal/teacher';else dialog.close();};function rememberDraft(){if(client)drafts.set(client.id,{notes:form.elements.notes.value,sessionNumber:sessionNumber.value,tracking:trackingValues()});updateNotesRequired();requestSignature='';pdfSignature='';}form.addEventListener('input',rememberDraft);
  let logoPromise;const loadLogo=()=>logoPromise||=(doc.defaultView.fetch(new URL(DOCUMENT_BRAND.logo,doc.baseURI||doc.defaultView.location.href)).then(response=>{if(!response.ok)throw new Error('Could not load the document logo.');return response.arrayBuffer();}).catch(error=>{logoPromise=null;throw error;}));
  const word=async(target,notes)=>buildClientNotesWord(target,notes,{title,logoBytes:await loadLogo()});
  download.onclick=async()=>{if(!client||!isUnlocked()||busy||!form.reportValidity())return;const current=generation,target=numberedTarget(client),notes=notesText();download.disabled=true;try{const bytes=await word(target,notes);if(current!==generation||!isUnlocked())return;const url=doc.defaultView.URL.createObjectURL(new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})),link=doc.createElement('a');link.href=url;link.download=studentDocumentFilename(target.name,title+(target.sessionNumber?' — Session '+target.sessionNumber:''),{level:target.level}).replace(/\.pdf$/,'.docx');doc.body.append(link);link.click();link.remove();doc.defaultView.setTimeout(()=>doc.defaultView.URL.revokeObjectURL(url),60000);status.textContent=title+' Word file downloaded.';}catch(error){if(current===generation)status.textContent=error.message;}finally{download.disabled=false;}};
@@ -35,5 +54,5 @@ export function initializeClientNotes(doc,isUnlocked,{pageMode=false,returnUrl=n
   status.textContent='Sending '+title.toLowerCase()+'…';const result=await sendSheetClientEmail(target.id,kind,{requestId,sessionNumber:target.sessionNumber,pdfBase64:doc.defaultView.btoa(binary)});if(current===generation&&isUnlocked()){status.textContent=title+' emailed to '+result.recipient+'.';finishSentReport(doc.defaultView,result,returnUrl);}
  }catch(error){if(current===generation)status.textContent=/Invalid email request|Invalid action|completed PDF/.test(error.message)?'Update UnifiedCode.gs and deploy a New version to activate '+title+' attachments.':error.message;}finally{if(current===generation){busy=false;tasks.setBusy(false);send.disabled=download.disabled=downloadPdf.disabled=false;}}};
  doc.addEventListener('portal-sign-out',lock);doc.defaultView.addEventListener('hashchange',()=>{if(!doc.defaultView.location.hash.startsWith('#students-portal'))lock();});
- return{lock,open(target){if(!isUnlocked())return;generation++;client={...target};busy=false;requestId=null;requestSignature='';tasks.reset();tasks.setBusy(false);sessionNumber.value='';form.elements.notes.value=drafts.get(target.id)||(actionPlan?'Goals\n\nPractice activities\n\nWeekly schedule\n\nProgress check and next review\n':'');dialog.querySelector('[data-notes-recipient]').textContent=target.name+' · '+target.email;status.textContent=title+' will be sent as a final PDF with the Speak Boldly logo on every page.';send.disabled=download.disabled=downloadPdf.disabled=false;if(pageMode)dialog.hidden=false;else dialog.showModal();form.elements.notes.focus();}};
+ return{lock,open(target){if(!isUnlocked())return;generation++;client={...target};busy=false;requestId=null;requestSignature='';tasks.reset();tasks.setBusy(false);const draft=drafts.get(target.id);sessionNumber.value=draft?.sessionNumber||'';for(const [key,input]of trackingInputs)input.value=draft?.tracking?.[key]||'';form.elements.notes.value=draft?.notes||(actionPlan?'Goals\n\nPractice activities\n\nWeekly schedule\n\nProgress check and next review\n':'');updateNotesRequired();dialog.querySelector('[data-notes-recipient]').textContent=target.name+' · '+target.email;status.textContent=title+' will be sent as a final PDF with the Speak Boldly logo on every page.';send.disabled=download.disabled=downloadPdf.disabled=false;if(pageMode)dialog.hidden=false;else dialog.showModal();form.elements.notes.focus();}};
 }

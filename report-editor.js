@@ -1,5 +1,5 @@
 import {submissionReturnUrl} from './submission-success.js';
-import {initializeClientNotes} from './client-notes.js?v=tasks-calendar-cash-1';
+import {initializeClientNotes} from './client-notes.js?v=session-record-2';
 import {readReportTab} from './report-tabs.js?v=route-safe-2';
 import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=success-return-1';
 import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=domain-email-routing';
