@@ -51,6 +51,12 @@ jobs:
         run: node scripts/sync-public-reviews.mjs
       - name: Check public comment readiness without posting
         run: node scripts/check-comment-service.mjs
+      - name: Install image tooling when picture derivatives need rebuilding
+        run: |
+          if ! command -v magick >/dev/null && ! command -v convert >/dev/null; then
+            sudo apt-get update -qq
+            sudo apt-get install -y imagemagick
+          fi
       - run: npm run build:seo
       - run: node --test public-seo.test.mjs rewards-backend.test.mjs drive-folders.test.mjs material-program-cards.test.mjs general-english-exams.test.mjs general-english-speaking.test.mjs monthly-learning.test.mjs report-tabs.test.mjs folder-passwords.test.mjs student-submissions.test.mjs coach-routing.test.mjs blog-comments.test.mjs blog-reading-tools.test.mjs blog-learning-backend.test.mjs simplified-novel.test.mjs motivation-copy-link.test.mjs motivation-author-text.test.mjs reviews-api.test.mjs motivation-email-compat.test.mjs
       - name: Save generated public pages and request a Pages build
