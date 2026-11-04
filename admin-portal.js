@@ -24,7 +24,7 @@ import {initializePortalSwitches} from './portal-switches.js?v=files-only-2';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=success-return-1';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=confirmation-tracking-2';
+import {initializeAdminCalendar} from './admin-calendar.js?v=compact-scheduling-3';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,clientCashReceived,removeBrowserClient} from './admin-clients.js?v=tasks-calendar-cash-1';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=custom-domain-1';
 import {loadPortalMaterials} from './portal-materials.js?v=custom-domain-1';
