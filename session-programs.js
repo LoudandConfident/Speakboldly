@@ -10,5 +10,16 @@ export function calendarProgramForType(type,program){
  if(!['session','session120'].includes(type)||!SESSION_PROGRAMS.some(item=>item.id!=='trial'&&item.title===program))throw new Error('Choose a program for this session.');
  return program;
 }
-export function nextSessionNumber(sessions,clientId,program,level='',hasHistory=false){return sessions.filter(session=>session.clientId===clientId&&session.reminderStatus!=='cancelled'&&(!session.program||session.program===program)&&(!level||String(session.level)===String(level)||(!session.level&&!hasHistory))).reduce((highest,session)=>Math.max(highest,Number(session.number)||0),0)+1;}
+export function currentRoundSessions(sessions,clientId,program,level='',hasHistory=false,round={}){
+ let rows=sessions.filter(s=>s.clientId===clientId&&s.reminderStatus!=='cancelled'&&(!s.program||s.program===program)&&(!level||String(s.level)===String(level)||(!s.level&&!hasHistory)));
+ const date=round.date||'9999-12-31';rows=rows.filter(s=>!s.date||s.date<=date);
+ const boundary=(round.history||[]).filter(h=>h.reason==='advanced'||String(h.id||'').startsWith('advanced-')).map(h=>{const d=new Date(h.closedAt);if(!Number.isFinite(d.getTime()))return '';const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Cairo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d),get=k=>p.find(v=>v.type===k).value;return get('year')+'-'+get('month')+'-'+get('day');}).filter(d=>/^\d{4}-\d{2}-\d{2}$/.test(d)&&d<=date).sort().at(-1);
+ if(boundary)rows=rows.filter(s=>!s.date||s.date>=boundary);
+ const stamp=s=>s.date+(s.time||'00:00');
+ const first=rows.filter(s=>Number(s.number)===1&&s.date).sort((a,b)=>stamp(b).localeCompare(stamp(a)))[0];
+ if(first)rows=rows.filter(s=>!s.date||stamp(s)>=stamp(first));
+ return rows;
+}
+export function nextSessionNumber(sessions,clientId,program,level='',hasHistory=false,round={}){return currentRoundSessions(sessions,clientId,program,level,hasHistory,round).reduce((highest,s)=>Math.max(highest,Number(s.number)||0),0)+1;}
+
 export function suggestedSessionProgram(client){if(SESSION_PROGRAMS.some(program=>program.title===client?.program))return client.program;const value=String(client?.level||'').toLowerCase();if(/business|e-mail/.test(value))return SESSION_PROGRAMS.find(program=>program.id==='writing')?.title;if(/interview/.test(value))return SESSION_PROGRAMS.find(program=>program.id==='interview')?.title;if(/speaking/.test(value))return SESSION_PROGRAMS.find(program=>program.id==='speaking')?.title;if(/ielts/.test(value))return SESSION_PROGRAMS.find(program=>program.id==='ielts')?.title;return SESSION_PROGRAMS.find(program=>program.id==='general-8')?.title;}

@@ -1,5 +1,5 @@
 import {connectInstructor} from './instructor-login.js?v=deployment-help-3';
-import {initializePersonalCalendar} from './personal-calendar.js?v=phone-sync-2';
+import {initializePersonalCalendar} from './personal-calendar.js?v=calendar-options-3';
 import {createTaskReminder} from './task-reminder.js?v=top-illustration-2';
 import {initializeRewardsAdmin} from './rewards-admin.js?v=manual-only-3';
 import {decorateClientActions,setClientStatusAction} from './client-actions.js?v=notes-background-7';
@@ -24,7 +24,7 @@ import {initializePortalSwitches} from './portal-switches.js?v=files-only-2';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=success-return-1';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=compact-scheduling-3';
+import {initializeAdminCalendar} from './admin-calendar.js?v=round-calendar-4';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,clientCashReceived,removeBrowserClient} from './admin-clients.js?v=tasks-calendar-cash-1';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=custom-domain-1';
 import {loadPortalMaterials} from './portal-materials.js?v=custom-domain-1';
@@ -43,7 +43,7 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
    if(other!==opened&&other.parentElement.closest('details')===parent)other.open=false;
   });
  },true);
- const clientsList=root.querySelector('#admin-students-list'),clientsHeading=clientsList?.querySelector('.admin-clients-heading');const clientsToggle=doc.createElement('button');clientsToggle.type='button';clientsToggle.className='button light small mobile-clients-toggle';clientsToggle.id='show-clients-toggle';clientsToggle.setAttribute('aria-expanded','false');const updateClientsToggle=()=>{const expanded=clientsList.classList.contains('clients-expanded');clientsToggle.textContent=(expanded?'Hide clients':'Show clients')+(clients.length?' ('+clients.length+')':'');clientsToggle.setAttribute('aria-expanded',String(expanded));};clientsToggle.onclick=()=>{clientsList.classList.toggle('clients-expanded');updateClientsToggle();};clientsHeading?.append(clientsToggle);
+ const clientsList=root.querySelector('#admin-students-list');const updateClientsToggle=()=>clientsList?.classList.add('clients-expanded');updateClientsToggle();
  let sheetGeneration=0,sheetLoading=false,lastSheetLoad=0;
  let unlocked=false,clients=[],editingId=null,editingHistoryId=null,isAdvancing=false,pendingClientId=null;let materialCatalog={};updateClientsToggle();const rewardsAdmin=initializeRewardsAdmin(doc,()=>unlocked,()=>clients);
  const programLabel=doc.createElement('label');programLabel.textContent='Program';const programChooser=doc.createElement('select');programChooser.name='program';programChooser.append(new doc.defaultView.Option('Choose a program',''));for(const program of CLIENT_PROGRAMS)programChooser.append(new doc.defaultView.Option(program.title,program.title));programLabel.append(programChooser);form.elements.level.closest('label').after(programLabel);

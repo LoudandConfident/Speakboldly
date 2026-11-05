@@ -73,3 +73,42 @@
 #admin-dashboard .instructor-tool-cards>details.admin-detail>summary{flex-direction:row!important;justify-content:flex-start!important;text-align:left!important}
 #admin-calendar .seasonal-calendar-art{display:none!important}
 @media(max-width:600px){#admin-calendar[data-calendar-view=month] .calendar-day-header .calendar-add{display:none!important}#admin-calendar[data-calendar-view=month] .calendar-day-header{justify-content:flex-start!important;flex-wrap:nowrap!important}#admin-calendar[data-calendar-view=month] .calendar-day{min-height:76px!important}#admin-calendar .calendar-view-day{white-space:nowrap!important;font-size:9px!important;min-height:28px!important}}
+
+/* Fewer visible calendar controls; settings remain available on demand. */
+#admin-calendar .calendar-toolbar{display:flex!important;align-items:center!important;gap:8px!important}
+#admin-calendar .calendar-toolbar .calendar-view-switch,#admin-calendar .calendar-toolbar .calendar-refresh{display:none!important}
+#admin-calendar .calendar-options{margin:8px 0 12px;padding:0;border:0;background:none}
+#admin-calendar .calendar-options>summary{font-size:12px;font-weight:500;min-height:36px;padding:8px 0;cursor:pointer;color:#53685b}
+#admin-calendar .calendar-tools-body{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:10px 0 14px;border-bottom:1px solid #dce3d5}
+#admin-calendar .calendar-tools-body .calendar-view-switch{display:flex}
+#admin-calendar .calendar-tools-body .calendar-primary-actions{width:auto;margin:0!important;gap:8px!important}
+#admin-calendar .calendar-tools-body .instructor-calendar-legend{margin:0;gap:12px}
+#admin-calendar .calendar-grid{gap:5px!important}
+#admin-calendar .calendar-day{cursor:pointer;min-height:68px!important;border:1px solid #dce3d5!important;background:#faf9f4;box-shadow:none;padding:8px!important;justify-content:flex-start!important;gap:7px!important}
+#admin-calendar .calendar-day:hover,#admin-calendar .calendar-day:focus-visible{background:#edf2e4;border-color:#477143!important;outline:2px solid transparent;outline-offset:2px}
+#admin-calendar .calendar-day.calendar-selected{border:2px solid #477143!important;background:#edf2e4}
+#admin-calendar .calendar-day .calendar-add,#admin-calendar .calendar-day .calendar-view-day{display:none!important}
+#admin-calendar .calendar-day-header{justify-content:flex-start!important;flex-wrap:nowrap!important}
+#admin-calendar .calendar-day-number{min-height:0!important;min-width:0!important;padding:0!important;font-size:13px!important;font-weight:500}
+#admin-calendar[data-calendar-view=month] .calendar-compact-entry{display:none!important}
+#admin-calendar .calendar-count{display:block;font-size:11px;line-height:1.3;color:#36593a;background:#e3edcf;border-radius:6px;padding:4px 6px;max-width:100%;box-sizing:border-box}
+#admin-calendar:not([data-calendar-view=month]) .calendar-count{display:none}
+#admin-calendar .calendar-day-blocked{opacity:.55;background:#f0f1eb}
+.instructor-day-dialog .calendar-day-settings{width:100%;padding:0;border:0;background:none;margin:0 0 8px}
+.instructor-day-dialog .calendar-day-settings>summary{font-size:12px;cursor:pointer;padding:8px 0}
+.instructor-day-dialog .calendar-day-settings>button{margin:6px 8px 0 0;min-height:36px}
+.instructor-day-dialog .calendar-appointment{grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:14px;align-items:center}
+.instructor-day-dialog .calendar-appointment .calendar-edit{grid-column:2;justify-self:end;min-height:36px;padding:7px 12px;font-size:12px}
+.instructor-day-dialog .calendar-session-more{grid-column:1/-1;width:100%;margin:0;padding:0;border:0;background:none}
+.instructor-day-dialog .calendar-session-more>summary{font-size:12px;min-height:32px;cursor:pointer;padding:6px 0;color:#53685b}
+.instructor-day-dialog .calendar-session-more .calendar-cancel{position:static!important;width:auto;height:auto;min-height:36px;border-radius:8px;padding:6px 12px;font-size:15px;margin:7px 0}
+.instructor-day-dialog .calendar-session-more .calendar-send-confirmation{min-height:36px;padding:7px 12px;font-size:12px;display:inline-flex;margin:7px 8px 0 0}
+#calendar-session-dialog .calendar-new-round{grid-column:1/-1;display:flex!important;align-items:center;gap:9px;margin:2px 0;padding:10px;background:#edf2e4;border-radius:9px;font-size:13px;cursor:pointer}
+#calendar-session-dialog .calendar-new-round input{width:18px!important;min-height:18px!important;height:18px;padding:0;flex:none;margin:0;accent-color:#477143}
+#show-clients-toggle{display:none!important}
+@media(max-width:600px){#admin-calendar .calendar-grid{gap:4px!important}#admin-calendar .calendar-day{min-height:61px!important;padding:6px 4px!important;gap:6px!important}#admin-calendar .calendar-day-number{font-size:12px!important}#admin-calendar .calendar-count{font-size:9px;padding:3px 2px;white-space:normal}#admin-calendar .calendar-toolbar .calendar-jump-label{flex:1 1 135px!important}#admin-calendar .calendar-toolbar h4{font-size:16px!important}.instructor-day-dialog .calendar-appointment{padding:12px}}
+
+#admin-calendar .calendar-grid{grid-auto-rows:78px!important}
+#admin-calendar .calendar-grid>.calendar-day{height:78px!important;min-height:0!important}
+#admin-calendar .calendar-count{overflow-wrap:normal!important;word-break:normal!important}
+@media(max-width:600px){#admin-calendar .calendar-grid{grid-auto-rows:66px!important}#admin-calendar[data-calendar-view=month] .calendar-grid>.calendar-day{height:66px!important;min-height:0!important}}
