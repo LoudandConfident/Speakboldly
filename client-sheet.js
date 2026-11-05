@@ -4,7 +4,17 @@ const CONNECTION_STORAGE_KEY = 'speak-boldly-client-sheet-connection-v1';
 let endpoint = '', key = '';
 export const clientSheetConnected = () => !!(endpoint && key);
 export function clearClientSheet() {endpoint = '';key = '';}
-async function sheetRequest(url,secret,payload,fetcher = globalThis.fetch) {
+const pendingReads=new Map();
+const SHARED_READ_ACTIONS=new Set(['listClients','listSessions','calendarSlots','instructorOverview']);
+function sheetRequest(url,secret,payload,fetcher=globalThis.fetch){
+ if(!SHARED_READ_ACTIONS.has(payload.action))return performSheetRequest(url,secret,payload,fetcher);
+ const identity=JSON.stringify([url,secret,payload]);
+ const active=pendingReads.get(identity);if(active&&active.fetcher===fetcher)return active.promise;
+ const promise=performSheetRequest(url,secret,payload,fetcher);pendingReads.set(identity,{promise,fetcher});
+ const clear=()=>{if(pendingReads.get(identity)?.promise===promise)pendingReads.delete(identity);};promise.then(clear,clear);
+ return promise;
+}
+async function performSheetRequest(url,secret,payload,fetcher = globalThis.fetch) {
  const controller = new AbortController(), timer = setTimeout(()=>controller.abort(),30000);
  try {
   const response = await fetcher(url,{method:'POST',credentials:'omit',redirect:'follow',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({...payload,key:secret}),signal:controller.signal});
