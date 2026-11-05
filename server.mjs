@@ -1,3 +1,4 @@
+import {configuredPrivateMailRelay} from './private-mail-relay.mjs';
 import {createSheetClientLoader} from './sheet-clients-server.mjs';
 import {createReminderMailer} from './class-reminders.mjs';
 import {createScoreMailer} from './score-mailer.mjs';
@@ -10,6 +11,7 @@ const root = new URL('./', import.meta.url);
 if(process.env.EXAM_ADMIN_PASSWORD&&process.env.EXAM_ADMIN_PASSWORD.length<12)throw new Error('The private owner password must be at least 12 characters. 1962 remains the dashboard preview code.');
 const privatePath=process.env.EXAM_DATA_DIR||fileURLToPath(new URL('./.private-data/',root));
 mkdirSync(privatePath,{recursive:true});
+const privateNotesRelay=await configuredPrivateMailRelay(process.env,privatePath+'/notes-mail');
 let privateExams=[];try{privateExams=JSON.parse(readFileSync(privatePath+'/exams.json','utf8'));}catch{}
 const examBackend=createExamBackend({getSheetClients:createSheetClientLoader(process.env),dbPath:privatePath+'/portal.sqlite',storageDirectory:privatePath+'/uploads',sendScoreEmail:createScoreMailer(process.env),sendReminderEmail:createReminderMailer(process.env),adminPassword:process.env.EXAM_ADMIN_PASSWORD||'',exams:privateExams,origins:(process.env.EXAM_ALLOWED_ORIGINS||'http://localhost:'+ (process.env.PORT||3000)+',http://127.0.0.1:'+(process.env.PORT||3000)).split(',')});
 
@@ -22,6 +24,7 @@ for(const name of ['manifest.webmanifest','phone-app.js','service-worker.js','of
 for(const name of ['assessment-guidance.js','result-image.js','popup-dismiss.js','student-contact.js','learning-hub-sections.js'])files['/'+name]=name;
 const types = { webmanifest:'application/manifest+json', pdf:'application/pdf', png:'image/png', svg:'image/svg+xml', html:'text/html',css:'text/css',js:'text/javascript',mjs:'text/javascript',json:'application/json',ttf:'font/ttf' };
 http.createServer(async (req,res) => {
+  if(privateNotesRelay&&await privateNotesRelay.handle(req,res))return;
   if(await examBackend.handle(req,res))return;
   const name = files[new URL(req.url,'http://localhost').pathname];
   if (!name) { res.writeHead(404); return res.end('Not found'); }

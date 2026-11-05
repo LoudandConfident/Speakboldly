@@ -1,3 +1,4 @@
+import {refreshContentRotation} from './shared-content-rotation.js';
 export const MOTIVATION_PIN={date:'2026-10-24',day:20750,revision:'213c7c67-d6c4-4afe-aa73-494b6a8c9630'};
 const usesPinnedSelection=value=>!value?.revision||value.revision==='0'||value.revision===MOTIVATION_PIN.revision;
 export const INITIAL_MOTIVATION_FREEZE={frozen:false,weekly:true,day:MOTIVATION_PIN.day,until:'',revision:'0'};
@@ -10,7 +11,7 @@ export async function refreshMotivationSettings(doc,{force=false}={}){
  if(!force&&Date.now()-lastLoad<60000)return settings;
  const endpoint=doc.querySelector('#client-sheet-connect')?.elements.endpoint.defaultValue;if(!endpoint)return settings;
  const win=doc.defaultView,controller=new win.AbortController(),timer=win.setTimeout(()=>controller.abort(),10000);
- pending=(async()=>{try{
+ pending=(async()=>{try{await refreshContentRotation(doc,{force});
   const explicitDate=new URL(win.location.href).searchParams.get('motivation'),pinned=usesPinnedSelection(settings);
   const read=async date=>{const r=await win.fetch(endpoint,{method:'POST',credentials:'omit',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action:'dailyMotivationSettings',date:date||undefined}),signal:controller.signal});const d=await r.json();return r.ok&&d.ok?d.settings:null;};
   let value=await read(explicitDate||null);

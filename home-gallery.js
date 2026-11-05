@@ -1,3 +1,4 @@
+import {contentRotation,refreshContentRotation} from './shared-content-rotation.js';
 import {motivationPreviews} from './motivation-preview-images.js?v=stern-teacher-6';
 import {motivationDay,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js?v=weekly-2';
 // Update this list to change the daily pictures and quotes.
@@ -29,6 +30,7 @@ export function cairoDayNumber(now = new Date()) {
 // One-time exception: keep 15 October's message through Sunday in Cairo.
 const settingsFrozen=()=>motivationSettings().frozen;
 export function motivationIndexForDate(now = new Date()) {
+ const shared=contentRotation('motivation');if(shared?.active&&!shared.selectedId?.startsWith('custom:')){const selected=dailyQuotes.findIndex(entry=>entry.image.split('/').pop().replace(/\.(png|webp)$/,'')===shared.selectedId);if(selected>=0)return selected;}
  const day=motivationDay(now,cairoDayNumber),start=Math.floor(Date.UTC(2026,9,15)/86400000),end=Math.floor(Date.UTC(2026,9,19)/86400000);
  if(day>=Math.floor(Date.UTC(2026,10,2)/86400000)&&day<Math.floor(Date.UTC(2026,10,9)/86400000)&&!settingsFrozen())return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-math-teacher-board.webp');
  if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
@@ -119,11 +121,12 @@ export async function copyMotivationLink(win,entry){
  return url;
 }
 export function clientDailyMotivation(now=new Date()){
- const custom=motivationSettings().message;if(custom)return {day:motivationDay(now,cairoDayNumber),quote:custom.quote,image:custom.image,paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[],url:motivationShareUrl({customDate:custom.date})};
+ const shared=contentRotation('motivation'),custom=shared?.active?(shared.message||null):motivationSettings().message;if(custom)return {day:motivationDay(now,cairoDayNumber),quote:custom.quote,image:custom.image,paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[],url:motivationShareUrl({customDate:custom.date})};
  const day=motivationDay(now,cairoDayNumber),index=motivationIndexForDate(now),entry=dailyQuotes[index],details=quoteDetails[index];
  return {day,quote:entry.quote,image:new URL(motivationPreviews[entry.image]?.emailImage||entry.image,'https://speakboldly.space/').href,paragraphs:details.paragraphs||[details.reflection,dailyPractice[index]],url:motivationShareUrl(entry)};
 }
 export function initializeGallery(doc, win) {
+ void refreshContentRotation(doc);
  const page = doc.querySelector('#daily-quote');
  if (!page||page.dataset.galleryInitialized) return;
  page.dataset.galleryInitialized='true';
@@ -135,7 +138,7 @@ export function initializeGallery(doc, win) {
   if (day === nextDay) return;
   day = nextDay;
   const sharedName=new URL(win.location.href).searchParams.get('motivation-entry'),sharedIndex=dailyQuotes.findIndex(q=>q.image.split('/').pop().replace(/\.(?:png|webp)$/,'')===sharedName);
-  const index = sharedIndex>=0?sharedIndex:motivationIndexForDate(now),custom=sharedIndex>=0?null:motivationSettings().message,entry=custom?{quote:custom.quote,image:custom.image,alt:custom.quote,customDate:custom.date}:dailyQuotes[index],details=custom?{paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[]}:quoteDetails[index];currentEntry=entry;page.dataset.publicShareUrl=motivationCopyUrl(entry);doc.dispatchEvent(new win.Event('sb-public-share-url'));copy.disabled=false;copyField.hidden=true;shareFile=null;shareStatus.textContent='';
+  const index = sharedIndex>=0?sharedIndex:motivationIndexForDate(now),custom=sharedIndex>=0?null:new URL(win.location.href).searchParams.has('motivation')?motivationSettings().message:contentRotation('motivation')?.active?(contentRotation('motivation').message||null):motivationSettings().message,entry=custom?{quote:custom.quote,image:custom.image,alt:custom.quote,customDate:custom.date}:dailyQuotes[index],details=custom?{paragraphs:custom.reflection?custom.reflection.split(/\n\s*\n/):[]}:quoteDetails[index];currentEntry=entry;page.dataset.publicShareUrl=motivationCopyUrl(entry);doc.dispatchEvent(new win.Event('sb-public-share-url'));copy.disabled=false;copyField.hidden=true;shareFile=null;shareStatus.textContent='';
   const displayImage=motivationPreviews[entry.image]?.image||entry.image;
   if(win.navigator.canShare&&win.File&&win.fetch)win.fetch(new URL(displayImage,doc.baseURI)).then(response=>{if(!response.ok)throw Error('Image unavailable');return response.blob();}).then(blob=>{if(currentEntry===entry)shareFile=new win.File([blob],displayImage.split('/').pop(),{type:blob.type||'image/png'});}).catch(()=>{});
   page.querySelector('#daily-quote-image').src = displayImage;
@@ -150,7 +153,7 @@ export function initializeGallery(doc, win) {
   reflection.replaceChildren(...(details.paragraphs||[details.reflection,dailyPractice[index]]).map(text=>{const paragraph=doc.createElement('p');if(text.startsWith('Cambridge Dictionary meaning')){const definition=doc.createElement('em');definition.textContent=text;paragraph.append(definition);}else paragraph.textContent=text;return paragraph;}));
  }
  const staticShared=dailyQuotes.some(q=>q.image.split('/').pop().replace(/\.(?:png|webp)$/,'')===new URL(win.location.href).searchParams.get('motivation-entry'));
- const check=()=>staticShared?Promise.resolve():refreshMotivationSettings(doc,{force:restored}).then(()=>{restored=false;ready=true;day=null;refresh();try{win.localStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),settings:motivationSettings()}));}catch{}});check();doc.addEventListener('daily-motivation-settings-changed',()=>{day=null;refresh();});
+ const check=()=>staticShared?Promise.resolve():refreshMotivationSettings(doc,{force:restored}).then(()=>{restored=false;ready=true;day=null;refresh();try{win.localStorage.setItem(cacheKey,JSON.stringify({savedAt:Date.now(),settings:motivationSettings()}));}catch{}});check();doc.addEventListener('sb-content-rotation-changed',()=>{day=null;refresh();});doc.addEventListener('daily-motivation-settings-changed',()=>{day=null;refresh();});
  let interval;
  function start() { win.clearInterval(interval); interval = win.setInterval(()=>{refresh();if(!doc.hidden&&!page.hidden)check();}, 60000); refresh(); }
  start();
