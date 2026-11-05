@@ -115,6 +115,7 @@ function doPost(event) {
     if(data.action==='programConsultation'){if(request.size>2900000)throw new Error('Pictures are too large. Use up to 2 pictures, 1 MB each.');return handleStudentInstructorContact(data);}
     if(['hubAccessSettings','hubLevelLogin'].includes(data.action)){if(request.size>4000)throw new Error('Request too large.');return sbHubPublic(data);}
     if(data.action==='boldlyNotes'){if(request.size>4000)throw Error('Request too large.');return response(sbNotesPublic(data));}
+    if(data.action==='contentRotationSettings')return response(sbContentRotationPublic());
     if(data.action==='dailyMotivationSettings')return response({ok:true,settings:sbPublishedMotivationSettings(sbDailyMotivationSettings(),data.date)});
     if(data.action==='nativeEnglishPage'){if(request.size>4000)throw new Error('Request too large.');return sbNativeEnglishRead(data);}
     if (data.action === 'studentInstructorContact') {
@@ -167,6 +168,9 @@ function sbRequireClientConnection(data) {
 }
 
 function sbRouteInstructorRequest(data, connection, lock) {
+  if(data.action==='privateNotesDeliveryStatus')return response(sbPrivateNotesReadiness());
+  if(data.action==='emailRoutingSettings'&&data.kind==='notes'&&PropertiesService.getScriptProperties().getProperty('SB_NOTES_MAIL_PROVIDER')==='namecheap')return response(sbPrivateNotesReadiness());
+  if(['contentRotationOwner','saveContentRotation'].includes(data.action))return response(sbContentRotationOwner(data));
   if(data.action==='emailRoutingSettings')return response(sbDomainEmailRoutingStatus());
   if(['listBoldlyNotes','saveBoldlyNote'].includes(data.action)){if(JSON.stringify(data).length>7500000)throw Error('Request too large.');return response(sbNotesOwner(data));}
   if(['listMotivationMessages','saveMotivationMessage'].includes(data.action))return response(sbMotivationMessagesOwner(data));
@@ -525,8 +529,9 @@ function handleClientEmail(p){
  try{
   let log=book.getSheetByName('EmailLog');if(!log){log=book.insertSheet('EmailLog');log.appendRow(['Request ID','Client ID','Kind','Recipient','Status','Sent at (UTC)','Error']);}
   const logs=log.getLastRow()>1?log.getRange(2,1,log.getLastRow()-1,7).getValues():[],existing=logs.find(r=>String(r[0])===requestId);
-  if(existing){if(String(existing[1])!==id||String(existing[2])!==kind)throw new Error('Email request identity mismatch.');if(existing[4]==='sent')return respond({ok:true,status:'sent',recipient:String(existing[3])});throw new Error('This email has an uncertain delivery status. Check EmailLog before sending it again.');}
-  if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached. Try again tomorrow.');
+  const privateNotes=kind==='notes'&&PropertiesService.getScriptProperties().getProperty('SB_NOTES_MAIL_PROVIDER')==='namecheap';
+  if(existing){if(String(existing[1])!==id||String(existing[2])!==kind)throw new Error('Email request identity mismatch.');if(existing[4]==='sent')return respond({ok:true,status:'sent',recipient:String(existing[3])});if(!privateNotes)throw new Error('This email has an uncertain delivery status. Check EmailLog before sending it again.');}
+  if(!privateNotes&&MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached. Try again tomorrow.');
   const labels={confirmation:'Email confirmation',progress:'Progress report',final:'Final report',registration:'Payment and registration confirmation',notes:'Notes',actionplan:'Action plan',paymentReminder:'Payment reminder for new round',motivation:'Daily motivation'};
   let message;
   if(kind==='paymentReminder'){
@@ -556,9 +561,10 @@ function handleClientEmail(p){
    const body='Hello '+client[1]+',\n\n'+(details?details+'\n\n':'')+'Please find your '+labels[kind].toLowerCase()+' attached.\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
    message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p>'+(details?'<p>'+sbEmailEscape(details).replace(/\n/g,'<br>')+'</p>':'')+'<p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p><p>If you have any questions, reply to this email.</p>')};
   }
-  const sender=sbDomainEmailRoute(kind),verifiedFrom=sbVerifiedFrom(sender.from);
-  const row=log.getLastRow()+1;log.getRange(row,1,1,7).setValues([[requestId,id,kind,String(client[2]),'sending','','']]);SpreadsheetApp.flush();
-  try{sbSendDomainEmail({to:String(client[2]),subject:(kind==='confirmation'?'Your class confirmation':labels[kind])+' — Speak Boldly',...message,name:'Speak Boldly',replyTo:sender.replyTo,...(attachment?{attachments:[attachment]}:{})},verifiedFrom);log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}
+  const sender=privateNotes?{from:'Contactus@speakboldly.space',replyTo:'Contactus@speakboldly.space'}:sbDomainEmailRoute(kind),verifiedFrom=privateNotes?null:sbVerifiedFrom(sender.from);
+  const row=existing?logs.indexOf(existing)+2:log.getLastRow()+1;log.getRange(row,1,1,7).setValues([[requestId,id,kind,String(client[2]),'sending','','']]);SpreadsheetApp.flush();
+  try{if(privateNotes){const result=sbSendPrivateNotesMail({requestId,to:String(client[2]),subject:labels[kind]+' — Speak Boldly',text:message.body||'',html:message.htmlBody||'',attachment});log.getRange(row,5,1,3).setValues([[result.status||'delivery_unknown',result.sentAt||'',result.error||'']]);return respond(result);}
+   sbSendDomainEmail({to:String(client[2]),subject:(kind==='confirmation'?'Your class confirmation':labels[kind])+' — Speak Boldly',...message,name:'Speak Boldly',replyTo:sender.replyTo,...(attachment?{attachments:[attachment]}:{})},verifiedFrom);log.getRange(row,5,1,3).setValues([['sent',new Date().toISOString(),'']]);return respond({ok:true,status:'sent',recipient:String(client[2])});}
   catch(error){log.getRange(row,5).setValue('delivery_unknown');log.getRange(row,7).setValue(String(error.message||error));throw new Error('Email delivery could not be confirmed. Check EmailLog before trying another send.');}
  }finally{lock.releaseLock();}
 }
@@ -1368,7 +1374,7 @@ function sbMotivationMessagesOwner(data){
 function sbPublishedMotivationSettings(settings,requestedDate){
  const today=Math.floor(Date.parse(Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')+'T00:00Z')/86400000),until=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity;let day=settings.frozen&&today<until?settings.day:today;
  if(typeof requestedDate==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)){const requested=Math.floor(Date.parse(requestedDate+'T00:00Z')/86400000);if(Number.isFinite(requested)&&requested<=today)day=requested;}
- return {...settings,message:sbMotivationMessageForDay(day)};
+ const rotation=sbRotationPublic('motivation');return {...settings,rotation,message:!requestedDate&&rotation.active?(rotation.message||null):sbMotivationMessageForDay(day)};
 }
 
 // Short public articles, managed only through the authenticated instructor routes.
@@ -1384,7 +1390,7 @@ function sbNotesPublic(data){
  const today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');
  const posts=sbNotesRows().posts.filter(p=>sbNotesVisible(p,today)).sort((a,b)=>b.date.localeCompare(a.date)||b.updated.localeCompare(a.updated));
  if(data.id){const p=posts.find(p=>p.id===data.id);if(!p)throw Error('This note is not available.');return {ok:true,post:{id:p.id,title:p.title,topic:p.topic,date:p.date,pages:p.pages,images:p.images}};}
- return {ok:true,posts:posts.map(p=>({id:p.id,title:p.title,topic:p.topic,date:p.date,pageCount:p.pages.length}))};
+ return {ok:true,rotation:sbRotationPublic('blog'),posts:posts.map(p=>({id:p.id,title:p.title,topic:p.topic,date:p.date,pageCount:p.pages.length}))};
 }
 function sbNotesOwner(data){
  const lock=LockService.getScriptLock();lock.waitLock(20000);
@@ -1473,3 +1479,58 @@ function sbEditSheetSession(p){
  sheet.getRange(index+2,4,1,2).setNumberFormat('@');sheet.getRange(index+2,1,1,15).setValues([updated]);
  return String(old[0]);
 }
+
+// Shared public selections. Stored separately; existing content and settings are retained.
+const SB_CONTENT_ROTATION_CATALOG={"motivation":[{"id":"daily-motivation-1","title":"Make time for what matters."},{"id":"daily-motivation-2","title":"Drop the shame and get in the game."},{"id":"daily-motivation-3","title":"It’s not how you start that matters. It’s how you finish."},{"id":"daily-motivation-4","title":"It is never too late to be what you might have been."},{"id":"daily-motivation-5","title":"To learn a language is to have one more window from which to look at the world."},{"id":"daily-motivation-translation-clean","title":"Lost in Translation? Don’t translate every thought—think in English."},{"id":"daily-motivation-fluency-clean","title":"Fluency: loading… Work in progress."},{"id":"daily-motivation-doors-clean","title":"English opens doors. Don’t let hesitation keep you from entering them."},{"id":"daily-motivation-unmute-clean","title":"Unmute yourself. You have something to say. Say it in English."},{"id":"daily-motivation-talk-clean","title":"Your turn to talk."},{"id":"daily-motivation-start-clean","title":"Start when you’re not ready."},{"id":"daily-motivation-listen-clean","title":"Listen. Learn. Try again."},{"id":"daily-motivation-keep-going-clean","title":"Keep going. You’re getting there."},{"id":"daily-motivation-accents-story","title":"عقدة الخواجة"},{"id":"daily-motivation-french-clean","title":"I learn French myself!"},{"id":"daily-motivation-language-skill","title":"Language is just a skill!"},{"id":"daily-motivation-ballet","title":"It's never too late!"},{"id":"daily-motivation-consistency-conversation","title":"Even I need consistency!"},{"id":"daily-motivation-safe-learning-original","title":"I hated my second-grade teacher, too!"},{"id":"daily-motivation-live-to-learn-original","title":"We live to learn!"},{"id":"daily-motivation-learned-through-love","title":"I learned through what I loved!"},{"id":"daily-motivation-small-steps-teacher","title":"Small steps still count."},{"id":"daily-motivation-math-teacher-board","title":"I hated my Math teacher, too!"}],"blog":[{"id":"the-quiet-power-of-consistency","title":"Quiet Power of Consistency","date":"2026-11-04"},{"id":"your-english-is-not-your-worth","title":"Your English Is Not Your Worth.","date":"2026-10-27"}]};
+function sbRotationToday(){return Math.floor(Date.parse(Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')+'T00:00Z')/86400000);}
+function sbRotationStore(){try{return JSON.parse(PropertiesService.getScriptProperties().getProperty('SB_CONTENT_ROTATION_V1')||'{}');}catch{return {};}}
+function sbRotationCatalogue(channel){
+ const today=new Date(sbRotationToday()*86400000).toISOString().slice(0,10),items=(SB_CONTENT_ROTATION_CATALOG[channel]||[]).filter(item=>!item.date||item.date<=today).map(item=>({...item}));
+ const sheetId=PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID');
+ if(sheetId){const book=SpreadsheetApp.openById(sheetId),sheet=book.getSheetByName(channel==='blog'?'Bold Blog':'Motivation messages');if(sheet&&sheet.getLastRow()>1){const rows=sheet.getRange(2,1,sheet.getLastRow()-1,channel==='blog'?8:5).getValues();for(const row of rows){if(channel==='blog'){const date=String(row[3]).replace(/^'/,'');if(row[5]===true&&date<=today&&/^[a-zA-Z0-9-]+$/.test(String(row[0])))items.push({id:String(row[0]),title:String(row[1]).replace(/^'/,''),date});}else{const date=String(row[0]).replace(/^'/,'');if(/^\d{4}-\d{2}-\d{2}$/.test(date)&&date<=today)items.push({id:'custom:'+date,title:String(row[1]).replace(/^'/,''),date});}}}}
+ return items.filter((item,index)=>items.findIndex(other=>other.id===item.id)===index);
+}
+function sbRotationPublic(channel,store){
+ if(!['motivation','blog'].includes(channel))throw Error('Unknown content section.');
+ const saved=(store||sbRotationStore())[channel];if(!saved)return {active:false,frozen:false,revision:'0',selectedId:null};
+ const ids=sbRotationCatalogue(channel).map(item=>item.id),order=(saved.order||[]).filter(id=>ids.includes(id));for(const id of ids)if(!order.includes(id))order.push(id);
+ if(!order.length)return {active:false,frozen:false,revision:saved.revision,selectedId:null};
+ const start=Math.max(0,order.indexOf(saved.selectedId)),elapsed=saved.frozen?0:Math.max(0,sbRotationToday()-saved.anchorDay),selectedId=order[(start+elapsed)%order.length];
+ const result={active:true,frozen:saved.frozen===true,revision:saved.revision,selectedId,anchorDay:saved.anchorDay,choiceCount:order.length};
+ if(channel==='motivation'&&selectedId.startsWith('custom:'))result.message=sbMotivationMessageForDay(Math.floor(Date.parse(selectedId.slice(7)+'T00:00Z')/86400000));
+ return result;
+}
+function sbContentRotationPublic(){return {ok:true,capabilities:{sharedRotation:1},states:{motivation:sbRotationPublic('motivation'),blog:sbRotationPublic('blog')}};}
+function sbContentRotationOwner(data){
+ const channel=String(data.channel||'');if(!['motivation','blog'].includes(channel))throw Error('Unknown content section.');
+ const lock=LockService.getScriptLock();lock.waitLock(20000);
+ try{const store=sbRotationStore(),state=sbRotationPublic(channel,store),catalogue=sbRotationCatalogue(channel);
+ if(data.action==='saveContentRotation'){
+  if(String(data.revision)!==String(state.revision))throw Error('Selection changed on another device. Refresh first.');
+  if(!['freeze','shuffle','resume'].includes(data.mode))throw Error('Invalid selection action.');
+  const ids=catalogue.map(item=>item.id);if(!ids.length)throw Error('Publish content before changing its selection.');
+  let selectedId=state.active?state.selectedId:(ids.includes(data.currentId)?data.currentId:ids[0]);
+  if(data.mode==='shuffle'){const other=ids.filter(id=>id!==selectedId);if(!other.length)throw Error('At least two published items are needed to shuffle.');selectedId=other[Math.floor(Math.random()*other.length)];}
+  store[channel]={active:true,frozen:data.mode==='freeze'?true:data.mode==='resume'?false:state.frozen===true,selectedId,anchorDay:sbRotationToday(),order:ids,revision:Utilities.getUuid()};
+  PropertiesService.getScriptProperties().setProperty('SB_CONTENT_ROTATION_V1',JSON.stringify(store));
+ }
+ return {ok:true,capabilities:{sharedRotation:1},state:sbRotationPublic(channel,store),catalogue};
+ }finally{lock.releaseLock();}
+}
+
+
+// Optional private Notes relay. Mailbox credentials exist only on the private server.
+function sbPrivateNotesRelayRequest(body,check){
+ const props=PropertiesService.getScriptProperties(),url=String(props.getProperty('SB_NOTES_MAIL_RELAY_URL')||''),secret=String(props.getProperty('SB_NOTES_MAIL_RELAY_SECRET')||'');
+ if(!/^https:\/\/[^\s?#]+\/api\/private-mail\/notes$/.test(url)||secret.length<32)throw Error('Private Notes mail delivery is not configured. No Gmail fallback was used.');
+ const payload=JSON.stringify({...body,timestamp:Date.now()}),signature=Utilities.base64EncodeWebSafe(Utilities.computeHmacSha256Signature(payload,secret)).replace(/=+$/,'');
+ const response=UrlFetchApp.fetch(check?url.replace(/\/notes$/,'/check'):url,{method:'post',contentType:'application/json',payload,headers:{'X-SB-Signature':signature},muteHttpExceptions:true,followRedirects:false});
+ try{return JSON.parse(response.getContentText());}catch{throw Error('Private mail delivery could not be confirmed. Retry the same request only.');}
+}
+function sbSendPrivateNotesMail(mail){
+ if(!mail.attachment)throw Error('A Notes PDF is required.');
+ const result=sbPrivateNotesRelayRequest({requestId:mail.requestId,to:mail.to,subject:mail.subject,text:mail.text,html:mail.html,attachment:{name:mail.attachment.getName(),mimeType:'application/pdf',base64:Utilities.base64Encode(mail.attachment.getBytes())}},false);
+ if(result.ok===true&&(result.status!=='sent'||result.sentCopy!==true||result.recipient!==mail.to))throw Error('Private mail service did not confirm the recipient and Sent copy.');
+ return result;
+}
+function sbPrivateNotesReadiness(){const result=sbPrivateNotesRelayRequest({},true);if(!result.ok||!result.ready)throw Error('Private Notes sending and Sent-folder access are not ready.');return {...result,enabled:PropertiesService.getScriptProperties().getProperty('SB_NOTES_MAIL_PROVIDER')==='namecheap'};}

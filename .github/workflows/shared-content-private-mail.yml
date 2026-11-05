@@ -1,0 +1,25 @@
+name: Check shared selections and private Notes delivery
+on:
+  pull_request:
+    paths:
+      - 'shared-content-rotation*'
+      - 'content-rotation-controls*'
+      - 'private-mail-relay*'
+      - 'private-notes-routing*'
+      - 'google-sheets/clients/UnifiedCode.gs'
+      - 'home-gallery.js'
+      - 'server.mjs'
+      - 'sheet-exam-fixture.mjs'
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test shared-content-rotation.test.mjs content-rotation-controls.test.mjs private-mail-relay.test.mjs private-notes-routing.test.mjs blog-learning-backend.test.mjs motivation-author-text.test.mjs weekly-motivation.test.mjs
+      - run: node --test --test-name-pattern='UnifiedCode|final notes paginate|action plan PDF' notes-pdf.test.mjs
