@@ -1,19 +1,19 @@
 import {deferredController} from './deferred-controller.js?v=1';
 import {readDriveFolderFile} from './drive-folder-files.js?v=1';
-import {renderPracticeZone,practiceAccessKey} from './practice-zone.js';
+import {renderPracticeZone,practiceAccessKey} from './practice-zone.js?v=reading-tabs-2';
 import {renderMaterialLibrary} from './material-library.js?v=word-stress-3';
 import {createLoadingNotice} from './loading-notice.js?v=visible-loading';
 import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=reward-access-2';
 import {withBerlitzBooks} from './berlitz-material.js?v=drive-folders-1';
 // Download the document/PDF tools only when someone opens a file.
 let documentViewer,documentViewerPending;
-function loadDocumentViewer(){return documentViewerPending ||= import('./learning-document-viewer.js?v=drive-folders-1').then(module=>documentViewer=module).catch(error=>{documentViewerPending=null;throw error;});}
+function loadDocumentViewer(){return documentViewerPending ||= import('./learning-document-viewer.js?v=reading-tabs-2').then(module=>documentViewer=module).catch(error=>{documentViewerPending=null;throw error;});}
 const closeLearningDocument=doc=>documentViewer?.closeLearningDocument(doc);
 const updateLearningDocumentAccess=(doc,items)=>documentViewer?.updateLearningDocumentAccess(doc,items);
 const openLearningDocument=(doc,item)=>documentViewer.openLearningDocument(doc,item);
 import {learningFolderPasswordGroup} from './learning-hub-sections.js?v=ask-coach-1';
 import {chooseLearningLevel} from './learning-level-dialog.js?v=password-free-1';
-import {learningDocumentTitle,learningDocumentLevel,learningDocumentCategory,learningDocumentPart,createLearningDocumentCard} from './learning-document-cards.js?v=library-folders';
+import {learningDocumentTitle,learningDocumentLevel,learningDocumentCategory,learningDocumentPart,createLearningDocumentCard,isLearningBook} from './learning-document-cards.js?v=reading-tabs-2';
 import {ensurePortalFolderTree,portalItemFolder} from './portal-folder-tree.js?v=learning-space';
 import {initializePractice} from './student-practice.js';
 import {assertPortalAllowed,noteWrongPassword,PORTAL_ATTEMPT_KEY,PORTAL_LOCK_MESSAGE,clearFolderPasswords,unlockStudentFolder} from './student-portal-attempts.js?v=ask-coach-1';
@@ -83,8 +83,8 @@ export function initializeStudentAssessment(doc) {
  });
  tabs.forEach((tab,index)=>tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();tabs[next].focus();}));
  async function openDocument(item,event){
-  event.preventDefault();const current=epoch,reading=++documentRequest;status.textContent='Opening document…';
-  try{await loadDocumentViewer();if(current!==epoch||reading!==documentRequest)return;if(learningDocumentCategory(item)==='exercises'&&(item.requiresAccess||!item.url)){const key=practiceAccessKey(item,hubEntry);if(!key)throw new Error('Practice Zone is currently closed by your instructor.');if(!await enterHubLevel(doc,key))return;}const response=await call('studentPortalAccess'),fresh=response.items.find(entry=>entry.id===item.id);if(current!==epoch)return;if(!fresh?.enabled){status.textContent='This document is currently closed by your instructor.';return;}if(fresh.driveFolder){const inline=await readDriveFolderFile(call,fresh,{valid:()=>current===epoch&&reading===documentRequest,progress:percent=>{status.textContent='Loading material… '+percent+'%';}});if(!inline)return;openLearningDocument(doc,{...fresh,title:learningDocumentTitle(fresh.title),inline});}else if(/^https:\/\/drive\.google\.com\/file\/d\//.test(fresh.url)&&/^Level[\s_-]*(?:1[0-2]|[1-9])\s*[—:-]\s*(Main Book|Activity|Audio|Practice)\s*[—:-]/i.test(fresh.title)){const file=await call('studentLibraryRead',{itemId:fresh.id});if(current!==epoch)return;openLearningDocument(doc,{...fresh,title:learningDocumentTitle(fresh.title),inline:file});}else openLearningDocument(doc,{...fresh,title:learningDocumentTitle(fresh.title)});status.textContent='';}catch(error){if(current===epoch)status.textContent=error.message;}
+  event.preventDefault();const bookWindow=isLearningBook(item)?doc.defaultView.open('about:blank','_blank'):null;if(isLearningBook(item)&&!bookWindow){status.textContent='Allow a reading tab to open, then select the book again.';return;}if(bookWindow){bookWindow.document.title='Opening your book…';bookWindow.document.body.textContent='Opening your book…';}let opened=false;const showDocument=entry=>{openLearningDocument(doc,{...entry,bookWindow});opened=true;};const current=epoch,reading=++documentRequest;status.textContent='Opening document…';
+  try{await loadDocumentViewer();if(current!==epoch||reading!==documentRequest)return;if(learningDocumentCategory(item)==='exercises'&&(item.requiresAccess||!item.url)){const key=practiceAccessKey(item,hubEntry);if(!key)throw new Error('Practice Zone is currently closed by your instructor.');if(!await enterHubLevel(doc,key))return;}const response=await call('studentPortalAccess'),fresh=response.items.find(entry=>entry.id===item.id);if(current!==epoch||reading!==documentRequest)return;if(!fresh?.enabled){status.textContent='This document is currently closed by your instructor.';return;}if(fresh.driveFolder){const inline=await readDriveFolderFile(call,fresh,{valid:()=>current===epoch&&reading===documentRequest,progress:percent=>{status.textContent='Loading material… '+percent+'%';}});if(!inline)return;showDocument({...fresh,title:learningDocumentTitle(fresh.title),inline});}else if(/^https:\/\/drive\.google\.com\/file\/d\//.test(fresh.url)&&/^Level[\s_-]*(?:1[0-2]|[1-9])\s*[—:-]\s*(Main Book|Book|Activity|Audio|Practice)\s*[—:-]/i.test(fresh.title)){const file=await call('studentLibraryRead',{itemId:fresh.id});if(current!==epoch||reading!==documentRequest)return;showDocument({...fresh,title:learningDocumentTitle(fresh.title),inline:file});}else showDocument({...fresh,title:learningDocumentTitle(fresh.title)});status.textContent='';}catch(error){if(current===epoch)status.textContent=error.message;}finally{if(bookWindow&&!opened&&!bookWindow.closed)bookWindow.close();}
  }
  const sectionNames={material:'Learning Library',listening:'Listening Lab',exercises:'Practice Zone'};
  function matchingFiles(id,level,items){return items.filter(item=>(learningDocumentLevel(item)===level||(id==='exercises'&&!learningDocumentLevel(item)))&&(learningDocumentCategory(item)===id||(id==='material'&&learningDocumentCategory(item)==='listening')));}
