@@ -18,8 +18,8 @@ test('Cairo class times follow daylight saving and reject skipped/repeated times
 });
 test('reminder contains session details, Zoom credentials, and cancellation policy',()=>{
  const message=reminderMessage({name:'Learner',number:2,startsAt:cairoSessionTimestamp(booking.date,booking.time),id:'test'});
- for(const value of ['Session number: 2','11 October 2026','3:00 pm','Cairo time','https://us06web.zoom.us/j/79051707388','Passcode: 7P1NpA','No same-day cancellations are allowed.'])assert.ok(message.text.includes(value),value);
- assert.equal(createReminderMailer({}),null);
+ for(const value of ['Session number: 2','11 October 2026','3:00 pm','Cairo time','https://us06web.zoom.us/j/84640483010','Meeting ID: 846 4048 3010','No same-day cancellations are allowed.'])assert.ok(message.text.includes(value),value);
+ assert(!message.text.includes('7P1NpA'));assert(!message.text.includes('Passcode:'));assert.equal(createReminderMailer({}),null);
 });
 test('classes send only after explicit authorization, survive restart, and do not resend',async()=>{
  const sent=[],s=setup(async record=>sent.push(record));try{

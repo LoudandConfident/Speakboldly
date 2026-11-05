@@ -1,3 +1,4 @@
+import {CLASS_ZOOM_URL} from './portal-config.js?v=zoom-20261105';
 import {renderBookingRequestCards} from './booking-request-cards.js?v=domain-email-routing';
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {clockText12} from './platform-time.js';

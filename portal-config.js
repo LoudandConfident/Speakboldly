@@ -7,3 +7,7 @@ export const portalResources = {
  reports: [],
  material: [],final: [],listening: []
 };
+
+// Shared class meeting; scheduled dates and times remain in the calendar.
+export const CLASS_ZOOM_URL='https://us06web.zoom.us/j/84640483010';
+export const CLASS_ZOOM_MEETING_ID='846 4048 3010';

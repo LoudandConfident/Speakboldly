@@ -1,4 +1,4 @@
-import './admin-portal.js?v=round-calendar-19';
+import './admin-portal.js?v=zoom-20261105';
 import {clientSheetConnected} from './client-sheet.js?v=domain-email-routing';
 const SESSION='speak-boldly-instructor-app-session-v1';
 const dashboard=document.querySelector('#admin-dashboard'),clientPage=document.querySelector('#admin-client-page'),login=document.querySelector('#admin-login-form'),dialog=document.querySelector('#teacher-login-dialog'),nav=document.querySelector('.app-nav'),lock=document.querySelector('#app-lock'),message=document.querySelector('#app-locked-message');

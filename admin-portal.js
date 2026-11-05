@@ -14,7 +14,7 @@ import {refreshMotivationSettings} from './motivation-settings.js?v=freeze-24-oc
 import {clientDailyMotivation} from './home-gallery.js?v=stern-teacher-10';
 import {initializeInstructorFrench} from './instructor-french.js?v=toolbar-v2';
 import {initializeNativeEnglishEditor} from './native-english-editor.js?v=simplified-art-3';
-import {initializeInstructorOverview} from './instructor-overview.js?v=new-zoom-1';
+import {initializeInstructorOverview} from './instructor-overview.js?v=zoom-20261105';
 import {cleanupRequestedPortalClients} from './requested-client-cleanup.js';
 import {openClientReportTab} from './report-tabs.js?v=route-safe-2';
 import {CLIENT_PROGRAMS,suggestedSessionProgram} from './session-programs.js?v=library-folders';

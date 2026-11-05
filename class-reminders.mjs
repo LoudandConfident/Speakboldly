@@ -1,9 +1,10 @@
+import {CLASS_ZOOM_URL,CLASS_ZOOM_MEETING_ID} from './portal-config.js';
 import {DOCUMENT_BRAND} from './document-branding.js';
 import {randomUUID} from 'node:crypto';
 import nodemailer from 'nodemailer';
 import {validateSession,defaultSessionDuration} from './admin-calendar.js';
-export const ZOOM_URL='https://us06web.zoom.us/j/79051707388';
-export const ZOOM_PASSCODE='7P1NpA';
+export const ZOOM_URL=CLASS_ZOOM_URL;
+export const ZOOM_PASSCODE='';
 const day=24*60*60*1000;
 const cairoParts=timestamp=>Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Cairo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(timestamp)).filter(p=>p.type!=='literal').map(p=>[p.type,p.value]));
 export function cairoSessionTimestamp(date,time){
@@ -16,7 +17,7 @@ export function cairoSessionTimestamp(date,time){
 export function reminderMessage({name,number,startsAt,id,duration=90}){
  const date=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date(startsAt));
  const time=new Intl.DateTimeFormat('en-GB',{timeZone:'Africa/Cairo',hour:'numeric',minute:'2-digit',hour12:true}).format(new Date(startsAt));
- return {subject:`Your class confirmation — Session ${number} — Speak Boldly`,messageId:`<class-${id}@speakboldly.local>`,text:`Hello ${name},\n\nYour upcoming English class is confirmed.\n\nSession number: ${number}\nDate: ${date}\nTime: ${time} (Cairo time)\nDuration: ${duration} minutes\n\nJoin on Zoom:\n${ZOOM_URL}\nPasscode: ${ZOOM_PASSCODE}\n\nPlease note: No same-day cancellations are allowed.\n\nSee you in class!\n${DOCUMENT_BRAND.credentials}`};
+ return {subject:`Your class confirmation — Session ${number} — Speak Boldly`,messageId:`<class-${id}@speakboldly.local>`,text:`Hello ${name},\n\nYour upcoming English class is confirmed.\n\nSession number: ${number}\nDate: ${date}\nTime: ${time} (Cairo time)\nDuration: ${duration} minutes\n\nJoin on Zoom:\n${ZOOM_URL}\nMeeting ID: ${CLASS_ZOOM_MEETING_ID}\n\nPlease note: No same-day cancellations are allowed.\n\nSee you in class!\n${DOCUMENT_BRAND.credentials}`};
 }
 export function createReminderMailer(env){
  if(!env.SMTP_HOST||!env.SMTP_USER||!env.SMTP_PASSWORD)return null;
