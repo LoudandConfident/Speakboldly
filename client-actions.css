@@ -79,3 +79,8 @@ body:has(.notes-editor-page[data-document-kind=notes]:not([hidden])){max-width:n
 #client-notes-dialog[data-document-kind=notes] :is(.session-note-section,.session-note-fields,.session-welcome,.notes-task-picker){background-color:#ffffff9c}
 #client-notes-dialog[data-document-kind=notes] :is(textarea,input:not([type=file])){background-color:#ffffffb8}
 @media(max-width:600px){#client-notes-dialog[data-document-kind=notes]{padding:14px}}
+
+/* Two export actions in normal flow, stacked on narrow screens. */
+#client-notes-dialog[data-document-kind=notes] .detail-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;isolation:isolate}
+#client-notes-dialog[data-document-kind=notes] .detail-actions>.button{width:100%!important;margin:0!important;align-self:stretch!important;line-height:1.5!important}
+@media(max-width:600px){#client-notes-dialog[data-document-kind=notes] .detail-actions{grid-template-columns:minmax(0,1fr)!important}}
