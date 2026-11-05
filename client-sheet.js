@@ -46,7 +46,6 @@ export function initializeClientSheet(doc) {
  const form = doc.querySelector('#client-sheet-connect');
  if (!form) return;
  const status = doc.querySelector('#client-sheet-status'), change = doc.querySelector('#client-sheet-change');
- if(!doc.querySelector('#check-domain-mail')){const check=doc.createElement('button');check.id='check-domain-mail';check.type='button';check.className='button light small';check.textContent='Check email sending';form.after(check);check.onclick=async()=>{if(!clientSheetConnected()){status.textContent='Sign in or use your saved connection first.';return;}check.disabled=true;status.textContent='Checking sender setup. No emails will be sent…';const results=[];for(const [label,kind]of [['Reports','notes'],['Billing','registration']]){try{await sheetRequest(endpoint,key,{action:'emailRoutingSettings',kind});results.push(label+': ready.');}catch(error){results.push(label+': '+error.message);}}status.textContent=results.join(' ');check.disabled=false;};}
  const validUrl = url => /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(url);
  function restore() {
   try {
