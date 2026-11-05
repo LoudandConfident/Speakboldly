@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-05T10:38:10.903Z",
+  "checkedAt": "2026-11-05T10:56:36.383Z",
   "comments": {
     "reachable": true,
     "ok": true,
@@ -8,12 +8,11 @@
   },
   "sharedContent": {
     "reachable": true,
-    "ready": false,
-    "error": "Incorrect connection key."
+    "ready": true
   },
   "practiceDrive": {
     "reachable": true,
-    "elapsedMs": 30018,
+    "elapsedMs": 46318,
     "httpStatus": 200,
     "ready": true,
     "files": 30
