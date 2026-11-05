@@ -24,7 +24,7 @@ export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date
  if(current)line(current,size);
  }
  }
- paragraph('Speak Boldly — '+title,19);y-=8;paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);if(client.sessionNumber)paragraph('Session: '+client.sessionNumber);paragraph('Date: '+date);y-=18;
+ paragraph('Speak Boldly — '+title,19);y-=8;if(title==='Session notes'){if(client.sessionNumber)paragraph('Session: '+client.sessionNumber,13);}else{paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);if(client.sessionNumber)paragraph('Session: '+client.sessionNumber);paragraph('Date: '+date);}y-=18;
  if(welcomeText){paragraph('Welcome to the session',16);y-=6;paragraph(welcomeText);y-=14;if(y<160)newPage();paragraph('Session notes',16);y-=6;}paragraph(notes);
  await appendTaskPages(pdf,taskAttachments,{font,rgb,client,newPage:()=>{newPage();return page;},answerPages});
  await drawDocumentBranding(pdf,{font,logo,light:false});
