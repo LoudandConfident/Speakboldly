@@ -201,7 +201,17 @@ export function initializeAdminPortal(doc,loader=loadPortalMaterials){
  doc.querySelector('[data-portal-area="client"]').addEventListener('click',lock);
  doc.defaultView.addEventListener('hashchange',()=>{if(doc.defaultView.location.hash.split('/')[0]!=='#students-portal')lock();else if(doc.defaultView.location.hash==='#students-portal'&&unlocked){root.querySelector('#admin-overview').hidden=false;root.querySelector('#admin-client-page').hidden=true;}});
 
- lock();return{lock};
+ lock();
+ // Return from a report using the existing server-validated session, never a saved password.
+ if(!doc.defaultView.location.pathname.endsWith('/instructor.html'))try{
+  const storage=doc.defaultView.sessionStorage,stamp=Number(storage.getItem('speak-boldly-report-return-v1'));
+  storage.removeItem('speak-boldly-report-return-v1');
+  const saved=JSON.parse(doc.defaultView.localStorage.getItem('speak-boldly-client-sheet-connection-v1')||'null');
+  if(stamp>0&&Date.now()-stamp>=0&&Date.now()-stamp<8*60*60*1000&&/^SBI_[A-Za-z0-9-]{60,100}$/.test(saved?.key||'')){
+   password.value=saved.key;login.requestSubmit();
+  }
+ }catch{}
+ return{lock};
 }
 if(typeof document!=='undefined')initializeAdminPortal(document);
 

@@ -18,7 +18,7 @@ export function initializeFeatureLoader(doc,win){
  const pending=new Map();let adminReady=false,missionReady=false;
  async function optional(module,label){const root=doc.getElementById('students-portal');const notice=doc.createElement('p');notice.className='sb-loading';notice.setAttribute('role','status');notice.setAttribute('aria-label',label);root.prepend(notice);try{await import(module);notice.remove();return true;}catch{notice.className='';notice.textContent=label+' could not load. Please try again.';return false;}}
  let adminPending=null,missionPending=null;
- async function ensureAdmin(){if(adminReady)return true;if(!adminPending)adminPending=optional('./admin-portal.js?v=zoom-20261105','Instructor dashboard').then(ok=>{adminReady=ok;adminPending=null;return ok;});return adminPending;}
+ async function ensureAdmin(){if(adminReady)return true;if(!adminPending)adminPending=optional('./admin-portal.js?v=notes-return-12','Instructor dashboard').then(ok=>{adminReady=ok;adminPending=null;return ok;});return adminPending;}
  doc.addEventListener('click',async event=>{const button=event.target.closest?.('[data-portal-area="admin"]');if(!button||adminReady)return;event.preventDefault();event.stopImmediatePropagation();if(await ensureAdmin()&&win.location.hash.startsWith('#students-portal'))button.click();},true);
  // Fetch the instructor modules while the portal chooser is visible, before a click.
  const warmAdmin=()=>{if(win.location.hash.startsWith('#students-portal')&&!doc.hidden)void ensureAdmin();};

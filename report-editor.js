@@ -1,5 +1,5 @@
 import {submissionReturnUrl} from './submission-success.js';
-import {initializeClientNotes} from './client-notes.js?v=notes-simple-11';
+import {initializeClientNotes} from './client-notes.js?v=notes-return-12';
 import {readReportTab} from './report-tabs.js?v=route-safe-2';
 import {initializeTeacherDocuments,DOCUMENT_TEMPLATES} from './teacher-documents.js?v=success-return-1';
 import {initializeClientSheet,clientSheetConnected,loadClientsFromSheet} from './client-sheet.js?v=domain-email-routing';
@@ -8,6 +8,7 @@ const payload=readReportTab(window);
 if(!payload){status.textContent='Open a client’s report from Authorize in the teacher dashboard.';back.hidden=false;}
 else{
  window.opener=null;
+ try{sessionStorage.setItem('speak-boldly-report-return-v1',String(Date.now()));}catch{}
  const freeform=payload.type==='notes'||payload.type==='actionplan';const title=freeform?(payload.type==='actionplan'?'Action plan':'Session notes'):DOCUMENT_TEMPLATES[payload.type].title;document.title=title+' — '+payload.client.name+' — Speak Boldly';document.querySelector('#report-tab-client').textContent=payload.client.name+' · '+payload.client.email;
  let active=true,client=payload.client;
  const returnUrl=submissionReturnUrl(window,(payload.appMode?'./instructor.html#students-portal/teacher':'./#students-portal/teacher'));if(returnUrl){back.href=returnUrl;back.textContent='←';back.setAttribute('aria-label','Back to instructor dashboard');back.hidden=false;document.documentElement.classList.add('instructor-report');}
