@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-05T09:34:03.660Z",
+  "checkedAt": "2026-11-05T10:09:31.976Z",
   "comments": {
     "reachable": true,
     "ok": true,
@@ -10,5 +10,10 @@
     "reachable": true,
     "ready": false,
     "error": "Incorrect connection key."
+  },
+  "practiceDrive": {
+    "reachable": false,
+    "ready": false,
+    "error": "Practice Drive catalog could not be checked."
   }
 }
