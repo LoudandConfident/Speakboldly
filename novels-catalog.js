@@ -17,6 +17,7 @@ export const MONTHLY_NOVELS=[
  },
  {
   "id": "158",
+  "simplified": {"id":"158-simplified","url":"./novels/simplified/emma.pdf","pages":31,"language":"Simplified modern English · intermediate reading","abridged":true},
   "title": "Emma",
   "author": "Jane Austen",
   "url": "./novels/book-158.pdf",

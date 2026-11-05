@@ -5,7 +5,8 @@ import {drawDocumentBranding} from '../document-branding.js';
 const root=new URL('../',import.meta.url);
 const books={
  'jane-eyre':{id:'1260',title:'Jane Eyre',author:'Charlotte Brontë'},
- 'pride-and-prejudice':{id:'1342',title:'Pride and Prejudice',author:'Jane Austen'}
+ 'pride-and-prejudice':{id:'1342',title:'Pride and Prejudice',author:'Jane Austen'},
+ 'emma':{id:'158',title:'Emma',author:'Jane Austen'}
 };
 const slug=process.argv[2]||'jane-eyre',book=books[slug];
 if(!book)throw Error('Unknown simplified novel: '+slug);
