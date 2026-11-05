@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="595" height="842" viewBox="0 0 595 842">
+<g fill="none" stroke="#e1e9df" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+<g transform="translate(488 120) rotate(12)"><path d="M0 12Q22 1 44 12Q66 1 88 12V76Q66 65 44 76Q22 65 0 76ZM44 12V76M9 27Q21 22 34 27M54 27Q67 22 79 27M9 42Q21 37 34 42M54 42Q67 37 79 42"/></g>
+<g transform="translate(-14 544) rotate(-12)"><path d="M5 16H96V43H5Q-7 30 5 16ZM5 43H96M15 24H77M15 34H65M17 51H110V77H17Q5 64 17 51ZM17 77H110M27 60H94M27 69H76M2 86H91V109H2Q-9 97 2 86ZM2 109H91"/></g>
+<g transform="translate(500 665) rotate(19)"><path d="M10 0H28V96L19 115L10 96ZM10 14H28M10 87H28M19 16V84M15 104H23"/></g>
+<g transform="translate(-20 291)"><path d="M0 0H86Q100 0 100 14V55Q100 69 86 69H52L31 88V69H0Q-13 69-13 55V14Q-13 0 0 0ZM12 22H74M12 39H60"/></g>
+<path d="M561 449l4 10 11 1-9 7 3 11-9-6-10 6 3-11-9-7 12-1ZM24 172l3 8 9 1-7 5 2 9-7-5-7 5 2-9-7-5 9-1Z"/>
+<path d="M552 284q22 22 7 54M30 738q37-10 51 12" stroke-dasharray="3 7"/>
+</g></svg>

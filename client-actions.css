@@ -53,3 +53,10 @@
 #client-notes-dialog .session-note-section>label input{width:100%;box-sizing:border-box}
 #client-notes-dialog .session-welcome{border:0;padding:0}
 #client-notes-dialog .session-welcome>legend{display:none}
+
+#client-notes-dialog[data-document-kind=notes]{background-color:#fff;background-image:url('./document-templates/session-notes-background.svg');background-repeat:repeat-y;background-size:100% auto;background-position:top center}
+#client-notes-dialog .session-note-section,#client-notes-dialog .session-note-fields,#client-notes-dialog .session-welcome,#client-notes-dialog .notes-task-picker{background-image:none!important;background-color:rgba(255,255,255,.96)}
+#client-notes-dialog .session-background-controls{margin:18px 0;padding:13px;border:1px dashed #b7c8ad;border-radius:12px}
+#client-notes-dialog .session-background-controls .notes-task-answer-option{display:none!important}
+
+#client-authorization-dialog .task-reminder-action{order:-1;background:#e5eed8;border-color:#a9bd96;font-weight:600;margin-bottom:6px}
