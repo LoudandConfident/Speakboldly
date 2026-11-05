@@ -71,3 +71,11 @@
 #client-notes-dialog .detail-actions{display:flex!important;position:static!important;inset:auto!important;float:none!important;clear:both;flex-wrap:wrap!important;align-items:stretch!important;gap:12px!important;width:100%;height:auto!important;min-width:0;margin:20px 0 0!important;padding:18px 0 0!important;box-sizing:border-box}
 #client-notes-dialog .detail-actions>.button{position:static!important;inset:auto!important;float:none!important;flex:1 1 180px!important;width:auto!important;max-width:100%!important;min-width:0!important;min-height:48px!important;height:auto!important;padding:12px 14px!important;box-sizing:border-box!important;white-space:normal!important;overflow-wrap:anywhere;transform:none!important}
 @media(max-width:600px){#client-notes-dialog .detail-actions{flex-direction:column!important}#client-notes-dialog .detail-actions>.button{flex:0 0 auto!important;width:100%!important}#client-notes-dialog .detail-actions>button[type=submit]{order:-1}#client-notes-dialog .session-note-section>label{margin:12px!important}}
+
+/* The illustrated teaching whiteboard fills the editing page, including writing areas. */
+body:has(.notes-editor-page[data-document-kind=notes]:not([hidden])){max-width:none;min-height:100dvh;background:#fff url('./document-templates/session-whiteboard.svg') repeat;background-size:640px 640px}
+#client-notes-dialog[data-document-kind=notes]{box-sizing:border-box;width:100%;max-width:none;min-height:100dvh;padding:24px;background:#fff url('./document-templates/session-whiteboard.svg') repeat;background-size:640px 640px}
+#client-notes-dialog[data-document-kind=notes] form{max-width:1100px;margin-inline:auto}
+#client-notes-dialog[data-document-kind=notes] :is(.session-note-section,.session-note-fields,.session-welcome,.notes-task-picker){background-color:#ffffff9c}
+#client-notes-dialog[data-document-kind=notes] :is(textarea,input:not([type=file])){background-color:#ffffffb8}
+@media(max-width:600px){#client-notes-dialog[data-document-kind=notes]{padding:14px}}

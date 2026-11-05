@@ -12,3 +12,10 @@ for(const filename of ['UnifiedCode.gs','Clients.gs'])test(filename+': action-pl
  const result=f.request({...payload,key:'private-test-key'});assert.equal(result.ok,true);assert.equal(f.emails.length,1);assert.notEqual(f.emails[0].to,'wrong@example.com');assert.match(f.emails[0].subject,/Action plan/);assert.match(f.emails[0].attachments[0].name,/Action plan.*\.pdf$/);
  assert.equal(f.request({...payload,key:'private-test-key'}).ok,true);assert.equal(f.emails.length,1);
 });
+
+test('session PDF exports written notes and branding without whiteboard illustrations',async()=>{
+ const bytes=await buildClientNotesPdf({name:'Test Student',sessionNumber:3},'Vocabulary:\nA written example',{...options,title:'Session notes',welcomeImages:[{type:'image/png',bytes:new Uint8Array([0])}]});
+ const pdf=await PDFDocument.load(bytes);assert.equal(pdf.getPageCount(),1);
+ const images=pdf.getPage(0).node.Resources().lookup(pdf.context.obj('XObject'));
+ assert.equal(images.keys().length,1,'only the logo should be embedded');
+});

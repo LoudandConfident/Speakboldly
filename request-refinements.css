@@ -110,3 +110,15 @@ html body main #boldly-notes .boldly-note-link:nth-child(even){background:#24544
 html body main #boldly-notes .boldly-note-link:nth-child(even) :is(h3,p,time,.blog-list-glossary){color:#fff!important}
 html body main #boldly-notes .boldly-note-link:nth-child(even) .blog-read-article{background:#e7efe3;color:#193c32;border-color:#e7efe3}
 @media(max-width:380px){html body main #boldly-notes .boldly-note-link h3{font-size:14px!important}}
+
+/* Let programs start below the heading while the circles occupy their own rail. */
+html body main #courses{display:grid;grid-template-columns:minmax(0,1fr) 230px;column-gap:28px;align-items:start}
+html body main #courses[hidden]{display:none!important}
+html body main #courses .courses-introduction{display:contents!important}
+html body main #courses .courses-heading{grid-column:1;grid-row:1;padding-bottom:18px}
+html body main #courses .course-booking-note{grid-column:2;grid-row:1/4;align-self:start}
+html body main #courses .catalog-controls{grid-column:1;grid-row:2;margin:0 0 20px}
+html body main #courses #course-grid{grid-column:1;grid-row:3;margin-top:0;grid-template-columns:repeat(2,minmax(0,1fr))}
+html body main #courses>.page-signature{grid-column:1/-1}
+@media(max-width:760px){html body main #courses{grid-template-columns:minmax(0,1fr) 142px;column-gap:14px}html body main #courses #course-grid{grid-template-columns:minmax(0,1fr)}html body main #courses .catalog-controls{flex-wrap:wrap;gap:12px}html body main #courses .catalog-controls .search{width:100%;min-width:0}}
+@media(max-width:380px){html body main #courses{grid-template-columns:minmax(0,1fr) 124px;column-gap:10px}}
