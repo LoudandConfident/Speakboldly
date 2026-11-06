@@ -10,6 +10,8 @@ on:
       - content/simplified-novels/**
       - novels/simplified/**
       - courses.js
+      - material-library.js
+      - google-sheets/clients/DriveFolders.gs
       - daily-idiom.js
       - home-gallery.js
       - daily-missions/**
