@@ -1,0 +1,11 @@
+{
+  "id": "120-simplified",
+  "title": "Treasure Island — Simplified version",
+  "originalAuthor": "Robert Louis Stevenson",
+  "pages": 10,
+  "words": 1150,
+  "language": "Simplified modern English for intermediate learners",
+  "url": "./novels/simplified/treasure-island.pdf",
+  "abridged": true,
+  "sourceSha256": "19f41bd753e3b9ef34bd505262647677e34a2dc229d623c0c6cd1efd398d0edb"
+}

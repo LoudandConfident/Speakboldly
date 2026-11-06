@@ -1,0 +1,11 @@
+{
+  "id": "11-simplified",
+  "title": "Alice’s Adventures in Wonderland — Simplified version",
+  "originalAuthor": "Lewis Carroll",
+  "pages": 10,
+  "words": 1215,
+  "language": "Simplified modern English for intermediate learners",
+  "url": "./novels/simplified/alices-adventures-in-wonderland.pdf",
+  "abridged": true,
+  "sourceSha256": "f5c859091cca5a75ee7c05df88982454cc51aa6f18c208db10af30aa8a64edde"
+}
