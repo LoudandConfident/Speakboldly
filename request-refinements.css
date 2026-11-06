@@ -186,3 +186,33 @@ html body main #home .home-free-offers>[aria-hidden="true"]{animation:none!impor
 
 /* Keep the two offers comfortably separated without a dot. */
 html body main #home .home-free-offers{column-gap:12px!important}
+
+/* Learning channels and direct enquiries have separate, readable places. */
+html body main #contact>.intro{max-width:660px;margin-bottom:26px}
+html body main #contact .contact-social-row{grid-template-columns:minmax(0,1fr) 120px;gap:30px;align-items:start;max-width:1100px;margin:0 0 28px}
+html body main #contact .contact-connect-content{display:block!important;max-width:none!important;width:100%;margin:0!important}
+html body main #contact .contact-connect-content h3{font-size:20px;line-height:1.35;letter-spacing:-.3px;font-weight:600;margin:0 0 16px;color:#193c32}
+html body main #contact .contact-learning-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+html body main #contact .contact-learning-links .contact-channel-card{display:flex!important;flex-direction:column;align-items:flex-start!important;justify-content:flex-start!important;gap:15px;min-height:152px!important;width:100%!important;max-width:none!important;padding:20px 17px!important;margin:0;box-sizing:border-box;border:1px solid #c6d3bf!important;border-radius:18px!important;white-space:normal;text-align:left!important;color:#193c32!important;text-decoration:none!important;box-shadow:none;transition:transform .18s,background .18s,border-color .18s}
+html body main #contact .contact-channel-card .contact-channel-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#ffffff80;flex:none}
+html body main #contact .contact-channel-icon svg{width:27px;height:27px}
+html body main #contact .contact-channel-copy{display:grid;gap:6px;min-width:0}
+html body main #contact .contact-channel-copy strong{font-size:14px;line-height:1.4;font-weight:650}
+html body main #contact .contact-channel-copy small{font-size:12px;line-height:1.55;font-weight:400}
+html body main #contact .contact-learning-links .contact-youtube{background:#faf9f4!important}
+html body main #contact .contact-learning-links .whatsapp-channel{background:#dce8d8!important}
+html body main #contact .contact-learning-links .instagram-contact{background:#e9eddf!important}
+html body main #contact .contact-learning-links .contact-channel-card:hover{transform:translateY(-3px);background:#cfdfc6!important;border-color:#8ca780!important;text-decoration:none!important}
+html body main #contact .contact-channel-card:focus-visible,html body main #contact .contact-enquiry:focus-visible{outline:3px solid #71945c;outline-offset:4px}
+html body main #contact .contact-touch-group{border-top:1px solid #cbd5c4;margin-top:30px;padding-top:25px}
+html body main #contact .contact-touch-group>p{font-size:14px;line-height:1.7;margin:0 0 18px}
+html body main #contact .contact-touch-group .contact-enquiry{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:10px;min-height:48px!important;width:auto!important;max-width:100%;padding:13px 20px!important;border-radius:999px;background:#193c32!important;color:#fff!important;text-decoration:none!important;font-size:14px}
+html body main #contact .contact-enquiry svg{width:24px;height:24px;flex:none}
+html body main #contact .contact-touch-group .contact-enquiry:hover{background:#315c46!important;transform:translateY(-2px);text-decoration:none!important}
+html body main #contact .contact-touch-group .contact-email-row{display:flex;flex-wrap:wrap;align-items:center;gap:5px 12px;margin:20px 0 0;font-size:13px}
+html body main #contact .contact-email-row .email-link{font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+html body main #contact .contact-promotion-rail{padding-top:42px}
+html body main #contact .contact-promotion-rail .contact-orbit{width:105px!important}
+@media(max-width:900px){html body main #contact .contact-learning-links{grid-template-columns:minmax(0,1fr)}html body main #contact .contact-learning-links .contact-channel-card{flex-direction:row;align-items:center!important;gap:14px;min-height:88px!important;padding:16px 18px!important}}
+@media(max-width:600px){html body main #contact .contact-social-row{grid-template-columns:minmax(0,1fr) 78px;gap:12px}html body main #contact .contact-connect-content h3{font-size:18px}html body main #contact .contact-learning-links .contact-channel-card{gap:10px;padding:14px 12px!important;border-radius:15px!important}html body main #contact .contact-channel-card .contact-channel-icon{width:30px;height:34px;border-radius:9px}html body main #contact .contact-channel-icon svg{width:23px;height:23px}html body main #contact .contact-channel-copy strong{font-size:13px}html body main #contact .contact-channel-copy small{font-size:11px}html body main #contact .contact-touch-group .contact-enquiry{font-size:12px;gap:7px;padding:12px!important}html body main #contact .contact-enquiry svg{width:20px;height:20px}html body main #contact .contact-email-row .email-link{font-size:12px}html body main #contact .contact-promotion-rail{padding-top:40px}html body main #contact .contact-promotion-rail .contact-orbit{width:72px!important}html body main #contact .contact-promotion-rail .reward-circle{max-width:78px;min-height:70px;padding:10px 7px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){html body main #contact .contact-learning-links .contact-channel-card,html body main #contact .contact-touch-group .contact-enquiry{transition:none;transform:none!important}}
