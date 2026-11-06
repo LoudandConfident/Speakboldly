@@ -139,3 +139,26 @@ html body main #speak-hub .speak-hub-story{grid-column:1!important;grid-row:5!im
 html body main #speak-hub .speak-hub-illustrations{column-gap:10px!important}
 html body main #speak-hub .speak-hub-illustrations>span{padding:8px 6px!important;font-size:clamp(13px,1.2vw,17px)!important}
 @media(max-width:760px){html body main #speak-hub .upcoming-view-content{grid-template-columns:minmax(0,1fr)!important}html body main #speak-hub .speak-hub-meeting,html body main #speak-hub .speak-hub-story{grid-column:1!important;grid-row:auto!important}html body main #speak-hub .speak-hub-illustrations{grid-column:1!important;grid-row:auto!important}}
+/* Contact: promotions on the right, with FAQs directly beneath them. */
+html body main #contact .contact-social-row{display:grid!important;grid-template-columns:minmax(0,1fr) 280px!important;gap:36px!important;width:100%!important;max-width:none!important;align-items:start!important}
+html body main #contact .contact-promotion-rail{box-sizing:border-box;width:280px!important;max-width:100%;justify-self:end!important;padding-top:0!important;gap:18px!important}
+html body main #contact .contact-promotion-rail .contact-orbit{position:static!important;inset:auto!important;width:110px!important;margin:0!important}
+html body main #contact .contact-promotion-rail .contact-faq{width:100%!important;max-width:none!important;margin:6px 0 0!important;border-radius:12px!important}
+html body main #contact .contact-promotion-rail .contact-faq>summary{font-size:16px;padding:12px 16px}
+html body main #contact .contact-promotion-rail .contact-faq-questions{padding:0 14px}
+html body main #contact .contact-promotion-rail .contact-faq-item>summary{font-size:13px;padding:12px 0;gap:8px}
+html body main #contact .contact-promotion-rail .contact-faq-item>p{font-size:13px;line-height:1.7;padding:0 0 14px}
+/* Compact green opening and closing bars in their original top/bottom positions. */
+html body #students-portal #daily-mission .daily-compact-banner{display:block!important;min-height:0!important;padding:12px 18px!important;margin:0!important;background:#edf0e6!important;border-radius:10px}
+html body #students-portal #daily-mission .daily-closing{grid-column:1!important;display:flex;flex-direction:column;align-items:flex-start;gap:14px;margin-top:0}
+html body #students-portal #daily-mission .daily-closing>.button{width:auto!important;min-width:0!important;min-height:36px!important;padding:8px 14px!important;font-size:12px!important;line-height:1.4!important;margin:0!important;align-self:flex-start}
+html body #students-portal #daily-mission .daily-closing>.mission-tomorrow{box-sizing:border-box;width:100%;min-height:0!important;margin:0!important;padding:12px 18px!important;border-radius:10px;background:#edf0e6!important;color:#176b3a!important;font-size:14px!important;line-height:1.5!important;text-align:center}
+html body #students-portal #daily-mission .daily-challenge-idiom>summary{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;list-style:none!important;box-sizing:border-box;width:100%;min-height:48px;padding:12px 28px!important;line-height:1.4!important}
+html body #students-portal #daily-mission .daily-challenge-idiom>summary::-webkit-details-marker{display:none}
+html body #students-portal #daily-mission .daily-challenge-idiom>summary::marker{content:''}
+html body #students-portal #daily-mission .daily-challenge-idiom>summary::before{content:'▸';position:absolute;left:12px;top:50%;transform:translateY(-50%)}
+html body #students-portal #daily-mission .daily-challenge-idiom[open]>summary::before{content:'▾'}
+html body #students-portal #daily-mission .daily-challenge-extras .daily-encouragement{margin-top:28px!important}
+@media(max-width:760px){html body main #contact .contact-social-row{grid-template-columns:minmax(0,1fr)!important;gap:24px!important}html body main #contact .contact-promotion-rail{width:min(100%,320px)!important;justify-self:end!important}html body #students-portal #daily-mission.daily-seven>.daily-challenge-extras{display:flex!important;flex-direction:column!important;align-items:center;gap:18px!important}html body #students-portal #daily-mission .daily-challenge-extras .daily-encouragement{display:block!important;margin-top:18px!important;max-width:120px}}
+html body #students-portal #daily-mission .daily-compact-banner{box-sizing:border-box;width:fit-content;max-width:100%;justify-self:start}
+html body #students-portal #daily-mission .daily-closing>.mission-tomorrow{width:fit-content;max-width:100%;align-self:center}
