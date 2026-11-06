@@ -7,7 +7,7 @@ import {dailyMissionSet} from './daily-mission-set.js?v=level-topics-3';
 import {cairoMissionDate,missionLevels,readMissionState,writeMissionState} from './daily-mission-data.js?v=five-practices';
 export function initializeDailyMission(doc,win=doc.defaultView){
  const host=doc.querySelector('#daily-mission');if(!host||host.dataset.initialized)return;host.dataset.initialized='true';host.classList.add('daily-seven');
- const el=(tag,text,cls)=>{const node=doc.createElement(tag);if(text)node.textContent=text;if(cls)node.className=cls;return node;};
+ const el=(tag,text,cls)=>{const node=doc.createElement(tag);if(text)node.textContent=text;if(cls)node.className=cls;if(cls==='daily-task-intro'||cls==='mission-tomorrow')node.style.setProperty('color','#176b3a','important');return node;};
  let state;try{state=readMissionState(win.localStorage);}catch{state={name:'',level:'foundation',days:{}};}
  let missionOpen=false;let writing;let day=cairoMissionDate(new win.Date()),playing=false,activeButton=null,mission,renderTicket=0;
  const heading=el('h3','Daily Challenge'),levelLabel=el('label','Choose your level'),level=el('select');for(const [key,text]of Object.entries(missionLevels)){const option=el('option',text);option.value=key;level.append(option);}level.value=state.level;levelLabel.append(level);

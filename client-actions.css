@@ -84,3 +84,9 @@ body:has(.notes-editor-page[data-document-kind=notes]:not([hidden])){max-width:n
 #client-notes-dialog[data-document-kind=notes] .detail-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;isolation:isolate}
 #client-notes-dialog[data-document-kind=notes] .detail-actions>.button{width:100%!important;margin:0!important;align-self:stretch!important;line-height:1.5!important}
 @media(max-width:600px){#client-notes-dialog[data-document-kind=notes] .detail-actions{grid-template-columns:minmax(0,1fr)!important}}
+
+.session-screen-quote{box-sizing:border-box;max-width:920px;margin:18px 0 22px;padding:20px 24px;border:1px solid #bdcdb0;border-left:4px solid #176b3a;border-radius:5px 22px 22px 5px;background:#edf3e5;color:#193c32}
+.session-screen-quote>p{font-size:12px;font-weight:600;margin:0 0 9px;letter-spacing:.2px}
+.session-screen-quote>blockquote{font-size:clamp(19px,2.2vw,27px);line-height:1.5;margin:0;font-weight:500}
+@media(max-width:600px){.session-screen-quote{padding:16px 18px;margin:14px 0 18px}}
+@media print{.session-screen-quote{display:none!important}}

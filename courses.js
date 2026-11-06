@@ -229,7 +229,7 @@ export const courses = [
     "id": "ielts",
     "title": "IELTS preparation",
     "level": "Advanced level",
-    "duration": "8 sessions",
+    "duration": "12 sessions",
     "category": "IELTS",
     "description": "Prepare for IELTS with focused practice across listening, reading, writing and speaking. Build familiarity with task types, improve your answer structure and time management, and receive personalized feedback on your performance.",
     "topics": [
@@ -244,6 +244,25 @@ export const courses = [
     "detailDescription": "Work through typical task formats and timed practice while identifying which skills need the most attention. Sessions cover organising written answers, explaining opinions in speaking tasks and approaching listening and reading questions.",
     "viewDescription": "Prepare for IELTS through focused practice in listening, reading, writing, and speaking. Explore typical task formats, timed activities, and strategies shaped around the areas you need to strengthen.",
     "outcomes": "You’ll build familiarity with exam tasks and practise organising answers within the available time. You’ll also learn how to review your performance and plan more focused independent preparation."
+  },
+  {
+    "id": "toefl",
+    "title": "TOEFL preparation",
+    "level": "Upper-intermediate and advanced learners",
+    "duration": "12 sessions",
+    "category": "TOEFL",
+    "description": "Prepare for TOEFL through guided practice in reading, listening, speaking and writing. Develop a focused preparation routine, review your responses and work on the skills that need more attention.",
+    "summary": "Focused TOEFL preparation across reading, listening, speaking and writing.",
+    "viewDescription": "Twelve guided sessions with comprehension practice, speaking and writing activities, vocabulary development and personalised feedback. The program is coming soon.",
+    "outcomes": "Build a practical study routine, practise expressing ideas clearly and learn how to review your own exam preparation.",
+    "topics": [
+      "Reading and listening comprehension",
+      "Speaking and writing practice",
+      "Vocabulary and language accuracy",
+      "Time management and independent preparation"
+    ],
+    "art": "ielts",
+    "comingSoon": true
   },
   {
     "id": "pronunciation",

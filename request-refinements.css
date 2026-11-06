@@ -122,3 +122,59 @@ html body main #courses #course-grid{grid-column:1;grid-row:3;margin-top:0;grid-
 html body main #courses>.page-signature{grid-column:1/-1}
 @media(max-width:760px){html body main #courses{grid-template-columns:minmax(0,1fr) 142px;column-gap:14px}html body main #courses #course-grid{grid-template-columns:minmax(0,1fr)}html body main #courses .catalog-controls{flex-wrap:wrap;gap:12px}html body main #courses .catalog-controls .search{width:100%;min-width:0}}
 @media(max-width:380px){html body main #courses{grid-template-columns:minmax(0,1fr) 124px;column-gap:10px}}
+
+/* Keep the existing alternating blog colors in a single stack of rectangles. */
+html body main #boldly-notes [data-notes-list]{grid-template-columns:minmax(0,1fr)!important;max-width:920px;width:100%;gap:16px}
+html body main #boldly-notes .boldly-note-link{width:100%;max-width:none;min-height:0!important;border-radius:10px;padding:20px 24px}
+html body main #boldly-notes .boldly-note-link h3{white-space:normal!important;overflow-wrap:anywhere}
+html body main #speak-hub .upcoming-view-content{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:15px 28px;align-items:start}
+html body main #speak-hub .upcoming-view-content>p{grid-column:1;margin:0;max-width:none}
+html body main #speak-hub .speak-hub-illustrations{grid-column:2;grid-row:1 / span 4;display:flex;flex-direction:column;gap:12px;margin:0;align-self:start;min-width:0}
+html body main #speak-hub .speak-hub-illustrations .culture-activity-art{width:160px;max-width:100%}
+html body main #speak-hub .speak-hub-meeting{grid-column:1;grid-row:5;margin-top:0;padding:20px;max-width:none}
+html body main #speak-hub .speak-hub-meeting h3{margin-top:0}
+html body main #vision #page-back-arrow{position:relative;left:-8px}
+@media(max-width:680px){
+ html body main #boldly-notes [data-notes-list]{grid-template-columns:minmax(0,1fr)!important}
+ html body main #boldly-notes .boldly-note-link{padding:17px 19px}
+ html body main #speak-hub .upcoming-view-content{grid-template-columns:minmax(0,1fr) 94px;gap:12px 14px}
+ html body main #speak-hub .speak-hub-illustrations{gap:10px}
+ html body main #speak-hub .speak-hub-illustrations>span{font-size:14px;padding:9px 10px;max-width:100%;box-sizing:border-box;text-align:center}
+ html body main #speak-hub .speak-hub-meeting{grid-column:1/-1;grid-row:5;padding:17px}
+}
+
+/* Step 1 shares the opening row with the illustration; 2 and 3 form the next row. */
+html body main #how .how-hero{gap:28px;align-items:center;padding-bottom:26px}
+html body main #how .how-hero-copy .how-hero-note{max-width:none;margin:0 0 18px}
+html body main #how .how-hero .how-step-1{box-sizing:border-box;padding:20px 23px;margin:0;border:1px solid #c8d2c2;border-radius:10px;background:#faf9f4}
+html body main #how .how-hero .how-step-1 .how-step-top{margin-bottom:12px}
+html body main #how .how-guide.how-editorial-guide{grid-template-columns:repeat(6,minmax(0,1fr));gap:20px;align-items:stretch}
+html body main #how .how-editorial-guide>.how-step-2,html body main #how .how-editorial-guide>.how-step-policy{grid-column:span 3;display:block!important;box-sizing:border-box;margin:0;padding:22px 24px;border:1px solid #b9cbb0;border-radius:10px;background:#e6efdf;color:#193c32}
+html body main #how .how-step-policy :is(.how-step-number,.how-step-icon,h3,p,li,a){color:#193c32}
+html body main #how .how-step-policy .how-policy-heading>h3{font-family:'DM Sans',sans-serif;font-size:20px;text-transform:none;letter-spacing:0;max-width:none;margin:0 0 18px}
+html body main #how .how-step-policy .how-step-top{max-width:none;margin-bottom:20px}
+html body main #how .how-editorial-guide>.how-step:not(.how-step-2):not(.how-step-policy){background:#faf9f4;border:1px solid #c8d2c2!important;border-radius:10px;padding:20px!important;box-sizing:border-box}
+@media(max-width:680px){html body main #how .how-hero{gap:16px;padding-bottom:22px}html body main #how .how-hero-visual{margin-top:0;padding-top:22px}html body main #how .how-guide.how-editorial-guide{grid-template-columns:minmax(0,1fr);gap:16px}html body main #how .how-editorial-guide>.how-step-2,html body main #how .how-editorial-guide>.how-step-policy{grid-column:1!important;padding:20px}}
+
+/* Three compact programs beside the pricing circle, then four per full-width row. */
+html body main #courses{display:block}
+html body main #courses .courses-introduction{display:block!important}
+html body main #courses .catalog-controls{margin:0 0 18px;max-width:100%}
+html body main #courses #course-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:0;width:100%;align-items:stretch}
+html body main #courses #course-grid>.course-pricing-grid-card{grid-column:4;grid-row:1;align-self:center;justify-self:center;margin:0;width:100%;max-width:220px;min-width:0}
+html body main #courses .course-pricing-grid-card .course-fees-open{width:min(100%,210px);height:auto;aspect-ratio:1;box-sizing:border-box}
+html body main #courses .course-card{min-width:0;max-width:none;min-height:0;margin:0;border-radius:12px}
+html body main #courses .course-card .course-illustration{width:100%;height:115px;object-fit:contain;flex:none}
+html body main #courses .course-card .course-body{min-width:0;padding:13px}
+html body main #courses .course-card h3{font-size:15px;line-height:1.35;margin:7px 0 10px;overflow-wrap:anywhere}
+html body main #courses .course-card .category{font-size:9px;line-height:1.45}
+html body main #courses .course-card .course-summary{font-size:12px;line-height:1.55;margin-bottom:9px}
+html body main #courses .course-card .course-pricing{margin:6px 0 9px}
+html body main #courses .course-card .course-pricing strong{font-size:17px}
+html body main #courses .course-card .course-price-option p{margin:5px 0}
+html body main #courses .course-card .course-price-option span{font-size:10px}
+html body main #courses .course-card .course-view-row{gap:6px;padding:8px 0 0;font-size:10px;flex-wrap:wrap}
+html body main #courses .course-card .course-link{font-size:11px;padding:8px 10px;min-height:34px;white-space:normal}
+html body main #home>.home-bottom-row{padding-left:calc(6% - 8px)!important}
+@media(max-width:900px){html body main #courses #course-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}html body main #courses #course-grid>.course-pricing-grid-card{grid-column:3;grid-row:1}}
+@media(max-width:600px){html body main #courses #course-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}html body main #courses #course-grid>.course-pricing-grid-card{grid-column:2;grid-row:1;max-width:160px}html body main #courses .course-card .course-illustration{height:90px}html body main #courses .course-card .course-body{padding:10px}html body main #courses .course-card h3{font-size:14px}html body main #courses .course-card .course-summary{font-size:11px}}

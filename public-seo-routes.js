@@ -7,6 +7,7 @@ export const coursePaths={
  writing:'/programs/business-email-writing/',
  speaking:'/programs/meetings-presentations-public-speaking/',
  ielts:'/programs/ielts-preparation/',
+ toefl:'/programs/toefl-preparation/',
  pronunciation:'/programs/english-pronunciation/',
  kids:'/programs/english-for-kids/',
  'different-learners':'/programs/supporting-different-learners/',

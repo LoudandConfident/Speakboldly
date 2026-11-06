@@ -28,7 +28,7 @@ export function initializeNavigation(doc,win){
    views.forEach(v=>{v.hidden=v!==next;v.classList.remove('view-enter');});
    doc.querySelectorAll('[data-open-view]').forEach(b=>{if(b.dataset.openView===(['assessment','learner-profile','learner-results'].includes(next.id)?'placement':next.id)||(b.closest('#main-navigation')&&b.dataset.openView==='programs'&&next.id==='courses'))b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
    if(trail.at(-1)!==next.id){if(trail.at(-2)===next.id)trail.pop();else trail.push(next.id);}
-   const parent=['assessment','learner-profile','learner-results'].includes(next.id)?'placement':'home';back.href='#'+(trail.at(-2)||parent);back.hidden=next.id==='home';
+   const parent=['assessment','learner-profile','learner-results'].includes(next.id)?'placement':'home';back.href='#'+(trail.at(-2)||parent);back.hidden=true;
    const heading=headings.get(next.id);if(heading)heading.prepend(back);else doc.querySelector('main')?.prepend(back);active=next;const resetScroll=()=>{if(ticket===request)win.scrollTo({top:0,left:0,behavior:'instant'});};resetScroll();win.requestAnimationFrame(()=>win.requestAnimationFrame(resetScroll));updateDownArrow();
   };
   if(animate&&typeof doc.startViewTransition==='function'){
