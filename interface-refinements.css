@@ -186,3 +186,26 @@ html body #students-portal #portal-monthly>.culture-page-title{display:block!imp
 html body #students-portal #portal-monthly .culture-navigation>span{grid-column:2;grid-row:1}
 html body #students-portal #portal-monthly .culture-navigation>button:first-child{grid-column:1;grid-row:1;justify-self:start}
 html body #students-portal #portal-monthly .culture-navigation>button:last-child{grid-column:3;grid-row:1;justify-self:end}
+/* Page explanations float in clear space, independent of headings and cards. */
+html body #students-portal #portal-content [data-portal-panel]>.section-guide,
+html body #students-portal #portal-content .dashboard-help-circle,
+html body #students-portal #portal-monthly .real-english-side>.sb-help,
+html body main #contact .contact-promotion-rail>.sb-help{position:fixed!important;inset:auto!important;top:var(--page-help-top,120px)!important;right:clamp(18px,2vw,32px)!important;left:auto!important;bottom:auto!important;float:none!important;margin:0!important;z-index:12!important;transform:none!important}
+html body #students-portal #portal-content [data-portal-panel]>.section-guide,
+html body #students-portal #portal-content .dashboard-help-circle{box-sizing:border-box;width:30px!important;height:30px!important;min-height:30px!important;max-width:30px!important;padding:0!important;border-radius:50%!important;font-size:15px!important;line-height:1!important}
+html body #students-portal #portal-content [data-portal-panel]>.section-guide .guide-mark{font:inherit!important}
+/* One small label style across tabs; Vision has the explicitly larger title. */
+html body main>[data-view]:not(#home) .sb-page-heading{box-sizing:border-box;position:relative!important;display:flex!important;align-items:center!important;gap:10px!important;min-height:24px!important;margin:0 0 14px!important;padding:0 44px 0 0!important}
+html body main>[data-view]:not(#home) .sb-page-heading .sb-page-title,
+html body main>[data-view] .sb-page-intro-title,
+html body #students-portal #portal-content .learning-space-heading>h3,
+html body #students-portal.learning-section-open #portal-content .learning-space-heading>h3,
+html body #admin-portal .admin-dashboard-heading>h3,
+html body main #how .how-journey-intro>h3{font:600 9px/1.6 'DM Sans',sans-serif!important;letter-spacing:.6px!important;text-transform:none!important;margin:0!important;padding:0!important}
+html body main #how .how-journey-intro{margin:0!important;padding:20px 0 18px!important}
+html body main>#vision.vision-editorial[data-view] .sb-page-heading .sb-page-title{font-size:14px!important;line-height:1.8!important;max-width:900px}
+html body main>#vision.vision-editorial[data-view] .sb-page-heading{margin-bottom:20px!important}
+html body main #home .home-bottom-row{padding-inline:clamp(16px,4.5vw,64px)!important}
+@media(max-width:680px){html body main>#vision.vision-editorial[data-view] .sb-page-heading .sb-page-title{font-size:12px!important}html body main #how .how-journey-intro{padding-top:18px!important}}
+html body main #home .home-bottom-row .page-signature{transform:translateX(-24px)!important}
+@media(max-width:680px){html body main #home .home-bottom-row .page-signature{transform:translateX(-4px)!important}}
