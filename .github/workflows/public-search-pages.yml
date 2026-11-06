@@ -7,6 +7,8 @@ on:
     branches: [main]
     paths:
       - novels-catalog.js
+      - scripts/build-simplified-novel.mjs
+      - scripts/build-simplified-library.mjs
       - content/simplified-novels/**
       - novels/simplified/**
       - courses.js
@@ -61,6 +63,8 @@ jobs:
             sudo apt-get update -qq
             sudo apt-get install -y --no-install-recommends imagemagick
           fi
+      - name: Build and verify every simplified reading edition
+        run: node scripts/build-simplified-library.mjs
       - run: npm run build:seo
       - run: node --test public-seo.test.mjs rewards-backend.test.mjs drive-folders.test.mjs material-program-cards.test.mjs general-english-exams.test.mjs general-english-speaking.test.mjs monthly-learning.test.mjs session-rounds.test.mjs report-tabs.test.mjs folder-passwords.test.mjs student-submissions.test.mjs coach-routing.test.mjs blog-comments.test.mjs blog-reading-tools.test.mjs blog-learning-backend.test.mjs simplified-novel.test.mjs motivation-copy-link.test.mjs motivation-author-text.test.mjs reviews-api.test.mjs motivation-email-compat.test.mjs
       - name: Save generated public pages and request a Pages build
@@ -68,7 +72,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPOSITORY: ${{ github.repository }}
         run: |
-          git add content/comment-service-status.json content/public-reviews.json programs learn assessments blog motivation reviews student-portal vision how-it-works contact join-us get-a-quote speak-hub images/motivation-preview images/daily-motivation-small-steps-teacher.png images/daily-motivation-math-teacher-board.png motivation-preview-images.js assets/site-base.min.css assets/site-theme.min.css sitemap.xml content/bold-blog-public.json content/public-pages-manifest.json
+          git add novels/simplified content/simplified-novels content/comment-service-status.json content/public-reviews.json programs learn assessments blog motivation reviews student-portal vision how-it-works contact join-us get-a-quote speak-hub images/motivation-preview images/daily-motivation-small-steps-teacher.png images/daily-motivation-math-teacher-board.png motivation-preview-images.js assets/site-base.min.css assets/site-theme.min.css sitemap.xml content/bold-blog-public.json content/public-pages-manifest.json
           if git diff --cached --quiet; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'

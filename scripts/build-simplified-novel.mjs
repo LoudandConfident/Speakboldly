@@ -2,12 +2,10 @@ import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {PDFDocument,rgb,StandardFonts} from '../vendor/pdf-lib.esm.min.js';
 import fontkit from '../vendor/fontkit.es.min.js';
 import {drawDocumentBranding} from '../document-branding.js';
+import {MONTHLY_NOVELS} from '../novels-catalog.js';
+import {createHash} from 'node:crypto';
 const root=new URL('../',import.meta.url);
-const books={
- 'jane-eyre':{id:'1260',title:'Jane Eyre',author:'Charlotte Brontë'},
- 'pride-and-prejudice':{id:'1342',title:'Pride and Prejudice',author:'Jane Austen'},
- 'emma':{id:'158',title:'Emma',author:'Jane Austen'}
-};
+const books=Object.fromEntries(MONTHLY_NOVELS.filter(book=>book.simplified).map(book=>[book.simplified.url.split('/').pop().replace(/\.pdf$/,''),book]));
 const slug=process.argv[2]||'jane-eyre',book=books[slug];
 if(!book)throw Error('Unknown simplified novel: '+slug);
 const source=readFileSync(new URL('content/simplified-novels/'+slug+'.md',root),'utf8');
@@ -18,9 +16,9 @@ let page,y;
 function nextPage(){page=pdf.addPage([width,height]);y=height-112;page.drawText('Culture Corner · Simplified reading',{x:104,y:height-68,size:8,font:regular,color:muted});return page;}
 function lines(text,font,size,max){const words=text.split(/\s+/),rows=[];let row='';for(const word of words){const candidate=row?row+' '+word:word;if(row&&font.widthOfTextAtSize(candidate,size)>max){rows.push(row);row=word;}else row=candidate;}if(row)rows.push(row);return rows;}
 function paragraph(text,{size=11.5,font=regular,lineHeight=17.6,color=ink,gap=9}={}){for(const line of lines(text,font,size,right-left)){if(y<72)nextPage();page.drawText(line,{x:left,y,size,font,color});y-=lineHeight;}y-=gap;}
-nextPage();y=height-160;page.drawRectangle({x:left,y:height-147,width:76,height:4,color:lime});paragraph(book.title,{size:book.title.length>16?27:34,lineHeight:42,gap:16});paragraph('A simplified retelling',{size:17,lineHeight:25,gap:20});paragraph('Original story by '+book.author,{size:12,lineHeight:20,gap:20});paragraph('The same journey. Clearer, shorter English.',{size:14,lineHeight:23,gap:20});paragraph('Abridged and retold for Speak Boldly\nIntermediate reading practice',{size:10.5,lineHeight:18,color:muted});
+nextPage();y=height-160;page.drawRectangle({x:left,y:height-124,width:76,height:4,color:lime});paragraph(book.title,{size:book.title.length>16?27:34,lineHeight:42,gap:16});paragraph('A simplified retelling',{size:17,lineHeight:25,gap:20});paragraph('Original story by '+book.author,{size:12,lineHeight:20,gap:20});paragraph('The same journey. Clearer, shorter English.',{size:14,lineHeight:23,gap:20});paragraph('Abridged and retold for Speak Boldly\nIntermediate reading practice',{size:10.5,lineHeight:18,color:muted});
 const sections=source.split(/^## /m).slice(1);for(const section of sections){const [heading,...rest]=section.split('\n');nextPage();paragraph(heading,{size:18,font:bold,lineHeight:24,gap:14});for(const text of rest.join('\n').trim().split(/\n\s*\n/)){if(!text.trim())continue;if(heading==='Words to keep'){for(const entry of text.split('\n'))paragraph(entry,{size:11,lineHeight:17,gap:9});}else paragraph(text);}}
 await drawDocumentBranding(pdf,{font:regular,logo});
 pdf.setTitle(book.title+' — Simplified version | Speak Boldly');pdf.setSubject('An abridged modern-English retelling of '+book.author+'’s public-domain novel.');pdf.setKeywords([book.title,'simplified retelling','Culture Corner','English reading']);
 if(pdf.getPageCount()>50)throw Error('Simplified novel exceeds 50 pages: '+pdf.getPageCount());
-const destination=new URL('novels/simplified/',root);mkdirSync(destination,{recursive:true});const bytes=await pdf.save();writeFileSync(new URL(slug+'.pdf',destination),bytes);writeFileSync(new URL('content/simplified-novels/'+slug+'-manifest.json',root),JSON.stringify({id:book.id+'-simplified',title:book.title+' — Simplified version',originalAuthor:book.author,pages:pdf.getPageCount(),words:source.split(/\s+/).length,language:'Simplified modern English for intermediate learners',url:'./novels/simplified/'+slug+'.pdf',abridged:true},null,2)+'\n');console.log('Built simplified '+book.title+': '+pdf.getPageCount()+' pages; '+bytes.length+' bytes.');
+const destination=new URL('novels/simplified/',root);mkdirSync(destination,{recursive:true});const bytes=await pdf.save();writeFileSync(new URL(slug+'.pdf',destination),bytes);writeFileSync(new URL('content/simplified-novels/'+slug+'-manifest.json',root),JSON.stringify({id:book.id+'-simplified',title:book.title+' — Simplified version',originalAuthor:book.author,pages:pdf.getPageCount(),words:source.split(/\s+/).length,language:'Simplified modern English for intermediate learners',url:'./novels/simplified/'+slug+'.pdf',abridged:true,sourceSha256:createHash('sha256').update(source).digest('hex')},null,2)+'\n');console.log('Built simplified '+book.title+': '+pdf.getPageCount()+' pages; '+bytes.length+' bytes.');

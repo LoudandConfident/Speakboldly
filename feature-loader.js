@@ -7,7 +7,7 @@ export function initializeFeatureLoader(doc,win){
  }
 
  const groups={
-  'students-portal':['./learning-hub-entry.js?v=reading-tabs-12'],
+  'students-portal':['./learning-hub-entry.js?v=complete-simplified-library-24'],
   'assessment':['./placement-assessment.js?v=brief-personal-2'],
   'reviews':['./reviews.js?v=complete-cards-4'],
   'daily-quote':['./home-gallery.js?v=stern-teacher-10'],

@@ -24,7 +24,7 @@ export function initializeStudentAssessment(doc) {
  const root=doc.querySelector('#students-portal'),content=root.querySelector('#portal-content'),status=root.querySelector('#portal-access-status'),panel=root.querySelector('#portal-exams');
  const blocked=doc.createElement('p');blocked.id='student-portal-lockout';blocked.hidden=true;blocked.setAttribute('role','alert');content.before(blocked);
  const booking=deferredController(()=>import('./student-booking.js?v=slot-request-1').then(m=>m.initializeStudentBooking(doc)),{doc,host:root.querySelector('#portal-calendar'),label:'Session calendar'});
- const monthly=deferredController(()=>import('./monthly-learning.js?v=simplified-reading-5').then(m=>m.initializeMonthlyLearning(doc)),{doc,host:root.querySelector('#portal-monthly'),label:'Culture Corner'});
+ const monthly=deferredController(()=>import('./monthly-learning.js?v=complete-simplified-library-24').then(m=>m.initializeMonthlyLearning(doc)),{doc,host:root.querySelector('#portal-monthly'),label:'Culture Corner'});
  const contact=deferredController(()=>import('./student-contact.js?v=coach-sections-1').then(m=>m.initializeStudentContact(doc)),{doc,host:root.querySelector('#portal-contact'),label:'Ask your coach'});
  const profile=doc.createElement('section');profile.id='student-assessment-profile';profile.className='assessment-entry';profile.hidden=true;profile.setAttribute('aria-label','Assessment details');
  const endpoint=root.querySelector('#client-sheet-connect').elements.endpoint.defaultValue;
