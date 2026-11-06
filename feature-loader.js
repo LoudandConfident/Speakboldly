@@ -8,7 +8,7 @@ export function initializeFeatureLoader(doc,win){
   'daily-quote':['./home-gallery.js?v=stern-teacher-10'],
   'learner-profile':['./learner-profile.js?v=brief-personal-2'],
   'learner-results':['./learner-profile.js?v=brief-personal-2'],
-  'boldly-notes':['./boldly-notes.js?v=consistency-words-5']
+  'boldly-notes':['./boldly-notes.js?v=rotating-nov6-1']
  };
  const pending=new Map();let adminReady=false,missionReady=false;
  async function optional(module,label){const root=doc.getElementById('students-portal');const notice=doc.createElement('p');notice.className='sb-loading';notice.setAttribute('role','status');notice.setAttribute('aria-label',label);root.prepend(notice);try{await import(module);notice.remove();return true;}catch{notice.className='';notice.textContent=label+' could not load. Please try again.';return false;}}

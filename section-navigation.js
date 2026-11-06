@@ -13,7 +13,7 @@ export function initializeSectionLinks(doc,win){
  else if(node.tagName==='A'){const url=new URL(node.href,win.location.href);if(url.origin!==win.location.origin)return;if(url.hash)destination=url.hash.slice(1);else{const routes={'/':'home','/vision/':'vision','/how-it-works/':'how','/programs/':'courses','/assessments/':'placement','/reviews/':'reviews','/student-portal/':'students-portal','/blog/':'boldly-notes','/learn/daily-quotes/':'daily-quote','/contact/':'contact','/get-a-quote/':'quote','/join-us/':'join-team','/speak-hub/':'speak-hub'};destination=routes[url.pathname];}}
  if(!destination||!views.has(destination.split('/')[0])||destination==='home'&&current()==='home')return;
  const activePanel=doc.querySelector('[data-portal-tab][aria-selected=true]')?.dataset.portalTab;
- if((destination===current()&&!(destination==='students-portal'&&activePanel))||(node.dataset.portalTab&&node.dataset.portalTab===activePanel))return;
+ const destinationView=destination.split('/')[0];if((destinationView===current()&&destinationView!=='students-portal')||(destination===current()&&!activePanel)||(node.dataset.portalTab&&node.dataset.portalTab===activePanel))return;
  if((event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)&&node.tagName==='A'){doc.querySelectorAll('dialog[open]').forEach(dialog=>dialog.close());return;}
  event.preventDefault();event.stopImmediatePropagation();if(!openSection(doc,destination)){let notice=doc.querySelector('#section-navigation-status');if(!notice){notice=doc.createElement('p');notice.id='section-navigation-status';notice.setAttribute('role','alert');doc.body.append(notice);}notice.textContent='Allow new tabs for Speak Boldly, then try again. Your current page is unchanged.';}
  },true);

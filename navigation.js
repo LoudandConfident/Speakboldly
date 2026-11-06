@@ -1,4 +1,4 @@
-import {initializeSectionLinks} from './section-navigation.js';
+import {initializeSectionLinks} from './section-navigation.js?v=blog-navigation-2';
 export function initializeNavigation(doc,win){
  initializeSectionLinks(doc,win);
  doc.querySelector('.sb-method-illustrated-button')?.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.currentTarget.dispatchEvent(new win.MouseEvent('click',{bubbles:true}));}});
