@@ -1,4 +1,6 @@
+import {initializeSectionLinks} from './section-navigation.js';
 export function initializeNavigation(doc,win){
+ initializeSectionLinks(doc,win);
  doc.querySelector('.sb-method-illustrated-button')?.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.currentTarget.dispatchEvent(new win.MouseEvent('click',{bubbles:true}));}});
  const menu=doc.querySelector('.mobile-menu-toggle'),nav=doc.querySelector('#main-navigation');
  function closeMenu(){menu?.setAttribute('aria-expanded','false');nav?.classList.remove('mobile-open');}

@@ -94,6 +94,7 @@ export const courses = [
   },
   {
     "id": "english-momentum",
+    "dimmed": true,
     "title": "English Momentum",
     "level": "Beginner, Intermediate, Advanced",
     "duration": "16 sessions · 4 weeks",
@@ -187,6 +188,7 @@ export const courses = [
   },
   {
     "id": "writing",
+    "dimmed": true,
     "title": "E-mail and business writing workshop",
     "level": "Intermediate and advanced",
     "duration": "5 sessions",

@@ -1,0 +1,125 @@
+/* Speak Boldly: compact layout, original palette, typography and artwork. */
+html body:has(main #home:not([hidden])),html body:has(#portal-monthly:not([hidden])){max-width:none!important;margin:0!important;border-inline:0!important}
+html body main #home{margin:0!important;padding:0!important;width:100%!important;max-width:none!important;min-height:0!important}
+html body main #home .hero{border-radius:0!important;max-width:none!important;width:100%!important;aspect-ratio:2.8!important}
+html body main #home .home-speech-links{width:220px!important;gap:12px!important}
+html body main #home .home-cover-benefits{max-width:950px!important;margin:0 auto!important;padding:12px 22px!important;min-height:0!important}
+html body main #home .home-bottom-row{min-height:0!important;padding:8px 6%!important;margin:0!important}
+html body main #home .page-signature{margin:8px 0!important}
+html body main #contact .contact-promotion-rail{display:flex!important;flex-direction:column!important;align-items:center!important;gap:16px!important;justify-self:end}
+.sb-help{position:relative;display:inline-flex;align-items:center;margin-inline-start:10px;vertical-align:middle;flex:none}
+.sb-help-button{display:inline-grid;place-items:center;width:26px;height:26px;min-height:26px;border:1px solid #8da67f;border-radius:50%;background:#edf0e6;color:#193c32;font:600 14px/1 'DM Sans',sans-serif;cursor:pointer}
+.sb-help-tip{position:absolute;z-index:30;right:0;top:calc(100% + 9px);width:min(280px,75vw);padding:12px 15px;border:1px solid #a8bc9d;border-radius:9px;background:#fffef9;color:#193c32;font:13px/1.65 'DM Sans',sans-serif;box-shadow:0 5px 18px #193c3220;text-align:left}
+.sb-help-tip[hidden]{display:none}
+.sb-help-button:focus-visible{outline:2px solid #193c32;outline-offset:3px}
+:is(.section-guide,.dashboard-help-circle,.challenge-step-help){margin-inline:10px!important;flex:none}
+html body main #how .how-hero h2{font-size:clamp(28px,3.5vw,43px)!important;line-height:1.15!important;margin:0 0 18px!important}
+html body main #how .how-journey-intro{padding:0 0 18px;margin:0;background:transparent}
+html body main #how .how-journey-intro h3{font-size:clamp(24px,3vw,34px);margin:0 0 10px}
+html body main #how .how-hero-note{font-size:13px!important;line-height:1.65!important;max-width:720px!important;margin:0!important}
+html body main #how .how-hero{padding:12px 0 26px!important;gap:28px!important}
+html body main #how .how-guide{max-width:none}
+html body main #how .how-guide article{padding:18px!important}
+html body main #how .how-guide p{margin:10px 0}
+html body main #how .how-ribbon{margin-block:16px!important}
+html body main #courses .courses-heading{border-bottom:1px solid #b9c9b9;padding-bottom:16px!important}
+html body main #courses .catalog-controls{padding-top:16px!important}
+html body main #reviews .reviews-layout{display:grid!important;grid-template-columns:minmax(230px,.8fr) minmax(0,1.6fr)!important;gap:34px!important;align-items:center!important}
+html body main #reviews .review-intro{font-size:clamp(18px,1.8vw,24px)!important;line-height:1.6!important}
+html body main #reviews .reviews-album-area{margin-top:32px!important;min-width:0}
+html body main #reviews .review-card{max-width:600px!important}
+html body main #reviews .reviews-divider-art{display:block;width:65px;height:56px;color:#176b3a;margin:20px auto 8px}
+html body #portal-contact .student-contact-layout{gap:20px;max-width:1050px;margin-inline:auto;align-items:start}
+html body #portal-contact .student-contact-composer{padding:18px;min-width:0;border-radius:12px}
+html body #portal-contact .student-contact-composer p{font-size:13px;line-height:1.65;margin:8px 0 14px}
+html body #portal-contact .student-contact-form{gap:10px}
+html body #portal-contact .student-contact-form label{margin:8px 0;font-size:13px}
+html body #portal-contact textarea{min-height:120px;box-sizing:border-box;width:100%;font:inherit;line-height:1.6}
+html body #students-portal #daily-mission.daily-seven:not([hidden]){display:grid!important;grid-template-columns:minmax(0,1fr) 200px!important;gap:14px 24px!important;padding:18px!important;min-height:0!important;background:transparent!important}
+html body #students-portal #daily-mission.daily-seven>.daily-content{grid-column:1!important;grid-row:auto!important;width:100%;min-width:0}
+html body #students-portal #daily-mission.daily-seven>.daily-challenge-extras{grid-column:2!important;grid-row:2/span 6!important;padding-top:26px!important;margin:0!important}
+html body #students-portal #daily-mission>.learning-visual-note,html body #students-portal #portal-monthly>.learning-visual-note{display:none!important}
+html body #daily-mission .daily-compact-banner{grid-column:1;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;padding:14px 18px;background:#edf0e6;border-radius:10px}
+html body #daily-mission .daily-compact-banner p{margin:0!important;padding:0!important;background:transparent!important;font-size:14px!important;line-height:1.5!important;min-height:0!important}
+html body #daily-mission :is(.mission-practices,.daily-content){margin:0!important;padding:0!important}
+html body #daily-mission .mission-practices{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}
+html body #daily-mission [data-challenge-step="Read it"]{grid-column:1/-1!important;font-size:17px;line-height:1.85;max-height:none!important}
+html body #daily-mission .mission-practice{min-width:0;padding:18px!important;min-height:0!important}
+html body #daily-mission .daily-accent-hint{font-size:13px;margin:0;grid-column:1}
+html body #daily-mission>label{grid-column:1;margin:0;max-width:400px}
+html body #daily-mission>h3{font-size:24px;margin:0}
+html body #portal-monthly{max-width:none!important;width:100%!important;padding:0!important;margin:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+html body #portal-monthly .real-english-layout{display:block!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important}
+html body #portal-monthly :is(.real-english-main,.culture-page){width:100%!important;max-width:none!important;min-width:0!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;min-height:0!important}
+html body #portal-monthly .culture-navigation{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin:0 0 18px!important;padding:0}
+html body #portal-monthly .culture-navigation button{width:max-content;max-width:100%}
+html body #portal-monthly .culture-navigation button:last-child{justify-self:end}
+html body #portal-monthly .culture-navigation>span{text-align:center;white-space:nowrap}
+html body #portal-monthly .culture-page-title{font-size:clamp(25px,3vw,36px);line-height:1.2;margin:0 0 10px}
+html body #portal-monthly .culture-subtitle{margin:0 0 20px;font-size:15px;line-height:1.6}
+html body #portal-monthly .culture-quick-links{display:flex;justify-content:flex-end;align-items:center;gap:20px;margin-bottom:16px}
+html body #portal-monthly .real-english-side{display:flex;align-items:center;gap:0;margin:0;padding:0;width:auto;background:transparent}
+html body #portal-monthly .real-english-fun{width:auto!important;height:auto!important;min-height:44px!important;padding:10px 18px!important;border-radius:999px!important;font-size:13px!important}
+html body #portal-monthly .culture-resource-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;align-items:stretch}
+html body #portal-monthly :is(.monthly-learning-feature,.clear-english-reading){box-sizing:border-box;padding:24px!important;margin:0!important;min-width:0;border-radius:12px!important;min-height:310px!important;max-width:none!important;aspect-ratio:auto!important}
+html body #portal-monthly .monthly-learning-feature{background:#193c32!important;color:#fffef9!important}
+html body #portal-monthly .monthly-learning-feature :is(h4,p){color:inherit!important}
+html body #portal-monthly .monthly-learning-feature .button{background:#edf0e6!important;color:#193c32!important}
+html body #portal-monthly .clear-english-reading{background:#e7efe3!important;border:1px solid #c5d6c7!important}
+html body #portal-monthly .clear-english-reading>p{font-size:16px!important;line-height:1.75!important}
+html body #portal-monthly .speaking-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+html body #portal-monthly .speaking-toolbar button{background:#193c32!important;color:#fff!important}
+html body #portal-monthly .speaking-toolbar select{max-width:100%;min-width:0;flex:1 1 200px}
+html body #portal-monthly .culture-habit{padding:14px 0;margin:16px 0;border-block:1px solid #c5d6c7}
+html body #portal-monthly .culture-habit summary{cursor:pointer;font-weight:600}
+html body #portal-monthly .culture-coach-action{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin:14px 0 20px}
+html body #portal-monthly .culture-coach-action p{margin:0;font-size:14px}
+html body #portal-monthly .culture-book-choices{justify-content:start!important;margin:18px 0!important;gap:16px!important}
+html body #portal-monthly .culture-book-choice{min-height:130px!important;width:230px!important;gap:12px!important;padding:18px!important}
+html body #portal-monthly .culture-book-choice strong{font-size:21px!important}
+html body #portal-monthly .novel-version-guidance{max-width:950px;font-size:14px;line-height:1.75}
+html body #portal-monthly .novel-version-transition{display:inline-block;padding:8px 14px;background:#edf0e6;border-radius:999px;font-size:13px;margin:0}
+html body #portal-monthly .culture-activity-art{position:static!important;width:75px!important;height:60px!important;margin:0 0 12px!important}
+html body #portal-monthly .culture-viewing-instruction{font-weight:700!important;font-style:normal!important;line-height:1.75;margin:0 0 20px}
+html body #portal-monthly .culture-film-grid{gap:20px!important}
+html body #portal-monthly :is(.culture-film-card,.culture-adaptation){padding:18px!important;background:#edf0e6!important;border-radius:10px;min-width:0}
+html body #portal-monthly .culture-film-poster{width:110px!important;height:150px!important;float:right;margin:0 0 12px 16px!important;object-fit:contain}
+html body #portal-monthly .culture-film-card p{font-size:14px!important;margin:10px 0}
+html body #portal-monthly .culture-film-card h5{font-size:18px;margin:0 0 12px}
+html body #portal-monthly .novel-reader{box-sizing:border-box;max-width:100%;width:100%;padding:12px!important;background:#edf0e6;border-radius:10px}
+.novel-spread{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;max-width:100%;width:100%;justify-content:center;background:#fffef9;box-shadow:0 3px 12px #193c321a;border-radius:3px 8px 8px 3px;overflow:hidden}
+html body #portal-monthly .novel-spread canvas{box-sizing:border-box;display:block;width:100%;max-width:100%!important;height:auto;max-height:65dvh;object-fit:contain;box-shadow:inset -5px 0 10px #193c3214}
+.novel-reader-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.novel-reader-controls label{display:flex;align-items:center;gap:8px;margin:0}.novel-reader-controls input{width:72px}
+html body #portal-monthly .novel-highlight-list:has(ul){margin-top:16px}
+html body #portal-monthly .novel-highlight-list:not(:has(ul)){display:none}
+@media(max-width:760px){html body main #home .hero{aspect-ratio:auto!important;min-height:420px!important}html body main #home .home-speech-links{width:196px!important}html body main #reviews .reviews-layout{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}html body main #reviews .reviews-album-area{margin-top:12px!important}html body #students-portal #daily-mission.daily-seven:not([hidden]){grid-template-columns:minmax(0,1fr)!important;padding:12px!important}html body #students-portal #daily-mission.daily-seven>.daily-challenge-extras{grid-column:1!important;grid-row:auto!important;padding-top:12px!important}html body #daily-mission .mission-practices{grid-template-columns:minmax(0,1fr)!important}html body #portal-monthly .culture-resource-grid{grid-template-columns:minmax(0,1fr)}html body #portal-monthly :is(.monthly-learning-feature,.clear-english-reading){min-height:0!important;padding:20px!important}html body #portal-monthly .culture-navigation{gap:8px}html body #portal-monthly .culture-navigation button{font-size:11px;padding:8px 10px}html body #portal-monthly .culture-quick-links{gap:12px;flex-wrap:wrap}html body #portal-monthly .culture-book-choice{width:calc(50% - 8px)!important;max-width:none!important}html body #portal-monthly .culture-film-grid{grid-template-columns:minmax(0,1fr)!important}.novel-spread{grid-template-columns:minmax(0,1fr)}.novel-spread canvas:nth-child(2){display:none!important}}
+/* Final sizing uses the same scope as the older learning styles. */
+html body #students-portal #portal-monthly .culture-page-title{font-size:clamp(25px,3vw,36px)!important;font-weight:600!important;line-height:1.25!important;letter-spacing:-.6px!important}
+html body #students-portal #portal-monthly .culture-quick-links .real-english-side{display:flex!important;flex-direction:row!important;align-items:center!important;gap:0!important;width:auto!important;max-width:none!important;min-height:0!important;padding:0!important}
+html body #students-portal #portal-monthly .culture-page::before,html body #students-portal #portal-monthly .culture-page::after{display:none!important;content:none!important}
+html body #students-portal #portal-monthly .culture-reading-art{float:right;display:block!important;width:65px!important;height:58px!important;background:none!important}
+html body #students-portal #portal-monthly .culture-reading-art svg{display:block;width:100%;height:100%;color:#193c32}
+html body #students-portal #daily-mission.daily-seven .daily-content .mission-practices{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important;max-width:none!important;width:100%!important}
+html body #students-portal #daily-mission.daily-seven .daily-content .mission-practice{grid-column:auto!important;width:auto!important;max-width:none!important;margin:0!important;min-height:0!important}
+html body #students-portal #daily-mission.daily-seven .daily-content :is([data-challenge-step="Read it"],[data-challenge-step="Hear it"],[data-challenge-step="Nail it"]){grid-column:1/-1!important}
+html body #students-portal #daily-mission.daily-seven .daily-content [data-challenge-step="Read it"]>p{font-size:17px!important;line-height:1.85!important}
+html body #students-portal #daily-mission.daily-seven .daily-content [data-challenge-step="Hear it"]{display:flex!important;align-items:center!important;gap:18px!important;flex-wrap:wrap}
+html body #students-portal #daily-mission.daily-seven .daily-content [data-challenge-step="Hear it"] .challenge-step-heading{margin:0!important}
+html body #students-portal #daily-mission.daily-seven>h3{font-size:24px!important;margin:0!important}
+html body #students-portal #daily-mission.daily-seven>.button{justify-self:start;min-width:0;width:auto;padding:10px 18px}
+html body main #courses .courses-heading{border-bottom:0!important}
+@media(max-width:760px){html body #students-portal #daily-mission.daily-seven .daily-content .mission-practices{grid-template-columns:minmax(0,1fr)!important}}
+
+html body main #how.how-editorial{background:transparent!important}
+html body main #how .how-hero{background:#edf0e6!important;border-radius:14px;padding:22px!important;box-sizing:border-box;max-width:100%}
+html body main #how .sb-page-heading .sb-page-title{font-size:25px!important;line-height:1.3!important;letter-spacing:-.5px!important}
+html body main #how .how-journey-intro{background:transparent!important;padding:8px 0 18px!important}
+html body #portal-contact .coach-code-hint{font-size:12px!important;line-height:1.55!important;margin:0 0 12px!important;color:#52664e}
+#section-navigation-status{position:fixed;inset:auto 20px 20px;z-index:100;padding:14px 20px;background:#193c32;color:#fff;border-radius:10px;box-shadow:0 5px 18px #193c3233;font-size:14px;line-height:1.6}
+html body main #reviews .reviews-album-area #review-cards{height:400px!important}
+html body main #reviews .reviews-album-area #review-cards>.review-card{height:360px!important;max-height:360px!important}
+html body main #contact .contact-learning-links{grid-template-columns:minmax(0,1fr)!important;max-width:850px!important;gap:8px!important}
+html body main #contact .contact-learning-links .contact-channel-card{flex-direction:row!important;align-items:center!important;gap:14px!important;min-height:66px!important;padding:12px 16px!important;border-radius:9px!important}
+html body main #contact .contact-learning-links .contact-channel-icon{width:35px!important;height:35px!important;flex:none}
+@media(max-width:680px){html body main #reviews .reviews-album-area #review-cards{height:356px!important}html body main #reviews .reviews-album-area #review-cards>.review-card{height:320px!important;max-height:320px!important}}

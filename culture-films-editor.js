@@ -1,5 +1,5 @@
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
-import {cultureFilms,validateCultureFilms} from './culture-corner-data.js?v=1';
+import {cultureFilms,validateCultureFilms} from './culture-corner-data.js?v=compact-nov6-1';
 export function initializeCultureFilmsEditor(doc,host,isUnlocked){
  const root=doc.createElement('details');root.className='admin-detail culture-film-editor';const summary=doc.createElement('summary');summary.textContent='Film recommendations';root.append(summary);host.append(root);
  const intro=doc.createElement('p');intro.textContent='Only these two films change every week. Monthly videos and the novel keep their separate selections.';root.append(intro);

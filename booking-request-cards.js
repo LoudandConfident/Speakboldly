@@ -1,4 +1,4 @@
-import {SESSION_PROGRAMS} from './session-programs.js?v=library-folders';
+import {SESSION_PROGRAMS} from './session-programs.js?v=compact-nov6-1';
 import {sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {confirmClientEmail} from './client-email-confirmation.js?v=registration-approval';
 export function renderBookingRequestCards(doc,root,requests,isUnlocked,clients=[]){
