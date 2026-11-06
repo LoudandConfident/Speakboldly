@@ -171,18 +171,19 @@ export const courses = [
       }
     ],
     "category": "Workshops",
-    "description": "Prepare to express your experience, strengths and goals clearly in English. Develop focused answers to common interview questions and build confidence through realistic practice and feedback.",
+    "description": "Prepare to express your experience, strengths and goals clearly in English. Develop focused answers to common interview questions and build confidence through realistic practice and feedback. If you’d like, we’ll also help you upgrade your CV at no extra cost.",
     "topics": [
       "Your professional introduction",
       "Answers to common interview questions",
       "Explaining achievements with examples",
-      "Mock interviews and personalized feedback"
+      "Mock interviews and personalized feedback",
+      "Upgrade your CV: optional review and improvements"
     ],
     "art": "interview",
-    "summary": "Prepare clear answers and practise for your next interview.",
-    "detailDescription": "Practise describing your experience, strengths and achievements in your own words. Work on focused answers, follow-up questions and the questions you want to ask an employer, using mock interviews and feedback to prepare.",
-    "viewDescription": "Prepare for English-language interviews through two focused sessions of practice and personal feedback. Rehearse your introduction, common questions, and examples that show your experience.",
-    "outcomes": "You’ll develop more focused answers and clearer ways to explain your strengths and achievements. You’ll also learn how to rehearse independently and handle follow-up questions with greater confidence."
+    "summary": "Prepare for your next interview and upgrade your CV.",
+    "detailDescription": "Practise describing your experience, strengths and achievements in your own words. Work on focused answers, follow-up questions and the questions you want to ask an employer, using mock interviews and feedback to prepare. Bring your current CV if you’d like help making it clearer, more focused and better suited to the role. This optional support is included at no extra cost.",
+    "viewDescription": "Prepare for English-language interviews through two focused sessions of practice and personal feedback. Rehearse your introduction, common questions, and examples that show your experience. Upgrade your CV with optional review and improvements, included at no extra cost.",
+    "outcomes": "You’ll develop more focused answers and clearer ways to explain your strengths and achievements. You’ll also learn how to rehearse independently and handle follow-up questions with greater confidence. You can also leave with a clearer, more focused CV that presents your experience and achievements effectively."
   },
   {
     "id": "writing",

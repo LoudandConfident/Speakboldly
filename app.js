@@ -2,7 +2,7 @@ import {offerIsActive} from './assessment-time.js';
 import {courseIllustration as art} from './course-illustrations.js?v=1';
 import {coursePaths} from './public-seo-routes.js?v=toefl-2';
 
-import {courses,matches} from './courses.js?v=toefl-12-sessions-3';
+import {courses,matches} from './courses.js?v=cv-upgrade-4';
 const $=s=>document.querySelector(s);
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const chat=message=>'mailto:Contactus@speakboldly.space?subject='+encodeURIComponent('English coaching enquiry')+'&body='+encodeURIComponent(message+'\n\nContact number: 01283786904');

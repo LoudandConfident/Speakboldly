@@ -3,7 +3,7 @@ import {initializeReviewLevels,displayedReviewLevel} from './review-levels.js?v=
 import {showSubmissionSuccess,SUBMISSION_SUCCESS_MESSAGE} from './submission-success.js';
 import {reviewSubmission} from './review-validation.js?v=course-levels-1';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
-import {courses} from './courses.js?v=word-stress-2';
+import {courses} from './courses.js?v=cv-upgrade-4';
 import {reviewsConnected,reviewRequest} from './reviews-api.js?v=separate-review-sheet';
 export function initializeReviews(doc, api = reviewRequest, connected = reviewsConnected) {
  const opener = doc.querySelector('#review-open'), form = doc.querySelector('#review-form');
@@ -55,6 +55,7 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
    const name = doc.createElement('h3');name.textContent = review.name || 'Anonymous';
    const detail = doc.createElement('p');detail.className = 'review-card-details';detail.textContent = [review.age ? 'Age: '+review.age : '',review.level ? 'Level: '+displayedReviewLevel(review) : '',review.program ? 'Program: '+review.program : ''].filter(Boolean).join(' · ');
    const content = doc.createElement('div');content.className = 'review-card-content';
+   content.tabIndex=0;content.setAttribute('role','region');content.setAttribute('aria-label','Review by '+(review.name||'Anonymous'));
    content.append(name,detail,quote);card.append(content);cards.append(card);cardResize?.observe(card);
   }
   previous.disabled = next.disabled = reviews.length < 2;

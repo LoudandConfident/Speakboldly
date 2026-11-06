@@ -9,7 +9,7 @@ export function initializeFeatureLoader(doc,win){
  const groups={
   'students-portal':['./learning-hub-entry.js?v=complete-simplified-library-24'],
   'assessment':['./placement-assessment.js?v=brief-personal-2'],
-  'reviews':['./reviews.js?v=complete-cards-4'],
+  'reviews':['./reviews.js?v=scrollable-cards-5'],
   'daily-quote':['./home-gallery.js?v=stern-teacher-10'],
   'learner-profile':['./learner-profile.js?v=brief-personal-2'],
   'learner-results':['./learner-profile.js?v=brief-personal-2'],
