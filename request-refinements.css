@@ -178,3 +178,8 @@ html body main #courses .course-card .course-link{font-size:11px;padding:8px 10p
 html body main #home>.home-bottom-row{padding-left:calc(6% - 8px)!important}
 @media(max-width:900px){html body main #courses #course-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}html body main #courses #course-grid>.course-pricing-grid-card{grid-column:3;grid-row:1}}
 @media(max-width:600px){html body main #courses #course-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}html body main #courses #course-grid>.course-pricing-grid-card{grid-column:2;grid-row:1;max-width:160px}html body main #courses .course-card .course-illustration{height:90px}html body main #courses .course-card .course-body{padding:10px}html body main #courses .course-card h3{font-size:14px}html body main #courses .course-card .course-summary{font-size:11px}}
+
+/* Animate the offers themselves; keep their separator and layout stationary. */
+html body main #home .home-pricing-note,
+html body main #home .home-free-offers,
+html body main #home .home-free-offers>[aria-hidden="true"]{animation:none!important;transform:none!important}
