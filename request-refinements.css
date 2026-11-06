@@ -183,3 +183,6 @@ html body main #home>.home-bottom-row{padding-left:calc(6% - 8px)!important}
 html body main #home .home-pricing-note,
 html body main #home .home-free-offers,
 html body main #home .home-free-offers>[aria-hidden="true"]{animation:none!important;transform:none!important}
+
+/* Keep the two offers comfortably separated without a dot. */
+html body main #home .home-free-offers{column-gap:12px!important}
