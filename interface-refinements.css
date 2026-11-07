@@ -255,3 +255,6 @@ html body #students-portal #portal-monthly .culture-habit li{font-size:14px;line
 html body #students-portal #portal-monthly>.culture-coach-action{margin:18px 0 0!important;padding-bottom:8px}
 html body #students-portal #portal-monthly .culture-book-choice{box-sizing:border-box;width:260px!important;min-height:170px!important;padding:22px!important;gap:14px!important}
 @media(max-width:760px){html body #students-portal #portal-monthly .culture-book-choice{width:calc(50% - 8px)!important;min-height:165px!important;padding:16px 12px!important}html body #students-portal #portal-monthly .culture-book-choice strong{font-size:19px!important}html body #students-portal #portal-monthly .culture-listening-instruction{font-size:13px!important;line-height:1.6!important}}
+html body #students-portal #daily-mission .daily-challenge-extras .daily-challenge-idiom{margin-top:20px!important}
+html body #students-portal #daily-mission .daily-challenge-extras .daily-encouragement{margin-top:40px!important}
+@media(min-width:761px){html body #students-portal #daily-mission .daily-closing>.button{align-self:flex-end!important}}
