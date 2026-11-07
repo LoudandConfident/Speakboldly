@@ -1,0 +1,89 @@
+/* Phone refinements only: desktop typography and layout stay unchanged. */
+.mobile-brief{display:none}
+@media(max-width:760px){
+ html body main :is(#home,#vision,#how,#programs,#courses,#speak-hub,#boldly-notes,#reviews,#daily-quote,#contact,#students-portal,#placement,#quote,#join-team){font-size:14px;line-height:1.6}
+ html body main :is(#home,#vision,#how,#programs,#courses,#speak-hub,#boldly-notes,#reviews,#daily-quote,#contact,#students-portal,#placement,#quote,#join-team) :is(p,li){font-size:14px!important;line-height:1.6!important}
+ html body main>[data-view]:not(#home){padding-block:18px!important}
+ html body main [data-view] :is(h2,h3,h4){overflow-wrap:break-word;text-wrap:pretty}
+ html body main [data-view] :is(.button,.course-link,.filter){font-size:12px;line-height:1.4;min-height:44px;padding:9px 13px}
+ /* Preserve 16px form text to prevent focus zoom on phones. */
+ html body main :is(input,select,textarea){font-size:16px}
+ html body main :is(#vision,#how,#programs,#contact,#speak-hub) p{margin-block:0 10px!important}
+ html body main #vision.vision-editorial .vision-purpose{padding-block:24px!important}
+ html body main #vision .vision-opening{gap:18px!important;margin-top:16px!important}
+ html body main #vision .vision-opening-copy h3{font-size:22px!important;line-height:1.3!important}
+ html body main #how .how-hero{gap:12px!important;padding-bottom:18px!important}
+ html body main #how .how-guide.how-editorial-guide{gap:12px!important}
+ html body main #how .how-guide .how-step{padding:16px!important;min-height:0!important}
+ html body main #how .how-guide h3{font-size:16px!important;line-height:1.35!important}
+ html body main #how .how-hero-visual{padding-top:12px!important}
+ html body main #how .how-hero-visual h3{font-size:24px!important}
+ /* One readable column; never combine a two-column catalog with split inner cards. */
+ html body main #courses #course-grid{grid-template-columns:minmax(0,1fr)!important;gap:12px!important;grid-auto-rows:auto!important}
+ html body main #courses #course-grid .course-card{display:grid!important;grid-template-columns:64px minmax(0,1fr)!important;align-items:start!important;gap:12px!important;padding:14px!important;min-height:0!important;height:auto!important}
+ html body main #courses #course-grid .course-illustration{width:64px!important;height:76px!important;margin:0!important}
+ html body main #courses #course-grid .course-body{display:flex;flex-direction:column;min-width:0;padding:0!important;gap:0}
+ html body main #courses #course-grid .course-body h3{font-size:16px!important;line-height:1.35!important;margin:4px 0 7px!important;min-height:0!important;overflow-wrap:normal!important}
+ html body main #courses #course-grid .category{font-size:10px!important;line-height:1.4!important}
+ html body main #courses #course-grid .course-summary{font-size:13px!important;line-height:1.5!important;margin:0 0 8px!important}
+ html body main #courses #course-grid .course-pricing{padding:8px 0 0!important;margin:0 0 8px!important}
+ html body main #courses #course-grid .course-pricing strong{font-size:17px!important}
+ html body main #courses #course-grid .course-price-option p{font-size:12px!important;line-height:1.5!important;margin:3px 0!important}
+ html body main #courses #course-grid .course-price-option span{font-size:11px!important}
+ html body main #courses #course-grid .course-view-row{font-size:11px!important;line-height:1.4!important;gap:6px!important;padding-top:4px!important;margin:0!important}
+ html body main #courses #course-grid .course-link{font-size:12px!important;min-height:44px!important;margin:0 0 0 auto!important;padding:9px 12px!important}
+ html body main #courses #course-grid>.course-pricing-grid-card{grid-column:1!important;grid-row:auto!important;max-width:124px!important;justify-self:end!important;margin:0!important}
+ html body main #courses .course-pricing-grid-card .course-fees-open{width:124px!important;font-size:11px!important;padding:12px!important;min-height:44px}
+ html body main #courses .courses-introduction{padding-bottom:12px!important}
+ html body main #courses .catalog-controls{gap:8px!important;padding-top:8px!important;margin-bottom:12px!important}
+ html body main #courses .filters{gap:6px!important;padding-bottom:4px!important}
+ html body main #course-dialog{padding:20px 16px!important}
+ html body main #course-detail :is(p,li){font-size:14px!important;line-height:1.6!important}
+ /* Short mobile copy keeps the full desktop wording available at wider widths. */
+ #speak-hub .desktop-full{display:none}
+ #speak-hub .mobile-brief{display:inline}
+ html body main #speak-hub .upcoming-view-content{gap:10px!important}
+ html body main #speak-hub .upcoming-view-content>.intro{font-size:12px!important;margin-bottom:2px!important}
+ html body main #speak-hub .speak-hub-illustrations{row-gap:4px!important;margin:0!important}
+ html body main #speak-hub .speak-hub-illustrations .culture-activity-art{width:105px!important;height:85px!important;min-height:0!important}
+ html body main #speak-hub .speak-hub-illustrations>span{font-size:12px!important;padding:6px!important}
+ html body main #speak-hub .speak-hub-meeting{padding:14px!important;margin:0!important}
+ html body main #speak-hub .speak-hub-meeting h3{font-size:16px!important;line-height:1.35!important;margin:0 0 8px!important}
+ html body main #speak-hub .speak-hub-story{margin-top:8px!important}
+ html body main #speak-hub .speak-hub-story h3{font-size:21px!important;line-height:1.35!important;margin-bottom:8px!important}
+ html body main #speak-hub .speak-hub-story p{font-size:14px!important;line-height:1.65!important}
+ html body main #reviews .review-intro{font-size:16px!important;line-height:1.55!important}
+ html body main #contact :is(h3,h4){font-size:16px!important;line-height:1.35!important}
+ html body #students-portal #portal-content{padding:14px!important}
+ html body #students-portal .learning-space-heading{margin:8px 0 16px!important}
+ html body #students-portal .learning-space-destinations>.learning-space-card:nth-child(n){min-height:164px!important;padding:14px!important;gap:6px!important}
+ html body #students-portal .learning-space-destinations>.learning-space-card>svg[data-card-glyph]{width:42px!important;height:40px!important;margin-bottom:4px!important}
+ html body #students-portal .learning-space-card-title{font-size:13px!important;line-height:1.35!important}
+ html body #students-portal .learning-space-card-description{font-size:11px!important;line-height:1.5!important}
+ html body #students-portal #portal-content :is(.portal-panel,.coach-form-card){padding:14px!important}
+ html body #students-portal #daily-mission.daily-seven .daily-content [data-challenge-step="Read it"]>p{font-size:15px!important;line-height:1.7!important;margin-block:0 12px!important}
+ html body #students-portal #daily-mission.daily-seven>h3{font-size:20px!important;line-height:1.35!important}
+ html body #students-portal #portal-monthly .culture-page-title{font-size:22px!important;line-height:1.3!important}
+ html body #students-portal #portal-monthly :is(.monthly-learning-feature,.clear-english-reading){padding:15px!important}
+ html body #students-portal #portal-monthly .clear-english-reading>p{font-size:15px!important;line-height:1.65!important}
+ html body #students-portal #portal-monthly .culture-film-card p{font-size:13px!important;line-height:1.5!important}
+}
+@media(max-width:360px){
+ html body main #courses #course-grid .course-card{grid-template-columns:48px minmax(0,1fr)!important;gap:10px!important;padding:12px!important}
+ html body main #courses #course-grid .course-illustration{width:48px!important;height:64px!important}
+}
+@media(max-width:760px){
+ html body main #how .how-step{padding:16px!important;min-height:0!important}
+ html body main #how .how-step h3{font-size:16px!important;line-height:1.35!important}
+ html body main #how .how-hero-visual figcaption{font-size:23px!important;line-height:1.25!important}
+ html body main #how .how-photo-frame{max-width:300px!important;margin-inline:auto!important}
+ html body main #how .how-learning-art{max-height:190px!important;width:100%!important}
+ html body main #vision.vision-editorial .vision-opening h3{font-size:22px!important;line-height:1.3!important}
+ html body main #students-portal .learning-space-card-description{font-size:11px!important;line-height:1.5!important}
+ html body main #boldly-notes .boldly-notes-intro{font-size:14px!important;line-height:1.6!important;margin-bottom:16px!important}
+ html body main #daily-quote .motivation-headline{font-size:23px!important;line-height:1.35!important}
+}
+@media(max-width:760px){
+ html body main #courses #course-grid>.course-pricing-grid-card{display:flex!important;flex-wrap:wrap;align-items:center!important;justify-content:center!important;gap:14px!important;width:100%!important;max-width:none!important;padding:6px 0!important}
+ html body main #courses .course-pricing-grid-card :is(.course-fees-open,.consultation-open){flex:0 0 116px!important;width:116px!important;height:116px!important;min-height:44px!important;max-width:116px!important;margin:0!important;padding:12px!important;font-size:11px!important;line-height:1.45!important}
+}
