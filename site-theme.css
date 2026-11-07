@@ -505,6 +505,10 @@ main #home>.home-bottom-row{margin:0;padding:19px 6% 8px}
 #home .home-title-main{color:#faf9f4}
 #home .home-speech-links{justify-content:flex-start}
 
+/* Keep the PC install action available without changing the existing phone controls. */
+header>.desktop-install-button{display:none;flex:none;margin-left:12px;white-space:nowrap;font-size:12px;min-height:36px;padding:7px 12px;border-radius:999px}
+@media(hover:hover) and (pointer:fine){header>.desktop-install-button:not([hidden]){display:inline-flex;align-items:center;justify-content:center}}
+
 /* programs-intro.css */
 /* Rounded filters and an open, asymmetric coaching introduction. */
 #courses .filter{border-radius:999px;min-height:42px;padding:11px 18px}
@@ -1232,16 +1236,22 @@ body:has(#students-portal.portal-session-active:not([hidden])) #page-back-arrow{
 #students-portal #portal-content .learning-space-card:nth-child(8):after{left:auto;right:24px}
 #students-portal .learning-space-destinations>.learning-space-card:nth-child(2),#students-portal .learning-space-destinations>.learning-space-card:nth-child(5){border-left-width:3px!important}
 
-/* Contact and calendar first; free learning sections stacked at the end. */
+/* Compact tools beside the three longer practice cards. */
 @media(min-width:901px){
- #students-portal .learning-space-card:nth-child(1){grid-column:1;grid-row:1}#students-portal .learning-space-card:nth-child(2){grid-column:1;grid-row:2}
- #students-portal .learning-space-card:nth-child(3){grid-column:2;grid-row:1}#students-portal .learning-space-card:nth-child(4){grid-column:3;grid-row:1}
- #students-portal .learning-space-card:nth-child(5){grid-column:2;grid-row:2}#students-portal .learning-space-card:nth-child(6){grid-column:3;grid-row:2}
- #students-portal .learning-space-card:nth-child(7){grid-column:4;grid-row:1}#students-portal .learning-space-card:nth-child(8){grid-column:4;grid-row:2}
+ #students-portal .learning-space-destinations{grid-template-columns:repeat(2,minmax(0,1fr)) minmax(0,1.65fr)!important}
+ #students-portal .learning-space-card:nth-child(1){grid-column:1;grid-row:1}
+ #students-portal .learning-space-card:nth-child(2){grid-column:2;grid-row:1}
+ #students-portal .learning-space-card:nth-child(3){grid-column:1;grid-row:2}
+ #students-portal .learning-space-card:nth-child(4){grid-column:2;grid-row:2}
+ #students-portal .learning-space-card:nth-child(5){grid-column:1;grid-row:3}
+ #students-portal .learning-space-card:nth-child(6){grid-column:3;grid-row:1}
+ #students-portal .learning-space-card:nth-child(7){grid-column:3;grid-row:2}
+ #students-portal .learning-space-card:nth-child(8){grid-column:3;grid-row:3}
+ #students-portal #portal-tab-studio,#students-portal #portal-tab-mission,#students-portal #portal-tab-monthly{aspect-ratio:auto!important}
 }
 #students-portal .learning-space-card .hub-free-badge{position:absolute;top:15px;right:15px;display:inline-flex;align-items:center;border:1px solid #bdcbb1;border-radius:999px;padding:4px 9px;background:#d5ed98;color:#193c32;font-size:10px;font-weight:600;line-height:1.3}
 @media(max-width:900px){
- #students-portal .learning-space-destinations>.learning-space-card:nth-child(1),#students-portal .learning-space-destinations>.learning-space-card:nth-child(2),#students-portal .learning-space-destinations>.learning-space-card:nth-child(7),#students-portal .learning-space-destinations>.learning-space-card:nth-child(8){grid-column:1/-1;min-height:140px!important;aspect-ratio:auto!important;padding-right:70px!important}
+ #students-portal .learning-space-destinations>.learning-space-card:nth-child(1),#students-portal .learning-space-destinations>.learning-space-card:nth-child(6),#students-portal .learning-space-destinations>.learning-space-card:nth-child(7),#students-portal .learning-space-destinations>.learning-space-card:nth-child(8){grid-column:1/-1;min-height:140px!important;aspect-ratio:auto!important;padding-right:70px!important}
 }
 
 /* phone-polish.css */
@@ -2479,25 +2489,6 @@ main #vision.vision-editorial .vision-purpose .vision-enrollment-promise{padding
 #admin-calendar .seasonal-calendar-art{display:none!important}
 @media(max-width:600px){#admin-calendar[data-calendar-view=month] .calendar-day-header .calendar-add{display:none!important}#admin-calendar[data-calendar-view=month] .calendar-day-header{justify-content:flex-start!important;flex-wrap:nowrap!important}#admin-calendar[data-calendar-view=month] .calendar-day{min-height:76px!important}#admin-calendar .calendar-view-day{white-space:nowrap!important;font-size:9px!important;min-height:28px!important}}
 
-/* reviews-readable.css */
-/* Review cards fit the entire selected message, with no inner vertical scroll. */
-#reviews .reviews-layout{align-items:start!important;margin-top:0!important}
-#reviews .reviews-introduction{padding-top:0!important;padding-bottom:0!important}
-#reviews .reviews-copy{min-height:0!important;padding:22px 26px 25px!important}
-#reviews .reviews-copy .review-intro{margin-bottom:14px!important}
-#reviews .reviews-spark-art{width:46px!important;height:37px!important;margin-bottom:10px!important}
-#reviews .reviews-album-area{padding-top:0!important;padding-bottom:0!important}
-#reviews .reviews-album-area .review-cards{height:var(--review-deck-height,420px)!important;min-height:0!important;align-items:flex-start!important}
-#reviews .reviews-album-area .review-card,#reviews .reviews-album-area .review-card.is-selected,#reviews .reviews-album-area .review-card.is-previous,#reviews .reviews-album-area .review-card.is-next{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}
-#reviews .reviews-album-area .review-card-content{height:auto!important;max-height:none!important;overflow:visible!important;padding-right:0!important}
-@media(max-width:680px){#reviews .reviews-layout{gap:16px!important}#reviews .reviews-copy{padding:18px 23px 21px!important}#reviews .reviews-album-area .review-cards{height:var(--review-deck-height,460px)!important}#reviews .reviews-album-area .review-card{padding:23px 19px!important}}
-main #home .hero .home-speech-links .home-speech-bubble,main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important}
-main #home .hero .home-speech-links .home-speech-bubble>span{display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;inset:auto!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;text-align:center!important;transform:none!important}
-
-/* Keep the PC install action available without changing the existing phone controls. */
-header>.desktop-install-button{display:none;flex:none;margin-left:12px;white-space:nowrap;font-size:12px;min-height:36px;padding:7px 12px;border-radius:999px}
-@media(hover:hover) and (pointer:fine){header>.desktop-install-button:not([hidden]){display:inline-flex;align-items:center;justify-content:center}}
-
 /* Fewer visible calendar controls; settings remain available on demand. */
 #admin-calendar .calendar-toolbar{display:flex!important;align-items:center!important;gap:8px!important}
 #admin-calendar .calendar-toolbar .calendar-view-switch,#admin-calendar .calendar-toolbar .calendar-refresh{display:none!important}
@@ -2536,3 +2527,18 @@ header>.desktop-install-button{display:none;flex:none;margin-left:12px;white-spa
 #admin-calendar .calendar-grid>.calendar-day{height:78px!important;min-height:0!important}
 #admin-calendar .calendar-count{overflow-wrap:normal!important;word-break:normal!important}
 @media(max-width:600px){#admin-calendar .calendar-grid{grid-auto-rows:66px!important}#admin-calendar[data-calendar-view=month] .calendar-grid>.calendar-day{height:66px!important;min-height:0!important}}
+
+/* reviews-readable.css */
+/* Review cards fit the entire selected message, with no inner vertical scroll. */
+#reviews .reviews-layout{align-items:start!important;margin-top:0!important}
+#reviews .reviews-introduction{padding-top:0!important;padding-bottom:0!important}
+#reviews .reviews-copy{min-height:0!important;padding:22px 26px 25px!important}
+#reviews .reviews-copy .review-intro{margin-bottom:14px!important}
+#reviews .reviews-spark-art{width:46px!important;height:37px!important;margin-bottom:10px!important}
+#reviews .reviews-album-area{padding-top:0!important;padding-bottom:0!important}
+#reviews .reviews-album-area .review-cards{height:var(--review-deck-height,420px)!important;min-height:0!important;align-items:flex-start!important}
+#reviews .reviews-album-area .review-card,#reviews .reviews-album-area .review-card.is-selected,#reviews .reviews-album-area .review-card.is-previous,#reviews .reviews-album-area .review-card.is-next{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}
+#reviews .reviews-album-area .review-card-content{height:auto!important;max-height:none!important;overflow:visible!important;padding-right:0!important}
+@media(max-width:680px){#reviews .reviews-layout{gap:16px!important}#reviews .reviews-copy{padding:18px 23px 21px!important}#reviews .reviews-album-area .review-cards{height:var(--review-deck-height,460px)!important}#reviews .reviews-album-area .review-card{padding:23px 19px!important}}
+main #home .hero .home-speech-links .home-speech-bubble,main #home .hero .home-speech-links .home-speech-bubble:nth-child(2){padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important}
+main #home .hero .home-speech-links .home-speech-bubble>span{display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;inset:auto!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;text-align:center!important;transform:none!important}
