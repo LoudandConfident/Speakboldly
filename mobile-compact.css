@@ -148,3 +148,9 @@
  html body main #contact .contact-promotion-rail .contact-faq-item>summary{min-height:44px;font-size:12px;line-height:1.45;padding:9px 0;gap:8px}
  html body main #contact .contact-promotion-rail .contact-faq-item>p{font-size:13px!important;line-height:1.55!important;padding:0 0 10px!important;margin:0!important}
 }
+
+@media(max-width:760px){
+ html body main #contact .contact-promotion-rail .reward-circle,
+ html body main #contact .contact-promotion-rail .contact-faq>summary{box-sizing:border-box!important;width:74px!important;max-width:74px!important;height:64px!important;min-height:64px!important;padding:9px!important;border-radius:10px!important;font-size:11px!important;line-height:1.3!important}
+ html body main #contact .contact-promotion-rail .contact-faq>summary{margin-left:auto;margin-right:6px}
+}
