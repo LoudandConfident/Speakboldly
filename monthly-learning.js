@@ -1,7 +1,7 @@
 import {openSection} from './section-navigation.js';
 import {filmArtwork,filmPosterFallback} from './film-posters.js?v=all-posters-2';
 import {cultureFilms,novelDetails,filmFortnight,MODERN_ADAPTATION} from './culture-corner-data.js?v=compact-nov6-1';
-import {createClearEnglishReading} from './clear-english-reading.js?v=culture-pause-2';
+import {createClearEnglishReading} from './clear-english-reading.js?v=accent-choice-20';
 import {createRealEnglishExtras} from './real-english-extras.js?v=compact-nov6-1';
 // Curated listening pages from different sources. Rotation uses Cairo calendar months, not elapsed days.
 export const MONTHLY_LEARNING_PAGES=[

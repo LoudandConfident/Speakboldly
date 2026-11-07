@@ -280,3 +280,14 @@ html body main>#vision.vision-editorial[data-view] .sb-page-heading .sb-page-tit
 html body main>#vision.vision-editorial[data-view] .sb-page-heading .sb-page-title em{font:inherit}
 html body main>#vision.vision-editorial[data-view] .sb-page-heading{margin-top:18px!important}
 @media(max-width:760px){html body main>#vision.vision-editorial[data-view] .sb-page-heading .sb-page-title{line-height:1.6!important}}
+/* Practice help opens outside the page flow. */
+.sb-help-popup{box-sizing:border-box;width:min(480px,calc(100vw - 32px))!important}
+.sb-help-popup h3{font-size:19px;line-height:1.4;margin:0 28px 14px 0}
+.sb-help-popup p{font-size:15px;line-height:1.7;margin:0}
+html body #students-portal #daily-mission.daily-seven:not([hidden]){grid-template-columns:minmax(0,1fr)!important}
+html body #students-portal #daily-mission.daily-seven>.daily-challenge-extras{grid-column:1!important;grid-row:auto!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:space-between;gap:28px!important;padding:18px 0!important;margin:4px 0 0!important}
+html body #students-portal #daily-mission .daily-challenge-extras .daily-challenge-idiom{flex:1!important;width:auto!important;max-width:620px!important;margin:0!important}
+html body #students-portal #daily-mission .daily-challenge-extras .daily-encouragement{flex:0 0 110px;max-width:110px!important;margin:0 18px!important}
+html body #students-portal #daily-mission .daily-language-example strong{font-weight:700;font-style:normal}
+html body #students-portal #daily-mission .mission-practice>p>strong{font-weight:700}
+@media(max-width:760px){html body #students-portal #daily-mission.daily-seven>.daily-challenge-extras{gap:16px!important;padding:14px 0!important}html body #students-portal #daily-mission .daily-challenge-extras .daily-encouragement{flex-basis:78px;max-width:78px!important;margin:0!important}html body #students-portal #daily-mission .daily-challenge-extras .daily-challenge-idiom{min-width:0}}

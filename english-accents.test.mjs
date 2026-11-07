@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {voiceForAccent} from './english-accents.js';
+test('requested British and American accents select matching voices despite device ordering',()=>{const us={name:'US voice',lang:'en-US'},gb={name:'British voice',lang:'en_GB'},other={name:'English Australian',lang:'en-AU'};const synth={getVoices:()=>[other,us,gb]};assert.equal(voiceForAccent(synth,'en-GB'),gb);assert.equal(voiceForAccent(synth,'en-US'),us);});
+test('missing requested accent does not silently substitute the other accent',()=>{assert.equal(voiceForAccent({getVoices:()=>[{name:'US voice',lang:'en-US'}]},'en-GB'),null);assert.equal(voiceForAccent(null,'en-US'),null);});

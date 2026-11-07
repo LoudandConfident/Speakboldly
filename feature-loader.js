@@ -2,7 +2,7 @@
 export function initializeFeatureLoader(doc,win){
 
  const groups={
-  'students-portal':['./learning-hub-entry.js?v=hub-polish-18'],
+  'students-portal':['./learning-hub-entry.js?v=clear-practice-20'],
   'assessment':['./placement-assessment.js?v=brief-personal-2'],
   'reviews':['./reviews.js?v=compact-nov6-1'],
   'daily-quote':['./home-gallery.js?v=stern-teacher-10'],
@@ -15,7 +15,7 @@ export function initializeFeatureLoader(doc,win){
  let adminPending=null,missionPending=null;
  async function ensureAdmin(){if(adminReady)return true;if(!adminPending)adminPending=optional('./admin-portal.js?v=compact-nov6-1','Instructor dashboard').then(ok=>{adminReady=ok;adminPending=null;return ok;});return adminPending;}
  doc.addEventListener('click',async event=>{const button=event.target.closest?.('[data-portal-area="admin"]');if(!button||adminReady)return;event.preventDefault();event.stopImmediatePropagation();if(await ensureAdmin()&&win.location.hash.startsWith('#students-portal'))button.click();},true);
- doc.addEventListener('daily-mission-open',async event=>{if(missionReady)return;event.stopImmediatePropagation();if(!missionPending)missionPending=optional('./daily-mission.js?v=daily-polish-18','Daily Challenge').then(ok=>{missionReady=ok;missionPending=null;return ok;});if(await missionPending&&doc.querySelector('[data-portal-tab="mission"]')?.getAttribute('aria-selected')==='true')doc.dispatchEvent(new win.Event('daily-mission-open'));},true);
+ doc.addEventListener('daily-mission-open',async event=>{if(missionReady)return;event.stopImmediatePropagation();if(!missionPending)missionPending=optional('./daily-mission.js?v=clear-practice-20','Daily Challenge').then(ok=>{missionReady=ok;missionPending=null;return ok;});if(await missionPending&&doc.querySelector('[data-portal-tab="mission"]')?.getAttribute('aria-selected')==='true')doc.dispatchEvent(new win.Event('daily-mission-open'));},true);
  async function assessment(){const root=doc.getElementById('assessment');if(!root)return;if(pending.has('assessment'))return;const note=doc.createElement('p');note.className='sb-loading';note.setAttribute('role','status');note.setAttribute('aria-label','Loading assessment');doc.getElementById('placement-form').prepend(note);const task=import('./placement-assessment.js?v=brief-personal-2');pending.set('assessment',task);try{await task;note.remove();}catch{pending.delete('assessment');note.className='';note.textContent='The assessment could not load. ';const retry=doc.createElement('button');retry.type='button';retry.className='button light small';retry.textContent='Try again';retry.onclick=()=>{note.remove();assessment();};note.append(retry);}}
  doc.addEventListener('assessment-open',assessment);
 
