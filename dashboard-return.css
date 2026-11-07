@@ -1,0 +1,7 @@
+.dashboard-return{display:inline-flex;align-items:center;justify-content:center;flex:none;width:40px;height:44px;min-height:44px;padding:0;border:0;background:transparent;color:#193c32;font:400 30px/1 'DM Sans',sans-serif;cursor:pointer}
+.dashboard-return:focus-visible{outline:2px solid #659150;outline-offset:2px;border-radius:6px}
+html body #students-portal #portal-content .learning-space-heading{grid-template-columns:40px minmax(0,1fr)!important}
+html body #students-portal #portal-content .learning-space-heading>.dashboard-return{grid-column:1;grid-row:1}
+html body #students-portal #portal-content .learning-space-heading>h3{grid-column:2!important}
+html body #students-portal.learning-section-open #portal-content .learning-space-heading>.dashboard-return{display:none!important}
+html body #admin-dashboard .admin-dashboard-heading{display:flex!important;align-items:center;gap:10px}

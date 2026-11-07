@@ -1,4 +1,4 @@
-import {initializeStudentAssessment} from './student-assessment.js?v=culture-reflections-16';
+import {initializeStudentAssessment} from './student-assessment.js?v=hub-polish-18';
 import {renderPdf} from './portal-document.js?v=embedded-books';
 import {openPopup} from './popups.js?v=mobile-assessment-page';
 import {takeStudentAttempt} from './student-attempts.js';

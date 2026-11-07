@@ -258,3 +258,25 @@ html body #students-portal #portal-monthly .culture-book-choice{box-sizing:borde
 html body #students-portal #daily-mission .daily-challenge-extras .daily-challenge-idiom{margin-top:20px!important}
 html body #students-portal #daily-mission .daily-challenge-extras .daily-encouragement{margin-top:40px!important}
 @media(min-width:761px){html body #students-portal #daily-mission .daily-closing>.button{align-self:flex-end!important}}
+/* Balance the opening banner with the closing banner. */
+html body #students-portal #daily-mission .daily-compact-banner{justify-self:center!important;text-align:center!important}
+/* Original bold sans-serif watermark lettering across dimmed pages and cards. */
+html body main :is(.upcoming-watermark,.coming-soon-label,.studio-coming-label,.stay-tuned-note,.boldly-blog-coming){font-family:Manrope,'DM Sans',sans-serif!important;font-style:normal!important;font-weight:800!important;letter-spacing:1px!important}
+html body main :is(#speak-hub,#quote,#join-team,#portal-studio)>.upcoming-watermark{font-family:Manrope,'DM Sans',sans-serif!important;font-style:normal!important;font-weight:800!important;letter-spacing:1px!important}
+html body #students-portal #portal-content :is(.dashboard-help-circle,[data-portal-panel]>.section-guide),
+html body #students-portal #portal-monthly .real-english-side>.sb-help{right:clamp(24px,calc(6vw + 8px),110px)!important}
+/* Let article text use the available width and keep six glossary terms together. */
+html body main #boldly-notes :is(.blog-reading-page,.boldly-note-page,.blog-glossary){width:100%;max-width:none!important;margin-inline:0!important;box-sizing:border-box}
+html body main #boldly-notes .blog-reading-page>p{max-width:none!important;white-space:normal!important}
+html body main #boldly-notes .blog-glossary-sheet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+html body main #boldly-notes .blog-glossary-entry{padding:12px;border-radius:12px}
+html body main #boldly-notes .blog-glossary-entry .blog-glossary-word{font-size:17px;line-height:1.35}
+html body main #boldly-notes .blog-glossary-entry small{margin:4px 0}
+html body main #boldly-notes .blog-glossary-entry p{font-size:13px!important;line-height:1.5!important;margin:6px 0!important}
+@media(max-width:900px){html body main #boldly-notes .blog-glossary-sheet{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){html body main #boldly-notes .blog-glossary-sheet{grid-template-columns:minmax(0,1fr);gap:8px}html body main #boldly-notes .blog-glossary-entry{padding:10px 12px}html body main #boldly-notes .blog-glossary-entry .blog-glossary-word{font-size:16px}html body main #boldly-notes .blog-glossary-nav{flex-wrap:wrap;gap:8px}html body main #boldly-notes .blog-glossary-nav>span{order:3;width:100%}}
+/* Match the Vision opening to the sentence introducing The need. */
+html body main>#vision.vision-editorial[data-view] .sb-page-heading .sb-page-title{font:400 14px/1.8 'DM Sans',Arial,sans-serif!important;letter-spacing:normal!important}
+html body main>#vision.vision-editorial[data-view] .sb-page-heading .sb-page-title em{font:inherit}
+html body main>#vision.vision-editorial[data-view] .sb-page-heading{margin-top:18px!important}
+@media(max-width:760px){html body main>#vision.vision-editorial[data-view] .sb-page-heading .sb-page-title{line-height:1.6!important}}
