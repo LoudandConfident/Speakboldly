@@ -125,3 +125,21 @@
  html body main #quote .quote-request-grid .quote-popup-choice:nth-child(n) .quote-tile-number{font-size:10px!important;line-height:1.3!important}
  html body main #quote .quote-request-grid .quote-personal-choices .quote-tile-number{display:none!important}
 }
+/* Keep the contact extras in a narrow right rail on phones. */
+@media(max-width:760px){
+ html body main #contact .contact-social-row{grid-template-columns:minmax(0,1fr) 86px!important;gap:12px!important;align-items:start!important}
+ html body main #contact .contact-social-row>*,html body main #contact .contact-connect-content{min-width:0!important}
+ html body main #contact .contact-promotion-rail{width:86px!important;gap:12px!important;padding-top:0!important}
+ html body main #contact .contact-promotion-rail .contact-orbit{width:72px!important;margin:0!important}
+ html body main #contact .contact-promotion-rail .reward-circle{width:74px!important;max-width:74px!important;min-height:64px!important;padding:9px!important;font-size:11px!important}
+ html body main #contact .contact-promotion-rail .contact-faq{position:relative!important;width:86px!important;margin:0!important;border-radius:10px!important;overflow:visible!important}
+ html body main #contact .contact-promotion-rail .contact-faq>summary{box-sizing:border-box;min-height:44px!important;padding:9px!important;font-size:12px!important;gap:4px!important;border-radius:10px}
+ html body main #contact .contact-promotion-rail .contact-faq .faq-symbol{width:18px!important;height:18px!important}
+ html body main #contact .contact-promotion-rail .contact-faq .faq-symbol::before,html body main #contact .contact-promotion-rail .contact-faq .faq-symbol::after{left:3px;top:8px;width:12px}
+ html body main #contact .contact-promotion-rail .contact-faq[open]>.contact-faq-questions{position:absolute;top:calc(100% + 8px);right:0;box-sizing:border-box;width:min(300px,calc(100vw - 48px));max-height:45vh;max-height:45dvh;overflow-y:auto;overscroll-behavior:contain;padding:0 12px!important;background:#faf9f4;border:1px solid #c2cfb8;border-radius:10px;box-shadow:0 8px 24px #193c321a;z-index:20}
+ html body main #contact .contact-promotion-rail .contact-faq-item>summary{min-height:44px!important;font-size:12px!important;line-height:1.45!important;padding:9px 0!important;gap:8px!important}
+ html body main #contact .contact-promotion-rail .contact-faq-item>p{font-size:13px!important;line-height:1.55!important;padding:0 0 10px!important;margin:0!important}
+ html body main #contact .contact-learning-links .contact-channel-card{padding:10px!important;gap:8px!important;min-width:0!important}
+ html body main #contact .contact-channel-copy{min-width:0;overflow-wrap:break-word}
+ html body main #contact .contact-email-row{flex-wrap:wrap!important;overflow-wrap:anywhere}
+}
