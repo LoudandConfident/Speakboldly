@@ -243,3 +243,6 @@ html body #portal-calendar .student-booking-content>.button{display:block;width:
 html body #students-portal #portal-calendar{box-sizing:border-box;width:100%!important;max-width:none!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
 html body #students-portal #portal-calendar>.portal-interior-art{display:none!important}
 html body #portal-calendar .booking-status:empty{display:none}
+
+:root{--page-help-top:112px}
+@media(max-width:760px){:root{--page-help-top:104px}}

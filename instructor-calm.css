@@ -112,3 +112,8 @@
 #admin-calendar .calendar-grid>.calendar-day{height:78px!important;min-height:0!important}
 #admin-calendar .calendar-count{overflow-wrap:normal!important;word-break:normal!important}
 @media(max-width:600px){#admin-calendar .calendar-grid{grid-auto-rows:66px!important}#admin-calendar[data-calendar-view=month] .calendar-grid>.calendar-day{height:66px!important;min-height:0!important}}
+/* Names stay visible in month cells, with room for two appointment previews. */
+#admin-calendar[data-calendar-view=month] .calendar-compact-entry{display:block!important}
+#admin-calendar[data-calendar-view=month] .calendar-grid{grid-auto-rows:144px!important}
+#admin-calendar[data-calendar-view=month] .calendar-grid>.calendar-day{height:144px!important;gap:4px!important}
+#admin-calendar .calendar-compact-entry>span:last-child{white-space:normal!important;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}

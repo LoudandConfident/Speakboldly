@@ -53,3 +53,5 @@ button.calendar-session{border:0;cursor:pointer;text-align:left;min-height:36px}
 @media(max-width:680px){#admin-calendar .calendar-grid{grid-auto-rows:132px;min-width:0!important;gap:3px}#admin-calendar .calendar-weekdays{min-width:0!important}#admin-calendar .calendar-grid>.calendar-day{height:132px;padding:3px;gap:3px}#admin-calendar .calendar-day-header{flex-wrap:nowrap;gap:1px}#admin-calendar .calendar-add{min-width:22px;min-height:32px;font-size:19px}.calendar-compact-entry{font-size:9px;padding:2px;line-height:1.4}.calendar-view-day{font-size:9px;line-height:1.2;min-height:32px;padding:2px 0}#admin-calendar .calendar-day-number{font-size:11px}}
 
 .calendar-compact-entry>span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.calendar-compact-entry>span:first-child{font-weight:700}
+/* Keep the student's name visible in each compact month appointment. */
+.calendar-compact-entry>span:last-child{white-space:normal;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}

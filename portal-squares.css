@@ -57,3 +57,32 @@
 @media(max-width:900px){
  #students-portal .learning-space-destinations>.learning-space-card:nth-child(1),#students-portal .learning-space-destinations>.learning-space-card:nth-child(6),#students-portal .learning-space-destinations>.learning-space-card:nth-child(7),#students-portal .learning-space-destinations>.learning-space-card:nth-child(8){grid-column:1/-1;min-height:140px!important;aspect-ratio:auto!important;padding-right:70px!important}
 }
+/* Four distinctive practice rectangles lead on desktop; compact tools sit beside them. */
+@media(min-width:901px){
+ #students-portal .learning-space-destinations{grid-template-columns:minmax(0,1.35fr) repeat(2,minmax(0,1fr))!important;grid-template-rows:repeat(4,minmax(0,1fr));height:clamp(400px,calc(100dvh - 320px),520px);gap:12px!important}
+ #students-portal .learning-space-destinations>.learning-space-card:nth-child(n){aspect-ratio:auto!important;min-height:0!important;padding:14px!important;gap:5px!important}
+ #students-portal #portal-tab-mission{grid-column:1;grid-row:1}
+ #students-portal #portal-tab-monthly{grid-column:1;grid-row:2}
+ #students-portal #portal-tab-studio{grid-column:1;grid-row:3}
+ #students-portal #portal-tab-contact{grid-column:1;grid-row:4}
+ #students-portal #portal-tab-calendar{grid-column:2;grid-row:1/3}
+ #students-portal #portal-tab-exercises{grid-column:3;grid-row:1/3}
+ #students-portal #portal-tab-material{grid-column:2;grid-row:3/5}
+ #students-portal #portal-tab-exams{grid-column:3;grid-row:3/5}
+ #students-portal .learning-space-destinations>.learning-space-card>svg[data-card-glyph]{width:44px!important;height:40px!important;margin:0 0 5px!important}
+ #students-portal .learning-space-destinations>:is(#portal-tab-mission,#portal-tab-monthly,#portal-tab-studio,#portal-tab-contact){padding:12px 16px 12px 78px!important}
+ #students-portal .learning-space-destinations>:is(#portal-tab-mission,#portal-tab-monthly,#portal-tab-studio,#portal-tab-contact)>svg[data-card-glyph]{position:absolute!important;left:18px;top:50%;transform:translateY(-50%)!important}
+ #students-portal .learning-space-card-title{font-size:15px!important;line-height:1.35!important}
+ #students-portal .learning-space-card-description{font-size:11px!important;line-height:1.45!important}
+ #students-portal .learning-space-card .hub-free-badge{top:8px;right:10px;padding:2px 7px;font-size:9px}
+}
+#students-portal .learning-space-destinations>#portal-tab-mission{border-radius:12px 34px 34px 12px!important}
+#students-portal .learning-space-destinations>#portal-tab-monthly{border-radius:32px 12px 32px 12px!important}
+#students-portal .learning-space-destinations>#portal-tab-studio{border-radius:12px 32px 12px 32px!important}
+#students-portal .learning-space-destinations>#portal-tab-contact{border-radius:32px 32px 12px 32px!important}
+@media(max-width:900px){
+ #students-portal #portal-tab-mission{order:-4}
+ #students-portal #portal-tab-monthly{order:-3}
+ #students-portal #portal-tab-studio{order:2}
+ #students-portal #portal-tab-contact{order:3}
+}

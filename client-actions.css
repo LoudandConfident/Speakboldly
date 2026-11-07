@@ -90,3 +90,26 @@ body:has(.notes-editor-page[data-document-kind=notes]:not([hidden])){max-width:n
 .session-screen-quote>blockquote{font-size:clamp(19px,2.2vw,27px);line-height:1.5;margin:0;font-weight:500}
 @media(max-width:600px){.session-screen-quote{padding:16px 18px;margin:14px 0 18px}}
 @media print{.session-screen-quote{display:none!important}}
+/* Two illustrated encouragements live on the whiteboard, outside the sent notes. */
+#client-notes-dialog[data-document-kind=notes] .session-screen-quote{position:absolute;right:24px;top:160px;width:180px;margin:0;padding:14px;border:0;border-radius:38% 20% 32% 12%;background:#edf3e5b8;transform:rotate(3deg)}
+#client-notes-dialog[data-document-kind=notes] .session-screen-quote-small{right:auto;left:24px;top:350px;width:145px;transform:rotate(-5deg);background:#f5f4e8b8}
+.session-screen-quote>svg{display:block;width:62px;height:56px;margin:0 auto 10px;color:#497447}
+#client-notes-dialog .session-screen-quote>p{font-size:11px;line-height:1.5;text-align:center}
+#client-notes-dialog .session-screen-quote>blockquote{font:italic 18px/1.6 Georgia,serif;text-align:center}
+#client-notes-dialog .session-screen-quote-small>blockquote{font-size:15px}
+#client-notes-dialog[data-document-kind=notes] form{max-width:min(950px,calc(100% - 400px))}
+#client-notes-dialog .session-writing-area{min-width:0}
+#client-notes-dialog .session-inline-attachments{margin:8px 0 0;border:0;background:transparent}
+#client-notes-dialog .session-inline-attachments>summary{cursor:pointer;min-height:44px;padding:10px 0;font-size:13px;color:#497447}
+#client-notes-dialog .session-inline-attachments .notes-task-picker{border:0;background:transparent;padding:0;margin:0}
+#client-notes-dialog .session-inline-attachments .notes-task-picker>legend{display:none}
+@media(max-width:1050px){
+ #client-notes-dialog[data-document-kind=notes] form{max-width:100%}
+ #client-notes-dialog .session-quote-scene{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:12px 0 20px}
+ #client-notes-dialog[data-document-kind=notes] .session-screen-quote{position:relative;inset:auto;order:2;width:200px;max-width:58%;padding:10px}
+ #client-notes-dialog[data-document-kind=notes] .session-screen-quote-small{order:1;width:145px;max-width:38%}
+ #client-notes-dialog .session-screen-quote>blockquote{font-size:15px;line-height:1.5}
+ #client-notes-dialog .session-screen-quote-small>blockquote{font-size:13px}
+ .session-screen-quote>svg{width:42px;height:38px;margin-bottom:6px}
+}
+@media print{.session-quote-scene,.session-inline-attachments{display:none!important}}
