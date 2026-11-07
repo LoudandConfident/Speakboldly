@@ -246,3 +246,12 @@ html body #portal-calendar .booking-status:empty{display:none}
 
 :root{--page-help-top:112px}
 @media(max-width:760px){:root{--page-help-top:104px}}
+/* Clear first-page guidance with always-visible reflection prompts. */
+html body #students-portal #portal-monthly .culture-quick-links{min-height:76px!important;margin-bottom:8px!important;align-items:flex-start!important}
+html body #students-portal #portal-monthly .culture-listening-instruction{font-weight:700!important;font-style:normal!important;font-size:14px!important;line-height:1.65!important;margin:0!important;padding:0!important;max-width:850px}
+html body #students-portal #portal-monthly .culture-habit h4{font-size:16px;line-height:1.4;margin:0 0 8px}
+html body #students-portal #portal-monthly .culture-habit ul{padding-left:20px;margin:10px 0 0}
+html body #students-portal #portal-monthly .culture-habit li{font-size:14px;line-height:1.65;margin-bottom:8px}
+html body #students-portal #portal-monthly>.culture-coach-action{margin:18px 0 0!important;padding-bottom:8px}
+html body #students-portal #portal-monthly .culture-book-choice{box-sizing:border-box;width:260px!important;min-height:170px!important;padding:22px!important;gap:14px!important}
+@media(max-width:760px){html body #students-portal #portal-monthly .culture-book-choice{width:calc(50% - 8px)!important;min-height:165px!important;padding:16px 12px!important}html body #students-portal #portal-monthly .culture-book-choice strong{font-size:19px!important}html body #students-portal #portal-monthly .culture-listening-instruction{font-size:13px!important;line-height:1.6!important}}
