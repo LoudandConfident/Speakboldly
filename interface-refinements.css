@@ -291,3 +291,22 @@ html body #students-portal #daily-mission .daily-challenge-extras .daily-encoura
 html body #students-portal #daily-mission .daily-language-example strong{font-weight:700;font-style:normal}
 html body #students-portal #daily-mission .mission-practice>p>strong{font-weight:700}
 @media(max-width:760px){html body #students-portal #daily-mission.daily-seven>.daily-challenge-extras{gap:16px!important;padding:14px 0!important}html body #students-portal #daily-mission .daily-challenge-extras .daily-encouragement{flex-basis:78px;max-width:78px!important;margin:0!important}html body #students-portal #daily-mission .daily-challenge-extras .daily-challenge-idiom{min-width:0}}
+/* Daily Challenge: one stationary guide and a wider, denser reading surface. */
+html body #students-portal:has(#daily-mission:not([hidden])){padding-inline:clamp(14px,2.5vw,40px)!important}
+html body #students-portal:has(#daily-mission:not([hidden])) #portal-content{padding-inline:0!important}
+html body #students-portal #daily-mission.daily-seven:not([hidden]){padding:0!important;gap:12px!important}
+html body #students-portal #daily-mission .daily-fixed-help{position:fixed!important;top:var(--page-help-top,112px)!important;right:18px!important;z-index:12;margin:0!important;width:40px;height:40px;display:flex;align-items:center;justify-content:center}
+html body #students-portal #daily-mission .daily-fixed-help .sb-help-button{width:32px;height:32px;min-height:32px;font-size:15px}
+html body #students-portal #daily-mission .daily-reading-controls{display:grid;grid-template-columns:repeat(2,minmax(0,280px));gap:8px 14px;align-items:start;width:100%}
+html body #students-portal #daily-mission .daily-reading-controls>label{display:grid;gap:5px;margin:0!important;min-width:0;font-size:13px;font-weight:600}
+html body #students-portal #daily-mission .daily-reading-controls select{box-sizing:border-box;width:100%;max-width:none;min-width:0;margin:0;min-height:42px;padding:8px 10px}
+html body #students-portal #daily-mission .daily-reading-controls>.daily-accent-hint{grid-column:1/-1;margin:0!important;font-size:12px!important;line-height:1.5!important}
+html body #students-portal #daily-mission.daily-seven .daily-content .mission-practices{gap:12px!important}
+html body #students-portal #daily-mission.daily-seven .daily-content .mission-practice{padding:14px!important}
+html body #students-portal #daily-mission.daily-seven .daily-content [data-challenge-step="Read it"]{box-sizing:border-box;width:100%!important;max-width:none!important}
+html body #students-portal #daily-mission.daily-seven .daily-content [data-challenge-step="Read it"]>p{max-width:none!important;width:100%;font-size:15px!important;line-height:1.6!important;margin:6px 0!important}
+html body #students-portal #daily-mission .daily-dictation textarea{min-height:104px!important}
+html body #students-portal #daily-mission.daily-seven>.daily-challenge-extras{padding:10px 0!important;margin:0!important}
+.sb-help-popup p{white-space:pre-line}
+@media(max-width:760px){html body #students-portal #daily-mission.daily-seven .daily-content .mission-practice{padding:12px!important}html body #students-portal #daily-mission .daily-reading-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px}}
+@media(max-width:360px){html body #students-portal #daily-mission .daily-reading-controls{grid-template-columns:minmax(0,1fr)}}
