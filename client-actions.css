@@ -113,3 +113,7 @@ body:has(.notes-editor-page[data-document-kind=notes]:not([hidden])){max-width:n
  .session-screen-quote>svg{width:42px;height:38px;margin-bottom:6px}
 }
 @media print{.session-quote-scene,.session-inline-attachments{display:none!important}}
+/* Only the prewritten headings receive emphasis; the writing surface keeps its sizing. */
+#client-notes-dialog .session-notes-rich-editor{white-space:pre-wrap;overflow-wrap:break-word;resize:vertical;overflow:auto;color:inherit;cursor:text}
+#client-notes-dialog .session-notes-rich-editor strong{font-weight:700}
+#client-notes-dialog .session-notes-rich-editor u{text-decoration:underline;text-underline-offset:3px}
