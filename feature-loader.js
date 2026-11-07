@@ -2,7 +2,7 @@
 export function initializeFeatureLoader(doc,win){
 
  const groups={
-  'students-portal':['./learning-hub-entry.js?v=clean-culture-4'],
+  'students-portal':['./learning-hub-entry.js?v=phone-calendar-6'],
   'assessment':['./placement-assessment.js?v=brief-personal-2'],
   'reviews':['./reviews.js?v=compact-nov6-1'],
   'daily-quote':['./home-gallery.js?v=stern-teacher-10'],
