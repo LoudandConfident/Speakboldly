@@ -1,3 +1,4 @@
+import {createCoachExcuses} from './coach-excuses.js?v=1';
 import {validateSubmissionAttachments,submissionFileType} from './student-submission-files.js?v=1';
 import {showSubmissionSuccess} from './submission-success.js';
 function initializeCoachComposer(doc, root, submissionMode) {
@@ -38,4 +39,4 @@ function initializeCoachComposer(doc, root, submissionMode) {
 }
 
 
-export function initializeStudentContact(doc){const root=doc.querySelector('#portal-contact');if(!root)return{open(){},lock(){}};root.replaceChildren();const heading=doc.createElement('h3');heading.textContent='Ask your coach';const layout=doc.createElement('div');layout.className='student-contact-layout';const questionHost=doc.createElement('div'),submissionHost=doc.createElement('div');layout.append(questionHost,submissionHost);root.append(heading,layout);const question=initializeCoachComposer(doc,questionHost,false),submission=initializeCoachComposer(doc,submissionHost,true);return{open:message=>question.open(message),lock(){question.lock();submission.lock();}};}
+export function initializeStudentContact(doc){const root=doc.querySelector('#portal-contact');if(!root)return{open(){},lock(){}};root.replaceChildren();const heading=doc.createElement('h3');heading.textContent='Ask your coach';const layout=doc.createElement('div');layout.className='student-contact-layout';const questionHost=doc.createElement('div'),submissionHost=doc.createElement('div');layout.append(questionHost,submissionHost);root.append(heading,createCoachExcuses(doc),layout);const question=initializeCoachComposer(doc,questionHost,false),submission=initializeCoachComposer(doc,submissionHost,true);return{open:message=>question.open(message),lock(){question.lock();submission.lock();}};}
