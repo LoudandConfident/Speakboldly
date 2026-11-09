@@ -310,3 +310,12 @@ html body #students-portal #daily-mission.daily-seven>.daily-challenge-extras{pa
 .sb-help-popup p{white-space:pre-line}
 @media(max-width:760px){html body #students-portal #daily-mission.daily-seven .daily-content .mission-practice{padding:12px!important}html body #students-portal #daily-mission .daily-reading-controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px}}
 @media(max-width:360px){html body #students-portal #daily-mission .daily-reading-controls{grid-template-columns:minmax(0,1fr)}}
+/* A personal story with light-green lettering and sketches of friendship and shared stories. */
+html body main #speak-hub .speak-hub-story{position:relative;padding:20px 24px!important;border-radius:14px 34px 18px 34px;background:#193c32;color:#d5ed98}
+html body main #speak-hub .speak-hub-story :is(h3,p){color:#d5ed98!important}
+html body main #speak-hub .speak-hub-story-art{display:flex;justify-content:space-between;align-items:center;gap:22px;margin-top:16px;color:#d5ed98;max-width:360px}
+html body main #speak-hub .speak-hub-story-art svg{display:block;width:110px;height:76px;flex:none}
+html body main #speak-hub .speak-hub-story-art svg:last-child{width:84px;height:70px;transform:rotate(5deg)}
+html body main #speak-hub .speak-hub-outings{font-weight:600}
+@media(max-width:760px){html body main #speak-hub .speak-hub-story{padding:16px 18px!important}html body main #speak-hub .speak-hub-story-art{margin-top:12px}html body main #speak-hub .speak-hub-story-art svg{width:90px;height:62px}html body main #speak-hub .speak-hub-story-art svg:last-child{width:72px;height:60px}}
+@media(min-width:761px){html body main #speak-hub .speak-hub-meeting{grid-row:3!important}html body main #speak-hub .speak-hub-story{grid-row:4!important}html body main #speak-hub .speak-hub-illustrations{grid-row:1/span 3!important}}

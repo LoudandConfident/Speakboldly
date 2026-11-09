@@ -1,4 +1,25 @@
 export const courses = [
+{
+  "id": "english-day-out",
+  "title": "English Day Out",
+  "level": "All levels · tailored to your needs",
+  "duration": "1 full-day session · one-to-one or groups",
+  "category": "General English",
+  "comingSoon": true,
+  "dimmed": true,
+  "comingSoonLabel": "Coming soon",
+  "art": "outings",
+  "summary": "Live a whole day in English, from your first ride to your last conversation.",
+  "description": "Step outside the classroom for a guided day in English, one-to-one or in a group. Practise ordering lunch, taking an Uber, asking for directions and booking a hotel room through everyday outings and realistic situations.",
+  "viewDescription": "Spend a day using English in the world around you. Order at a restaurant, talk through a ride, explore a neighbourhood and practise a hotel booking, with support suited to your level. Join one-to-one or in a group for an entire day of English.",
+  "outcomes": "Build confidence starting conversations, responding naturally and finding another way to express yourself when a word goes missing. Take useful language from the classroom into your everyday life.",
+  "topics": [
+    "Ordering food and drinks at a restaurant",
+    "Taking an Uber and explaining where you want to go",
+    "Asking for directions and making everyday conversation",
+    "Practising hotel bookings and check-in conversations"
+  ]
+},
   {
     "id": "reclaim-focus",
     "title": "Reclaim your focus workshop",

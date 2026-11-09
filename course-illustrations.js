@@ -1,5 +1,7 @@
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const scenes={
+outings:'<path d="M25 158h190M42 158V74h62v84M54 89h12M80 89h12M54 110h12M80 110h12M64 158v-27h20v27"/><path d="M121 143v-18l13-25h47l16 25v18M127 123h64M141 102l-6 21M176 102l8 21" fill="#edf0e6"/><circle cx="138" cy="146" r="11" fill="#d5ed98"/><circle cx="180" cy="146" r="11" fill="#d5ed98"/><path d="M112 45h72v32h-38l-16 13V77h-18ZM127 58h43M159 12v20M149 22h20M22 34v23M17 34v10h10V34M200 37v23"/>',
+
 story:'<path d="M54 28h94l30 30v116H54Z" fill="#f7faf3"/><path d="M148 28v31h30M73 83h68M73 101h59M73 119h46M73 147q14-18 28-6t27-5"/><path d="m166 89 13-13 24 24-13 13-24-24Zm-5 5-39 39-7 23 23-7 39-39" fill="#d5ed98"/><path d="m122 133 16 16M190 43v17M182 51h17M29 110v13M23 116h13"/>',
 
 focus:'<rect x="30" y="99" width="112" height="65" rx="7"/><path d="M43 116h66M43 130h49M43 144h59M18 166h137"/><circle cx="164" cy="72" r="45" fill="#f7faf3"/><circle cx="164" cy="72" r="29"/><circle cx="164" cy="72" r="12" fill="#d5ed98"/><path d="m164 72 35-35m-5-10 1 14 14 1M78 39h24M90 27v24"/><circle cx="173" cy="146" r="26"/><path d="M173 131v16l10 6M164 116h18M173 116v4"/>',

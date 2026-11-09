@@ -107,7 +107,7 @@ export function initializeClientSheet(doc) {
 }
 
 export async function loadSheetSessions(fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'listSessions'},fetcher);}
-export async function saveSheetSession(session,fetcher=globalThis.fetch,options={}){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'saveSession',session,importPast:options.importPast===true},fetcher);}
+export async function saveSheetSession(session,fetcher=globalThis.fetch,options={}){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'saveSession',session,importPast:options.importPast===true,allowOverlap:options.allowOverlap===true},fetcher);}
 export async function cancelSheetSession(sessionId,fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'cancelSession',sessionId},fetcher);}
 
 export async function loadSheetTeacherDocuments(fetcher=globalThis.fetch){if(!clientSheetConnected())throw new Error('Connect your client sheet first.');return sheetRequest(endpoint,key,{action:'listTeacherDocuments'},fetcher);}
