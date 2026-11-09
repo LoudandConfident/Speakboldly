@@ -1,22 +1,20 @@
 {
-  "checkedAt": "2026-11-09T15:30:51.437Z",
+  "checkedAt": "2026-11-09T16:08:28.602Z",
   "comments": {
     "reachable": true,
-    "ok": false,
-    "ready": false,
-    "enabled": false,
-    "error": "Incorrect connection key."
+    "ok": true,
+    "ready": true,
+    "enabled": true
   },
   "sharedContent": {
     "reachable": true,
-    "ready": false,
-    "error": "Incorrect connection key."
+    "ready": true
   },
   "practiceDrive": {
     "reachable": true,
-    "elapsedMs": 8792,
+    "elapsedMs": 27801,
     "httpStatus": 200,
-    "ready": false,
-    "files": 0
+    "ready": true,
+    "files": 30
   }
 }
