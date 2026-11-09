@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-09T12:36:07.018Z",
+  "checkedAt": "2026-11-09T12:47:12.645Z",
   "comments": {
     "reachable": true,
     "ok": true,
@@ -11,8 +11,10 @@
     "ready": true
   },
   "practiceDrive": {
-    "reachable": false,
-    "ready": false,
-    "error": "Practice Drive catalog exceeded 90 seconds."
+    "reachable": true,
+    "elapsedMs": 25223,
+    "httpStatus": 200,
+    "ready": true,
+    "files": 30
   }
 }
