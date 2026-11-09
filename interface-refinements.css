@@ -319,3 +319,9 @@ html body main #speak-hub .speak-hub-story-art svg:last-child{width:84px;height:
 html body main #speak-hub .speak-hub-outings{font-weight:600}
 @media(max-width:760px){html body main #speak-hub .speak-hub-story{padding:16px 18px!important}html body main #speak-hub .speak-hub-story-art{margin-top:12px}html body main #speak-hub .speak-hub-story-art svg{width:90px;height:62px}html body main #speak-hub .speak-hub-story-art svg:last-child{width:72px;height:60px}}
 @media(min-width:761px){html body main #speak-hub .speak-hub-meeting{grid-row:3!important}html body main #speak-hub .speak-hub-story{grid-row:4!important}html body main #speak-hub .speak-hub-illustrations{grid-row:1/span 3!important}}
+/* Every unavailable preview has an explicit label; active features keep their usual styling. */
+html body #students-portal .learning-space-card.portal-feature-closed{opacity:1!important}
+html body #students-portal .learning-space-card.portal-feature-closed>:is(svg,.learning-space-card-title,.learning-space-card-description),
+html body #students-portal #portal-tab-studio.studio-coming-soon>:is(svg,.learning-space-card-title,.learning-space-card-description){opacity:.35!important}
+html body #students-portal .learning-space-card>.closed-preview-label{position:absolute;top:10px;right:12px;display:block;font:800 11px/1.3 Manrope,'DM Sans',sans-serif;letter-spacing:.3px;color:#193c32;pointer-events:none;margin:0!important;opacity:1!important}
+html body #students-portal #portal-tab-studio>.closed-preview-label{top:auto;bottom:10px;transform:none}

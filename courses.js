@@ -7,7 +7,6 @@ export const courses = [
   "category": "General English",
   "comingSoon": true,
   "dimmed": true,
-  "comingSoonLabel": "Coming soon",
   "art": "outings",
   "summary": "Live a whole day in English, from your first ride to your last conversation.",
   "description": "Step outside the classroom for a guided day in English, one-to-one or in a group. Practise ordering lunch, taking an Uber, asking for directions and booking a hotel room through everyday outings and realistic situations.",
