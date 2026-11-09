@@ -1,6 +1,6 @@
 import {learningDocumentPart,createLearningDocumentCard} from './learning-document-cards.js?v=library-folders';
-import {courses} from './courses.js?v=compact-nov6-1';
-import {courseIllustration} from './course-illustrations.js?v=1';
+import {courses} from './courses.js?v=english-day-out-22';
+import {courseIllustration} from './course-illustrations.js?v=outings-22';
 const aliases={writing:'business-writing',speaking:'meetings','reclaim-focus':'focus'};
 const learnerPrograms=courses.filter(c=>!c.catalogHidden&&c.category!=='Training'&&!['general-4','general-8','information-technology'].includes(c.id));
 export const MATERIAL_FOLDERS=[{id:'general',title:'General English',art:'general'},...learnerPrograms.map(c=>({id:aliases[c.id]||c.id,title:c.displayTitle||c.title,art:c.art}))];

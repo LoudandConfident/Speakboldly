@@ -2,7 +2,7 @@ import {openSection} from './section-navigation.js';
 import {deferredController} from './deferred-controller.js?v=1';
 import {readDriveFolderFile} from './drive-folder-files.js?v=1';
 import {renderPracticeZone,practiceAccessKey} from './practice-zone.js?v=reading-tabs-2';
-import {renderMaterialLibrary} from './material-library.js?v=compact-nov6-1';
+import {renderMaterialLibrary} from './material-library.js?v=outings-23';
 import {createLoadingNotice} from './loading-notice.js?v=visible-loading';
 import {enterHubLevel,hubGrantPayload,hubEntry,refreshHubAccess,updateHubAccess,hasHubGrant} from './hub-level-access.js?v=reward-access-2';
 import {withBerlitzBooks} from './berlitz-material.js?v=drive-folders-1';
