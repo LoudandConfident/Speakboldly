@@ -121,3 +121,16 @@ body:has(.notes-editor-page[data-document-kind=notes]:not([hidden])){max-width:n
 /* Personal welcome uses the open space above the teaching whiteboard. */
 #client-notes-dialog[data-document-kind=notes]>.session-student-greeting{display:block;width:100%;box-sizing:border-box;text-align:center;font:600 clamp(28px,4vw,42px)/1.3 'DM Sans',sans-serif;color:#193c32;margin:8px auto 24px;padding:10px 20px;overflow-wrap:anywhere}
 @media(max-width:600px){#client-notes-dialog[data-document-kind=notes]>.session-student-greeting{font-size:30px;margin:8px auto 20px;padding-inline:8px}}
+
+/* The whiteboard keeps its full writing width and height on every screen. */
+#client-notes-dialog[data-document-kind=notes] form{box-sizing:border-box;width:100%;max-width:none!important;min-width:0;margin-inline:0}
+#client-notes-dialog[data-document-kind=notes] .session-writing-area{width:100%;min-width:0}
+#client-notes-dialog[data-document-kind=notes] .session-writing-area>label{display:block;width:100%;margin-inline:0}
+#client-notes-dialog[data-document-kind=notes] :is(textarea[name=notes],.session-notes-rich-editor){box-sizing:border-box;width:100%!important;max-width:100%!important;min-width:0;min-height:max(640px,65dvh)!important}
+#client-notes-dialog[data-document-kind=notes] .session-quote-scene{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:12px 0 24px}
+#client-notes-dialog[data-document-kind=notes] .session-screen-quote{position:relative;inset:auto;order:2;width:240px;max-width:58%;margin:0;padding:10px;transform:rotate(3deg)}
+#client-notes-dialog[data-document-kind=notes] .session-screen-quote-small{order:1;width:180px;max-width:38%;transform:rotate(-5deg)}
+#client-notes-dialog[data-document-kind=notes] .session-screen-quote>svg{width:38px;height:34px;margin-bottom:6px}
+#client-notes-dialog[data-document-kind=notes] .session-screen-quote>blockquote{font-size:15px;line-height:1.5}
+#client-notes-dialog[data-document-kind=notes] .session-screen-quote-small>blockquote{font-size:13px}
+@media(max-width:600px){#client-notes-dialog[data-document-kind=notes] :is(textarea[name=notes],.session-notes-rich-editor){min-height:560px!important}#client-notes-dialog[data-document-kind=notes] .session-quote-scene{gap:12px}}
