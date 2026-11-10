@@ -1,3 +1,4 @@
+import {initializeFixedPageHelp} from './fixed-page-help.js?v=1';
 import {helpIcon} from './ui-help.js';
 const doc=document;
 // Reuse established artwork, retaining the original SVG speech bubbles.
@@ -8,3 +9,5 @@ const how=doc.querySelector('#how'),copy=how?.querySelector('.how-hero-copy');if
 for(const node of doc.querySelectorAll('[data-get-code],.get-code'))node.querySelector('.step-number,.how-step-number')?.remove();
 const banner=doc.querySelector('#courses .courses-subtitle');if(banner)banner.classList.add('program-two-part-banner');
 const reviews=doc.querySelector('#reviews');if(reviews&&!reviews.querySelector('.reviews-divider-art')){const art=reviews.querySelector('.reviews-spark-art')?.cloneNode(true);if(art){art.classList.add('reviews-divider-art');reviews.querySelector('.page-signature')?.before(art);}}
+
+initializeFixedPageHelp(document);

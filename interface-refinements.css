@@ -367,3 +367,10 @@ html body #students-portal #portal-tab-student-zone>.closed-preview-label{top:au
  html body #portal-calendar .booking-time-list{gap:8px}
  html body #portal-calendar .booking-time-choice{min-height:56px;border-radius:12px;font-size:13px}
 }
+
+/* One viewport-level help button: page containers cannot move it during scrolling. */
+html body.sb-fixed-help-ready #students-portal :is(.dashboard-help-circle,[data-portal-panel]>.section-guide,.daily-fixed-help,.real-english-side>.sb-help),
+html body.sb-fixed-help-ready #contact .contact-promotion-rail>.sb-help{visibility:hidden!important;pointer-events:none!important}
+html body>#sb-fixed-page-help{position:fixed!important;inset:auto!important;top:calc(var(--page-help-top,112px) + env(safe-area-inset-top,0px))!important;right:max(18px,env(safe-area-inset-right,0px))!important;left:auto!important;bottom:auto!important;z-index:45!important;display:grid;place-items:center;width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;margin:0!important;border:1px solid #8da67f;border-radius:50%;background:#edf0e6;color:#193c32;font:600 18px/1 'DM Sans',sans-serif;cursor:pointer;transform:none!important;box-shadow:0 2px 8px #193c3214}
+html body>#sb-fixed-page-help[hidden]{display:none!important}
+html body>#sb-fixed-page-help:focus-visible{outline:3px solid #659150;outline-offset:3px}
