@@ -1,7 +1,7 @@
 import {createTaskPicker} from './notes-tasks.js';
 import {finishSentReport} from './report-send-complete.js?v=success-return-1';
 import {DOCUMENT_BRAND} from './document-branding.js?v=two-line-footer-1';
-import {buildClientNotesPdf} from './notes-pdf.js?v=written-only-5';
+import {buildClientNotesPdf} from './notes-pdf.js?v=centered-greeting-30';
 import {buildClientNotesWord} from './word-notes.js?v=session-only-3';
 import {clientSheetConnected,sendSheetClientEmail} from './client-sheet.js?v=domain-email-routing';
 import {confirmClientEmail} from './client-email-confirmation.js';
@@ -78,7 +78,7 @@ export function initializeClientNotes(doc,isUnlocked,{pageMode=false,returnUrl=n
  let studentGreeting;
  if(!actionPlan){studentGreeting=doc.createElement('p');studentGreeting.className='session-student-greeting';dialog.querySelector('[data-notes-recipient]').before(studentGreeting);}
  const notesText=()=>{const written=(actionPlan?form.elements.notes.value.trim():composeSessionNotes(form.elements.notes.value,trackingValues()))||(tasks.count()?'Please complete the attached tasks and send your answers back.':'');return !actionPlan&&written?sessionStudentGreeting(client)+'\n\n'+written:written;};
- if(!actionPlan){download.remove();downloadPdf.textContent='Save as PDF';send.textContent='Send to client';const link=doc.createElement('link');link.rel='stylesheet';link.href=new URL('./client-actions.css?v=notes-heading-style-15',import.meta.url).href;doc.head.append(link);}
+ if(!actionPlan){download.remove();downloadPdf.textContent='Save as PDF';send.textContent='Send to client';const link=doc.createElement('link');link.rel='stylesheet';link.href=new URL('./client-actions.css?v=centered-30-notes-heading-style-15',import.meta.url).href;doc.head.append(link);}
  function lock(){generation++;client=null;busy=false;requestId=null;requestSignature='';drafts.clear();tasks.reset();pdfPromise=null;pdfSignature='';form.reset();status.textContent='';if(pageMode)dialog.hidden=true;else if(dialog.open)dialog.close();send.disabled=download.disabled=downloadPdf.disabled=false;}
  if(pageMode)dialog.querySelector('.popup-close').hidden=true;
  dialog.querySelector('.popup-close').onclick=()=>{if(pageMode)doc.defaultView.location.href=returnUrl||'./#students-portal/teacher';else dialog.close();};function rememberDraft(){if(client)drafts.set(client.id,{notes:form.elements.notes.value,sessionNumber:sessionNumber.value,tracking:trackingValues(),welcomeText:welcomeText?.value});updateNotesRequired();requestSignature='';pdfSignature='';}form.addEventListener('input',rememberDraft);

@@ -15,7 +15,7 @@ export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date
  }
  }
  paragraph('Speak Boldly — '+title,19);y-=8;if(title==='Session notes'){if(client.sessionNumber)paragraph('Session: '+client.sessionNumber,13);}else{paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);if(client.sessionNumber)paragraph('Session: '+client.sessionNumber);paragraph('Date: '+date);}y-=18;
- if(welcomeText){paragraph('Welcome to the session',16);y-=6;paragraph(welcomeText);y-=14;if(y<160)newPage();paragraph('Session notes',16);y-=6;}paragraph(notes);
+ if(welcomeText){paragraph('Welcome to the session',16);y-=6;paragraph(welcomeText);y-=14;if(y<160)newPage();paragraph('Session notes',16);y-=6;}const greeting=title==='Session notes'?String(notes||'').match(/^Hi [^\n!]{1,100}!\n\n/):null;if(greeting){const value=greeting[0].trim(),size=Math.min(22,maxWidth/font.widthOfTextAtSize(value,1));page.drawText(value,{x:(width-font.widthOfTextAtSize(value,size))/2,y,font,size,color:ink});y-=42;paragraph(String(notes).slice(greeting[0].length));}else paragraph(notes);
  await appendTaskPages(pdf,taskAttachments,{font,rgb,client,newPage:()=>{newPage();return page;},answerPages});
  await drawDocumentBranding(pdf,{font,logo,light:false});
  return pdf.save();

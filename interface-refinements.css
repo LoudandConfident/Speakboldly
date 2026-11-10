@@ -326,11 +326,44 @@ html body #students-portal #portal-tab-studio.studio-coming-soon>:is(svg,.learni
 html body #students-portal .learning-space-card>.closed-preview-label{position:absolute;top:10px;right:12px;display:block;font:800 11px/1.3 Manrope,'DM Sans',sans-serif;letter-spacing:.3px;color:#193c32;pointer-events:none;margin:0!important;opacity:1!important}
 html body #students-portal #portal-tab-studio>.closed-preview-label{top:auto;bottom:10px;transform:none}
 
-/* Closed Student Zone preview: membership label stays distinct from the free resources. */
-html body #students-portal #portal-tab-student-zone{grid-column:1/-1;position:relative;cursor:default;opacity:1!important;border-radius:14px 32px 14px 32px!important;padding:22px 150px 25px 78px!important;min-height:110px!important;text-align:left!important;align-items:flex-start!important;justify-content:center!important;gap:5px!important;order:4}
+/* Student Zone and Listening form a matching fifth dashboard row. */
+html body #students-portal #portal-tab-student-zone,html body #students-portal #portal-tab-listening{position:relative;grid-column:auto;cursor:pointer;border-radius:14px 32px 14px 32px!important;text-align:left!important;align-items:flex-start!important;justify-content:center!important;gap:5px!important}
+html body #students-portal #portal-tab-student-zone{opacity:1!important;cursor:default;order:4}
+html body #students-portal #portal-tab-listening{order:5}
 html body #students-portal #portal-tab-student-zone>:is(svg,.learning-space-card-title,.learning-space-card-description){opacity:.38!important}
-html body #students-portal #portal-tab-student-zone>svg{position:absolute!important;left:18px;top:50%;transform:translateY(-50%);width:42px!important;height:40px!important}
-html body #students-portal #portal-tab-student-zone>.student-zone-enrolled-badge{position:absolute;right:14px;top:16px;display:inline-flex;background:#d5ed98;color:#193c32;border:1px solid #bdcbb1;border-radius:999px;padding:4px 9px;font-size:10px;font-weight:600;line-height:1.3}
-html body #students-portal #portal-tab-student-zone>.closed-preview-label{top:auto;bottom:17px;right:16px}
-@media(min-width:901px){html body #students-portal .learning-space-destinations{grid-template-rows:repeat(4,minmax(0,1fr)) 90px;height:clamp(470px,calc(100dvh - 300px),580px)}html body #students-portal #portal-tab-student-zone{grid-row:5;min-height:0!important}}
-@media(max-width:480px){html body #students-portal #portal-tab-student-zone{padding:44px 16px 40px 68px!important;min-height:140px!important}html body #students-portal #portal-tab-student-zone>svg{left:14px;width:36px!important}html body #students-portal #portal-tab-student-zone>.student-zone-enrolled-badge{top:11px;right:13px}html body #students-portal #portal-tab-student-zone>.closed-preview-label{bottom:11px;right:14px}}
+html body #students-portal #portal-tab-student-zone>.student-zone-enrolled-badge{position:absolute;right:12px;top:9px;display:inline-flex;background:#d5ed98;color:#193c32;border:1px solid #bdcbb1;border-radius:999px;padding:3px 8px;font-size:9px;font-weight:600;line-height:1.3}
+html body #students-portal #portal-tab-student-zone>.closed-preview-label{top:auto;bottom:8px;right:12px}
+@media(min-width:901px){html body #students-portal .learning-space-destinations{grid-template-rows:repeat(5,minmax(0,1fr));height:clamp(470px,calc(100dvh - 300px),580px)}html body #students-portal #portal-tab-student-zone{grid-column:1;grid-row:5}html body #students-portal #portal-tab-listening{grid-column:2;grid-row:5}html body #students-portal :is(#portal-tab-student-zone,#portal-tab-listening){min-height:0!important;padding:14px 16px 14px 78px!important}html body #students-portal :is(#portal-tab-student-zone,#portal-tab-listening)>svg{position:absolute!important;left:18px;top:50%;transform:translateY(-50%);width:42px!important;height:40px!important}html body #students-portal #portal-tab-student-zone{padding-top:24px!important;padding-bottom:22px!important}html body #students-portal #portal-tab-student-zone>.learning-space-card-description{max-width:28ch;font-size:10px!important}}
+@media(max-width:900px){html body #students-portal #portal-tab-student-zone{padding-top:34px!important;padding-bottom:28px!important}html body #students-portal :is(#portal-tab-student-zone,#portal-tab-listening){min-height:164px!important}html body #students-portal #portal-tab-student-zone>.student-zone-enrolled-badge{right:8px;font-size:8px;padding:3px 6px}}
+/* A readable phone month: choose a date, then read the full named agenda. */
+@media(max-width:680px){
+ html body #admin-calendar[data-calendar-view=month] .calendar-grid{grid-auto-rows:68px!important;gap:5px!important;min-width:0!important}
+ html body #admin-calendar[data-calendar-view=month] .calendar-grid>.calendar-day{height:68px!important;min-height:0!important;padding:6px 2px!important;gap:3px!important;border-radius:10px!important;background:#f7f8f2!important;border:1px solid #e1e6d8!important;box-shadow:none!important}
+ html body #admin-calendar[data-calendar-view=month] .calendar-day-header{justify-content:center!important;min-height:22px}
+ html body #admin-calendar[data-calendar-view=month] .calendar-day-number{font-size:14px!important;font-weight:600!important;line-height:22px}
+ html body #admin-calendar[data-calendar-view=month] :is(.calendar-compact-entry,.calendar-count,.calendar-add){display:none!important}
+ html body #admin-calendar[data-calendar-view=month] .calendar-view-day{display:block!important;min-height:26px!important;width:100%;font-size:0!important;padding:3px 0!important;border:0!important;background:transparent!important;line-height:1.2!important;color:#61725c!important}
+ html body #admin-calendar[data-calendar-view=month] .calendar-view-day::after{content:attr(data-mobile-label);font-size:10px;font-weight:600}
+ html body #admin-calendar[data-calendar-view=month] .calendar-selected{border-color:#659150!important;background:#e7efdd!important}
+ html body #admin-calendar[data-calendar-view=month] .calendar-day-blocked{background:#eceee7!important}
+ html body #admin-calendar .calendar-weekdays{gap:5px!important;font-size:11px!important;min-width:0!important;padding-bottom:8px}
+ html body #admin-calendar .calendar-toolbar{display:flex!important;flex-wrap:wrap!important;gap:8px!important}
+ html body #admin-calendar .calendar-toolbar :is(button,input){min-height:44px!important}
+ html body #admin-calendar .calendar-quick-add{flex:1 1 100px}
+ html body #admin-calendar .calendar-jump-label{flex:1 1 140px!important}
+ html body #admin-calendar .calendar-view-switch{margin-inline:auto}
+ html body #admin-calendar .calendar-day:focus-visible{outline:3px solid #659150;outline-offset:1px}
+ html body #portal-calendar .student-booking-content{background:#fafbf7;padding:14px 10px;border:1px solid #dce4d3;border-radius:16px}
+ html body #portal-calendar .booking-month-toolbar{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px;margin-bottom:17px}
+ html body #portal-calendar .booking-month-toolbar .button{min-width:44px;min-height:44px;padding:6px;border-radius:50%;font-size:24px}
+ html body #portal-calendar .booking-month-toolbar h4{text-align:center;font-size:18px;line-height:1.4;margin:0}
+ html body #portal-calendar .booking-weekdays{font-size:11px;color:#61725c;margin-bottom:10px}
+ html body #portal-calendar :is(.booking-weekdays,.booking-month-grid){gap:4px}
+ html body #portal-calendar .booking-date{min-height:46px;border-radius:12px;font-size:15px;font-weight:500}
+ html body #portal-calendar .booking-date.has-times{background:#edf3e5}
+ html body #portal-calendar .booking-date[aria-pressed=true]{background:#193c32;color:#fff}
+ html body #portal-calendar .booking-month-legend{font-size:11px;line-height:1.5;margin-top:12px}
+ html body #portal-calendar .booking-day-agenda{margin-top:14px;padding-top:14px}
+ html body #portal-calendar .booking-time-list{gap:8px}
+ html body #portal-calendar .booking-time-choice{min-height:56px;border-radius:12px;font-size:13px}
+}
