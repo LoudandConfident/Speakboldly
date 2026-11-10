@@ -1,5 +1,8 @@
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const scenes={
+inperson:'<circle cx="65" cy="72" r="20"/><circle cx="177" cy="72" r="20"/><path d="M31 164v-40q34-38 68 0v40M143 164v-40q34-38 68 0v40M87 129h66M120 129v48"/><path d="M88 25h64v34h-22l-13 12V59H88Z" fill="#d5ed98"/><path d="M100 39h39M101 48h24"/>',
+group:'<circle cx="120" cy="56" r="20"/><circle cx="55" cy="88" r="17"/><circle cx="186" cy="88" r="17"/><path d="M85 142v-36q35-38 70 0v36M27 169v-47q28-29 56 0v47M158 169v-47q28-29 56 0v47"/><path d="M72 22H34v29h13l10 11V51h15ZM167 23h38v29h-13l-10 11V52h-15Z" fill="#d5ed98"/><path d="M104 122h32M120 106v32"/>',
+
 outings:'<path d="M25 158h190M42 158V74h62v84M54 89h12M80 89h12M54 110h12M80 110h12M64 158v-27h20v27"/><path d="M121 143v-18l13-25h47l16 25v18M127 123h64M141 102l-6 21M176 102l8 21" fill="#edf0e6"/><circle cx="138" cy="146" r="11" fill="#d5ed98"/><circle cx="180" cy="146" r="11" fill="#d5ed98"/><path d="M112 45h72v32h-38l-16 13V77h-18ZM127 58h43M159 12v20M149 22h20M22 34v23M17 34v10h10V34M200 37v23"/>',
 
 story:'<path d="M54 28h94l30 30v116H54Z" fill="#f7faf3"/><path d="M148 28v31h30M73 83h68M73 101h59M73 119h46M73 147q14-18 28-6t27-5"/><path d="m166 89 13-13 24 24-13 13-24-24Zm-5 5-39 39-7 23 23-7 39-39" fill="#d5ed98"/><path d="m122 133 16 16M190 43v17M182 51h17M29 110v13M23 116h13"/>',

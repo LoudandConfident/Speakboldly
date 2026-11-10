@@ -2,7 +2,7 @@ import {learningDocumentPart,createLearningDocumentCard} from './learning-docume
 import {courses} from './courses.js?v=english-day-out-22';
 import {courseIllustration} from './course-illustrations.js?v=outings-22';
 const aliases={writing:'business-writing',speaking:'meetings','reclaim-focus':'focus'};
-const learnerPrograms=courses.filter(c=>!c.catalogHidden&&c.category!=='Training'&&!['general-4','general-8','information-technology'].includes(c.id));
+const learnerPrograms=courses.filter(c=>!c.catalogHidden&&!c.formatOnly&&c.category!=='Training'&&!['general-4','general-8','information-technology'].includes(c.id));
 export const MATERIAL_FOLDERS=[{id:'general',title:'General English',art:'general'},...learnerPrograms.map(c=>({id:aliases[c.id]||c.id,title:c.displayTitle||c.title,art:c.art}))];
 export function learningDocumentFolder(item){const key=String(item.title||'').match(/\[SB-folder:([a-z-]+)\]/)?.[1];return key?(MATERIAL_FOLDERS.some(f=>f.id===key)?key:null):'general';}
 export function renderMaterialLibrary(doc,target,{folder,level,items,enabled,chooseFolder,chooseLevel,back,open}){

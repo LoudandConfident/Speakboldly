@@ -1,5 +1,5 @@
 import {courses} from './courses.js?v=compact-nov6-1';
-export const SESSION_PROGRAMS=[{id:'trial',title:'Trial session'},...courses.map(({id,title})=>({id,title}))];
+export const SESSION_PROGRAMS=[{id:'trial',title:'Trial session'},...courses.filter(c=>!c.formatOnly).map(({id,title})=>({id,title}))];
 export const CLIENT_PROGRAMS=SESSION_PROGRAMS.filter(({id})=>!['urgent-session','make-up-revision','instructor-training','different-learners'].includes(id));
 export const SESSION_TYPES=[{id:'session',title:'Session'},{id:'trial',title:'Trial session'},{id:'assessment',title:'Assessment'}];
 export const INSTRUCTOR_APPOINTMENT_TYPES=[{id:'session',title:'Session — 90 minutes',duration:90},{id:'session120',title:'Session — 120 minutes',duration:120},{id:'trial',title:'Trial session — 60 minutes',duration:60},{id:'assessment',title:'Placement test — 30 minutes',duration:30}];

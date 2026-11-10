@@ -1,24 +1,26 @@
 export const courses = [
-{
-  "id": "english-day-out",
-  "title": "English Day Out",
-  "level": "All levels · tailored to your needs",
-  "duration": "1 full-day session · one-to-one or groups",
-  "category": "General English",
-  "comingSoon": true,
-  "dimmed": true,
-  "art": "outings",
-  "summary": "Live a whole day in English, from your first ride to your last conversation.",
-  "description": "Step outside the classroom for a guided day in English, one-to-one or in a group. Practise ordering lunch, taking an Uber, asking for directions and booking a hotel room through everyday outings and realistic situations.",
-  "viewDescription": "Spend a day using English in the world around you. Order at a restaurant, talk through a ride, explore a neighbourhood and practise a hotel booking, with support suited to your level. Join one-to-one or in a group for an entire day of English.",
-  "outcomes": "Build confidence starting conversations, responding naturally and finding another way to express yourself when a word goes missing. Take useful language from the classroom into your everyday life.",
-  "topics": [
-    "Ordering food and drinks at a restaurant",
-    "Taking an Uber and explaining where you want to go",
-    "Asking for directions and making everyday conversation",
-    "Practising hotel bookings and check-in conversations"
-  ]
-},
+  {
+    "id": "english-day-out",
+    "title": "English Day Out",
+    "level": "All levels · tailored to your needs",
+    "duration": "One day · an English outing",
+    "category": "General English",
+    "comingSoon": true,
+    "dimmed": true,
+    "art": "outings",
+    "summary": "Live a whole day in English, from your first ride to your last conversation.",
+    "description": "Step outside the classroom for a guided day in English, one-to-one or in a group. Practise ordering lunch, taking an Uber, asking for directions and booking a hotel room through everyday outings and realistic situations.",
+    "viewDescription": "Spend a day using English in the world around you. Order at a restaurant, talk through a ride, explore a neighbourhood and practise a hotel booking, with support suited to your level. Join one-to-one or in a group for an entire day of English.",
+    "outcomes": "Build confidence starting conversations, responding naturally and finding another way to express yourself when a word goes missing. Take useful language from the classroom into your everyday life.",
+    "topics": [
+      "Ordering food and drinks at a restaurant",
+      "Taking an Uber and explaining where you want to go",
+      "Asking for directions and making everyday conversation",
+      "Practising hotel bookings and check-in conversations"
+    ],
+    "quoteOnly": true,
+    "sessionDuration": "One day basis"
+  },
   {
     "id": "reclaim-focus",
     "title": "Reclaim your focus workshop",
@@ -37,7 +39,8 @@ export const courses = [
       "Planning manageable tasks and study time",
       "Building supportive routines and breaks",
       "Reviewing and adjusting your approach"
-    ]
+    ],
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "write-boldly",
@@ -58,7 +61,8 @@ export const courses = [
       "Clear sentences and connected paragraphs",
       "Tone and vocabulary choices",
       "Editing your own writing"
-    ]
+    ],
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "general-8",
@@ -84,7 +88,8 @@ export const courses = [
     "summary": "Private English coaching tailored to your level and everyday needs.",
     "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions. This is an ongoing program; how long you continue depends on your English level.",
     "viewDescription": "Build everyday English through two private sessions a week, with practice tailored to your level and goals. Work on speaking, listening, vocabulary, and sentence structure using real situations and personal feedback.",
-    "outcomes": "You’ll develop clearer ways to express your ideas and take part in everyday conversations. You’ll also build a practical routine for recognising mistakes and continuing your progress between sessions."
+    "outcomes": "You’ll develop clearer ways to express your ideas and take part in everyday conversations. You’ll also build a practical routine for recognising mistakes and continuing your progress between sessions.",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "general-4",
@@ -110,7 +115,8 @@ export const courses = [
     "summary": "Private English coaching tailored to your level and everyday needs.",
     "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions. This is an ongoing program; how long you continue depends on your English level.",
     "viewDescription": "Develop everyday English through one private session a week, with practice shaped around your level and priorities. Each session combines useful language, conversation, and feedback you can apply during the week.",
-    "outcomes": "You’ll strengthen the language you need to explain yourself and respond more comfortably. You’ll leave with practical activities that help you keep improving independently between sessions."
+    "outcomes": "You’ll strengthen the language you need to explain yourself and respond more comfortably. You’ll leave with practical activities that help you keep improving independently between sessions.",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "english-momentum",
@@ -124,12 +130,12 @@ export const courses = [
       {
         "previous": 4500,
         "amount": 4000,
-        "schedule": "16 sessions · 4 days a week · 1 hour each · 4 weeks"
+        "schedule": "16 sessions · 4 days a week · 60–90 minutes each · 4 weeks"
       }
     ],
-    "description": "Build your English routine with focused, one-hour sessions four days a week for four weeks. Practise speaking, listening, vocabulary and grammar through conversation and personalised feedback.",
-    "summary": "Four days a week, one hour each, for four weeks.",
-    "viewDescription": "Make English a regular part of your week with 16 private, one-hour sessions over four weeks. Your instructor adapts the practice to your level, goals, and the English you need in everyday life.",
+    "description": "Build your English routine with focused, 60–90-minute sessions four days a week for four weeks. Practise speaking, listening, vocabulary and grammar through conversation and personalised feedback.",
+    "summary": "Four days a week, 60–90 minutes each, for four weeks.",
+    "viewDescription": "Make English a regular part of your week with 16 private, 60–90-minute sessions over four weeks. Your instructor adapts the practice to your level, goals, and the English you need in everyday life.",
     "outcomes": "You’ll practise more frequently, review useful language regularly, and build habits that help you keep improving between sessions.",
     "topics": [
       "Frequent speaking and listening practice",
@@ -137,7 +143,8 @@ export const courses = [
       "Focused feedback and revision",
       "Independent practice between sessions"
     ],
-    "art": "momentum"
+    "art": "momentum",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "urgent-session",
@@ -146,7 +153,7 @@ export const courses = [
     "level": "Your current English level",
     "duration": "1 session",
     "category": "Session",
-    "description": "Book session by session, with no commitment. A little pricier, but useful when something urgent comes up. Enjoy 90 minutes of interactive conversation about the topic you need, or a topic your instructor chooses based on your previously communicated needs and English level. It can also be your trial session to help you decide what would support you most with your current needs.",
+    "description": "Book session by session, with no commitment. A little pricier, but useful when something urgent comes up. Enjoy 60–90 minutes of interactive conversation about the topic you need, or a topic your instructor chooses based on your previously communicated needs and English level. It can also be your trial session to help you decide what would support you most with your current needs.",
     "price": 550,
     "showComingSoonPrice": true,
     "topics": [
@@ -155,29 +162,31 @@ export const courses = [
       "A trial to help you choose your next step"
     ],
     "art": "urgent",
-    "summary": "One 90-minute conversation session tailored to your immediate needs.",
+    "summary": "One 60–90-minute conversation session tailored to your immediate needs.",
     "detailDescription": "Before the session, tell your instructor your topic, current English level and what you need help with. Use the conversation to rehearse an upcoming situation, work through an immediate communication need or explore what kind of coaching would help you next. Each session stands on its own, with no ongoing commitment.",
-    "viewDescription": "Use one 90-minute session to focus on an immediate English need, rehearse a situation, or try private coaching. Share your topic and goals beforehand so your instructor can shape the conversation around you.",
-    "outcomes": "You’ll practise useful wording for your chosen situation and receive feedback on what to improve. You’ll finish with clearer next steps for preparing on your own, without committing to an ongoing course."
+    "viewDescription": "Use one 60–90-minute session to focus on an immediate English need, rehearse a situation, or try private coaching. Share your topic and goals beforehand so your instructor can shape the conversation around you.",
+    "outcomes": "You’ll practise useful wording for your chosen situation and receive feedback on what to improve. You’ll finish with clearer next steps for preparing on your own, without committing to an ongoing course.",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "make-up-revision",
     "catalogHidden": true,
     "title": "Make-up / revision session",
     "level": "Already enrolled clients",
-    "duration": "1 session · 90 minutes",
+    "duration": "1 session · 60–90 minutes",
     "category": "Session",
     "price": 350,
-    "description": "An additional 90-minute session for already enrolled clients who want to revise previous lessons or add extra practice to their current program.",
+    "description": "An additional 60–90-minute session for already enrolled clients who want to revise previous lessons or add extra practice to their current program.",
     "summary": "Extra revision and practice for already enrolled clients.",
-    "viewDescription": "Add a 90-minute session to your current coaching program. Revisit lessons, practise areas you find challenging, and clarify questions with your instructor.",
+    "viewDescription": "Add a 60–90-minute session to your current coaching program. Revisit lessons, practise areas you find challenging, and clarify questions with your instructor.",
     "outcomes": "You’ll consolidate what you have learned and leave with clearer next steps for your ongoing practice.",
     "topics": [
       "Revision of previous lessons",
       "Extra practice with your current program",
       "Questions and personalised feedback"
     ],
-    "art": "general"
+    "art": "general",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "interview",
@@ -204,7 +213,8 @@ export const courses = [
     "summary": "Prepare for your next interview and upgrade your CV.",
     "detailDescription": "Practise describing your experience, strengths and achievements in your own words. Work on focused answers, follow-up questions and the questions you want to ask an employer, using mock interviews and feedback to prepare. Bring your current CV if you’d like help making it clearer, more focused and better suited to the role. This optional support is included at no extra cost.",
     "viewDescription": "Prepare for English-language interviews through two focused sessions of practice and personal feedback. Rehearse your introduction, common questions, and examples that show your experience. Upgrade your CV with optional review and improvements, included at no extra cost.",
-    "outcomes": "You’ll develop more focused answers and clearer ways to explain your strengths and achievements. You’ll also learn how to rehearse independently and handle follow-up questions with greater confidence. You can also leave with a clearer, more focused CV that presents your experience and achievements effectively."
+    "outcomes": "You’ll develop more focused answers and clearer ways to explain your strengths and achievements. You’ll also learn how to rehearse independently and handle follow-up questions with greater confidence. You can also leave with a clearer, more focused CV that presents your experience and achievements effectively.",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "writing",
@@ -225,7 +235,8 @@ export const courses = [
     "summary": "Write clear, professional emails and business messages.",
     "detailDescription": "Bring examples of the kinds of messages you need to write, such as requests, updates or follow-ups. Practise adapting your tone to the reader, arranging key information clearly and revising drafts with instructor feedback.",
     "viewDescription": "Practise professional emails and business messages across five sessions using situations relevant to your work. Explore tone, structure, requests, and follow-ups while revising drafts with instructor feedback.",
-    "outcomes": "You’ll develop clearer messages that suit your reader and make the next action easy to understand. You’ll also build an editing checklist to review your writing before sending it."
+    "outcomes": "You’ll develop clearer messages that suit your reader and make the next action easy to understand. You’ll also build an editing checklist to review your writing before sending it.",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "speaking",
@@ -246,7 +257,8 @@ export const courses = [
     "summary": "Speak confidently in meetings, presentations and public settings.",
     "detailDescription": "Practise introducing a topic, linking ideas and making your point without losing your audience. Work through meeting contributions, presentation openings and question-and-answer situations, with feedback on clarity, delivery and pronunciation.",
     "viewDescription": "Develop your English for meetings, presentations, and public speaking through five practical sessions. Rehearse contributions, organise your message, and handle questions with feedback on clarity and delivery.",
-    "outcomes": "You’ll practise making your point clearly and supporting it with useful examples. You’ll also develop a repeatable preparation routine for presenting ideas and responding to an audience."
+    "outcomes": "You’ll practise making your point clearly and supporting it with useful examples. You’ll also develop a repeatable preparation routine for presenting ideas and responding to an audience.",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "ielts",
@@ -266,7 +278,10 @@ export const courses = [
     "summary": "Focused IELTS practice across all four language skills.",
     "detailDescription": "Work through typical task formats and timed practice while identifying which skills need the most attention. Sessions cover organising written answers, explaining opinions in speaking tasks and approaching listening and reading questions.",
     "viewDescription": "Prepare for IELTS through focused practice in listening, reading, writing, and speaking. Explore typical task formats, timed activities, and strategies shaped around the areas you need to strengthen.",
-    "outcomes": "You’ll build familiarity with exam tasks and practise organising answers within the available time. You’ll also learn how to review your performance and plan more focused independent preparation."
+    "outcomes": "You’ll build familiarity with exam tasks and practise organising answers within the available time. You’ll also learn how to review your performance and plan more focused independent preparation.",
+    "catalogHidden": true,
+    "retired": true,
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "toefl",
@@ -285,7 +300,10 @@ export const courses = [
       "Time management and independent preparation"
     ],
     "art": "ielts",
-    "comingSoon": true
+    "comingSoon": true,
+    "catalogHidden": true,
+    "retired": true,
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "pronunciation",
@@ -308,7 +326,8 @@ export const courses = [
     "summary": "Practical word stress, sentence stress, intonation and natural English rhythm.",
     "detailDescription": "Practise stressed syllables and stress shifts, sentence emphasis, rising and falling intonation, and connected speech. Use your voice to express confidence, uncertainty, excitement, politeness and sarcasm through real-life conversations.",
     "viewDescription": "Six practical sessions with speaking drills, dialogues, listening discrimination, role-play and recording challenges. Learn to stress important words and develop a more natural English rhythm.",
-    "outcomes": "You’ll learn to notice stress and intonation patterns, use your voice to change meaning and review your own recordings with a practical self-assessment routine."
+    "outcomes": "You’ll learn to notice stress and intonation patterns, use your voice to change meaning and review your own recordings with a practical self-assessment routine.",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "information-technology",
@@ -326,7 +345,8 @@ export const courses = [
     "summary": "Explain technical ideas and communicate confidently in IT.",
     "detailDescription": "Practise explaining a technical issue, describing how a system works and sharing progress with colleagues. Sessions can focus on troubleshooting conversations, project updates and technical vocabulary relevant to your work.",
     "viewDescription": "Practise English for technical explanations, troubleshooting, and project discussions across eight sessions. Use situations and vocabulary relevant to your work in information technology.",
-    "outcomes": "You’ll develop clearer ways to explain problems, describe systems, and share progress with colleagues. You’ll also practise checking understanding and organising technical information for different listeners."
+    "outcomes": "You’ll develop clearer ways to explain problems, describe systems, and share progress with colleagues. You’ll also practise checking understanding and organising technical information for different listeners.",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "kids",
@@ -345,7 +365,8 @@ export const courses = [
     "priceLabel": "8 sessions",
     "detailDescription": "Speaking practice uses stories, picture prompts, games and short conversations suited to the child’s age and English level. Activities encourage children to ask questions, express ideas and participate with confidence.",
     "viewDescription": "Children aged 6–14 explore English through stories, games, picture prompts, and playful conversations. Activities are adapted to the child’s age and level across eight sessions.",
-    "outcomes": "Children will practise asking questions, sharing ideas, and responding in familiar situations. They’ll also discover enjoyable activities they can repeat outside lessons with age-appropriate support."
+    "outcomes": "Children will practise asking questions, sharing ideas, and responding in familiar situations. They’ll also discover enjoyable activities they can repeat outside lessons with age-appropriate support.",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "different-learners",
@@ -362,7 +383,8 @@ export const courses = [
     "summary": "Explore learning preferences and ways to support different learners.",
     "detailDescription": "Explore how pictures, spoken explanations, written examples and practical activities can support learning. The course encourages flexible teaching rather than limiting a learner to one fixed type, with ideas for presenting and practising the same topic in different ways.",
     "viewDescription": "Explore how visual examples, conversation, reading, and hands-on activities can support different learners. Across eight sessions, practise adapting the same topic in several ways while keeping learning preferences flexible.",
-    "outcomes": "You’ll develop a wider range of activities and clearer ways to respond to learners’ needs. You’ll also learn to observe what helps, gather feedback, and adjust your approach as learners progress."
+    "outcomes": "You’ll develop a wider range of activities and clearer ways to respond to learners’ needs. You’ll also learn to observe what helps, gather feedback, and adjust your approach as learners progress.",
+    "sessionDuration": "60–90 minutes"
   },
   {
     "id": "instructor-training",
@@ -382,7 +404,50 @@ export const courses = [
     "price": 6500,
     "priceLabel": "8 sessions",
     "viewDescription": "Build practical teaching skills through eight sessions on lesson planning, classroom communication, and learner participation. Designed for instructors with 0–2 years of experience, admission requires an interview and an English exam score of at least 93%.",
-    "outcomes": "You’ll practise planning purposeful lessons, giving clear instructions, and helping learners take part. You’ll also develop ways to review your teaching, use feedback, and continue improving independently."
+    "outcomes": "You’ll practise planning purposeful lessons, giving clear instructions, and helping learners take part. You’ll also develop ways to review your teaching, use feedback, and continue improving independently.",
+    "sessionDuration": "60–90 minutes"
+  },
+  {
+    "id": "in-person-sessions",
+    "title": "In-person sessions",
+    "level": "All levels · tailored to your needs",
+    "duration": "Flexible sessions",
+    "sessionDuration": "60–120 minutes",
+    "category": "General English",
+    "formatOnly": true,
+    "quoteOnly": true,
+    "art": "inperson",
+    "summary": "Private English coaching, face to face and shaped around your goals.",
+    "description": "Build confidence through face-to-face English coaching tailored to your level, interests and everyday needs. Discuss your preferred location, schedule and goals so we can prepare a suitable quote.",
+    "viewDescription": "Meet your coach in person for practical conversation, useful vocabulary and clear feedback. Sessions last 60–120 minutes, with the setting and learning plan agreed around your needs.",
+    "outcomes": "Use English more comfortably in situations that matter to you, with personalised support and practical ideas to use between sessions.",
+    "topics": [
+      "Everyday conversation and speaking confidence",
+      "Vocabulary, grammar and pronunciation in context",
+      "Practice tailored to your goals",
+      "A location and schedule agreed together"
+    ]
+  },
+  {
+    "id": "group-sessions",
+    "title": "Group sessions",
+    "level": "Friends, colleagues or learners with shared goals",
+    "duration": "Flexible group sessions",
+    "sessionDuration": "60–120 minutes",
+    "category": "General English",
+    "formatOnly": true,
+    "quoteOnly": true,
+    "art": "group",
+    "summary": "Practise together, exchange ideas and build confidence as a group.",
+    "description": "Learn English with friends, colleagues or a group with shared communication goals. Tell us about the participants, their levels and your preferred format so we can suggest a suitable plan and quote.",
+    "viewDescription": "Build your English through guided discussions, collaborative activities and realistic conversations. Sessions last 60–120 minutes and can be arranged online or in person, depending on the group’s needs.",
+    "outcomes": "Develop confidence taking turns, asking questions and responding to others while practising language relevant to your group.",
+    "topics": [
+      "Guided conversations and shared learning goals",
+      "Realistic situations and collaborative activities",
+      "Clear communication and useful expressions",
+      "An agreed group format, schedule and learning plan"
+    ]
   }
 ];
 export function matches(c,category,query){return !c.catalogHidden&&(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
