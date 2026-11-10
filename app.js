@@ -3,7 +3,7 @@ import {offerIsActive} from './assessment-time.js';
 import {courseIllustration as art} from './course-illustrations.js?v=outings-22';
 import {coursePaths} from './public-seo-routes.js?v=outings-22';
 
-import {courses,matches} from './courses.js?v=stay-tuned-23';
+import {courses,matches,compareCatalogCourses} from './courses.js?v=stay-tuned-23';
 const $=s=>document.querySelector(s);
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const durationLabel=c=>c.id==='english-day-out'?c.duration:c.duration+' · '+c.sessionDuration+' per session';
@@ -17,7 +17,7 @@ function coursePricing(c){
  return '';
 }
 let category='All courses';
-function render(){const bookingCircle=document.querySelector('#courses .course-booking-note');const list=courses.filter(c=>matches(c,category,$('#search').value)).sort((a,b)=>Number(Boolean(a.comingSoon||a.dimmed))-Number(Boolean(b.comingSoon||b.dimmed)));$('#course-grid').innerHTML=list.length?list.map(c=>'<article class="course-card'+(c.comingSoon?' course-coming-soon':c.dimmed?' course-dimmed':'')+'">'+art(c)+'<div class="course-body"><span class="category">'+escape(c.level)+'</span><h3>'+(coursePaths[c.id]?'<a href="'+coursePaths[c.id]+'">'+escape(c.displayTitle||c.title)+'</a>':escape(c.displayTitle||c.title))+'</h3><p class="course-summary">'+escape(c.summary||c.description)+'</p>'+(!c.comingSoon||c.id==='urgent-session'||c.quoteOnly?coursePricing(c):'')+'<div class="course-view-row"><span>'+escape(durationLabel(c))+'</span><button type="button" class="course-link" data-course="'+c.id+'">View course</button></div>'+'</div>'+((c.comingSoon||c.dimmed)?'<span class="upcoming-watermark">Stay Tuned</span>':'')+'</article>').join(''):'<p class="empty">No courses match your search.</p>';if(bookingCircle){bookingCircle.classList.add('course-pricing-grid-card');const grid=$('#course-grid');grid.insertBefore(bookingCircle,grid.children[3]||null);}}
+function render(){const bookingCircle=document.querySelector('#courses .course-booking-note');const list=courses.filter(c=>matches(c,category,$('#search').value)).sort(compareCatalogCourses);$('#course-grid').innerHTML=list.length?list.map(c=>'<article class="course-card'+(c.comingSoon?' course-coming-soon':c.dimmed?' course-dimmed':'')+'">'+art(c)+'<div class="course-body"><span class="category">'+escape(c.level)+'</span><h3>'+(coursePaths[c.id]?'<a href="'+coursePaths[c.id]+'">'+escape(c.displayTitle||c.title)+'</a>':escape(c.displayTitle||c.title))+'</h3><p class="course-summary">'+escape(c.summary||c.description)+'</p>'+(!c.comingSoon||c.id==='urgent-session'||c.quoteOnly?coursePricing(c):'')+'<div class="course-view-row"><span>'+escape(durationLabel(c))+'</span><button type="button" class="course-link" data-course="'+c.id+'">View course</button></div>'+'</div>'+((c.comingSoon||c.dimmed)?'<span class="upcoming-watermark">Stay Tuned</span>':'')+'</article>').join(''):'<p class="empty">No courses match your search.</p>';if(bookingCircle){bookingCircle.classList.add('course-pricing-grid-card');const grid=$('#course-grid');grid.insertBefore(bookingCircle,grid.children[3]||null);}}
 function descriptionParagraphs(text){const sentences=text.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g)||[text];const paragraphs=[];for(let i=0;i<sentences.length;i+=2)paragraphs.push('<p>'+escape(sentences.slice(i,i+2).join('').trim())+'</p>');return paragraphs.join('');}
 function showCourse(id){
  const c=courses.find(c=>c.id===id);if(!c)return;

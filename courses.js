@@ -366,7 +366,8 @@ export const courses = [
     "detailDescription": "Speaking practice uses stories, picture prompts, games and short conversations suited to the child’s age and English level. Activities encourage children to ask questions, express ideas and participate with confidence.",
     "viewDescription": "Children aged 6–14 explore English through stories, games, picture prompts, and playful conversations. Activities are adapted to the child’s age and level across eight sessions.",
     "outcomes": "Children will practise asking questions, sharing ideas, and responding in familiar situations. They’ll also discover enjoyable activities they can repeat outside lessons with age-appropriate support.",
-    "sessionDuration": "60–90 minutes"
+    "sessionDuration": "60–90 minutes",
+    "catalogHidden": true
   },
   {
     "id": "different-learners",
@@ -426,7 +427,9 @@ export const courses = [
       "Vocabulary, grammar and pronunciation in context",
       "Practice tailored to your goals",
       "A location and schedule agreed together"
-    ]
+    ],
+    "dimmed": true,
+    "comingSoon": true
   },
   {
     "id": "group-sessions",
@@ -447,7 +450,9 @@ export const courses = [
       "Realistic situations and collaborative activities",
       "Clear communication and useful expressions",
       "An agreed group format, schedule and learning plan"
-    ]
+    ],
+    "dimmed": true,
+    "comingSoon": true
   }
 ];
 export function matches(c,category,query){return !c.catalogHidden&&(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
@@ -455,3 +460,10 @@ export function matches(c,category,query){return !c.catalogHidden&&(category==='
 
 
 
+
+// Group quote-based formats immediately before focus and instructor development.
+export function compareCatalogCourses(a,b){
+ const quotes=['in-person-sessions','group-sessions','english-day-out'],last=['reclaim-focus','different-learners','instructor-training'];
+ const rank=c=>last.includes(c.id)?3:quotes.includes(c.id)?2:(c.comingSoon||c.dimmed)?1:0;
+ return rank(a)-rank(b)||(rank(a)===2?quotes.indexOf(a.id)-quotes.indexOf(b.id):rank(a)===3?last.indexOf(a.id)-last.indexOf(b.id):0);
+}

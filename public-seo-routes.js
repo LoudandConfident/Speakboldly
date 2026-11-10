@@ -10,7 +10,6 @@ export const coursePaths={
  writing:'/programs/business-email-writing/',
  speaking:'/programs/meetings-presentations-public-speaking/',
  pronunciation:'/programs/english-pronunciation/',
- kids:'/programs/english-for-kids/',
  'different-learners':'/programs/supporting-different-learners/',
  'instructor-training':'/programs/instructor-training/',
  'reclaim-focus':'/programs/reclaim-your-focus/',
