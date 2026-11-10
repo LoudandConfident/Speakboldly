@@ -399,3 +399,6 @@ html body #daily-quote .motivation-return-note{display:grid;grid-template-column
 html body #daily-quote .motivation-next-teaser{margin:0;min-width:0;overflow:hidden}
 html body #daily-quote .motivation-next-teaser img{display:block;width:100%;height:50px;object-fit:cover;object-position:50% 35%;border-radius:9px;background:#dce6cc}
 @media(max-width:680px){html body main #quote .quote-request-grid.quote-three-choices{grid-template-columns:minmax(0,1fr)!important;gap:12px!important}html body main #quote .quote-request-grid.quote-three-choices>.quote-popup-choice:nth-child(n){min-height:126px!important;padding:16px!important}html body #daily-quote .motivation-return-note{grid-template-columns:minmax(0,1fr) 62px;gap:9px;padding:9px 11px}html body #daily-quote .motivation-return-spark{display:none}html body #daily-quote .motivation-next-teaser img{height:46px}html body #daily-quote .motivation-return-note strong{font-size:13px}}
+
+/* No repeated tab heading or empty heading-row gap inside How It Works. */
+html body main #how>.sb-page-heading{min-height:0!important;margin:0!important;padding:0!important}
