@@ -153,7 +153,7 @@ export const courses = [
     "level": "Your current English level",
     "duration": "1 session",
     "category": "Session",
-    "description": "Book session by session, with no commitment. A little pricier, but useful when something urgent comes up. Enjoy 60–90 minutes of interactive conversation about the topic you need, or a topic your instructor chooses based on your previously communicated needs and English level. It can also be your trial session to help you decide what would support you most with your current needs.",
+    "description": "Book session by session, with no commitment. A little pricier, but useful when something urgent comes up. Enjoy 60–90 minutes of interactive conversation about the topic you need, or a topic your instructor chooses based on your previously communicated needs and English level.",
     "price": 550,
     "showComingSoonPrice": true,
     "topics": [

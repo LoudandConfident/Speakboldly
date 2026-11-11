@@ -445,3 +445,33 @@ html body #boldly-notes .bold-blog-brand img{width:148px;height:148px;object-fit
 @media(max-width:680px){html body #boldly-notes .bold-blog-brand img{width:112px;height:112px}}
 
 html body [data-fixed-page-help=true]{visibility:hidden!important;pointer-events:none!important}
+
+/* The quiet whitespace beside Credentials reveals the independent editorial space. */
+html body main #home .home-bottom-row>.beyond-entry{flex:1 1 auto;align-self:stretch;display:flex;justify-content:center;align-items:center;gap:12px;min-height:44px;margin-left:24px;color:#193c32;background:transparent;text-decoration:none;cursor:pointer;border:0;border-radius:4px}
+html body main #home .beyond-entry-label{font:400 9px/1.4 Georgia,'Times New Roman',serif;letter-spacing:1.9px}
+html body main #home .beyond-entry-arrow{display:grid;place-items:center;flex:0 0 30px;width:30px;height:30px;border:1px solid #a8b39b;border-radius:50%;background:#edf0e633}
+html body main #home .beyond-entry svg{display:block;width:18px;height:18px}
+html body main #home .beyond-entry:focus-visible{outline:2px solid #193c32;outline-offset:4px}
+@media(hover:hover) and (pointer:fine){html body main #home .beyond-entry-label,html body main #home .beyond-entry-arrow{opacity:0;transform:translateY(-5px);transition:opacity .2s,transform .25s}html body main #home .home-bottom-row:hover .beyond-entry-label,html body main #home .home-bottom-row:hover .beyond-entry-arrow,html body main #home .home-bottom-row:focus-within .beyond-entry-label,html body main #home .home-bottom-row:focus-within .beyond-entry-arrow{opacity:1;transform:translateY(0)}html body main #home .beyond-entry:hover .beyond-entry-arrow{background:#e5ecdd;border-color:#193c32;transform:translateY(3px)}}
+@media(max-width:680px){html body main #home .home-bottom-row{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(88px,.6fr);gap:14px;align-items:center}html body main #home .home-bottom-row>.page-signature{min-width:0;width:auto!important;transform:none!important;overflow-wrap:anywhere}html body main #home .home-bottom-row>.beyond-entry{margin-left:0;min-height:44px;gap:8px;justify-content:flex-end}html body main #home .beyond-entry-label{font-size:8px;letter-spacing:1.1px}}
+@media(prefers-reduced-motion:reduce){html body main #home .beyond-entry-label,html body main #home .beyond-entry-arrow{transition:none!important;transform:none!important}}
+
+/* A little B that becomes the downward invitation into Beyond. */
+html body main #home .home-bottom-row>.beyond-entry{gap:14px;min-height:50px}
+html body main #home .beyond-entry-label{font-size:10px;letter-spacing:2px}
+html body main #home .beyond-entry-caption{display:block;margin-top:5px;font:italic 10px/1.4 Georgia,serif;letter-spacing:0;color:#637254}
+html body main #home .beyond-entry-arrow{flex-basis:44px;width:44px;height:44px;border-radius:14px 14px 14px 4px;background:#dcebbf;border-color:#8da276;box-shadow:0 3px 0 #193c3210}
+html body main #home .beyond-entry svg{width:37px;height:37px}
+html body main #home .beyond-b-tail{transition:transform .25s;transform-origin:center}
+html body main #home .beyond-entry:hover .beyond-b-tail{transform:translateY(2px)}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){html body main #home .home-bottom-row:hover .beyond-entry-arrow{animation:beyond-b-pop .4s ease both}@keyframes beyond-b-pop{0%{opacity:0;transform:translateY(-6px) rotate(-9deg) scale(.85)}65%{opacity:1;transform:translateY(3px) rotate(4deg) scale(1.04)}100%{opacity:1;transform:translateY(0) rotate(0) scale(1)}}}
+@media(max-width:680px){html body main #home .home-bottom-row{grid-template-columns:minmax(0,1fr) minmax(120px,.7fr)}html body main #home .beyond-entry-label{font-size:8px;letter-spacing:1px}html body main #home .beyond-entry-caption{font-size:9px;max-width:73px}html body main #home .beyond-entry-arrow{width:38px;height:38px;flex-basis:38px}html body main #home .beyond-entry svg{width:32px;height:32px}}
+html body #boldly-notes .blog-post-coming-soon .boldly-note-main-link{cursor:default}
+html body #boldly-notes .blog-post-coming-soon :is(h3,time,.boldly-note-main-link>p){opacity:.38}
+html body #boldly-notes .blog-coming-status{display:inline-block;font:italic 19px/1.4 Georgia,serif;color:#193c32;margin-top:12px}
+
+/* Reserve the whole discovery strip before sizing the photographic cover. */
+html body main #home:not([hidden]){display:grid!important;grid-template-rows:minmax(0,1fr) auto!important;gap:0!important;height:var(--home-viewport-space,calc(100svh - 100px))!important;min-height:0!important;overflow:visible!important}
+html body main #home:not([hidden])>.hero{height:100%!important;min-height:0!important;max-height:100%!important;aspect-ratio:auto!important}
+html body main #home:not([hidden])>.home-bottom-row{box-sizing:border-box;flex-shrink:0;min-height:74px!important;padding-top:10px!important;padding-bottom:14px!important;overflow:visible!important}
+@media(max-width:680px){html body main #home:not([hidden])>.home-bottom-row{min-height:76px!important;padding-top:10px!important;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))!important}}

@@ -66,7 +66,7 @@ jobs:
       - name: Build and verify every simplified reading edition
         run: node scripts/build-simplified-library.mjs
       - run: npm run build:seo
-      - run: node --test public-seo.test.mjs rewards-backend.test.mjs drive-folders.test.mjs material-program-cards.test.mjs general-english-exams.test.mjs general-english-speaking.test.mjs monthly-learning.test.mjs session-rounds.test.mjs report-tabs.test.mjs folder-passwords.test.mjs student-submissions.test.mjs coach-routing.test.mjs blog-comments.test.mjs blog-reading-tools.test.mjs blog-learning-backend.test.mjs simplified-novel.test.mjs motivation-copy-link.test.mjs motivation-author-text.test.mjs reviews-api.test.mjs motivation-email-compat.test.mjs teaching-update.test.mjs notes-formatting.test.mjs
+      - run: node --test public-seo.test.mjs rewards-backend.test.mjs drive-folders.test.mjs material-program-cards.test.mjs general-english-exams.test.mjs general-english-speaking.test.mjs monthly-learning.test.mjs session-rounds.test.mjs report-tabs.test.mjs folder-passwords.test.mjs student-submissions.test.mjs coach-routing.test.mjs blog-comments.test.mjs blog-reading-tools.test.mjs blog-learning-backend.test.mjs simplified-novel.test.mjs motivation-copy-link.test.mjs motivation-author-text.test.mjs reviews-api.test.mjs motivation-email-compat.test.mjs teaching-update.test.mjs notes-formatting.test.mjs beyond-words.test.mjs
       - name: Save generated public pages and request a Pages build
         env:
           GH_TOKEN: ${{ github.token }}
