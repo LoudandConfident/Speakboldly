@@ -1,5 +1,6 @@
+import './learning-card-groups.js?v=42';
 import './teaching-refinements.js?v=41';
-import {initializeFixedPageHelp} from './fixed-page-help.js?v=1';
+import {initializeFixedPageHelp} from './fixed-page-help.js?v=42';
 import {helpIcon} from './ui-help.js';
 const doc=document;
 // Reuse established artwork, retaining the original SVG speech bubbles.
