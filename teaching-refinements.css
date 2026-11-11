@@ -1,0 +1,61 @@
+/* Practical tools keep the Speak Boldly palette and use space more deliberately. */
+#admin-dashboard .instructor-tool-cards{display:block!important}
+#admin-dashboard .instructor-tool-search{display:flex;align-items:center;gap:14px;font-size:12px;margin:18px 0;max-width:620px}
+#admin-dashboard .instructor-tool-search input{flex:1;min-width:0;border:1px solid #c3d0b8;background:#f5f7ee;border-radius:999px;padding:11px 16px;font:inherit;color:#193c32}
+#admin-dashboard .instructor-tool-group{margin:0 0 24px}
+#admin-dashboard .instructor-group-heading{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 18px;margin-bottom:10px}
+#admin-dashboard .instructor-group-heading h3{font-size:15px;margin:0;font-weight:600}
+#admin-dashboard .instructor-group-heading p{font-size:11px;color:#61725c;margin:0}
+#admin-dashboard .instructor-group-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#admin-dashboard [data-tool-group=day] .instructor-group-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+#admin-dashboard .instructor-group-grid>details.admin-detail{min-width:0;border:1px solid #c1cfb5;background:#f1f5e9;border-radius:12px 28px 12px 28px!important;overflow:hidden}
+#admin-dashboard .instructor-group-grid>details.admin-detail:nth-child(even){background:#faf9f4;border-radius:28px 12px 28px 12px!important}
+#admin-dashboard .instructor-group-grid>details.admin-detail>summary{display:flex!important;flex-direction:row!important;justify-content:flex-start!important;align-items:center!important;gap:12px!important;min-height:86px!important;padding:16px!important;font-size:14px!important;line-height:1.5!important}
+#admin-dashboard .instructor-group-grid>details.admin-detail>summary .panel-symbol{flex:none;align-self:center;margin:0}
+#admin-dashboard .instructor-group-grid>details.admin-detail>summary svg{width:38px!important;height:38px!important}
+#admin-dashboard .instructor-group-grid>details.admin-detail[open]{grid-column:1/-1;background:#fafbf6}
+html body main #quote .quote-three-choices>.quote-illustrated:nth-child(n){position:relative;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;min-height:250px!important;padding:22px!important;border:1px solid #b7c9a7!important;background:#f0f4e5!important;gap:12px!important}
+html body main #quote  .quote-request-grid.quote-three-choices>.quote-illustrated.quote-shape-support:nth-child(n){border-radius:46% 46% 18px 18px!important}
+html body main #quote  .quote-request-grid.quote-three-choices>.quote-illustrated.quote-shape-corporate:nth-child(n){border-radius:18px 42px 18px 42px!important;background:#e4ecd9!important}
+html body main #quote  .quote-request-grid.quote-three-choices>.quote-illustrated.quote-shape-interpret:nth-child(n){border-radius:42px 18px 42px 18px!important;background:#faf9f4!important}
+#quote .quote-card-illustration{display:block;width:96px;height:96px;color:#315e42}
+#quote .quote-card-illustration svg{display:block;width:100%;height:100%}
+html body main #quote .quote-three-choices .quote-tile-number{display:none!important}
+html body main #quote .quote-three-choices .quote-tile-copy{display:block;text-align:center}
+.placement-booking-card{display:flex;flex-wrap:wrap;align-items:center;gap:12px 22px;border:1px solid #b9cba7;background:#eaf1dd;border-radius:18px 36px 18px 36px;padding:22px;margin:24px 0;max-width:1100px}
+.placement-booking-kicker{flex-basis:100%;font-size:10px;letter-spacing:1px;color:#557346}
+.placement-booking-card h3{font-size:22px;font-weight:500;line-height:1.4;margin:0;max-width:580px}
+.placement-booking-card p{font-size:13px;line-height:1.7;max-width:650px;margin:0}
+.placement-booking-card .button{margin-left:auto;font-size:12px}
+html body #speak-hub .speak-hub-experiences{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;grid-column:1/-1;grid-row:auto;width:100%}
+html body #speak-hub .speak-hub-experience{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:26px;background:#edf3e4;border:1px solid #bed0af;border-radius:28px 28px 10px 28px}
+html body #speak-hub .hub-live-english{background:#e5ecd9;border-radius:28px 12px 28px 12px}
+#speak-hub .hub-experience-kicker{font-size:10px;letter-spacing:1px;color:#627957}
+html body #speak-hub .speak-hub-experience h3{font:500 28px/1.25 'DM Sans',sans-serif;margin:0;max-width:16ch}
+html body #speak-hub .speak-hub-experience p{font-size:14px;line-height:1.7;margin:0;max-width:44ch}
+#speak-hub .speak-hub-experience .button{margin-top:auto}
+html body #contact>.contact-email-faq-row{margin-top:-4px!important;grid-template-columns:minmax(0,1fr) 94px!important;align-items:start;gap:12px!important}
+html body #contact .contact-email-faq-row>.contact-faq-footer{justify-self:start!important;transform:translateY(-7px);margin-right:20px!important}
+input[type=file]{box-sizing:border-box;max-width:100%;min-width:0;padding:7px!important;border:1px solid #bacaad!important;border-radius:12px!important;background:#f2f5e9!important;color:#536a48;font:inherit;font-size:12px}
+input[type=file]::file-selector-button{border:0;border-radius:999px;padding:9px 14px;margin-right:10px;background:#193c32;color:#faf9f4;font:600 12px/1.4 'DM Sans',sans-serif;cursor:pointer}
+input[type=file]::file-selector-button:hover{background:#345b46}
+#portal-contact .student-contact-composer{padding:18px!important;border-radius:18px!important}
+#portal-contact .student-contact-composer>p{font-size:12px;line-height:1.5;margin:6px 0 12px}
+#portal-contact .student-contact-form textarea{min-height:120px;font-size:14px}
+#portal-contact .student-contact-form label{font-size:13px}
+@media(max-width:760px){#admin-dashboard .instructor-group-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#admin-dashboard .instructor-tool-search{flex-direction:column;align-items:stretch;gap:7px}#admin-dashboard .instructor-group-grid>details.admin-detail>summary{font-size:12px!important;padding:12px!important;min-height:84px!important;gap:8px!important}#admin-dashboard .instructor-group-grid>details.admin-detail>summary svg{width:28px!important;height:28px!important}html body #quote .quote-three-choices>.quote-illustrated:nth-child(n){min-height:185px!important;padding:18px!important;gap:8px!important}#quote .quote-card-illustration{width:70px;height:70px}html body #speak-hub .speak-hub-experiences{grid-template-columns:minmax(0,1fr);gap:14px}html body #speak-hub .speak-hub-experience{padding:20px}html body #speak-hub .speak-hub-experience h3{font-size:25px}.placement-booking-card{padding:18px}.placement-booking-card h3{font-size:20px}.placement-booking-card .button{margin-left:0;max-width:100%;white-space:normal}html body #contact .contact-email-faq-row>.contact-faq-footer{transform:translateY(-4px)}}
+@media(max-width:380px){#admin-dashboard .instructor-group-grid,#admin-dashboard [data-tool-group=day] .instructor-group-grid{grid-template-columns:minmax(0,1fr)}}
+
+html body #speak-hub .upcoming-view-content{display:block!important;opacity:1!important;pointer-events:auto!important}
+html body #speak-hub .speak-hub-story{grid-column:auto!important;grid-row:auto!important;margin-top:22px!important}
+html body #speak-hub .speak-hub-experience{position:relative}
+html body #speak-hub .hub-use-voice .button[aria-disabled=true]{opacity:.45;cursor:default}
+#speak-hub .hub-meeting-preview-status{position:absolute;right:18px;top:18px;font:800 10px/1.3 Manrope,'DM Sans',sans-serif;color:#536b47;letter-spacing:.5px}
+html body #speak-hub .speak-hub-illustrations{display:flex!important;flex-wrap:nowrap;justify-content:center;gap:18px;margin:18px 0}
+
+#admin-dashboard .instructor-group-grid>details.admin-detail{margin:0!important;min-height:0!important}
+#admin-dashboard .instructor-group-heading p{font-size:11px!important;line-height:1.5!important;margin:0!important}
+#admin-dashboard .instructor-tool-group{margin-bottom:20px}
+
+html body #speak-hub .speak-hub-experience>.hub-voice-art{display:block!important;width:96px!important;max-width:96px!important;height:72px!important;margin:0!important}
+html body #speak-hub .hub-voice-art svg{width:96px!important;height:72px!important}

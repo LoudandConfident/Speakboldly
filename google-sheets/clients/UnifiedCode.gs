@@ -1069,7 +1069,7 @@ function handleStudentInstructorContact(data) {
  const consultation=data.action==='programConsultation',attachments=consultation?sbConsultationAttachments(data.attachments):[];
  const respond=typeof response==='function'?response:clientSyncResponse;
  const requestId=String(data.requestId||''),name=String(data.name||'').trim(),email=String(data.email||'').trim().toLowerCase(),message=String(data.message||'').trim();
- if(String(data.website||'')||! /^[a-zA-Z0-9-]{1,100}$/.test(requestId)||!name||name.length>100||/[\r\n]/.test(name)||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254||!message||message.length>4000)throw new Error('Check your name, email, and note before sending.');
+ if(String(data.website||'')||! /^[a-zA-Z0-9-]{1,100}$/.test(requestId)||!name||name.length>100||/[\r\n]/.test(name)||(email&&! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))||email.length>254||!message||message.length>4000)throw new Error('Check your name and question before sending.');
  const props=PropertiesService.getScriptProperties(),sheetId=props.getProperty('CLIENT_SHEET_ID');if(!sheetId)throw new Error('Your instructor needs to finish the contact setup.');
  const lock=LockService.getScriptLock();lock.waitLock(20000);
  try{
@@ -1084,14 +1084,14 @@ function handleStudentInstructorContact(data) {
   }
   const today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd');
   const daily=rows.filter(row=>Utilities.formatDate(new Date(row[4]),'Africa/Cairo','yyyy-MM-dd')===today);
-  if(daily.length>=50||daily.filter(row=>plain(row[2])===email).length>=3)throw new Error('The daily request limit has been reached. Please try again tomorrow.');
+  if(daily.length>=50||daily.filter(row=>email?plain(row[2])===email:!plain(row[2])&&plain(row[1]).toLowerCase()===name.toLowerCase()).length>=3)throw new Error('The daily request limit has been reached. Please try again tomorrow.');
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Email is temporarily unavailable. Please try again later.');
   const rowNumber=sheet.getLastRow()+1;sheet.appendRow([requestId,"'"+name,"'"+email,"'"+message,new Date().toISOString(),'sending','']);SpreadsheetApp.flush();
   const escape=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const content='<p><strong>Name:</strong> '+escape(name)+'<br><strong>Reply email:</strong> '+escape(email)+'</p><p style="white-space:pre-wrap">'+escape(message)+'</p>';
   const htmlBody=typeof sbBrandedEmail==='function'?sbBrandedEmail(consultation?'Program consultation':'Learning Hub request',content):'<html><body style="font-family:Arial,sans-serif;color:#193c32"><h2>Learning Hub request</h2>'+content+'<p>Speak Boldly</p></body></html>';
   try{
-   MailApp.sendEmail({to:consultation?'Contactus@speakboldly.space':'askcoach@speakboldly.space',replyTo:email,name:'Speak Boldly',attachments,subject:(consultation?'Program consultation — ':'Learning Hub request — ')+name,body:(consultation?'Program consultation':'How can I help you?')+'\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
+   MailApp.sendEmail({to:consultation?'Contactus@speakboldly.space':'askcoach@speakboldly.space',...(email?{replyTo:email}:{}),name:'Speak Boldly',attachments,subject:(consultation?'Program consultation — ':'Learning Hub request — ')+name,body:(consultation?'Program consultation':'How can I help you?')+'\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
    sheet.getRange(rowNumber,6,1,2).setValues([['sent','']]);return respond({ok:true,status:'sent'});
   }catch(error){sheet.getRange(rowNumber,6,1,2).setValues([['delivery_unknown',String(error.message||error)]]);throw new Error('Your note is saved, but email delivery could not be confirmed. Please wait for your instructor to check it before sending again.');}
  }finally{lock.releaseLock();}

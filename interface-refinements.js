@@ -1,3 +1,4 @@
+import './teaching-refinements.js?v=41';
 import {initializeFixedPageHelp} from './fixed-page-help.js?v=1';
 import {helpIcon} from './ui-help.js';
 const doc=document;

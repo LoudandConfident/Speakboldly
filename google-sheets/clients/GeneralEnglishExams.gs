@@ -114,7 +114,7 @@ function sbStudentSubmission(data,requestSize){
   const props=PropertiesService.getScriptProperties();if(props.getProperty('SB_STUDENT_SUBMISSIONS_ENABLED')!=='true')throw Error('Your coach needs to run setupStudentSubmissions and deploy the updated exam script.');
   if(requestSize>21000000)throw Error('Keep attachments within 15 MB total.');
   const requestId=String(data.requestId||''),name=String(data.name||'').trim(),email=String(data.email||'').trim().toLowerCase(),kind=String(data.kind||''),message=String(data.message||'').trim();
-  if(data.website||! /^[a-zA-Z0-9-]{16,100}$/.test(requestId)||!name||name.length>100||/[\r\n]/.test(name)||! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254||!['assignment','test'].includes(kind)||message.length>3900)throw Error('Check your name, email and submission type.');
+  if(data.website||! /^[a-zA-Z0-9-]{16,100}$/.test(requestId)||!name||name.length>100||/[\r\n]/.test(name)||(email&&! /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))||email.length>254||!['assignment','test'].includes(kind)||message.length>3900)throw Error('Check your name and submission type.');
   const files=sbStudentSubmissionFiles(data.attachments);if(!message&&!files.length)throw Error('Attach your work or write your answer before sending.');
   const subject=(kind==='test'?'Test':'Assignment')+' submission — '+name;
   const fingerprint=sbExamHash(JSON.stringify([name,email,kind,message,files.map(f=>[f.name,f.mimeType,f.bytes.length,Utilities.base64Encode(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,f.bytes))]) ]));
@@ -122,7 +122,7 @@ function sbStudentSubmission(data,requestSize){
   const rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,11).getValues():[],existing=rows.find(r=>String(r[0])===requestId);
   if(existing){if(String(existing[8])!==fingerprint)throw Error('This submission changed. Start a new submission.');if(existing[9]==='sent')return json({ok:true,status:'sent'});throw Error('Your submission is saved, but email delivery is not confirmed. Ask your coach to check Student submissions and Sent Mail before sending it again.');}
   const today=Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd'),daily=rows.filter(r=>Utilities.formatDate(new Date(r[1]),'Africa/Cairo','yyyy-MM-dd')===today);
-  if(daily.length>=50||daily.filter(r=>String(r[3]).replace(/^'/,'')===email).length>=3)throw Error('The daily submission limit has been reached. Please try again tomorrow.');
+  if(daily.length>=50||daily.filter(r=>email?String(r[3]).replace(/^'/,'')===email:!String(r[3]).replace(/^'/,'')&&String(r[2]).replace(/^'/,'').toLowerCase()===name.toLowerCase()).length>=3)throw Error('The daily submission limit has been reached. Please try again tomorrow.');
   if(MailApp.getRemainingDailyQuota()<1)throw Error('Email is temporarily unavailable. Keep your files and try again later.');
   const folderId=props.getProperty('SB_STUDENT_SUBMISSIONS_FOLDER');if(!folderId)throw Error('Run setupStudentSubmissions first.');const folder=DriveApp.getFolderById(folderId);if(folder.isTrashed())throw Error('Your coach needs to restore the private submissions folder.');
   const row=sheet.getLastRow()+1,safe=v=>/^[=+\-@\t\r]/.test(v)?"'"+v:v;
@@ -131,7 +131,7 @@ function sbStudentSubmission(data,requestSize){
   try{
    for(const f of files){const blob=Utilities.newBlob(f.bytes,f.mimeType,f.name),saved=folder.createFile(blob);attachments.push(blob);stored.push({id:saved.getId(),name:f.name,mimeType:f.mimeType,size:f.bytes.length});sheet.getRange(row,8).setValue(JSON.stringify(stored));}
    sheet.getRange(row,10,1,2).setValues([['sending','']]);SpreadsheetApp.flush();
-   MailApp.sendEmail({to:'submissions@speakboldly.space',replyTo:email,name:'Speak Boldly',subject,attachments,body:(kind==='test'?'Test':'Assignment')+' submission\n\nName: '+name+'\nReply email: '+email+'\nSubmission ID: '+requestId+'\nAttachments: '+files.length+'\n\n'+(message||'(Work attached)')+'\n\nEnglish Language Coaching\n© 2026 Founded by Mira Nasser Louis.'});
+   MailApp.sendEmail({to:'submissions@speakboldly.space',...(email?{replyTo:email}:{}),name:'Speak Boldly',subject,attachments,body:(kind==='test'?'Test':'Assignment')+' submission\n\nName: '+name+'\nReply email: '+email+'\nSubmission ID: '+requestId+'\nAttachments: '+files.length+'\n\n'+(message||'(Work attached)')+'\n\nEnglish Language Coaching\n© 2026 Founded by Mira Nasser Louis.'});
    sheet.getRange(row,10,1,2).setValues([['sent','']]);return json({ok:true,status:'sent'});
   }catch(error){const status=String(sheet.getRange(row,10).getValues()[0][0])==='sending'?'delivery_unknown':'saved_incomplete';sheet.getRange(row,10,1,2).setValues([[status,String(error.message||error).slice(0,1000)]]);throw Error(status==='delivery_unknown'?'Your submission is saved, but email delivery is not confirmed. Ask your coach to check Student submissions and Sent Mail before sending it again.':'Your submission record is saved, but some attachments could not be stored. Keep your files and ask your coach to check the submission record before trying again.');}
  }catch(error){return json({ok:false,error:String(error.message||error)});}finally{if(lock.hasLock())lock.releaseLock();}

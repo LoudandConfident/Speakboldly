@@ -1,3 +1,4 @@
+import {openSection} from './section-navigation.js';
 export function openPopup(dialog) {
  if (!dialog || dialog.open) return;
  dialog.showModal();
@@ -21,16 +22,11 @@ export function initializePopups(doc, win) {
   const intro=assessmentPage.querySelector('.intro');
   if(intro)intro.textContent='50 questions · 20 minutes. Leaving this page does not pause the timer. Leave questions blank if you don’t know the answer. Submit when you’re ready, or your answers will be submitted when the timer reaches zero.';
  }
- if(mobile())useAssessmentPage();
+ useAssessmentPage();
  const openAssessment = () => {
-  if(mobile() || assessmentPage?.hasAttribute('data-view')) {
-   useAssessmentPage();
-   win.location.hash='assessment';
-   doc.dispatchEvent(new win.Event('assessment-open'));
-   return;
+  if(!openSection(doc,'assessment')){
+   let message=doc.getElementById('assessment-tab-message');if(!message){message=doc.createElement('p');message.id='assessment-tab-message';message.setAttribute('role','status');doc.querySelector('#assessment-start').after(message);}message.textContent='Allow a new tab for Speak Boldly, then try again. Your current page is unchanged.';
   }
-  openPopup(assessment);
-  doc.dispatchEvent(new win.Event('assessment-open'));
  };
  doc.querySelector('#assessment-start')?.addEventListener('click', openAssessment);
  function route() {

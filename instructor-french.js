@@ -1,7 +1,7 @@
 import {FRENCH_LEVELS,FRENCH_DAYS,loadFrenchDay,frenchDate,normalizeFrenchAnswer,normalizeFrenchSentence,frenchSpeechRate,frenchExpressionTask,readFrenchProgress,saveFrenchProgress} from './french-practice.js?v=fr-365-v2';
 export function initializeInstructorFrench(doc,isUnlocked){
  const dashboard=doc.querySelector('#admin-dashboard'),heading=dashboard?.querySelector('.admin-dashboard-heading');if(!heading)return;
- const win=doc.defaultView,el=(tag,text,cls)=>{const n=doc.createElement(tag);if(text)n.textContent=text;if(cls)n.className=cls;return n;},button=el('button','FRENCH','button light small instructor-french-button');button.id='instructor-french-button';button.type='button';button.setAttribute('aria-controls','instructor-french-view');(heading.querySelector('.instructor-shortcuts')||heading).append(button);
+ const win=doc.defaultView,el=(tag,text,cls)=>{const n=doc.createElement(tag);if(text)n.textContent=text;if(cls)n.className=cls;return n;},button=el('button','French','button light small instructor-french-button');button.id='instructor-french-button';button.type='button';button.setAttribute('aria-controls','instructor-french-view');(heading.querySelector('.instructor-shortcuts')||heading).append(button);
  const view=el('section',null,'instructor-french');view.id='instructor-french-view';view.lang='fr';view.hidden=true;dashboard.append(view);
  const fetcher=win.fetch.bind(win);
  let snapshot=null,day='',level='foundation',ticket=0,speaking=false,activeAudio=null,settingsReady=false;
@@ -12,7 +12,7 @@ export function initializeInstructorFrench(doc,isUnlocked){
   if(!isUnlocked()||view.hidden)return;const current=++ticket;stop();view.replaceChildren();
   const back=el('button',null,'button light small french-back');back.innerHTML='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg>';back.type='button';back.setAttribute('aria-label','Retour au tableau de bord');back.title='Retour au tableau de bord';back.onclick=()=>{close();win.location.hash='students-portal/teacher';button.focus();};
   const status=el('p',null,'french-status');status.setAttribute('role','status');status.setAttribute('aria-live','polite');
-  view.append(back,el('p','SPEAK BOLDLY · MON ESPACE FRANÇAIS','eyebrow'),el('h2','Ma tâche du jour'),el('p','Ton français ne va pas s’améliorer tout seul !','daily-task-intro'));
+  view.append(back,el('p','MIRA · MON ESPACE FRANÇAIS','eyebrow'),el('h2','Le coin français de Mira'),el('p','Ton français ne va pas s’améliorer tout seul !','daily-task-intro'));
   const label=el('label','Choisis ton niveau'),select=el('select');select.id='french-level';for(const [value,text]of Object.entries(FRENCH_LEVELS)){const option=el('option',text);option.value=value;select.append(option);}select.value=level;label.append(select);view.append(label,status);
   select.onchange=()=>{level=select.value;try{win.localStorage.setItem('speak-boldly-french-settings-v1',JSON.stringify({level}));}catch{}render();};
   status.textContent='Préparation de ta tâche…';
@@ -37,12 +37,13 @@ export function initializeInstructorFrench(doc,isUnlocked){
   }catch{if(current!==ticket||!isUnlocked())return;status.textContent='La tâche n’a pas pu se charger. Vérifie ta connexion et réessaie.';const retry=el('button','Réessayer','button light small');retry.type='button';retry.onclick=render;view.append(retry);}
  }
  function open(){if(!isUnlocked())return;if(!settingsReady){settingsReady=true;try{const saved=JSON.parse(win.localStorage.getItem('speak-boldly-french-settings-v1')||'{}');if(FRENCH_LEVELS[saved.level])level=saved.level;}catch{}}
-  if(!doc.querySelector('#instructor-french-css')){const css=doc.createElement('link');css.id='instructor-french-css';css.rel='stylesheet';css.href=new URL('./instructor-french.css?v=fr-365-v2',import.meta.url).href;doc.head.append(css);}
-  if(!snapshot)snapshot=[...dashboard.children].filter(child=>child!==view).map(child=>[child,child.hidden]);for(const [child]of snapshot)child.hidden=true;view.hidden=false;doc.documentElement.classList.add('french-open');button.setAttribute('aria-expanded','true');day=frenchDate(new win.Date());win.location.hash='students-portal/french';render();win.scrollTo({top:0,behavior:'instant'});
+  if(!doc.querySelector('#instructor-french-css')){const css=doc.createElement('link');css.id='instructor-french-css';css.rel='stylesheet';css.href=new URL('./instructor-french.css?v=mira-41',import.meta.url).href;doc.head.append(css);}
+  if(!snapshot)snapshot=[...dashboard.children].filter(child=>child!==view).map(child=>[child,child.hidden]);for(const [child]of snapshot)child.hidden=true;view.hidden=false;doc.documentElement.classList.add('french-open');button.setAttribute('aria-expanded','true');day=frenchDate(new win.Date());win.location.hash='students-portal/teacher/french';render();win.scrollTo({top:0,behavior:'instant'});
  }
  button.onclick=open;button.setAttribute('aria-expanded','false');
+ const openPersonalRoute=()=>{if(isUnlocked()&&view.hidden&&win.location.hash==='#students-portal/teacher/french')open();};new win.MutationObserver(openPersonalRoute).observe(dashboard,{attributes:true,attributeFilter:['hidden']});win.addEventListener('hashchange',openPersonalRoute);win.queueMicrotask(openPersonalRoute);
  const rollover=()=>{if(!isUnlocked()||view.hidden||doc.hidden)return;const next=frenchDate(new win.Date());if(next!==day){day=next;render();}};
- doc.addEventListener('visibilitychange',()=>{if(doc.hidden)stop();else rollover();});doc.addEventListener('speak-boldly-app-resume',rollover);win.addEventListener('hashchange',()=>{if(win.location.hash!=='#students-portal/french')close();});win.addEventListener('pagehide',close);let timer=win.setInterval(rollover,30000);win.addEventListener('pagehide',()=>{win.clearInterval(timer);timer=null;});win.addEventListener('pageshow',()=>{if(timer===null)timer=win.setInterval(rollover,30000);});
+ doc.addEventListener('visibilitychange',()=>{if(doc.hidden)stop();else rollover();});doc.addEventListener('speak-boldly-app-resume',rollover);win.addEventListener('hashchange',()=>{if(win.location.hash!=='#students-portal/teacher/french')close();});win.addEventListener('pagehide',close);let timer=win.setInterval(rollover,30000);win.addEventListener('pagehide',()=>{win.clearInterval(timer);timer=null;});win.addEventListener('pageshow',()=>{if(timer===null)timer=win.setInterval(rollover,30000);});
  return{lock(){close();view.replaceChildren();settingsReady=false;}};
 }
 
