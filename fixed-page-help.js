@@ -10,7 +10,8 @@ export function initializeFixedPageHelp(doc){
    else next=root.querySelector('.dashboard-help-circle');
   }
   if(!next){const contact=doc.querySelector('#contact');if(visible(contact))next=contact.querySelector('.contact-promotion-rail>.sb-help .sb-help-button');}
-  target=visible(next)?next:null;button.hidden=!target;if(target){const label=target.getAttribute('aria-label')||'Help for this page';if(button.getAttribute('aria-label')!==label)button.setAttribute('aria-label',label);}
+  if(!next)next=[...doc.querySelectorAll('main .sb-help-button,main .section-guide,main .dashboard-help-circle')].find(node=>!node.closest('dialog')&&visible(node));
+  const previous=target;target=visible(next)?next:null;if(previous!==target){previous?.removeAttribute('data-fixed-page-help');target?.setAttribute('data-fixed-page-help','true');}button.hidden=!target;if(target){const label=target.getAttribute('aria-label')||'Help for this page';if(button.getAttribute('aria-label')!==label)button.setAttribute('aria-label',label);}
  }
  const schedule=()=>{if(!queued){queued=true;win.requestAnimationFrame(update);}};
  button.onclick=()=>{if(target&&visible(target))target.click();};

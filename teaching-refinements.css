@@ -59,3 +59,16 @@ html body #speak-hub .speak-hub-illustrations{display:flex!important;flex-wrap:n
 
 html body #speak-hub .speak-hub-experience>.hub-voice-art{display:block!important;width:96px!important;max-width:96px!important;height:72px!important;margin:0!important}
 html body #speak-hub .hub-voice-art svg{width:96px!important;height:72px!important}
+
+/* Compact paired previews: the same illustration-and-slogan rhythm in both. */
+html body #speak-hub .speak-hub-experiences{max-width:920px;margin-inline:auto;gap:16px}
+html body #speak-hub .speak-hub-experience{padding:18px;gap:10px;overflow:hidden}
+html body #speak-hub .speak-hub-experience h3{font-size:23px;max-width:22ch}
+html body #speak-hub .speak-hub-experience p{font-size:13px;line-height:1.55}
+html body #speak-hub .speak-hub-experience>:not(.hub-meeting-preview-status){opacity:.4;filter:grayscale(.25);pointer-events:none}
+html body #speak-hub .speak-hub-experience .hub-meeting-preview-status{position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%) rotate(-7deg);font-size:27px;white-space:nowrap;z-index:1;background:#edf3e4e8;padding:8px 14px;border-radius:12px;pointer-events:none}
+html body #speak-hub .speak-hub-experience>:is(.hub-voice-art,.hub-outing-art){width:80px!important;max-width:80px!important;height:60px!important;margin:0!important;display:block!important}
+html body #speak-hub :is(.hub-voice-art,.hub-outing-art) svg{width:80px!important;height:60px!important}
+html body main #contact>.contact-email-faq-row{grid-template-columns:minmax(0,1fr) 74px!important;align-items:center!important}
+html body main #contact .contact-email-faq-row>.contact-faq-footer{justify-self:end!important;transform:none!important;margin:0!important}
+@media(max-width:760px){html body #speak-hub .speak-hub-experience{padding:16px}html body #speak-hub .speak-hub-experience h3{font-size:21px}}

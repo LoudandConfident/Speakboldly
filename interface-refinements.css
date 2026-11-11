@@ -440,3 +440,8 @@ html body #students-portal.learning-section-open #portal-content .learning-space
 html body #students-portal #portal-content :is(.portal-interior-art,.culture-activity-art,.practice-section-art,.practice-art,.daily-encouragement,.material-program-illustration){justify-self:center!important;align-self:center!important}
 html body #students-portal #portal-content .material-program-illustration{display:flex;justify-content:center;margin-inline:auto}
 html body #students-portal #daily-mission .daily-challenge-extras{display:flex!important;flex-direction:column!important;align-items:center!important;gap:22px!important}
+
+html body #boldly-notes .bold-blog-brand img{width:148px;height:148px;object-fit:contain}
+@media(max-width:680px){html body #boldly-notes .bold-blog-brand img{width:112px;height:112px}}
+
+html body [data-fixed-page-help=true]{visibility:hidden!important;pointer-events:none!important}

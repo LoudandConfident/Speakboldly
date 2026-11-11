@@ -1,9 +1,10 @@
 import {appendTaskPages} from './notes-task-pdf.js?v=white-notes-2';
 import {DOCUMENT_BRAND,drawDocumentBranding} from './document-branding.js?v=two-line-footer-1';
 import {documentDate} from './student-document-filenames.js';
-export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date=documentDate(),title='Notes',taskAttachments=[],answerPages=true,welcomeText='',welcomeImages=[],backgroundBytes=null}={}){
+export async function buildClientNotesPdf(client,notes,{fontBytes,boldFontBytes=null,richRuns=null,logoBytes,date=documentDate(),title='Notes',taskAttachments=[],answerPages=true,welcomeText='',welcomeImages=[],backgroundBytes=null}={}){
  const {PDFDocument,rgb}=await import('./vendor/pdf-lib.esm.min.js');const {default:fontkit}=await import('./vendor/fontkit.es.min.js');
  const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);const font=await pdf.embedFont(fontBytes,{subset:true}),logo=await pdf.embedPng(logoBytes);pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setTitle(client.name+' — '+title+(client.sessionNumber?' — Session '+client.sessionNumber:''));pdf.setCreator('Speak Boldly');
+ const boldFont=boldFontBytes?await pdf.embedFont(boldFontBytes,{subset:true}):font;
  const background=title==='Session notes'&&backgroundBytes?await pdf.embedPng(backgroundBytes):null;
  const width=595.28,height=841.89,left=DOCUMENT_BRAND.left,maxWidth=width-88,ink=rgb(.098,.235,.196);let page,y;
  const newPage=()=>{page=pdf.addPage([width,height]);page.drawRectangle({x:0,y:0,width,height,color:rgb(1,1,1)});if(background)for(let top=0;top<height;top+=640)page.drawImage(background,{x:0,y:height-top-640,width:640,height:640});y=height-124;};newPage();
@@ -15,8 +16,18 @@ export async function buildClientNotesPdf(client,notes,{fontBytes,logoBytes,date
  if(current)line(current,size);
  }
  }
+ function formattedParagraph(runs){
+  let x=left;
+  const newline=()=>{y-=18;x=left;if(y<106)newPage();};
+  for(const run of runs){const face=run.bold?boldFont:font;const size=11;for(const token of String(run.text).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g,'').replace(/\r/g,'').replace(/\t/g,'    ').split(/(\n|[^\S\n]+|[^\s]+)/).filter(Boolean)){
+   if(token==='\n'){newline();continue;}
+   const draw=text=>{const w=face.widthOfTextAtSize(text,size);if(run.highlight)page.drawRectangle({x:x-1,y:y-3,width:w+2,height:15,color:rgb(.898,.937,.616)});page.drawText(text,{x,y,font:face,size,color:ink});if(run.underline)page.drawLine({start:{x,y:y-2},end:{x:x+w,y:y-2},thickness:.6,color:ink});x+=w;};
+   const w=face.widthOfTextAtSize(token,size);if(x>left&&x+w>left+maxWidth)newline();
+   if(w>maxWidth){for(const character of token){if(x+face.widthOfTextAtSize(character,size)>left+maxWidth)newline();draw(character);}}else draw(token);
+  }}y-=18;
+ }
  paragraph('Speak Boldly — '+title,19);y-=8;if(title==='Session notes'){if(client.sessionNumber)paragraph('Session: '+client.sessionNumber,13);}else{paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);if(client.sessionNumber)paragraph('Session: '+client.sessionNumber);paragraph('Date: '+date);}y-=18;
- if(welcomeText){paragraph('Welcome to the session',16);y-=6;paragraph(welcomeText);y-=14;if(y<160)newPage();paragraph('Session notes',16);y-=6;}const greeting=title==='Session notes'?String(notes||'').match(/^Hi [^\n!]{1,100}!\n\n/):null;if(greeting){const value=greeting[0].trim(),size=Math.min(22,maxWidth/font.widthOfTextAtSize(value,1));page.drawText(value,{x:(width-font.widthOfTextAtSize(value,size))/2,y,font,size,color:ink});y-=42;paragraph(String(notes).slice(greeting[0].length));}else paragraph(notes);
+ if(welcomeText){paragraph('Welcome to the session',16);y-=6;paragraph(welcomeText);y-=14;if(y<160)newPage();paragraph('Session notes',16);y-=6;}const greeting=title==='Session notes'?String(notes||'').match(/^Hi [^\n!]{1,100}!\n\n/):null;if(greeting){const value=greeting[0].trim(),size=Math.min(22,maxWidth/font.widthOfTextAtSize(value,1));page.drawText(value,{x:(width-font.widthOfTextAtSize(value,size))/2,y,font,size,color:ink});y-=42;if(richRuns)formattedParagraph(richRuns);else paragraph(String(notes).slice(greeting[0].length));}else if(richRuns)formattedParagraph(richRuns);else paragraph(notes);
  await appendTaskPages(pdf,taskAttachments,{font,rgb,client,newPage:()=>{newPage();return page;},answerPages});
  await drawDocumentBranding(pdf,{font,logo,light:false});
  return pdf.save();

@@ -5,7 +5,7 @@ const illustrations={
 };
 export function initializeTeachingRefinements(doc){
  if(doc.documentElement.dataset.teachingRefinements)return;doc.documentElement.dataset.teachingRefinements='true';
- const css=doc.createElement('link');css.rel='stylesheet';css.href=new URL('./teaching-refinements.css?v=41',import.meta.url).href;doc.head.append(css);
+ const css=doc.createElement('link');css.rel='stylesheet';css.href=new URL('./teaching-refinements.css?v=43',import.meta.url).href;doc.head.append(css);
  const el=(tag,text,cls)=>{const n=doc.createElement(tag);if(text)n.textContent=text;if(cls)n.className=cls;return n;};
  for(const [id,art]of [['quote-dialog-3','support'],['quote-dialog-1','corporate'],['quote-dialog-4','interpret']]){const card=doc.querySelector('[data-popup="'+id+'"]');if(!card)continue;card.classList.add('quote-illustrated','quote-shape-'+art);card.querySelector('.quote-mini-art')?.remove();const image=el('span',null,'quote-card-illustration');image.innerHTML='<svg viewBox="0 0 124 124" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+illustrations[art]+'</svg>';card.prepend(image);}
  // Preserve the program-specific booking intent when opening the calendar in a new tab.

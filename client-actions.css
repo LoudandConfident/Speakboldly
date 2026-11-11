@@ -125,3 +125,9 @@ body:has(.notes-editor-page[data-document-kind=notes]:not([hidden])){max-width:n
 
 #client-notes-dialog input[type=file]{box-sizing:border-box;max-width:100%;padding:7px;border:1px solid #bacaad;border-radius:12px;background:#f2f5e9;color:#536a48;font:inherit;font-size:12px}
 #client-notes-dialog input[type=file]::file-selector-button{border:0;border-radius:999px;padding:9px 14px;margin-right:10px;background:#193c32;color:#faf9f4;font:600 12px/1.4 'DM Sans',sans-serif;cursor:pointer}
+
+#client-notes-dialog .session-notes-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px;align-items:center}
+#client-notes-dialog .session-notes-toolbar button{min-height:36px;padding:6px 12px;cursor:pointer;font-size:13px}
+#client-notes-dialog .session-notes-toolbar button[aria-pressed=true]{background:#193c32;color:#edf3e4}
+#client-notes-dialog .session-notes-toolbar button:first-child{font-weight:700}
+#client-notes-dialog .session-notes-rich-editor{overflow-wrap:anywhere}

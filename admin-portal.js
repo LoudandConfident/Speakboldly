@@ -1,5 +1,5 @@
 import {monthlyTeachingHours} from './teaching-metrics.js?v=41';
-import './teaching-refinements.js?v=41';
+import './teaching-refinements.js?v=43';
 import {connectInstructor} from './instructor-login.js?v=deployment-help-3';
 import {initializePersonalCalendar} from './personal-calendar.js?v=calendar-options-3';
 import {createTaskReminder} from './task-reminder.js?v=top-illustration-2';
