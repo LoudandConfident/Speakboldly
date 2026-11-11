@@ -26,7 +26,6 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
 
  function restartRotation() {
   doc.defaultView.clearInterval(rotationTimer);
-  if(view?.dataset.reviewScreenshot==='true')return;
   rotationTimer = doc.defaultView.setInterval(()=>{
    if (reviews.length < 2 || doc.hidden || view?.hidden || hovering || focused || drag || doc.querySelector('dialog[open]')) return;
    moveReview(1);
@@ -46,12 +45,12 @@ export function initializeReviews(doc, api = reviewRequest, connected = reviewsC
   cardResize?.disconnect();cards.replaceChildren();
   if (!reviews.length) return;
   selected = Math.min(selected,reviews.length-1);
-  const indices = (view?.dataset.reviewScreenshot==='true'||mobileReviews())?reviews.map((_,index)=>index):[...new Set([selected-1,selected+1,selected].map(i => (i+reviews.length)%reviews.length))];
+  const indices = mobileReviews()?reviews.map((_,index)=>index):[...new Set([selected-1,selected+1,selected].map(i => (i+reviews.length)%reviews.length))];
   for (const index of indices) {
    const review = reviews[index], card = doc.createElement('article');
    const side = index === selected ? 'selected' : index === (selected-1+reviews.length)%reviews.length ? 'previous' : 'next';
    card.className = 'review-card is-'+side;
-   if (side !== 'selected'&&!mobileReviews()&&view?.dataset.reviewScreenshot!=='true') card.setAttribute('aria-hidden','true');
+   if (side !== 'selected'&&!mobileReviews()) card.setAttribute('aria-hidden','true');
    const quote = doc.createElement('blockquote');quote.textContent = review.message;
    const name = doc.createElement('h3');name.textContent = review.name || 'Anonymous';
    const detail = doc.createElement('p');detail.className = 'review-card-details';detail.textContent = [review.age ? 'Age: '+review.age : '',review.level ? 'Level: '+displayedReviewLevel(review) : '',review.program ? 'Program: '+review.program : ''].filter(Boolean).join(' · ');

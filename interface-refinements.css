@@ -445,12 +445,3 @@ html body #boldly-notes .bold-blog-brand img{width:148px;height:148px;object-fit
 @media(max-width:680px){html body #boldly-notes .bold-blog-brand img{width:112px;height:112px}}
 
 html body [data-fixed-page-help=true]{visibility:hidden!important;pointer-events:none!important}
-
-/* TEMPORARY review screenshot layout — remove when the owner asks to revert. */
-html body main #reviews[data-review-screenshot=true] .reviews-layout{grid-template-columns:minmax(0,1fr)!important}
-html body main #reviews[data-review-screenshot=true] .review-album{display:block!important;max-width:none!important}
-html body main #reviews[data-review-screenshot=true] #review-cards{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:18px!important;height:auto!important;min-height:0!important;overflow:visible!important;cursor:default;scroll-snap-type:none!important}
-html body main #reviews[data-review-screenshot=true] #review-cards>.review-card{display:block!important;position:relative!important;inset:auto!important;transform:none!important;animation:none!important;transition:none!important;opacity:1!important;filter:none!important;width:100%!important;max-width:none!important;height:auto!important;min-height:0!important;max-height:none!important;margin:0!important;flex:none!important}
-html body main #reviews[data-review-screenshot=true] .review-card-content{height:auto!important;max-height:none!important;overflow:visible!important}
-html body main #reviews[data-review-screenshot=true] :is(.review-arrow,#review-position){display:none!important}
-@media(max-width:680px){html body main #reviews[data-review-screenshot=true] #review-cards{grid-template-columns:minmax(0,1fr)!important}}
