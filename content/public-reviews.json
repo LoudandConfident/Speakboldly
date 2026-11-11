@@ -1,6 +1,15 @@
 {
   "reviews": [
     {
+      "id": "303355f0-0dee-4e6c-b460-a9ce377b8b17",
+      "createdAt": "2026-11-11T17:48:39.359Z",
+      "name": "Sandy",
+      "age": "28",
+      "program": "General English — 4 sessions",
+      "level": "1",
+      "message": "Honestly, Mira is one of the most capable people I have ever worked with. She is patient and tolerant; she doesn’t point out every single mistake I make, and she is always willing to explain things again—even multiple times if needed. The teaching method she uses has been a great help to me in my own life. I am truly proud of her courage and the effort she puts into her own personal and professional growth ❤️"
+    },
+    {
       "id": "a43d1b6b-c9aa-41c4-9af9-e0957085948c",
       "createdAt": "2026-11-06T13:35:08.145Z",
       "name": "Anonymous",
