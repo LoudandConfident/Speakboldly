@@ -1,6 +1,8 @@
+import './monthly-home-theme.js?v=2';
+import './program-offer.js?v=2';
 import './beyond-brand.js?v=51';
 import './learning-card-groups.js?v=balanced-60';
-import './teaching-refinements.js?v=43';
+import './teaching-refinements.js?v=64';
 import {initializeFixedPageHelp} from './fixed-page-help.js?v=58';
 import {helpIcon} from './ui-help.js';
 const doc=document;

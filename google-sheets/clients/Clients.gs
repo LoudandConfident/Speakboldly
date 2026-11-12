@@ -132,6 +132,8 @@ function handleClientSync(e){
 // In existing Code.gs, rename only function doPost(event) to handleReviewPost(event).
 // Leave doGet and all other review code untouched. This router keeps both features separate.
 function doPost(e) {
+  if(typeof sbHomepageThemesEvent==='function'){const homeThemeResult=sbHomepageThemesEvent(e);if(homeThemeResult!==null)return homeThemeResult;}
+
  let data;
  try {data = JSON.parse(e.postData.contents);} catch {return clientSyncResponse({ok:false,error:'Invalid request.'});}
  if(data.action==='nativeEnglishPage')return handleClientSync(e);

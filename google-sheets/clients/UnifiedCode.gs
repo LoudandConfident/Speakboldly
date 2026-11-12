@@ -107,6 +107,8 @@ function doGet(event) {
 }
 
 function doPost(event) {
+  if(typeof sbHomepageThemesEvent==='function'){const homeThemeResult=sbHomepageThemesEvent(event);if(homeThemeResult!==null)return homeThemeResult;}
+
   const lock = LockService.getScriptLock();
   try {
     // Keep additive portal, exam, material and Culture Corner routes when replacing this file.
