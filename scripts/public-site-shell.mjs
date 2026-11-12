@@ -3,6 +3,7 @@ export function publicSiteShell(shell,{path,title,description,graph,view,course=
  const origin='https://speakboldly.space',url=origin+path;
  const escape=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
  let html=shell.replace(/<base href="\/">/g,'').replace(/<title>[\s\S]*?<\/title>/,'<title>'+escape(title)+'</title>');
+ if(view==='boldly-notes')html=html.replace(/<link\b[^>]*rel="(?:shortcut )?icon"[^>]*>/g,'<link rel="icon" type="image/svg+xml" sizes="any" href="/literatespace/beyond-mark.svg?v=1">');
  html=html.replace(/<meta name="description"[^>]*>/,'<meta name="description" content="'+escape(description)+'">');
  html=html.replace(/<link rel="canonical"[^>]*>/,'<link rel="canonical" href="'+url+'">');
  html=html.replace(/<meta name="robots"[^>]*>/g,'<meta name="robots" content="'+(noindex?'noindex,follow':'index,follow,max-image-preview:large')+'">');

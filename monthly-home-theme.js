@@ -3,12 +3,12 @@ import {seasonalThemeSettings,refreshSeasonalThemes} from './seasonal-theme-sett
 export function initializeMonthlyHomeTheme(doc,now=new Date()){
  const hero=doc.querySelector('#home>.hero');if(!hero)return;hero.querySelector('.monthly-home-theme')?.remove();
  const theme=themeForDate(now,seasonalThemeSettings());if(!theme)return;
- const decoration=doc.createElement('aside');decoration.className='monthly-home-theme';decoration.dataset.theme=theme.art;decoration.dataset.copyLength=theme.message.length>60?'long':theme.message.length>28?'medium':'short';decoration.setAttribute('aria-label',theme.label);
- decoration.innerHTML='<svg class="monthly-theme-art" viewBox="0 0 270 215" fill="none" aria-hidden="true"><path d="M52 0v55M218 0v55" stroke="#bca779" stroke-width="2"/><path d="M21 48q114-15 228 0l-5 132q-109 29-218 0Z" fill="#f4dfbb" stroke="#d0ae78" stroke-width="1.5"/><path d="M30 57q106-12 210 0" stroke="#fff8e6" stroke-width="2"/><circle cx="52" cy="55" r="4" fill="#193c32"/><circle cx="218" cy="55" r="4" fill="#193c32"/><path d="M33 170q-18-14-15-33 22 3 26 21-1-29 17-39 11 23-4 42 20-11 34 1-15 18-37 12" fill="#96a76c"/><path d="m30 147 28 36M55 139l-1 37" stroke="#657744"/><path d="M201 168q-12-22 3-36 14 11 10 28 7-25 25-23 2 24-19 35" fill="#c59157"/><path d="m206 145 12 35M231 150l-13 25" stroke="#8c693c"/><path d="M123 178q-8-15 9-19 17 2 11 19" fill="#71844b"/><ellipse cx="132" cy="187" rx="26" ry="22" fill="#cc783c"/><ellipse cx="121" cy="187" rx="12" ry="21" fill="#dc914e"/><ellipse cx="142" cy="187" rx="11" ry="21" fill="#b86131"/><path d="M132 166q-4-10 4-14" stroke="#526341" stroke-width="4" stroke-linecap="round"/><path d="m84 76 3 7 7 1-5 5 1 7-6-4-6 4 1-7-5-5 7-1Z" fill="#c59755"/><path d="m188 85 2 5 5 1-4 3 1 5-4-3-5 3 1-5-4-3 5-1Z" fill="#c59755"/></svg><div class="monthly-theme-copy"><p class="monthly-theme-note"></p><p class="monthly-theme-message"></p></div>';
+ const decoration=doc.createElement('a');decoration.className='monthly-home-theme';decoration.href='/programs/';decoration.dataset.openView='courses';decoration.dataset.theme=theme.art;decoration.dataset.copyLength=theme.message.length>60?'long':theme.message.length>28?'medium':'short';decoration.setAttribute('aria-label',theme.label+' — explore programs');decoration.addEventListener('click',event=>{if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();doc.defaultView.location.hash='courses';});
+ decoration.innerHTML='<svg class="monthly-theme-art" viewBox="0 0 270 200" fill="none" aria-hidden="true"><path d="M57 0v55M213 0v55" stroke="#a58b62" stroke-width="2"/><circle cx="57" cy="55" r="3" fill="#6b654e"/><circle cx="213" cy="55" r="3" fill="#6b654e"/><rect x="20" y="48" width="230" height="142" rx="3" fill="#efe5ce" stroke="#af9772" stroke-width="3"/><rect x="27" y="55" width="216" height="128" rx="1" fill="#f8f1df" stroke="#d8c8a5"/><path d="M37 169q13-15 26-15M45 161q-13-2-13-13 13 2 13 13Zm10-5q-1-13 11-14 3 11-11 14Z" stroke="#91a275" stroke-width="1.3" fill="#aaba8d"/><path d="M220 73q-10 5-13 17m7-10q12 1 15-9-9-4-15 9Z" stroke="#b89460" stroke-width="1.3" fill="#c5a777"/></svg><div class="monthly-theme-copy"><p class="monthly-theme-note"></p><p class="monthly-theme-message"></p></div>';
  decoration.querySelector('.monthly-theme-note').textContent=theme.label;
  decoration.querySelector('.monthly-theme-message').textContent=theme.message;
  if(theme.art!=='thanksgiving'){
- const art=decoration.querySelector('svg'),base=art.innerHTML.split('<path d="M33')[0];
+ const art=decoration.querySelector('svg');
  const icons={
  christmas:'<path d="m134 137-24 27h13l-23 25h68l-23-25h13Z" fill="#59754a"/><path d="M134 185v17" stroke="#88663e" stroke-width="5"/><path d="m134 128 3 6 7 1-5 4 1 7-6-3-6 3 1-7-5-4 7-1Z" fill="#c49b4b"/><circle cx="126" cy="173" r="3" fill="#c88664"/><circle cx="143" cy="182" r="3" fill="#e6cf8c"/>',
  winter:'<g stroke="#769c9f" stroke-width="3" stroke-linecap="round"><path d="M134 153v49m-21-37 42 25m0-25-42 25M128 157l6 6 6-6M128 198l6-6 6 6m-24-27 8-2v-8m28 24-8 2v8m-28-9 8 2v8m28-25-8-2v-8"/></g>',
@@ -19,7 +19,7 @@ export function initializeMonthlyHomeTheme(doc,now=new Date()){
  'april-fools':'<path d="M110 192q24-12 48 0l-4-28-18 10-12-20-8 27-10-15Z" fill="#b78c64"/><circle cx="124" cy="154" r="4" fill="#879c60"/><circle cx="154" cy="164" r="4" fill="#879c60"/>',
  spring:'<path d="M134 204v-35m0 23q-25-4-21-23 21 2 21 23m0-12q24 0 22-19-20-1-22 19" stroke="#809762" fill="#99ae75"/>',
  autumn:'<path d="M134 202q-38-32-13-47l13 13 13-13q25 15-13 47Z" fill="#c08b56"/><path d="M134 170v36" stroke="#7b7747" stroke-width="2"/>'};
- art.innerHTML=base+'<g transform="translate(67 98) scale(.5)">'+(icons[theme.art]||icons.spring)+'</g>';
+ art.insertAdjacentHTML('beforeend','<g transform="translate(67 90) scale(.5)">'+(icons[theme.art]||icons.spring)+'</g>');
  }
  hero.append(decoration);
 }

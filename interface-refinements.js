@@ -1,9 +1,9 @@
-import './monthly-home-theme.js?v=2';
-import './program-offer.js?v=2';
-import './beyond-brand.js?v=51';
+import './monthly-home-theme.js?v=5';
+import './program-offer.js?v=3';
+import './beyond-brand.js?v=70';
 import './learning-card-groups.js?v=balanced-60';
 import './teaching-refinements.js?v=64';
-import {initializeFixedPageHelp} from './fixed-page-help.js?v=58';
+import {initializeFixedPageHelp} from './fixed-page-help.js?v=70';
 import {helpIcon} from './ui-help.js';
 const doc=document;
 // Reuse established artwork, retaining the original SVG speech bubbles.
