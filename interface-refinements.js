@@ -1,5 +1,5 @@
 import './beyond-brand.js?v=51';
-import './learning-card-groups.js?v=journey-preview-50';
+import './learning-card-groups.js?v=balanced-60';
 import './teaching-refinements.js?v=43';
 import {initializeFixedPageHelp} from './fixed-page-help.js?v=58';
 import {helpIcon} from './ui-help.js';

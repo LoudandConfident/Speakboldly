@@ -93,3 +93,11 @@ body>main:not(.interpret-page){padding-bottom:18px}
  .editorial-sidebar .interpret-preview-card small,.editorial-sidebar .sign-language-preview-card small{font-size:12px;margin-top:20px}
  .editorial-destinations{margin-top:0}
 }
+.monthly-edit-open{display:flex;justify-content:space-between;align-items:center;font-size:12px}
+body:has(.interpret-page){background:radial-gradient(ellipse at 50% -15%,#34614a60,transparent 58%),linear-gradient(160deg,#173a30,#112d27 45%,#0b211c);color:#f1ecde;min-height:100svh;display:flex;flex-direction:column}
+body:has(.interpret-page) .editorial-header{width:100%;border-color:#b7a57c40}
+body:has(.interpret-page) main{flex:1;width:100%}
+body:has(.interpret-page) :is(.editorial-subtitle,.editorial-intro-copy){color:#c1c6b6}
+body:has(.interpret-page) .editorial-eyebrow{color:#b7a57c}.more-coming{font:italic 24px/1.5 Georgia,serif;color:#d2dfbb;margin-top:35px}
+.editorial-footer.editorial-credentials{width:100%;max-width:none;margin-top:0;padding:18px clamp(22px,6vw,86px);background:#faf9f4;color:#193c32;border-top:1px solid #193c3225;font-family:Arial,sans-serif}
+.editorial-footer.editorial-credentials strong{font-size:12px;font-weight:600}.editorial-footer.editorial-credentials small{font-size:10px}

@@ -8,7 +8,7 @@ export function initializeSectionLinks(doc,win){
  doc.addEventListener('click',event=>{const node=event.target.closest?.('[data-open-view],[data-portal-tab],[data-learning-open],[data-learning-back],a[href]');if(!node||!event.isTrusted||event.defaultPrevented||event.button>0)return;
  if(node.closest('.placement-booking-card'))return;
  // Primary navigation and dashboard cards use their existing same-tab handlers.
- if(node.closest('body>header,#main-navigation,.nav-tab,.home-guided-path,.home-preview-actions,[data-portal-tab],[data-learning-open],[data-learning-back]'))return;
+ if(node.closest('body>header,#main-navigation,.nav-tab,.home-guided-path,.home-preview-actions,.home-explore,.journey-next,[data-portal-tab],[data-learning-open],[data-learning-back]'))return;
  let destination;
  if(node.hasAttribute('data-learning-back'))destination='students-portal/student';
  else if(node.dataset.learningOpen)destination='students-portal/student/'+node.dataset.learningOpen;

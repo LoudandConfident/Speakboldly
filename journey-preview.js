@@ -1,9 +1,5 @@
 // A reversible local proposal: no publication, analytics or account changes.
 const doc=document;
-// Keep the FAQ immediately under the three social buttons, within their column.
-const placeContactFaq=()=>{const links=doc.querySelector('#contact .contact-learning-links'),footer=doc.querySelector('#contact .contact-faq-footer');if(!links||!footer)return false;if(footer.parentNode!==links)links.append(footer);return true;};
+// Keep the FAQ immediately under Share & Earn in the promotion column.
+const placeContactFaq=()=>{const links=doc.querySelector('#contact .contact-promotion-rail'),footer=doc.querySelector('#contact .contact-faq-footer');if(!links||!footer)return false;if(footer.parentNode!==links)links.append(footer);return true;};
 if(!placeContactFaq()){const observer=new MutationObserver(()=>{if(placeContactFaq())observer.disconnect();});observer.observe(doc.body,{childList:true,subtree:true});}
-
-// Keep the tour optional, behind the requested button rather than in the footer.
-const nextButton=doc.querySelector('[data-home-next]');
-if(nextButton){nextButton.addEventListener('click',()=>{let panel=doc.querySelector('#home-next-step-dialog');if(!panel){panel=doc.createElement('dialog');panel.id='home-next-step-dialog';panel.className='action-popup home-next-step-dialog';panel.innerHTML='<button type="button" class="popup-close" aria-label="Close next steps">×</button><h2>Find your next step</h2><p>Choose where you’d like to begin.</p><nav aria-label="Your next step"><a href="/#vision">Meet Speak Boldly <span>Our vision</span></a><a href="/#how">See how it works <span>Our approach</span></a><a href="/programs/">Explore programs <span>Find your fit</span></a><a href="/assessments/">Take your test <span>Find your starting point</span></a><a href="/#students-portal">Learning Hub <span>Practise independently or find course support</span></a><a href="/#contact">Talk to us <span>Ask a question</span></a></nav>';panel.querySelector('.popup-close').onclick=()=>panel.close();panel.addEventListener('click',event=>{if(event.target.closest('a'))panel.close();});doc.body.append(panel);}panel.showModal();});}

@@ -500,7 +500,9 @@ export const courses = [
     "comingSoon": false,
     "programKind": "Pro Service",
     "audienceBadge": "Pro Service"
-  }
+  },
+ {id:'corporate-deals',formatOnly:true,title:'Corporate deals',level:'Teams & organisations',duration:'Tailored to your team',sessionDuration:'60–90 minutes',category:'Pro Services',programKind:'Pro Service',audienceBadge:'Pro Service',quoteOnly:true,dimmed:true,noWatermark:true,art:'group',summary:'Practical English shaped around your team’s work.',description:'Build a coaching plan around your team’s communication needs, current levels and working schedule.',viewDescription:'Discuss your team’s goals and the situations where English matters most. We’ll shape the format, schedule and learning priorities around your organisation.',outcomes:'Help your team communicate more confidently and clearly at work.',topics:['A needs analysis for your team','Practical workplace communication','An agreed schedule and coaching format','A quote tailored to your organisation']}
+
 ];
 export function matches(c,category,query){return !c.catalogHidden&&(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
 
@@ -511,6 +513,9 @@ export function matches(c,category,query){return !c.catalogHidden&&(category==='
 // Group quote-based formats immediately before focus and instructor development.
 export function compareCatalogCourses(a,b){
  const quotes=['in-person-sessions','group-sessions','english-day-out'],last=['reclaim-focus','different-learners','instructor-training'];
- const rank=c=>c.plannedYear?4:last.includes(c.id)?3:quotes.includes(c.id)?2:(c.comingSoon||c.dimmed)?1:0;
+ const rank=c=>c.plannedYear?5:last.includes(c.id)?4:c.category==='Pro Services'?3:c.category==='Workshops'?2:0;
  return rank(a)-rank(b)||(rank(a)===2?quotes.indexOf(a.id)-quotes.indexOf(b.id):rank(a)===3?last.indexOf(a.id)-last.indexOf(b.id):0);
 }
+
+// Pro Services remain available to explore while booking is being prepared.
+for(const course of courses){if(course.category==='Pro Services'){course.dimmed=true;course.noWatermark=true;}}
