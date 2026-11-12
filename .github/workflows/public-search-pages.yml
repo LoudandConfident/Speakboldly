@@ -18,6 +18,8 @@ on:
       - home-gallery.js
       - daily-missions/**
       - index.html
+      - literatespace/**
+      - images/monthly-edit-*.webp
       - styles.css
       - site-theme.css
       - public-seo-routes.js
