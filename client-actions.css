@@ -131,3 +131,14 @@ body:has(.notes-editor-page[data-document-kind=notes]:not([hidden])){max-width:n
 #client-notes-dialog .session-notes-toolbar button[aria-pressed=true]{background:#193c32;color:#edf3e4}
 #client-notes-dialog .session-notes-toolbar button:first-child{font-weight:700}
 #client-notes-dialog .session-notes-rich-editor{overflow-wrap:anywhere}
+/* Formatting follows the selected text rather than occupying the whiteboard. */
+#client-notes-dialog .session-notes-toolbar{position:fixed!important;inset:auto!important;left:var(--notes-toolbar-left,0px)!important;top:var(--notes-toolbar-top,0px)!important;right:auto!important;bottom:auto!important;display:flex;flex-wrap:nowrap;gap:4px;align-items:center;width:max-content;max-width:calc(100vw - 20px);box-sizing:border-box;margin:0!important;padding:5px;border:1px solid #b4c4a5;border-radius:10px;background:#fafbf4;box-shadow:0 4px 18px #193c3226;z-index:100;transform:none!important;animation:none!important}
+#client-notes-dialog .session-notes-toolbar[hidden]{display:none!important}
+#client-notes-dialog .session-notes-toolbar::backdrop{background:transparent;pointer-events:none}
+#client-notes-dialog .session-notes-toolbar button{min-height:36px;margin:0;padding:6px 11px;border:0;border-radius:6px;background:transparent;color:#193c32;font-size:13px;white-space:nowrap}
+#client-notes-dialog .session-notes-toolbar button:hover{background:#e5edda}
+#client-notes-dialog .session-notes-toolbar button[aria-pressed=true]{background:#193c32!important;color:#fafbf4!important;opacity:1!important}
+#client-notes-dialog .session-notes-toolbar button:focus-visible{outline:2px solid #65834f;outline-offset:1px}
+@media(pointer:coarse){#client-notes-dialog .session-notes-toolbar button{min-height:44px;padding-inline:13px}}
+@media print{#client-notes-dialog .session-notes-toolbar{display:none!important}}
+#client-notes-dialog .session-notes-toolbar button{transition:none!important;animation:none!important}

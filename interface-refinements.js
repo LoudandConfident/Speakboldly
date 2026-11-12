@@ -1,4 +1,4 @@
-import './monthly-home-theme.js?v=5';
+import './monthly-home-theme.js?v=7';
 import './program-offer.js?v=3';
 import './beyond-brand.js?v=70';
 import './learning-card-groups.js?v=balanced-60';
