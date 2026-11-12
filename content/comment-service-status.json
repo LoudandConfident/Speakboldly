@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-12T09:10:52.807Z",
+  "checkedAt": "2026-11-12T09:27:52.318Z",
   "comments": {
     "reachable": true,
     "ok": true,
@@ -7,13 +7,14 @@
     "enabled": true
   },
   "sharedContent": {
-    "reachable": false,
-    "ready": false,
-    "error": "Shared content controls could not be checked."
+    "reachable": true,
+    "ready": true
   },
   "practiceDrive": {
-    "reachable": false,
-    "ready": false,
-    "error": "Practice Drive catalog exceeded 90 seconds."
+    "reachable": true,
+    "elapsedMs": 31047,
+    "httpStatus": 200,
+    "ready": true,
+    "files": 30
   }
 }
