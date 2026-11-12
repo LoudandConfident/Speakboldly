@@ -1,8 +1,10 @@
 // Public, crawlable URLs. Hidden operational courses deliberately have no route.
 export const coursePaths={
+ ielts:'/programs/ielts-preparation/',
+ toefl:'/programs/toefl-preparation/',
+ kids:'/programs/kids-english/',
  'in-person-sessions':'/programs/in-person-sessions/',
  'group-sessions':'/programs/group-sessions/',
- 'english-day-out':'/programs/english-day-out/',
  'general-8':'/programs/general-english/',
  'general-4':'/programs/general-english/',
  'english-momentum':'/programs/english-momentum/',

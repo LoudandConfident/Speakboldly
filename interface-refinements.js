@@ -1,7 +1,7 @@
-import './beyond-brand.js?v=49';
-import './learning-card-groups.js?v=42';
+import './beyond-brand.js?v=51';
+import './learning-card-groups.js?v=journey-preview-50';
 import './teaching-refinements.js?v=43';
-import {initializeFixedPageHelp} from './fixed-page-help.js?v=43';
+import {initializeFixedPageHelp} from './fixed-page-help.js?v=51';
 import {helpIcon} from './ui-help.js';
 const doc=document;
 // Reuse established artwork, retaining the original SVG speech bubbles.
