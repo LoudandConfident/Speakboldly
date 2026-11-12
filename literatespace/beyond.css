@@ -77,3 +77,19 @@ body>main{animation:none!important;transform:none!important}
 body>main:not(.interpret-page){padding-bottom:18px}
 .editorial-footer.editorial-credentials{margin-top:0;padding-top:12px;padding-bottom:12px;line-height:1.45}
 @media(max-width:680px){body>main:not(.interpret-page){padding-bottom:14px}.editorial-footer.editorial-credentials{padding-top:11px;padding-bottom:11px}}
+
+/* Touch-friendly previews appear before the main destinations. */
+@media(max-width:999px){
+ .editorial-main-layout{display:flex;flex-direction:column;gap:20px}
+ .editorial-sidebar{display:flex;order:-1;gap:14px;width:100%;padding:8px 24px 16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:24px;align-items:stretch;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#9aaf94 transparent}
+ .editorial-services{display:contents}
+ .editorial-sidebar .monthly-edit-card,.editorial-sidebar .interpret-preview-card,.editorial-sidebar .sign-language-preview-card{position:relative;inset:auto;flex:0 0 min(76vw,290px);width:min(76vw,290px);min-height:270px;margin:0;transform:none;border:1px solid #b9c8af;border-radius:18px;scroll-snap-align:start;box-shadow:0 4px 0 #193c320a}
+ .editorial-sidebar .monthly-edit-card{padding:0;align-self:stretch}
+ .editorial-sidebar .monthly-edit-photo{height:104px;aspect-ratio:auto;border-radius:17px 17px 0 0}
+ .editorial-sidebar .monthly-edit-card h2{font-size:25px}
+ .editorial-sidebar .interpret-preview-card,.editorial-sidebar .sign-language-preview-card{display:flex;flex-direction:column;justify-content:center;padding:26px}
+ .editorial-sidebar .interpret-preview-card h2,.editorial-sidebar .sign-language-preview-card h2{font-size:30px;margin:15px 0 12px}
+ .editorial-sidebar .interpret-preview-card>p,.editorial-sidebar .sign-language-preview-card>p{font-size:15px;line-height:1.6}
+ .editorial-sidebar .interpret-preview-card small,.editorial-sidebar .sign-language-preview-card small{font-size:12px;margin-top:20px}
+ .editorial-destinations{margin-top:0}
+}
