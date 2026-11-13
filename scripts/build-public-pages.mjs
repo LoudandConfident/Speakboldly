@@ -9,6 +9,7 @@ import {coursePaths} from '../public-seo-routes.js';
 import {idioms} from '../daily-idiom.js';
 import {dailyQuotes,quoteDetails,quoteForDate,dailyPractice} from '../home-gallery.js';
 import {publicSiteShell} from './public-site-shell.mjs';
+import {renderBeyondHeader,renderBeyondFooter} from '../beyond-shell.js';
 import {motivationPreviews} from '../motivation-preview-images.js';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),origin='https://speakboldly.space';
 const e=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -151,4 +152,18 @@ for(const name of readdirSync(resolve(root,'motivation')).filter(n=>n.endsWith('
 const urls=['/',...indexable,...motivationPaths,'/brochures/Speak-Boldly-Method.pdf','/brochures/SB-Policy.pdf'];
 writeFileSync(resolve(root,'sitemap.xml'),'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.map(p=>'  <url><loc>'+e(origin+p)+'</loc></url>').join('\n')+'\n</urlset>\n');
 writeFileSync(manifestPath,JSON.stringify({files:generated,indexable:urls},null,2)+'\n');
+// Every independent Beyond page uses the same header, wordmark and footer.
+for(const [file,section]of [
+ ['literatespace/index.html',''],
+ ['literatespace/interpret-boldly/index.html','Interpret Boldly'],
+ ['literatespace/sign-language/index.html','Sign Language'],
+ ['literatespace/monthly-edit/index.html','The Monthly Edit'],
+ ['beyond-words/index.html','Bold Reads']
+]){
+ const path=resolve(root,file);let html=readFileSync(path,'utf8');
+ html=html.replace(/<header\b[\s\S]*?<\/header>/,renderBeyondHeader(section)).replace(/<footer\b[\s\S]*?<\/footer>/,renderBeyondFooter());
+ html=html.replace(/<body([^>]*)>/,(_,attrs)=>'<body'+attrs.replace(/ data-beyond-space(?:="[^"]*")?/g,'')+' data-beyond-space>');
+ if(!html.includes('/literatespace/beyond-shared.css?')){const link='<link rel="stylesheet" href="/literatespace/beyond-shared.css?v=1">';html=html.includes('</head>')?html.replace('</head>',link+'</head>'):html.replace('<body',link+'<body');}
+ writeFileSync(path,html);
+}
 console.log('Built '+generated.length+' public pages; '+urls.length+' sitemap URLs. Blog articles: '+posts.length+'.');

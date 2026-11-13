@@ -448,7 +448,7 @@ html body [data-fixed-page-help=true]{visibility:hidden!important;pointer-events
 
 /* The quiet whitespace beside Credentials reveals the independent editorial space. */
 html body main #home .home-bottom-row>.beyond-entry{flex:1 1 auto;align-self:stretch;display:flex;justify-content:center;align-items:center;gap:12px;min-height:44px;margin-left:24px;color:#193c32;background:transparent;text-decoration:none;cursor:pointer;border:0;border-radius:4px}
-html body main #home .beyond-entry-label{font:400 9px/1.4 Georgia,'Times New Roman',serif;letter-spacing:1.9px}
+html body main #home .beyond-entry-label{font:400 9px/1.4 'DM Sans',Arial,sans-serif;letter-spacing:1.9px}
 html body main #home .beyond-entry-arrow{display:grid;place-items:center;flex:0 0 30px;width:30px;height:30px;border:1px solid #a8b39b;border-radius:50%;background:#edf0e633}
 html body main #home .beyond-entry svg{display:block;width:18px;height:18px}
 html body main #home .beyond-entry:focus-visible{outline:2px solid #193c32;outline-offset:4px}
@@ -468,7 +468,7 @@ html body main #home .beyond-entry:hover .beyond-b-tail{transform:translateY(2px
 @media(max-width:680px){html body main #home .home-bottom-row{grid-template-columns:minmax(0,1fr) minmax(120px,.7fr)}html body main #home .beyond-entry-label{font-size:8px;letter-spacing:1px}html body main #home .beyond-entry-caption{font-size:9px;max-width:73px}html body main #home .beyond-entry-arrow{width:38px;height:38px;flex-basis:38px}html body main #home .beyond-entry svg{width:32px;height:32px}}
 html body #boldly-notes .blog-post-coming-soon .boldly-note-main-link{cursor:default}
 html body #boldly-notes .blog-post-coming-soon :is(h3,time,.boldly-note-main-link>p){opacity:.38}
-html body #boldly-notes .blog-coming-status{display:inline-block;font:italic 19px/1.4 Georgia,serif;color:#193c32;margin-top:12px}
+html body #boldly-notes .blog-coming-status{display:inline-block;font:italic 19px/1.4 'DM Sans',Arial,sans-serif;color:#193c32;margin-top:12px}
 
 /* Reserve the whole discovery strip before sizing the photographic cover. */
 html body main #home:not([hidden]){display:grid!important;grid-template-rows:minmax(0,1fr) auto!important;gap:0!important;height:var(--home-viewport-space,calc(100svh - 100px))!important;min-height:0!important;overflow:visible!important}
@@ -477,14 +477,14 @@ html body main #home:not([hidden])>.home-bottom-row{box-sizing:border-box;flex-s
 @media(max-width:680px){html body main #home:not([hidden])>.home-bottom-row{min-height:76px!important;padding-top:10px!important;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))!important}}
 /* Beyond / Bold Blog: one editorial identity and quieter preview watermarks. */
 html body #boldly-notes{--beyond-mint:#dce8d5;--beyond-ink:#193c32}
-.beyond-blog-wordmark{display:flex;align-items:center;gap:10px;width:fit-content;margin:0 0 26px;text-decoration:none;color:#193c32;font:600 28px/1.1 Georgia,serif;letter-spacing:-.8px}
+.beyond-blog-wordmark{display:flex;align-items:center;gap:10px;width:fit-content;margin:0 0 26px;text-decoration:none;color:#193c32;font:600 28px/1.1 'DM Sans',Arial,sans-serif;letter-spacing:-.8px}
 .beyond-blog-wordmark img{width:30px;height:30px}.beyond-wordmark-dot{color:#7d9c61}.beyond-blog-wordmark small{font:500 10px/1.4 'DM Sans',Arial,sans-serif;letter-spacing:1.4px;text-transform:uppercase;border-left:1px solid #9fb293;margin-left:5px;padding-left:15px}
 html body #boldly-notes .boldly-note-link{background:#dce8d5;border:1px solid #b3c6a5;border-top:4px solid #193c32;border-radius:5px 25px 5px 25px;padding:24px;position:relative}
-html body #boldly-notes .boldly-note-link h3{font:600 27px/1.25 Georgia,serif;color:#193c32;margin:12px 0}
-html body #boldly-notes .boldly-note-page h3{background:#dce8d5;color:#193c32;border-left:4px solid #193c32;border-radius:2px 14px 2px 14px;padding:13px 18px;font:600 24px/1.35 Georgia,serif;margin:30px 0 18px}
+html body #boldly-notes .boldly-note-link h3{font:600 27px/1.25 'DM Sans',Arial,sans-serif;color:#193c32;margin:12px 0}
+html body #boldly-notes .boldly-note-page h3{background:#dce8d5;color:#193c32;border-left:4px solid #193c32;border-radius:2px 14px 2px 14px;padding:13px 18px;font:600 24px/1.35 'DM Sans',Arial,sans-serif;margin:30px 0 18px}
 html body #boldly-notes .bold-question{background:#e5ecdf;border:1px solid #b3c6a5;border-radius:5px 25px 5px 25px;padding:18px 24px;margin:26px 0}
 html body #boldly-notes .blog-post-coming-soon .boldly-note-main-link{display:block;position:static;min-height:125px;pointer-events:none}
-html body #boldly-notes .blog-post-coming-soon .blog-coming-status{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-7deg);font:italic 22px/1.3 Georgia,serif;white-space:nowrap;letter-spacing:0;color:#193c32;background:transparent;border:0;border-radius:0;padding:0;margin:0;min-height:0;box-shadow:none;pointer-events:none}
+html body #boldly-notes .blog-post-coming-soon .blog-coming-status{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-7deg);font:italic 22px/1.3 'DM Sans',Arial,sans-serif;white-space:nowrap;letter-spacing:0;color:#193c32;background:transparent;border:0;border-radius:0;padding:0;margin:0;min-height:0;box-shadow:none;pointer-events:none}
 html body #speak-hub .speak-hub-experiences{position:relative}
 html body #speak-hub .hub-page-preview-status{position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%) rotate(-7deg);font:italic 26px/1.3 Georgia,serif;white-space:nowrap;color:#193c32;background:transparent;z-index:2;pointer-events:none}
 @media(max-width:680px){.beyond-blog-wordmark{font-size:25px;margin-bottom:18px}.beyond-blog-wordmark small{font-size:9px;padding-left:10px}.beyond-blog-wordmark img{width:26px;height:26px}html body #boldly-notes .boldly-note-link{padding:20px}html body #boldly-notes .boldly-note-link h3{font-size:23px}html body #boldly-notes .boldly-note-page h3{font-size:20px;padding:11px 13px}html body #boldly-notes .bold-question{padding:15px 17px}html body #speak-hub .hub-page-preview-status{font-size:24px}}
@@ -493,7 +493,7 @@ html body main :is(.upcoming-watermark,.coming-preview-watermark,.studio-preview
 @media(max-width:680px){html body main :is(.upcoming-watermark,.coming-preview-watermark,.studio-preview-watermark,.blog-coming-status,.hub-page-preview-status){font-size:21px!important}}
 html body main #boldly-notes [data-notes-list]>.boldly-note-link:nth-child(n){background:#dce8d5!important;color:#193c32!important;border:1px solid #b3c6a5!important;border-top:4px solid #193c32!important;border-radius:5px 25px 5px 25px!important;padding:24px!important}
 html body main #boldly-notes [data-notes-list]>.boldly-note-link :is(a,h3,p,time){color:#193c32!important}
-html body main #boldly-notes [data-notes-list]>.boldly-note-link h3{font:600 27px/1.25 Georgia,serif!important}
+html body main #boldly-notes [data-notes-list]>.boldly-note-link h3{font:600 27px/1.25 'DM Sans',Arial,sans-serif!important}
 html body #boldly-notes .blog-reading-page:first-child>p:first-of-type{background:#e5ecdf;border-left:4px solid #193c32;border-radius:2px 18px 2px 18px;padding:16px 20px;font-weight:600}
 @media(max-width:680px){html body main #boldly-notes [data-notes-list]>.boldly-note-link:nth-child(n){padding:20px!important}html body main #boldly-notes [data-notes-list]>.boldly-note-link h3{font-size:23px!important}}
 html body main #boldly-notes [data-notes-list]>.boldly-note-link:nth-child(n) .boldly-note-main-link :is(h3,p,time){color:#193c32!important}

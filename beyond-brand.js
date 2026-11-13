@@ -1,10 +1,9 @@
+import {renderBeyondHeader,BEYOND_FOOTER_LINES} from './beyond-shell.js?v=2';
 // The blog lives inside Beyond; teaching navigation remains in the teaching space.
 export function initializeBeyondBrand(doc){
  const root=doc.querySelector('#boldly-notes');if(!root||doc.querySelector('#beyond-blog-header'))return;const win=doc.defaultView;
- const arrow='<svg viewBox="0 0 24 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10H3m7-7-7 7 7 7"/></svg>';
- const header=doc.createElement('header');header.id='beyond-blog-header';header.className='beyond-blog-header';header.hidden=true;
- header.innerHTML='<a class="beyond-blog-back" href="/literatespace/" aria-label="Back to Beyond">'+arrow+'</a><a class="beyond-blog-wordmark" href="/literatespace/"><img src="/literatespace/beyond-mark.svg?v=1" alt="" width="30" height="30"><span>Beyond.</span></a><span class="beyond-blog-section-name">Bold Blog</span><a class="beyond-teaching-return" href="/#home">Back to Speak Boldly</a>';
- doc.body.insertBefore(header,doc.querySelector('main'));root.querySelector('.beyond-blog-wordmark')?.remove();
+ const template=doc.createElement('template');template.innerHTML=renderBeyondHeader('Bold Blog');const header=template.content.firstElementChild;header.id='beyond-blog-header';header.classList.add('beyond-blog-header');header.hidden=true;
+ doc.body.insertBefore(header,doc.querySelector('main'));root.querySelector('.beyond-blog-wordmark')?.remove();const footer=root.querySelector('[data-blog-footer]');if(footer){footer.classList.remove('page-signature');footer.classList.add('beyond-space-footer');footer.replaceChildren(...BEYOND_FOOTER_LINES.map((line,index)=>{const node=doc.createElement(index?'small':'span');node.textContent=line;return node;}));}
  // Change every browser-tab icon together: competing PNG/SVG declarations can
  // otherwise leave the previous space's logo cached after navigation.
  const icons=[...doc.head.querySelectorAll('link[rel~="icon"]')];
