@@ -1,5 +1,11 @@
-// A reversible local proposal: no publication, analytics or account changes.
 const doc=document;
-// Keep the FAQ immediately under Share & Earn in the promotion column.
-const placeContactFaq=()=>{const links=doc.querySelector('#contact .contact-promotion-rail'),footer=doc.querySelector('#contact .contact-faq-footer');if(!links||!footer)return false;if(footer.parentNode!==links)links.append(footer);return true;};
-if(!placeContactFaq()){const observer=new MutationObserver(()=>{if(placeContactFaq())observer.disconnect();});observer.observe(doc.body,{childList:true,subtree:true});}
+// The promotion column may grow independently of the contact details.
+const placeContactExtras=()=>{
+ const contact=doc.querySelector('#contact'),rail=contact?.querySelector('.contact-promotion-rail'),footer=contact?.querySelector('.contact-faq-footer'),social=contact?.querySelector('.contact-connect-content'),email=contact?.querySelector('.contact-email-faq-row');
+ if(!contact||!rail||!footer||!social||!email)return false;
+ if(footer.parentNode!==rail)rail.append(footer);
+ let column=contact.querySelector('.contact-main-column');if(!column){column=doc.createElement('div');column.className='contact-main-column';social.before(column);column.append(social);}
+ if(email.parentNode!==column)column.append(email);
+ return true;
+};
+if(!placeContactExtras()){const observer=new MutationObserver(()=>{if(placeContactExtras())observer.disconnect();});observer.observe(doc.body,{childList:true,subtree:true});}

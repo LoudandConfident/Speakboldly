@@ -101,3 +101,33 @@ body:has(.interpret-page) :is(.editorial-subtitle,.editorial-intro-copy){color:#
 body:has(.interpret-page) .editorial-eyebrow{color:#b7a57c}.more-coming{font:italic 24px/1.5 'DM Sans',Arial,sans-serif;color:#d2dfbb;margin-top:35px}
 .editorial-footer.editorial-credentials{width:100%;max-width:none;margin-top:0;padding:18px clamp(22px,6vw,86px);background:#faf9f4;color:#193c32;border-top:1px solid #193c3225;font-family:Arial,sans-serif}
 .editorial-footer.editorial-credentials strong{font-size:12px;font-weight:600}.editorial-footer.editorial-credentials small{font-size:10px}
+/* Mobile bookmarks unfold into ordinary cards at the same edge. */
+.beyond-mobile-bookmarks{display:none}
+.beyond-bookmark-panel{position:absolute;z-index:1;box-sizing:border-box;width:min(290px,calc(100vw - 70px));max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;border:1px solid #b5c5a6;background:#e8eedf;color:#193c32;box-shadow:5px 7px 0 #193c3212;border-radius:5px 20px 5px 20px;transform-origin:var(--bookmark-origin-x) var(--bookmark-origin-y,50%)}
+.beyond-bookmark-panel[hidden]{display:none}
+.beyond-bookmark-slot-monthly .beyond-bookmark-panel{left:calc(100% - 1px);--bookmark-origin-x:left}
+.beyond-bookmark-slot-interpret .beyond-bookmark-panel,.beyond-bookmark-slot-sign .beyond-bookmark-panel{right:calc(100% - 1px);--bookmark-origin-x:right;box-shadow:-5px 7px 0 #193c3212}
+.beyond-bookmark-panel>.monthly-edit-card,.beyond-bookmark-panel>.interpret-preview-card,.beyond-bookmark-panel>.sign-language-preview-card{position:static!important;inset:auto!important;transform:none!important;display:block;width:100%!important;max-width:none!important;min-height:0!important;margin:0!important;padding:24px!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#e8eedf}
+.beyond-bookmark-panel>.monthly-edit-card{padding:0!important}
+.beyond-bookmark-panel .monthly-edit-photo{height:auto!important;aspect-ratio:1.8;object-fit:cover;border-radius:0}
+.beyond-bookmark-panel .monthly-edit-card>.edit-month{margin:17px 20px 0}.beyond-bookmark-panel .monthly-edit-card h2{font-size:25px;margin:10px 20px}.beyond-bookmark-panel .monthly-edit-card>p{font-size:14px;margin:0 20px 17px;line-height:1.6}.beyond-bookmark-panel .monthly-edit-open{margin:0 20px 20px}
+.beyond-bookmark-panel :is(.interpret-preview-card,.sign-language-preview-card) h2{font-size:26px;margin:16px 0 12px}.beyond-bookmark-panel :is(.interpret-preview-card,.sign-language-preview-card)>p{font-size:14px;line-height:1.6}.beyond-bookmark-panel :is(.interpret-preview-card,.sign-language-preview-card) small{font-size:12px;display:block;margin-top:24px}
+@media(max-width:999px){
+ body.beyond-bookmarks-ready main:has(.editorial-main-layout){padding-inline:36px}
+ body.beyond-bookmarks-ready .editorial-main-layout{display:block;margin-inline:0}
+ body.beyond-bookmarks-ready .editorial-sidebar{display:none!important}
+ body.beyond-bookmarks-ready .editorial-destinations{width:100%;margin-top:20px}
+ .beyond-mobile-bookmarks{display:block}
+ .beyond-bookmark-slot{position:fixed;z-index:8;width:28px;height:112px}
+ .beyond-bookmark-slot.is-open{z-index:9}
+ .beyond-bookmark-slot-monthly{left:0;top:calc(50svh - 56px)}
+ .beyond-bookmark-slot-interpret{right:0;top:calc(50svh - 116px)}
+ .beyond-bookmark-slot-sign{right:0;top:calc(50svh + 6px)}
+ .beyond-bookmark{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;width:28px;height:112px;box-sizing:border-box;padding:8px 4px;border:1px solid #9eb18d;background:#dfe9d1;color:#294831;font:600 11px/1.2 'DM Sans',Arial,sans-serif;letter-spacing:.2px;writing-mode:vertical-rl;cursor:pointer;box-shadow:2px 3px 0 #193c320b}
+ .beyond-bookmark-monthly{border-left:0;border-radius:0 10px 10px 0;transform:rotate(180deg)}
+ .beyond-bookmark-interpret{border-right:0;border-radius:10px 0 0 10px;background:#193c32;color:#f5f4e8}
+ .beyond-bookmark-sign{border-right:0;border-radius:10px 0 0 10px}
+ .beyond-bookmark:focus-visible{outline:3px solid #a7bd83;outline-offset:2px}.beyond-bookmark[aria-expanded=true]{filter:brightness(.93)}
+}
+@media(prefers-reduced-motion:no-preference){.beyond-bookmark-slot.is-open .beyond-bookmark-panel{animation:bookmark-unfold .23s ease-out both}@keyframes bookmark-unfold{from{opacity:0;transform:scale(.45,.85)}to{opacity:1;transform:scale(1)}}}
+@media(max-width:360px){body.beyond-bookmarks-ready .editorial-destinations>.editorial-card{padding:14px 11px}body.beyond-bookmarks-ready .editorial-card h2{font-size:20px}}

@@ -1,11 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;900&family=Manrope:wght@400;500;600;700;800&display=swap');
-/* Shared Speak Boldly typography, with one identity throughout Beyond. */
-html body[data-beyond-space],html body.beyond-blog-active{font-family:'DM Sans',Arial,sans-serif!important;font-size:15px}
+@font-face{font-family:'Beyond Display';font-style:normal;font-weight:100 900;font-display:swap;src:url('./fonts/fraunces-latin-standard-normal.woff2') format('woff2')}
+@font-face{font-family:'Beyond Display';font-style:italic;font-weight:100 900;font-display:swap;src:url('./fonts/fraunces-latin-standard-italic.woff2') format('woff2')}
+@font-face{font-family:'Beyond Sans';font-style:normal;font-weight:100 1000;font-display:swap;src:url('./fonts/dm-sans-latin-wght-normal.woff2') format('woff2')}
+@font-face{font-family:'Beyond Sans';font-style:italic;font-weight:100 1000;font-display:swap;src:url('./fonts/dm-sans-latin-wght-italic.woff2') format('woff2')}
+html body[data-beyond-space],html body.beyond-blog-active{--beyond-font-text:'Beyond Sans','DM Sans',Arial,sans-serif;--beyond-font-display:'Beyond Display',Georgia,serif;font-optical-sizing:auto;-webkit-font-smoothing:antialiased}
+/* One editorial type system throughout Beyond, including the side cards. */
+html body[data-beyond-space],html body.beyond-blog-active{font-family:var(--beyond-font-text)!important;font-size:15px}
 body[data-beyond-space]{min-height:100svh;display:flex;flex-direction:column}
 body[data-beyond-space]>main{width:100%;flex:1;margin-block:0;margin-inline:auto}
-body[data-beyond-space] :is(h1,h2,h3,h4,p,a,button,summary,small,span,strong,em,li,label,input,textarea,select){font-family:'DM Sans',Arial,sans-serif!important}
-.beyond-space-header{box-sizing:border-box;display:flex;align-items:center;gap:20px;min-height:100px;width:100%;max-width:none;margin:0;padding:20px clamp(22px,4vw,64px);border-bottom:1px solid #dedfd5;background:#faf9f4;color:#193c32;font-family:'DM Sans',Arial,sans-serif}
-.beyond-space-wordmark{display:flex;align-items:center;gap:12px;flex:none;text-decoration:none;font:600 28px/1.2 'DM Sans',Arial,sans-serif;letter-spacing:-.7px;color:#193c32}
+body[data-beyond-space] :is(h1,h2,h3,h4,p,a,button,summary,small,span,strong,em,li,label,input,textarea,select){font-family:var(--beyond-font-text)!important}
+.beyond-space-header{box-sizing:border-box;display:flex;align-items:center;gap:20px;min-height:100px;width:100%;max-width:none;margin:0;padding:20px clamp(22px,4vw,64px);border-bottom:1px solid #dedfd5;background:#faf9f4;color:#193c32;font-family:var(--beyond-font-text)}
+.beyond-space-wordmark{display:flex;align-items:center;gap:12px;flex:none;text-decoration:none;font:600 28px/1.2 var(--beyond-font-text);letter-spacing:-.7px;color:#193c32}
 .beyond-space-wordmark img{display:block;flex:none;width:38px;height:38px;object-fit:contain}
 .beyond-space-section{font-size:11px;letter-spacing:.4px;color:#66745d}
 .beyond-space-navigation{display:flex;align-items:center;justify-content:flex-end;gap:22px;width:auto;flex:none;margin-left:auto;font-size:12px}
@@ -15,14 +19,14 @@ body[data-beyond-space] :is(h1,h2,h3,h4,p,a,button,summary,small,span,strong,em,
 .beyond-space-header a:focus-visible{outline:3px solid #8aab4f;outline-offset:4px}
 .beyond-space-header a:hover{color:#4f6c42}
 html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:auto;min-height:100px;max-width:none;margin:0;padding:20px clamp(22px,4vw,64px)!important;gap:20px!important;background:#faf9f4!important;color:#193c32!important;border-bottom:1px solid #dedfd5!important}
-html body.beyond-blog-active>#beyond-blog-header.beyond-space-header :is(a,span){font-family:'DM Sans',Arial,sans-serif!important;color:#193c32!important}
+html body.beyond-blog-active>#beyond-blog-header.beyond-space-header :is(a,span){color:#193c32!important}
 html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark{font-size:28px!important;margin:0!important}
 html body.beyond-blog-active>#beyond-blog-header .beyond-space-navigation{margin-left:auto!important}
-.beyond-space-footer{box-sizing:border-box;display:block;clear:both;width:100%;max-width:none;margin:0;padding:18px clamp(22px,6vw,86px);background:#faf9f4;color:#193c32;border-top:1px solid #dedfd5;text-align:left;font-family:'DM Sans',Arial,sans-serif;letter-spacing:normal;line-height:1.6}
-.beyond-space-footer>span{display:block;font:600 12px/1.6 'DM Sans',Arial,sans-serif;color:#193c32}
-.beyond-space-footer>small{display:block;font:400 10px/1.6 'DM Sans',Arial,sans-serif;color:#193c32}
+.beyond-space-footer{box-sizing:border-box;display:block;clear:both;width:100%;max-width:none;margin:0;padding:18px clamp(22px,6vw,86px);background:#faf9f4;color:#193c32;border-top:1px solid #dedfd5;text-align:left;font-family:var(--beyond-font-text);letter-spacing:normal;line-height:1.6}
+.beyond-space-footer>span{display:block;font:600 12px/1.6 var(--beyond-font-text);color:#193c32}
+.beyond-space-footer>small{display:block;font:400 10px/1.6 var(--beyond-font-text);color:#193c32}
 html body.beyond-blog-active main #boldly-notes .beyond-space-footer{max-width:none;margin-top:32px;padding:18px 24px;background:#faf9f4;color:#193c32;border-top:1px solid #dedfd5}
-html body.beyond-blog-active main #boldly-notes .beyond-space-footer :is(span,small){font-family:'DM Sans',Arial,sans-serif!important;color:#193c32!important}
+html body.beyond-blog-active main #boldly-notes .beyond-space-footer :is(span,small){color:#193c32!important}
 body[data-beyond-space] .editorial-introduction h1{font-weight:500;font-size:clamp(36px,4.8vw,62px);line-height:1.15;letter-spacing:-1.7px}
 body[data-beyond-space] .literary-hero h1{font-weight:500;font-size:clamp(38px,5.5vw,76px);line-height:1.15;letter-spacing:-1.7px}
 @media(max-width:680px){
@@ -38,8 +42,22 @@ body[data-beyond-space] .literary-hero h1{font-weight:500;font-size:clamp(38px,5
 html body.beyond-blog-active>#beyond-blog-header .beyond-space-section{color:#66745d!important}
 .beyond-space-footer{padding-inline:max(22px,calc((100vw - 1176px)/2))}
 html body.beyond-blog-active main #boldly-notes .beyond-space-footer{position:relative;left:50%;transform:translateX(-50%);box-sizing:border-box;width:100vw!important;max-width:none!important;padding:18px max(22px,calc((100vw - 1176px)/2))!important}
-html body.beyond-blog-active main section#boldly-notes.catalog[data-view]:not([hidden]) .bold-blog-masthead.sb-page-heading>.sb-page-title{color:#f1ecde!important;font-family:'DM Sans',Arial,sans-serif!important}
+html body.beyond-blog-active main section#boldly-notes.catalog[data-view]:not([hidden]) .bold-blog-masthead.sb-page-heading>.sb-page-title{color:#f1ecde!important;font-family:var(--beyond-font-display)!important}
 html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:100px!important;min-height:100px!important;box-sizing:border-box!important}
 html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark img{width:38px!important;height:38px!important}
 @media(max-width:680px){html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:80px!important;min-height:80px!important}html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark img{width:32px!important;height:32px!important}}
 @media(max-width:360px){html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark img{width:28px!important;height:28px!important}}
+
+/* Expressive titles, quiet copy: the same pairing on every destination. */
+html body[data-beyond-space] :is(h1,h2,h3,h4),html body.beyond-blog-active #boldly-notes :is(h1,h2,h3,h4){font-family:var(--beyond-font-display)!important;font-weight:500!important;letter-spacing:-.025em}
+html body[data-beyond-space] :is(h1,h2,h3,h4) :is(a,span,em,strong),html body.beyond-blog-active #boldly-notes :is(h1,h2,h3,h4) :is(a,span,em,strong){font-family:inherit!important}
+html body.beyond-blog-active #boldly-notes :is(p,button,label,input,textarea,select,small,time,.button,.eyebrow,.blog-word){font-family:var(--beyond-font-text)!important}
+html body[data-beyond-space] .beyond-space-wordmark,html body[data-beyond-space] .beyond-space-wordmark>span,html body.beyond-blog-active>#beyond-blog-header.beyond-space-header .beyond-space-wordmark,html body.beyond-blog-active>#beyond-blog-header.beyond-space-header .beyond-space-wordmark>span{font-family:var(--beyond-font-display)!important;font-weight:600!important;letter-spacing:-.035em}
+html body[data-beyond-space] .editorial-introduction h1{line-height:1.1;letter-spacing:-.035em}
+html body[data-beyond-space] .editorial-card h2{font-size:30px;line-height:1.16;white-space:normal}
+html body[data-beyond-space] .beyond-bookmark-panel h2{font-size:26px;line-height:1.2}
+html body[data-beyond-space] :is(.more-coming,.teaser-placeholder>p){font-family:var(--beyond-font-display)!important;font-weight:500}
+html body.beyond-blog-active #boldly-notes .boldly-note-link h3{line-height:1.2;letter-spacing:-.025em}
+html body.beyond-blog-active main section#boldly-notes.catalog[data-view]:not([hidden]) :is(.boldly-note-link h3,[data-notes-reader]>h2,.boldly-note-page h3,.bold-question>h3){font-family:var(--beyond-font-display)!important;font-weight:500!important}
+html body[data-beyond-space] :is(.editorial-action,.monthly-edit-open,.beyond-bookmark,.beyond-space-navigation){font-family:var(--beyond-font-text)!important;font-weight:500;letter-spacing:.01em}
+@media(max-width:680px){html body[data-beyond-space] .editorial-card h2{font-size:clamp(20px,5.2vw,24px)}}

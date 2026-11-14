@@ -163,7 +163,7 @@ for(const [file,section]of [
  const path=resolve(root,file);let html=readFileSync(path,'utf8');
  html=html.replace(/<header\b[\s\S]*?<\/header>/,renderBeyondHeader(section)).replace(/<footer\b[\s\S]*?<\/footer>/,renderBeyondFooter());
  html=html.replace(/<body([^>]*)>/,(_,attrs)=>'<body'+attrs.replace(/ data-beyond-space(?:="[^"]*")?/g,'')+' data-beyond-space>');
- if(!html.includes('/literatespace/beyond-shared.css?')){const link='<link rel="stylesheet" href="/literatespace/beyond-shared.css?v=1">';html=html.includes('</head>')?html.replace('</head>',link+'</head>'):html.replace('<body',link+'<body');}
+ if(!html.includes('/literatespace/beyond-shared.css?')){const link='<link rel="stylesheet" href="/literatespace/beyond-shared.css?v=2">';html=html.includes('</head>')?html.replace('</head>',link+'</head>'):html.replace('<body',link+'<body');}
  writeFileSync(path,html);
 }
 console.log('Built '+generated.length+' public pages; '+urls.length+' sitemap URLs. Blog articles: '+posts.length+'.');

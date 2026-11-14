@@ -1,4 +1,4 @@
-import './home-header-doodles.js?v=1';
+import './home-header-doodles.js?v=2';
 import './monthly-home-theme.js?v=8';
 import './program-offer.js?v=4';
 import './beyond-brand.js?v=77';
