@@ -1,9 +1,9 @@
-import {appendTaskPages} from './notes-task-pdf.js?v=white-notes-2';
+import {appendTaskPages} from './notes-task-pdf.js?v=writable-84';
 import {DOCUMENT_BRAND,drawDocumentBranding} from './document-branding.js?v=two-line-footer-1';
 import {documentDate} from './student-document-filenames.js';
 export async function buildClientNotesPdf(client,notes,{fontBytes,boldFontBytes=null,richRuns=null,logoBytes,date=documentDate(),title='Notes',taskAttachments=[],answerPages=true,welcomeText='',welcomeImages=[],backgroundBytes=null}={}){
  const {PDFDocument,rgb}=await import('./vendor/pdf-lib.esm.min.js');const {default:fontkit}=await import('./vendor/fontkit.es.min.js');
- const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);const font=await pdf.embedFont(fontBytes,{subset:true}),logo=await pdf.embedPng(logoBytes);pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setTitle(client.name+' — '+title+(client.sessionNumber?' — Session '+client.sessionNumber:''));pdf.setCreator('Speak Boldly');
+ const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);const font=await pdf.embedFont(fontBytes,{subset:taskAttachments.length===0}),logo=await pdf.embedPng(logoBytes);pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setTitle(client.name+' — '+title+(client.sessionNumber?' — Session '+client.sessionNumber:''));pdf.setCreator('Speak Boldly');
  const boldFont=boldFontBytes?await pdf.embedFont(boldFontBytes,{subset:true}):font;
  const background=title==='Session notes'&&backgroundBytes?await pdf.embedPng(backgroundBytes):null;
  const width=595.28,height=841.89,left=DOCUMENT_BRAND.left,maxWidth=width-88,ink=rgb(.098,.235,.196);let page,y;

@@ -38,7 +38,7 @@ export function motivationIndexForDate(now = new Date()) {
   for(let i=order.length-1;i>0;i--){seed=(Math.imul(1664525,seed)+1013904223)>>>0;const j=seed%(i+1);[order[i],order[j]]=[order[j],order[i]];}
   const held=dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
   if(order[0]===held)[order[0],order[1]]=[order[1],order[0]];
-  return order[((settingsFrozen()?day-end:Math.floor((day-end)/7))%order.length+order.length)%order.length];
+  return order[((settingsFrozen()?day-end:Math.floor((day-end)/7)+(day>=Math.floor(Date.UTC(2026,10,16)/86400000)?3:0))%order.length+order.length)%order.length];
  }
  return day%dailyQuotes.length;
 }

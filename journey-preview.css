@@ -343,7 +343,7 @@ html body main #contact .contact-main-column>.contact-connect-content{min-width:
 html body main #contact .contact-main-column>.contact-email-faq-row{display:block!important;width:100%;min-width:0;margin:14px 0 12px!important}
 html body main #contact .contact-main-column>.contact-email-faq-row>.contact-email-row{margin:0!important}
 html body main #contact .contact-social-row>.contact-promotion-rail{grid-column:2;grid-row:1;align-self:start}
-/* The same small book illustration belongs in the header and footer on every screen. */
+/* The original leafy sprigs and small gold accents return to both white margins. */
 html body main #home .home-whitespace-doodles{height:38px;opacity:.8}
 html body main #home .home-whitespace-doodles>.home-doodle-art,html body>header .home-header-doodles>.home-doodle-art{display:block!important}
 html body>header .home-header-doodles{opacity:.8}

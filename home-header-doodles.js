@@ -10,8 +10,9 @@ export function initializeHomeHeaderDoodles(doc){
   const next=menu&&menu.getClientRects().length?menu:nav;if(!next)return;
   const h=header.getBoundingClientRect(),l=logo.getBoundingClientRect(),r=next.getBoundingClientRect();
   const start=l.right+10,end=r.left-10,gap=end-start;
-  mark.hidden=gap<54;if(mark.hidden)return;
-  const width=Math.min(90,gap),height=36;
+  mark.hidden=gap<22;if(mark.hidden)return;
+  const width=Math.min(150,gap),height=width<70?22:30;
+  art.setAttribute('viewBox',width<70?'0 0 45 45':'0 0 230 45');
   mark.style.left=(start+(gap-width)/2-h.left)+'px';mark.style.top=(l.top+l.height/2-h.top-height/2)+'px';
   mark.style.width=width+'px';mark.style.height=height+'px';
  }

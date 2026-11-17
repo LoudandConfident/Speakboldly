@@ -142,3 +142,8 @@ body:has(.notes-editor-page[data-document-kind=notes]:not([hidden])){max-width:n
 @media(pointer:coarse){#client-notes-dialog .session-notes-toolbar button{min-height:44px;padding-inline:13px}}
 @media print{#client-notes-dialog .session-notes-toolbar{display:none!important}}
 #client-notes-dialog .session-notes-toolbar button{transition:none!important;animation:none!important}
+/* Compact, writable feedback beside each attached worksheet. */
+#client-notes-dialog .notes-task-picker li.notes-task-file{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:8px 12px;padding:12px 0;border-bottom:1px solid #c8d3bf}
+#client-notes-dialog .notes-task-file>span{overflow-wrap:anywhere;font-size:13px}
+#client-notes-dialog .notes-task-file>.notes-task-comment{grid-column:1/-1;font-size:12px;font-weight:500}
+#client-notes-dialog .notes-task-comment textarea{display:block;box-sizing:border-box;width:100%;min-height:88px;height:auto;max-height:none;padding:10px;border:1px solid #9fb28d;border-radius:6px 14px 6px 14px;background:#f6f8ef!important;color:#193c32;font:400 14px/1.6 'DM Sans',Arial,sans-serif;resize:vertical;margin-top:6px}
