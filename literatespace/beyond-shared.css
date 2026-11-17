@@ -8,7 +8,7 @@ html body[data-beyond-space],html body.beyond-blog-active{font-family:var(--beyo
 body[data-beyond-space]{min-height:100svh;display:flex;flex-direction:column}
 body[data-beyond-space]>main{width:100%;flex:1;margin-block:0;margin-inline:auto}
 body[data-beyond-space] :is(h1,h2,h3,h4,p,a,button,summary,small,span,strong,em,li,label,input,textarea,select){font-family:var(--beyond-font-text)!important}
-.beyond-space-header{box-sizing:border-box;display:flex;align-items:center;gap:20px;min-height:100px;width:100%;max-width:none;margin:0;padding:20px clamp(22px,4vw,64px);border-bottom:1px solid #dedfd5;background:#faf9f4;color:#193c32;font-family:var(--beyond-font-text)}
+.beyond-space-header{box-sizing:border-box;display:flex;align-items:center;gap:20px;min-height:84px;width:100%;max-width:none;margin:0;padding:12px clamp(22px,4vw,64px);border-bottom:1px solid #dedfd5;background:#faf9f4;color:#193c32;font-family:var(--beyond-font-text)}
 .beyond-space-wordmark{display:flex;align-items:center;gap:12px;flex:none;text-decoration:none;font:600 28px/1.2 var(--beyond-font-text);letter-spacing:-.7px;color:#193c32}
 .beyond-space-wordmark img{display:block;flex:none;width:38px;height:38px;object-fit:contain}
 .beyond-space-section{font-size:11px;letter-spacing:.4px;color:#66745d}
@@ -18,7 +18,7 @@ body[data-beyond-space] :is(h1,h2,h3,h4,p,a,button,summary,small,span,strong,em,
 .beyond-space-teaching{white-space:nowrap;color:#193c32}
 .beyond-space-header a:focus-visible{outline:3px solid #8aab4f;outline-offset:4px}
 .beyond-space-header a:hover{color:#4f6c42}
-html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:auto;min-height:100px;max-width:none;margin:0;padding:20px clamp(22px,4vw,64px)!important;gap:20px!important;background:#faf9f4!important;color:#193c32!important;border-bottom:1px solid #dedfd5!important}
+html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:auto;min-height:84px;max-width:none;margin:0;padding:12px clamp(22px,4vw,64px)!important;gap:20px!important;background:#faf9f4!important;color:#193c32!important;border-bottom:1px solid #dedfd5!important}
 html body.beyond-blog-active>#beyond-blog-header.beyond-space-header :is(a,span){color:#193c32!important}
 html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark{font-size:28px!important;margin:0!important}
 html body.beyond-blog-active>#beyond-blog-header .beyond-space-navigation{margin-left:auto!important}
@@ -30,10 +30,10 @@ html body.beyond-blog-active main #boldly-notes .beyond-space-footer :is(span,sm
 body[data-beyond-space] .editorial-introduction h1{font-weight:500;font-size:clamp(36px,4.8vw,62px);line-height:1.15;letter-spacing:-1.7px}
 body[data-beyond-space] .literary-hero h1{font-weight:500;font-size:clamp(38px,5.5vw,76px);line-height:1.15;letter-spacing:-1.7px}
 @media(max-width:680px){
- .beyond-space-header{min-height:80px;padding:18px 22px;gap:12px}
+ .beyond-space-header{min-height:68px;padding:12px 22px;gap:12px}
  .beyond-space-wordmark{font-size:24px;gap:9px}.beyond-space-wordmark img{width:32px;height:32px}
  .beyond-space-section{display:none}.beyond-space-navigation{gap:10px;font-size:10px}.beyond-space-back{width:30px;height:30px}
- html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{min-height:80px;padding:18px 22px!important;gap:12px!important}
+ html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{min-height:68px;padding:12px 22px!important;gap:12px!important}
  html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark{font-size:24px!important}
  .beyond-space-footer{padding:18px 22px}
 }
@@ -43,9 +43,9 @@ html body.beyond-blog-active>#beyond-blog-header .beyond-space-section{color:#66
 .beyond-space-footer{padding-inline:max(22px,calc((100vw - 1176px)/2))}
 html body.beyond-blog-active main #boldly-notes .beyond-space-footer{position:relative;left:50%;transform:translateX(-50%);box-sizing:border-box;width:100vw!important;max-width:none!important;padding:18px max(22px,calc((100vw - 1176px)/2))!important}
 html body.beyond-blog-active main section#boldly-notes.catalog[data-view]:not([hidden]) .bold-blog-masthead.sb-page-heading>.sb-page-title{color:#f1ecde!important;font-family:var(--beyond-font-display)!important}
-html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:100px!important;min-height:100px!important;box-sizing:border-box!important}
+html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:84px!important;min-height:84px!important;box-sizing:border-box!important}
 html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark img{width:38px!important;height:38px!important}
-@media(max-width:680px){html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:80px!important;min-height:80px!important}html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark img{width:32px!important;height:32px!important}}
+@media(max-width:680px){html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:68px!important;min-height:68px!important}html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark img{width:32px!important;height:32px!important}}
 @media(max-width:360px){html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark img{width:28px!important;height:28px!important}}
 
 /* Expressive titles, quiet copy: the same pairing on every destination. */

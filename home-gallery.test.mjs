@@ -27,7 +27,7 @@ test('every rotating motivation has its own static picture preview and stable sh
 test('automatic weekly rotation shows the requested fourth message and preserves a complete shuffled cycle',()=>{
  const current=quoteForDate(new Date('2026-11-17T12:00:00Z'));assert.equal(current.image,'./images/daily-motivation-keep-going-clean.png');
  const available=dailyQuotes.filter(entry=>!entry.image.endsWith('small-steps-teacher.webp')&&!entry.image.endsWith('math-teacher-board.webp'));
- const cycle=Array.from({length:available.length},(_,i)=>quoteForDate(new Date(Date.UTC(2026,10,16+7*i,12))));
+ const cycle=Array.from({length:available.length},(_,i)=>quoteForDate(new Date(Date.UTC(2026,10,23+7*i,12))));
  assert.equal(new Set(cycle).size,available.length);assert.notDeepEqual(cycle,available);
  for(const entry of available)assert.ok(cycle.includes(entry));
 });

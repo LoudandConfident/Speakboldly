@@ -1,5 +1,5 @@
 import {clientSheetConnected,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
-import {cairoDayNumber,clientDailyMotivation,dailyQuotes,quoteDetails,dailyPractice,motivationEntryId} from './home-gallery.js?v=motivation-control-85';
+import {cairoDayNumber,clientDailyMotivation,dailyQuotes,quoteDetails,dailyPractice,motivationEntryId} from './home-gallery.js?v=motivation-library-89';
 import {setMotivationSettings,motivationSettings,motivationIsFrozen} from './motivation-settings.js';
 
 export function initializeMotivationFreeze(doc,isUnlocked){

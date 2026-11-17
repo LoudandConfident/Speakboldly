@@ -162,5 +162,333 @@ export const motivationPreviews = {
     "version": "48d6ce1249e9",
     "bytes": 67106,
     "emailImage": "./images/daily-motivation-math-teacher-board.png"
+  },
+  "./images/daily-motivation-there-is-always-more-to-discover.webp": {
+    "image": "./images/motivation-preview/daily-motivation-there-is-always-more-to-discover-1896a79b636f.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "1896a79b636f",
+    "bytes": 95331,
+    "emailImage": "./images/daily-motivation-there-is-always-more-to-discover.png"
+  },
+  "./images/daily-motivation-dont-outgrow-your-curiosity.webp": {
+    "image": "./images/motivation-preview/daily-motivation-dont-outgrow-your-curiosity-2bb468b83e6e.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "2bb468b83e6e",
+    "bytes": 73969,
+    "emailImage": "./images/daily-motivation-dont-outgrow-your-curiosity.png"
+  },
+  "./images/daily-motivation-become-more-than-your-routine.webp": {
+    "image": "./images/motivation-preview/daily-motivation-become-more-than-your-routine-0ab858e3e210.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "0ab858e3e210",
+    "bytes": 64317,
+    "emailImage": "./images/daily-motivation-become-more-than-your-routine.png"
+  },
+  "./images/daily-motivation-a-bigger-world-begins-with-a-broader-mind.webp": {
+    "image": "./images/motivation-preview/daily-motivation-a-bigger-world-begins-with-a-broader-mind-434a23eea70b.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "434a23eea70b",
+    "bytes": 72286,
+    "emailImage": "./images/daily-motivation-a-bigger-world-begins-with-a-broader-mind.png"
+  },
+  "./images/daily-motivation-never-become-too-experienced-to-learn.webp": {
+    "image": "./images/motivation-preview/daily-motivation-never-become-too-experienced-to-learn-904d3ea00244.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "904d3ea00244",
+    "bytes": 72345,
+    "emailImage": "./images/daily-motivation-never-become-too-experienced-to-learn.png"
+  },
+  "./images/daily-motivation-give-your-future-self-more-possibilities.webp": {
+    "image": "./images/motivation-preview/daily-motivation-give-your-future-self-more-possibilities-cf46febe97c6.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "cf46febe97c6",
+    "bytes": 98500,
+    "emailImage": "./images/daily-motivation-give-your-future-self-more-possibilities.png"
+  },
+  "./images/daily-motivation-let-life-surprise-you.webp": {
+    "image": "./images/motivation-preview/daily-motivation-let-life-surprise-you-a383388ee576.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "a383388ee576",
+    "bytes": 66296,
+    "emailImage": "./images/daily-motivation-let-life-surprise-you.png"
+  },
+  "./images/daily-motivation-the-courage-to-begin-again.webp": {
+    "image": "./images/motivation-preview/daily-motivation-the-courage-to-begin-again-604baaf9f9ef.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "604baaf9f9ef",
+    "bytes": 69080,
+    "emailImage": "./images/daily-motivation-the-courage-to-begin-again.png"
+  },
+  "./images/daily-motivation-choose-depth-over-distraction.webp": {
+    "image": "./images/motivation-preview/daily-motivation-choose-depth-over-distraction-0800aff52616.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "0800aff52616",
+    "bytes": 64663,
+    "emailImage": "./images/daily-motivation-choose-depth-over-distraction.png"
+  },
+  "./images/daily-motivation-allow-your-perspective-to-evolve.webp": {
+    "image": "./images/motivation-preview/daily-motivation-allow-your-perspective-to-evolve-85641ef8feee.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "85641ef8feee",
+    "bytes": 82021,
+    "emailImage": "./images/daily-motivation-allow-your-perspective-to-evolve.png"
+  },
+  "./images/daily-motivation-dont-wait-for-the-perfect-moment.webp": {
+    "image": "./images/motivation-preview/daily-motivation-dont-wait-for-the-perfect-moment-34b638b435ca.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "34b638b435ca",
+    "bytes": 85776,
+    "emailImage": "./images/daily-motivation-dont-wait-for-the-perfect-moment.png"
+  },
+  "./images/daily-motivation-keep-becoming.webp": {
+    "image": "./images/motivation-preview/daily-motivation-keep-becoming-ef1b2b83c528.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "ef1b2b83c528",
+    "bytes": 102712,
+    "emailImage": "./images/daily-motivation-keep-becoming.png"
+  },
+  "./images/daily-motivation-the-world-is-bigger-than-what-you-know.webp": {
+    "image": "./images/motivation-preview/daily-motivation-the-world-is-bigger-than-what-you-know-30f3f8756203.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "30f3f8756203",
+    "bytes": 82179,
+    "emailImage": "./images/daily-motivation-the-world-is-bigger-than-what-you-know.png"
+  },
+  "./images/daily-motivation-you-are-allowed-to-become-someone-new.webp": {
+    "image": "./images/motivation-preview/daily-motivation-you-are-allowed-to-become-someone-new-5988f2dcc0b6.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "5988f2dcc0b6",
+    "bytes": 70840,
+    "emailImage": "./images/daily-motivation-you-are-allowed-to-become-someone-new.png"
+  },
+  "./images/daily-motivation-protect-your-ability-to-wonder.webp": {
+    "image": "./images/motivation-preview/daily-motivation-protect-your-ability-to-wonder-382146bdeed3.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "382146bdeed3",
+    "bytes": 68727,
+    "emailImage": "./images/daily-motivation-protect-your-ability-to-wonder.png"
+  },
+  "./images/daily-motivation-discipline-creates-opportunities-that-motivation-cannot.webp": {
+    "image": "./images/motivation-preview/daily-motivation-discipline-creates-opportunities-that-motivation-cannot-f306a86a4738.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "f306a86a4738",
+    "bytes": 68000,
+    "emailImage": "./images/daily-motivation-discipline-creates-opportunities-that-motivation-cannot.png"
+  },
+  "./images/daily-motivation-dont-confuse-being-busy-with-moving-forward.webp": {
+    "image": "./images/motivation-preview/daily-motivation-dont-confuse-being-busy-with-moving-forward-2cfab22872af.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "2cfab22872af",
+    "bytes": 62838,
+    "emailImage": "./images/daily-motivation-dont-confuse-being-busy-with-moving-forward.png"
+  },
+  "./images/daily-motivation-the-people-you-meet-can-expand-your-world.webp": {
+    "image": "./images/motivation-preview/daily-motivation-the-people-you-meet-can-expand-your-world-acfb21ef4918.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "acfb21ef4918",
+    "bytes": 69251,
+    "emailImage": "./images/daily-motivation-the-people-you-meet-can-expand-your-world.png"
+  },
+  "./images/daily-motivation-learning-is-an-investment-in-freedom.webp": {
+    "image": "./images/motivation-preview/daily-motivation-learning-is-an-investment-in-freedom-3d3be5db17bf.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "3d3be5db17bf",
+    "bytes": 73169,
+    "emailImage": "./images/daily-motivation-learning-is-an-investment-in-freedom.png"
+  },
+  "./images/daily-motivation-a-difficult-beginning-is-still-a-beginning.webp": {
+    "image": "./images/motivation-preview/daily-motivation-a-difficult-beginning-is-still-a-beginning-10c24997bdec.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "10c24997bdec",
+    "bytes": 66120,
+    "emailImage": "./images/daily-motivation-a-difficult-beginning-is-still-a-beginning.png"
+  },
+  "./images/daily-motivation-learn-to-think-beyond-your-own-experience.webp": {
+    "image": "./images/motivation-preview/daily-motivation-learn-to-think-beyond-your-own-experience-b2544d676534.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "b2544d676534",
+    "bytes": 76874,
+    "emailImage": "./images/daily-motivation-learn-to-think-beyond-your-own-experience.png"
+  },
+  "./images/daily-motivation-the-quality-of-your-attention-shapes-your-life.webp": {
+    "image": "./images/motivation-preview/daily-motivation-the-quality-of-your-attention-shapes-your-life-ab72edd6ca5d.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "ab72edd6ca5d",
+    "bytes": 61634,
+    "emailImage": "./images/daily-motivation-the-quality-of-your-attention-shapes-your-life.png"
+  },
+  "./images/daily-motivation-dont-let-familiarity-become-a-limitation.webp": {
+    "image": "./images/motivation-preview/daily-motivation-dont-let-familiarity-become-a-limitation-3670fb87e0d7.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "3670fb87e0d7",
+    "bytes": 83560,
+    "emailImage": "./images/daily-motivation-dont-let-familiarity-become-a-limitation.png"
+  },
+  "./images/daily-motivation-your-mind-deserves-better-than-endless-distraction.webp": {
+    "image": "./images/motivation-preview/daily-motivation-your-mind-deserves-better-than-endless-distraction-c0832558c02b.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "c0832558c02b",
+    "bytes": 71144,
+    "emailImage": "./images/daily-motivation-your-mind-deserves-better-than-endless-distraction.png"
+  },
+  "./images/daily-motivation-progress-doesnt-always-announce-itself.webp": {
+    "image": "./images/motivation-preview/daily-motivation-progress-doesnt-always-announce-itself-3873cfa752d2.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "3873cfa752d2",
+    "bytes": 68316,
+    "emailImage": "./images/daily-motivation-progress-doesnt-always-announce-itself.png"
+  },
+  "./images/daily-motivation-you-dont-need-to-know-where-every-interest-will-lead.webp": {
+    "image": "./images/motivation-preview/daily-motivation-you-dont-need-to-know-where-every-interest-will-lead-3c087b0ea3a6.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "3c087b0ea3a6",
+    "bytes": 76246,
+    "emailImage": "./images/daily-motivation-you-dont-need-to-know-where-every-interest-will-lead.png"
+  },
+  "./images/daily-motivation-be-brave-enough-to-question-yourself.webp": {
+    "image": "./images/motivation-preview/daily-motivation-be-brave-enough-to-question-yourself-45adb145731d.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "45adb145731d",
+    "bytes": 63368,
+    "emailImage": "./images/daily-motivation-be-brave-enough-to-question-yourself.png"
+  },
+  "./images/daily-motivation-build-a-life-that-continues-to-interest-you.webp": {
+    "image": "./images/motivation-preview/daily-motivation-build-a-life-that-continues-to-interest-you-e21d92c69a62.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "e21d92c69a62",
+    "bytes": 77722,
+    "emailImage": "./images/daily-motivation-build-a-life-that-continues-to-interest-you.png"
+  },
+  "./images/daily-motivation-the-courage-to-be-different.webp": {
+    "image": "./images/motivation-preview/daily-motivation-the-courage-to-be-different-90e7e2eec82c.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "90e7e2eec82c",
+    "bytes": 100934,
+    "emailImage": "./images/daily-motivation-the-courage-to-be-different.png"
+  },
+  "./images/daily-motivation-small-habits-shape-the-person-you-become.webp": {
+    "image": "./images/motivation-preview/daily-motivation-small-habits-shape-the-person-you-become-8d7dbe34b796.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "8d7dbe34b796",
+    "bytes": 86427,
+    "emailImage": "./images/daily-motivation-small-habits-shape-the-person-you-become.png"
+  },
+  "./images/daily-motivation-there-is-wisdom-in-slowing-down.webp": {
+    "image": "./images/motivation-preview/daily-motivation-there-is-wisdom-in-slowing-down-db54d742d9b5.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "db54d742d9b5",
+    "bytes": 79677,
+    "emailImage": "./images/daily-motivation-there-is-wisdom-in-slowing-down.png"
+  },
+  "./images/daily-motivation-learn-from-lives-you-havent-lived.webp": {
+    "image": "./images/motivation-preview/daily-motivation-learn-from-lives-you-havent-lived-f22ff3168ab1.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "f22ff3168ab1",
+    "bytes": 76515,
+    "emailImage": "./images/daily-motivation-learn-from-lives-you-havent-lived.png"
+  },
+  "./images/daily-motivation-dont-mistake-comparison-for-direction.webp": {
+    "image": "./images/motivation-preview/daily-motivation-dont-mistake-comparison-for-direction-d147354546dd.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "d147354546dd",
+    "bytes": 107809,
+    "emailImage": "./images/daily-motivation-dont-mistake-comparison-for-direction.png"
+  },
+  "./images/daily-motivation-the-art-of-starting-over.webp": {
+    "image": "./images/motivation-preview/daily-motivation-the-art-of-starting-over-e5ef00e0f96b.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "e5ef00e0f96b",
+    "bytes": 66301,
+    "emailImage": "./images/daily-motivation-the-art-of-starting-over.png"
+  },
+  "./images/daily-motivation-let-your-ambition-have-meaning.webp": {
+    "image": "./images/motivation-preview/daily-motivation-let-your-ambition-have-meaning-872124922c4d.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "872124922c4d",
+    "bytes": 80209,
+    "emailImage": "./images/daily-motivation-let-your-ambition-have-meaning.png"
+  },
+  "./images/daily-motivation-stay-teachable.webp": {
+    "image": "./images/motivation-preview/daily-motivation-stay-teachable-7ce4c941f497.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "7ce4c941f497",
+    "bytes": 60837,
+    "emailImage": "./images/daily-motivation-stay-teachable.png"
+  },
+  "./images/daily-motivation-your-environment-influences-your-possibilities.webp": {
+    "image": "./images/motivation-preview/daily-motivation-your-environment-influences-your-possibilities-c8ee5f87868e.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "c8ee5f87868e",
+    "bytes": 85300,
+    "emailImage": "./images/daily-motivation-your-environment-influences-your-possibilities.png"
+  },
+  "./images/daily-motivation-make-room-for-meaningful-conversations.webp": {
+    "image": "./images/motivation-preview/daily-motivation-make-room-for-meaningful-conversations-9b0f7071bc5e.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "9b0f7071bc5e",
+    "bytes": 69318,
+    "emailImage": "./images/daily-motivation-make-room-for-meaningful-conversations.png"
+  },
+  "./images/daily-motivation-dont-postpone-living-until-everything-is-perfect.webp": {
+    "image": "./images/motivation-preview/daily-motivation-dont-postpone-living-until-everything-is-perfect-7a1000438aba.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "7a1000438aba",
+    "bytes": 69537,
+    "emailImage": "./images/daily-motivation-dont-postpone-living-until-everything-is-perfect.png"
+  },
+  "./images/daily-motivation-a-lifetime-is-an-opportunity-to-keep-becoming.webp": {
+    "image": "./images/motivation-preview/daily-motivation-a-lifetime-is-an-opportunity-to-keep-becoming-3198fc004ba5.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "3198fc004ba5",
+    "bytes": 108661,
+    "emailImage": "./images/daily-motivation-a-lifetime-is-an-opportunity-to-keep-becoming.png"
+  },
+  "./images/daily-motivation-give-yourself-time-to-learn.webp": {
+    "image": "./images/motivation-preview/daily-motivation-give-yourself-time-to-learn-75206c005a51.jpg",
+    "width": 600,
+    "height": 600,
+    "version": "75206c005a51",
+    "bytes": 56600,
+    "emailImage": "./images/daily-motivation-give-yourself-time-to-learn.png"
   }
 };

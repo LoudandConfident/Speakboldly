@@ -1,4 +1,4 @@
-import {createSeasonalSign} from './monthly-home-theme.js?v=seasonal-pages-86';
+import {createSeasonalSign} from './monthly-home-theme.js?v=home-sign-87';
 import {renderSeasonalFlourish} from './seasonal-flourish.js?v=1';
 import {themeForDate} from './seasonal-theme-data.js';
 import {seasonalThemeSettings,refreshSeasonalThemes} from './seasonal-theme-settings.js';

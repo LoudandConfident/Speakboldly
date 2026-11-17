@@ -27,7 +27,12 @@ export function createSeasonalSign(doc,theme){
 export function initializeMonthlyHomeTheme(doc,now=new Date()){
  const hero=doc.querySelector('#home>.hero');if(!hero)return;hero.querySelector('.monthly-home-theme')?.remove();hero.querySelector('.home-seasonal-flourish')?.remove();
  const theme=themeForDate(now,seasonalThemeSettings());if(!theme)return;
- hero.append(createSeasonalSign(doc,theme));
+ const sign=createSeasonalSign(doc,theme);sign.classList.add('home-seasonal-tag');
+ const art=sign.querySelector('.monthly-theme-art'),accent=art.querySelector(':scope>g')?.cloneNode(true);art.setAttribute('viewBox','0 0 270 180');
+ const greenPanel=theme.art==='thanksgiving';
+ art.innerHTML='<defs><linearGradient id="home-sign-wood" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b79a70"/><stop offset=".45" stop-color="#9d8057"/><stop offset="1" stop-color="#806441"/></linearGradient><linearGradient id="home-sign-panel" x1="0" y1="0" x2="1" y2="1"><stop stop-color="'+(greenPanel?'#496052':'#e6dfcb')+'"/><stop offset="1" stop-color="'+(greenPanel?'#2e493d':'#d7ceb7')+'"/></linearGradient></defs><path d="M66 0v39M204 0v39" stroke="#baaa8b" stroke-width="1.3"/><rect x="19" y="30" width="232" height="130" rx="3" fill="url(#home-sign-wood)" stroke="#725b3f" stroke-opacity=".65" stroke-width=".8"/><path d="M23 34h224M23 34v122" stroke="#d0b38a" stroke-opacity=".65" stroke-width=".8"/><rect x="28" y="39" width="214" height="112" rx="1" fill="url(#home-sign-panel)" stroke="#5e5f46" stroke-width=".8"/><path d="M28 151h214M242 39v112" stroke="#d1b68e" stroke-opacity=".45" stroke-width=".7"/><circle cx="66" cy="35" r="2.2" fill="#7f694c"/><circle cx="204" cy="35" r="2.2" fill="#7f694c"/>';
+ if(accent){accent.setAttribute('transform','translate(73 55) scale(.46)');art.append(accent);}
+ hero.append(sign);
  const actions=hero.querySelector('.home-action-stack');if(actions){const flourish=doc.createElement('span');flourish.className='home-seasonal-flourish';flourish.dataset.theme=theme.art;flourish.setAttribute('aria-hidden','true');flourish.innerHTML=renderSeasonalFlourish(theme.art);actions.append(flourish);}
 }
 if(typeof document!=='undefined'){

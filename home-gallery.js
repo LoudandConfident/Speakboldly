@@ -1,4 +1,5 @@
-import {motivationPreviews} from './motivation-preview-images.js?v=stern-teacher-6';
+import {motivationPreviews} from './motivation-preview-images.js?v=library-89';
+import {additionalMotivations} from './motivation-library-additions.js?v=1';
 import {motivationDay,motivationIsFrozen,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
@@ -36,14 +37,17 @@ export function motivationIndexForDate(now = new Date()) {
  if(day>=Math.floor(Date.UTC(2026,10,2)/86400000)&&day<Math.floor(Date.UTC(2026,10,9)/86400000))return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-math-teacher-board.webp');
  if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
  if(day>=end){
-  // A fixed seed gives every device the same shuffled daily schedule.
-  const order=Array.from({length:dailyQuotes.length},(_,index)=>index).filter(index=>!['./images/daily-motivation-small-steps-teacher.webp','./images/daily-motivation-math-teacher-board.webp'].includes(dailyQuotes[index].image));let seed=20261019;
+  // One shared weekly shuffle; new messages join at the next scheduled boundary.
+  const expanded=day>=ADDITIONAL_MOTIVATIONS_START;
+  const order=Array.from({length:expanded?dailyQuotes.length:LEGACY_MOTIVATION_COUNT},(_,index)=>index).filter(index=>!['./images/daily-motivation-small-steps-teacher.webp','./images/daily-motivation-math-teacher-board.webp'].includes(dailyQuotes[index].image));let seed=expanded?20261123:20261019;
   for(let i=order.length-1;i>0;i--){seed=(Math.imul(1664525,seed)+1013904223)>>>0;const j=seed%(i+1);[order[i],order[j]]=[order[j],order[i]];}
   const held=dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
   if(order[0]===held)[order[0],order[1]]=[order[1],order[0]];
-  return order[((Math.floor((day-end)/7)+(day>=Math.floor(Date.UTC(2026,10,16)/86400000)?3:0))%order.length+order.length)%order.length];
+  if(expanded&&order[0]<LEGACY_MOTIVATION_COUNT){const firstNew=order.findIndex(index=>index>=LEGACY_MOTIVATION_COUNT);[order[0],order[firstNew]]=[order[firstNew],order[0]];}
+  const week=expanded?Math.floor((day-ADDITIONAL_MOTIVATIONS_START)/7):Math.floor((day-end)/7)+(day>=Math.floor(Date.UTC(2026,10,16)/86400000)?3:0);
+  return order[((week%order.length)+order.length)%order.length];
  }
- return day%dailyQuotes.length;
+ return day%LEGACY_MOTIVATION_COUNT;
 }
 export function quoteForDate(now = new Date()) {
  return dailyQuotes[motivationIndexForDate(now)];
@@ -122,6 +126,13 @@ const mathTeacherOriginalIndex=dailyQuotes.findIndex(entry=>entry.image==='./ima
 dailyQuotes.push({...dailyQuotes[mathTeacherOriginalIndex],image:'./images/daily-motivation-math-teacher-board.webp',alt:'A stern Math teacher scolding a worried schoolgirl beside an incorrect answer on the blackboard',quote:'I hated my Math teacher, too!'});
 quoteDetails.push({"support":[],"reflection":"Sometimes, what stays with us from a classroom has very little to do with the subject. We remember how it felt to hesitate, to ask a question, or to get an answer wrong while everyone was listening.","paragraphs":["Sometimes, what stays with us from a classroom has very little to do with the subject. We remember how it felt to hesitate, to ask a question, or to get an answer wrong while everyone was listening.","Over time, that feeling can become a belief about ourselves: ‘I’m bad at Math.’ ‘Languages just aren’t for me.’ We carry those conclusions into adulthood, often without questioning where they came from.","If English brings back that same fear, you deserve the chance to experience learning differently.","Give yourself permission to try in a space where questions are welcome. Start with one conversation, one useful sentence, or one question you would usually keep to yourself. Let that experience give you new evidence about what you can do.","And if you teach, remember the responsibility in your next response. The learner in front of you may carry your words long after they forget the lesson. Choose words that help them return with curiosity and the courage to try again."]});
 dailyPractice.push("Ask one question you would usually keep to yourself. Give yourself the chance to be supported.");
+const LEGACY_MOTIVATION_COUNT=dailyQuotes.length;
+export const ADDITIONAL_MOTIVATIONS_START=Math.floor(Date.UTC(2026,10,23)/86400000);
+for(const entry of additionalMotivations){
+ dailyQuotes.push({image:entry.image,alt:entry.alt,quote:entry.title,embedded:false});
+ quoteDetails.push({support:[],reflection:entry.paragraphs[0],paragraphs:entry.paragraphs});
+ dailyPractice.push('');
+}
 export function motivationShareUrl(entry,base='https://speakboldly.space/'){
  if(entry.customDate)return new URL('./?motivation='+entry.customDate+'#daily-quote',base).href;
  const name=entry.image.split('/').pop().replace(/\.(?:png|webp)$/,'.html');return new URL('./motivation/'+name,base).href;
