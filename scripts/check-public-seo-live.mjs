@@ -2,6 +2,14 @@
 import {readFileSync,appendFileSync} from 'node:fs';
 const paths=JSON.parse(readFileSync(new URL('../content/public-pages-manifest.json',import.meta.url),'utf8')).indexable;
 const origin='https://speakboldly.space',report=[];
+async function fetchPublicPage(path){
+ for(let attempt=0;attempt<3;attempt++){
+  const response=await fetch(origin+path,{signal:AbortSignal.timeout(20000)});
+  if(![429,502,503,504].includes(response.status)||attempt===2)return response;
+  await response.body?.cancel();
+  await new Promise(resolve=>setTimeout(resolve,1500*(attempt+1)));
+ }
+}
 const marker=(process.env.GITHUB_SHA||'public-pages').slice(0,12);
 const probes=['/programs/general-english/','/reviews/','/student-portal/','/blog/'].filter(path=>paths.includes(path));
 let ready=false;
@@ -22,10 +30,10 @@ for(let attempt=0;attempt<24;attempt++){
 }
 if(!ready)throw Error('The new public pages are not live yet. Check the Pages deployment.');
 for(let i=0;i<paths.length;i+=4){await Promise.all(paths.slice(i,i+4).map(async path=>{
- const response=await fetch(origin+path,{signal:AbortSignal.timeout(20000)});if(!response.ok)throw Error(path+' HTTP '+response.status);
+ const response=await fetchPublicPage(path);if(!response.ok)throw Error(path+' HTTP '+response.status);
  if(!path.endsWith('.pdf')){const html=await response.text();if(!html.includes('<link rel="canonical" href="'+origin+path+'">'))throw Error('Canonical mismatch '+path);if(/name="robots" content="noindex/.test(html))throw Error('Unexpected noindex '+path);}
  report.push({path,status:response.status});
 }));}
-const response=await fetch(origin+'/sitemap.xml',{signal:AbortSignal.timeout(20000)}),xml=await response.text();if(!response.ok||!xml.includes(origin+'/programs/general-english/'))throw Error('Live sitemap is stale.');
+const response=await fetchPublicPage('/sitemap.xml'),xml=await response.text();if(!response.ok||!xml.includes(origin+'/programs/general-english/'))throw Error('Live sitemap is stale.');
 console.log(JSON.stringify({checked:report.length,https:true,sitemap:true,pages:report},null,2));
 if(process.env.GITHUB_STEP_SUMMARY)appendFileSync(process.env.GITHUB_STEP_SUMMARY,'## Live SEO check\n\nVerified '+report.length+' public URLs over HTTPS, including canonical URLs, indexing directives and the course sitemap. No forms or email actions were submitted.\n');
