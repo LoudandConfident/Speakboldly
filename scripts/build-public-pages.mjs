@@ -111,6 +111,7 @@ for(const [index,q] of dailyQuotes.entries()){
  const importmap=currentShell.match(/<script type="importmap">[\s\S]*?<\/script>/)?.[0];if(importmap)html=html.replace(/<script type="importmap">[\s\S]*?<\/script>/,()=>importmap);
  const refinements=currentShell.match(/href="\.\/interface-refinements\.css\?[^\"]+"/)?.[0];if(refinements)html=html.replace(/href="\.\/interface-refinements\.css\?[^\"]+"/,refinements);
  const appEntry=currentShell.match(/src="\.\/app\.js\?[^\"]+"/)?.[0];if(appEntry)html=html.replace(/src="\.\/app\.js\?[^\"]+"/,appEntry);
+ for(const name of ['interface-refinements.js','journey-preview.css']){const attr=name.endsWith('.js')?'src':'href',pattern=new RegExp(attr+'="\\./'+name.replaceAll('.','\\.')+'\\?[^\\"]+"'),current=currentShell.match(pattern)?.[0];if(current)html=html.replace(pattern,current);}
 
  html=html.replace(/<link\b[^>]*rel="icon"[^>]*>/g,'<link rel="icon" type="image/png" sizes="192x192" href="/app-icons/icon-192.png">');
  const preview=motivationPreviews[q.image],previewUrl=new URL(preview?.image||q.image,origin).href;

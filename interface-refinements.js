@@ -1,6 +1,7 @@
 import './home-header-doodles.js?v=4';
-import './monthly-home-theme.js?v=9';
-import './program-offer.js?v=4';
+import './monthly-home-theme.js?v=seasonal-pages-86';
+import './seasonal-pages.js?v=1';
+import './program-offer.js?v=thanksgiving-2s-86';
 import './beyond-brand.js?v=77';
 import './learning-card-groups.js?v=balanced-60';
 import './teaching-refinements.js?v=64';

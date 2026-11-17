@@ -357,6 +357,40 @@ html body main #home .home-action-stack>.home-explore{position:static!important;
 html body main #home .hero .home-action-stack>.home-speech-links{position:static!important;inset:auto!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:start!important;transform:none!important;margin:0!important}
 html body main #home .home-seasonal-flourish{display:block;align-self:center;width:154px;height:35px;margin-top:-3px;line-height:0;pointer-events:none}
 html body main #home .home-seasonal-flourish svg{display:block;width:100%;height:100%}
+/* Seasonal signs use the existing header space, with the same illustrations as home. */
+.monthly-theme-copy>.monthly-theme-note,.monthly-theme-copy>.monthly-theme-message{display:block}
+.monthly-theme-copy>.monthly-theme-message[hidden]{display:none!important}
+html body main #home .monthly-home-theme.seasonal-thanksgiving .monthly-theme-copy{top:32%;left:12%;right:12%}
+html body main #home .monthly-home-theme.seasonal-thanksgiving .monthly-theme-note{font:italic 500 17px/1.2 Georgia,serif!important;letter-spacing:0!important;margin:0!important;color:#41543e!important}
+html body main .monthly-home-theme.seasonal-thanksgiving .monthly-theme-note::after{display:none}
+.seasonal-page-heading{position:relative!important;box-sizing:border-box;min-height:76px;padding-inline-end:184px!important}
+#students-portal:not(.learning-section-open) #portal-content .learning-space-heading.seasonal-page-heading{padding-inline-end:184px!important;min-height:76px}
+#courses .courses-heading.seasonal-page-heading{padding-inline-end:240px!important}
+.section-seasonal-decoration{position:absolute;inset-inline-end:0;top:-16px;display:flex;align-items:center;gap:0;width:174px;height:88px;pointer-events:none}
+#courses .section-seasonal-decoration{inset-inline-end:76px;width:160px}
+.section-seasonal-decoration .monthly-home-theme{position:relative;display:block;flex:none;width:112px;height:auto;aspect-ratio:270/200;transform:rotate(-1deg);filter:drop-shadow(1px 2px 2px #342d2414)}
+.section-seasonal-decoration .monthly-theme-art{display:block;width:100%;height:100%}
+.section-seasonal-decoration .monthly-theme-copy{position:absolute;top:29%;left:12%;right:12%;text-align:center}
+.section-seasonal-decoration .monthly-theme-note{font:500 9px/1.3 'DM Sans',Arial,sans-serif;margin:0 0 4px;color:#5b614b}
+.section-seasonal-decoration .monthly-theme-message{font:italic 500 12px/1.2 Georgia,serif;margin:0;color:#41543e}
+.section-seasonal-decoration .seasonal-thanksgiving .monthly-theme-copy{top:31%}
+.section-seasonal-decoration .seasonal-thanksgiving .monthly-theme-note{font:italic 500 14px/1.2 Georgia,serif;margin:0;letter-spacing:0;color:#41543e}
+.section-seasonal-flourish{display:block;width:62px;height:36px;flex:none;align-self:flex-end;margin-bottom:10px;opacity:.9}
+.section-seasonal-flourish svg{display:block;width:100%;height:100%}
+#students-portal.learning-section-open .section-seasonal-decoration{display:none}
+#students-portal.learning-section-open .learning-space-heading.seasonal-page-heading{padding-inline-end:0!important;min-height:0}
+@media(max-width:680px){
+ html body main #home .monthly-home-theme.seasonal-thanksgiving .monthly-theme-note{font-size:13px!important}
+ .seasonal-page-heading{min-height:82px;padding-inline-end:120px!important}
+ #students-portal:not(.learning-section-open) #portal-content .learning-space-heading.seasonal-page-heading{padding-inline-end:156px!important;min-height:82px}
+ #students-portal #portal-content .section-seasonal-decoration{inset-inline-end:36px}
+ #courses .courses-heading.seasonal-page-heading{padding-inline-end:172px!important}
+ .section-seasonal-decoration{top:-8px;width:108px;height:90px;justify-content:flex-end;align-items:flex-start}
+ #courses .section-seasonal-decoration{inset-inline-end:55px;width:108px}
+ .section-seasonal-decoration .monthly-home-theme{width:108px}
+ .section-seasonal-flourish{position:absolute;inset-inline-end:6px;bottom:-3px;width:92px;height:25px;margin:0}
+ .section-seasonal-decoration .seasonal-thanksgiving .monthly-theme-note{font-size:13.5px}
+}
 /* A tighter full-width footer, with room for the complete Beyond mark. */
 html body main #home:not([hidden]){grid-template-rows:minmax(0,1fr) auto!important;gap:0!important}
 html body main #home:not([hidden])>.home-bottom-row{min-height:58px!important;max-width:none!important;width:100%!important;padding:4px clamp(32px,5vw,72px) calc(4px + env(safe-area-inset-bottom,0px)) clamp(18px,3vw,42px)!important;grid-template-columns:minmax(0,1fr) auto clamp(104px,14vw,200px)!important;gap:18px!important}
