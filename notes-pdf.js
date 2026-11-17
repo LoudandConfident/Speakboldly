@@ -1,7 +1,7 @@
-import {appendTaskPages} from './notes-task-pdf.js?v=writable-84';
+import {appendTaskPages} from './notes-task-pdf.js?v=writing-option-96';
 import {DOCUMENT_BRAND,drawDocumentBranding} from './document-branding.js?v=two-line-footer-1';
 import {documentDate} from './student-document-filenames.js';
-export async function buildClientNotesPdf(client,notes,{fontBytes,boldFontBytes=null,richRuns=null,logoBytes,date=documentDate(),title='Notes',taskAttachments=[],answerPages=true,welcomeText='',welcomeImages=[],backgroundBytes=null}={}){
+export async function buildClientNotesPdf(client,notes,{fontBytes,boldFontBytes=null,richRuns=null,logoBytes,date=documentDate(),title='Notes',taskAttachments=[],answerPages=true,writingSpace=true,welcomeText='',welcomeImages=[],backgroundBytes=null}={}){
  const {PDFDocument,rgb}=await import('./vendor/pdf-lib.esm.min.js');const {default:fontkit}=await import('./vendor/fontkit.es.min.js');
  const pdf=await PDFDocument.create();pdf.registerFontkit(fontkit);const font=await pdf.embedFont(fontBytes,{subset:taskAttachments.length===0}),logo=await pdf.embedPng(logoBytes);pdf.setAuthor(DOCUMENT_BRAND.founder);pdf.setTitle(client.name+' — '+title+(client.sessionNumber?' — Session '+client.sessionNumber:''));pdf.setCreator('Speak Boldly');
  const boldFont=boldFontBytes?await pdf.embedFont(boldFontBytes,{subset:true}):font;
@@ -28,7 +28,7 @@ export async function buildClientNotesPdf(client,notes,{fontBytes,boldFontBytes=
  }
  paragraph('Speak Boldly — '+title,19);y-=8;if(title==='Session notes'){if(client.sessionNumber)paragraph('Session: '+client.sessionNumber,13);}else{paragraph(client.name,13);if(client.program)paragraph('Program: '+client.program);if(client.level)paragraph('Level: '+client.level);if(client.sessionNumber)paragraph('Session: '+client.sessionNumber);paragraph('Date: '+date);}y-=18;
  if(welcomeText){paragraph('Welcome to the session',16);y-=6;paragraph(welcomeText);y-=14;if(y<160)newPage();paragraph('Session notes',16);y-=6;}const greeting=title==='Session notes'?String(notes||'').match(/^Hi [^\n!]{1,100}!\n\n/):null;if(greeting){const value=greeting[0].trim(),size=Math.min(22,maxWidth/font.widthOfTextAtSize(value,1));page.drawText(value,{x:(width-font.widthOfTextAtSize(value,size))/2,y,font,size,color:ink});y-=42;if(richRuns)formattedParagraph(richRuns);else paragraph(String(notes).slice(greeting[0].length));}else if(richRuns)formattedParagraph(richRuns);else paragraph(notes);
- await appendTaskPages(pdf,taskAttachments,{font,rgb,client,newPage:()=>{newPage();return page;},answerPages});
+ await appendTaskPages(pdf,taskAttachments,{font,rgb,client,newPage:()=>{newPage();return page;},answerPages,writingSpace});
  await drawDocumentBranding(pdf,{font,logo,light:false});
  return pdf.save();
 }

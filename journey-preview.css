@@ -417,8 +417,8 @@ html body main #daily-quote #daily-quote-text>strong{font-size:inherit!important
 /* Give Beyond a longer horizontal invitation while keeping the footer shallow. */
 html body main #home:not([hidden])>.home-bottom-row{grid-template-columns:minmax(0,1fr) clamp(220px,28vw,360px) 90px!important}
 html body main #home .home-bottom-row>.beyond-entry{width:100%!important;justify-content:space-between!important;gap:18px!important}
-html body main #home .beyond-entry-label{order:0}
-html body main #home .beyond-entry-arrow{order:2}
+html body main #home .beyond-entry-label{order:2}
+html body main #home .beyond-entry-arrow{order:0}
 html body main #home .beyond-entry::after{content:'';order:1;flex:1;height:1px;background:#a8b39b80;opacity:0;transition:opacity .2s}
 html body main #home .home-bottom-row:is(:hover,:focus-within) .beyond-entry::after{opacity:1}
 html body main #home .home-action-stack{top:24px}
@@ -444,3 +444,9 @@ html body:has(#home:not([hidden]))>header{box-sizing:border-box!important;height
  html body main #home>.hero>.monthly-home-theme.home-seasonal-tag{left:auto;right:12px}
  html body main #home .home-kicker{left:18px!important;right:auto!important;max-width:calc(100% - 174px)!important;text-align:left!important}
 }
+/* Leave clear space between each assessment illustration and its divider. */
+html body main #placement .assessment-visual{height:96px!important;min-height:96px!important;max-height:96px!important;padding:6px 0 10px!important;gap:6px!important}
+html body main #placement .assessment-folio{flex:none;line-height:12px!important}
+html body main #placement .level-stair{height:54px!important;flex:0 0 54px}
+html body main #placement .assessment-visual svg{height:58px!important;max-height:58px!important;flex:0 0 58px}
+@media(max-width:680px){#placement .section-seasonal-decoration .seasonal-thanksgiving .monthly-theme-note{font-size:12px;line-height:1.2;word-break:normal;overflow-wrap:normal}}

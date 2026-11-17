@@ -5,3 +5,11 @@ test('notes include PDF tasks, image tasks and independently fillable answers in
 test('answer pages can be omitted and corrupt tasks fail before delivery',async()=>{const bytes=await buildClientNotesPdf({name:'Test'},'Notes',{...options,answerPages:false,taskAttachments:[{name:'Image.png',type:'image/png',bytes:options.logoBytes}]});const pdf=await PDFDocument.load(bytes);assert.equal(pdf.getPageCount(),2);assert.equal(pdf.getForm().getFields().length,1);assert.equal(pdf.getForm().getTextField('task_1_answers').isReadOnly(),false);await assert.rejects(buildClientNotesPdf({name:'Test'},'Notes',{...options,taskAttachments:[{name:'Broken.pdf',type:'application/pdf',bytes:new Uint8Array([1,2,3])}]}),/Could not open Broken.pdf/);});
 
 test('worksheet comments and answer pages share an editable value that survives saving',async()=>{const comment='Try the past tense here.\nI visited my friend yesterday.';const bytes=await buildClientNotesPdf({name:'Monica',sessionNumber:2},'Notes',{...options,taskAttachments:[{name:'Practice.png',type:'image/png',bytes:options.logoBytes,comments:comment}]});const pdf=await PDFDocument.load(bytes),field=pdf.getForm().getTextField('task_1_answers');assert.equal(field.getText(),comment);assert.equal(field.isReadOnly(),false);assert.equal(field.acroField.getWidgets().length,2);field.setText('I visited my friend and we cooked dinner.');const saved=await PDFDocument.load(await pdf.save());assert.equal(saved.getForm().getTextField('task_1_answers').getText(),'I visited my friend and we cooked dinner.');});
+
+test('writing space can be omitted entirely for both PDF and image worksheets',async()=>{
+ const worksheet=await PDFDocument.create();worksheet.addPage([300,400]).drawText('Practice: describe your day.');
+ const bytes=await buildClientNotesPdf({name:'Monica',sessionNumber:2},'Session notes',{...options,writingSpace:false,answerPages:true,taskAttachments:[{name:'Practice.pdf',type:'application/pdf',bytes:await worksheet.save(),comments:'Use the past tense.'},{name:'Picture.png',type:'image/png',bytes:options.logoBytes}]});
+ const pdf=await PDFDocument.load(bytes);
+ assert.equal(pdf.getPageCount(),3,'only notes and the two original worksheets');
+ assert.equal(pdf.getForm().getFields().length,0,'no answer boxes or extra writable pages');
+});

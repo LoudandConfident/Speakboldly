@@ -137,6 +137,7 @@ export const courses = [
     "title": "English Momentum",
     "level": "Beginner, Intermediate, Advanced",
     "duration": "16 sessions per month",
+    "frequency": "4 times a week",
     "category": "General English",
     "sessionMinutes": 60,
     "priceOptions": [
@@ -146,9 +147,9 @@ export const courses = [
         "schedule": "16 sessions per month"
       }
     ],
-    "description": "Ongoing General English coaching with 16 sessions per month. Develop speaking, listening, reading and writing through practice tailored to your level, goals and progress.",
+    "description": "Ongoing General English coaching with four 60-minute sessions a week (16 sessions per month). Develop speaking, listening, reading and writing through practice tailored to your level, goals and progress.",
     "summary": "Keep English in your routine with more frequent, personalised coaching.",
-    "viewDescription": "Ongoing General English coaching with 16 sessions per month. Develop speaking, listening, reading and writing through practice tailored to your level, goals and progress.",
+    "viewDescription": "Ongoing General English coaching with four 60-minute sessions a week (16 sessions per month). Develop speaking, listening, reading and writing through practice tailored to your level, goals and progress.",
     "outcomes": "You’ll practise more frequently, review useful language regularly, and build habits that help you keep improving between sessions.",
     "topics": [
       "Frequent speaking and listening practice",
@@ -157,10 +158,10 @@ export const courses = [
       "Independent practice between sessions"
     ],
     "art": "momentum",
-    "sessionDuration": "60–90 minutes",
+    "sessionDuration": "60 minutes",
     "comingSoon": false,
     "programKind": "Ongoing coaching",
-    "programPlan": "Ongoing General English coaching. Sixteen sessions per month; your level and next steps depend on your progress, not a fixed four-week finish line."
+    "programPlan": "Ongoing General English coaching with four 60-minute sessions a week, billed as 16 sessions per month. Your level and next steps depend on your progress."
   },
   {
     "id": "urgent-session",

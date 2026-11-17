@@ -7,7 +7,7 @@ import {courses,matches,compareCatalogCourses} from './courses.js?v=stay-tuned-2
 const $=s=>document.querySelector(s);
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const durationLabel=c=>c.id==='english-day-out'?'One day · guided outing':c.sessionDuration+' / session';
-const cadenceLabel=c=>c.plannedYear?'':c.id==='general-8'?'8 sessions / month · Twice a week':c.id==='general-4'?'4 sessions / month · Once a week':c.id==='english-momentum'?'16 sessions / month':c.category==='Pro Services'?'By arrangement':c.duration+' · '+(c.programKind==='Workshop'?'Focused workshop':'Professional development');
+const cadenceLabel=c=>c.plannedYear?'':c.id==='general-8'?'8 sessions / month · Twice a week':c.id==='general-4'?'4 sessions / month · Once a week':c.id==='english-momentum'?c.frequency+' · '+c.duration.replace(' per month',' / month'):c.category==='Pro Services'?'By arrangement':c.duration+' · '+(c.programKind==='Workshop'?'Focused workshop':'Professional development');
 const quoteLink=(c,className='course-quote')=>'<a class="'+className+'" href="'+escape(chat('Hello! I would like a quote for '+c.title+'.'))+'">Get a quote</a>';
 const chat=message=>'mailto:Contactus@speakboldly.space?subject='+encodeURIComponent('English coaching enquiry')+'&body='+encodeURIComponent(message+'\n\nContact number: 01283786904');
 function coursePricing(c){
