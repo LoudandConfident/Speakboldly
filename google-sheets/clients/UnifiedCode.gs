@@ -715,7 +715,7 @@ function sbExamNotify(sheet,index,row){
       lines.push('');
     }
     const writingLimit=attempt.answers.examVersion===2?10:20;
-    MailApp.sendEmail({to,subject:'Assessment submitted — '+String(row[2]).replace(/^'/,'')+' — Level '+row[3],body:'An interactive test has been submitted.\n\nName: '+String(row[2]).replace(/^'/,'')+'\nLevel: '+row[3]+'\nProgram: '+String(row[13]).replace(/^'/,'')+'\nAttempt: '+attempt.id+'\n\nAutomatic section scores and corrections:\n'+lines.join('\n')+'\nObjective total: '+total.score+' / '+total.outOf+'\n\nWriting: awaiting your mark (out of '+writingLimit+'). Writing has not been automatically graded. Review any flagged alternatives before setting the final score.\n\nWriting response:\n'+(attempt.answers.E||'(No response)')+'\n\nAll submitted answers:\n'+JSON.stringify(attempt.answers,null,2)+'\n\nPrepare your final report and notes manually: Instructor Portal → client Actions → Send final Report / Notes. Nothing is sent to the student automatically.\n\nSpeak Boldly',name:'Speak Boldly'});
+    sbSendArchivedMail({to,subject:'Assessment submitted — '+String(row[2]).replace(/^'/,'')+' — Level '+row[3],body:'An interactive test has been submitted.\n\nName: '+String(row[2]).replace(/^'/,'')+'\nLevel: '+row[3]+'\nProgram: '+String(row[13]).replace(/^'/,'')+'\nAttempt: '+attempt.id+'\n\nAutomatic section scores and corrections:\n'+lines.join('\n')+'\nObjective total: '+total.score+' / '+total.outOf+'\n\nWriting: awaiting your mark (out of '+writingLimit+'). Writing has not been automatically graded. Review any flagged alternatives before setting the final score.\n\nWriting response:\n'+(attempt.answers.E||'(No response)')+'\n\nAll submitted answers:\n'+JSON.stringify(attempt.answers,null,2)+'\n\nPrepare your final report and notes manually: Instructor Portal → client Actions → Send final Report / Notes. Nothing is sent to the student automatically.\n\nSpeak Boldly',name:'Speak Boldly'});
     row[15]='sent';
   }catch(error){row[15]=row[15]==='sending'?'delivery_unknown':'failed';row[16]=sbExamSafe(error.message);}
   sheet.getRange(index+2,1,1,18).setValues([row]);
@@ -913,7 +913,7 @@ function sbBookingNotify(sheet,index,row){
   if(MailApp.getRemainingDailyQuota()<1)throw new Error('Daily email quota reached.');
   row[7]='sending';row[8]='';sheet.getRange(index+2,1,1,9).setValues([row]);
   const lines=JSON.parse(String(row[3])).map(item=>'Session '+item.number+' — '+item.date+' — '+sbDisplayTime(item.time)+' (Cairo time)');
-  MailApp.sendEmail({to,subject:'New slot booking — '+String(row[2]).replace(/^'/,''),body:'Name: '+String(row[2]).replace(/^'/,'')+'\n\n'+lines.join('\n')+'\n\nReview the instructor calendar and send class confirmation manually through Actions.\n\nSpeak Boldly',name:'Speak Boldly'});row[7]='sent';
+  sbSendArchivedMail({to,subject:'New slot booking — '+String(row[2]).replace(/^'/,''),body:'Name: '+String(row[2]).replace(/^'/,'')+'\n\n'+lines.join('\n')+'\n\nReview the instructor calendar and send class confirmation manually through Actions.\n\nSpeak Boldly',name:'Speak Boldly'});row[7]='sent';
  }catch(error){row[7]='failed';row[8]=sbExamSafe(error.message);}
  sheet.getRange(index+2,1,1,9).setValues([row]);
 }
@@ -1093,7 +1093,7 @@ function handleStudentInstructorContact(data) {
   const content='<p><strong>Name:</strong> '+escape(name)+'<br><strong>Reply email:</strong> '+escape(email)+'</p><p style="white-space:pre-wrap">'+escape(message)+'</p>';
   const htmlBody=typeof sbBrandedEmail==='function'?sbBrandedEmail(consultation?'Program consultation':'Learning Hub request',content):'<html><body style="font-family:Arial,sans-serif;color:#193c32"><h2>Learning Hub request</h2>'+content+'<p>Speak Boldly</p></body></html>';
   try{
-   MailApp.sendEmail({to:consultation?'Contactus@speakboldly.space':'askcoach@speakboldly.space',...(email?{replyTo:email}:{}),name:'Speak Boldly',attachments,subject:(consultation?'Program consultation — ':'Learning Hub request — ')+name,body:(consultation?'Program consultation':'How can I help you?')+'\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
+   sbSendArchivedMail({to:consultation?'Contactus@speakboldly.space':'askcoach@speakboldly.space',...(email?{replyTo:email}:{}),name:'Speak Boldly',attachments,subject:(consultation?'Program consultation — ':'Learning Hub request — ')+name,body:(consultation?'Program consultation':'How can I help you?')+'\n\nName: '+name+'\nReply email: '+email+'\n\n'+message+'\n\nSpeak Boldly',htmlBody});
    sheet.getRange(rowNumber,6,1,2).setValues([['sent','']]);return respond({ok:true,status:'sent'});
   }catch(error){sheet.getRange(rowNumber,6,1,2).setValues([['delivery_unknown',String(error.message||error)]]);throw new Error('Your note is saved, but email delivery could not be confirmed. Please wait for your instructor to check it before sending again.');}
  }finally{lock.releaseLock();}
@@ -1457,7 +1457,7 @@ function sbVerifiedFrom(address){
 }
 function sbSendDomainEmail(message,verifiedFrom){
  const {to,subject,body,...options}=message;
- GmailApp.sendEmail(to,subject,body||'',{...options,...(verifiedFrom?{from:verifiedFrom}:{})});
+ sbSendArchivedGmail(to,subject,body||'',{...options,...(verifiedFrom?{from:verifiedFrom}:{})});
 }
 function checkDomainEmailSenders(){
  const routes=['registration','paymentReminder','progress','final','actionplan','notes'].map(kind=>({kind,...sbDomainEmailRoute(kind)}));
@@ -1524,4 +1524,26 @@ function sbUnifiedInstructorSessionEvent(event){
   if(!session||session.salt!==salt||session.expires<=Date.now())throw Error('Your instructor session expired. Sign in again with your password.');
   data.key=privateKey;event.postData.contents=JSON.stringify(data);return null;
  }catch(error){return json({ok:false,error:String(error.message||error)});}
+}
+
+// Optional mailbox archive. Configure SB_SENT_COPY_EMAIL in Script Properties only
+// after the destination mailbox's incoming-mail rule files these copies into Sent.
+// This does not change the sending provider or move older messages.
+function sbSentCopyOptions(options,recipient){
+ const result={...(options||{})};
+ const archive=String(PropertiesService.getScriptProperties().getProperty('SB_SENT_COPY_EMAIL')||'').trim();
+ if(!archive)return result;
+ if(!/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$/.test(archive))throw Error('Check SB_SENT_COPY_EMAIL in Script Properties before sending.');
+ const addresses=value=>String(value||'').split(/[,;]/).map(part=>{const match=part.trim().match(/<([^<>]+)>$/);return (match?match[1]:part).trim().toLowerCase();});
+ const existing=[recipient||result.to,result.cc,result.bcc].flatMap(addresses);
+ if(!existing.includes(archive.toLowerCase()))result.bcc=[result.bcc,archive].filter(Boolean).join(',');
+ return result;
+}
+function sbSendArchivedMail(message){return MailApp.sendEmail(sbSentCopyOptions(message));}
+function sbSendArchivedGmail(to,subject,body,options){return GmailApp.sendEmail(to,subject,body,sbSentCopyOptions(options,to));}
+function checkSentCopySettings(){
+ const archive=String(PropertiesService.getScriptProperties().getProperty('SB_SENT_COPY_EMAIL')||'').trim();
+ sbSentCopyOptions({});
+ const status={enabled:Boolean(archive),archiveMailbox:archive,provider:'Existing Google delivery',sentFolderRuleRequired:true,emailsSent:0};
+ console.log(JSON.stringify(status));return status;
 }
