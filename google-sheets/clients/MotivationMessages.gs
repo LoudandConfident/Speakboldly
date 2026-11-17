@@ -1,6 +1,11 @@
 // Instructor-authored daily motivations. Published pictures are intentionally public.
 function sbMotivationMessagesSheet(){const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID'));let sheet=book.getSheetByName('Motivation messages');if(!sheet){sheet=book.insertSheet('Motivation messages');sheet.appendRow(['Date (Cairo)','Quote','Reflection','Picture URL','Updated at (UTC)']);}return sheet;}
-function sbMotivationMessageForDay(day){const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')),sheet=book.getSheetByName('Motivation messages');if(!sheet||sheet.getLastRow()<2)return null;const date=new Date(day*86400000).toISOString().slice(0,10),row=sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues().find(r=>String(r[0]).replace(/^'/,'')===date);return row?{date,quote:String(row[1]).replace(/^'/,''),reflection:String(row[2]).replace(/^'/,''),image:String(row[3])}:null;}
+function sbMotivationMessageForDay(day,week){
+ const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')),sheet=book.getSheetByName('Motivation messages');if(!sheet||sheet.getLastRow()<2)return null;
+ const date=new Date(day*86400000).toISOString().slice(0,10),monday=day-((new Date(day*86400000).getUTCDay()+6)%7),start=new Date(monday*86400000).toISOString().slice(0,10);
+ const rows=sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues().filter(r=>{const d=String(r[0]).replace(/^'/,'');return week?d>=start&&d<=date:d===date;}).sort((a,b)=>String(b[0]).localeCompare(String(a[0]))),row=rows[0];
+ return row?{date:String(row[0]).replace(/^'/,''),quote:String(row[1]).replace(/^'/,''),reflection:String(row[2]).replace(/^'/,''),image:String(row[3])}:null;
+}
 function sbMotivationMessagesOwner(data){
  const lock=LockService.getScriptLock();lock.waitLock(20000);const sheet=sbMotivationMessagesSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues():[];
  if(data.action==='listMotivationMessages')return {ok:true,messages:rows.map(r=>({date:String(r[0]).replace(/^'/,''),quote:String(r[1]).replace(/^'/,''),reflection:String(r[2]).replace(/^'/,''),image:String(r[3])})).sort((a,b)=>a.date.localeCompare(b.date))};
@@ -11,7 +16,7 @@ function sbMotivationMessagesOwner(data){
 }
 
 function sbPublishedMotivationSettings(settings,requestedDate){
- const today=Math.floor(Date.parse(Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')+'T00:00Z')/86400000),until=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity;let day=settings.frozen&&today<until?settings.day:today;
- if(typeof requestedDate==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)){const requested=Math.floor(Date.parse(requestedDate+'T00:00Z')/86400000);if(Number.isFinite(requested)&&requested<=today)day=requested;}
- return {...settings,message:sbMotivationMessageForDay(day)};
+ const today=Math.floor(Date.parse(Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')+'T00:00Z')/86400000),until=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity,frozen=settings.frozen&&today<until;
+ if(typeof requestedDate==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)){const requested=Math.floor(Date.parse(requestedDate+'T00:00Z')/86400000);if(Number.isFinite(requested)&&requested<=today)return {...settings,frozen:true,day:requested,selection:'',until:'',message:sbMotivationMessageForDay(requested)};}
+ return {...settings,weekly:true,message:frozen&&settings.selection?null:sbMotivationMessageForDay(frozen?settings.day:today,!frozen)};
 }

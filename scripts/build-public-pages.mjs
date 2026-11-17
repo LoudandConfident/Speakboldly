@@ -122,9 +122,11 @@ for(const [index,q] of dailyQuotes.entries()){
  const title=q.quote.length>75?q.quote.slice(0,72).trim()+'…':q.quote;
  const details=quoteDetails[index],reflection=details?.reflection||details?.paragraphs?.[0]||q.quote;
  // Keep this week's retained article and share URL on the revised reflection too.
- if(name==='daily-motivation-5.html'){
+ if(['daily-motivation-5.html','daily-motivation-keep-going-clean.html'].includes(name)){
   const copy=details.paragraphs||[details.reflection,dailyPractice[index]];
   html=html.replace(/<article><h1>[\s\S]*?<\/article>/,()=>'<article><h1>'+e(q.quote)+'</h1>'+copy.filter(Boolean).map(text=>'<p>'+e(text)+'</p>').join('')+'</article>');
+  const summary=reflection.replace(/\s+/g,' ').slice(0,157).trim()+'…';
+  html=html.replace(/<meta property="og:description"[^>]*>/,'<meta property="og:description" content="'+e(summary)+'">').replace(/<meta name="twitter:description"[^>]*>/,'<meta name="twitter:description" content="'+e(summary)+'">');
  }
  const description=reflection.replace(/\s+/g,' ').slice(0,157).trim()+'…';
  html=html.replace(/<title>[\s\S]*?<\/title>/,'<title>Motivation — '+e(title)+' | Speak Boldly</title>');

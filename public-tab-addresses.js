@@ -24,6 +24,8 @@ export function publicTabTarget(hash,{pathname='/',motivationUrl=''}={}){
 }
 export function initializePublicTabAddresses(doc,win){
  function sync(){const hash=win.location.hash,view=hash.slice(1).split('/')[0]||'home',motivationUrl=doc.querySelector('#daily-quote')?.dataset.publicShareUrl,target=publicTabTarget(hash,{pathname:win.location.pathname,motivationUrl});if(!target)return;const url=new URL(target,win.location.origin);if(url.origin!=='https://speakboldly.space'&&url.origin!==win.location.origin)return;
+  // Keep an explicitly shared message while the lazy-loaded gallery is still starting.
+  if(view==='daily-quote'){const requested=new URLSearchParams(win.location.search);for(const key of ['motivation-entry','motivation'])if(requested.has(key))url.searchParams.set(key,requested.get(key));}
   if(!target.includes('?')&&view!=='daily-quote'){const search=new URLSearchParams(win.location.search);for(const key of ['motivation-entry','daily-motivation','motivation'])search.delete(key);url.search=search.toString();}url.hash=hash;
   const destination=url.pathname+url.search+url.hash;if(win.location.pathname+win.location.search+win.location.hash!==destination)win.history.replaceState(null,'',destination);
   const title=PUBLIC_TAB_ROUTES[view]?.title;if(title)doc.title=view==='boldly-notes'&&hash.includes('/')?title+' | '+(doc.querySelector('[data-notes-reader]>h2')?.textContent||'Read the blog'):title;

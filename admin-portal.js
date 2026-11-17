@@ -9,12 +9,12 @@ import {decorateClientActions,setClientStatusAction} from './client-actions.js?v
 import {showSubmissionSuccess} from './submission-success.js';
 import {initializeHoursAdjustment} from './client-hours-adjustment.js';
 import {initializeBoldlyNotesEditor} from './boldly-notes-editor.js?v=learning-tools-3';
-import {initializeMotivationMessages} from './motivation-message-editor.js?v=freeze-24-oct-1';
+import {initializeMotivationMessages} from './motivation-message-editor.js?v=motivation-control-85';
 import {createPaymentReminder} from './payment-reminder.js?v=success-return-1';
 import {initializeHubAccessEditor} from './hub-access-editor.js?v=compact-nov6-1';
-import {initializeMotivationFreeze} from './motivation-freeze-editor.js?v=motivation-label-2';
-import {refreshMotivationSettings} from './motivation-settings.js?v=freeze-24-oct-1';
-import {clientDailyMotivation} from './home-gallery.js?v=stern-teacher-10';
+import {initializeMotivationFreeze} from './motivation-freeze-editor.js?v=motivation-control-85';
+import {refreshMotivationSettings} from './motivation-settings.js';
+import {clientDailyMotivation} from './home-gallery.js?v=motivation-control-85';
 import {initializeInstructorFrench} from './instructor-french.js?v=toolbar-v2';
 import {initializeNativeEnglishEditor} from './native-english-editor.js?v=compact-nov6-1';
 import {initializeInstructorOverview} from './instructor-overview.js?v=compact-nov6-1';

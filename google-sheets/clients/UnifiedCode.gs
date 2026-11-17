@@ -1301,16 +1301,24 @@ function sbNativeSettingsOwner(data){
 
 
 // Shared Daily Motivation controls. Public reads, private owner writes.
-function sbDailyMotivationSettings(){const raw=PropertiesService.getScriptProperties().getProperty('SB_DAILY_MOTIVATION_SETTINGS');if(raw){try{const value=JSON.parse(raw),props=PropertiesService.getScriptProperties();if(props.getProperty('SB_MOTIVATION_SUNDAY_2026_APPLIED')!=='1'){if(value.frozen){value.until='';props.setProperty('SB_DAILY_MOTIVATION_SETTINGS',JSON.stringify(value));}props.setProperty('SB_MOTIVATION_SUNDAY_2026_APPLIED','1');}return value;}catch{}}PropertiesService.getScriptProperties().setProperty('SB_MOTIVATION_SUNDAY_2026_APPLIED','1');return {frozen:true,day:20746,until:'',revision:'0'};}
+function sbDailyMotivationSettings(){
+ const raw=PropertiesService.getScriptProperties().getProperty('SB_DAILY_MOTIVATION_SETTINGS');
+ if(raw){try{const value=JSON.parse(raw);if(value&&typeof value.frozen==='boolean')return {...value,weekly:true,...(!value.revision||value.revision==='0'||value.revision==='213c7c67-d6c4-4afe-aa73-494b6a8c9630'?{frozen:false,until:'',selection:''}:{})};}catch{}}
+ return {frozen:false,weekly:true,day:20750,until:'',revision:'0'};
+}
 function sbDailyMotivationOwner(data){const lock=LockService.getScriptLock();lock.waitLock(20000);let settings=sbDailyMotivationSettings();if(data.action==='saveDailyMotivationSettings'){
  if(String(data.revision)!==String(settings.revision))throw new Error('Settings changed on another device. Press Refresh first.');
  if(!['week','hold','resume'].includes(data.mode)||!Number.isInteger(data.day)||data.day<20000||data.day>50000)throw new Error('Invalid motivation setting.');
  const day=Math.floor(Date.parse(Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')+'T00:00Z')/86400000);
  if(Math.abs(data.day-day)>1)throw new Error('Check your device date, then refresh.');
  let until='';if(data.mode==='week'){const date=new Date(day*86400000),weekday=date.getUTCDay(),days=(8-weekday)%7||7;until=new Date((day+days)*86400000).toISOString().slice(0,10);}
- const previousUntil=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity,heldDay=settings.frozen&&day<previousUntil?settings.day:day;
- settings={frozen:data.mode!=='resume',day:heldDay,until,revision:Utilities.getUuid()};PropertiesService.getScriptProperties().setProperty('SB_DAILY_MOTIVATION_SETTINGS',JSON.stringify(settings));
- }return response({ok:true,settings:sbPublishedMotivationSettings(settings)});}
+ const previousUntil=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity,wasFrozen=settings.frozen&&day<previousUntil;
+ const requested=String(data.selection||'');if(requested&&!/^daily-motivation-[a-z0-9-]{1,100}$/.test(requested))throw Error('Choose a valid motivation.');
+ const selection=data.mode==='resume'?'':requested||(wasFrozen?settings.selection||'':'');
+ const currentMessage=!requested&&!wasFrozen&&data.mode!=='resume'?sbMotivationMessageForDay(day,true):null;
+ const heldDay=requested?day:wasFrozen?settings.day:currentMessage?Math.floor(Date.parse(currentMessage.date+'T00:00Z')/86400000):day;
+ settings={frozen:data.mode!=='resume',weekly:true,day:heldDay,selection,until,revision:Utilities.getUuid()};PropertiesService.getScriptProperties().setProperty('SB_DAILY_MOTIVATION_SETTINGS',JSON.stringify(settings));
+ }return response({ok:true,capabilities:{motivationSelection:1},settings:sbPublishedMotivationSettings(settings)});}
 
 
 
@@ -1365,7 +1373,12 @@ function sbSetClientActive(data,book){
 
 // Instructor-authored daily motivations. Published pictures are intentionally public.
 function sbMotivationMessagesSheet(){const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID'));let sheet=book.getSheetByName('Motivation messages');if(!sheet){sheet=book.insertSheet('Motivation messages');sheet.appendRow(['Date (Cairo)','Quote','Reflection','Picture URL','Updated at (UTC)']);}return sheet;}
-function sbMotivationMessageForDay(day){const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')),sheet=book.getSheetByName('Motivation messages');if(!sheet||sheet.getLastRow()<2)return null;const date=new Date(day*86400000).toISOString().slice(0,10),row=sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues().find(r=>String(r[0]).replace(/^'/,'')===date);return row?{date,quote:String(row[1]).replace(/^'/,''),reflection:String(row[2]).replace(/^'/,''),image:String(row[3])}:null;}
+function sbMotivationMessageForDay(day,week){
+ const book=SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('CLIENT_SHEET_ID')),sheet=book.getSheetByName('Motivation messages');if(!sheet||sheet.getLastRow()<2)return null;
+ const date=new Date(day*86400000).toISOString().slice(0,10),monday=day-((new Date(day*86400000).getUTCDay()+6)%7),start=new Date(monday*86400000).toISOString().slice(0,10);
+ const rows=sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues().filter(r=>{const d=String(r[0]).replace(/^'/,'');return week?d>=start&&d<=date:d===date;}).sort((a,b)=>String(b[0]).localeCompare(String(a[0]))),row=rows[0];
+ return row?{date:String(row[0]).replace(/^'/,''),quote:String(row[1]).replace(/^'/,''),reflection:String(row[2]).replace(/^'/,''),image:String(row[3])}:null;
+}
 function sbMotivationMessagesOwner(data){
  const lock=LockService.getScriptLock();lock.waitLock(20000);const sheet=sbMotivationMessagesSheet(),rows=sheet.getLastRow()>1?sheet.getRange(2,1,sheet.getLastRow()-1,5).getValues():[];
  if(data.action==='listMotivationMessages')return {ok:true,messages:rows.map(r=>({date:String(r[0]).replace(/^'/,''),quote:String(r[1]).replace(/^'/,''),reflection:String(r[2]).replace(/^'/,''),image:String(r[3])})).sort((a,b)=>a.date.localeCompare(b.date))};
@@ -1376,9 +1389,9 @@ function sbMotivationMessagesOwner(data){
 }
 
 function sbPublishedMotivationSettings(settings,requestedDate){
- const today=Math.floor(Date.parse(Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')+'T00:00Z')/86400000),until=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity;let day=settings.frozen&&today<until?settings.day:today;
- if(typeof requestedDate==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)){const requested=Math.floor(Date.parse(requestedDate+'T00:00Z')/86400000);if(Number.isFinite(requested)&&requested<=today)day=requested;}
- return {...settings,message:sbMotivationMessageForDay(day)};
+ const today=Math.floor(Date.parse(Utilities.formatDate(new Date(),'Africa/Cairo','yyyy-MM-dd')+'T00:00Z')/86400000),until=settings.until?Math.floor(Date.parse(settings.until+'T00:00Z')/86400000):Infinity,frozen=settings.frozen&&today<until;
+ if(typeof requestedDate==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)){const requested=Math.floor(Date.parse(requestedDate+'T00:00Z')/86400000);if(Number.isFinite(requested)&&requested<=today)return {...settings,frozen:true,day:requested,selection:'',until:'',message:sbMotivationMessageForDay(requested)};}
+ return {...settings,weekly:true,message:frozen&&settings.selection?null:sbMotivationMessageForDay(frozen?settings.day:today,!frozen)};
 }
 
 // Short public articles, managed only through the authenticated instructor routes.

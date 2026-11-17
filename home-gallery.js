@@ -1,5 +1,5 @@
 import {motivationPreviews} from './motivation-preview-images.js?v=stern-teacher-6';
-import {motivationDay,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js?v=weekly-2';
+import {motivationDay,motivationIsFrozen,refreshMotivationSettings,motivationSettings,setMotivationSettings,MOTIVATION_PIN} from './motivation-settings.js';
 // Update this list to change the daily pictures and quotes.
 export const dailyQuotes = [
  { image: './images/daily-motivation-1.png', alt: 'A notebook and phone, ready for a fresh start', quote: 'Make time for what matters.' },
@@ -27,10 +27,13 @@ export function cairoDayNumber(now = new Date()) {
  return Math.floor(Date.UTC(part('year'), part('month') - 1, part('day')) / 86400000);
 }
 // One-time exception: keep 15 October's message through Sunday in Cairo.
-const settingsFrozen=()=>motivationSettings().frozen;
+export const motivationEntryId=entry=>entry.image.split('/').pop().replace(/\.(?:png|webp)$/,'');
 export function motivationIndexForDate(now = new Date()) {
+ const selected=motivationIsFrozen(now,cairoDayNumber)&&motivationSettings().selection;
+ const selectedIndex=selected?dailyQuotes.findIndex(entry=>motivationEntryId(entry)===selected):-1;
+ if(selectedIndex>=0)return selectedIndex;
  const day=motivationDay(now,cairoDayNumber),start=Math.floor(Date.UTC(2026,9,15)/86400000),end=Math.floor(Date.UTC(2026,9,19)/86400000);
- if(day>=Math.floor(Date.UTC(2026,10,2)/86400000)&&day<Math.floor(Date.UTC(2026,10,9)/86400000)&&!settingsFrozen())return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-math-teacher-board.webp');
+ if(day>=Math.floor(Date.UTC(2026,10,2)/86400000)&&day<Math.floor(Date.UTC(2026,10,9)/86400000))return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-math-teacher-board.webp');
  if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
  if(day>=end){
   // A fixed seed gives every device the same shuffled daily schedule.
@@ -38,7 +41,7 @@ export function motivationIndexForDate(now = new Date()) {
   for(let i=order.length-1;i>0;i--){seed=(Math.imul(1664525,seed)+1013904223)>>>0;const j=seed%(i+1);[order[i],order[j]]=[order[j],order[i]];}
   const held=dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
   if(order[0]===held)[order[0],order[1]]=[order[1],order[0]];
-  return order[((settingsFrozen()?day-end:Math.floor((day-end)/7)+(day>=Math.floor(Date.UTC(2026,10,16)/86400000)?3:0))%order.length+order.length)%order.length];
+  return order[((Math.floor((day-end)/7)+(day>=Math.floor(Date.UTC(2026,10,16)/86400000)?3:0))%order.length+order.length)%order.length];
  }
  return day%dailyQuotes.length;
 }
@@ -78,7 +81,12 @@ export const dailyPractice = [
 quoteDetails.push(
  {support:[],reflection:'Readiness often grows through practice. You might be waiting to know more words, feel less nervous, or find the perfect moment to speak. Give yourself a smaller beginning instead: one greeting, one question, or a short voice note. You can pause, ask for help, and correct yourself as you go. Starting with the English you have gives you something real to build on. You don’t need complete confidence to take your first step.'},
  {support:[],reflection:'Listening gives you a chance to notice how English sounds in everyday life. Pay attention to a useful phrase, the rhythm of a sentence, or the way someone asks a question. Then try it aloud and make it your own. If the first attempt feels awkward, listen again and give yourself another try. Repetition can help you become more familiar with the language. Choose something short enough to enjoy and return to, rather than trying to understand everything at once.'},
- {support:[],reflection:'Progress can be easy to miss when you are focused on everything you still want to learn. Look for the small changes: a word you remember, a question you can ask, or a conversation you stay in a little longer. Difficult days don’t erase those achievements. Adjust your pace when you need to, and choose a manageable next step. You can keep learning without rushing. Give yourself credit for showing up and making English a part of your life.'}
+ {support:[],reflection:'It can be difficult to recognise progress when you are the person living through every uncertain sentence. You remember the word that disappeared in the middle of a conversation, the question you misunderstood, the moment you wished you had stayed quiet. Meanwhile, the things that have become easier start to feel ordinary. You forget that, once, they were difficult too.',paragraphs:[
+ 'It can be difficult to recognise progress when you are the person living through every uncertain sentence. You remember the word that disappeared in the middle of a conversation, the question you misunderstood, the moment you wished you had stayed quiet. Meanwhile, the things that have become easier start to feel ordinary. You forget that, once, they were difficult too.',
+ 'Perhaps you can now follow a conversation without translating every line. Perhaps you asked someone to explain themselves instead of smiling and pretending to understand. Perhaps you found a simpler way to say something when the perfect word would not come. These moments rarely feel impressive while they are happening. They are how a language gradually becomes something you can use for yourself.',
+ 'There will still be days when English feels further away. Tiredness, worry, and a difficult conversation can make familiar words harder to reach. Give those days their proper size: one experience within a much longer story. Rest when you need to. Then return to something small enough to do with care, whether that is a paragraph you enjoy, a voice note, or a question you have been wanting to ask.',
+ 'You are building the ability to enter a conversation, make a choice, and find your own way through unfamiliar situations. Notice where you can already do that with a little less help. Keep a few examples of those moments for the days when you doubt yourself. You do not have to feel confident every time you practise. Give yourself another chance to speak, and let the evidence of your own progress grow.'
+ ]}
 );
 dailyPractice.push(
  'Try this today: record a thirty-second introduction without writing a script first. Say what you can, pause when you need to, and finish your thought. Let this be a beginning you can build on.',
