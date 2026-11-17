@@ -439,8 +439,7 @@ html body main #home .monthly-home-theme.home-seasonal-tag[data-theme=thanksgivi
 /* A small homepage-only trim; the existing viewport fit adjusts the photograph. */
 html body:has(#home:not([hidden]))>header{box-sizing:border-box!important;height:92px!important;min-height:92px!important;padding-block:16px!important}
 @media(max-width:680px){html body:has(#home:not([hidden]))>header{height:72px!important;min-height:72px!important;padding-block:12px!important}}
-/* Keep the desktop photograph clear; pair the mobile sign with the lighter wall. */
-@media(min-width:681px){html body main #home>.hero>.monthly-home-theme{display:none!important}}
+/* Pair the mobile sign with the lighter wall and the tagline with the darker photo. */
 @media(max-width:680px){
  html body main #home>.hero>.monthly-home-theme.home-seasonal-tag{left:auto;right:12px}
  html body main #home .home-kicker{left:18px!important;right:auto!important;max-width:calc(100% - 174px)!important;text-align:left!important}
