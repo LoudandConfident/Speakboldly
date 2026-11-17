@@ -1,10 +1,11 @@
+import {renderSeasonalFlourish} from './seasonal-flourish.js?v=1';
 import {themeForDate} from './seasonal-theme-data.js';
 import {seasonalThemeSettings,refreshSeasonalThemes} from './seasonal-theme-settings.js';
 export function initializeMonthlyHomeTheme(doc,now=new Date()){
- const hero=doc.querySelector('#home>.hero');if(!hero)return;hero.querySelector('.monthly-home-theme')?.remove();
+ const hero=doc.querySelector('#home>.hero');if(!hero)return;hero.querySelector('.monthly-home-theme')?.remove();hero.querySelector('.home-seasonal-flourish')?.remove();
  const theme=themeForDate(now,seasonalThemeSettings());if(!theme)return;
  const decoration=doc.createElement('aside');decoration.className='monthly-home-theme';decoration.dataset.theme=theme.art;decoration.dataset.copyLength=theme.message.length>60?'long':theme.message.length>28?'medium':'short';decoration.setAttribute('aria-label',theme.label);
- decoration.innerHTML='<svg class="monthly-theme-art" viewBox="0 0 270 200" fill="none" aria-hidden="true"><path d="M58 0q-2 22 0 48M212 0q2 22 0 48" stroke="#a59470" stroke-width="1.4"/><path d="M24 40q111-9 222 0v135q-111 24-222 0Z" fill="#f8f4e7" stroke="#c0b18f" stroke-width=".8"/><path d="M33 48q103-7 204 0v121q-102 20-204 0Z" stroke="#d6c9ab" stroke-width=".65"/><circle cx="58" cy="48" r="3.7" fill="#b39a64"/><circle cx="212" cy="48" r="3.7" fill="#b39a64"/><circle cx="58" cy="48" r="1.8" fill="#6c7054"/><circle cx="212" cy="48" r="1.8" fill="#6c7054"/><path d="m205 58-14 12m7-6q12-1 13-10-10 0-13 10Z" fill="#a6ae87" stroke="#8a9670" stroke-width=".8"/></svg><div class="monthly-theme-copy"><p class="monthly-theme-note"></p><p class="monthly-theme-message"></p></div>';
+ decoration.innerHTML='<svg class="monthly-theme-art" viewBox="0 0 270 200" fill="none" aria-hidden="true"><path d="M58 0q-2 22 0 48M212 0q2 22 0 48" stroke="#a59470" stroke-width="1.4"/><path d="M24 40q111-9 222 0v135q-111 24-222 0Z" fill="#f8f4e7" stroke="#c0b18f" stroke-width=".8"/><path d="M33 48q103-7 204 0v121q-102 20-204 0Z" stroke="#d6c9ab" stroke-width=".65"/><circle cx="58" cy="48" r="3.7" fill="#b39a64"/><circle cx="212" cy="48" r="3.7" fill="#b39a64"/><circle cx="58" cy="48" r="1.8" fill="#6c7054"/><circle cx="212" cy="48" r="1.8" fill="#6c7054"/></svg><div class="monthly-theme-copy"><p class="monthly-theme-note"></p><p class="monthly-theme-message"></p></div>';
  const label=decoration.querySelector('.monthly-theme-note');label.textContent=theme.label;
  if(theme.art==='thanksgiving'&&/^happy thanksgiving$/i.test(theme.label.trim()))decoration.classList.add('seasonal-thanksgiving');
  decoration.querySelector('.monthly-theme-message').textContent=theme.message;
@@ -23,6 +24,7 @@ export function initializeMonthlyHomeTheme(doc,now=new Date()){
  art.insertAdjacentHTML('beforeend','<g transform="translate(67 90) scale(.5)">'+(icons[theme.art]||icons.spring)+'</g>');
  }
  hero.append(decoration);
+ const actions=hero.querySelector('.home-action-stack');if(actions){const flourish=doc.createElement('span');flourish.className='home-seasonal-flourish';flourish.dataset.theme=theme.art;flourish.setAttribute('aria-hidden','true');flourish.innerHTML=renderSeasonalFlourish(theme.art);actions.append(flourish);}
 }
 if(typeof document!=='undefined'){
  const doc=document,home=doc.querySelector('#home');let loaded=false;

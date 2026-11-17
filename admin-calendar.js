@@ -50,7 +50,7 @@ export function usualSession(sessions,clientId,date,program=''){
 }
 export function initializeAdminCalendar(doc,isUnlocked,getClients,openClient,onRefresh){
  const root=doc.querySelector('#admin-calendar');if(!root)return;
- const calendarPanel=root.closest('details');calendarPanel?.addEventListener('toggle',()=>{if(calendarPanel.open&&isUnlocked())load();});
+ const calendarPanel=root.closest('details');calendarPanel?.addEventListener('toggle',()=>{if(!calendarPanel.open||!isUnlocked())return;calendarView='month';viewSelect.value='month';selected=cairoToday();month=selected.slice(0,7);dayDialog.close();render();load();});
  const form=root.querySelector('form'),grid=root.querySelector('.calendar-grid'),status=root.querySelector('[role=status]'),heading=root.querySelector('#calendar-month');
  const chooser=form.elements.clientId;
  const typeLabel=doc.createElement('label');typeLabel.textContent='Appointment type';const type=doc.createElement('select');type.name='appointmentType';type.required=true;for(const item of INSTRUCTOR_APPOINTMENT_TYPES)type.append(new doc.defaultView.Option(item.title,item.id));typeLabel.append(type);chooser.closest('label').after(typeLabel);
