@@ -1,5 +1,5 @@
 // These search URLs render the existing website, rather than a second design.
-export function publicSiteShell(shell,{path,title,description,graph,view,course='',post='',image='/speak-boldly-preview-dark-green.png',imageAlt='',fallback='',motivation=null,noindex=false}){
+export function publicSiteShell(shell,{path,title,description,graph,view,course='',post='',panel='',image='/speak-boldly-preview-dark-green.png',imageAlt='',fallback='',motivation=null,noindex=false}){
  const origin='https://speakboldly.space',url=origin+path;
  const escape=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
  let html=shell.replace(/<base href="\/">/g,'').replace(/<title>[\s\S]*?<\/title>/,'<title>'+escape(title)+'</title>');
@@ -20,10 +20,10 @@ export function publicSiteShell(shell,{path,title,description,graph,view,course=
  }
  html=html.replace(/<script type="application\/ld\+json"[^>]*>[\s\S]*?<\/script>/g,'');
  html=html.replace('</head>','<script type="application/ld+json">'+JSON.stringify({'@context':'https://schema.org','@graph':graph}).replace(/</g,'\\u003c')+'</script></head>');
- html=html.replace('<head>','<head><base href="/"><script>if(!location.hash)history.replaceState(null,"",location.pathname+location.search+"#'+view+(post?'/'+post:'')+'");</script>');
- html=html.replace('<body>','<body data-public-site-view="'+view+'" data-public-course="'+escape(course)+'" data-public-post="'+escape(post)+'">');
+ html=html.replace('<head>','<head><base href="/"><script>if(!location.hash)history.replaceState(null,"",location.pathname+location.search+"#'+view+(post?'/'+post:panel?'/student/'+panel:'')+'");</script>');
+ html=html.replace('<body>','<body data-public-site-view="'+view+'" data-public-panel="'+escape(panel)+'" data-public-course="'+escape(course)+'" data-public-post="'+escape(post)+'">');
  html=html.replace(/<([a-z]+)\b([^>]*\bdata-view\b[^>]*)>/g,(whole,tag,attributes)=>{const id=attributes.match(/\bid="([^"]+)"/)?.[1];attributes=attributes.replace(/\s+hidden(?:="")?/g,'');return '<'+tag+attributes+(id===view?'':' hidden')+'>';});
  if(view!=='home')html=html.replace(/(<img\b[^>]*src="\.\/home-coaching-wide\.webp[^"]*")([^>]*>)/,'$1 loading="lazy"$2').replace('fetchpriority="high"','fetchpriority="auto"');
  html=html.replace('</main>','<noscript><section class="catalog">'+fallback+'</section></noscript></main>');
- return html.replace('</body>','<script type="module" src="/assets/public-site-route.js?v=portal-reload-2"></script></body>');
+ return html.replace('</body>','<script type="module" src="/assets/public-site-route.js?v=paths-98"></script></body>');
 }

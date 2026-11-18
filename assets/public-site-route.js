@@ -16,9 +16,10 @@ if(view==='students-portal'&&performance.getEntriesByType('navigation')[0]?.type
  function openHub(){
   if(location.hash!=='#students-portal'&&!location.hash.startsWith('#students-portal/')){observer.disconnect();return;}
   const client=document.querySelector('[data-portal-area="client"]');
-  if(!clientOpened&&client&&!client.disabled){clientOpened=true;client.click();}
+  if(!clientOpened&&client&&!client.disabled){clientOpened=true;if(document.querySelector('#client-portal')?.hidden)client.click();}
   if(!clientOpened)return;
   if(!panel){observer.disconnect();return;}
+  if(!['#students-portal','#students-portal/student'].includes(location.hash)){observer.disconnect();return;}
   const button=document.querySelector('[data-portal-tab="'+panel+'"]');
   if(!panelOpened&&button&&!button.disabled&&button.getClientRects().length){panelOpened=true;button.click();observer.disconnect();}
  }

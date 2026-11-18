@@ -1,3 +1,4 @@
+import {learningHubRoute,learningCardFromHash} from './learning-hub-routes.js?v=paths-98';
 export const PUBLIC_TAB_ROUTES={
  home:{path:'/',title:'Speak Boldly | English Language Coaching'},
  vision:{path:'/vision/',title:'Our Vision | Speak Boldly'},
@@ -17,6 +18,7 @@ export function publicTabTarget(hash,{pathname='/',motivationUrl=''}={}){
  const parts=String(hash).replace(/^#/,'').split('/'),view=parts[0]||'home';
  if(view==='daily-quote'&&motivationUrl)return motivationUrl;
  if(view==='boldly-notes'&&parts[1]&&/^[a-zA-Z0-9_-]+$/.test(parts[1]))return '/blog/'+parts[1]+'/';
+ const panel=learningCardFromHash(hash);if(panel&&!(panel==='mission'&&pathname==='/learn/daily-idioms/'))return learningHubRoute(panel).path;
  // Preserve existing course and free-resource deep links inside their own views.
  if(view==='courses'&&/^\/programs\/[a-z0-9-]+\/$/.test(pathname))return pathname;
  if(view==='students-portal'&&['/learn/','/learn/daily-idioms/','/learn/daily-challenges/'].includes(pathname))return pathname;
@@ -28,7 +30,7 @@ export function initializePublicTabAddresses(doc,win){
   if(view==='daily-quote'){const requested=new URLSearchParams(win.location.search);for(const key of ['motivation-entry','motivation'])if(requested.has(key))url.searchParams.set(key,requested.get(key));}
   if(!target.includes('?')&&view!=='daily-quote'){const search=new URLSearchParams(win.location.search);for(const key of ['motivation-entry','daily-motivation','motivation'])search.delete(key);url.search=search.toString();}url.hash=hash;
   const destination=url.pathname+url.search+url.hash;if(win.location.pathname+win.location.search+win.location.hash!==destination)win.history.replaceState(null,'',destination);
-  const title=PUBLIC_TAB_ROUTES[view]?.title;if(title)doc.title=view==='boldly-notes'&&hash.includes('/')?title+' | '+(doc.querySelector('[data-notes-reader]>h2')?.textContent||'Read the blog'):title;
+  const card=learningHubRoute(learningCardFromHash(hash)),title=card?card.title+' | Speak Boldly':PUBLIC_TAB_ROUTES[view]?.title;if(title)doc.title=view==='boldly-notes'&&hash.includes('/')?title+' | '+(doc.querySelector('[data-notes-reader]>h2')?.textContent||'Read the blog'):title;
  }
  const later=()=>win.queueMicrotask(sync);win.addEventListener('hashchange',later);doc.addEventListener('sb-public-share-url',later);later();
 }
