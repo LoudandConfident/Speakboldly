@@ -1,8 +1,8 @@
 import './home-header-doodles.js?v=4';
-import './monthly-home-theme.js?v=home-sign-87';
-import './seasonal-pages.js?v=2';
+import './monthly-home-theme.js?v=home-no-sign-100';
+import './seasonal-pages.js?v=home-no-sign-100';
 import './program-offer.js?v=enquiry-96';
-import './beyond-brand.js?v=77';
+import './beyond-brand.js?v=transparent-99';
 import './learning-card-groups.js?v=balanced-60';
 import './teaching-refinements.js?v=64';
 import {initializeFixedPageHelp} from './fixed-page-help.js?v=70';
