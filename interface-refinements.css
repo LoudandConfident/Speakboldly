@@ -497,3 +497,11 @@ html body main #boldly-notes [data-notes-list]>.boldly-note-link h3{font:600 27p
 html body #boldly-notes .blog-reading-page:first-child>p:first-of-type{background:#e5ecdf;border-left:4px solid #193c32;border-radius:2px 18px 2px 18px;padding:16px 20px;font-weight:600}
 @media(max-width:680px){html body main #boldly-notes [data-notes-list]>.boldly-note-link:nth-child(n){padding:20px!important}html body main #boldly-notes [data-notes-list]>.boldly-note-link h3{font-size:23px!important}}
 html body main #boldly-notes [data-notes-list]>.boldly-note-link:nth-child(n) .boldly-note-main-link :is(h3,p,time){color:#193c32!important}
+/* Clear white meanings and examples in the reading glossary and word popups. */
+html body #boldly-notes .blog-glossary-entry{background:#245443;border-color:#658770;color:#fff}
+html body #boldly-notes .blog-glossary-entry :is(p,small){color:#fff!important;opacity:1}
+html body #boldly-notes .blog-glossary-entry .blog-glossary-word{color:#d5ed98!important}
+html body #boldly-notes .blog-word-tip{color:#fff!important}
+html body dialog.blog-word-dialog{background:#193c32;color:#fff}
+html body dialog.blog-word-dialog :is(h2,small,p,blockquote){color:#fff!important;opacity:1}
+html body dialog.blog-word-dialog blockquote{background:#284d41;border-color:#d5ed98}
