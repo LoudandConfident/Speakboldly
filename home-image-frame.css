@@ -1,4 +1,4 @@
-/* Keep the photograph's framing stable when browser chrome or zoom changes. */
+/* A stable portrait on phones; a screen-fitting photographic cover on desktop. */
 html body main #home[data-view]:not([hidden]){display:block!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}
 html body main #home[data-view]:not([hidden])>.hero{display:block!important;position:relative!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:16/9!important;overflow:hidden!important}
 html body main #home[data-view] .home-picture-and-reviews,
@@ -8,20 +8,33 @@ html body main #home[data-view] .home-picture-and-reviews .coaching-photo img{di
 /* The floating scroll hint must not cover the coach's face at enlarged zoom. */
 html body:has(#home[data-view]:not([hidden])) #page-down-arrow{display:none!important}
 @media(min-width:681px) and (max-width:1100px){
- html body:has(#home[data-view]:not([hidden]))>header{height:auto!important;min-height:92px!important}
+ html body:has(#home[data-view]:not([hidden]))>header{height:auto!important;min-height:72px!important;padding-block:12px!important}
+ html body:has(#home[data-view]:not([hidden]))>header .mobile-menu-toggle{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#edf0e6;color:var(--ink);font-size:14px}
+ html body:has(#home[data-view]:not([hidden]))>header #main-navigation{display:none;width:100%;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body:has(#home[data-view]:not([hidden]))>header #main-navigation.mobile-open{display:grid}
+ html body:has(#home[data-view]:not([hidden]))>header #main-navigation .nav-tab{min-height:44px;font-size:14px;grid-column:auto;white-space:normal}
+ html body main #home[data-view] .home-picture-and-reviews .coaching-photo img{object-position:70% 50%!important}
+}
+@media(min-width:681px),(pointer:fine){
+ html body main #home[data-view]:not([hidden]){display:grid!important;grid-template-rows:minmax(0,1fr) auto!important;height:var(--home-viewport-space,calc(100svh - 92px))!important}
+ html body main #home[data-view]:not([hidden])>.hero{height:100%!important;max-height:100%!important;aspect-ratio:auto!important}
 }
 @media(max-width:680px) and (pointer:coarse){
  html body main #home[data-view]:not([hidden])>.hero{aspect-ratio:9/16!important}
 }
-/* At high desktop zoom, let the copy flow below the same fixed photo frame. */
-@media(max-width:680px) and (pointer:fine){
- html body main #home[data-view]:not([hidden])>.hero{display:flex!important;flex-direction:column;aspect-ratio:auto!important;overflow:visible!important}
- html body main #home[data-view] .hero::before{display:none!important}
- html body main #home[data-view] .home-picture-and-reviews{position:relative!important;inset:auto!important;order:0;z-index:0!important;aspect-ratio:16/9!important;height:auto!important;flex:none}
- html body main #home[data-view] .hero-copy{position:relative!important;inset:auto!important;order:1;display:flex!important;flex-direction:column;align-items:flex-start!important;justify-content:flex-start!important;width:100%!important;height:auto!important;min-height:0!important;padding:20px!important;background:#193c32!important}
- html body main #home[data-view] .hero-copy .home-kicker{position:static!important;inset:auto!important;width:auto!important;max-width:none!important;margin:0 0 14px!important;font-size:10px!important;text-align:left!important;transform:none!important}
- html body main #home[data-view] .hero-copy .home-slogan{position:static!important;inset:auto!important;width:100%!important;max-width:none!important;margin:0 0 18px!important;font-size:30px!important;text-align:left!important;transform:none!important}
- html body main #home[data-view] .home-action-stack{position:static!important;inset:auto!important;width:max-content!important;max-width:100%!important;margin:0!important;transform:none!important}
- html body main #home[data-view] .hero .home-speech-links{width:198px!important;max-width:100%!important}
- html body main #home[data-view] .hero>.home-cover-benefits{position:static!important;inset:auto!important;order:2;box-sizing:border-box;width:100%!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;padding:14px 20px!important;margin:0!important;background:#193c32!important;font-size:10px!important;line-height:1.5!important}
+/* Keep enlarged desktop text in the cover, with enough room for its controls. */
+@media(pointer:fine) and (max-height:700px){
+ html body main #home[data-view] .hero-copy{position:absolute!important;inset:0 auto 48px 0!important;display:flex!important;flex-direction:column;align-items:flex-start!important;justify-content:center!important;width:62%!important;height:auto!important;min-height:0!important;max-height:none!important;padding:18px 28px!important;box-sizing:border-box!important}
+ html body main #home[data-view] .hero-copy .home-kicker{position:static!important;inset:auto!important;transform:none!important;width:auto!important;max-width:none!important;font-size:9px!important;line-height:1.5!important;text-align:left!important;margin:0 0 10px!important}
+ html body main #home[data-view] .hero-copy .home-slogan{position:static!important;inset:auto!important;transform:none!important;width:100%!important;max-width:100%!important;font-size:clamp(26px,4.2vw,48px)!important;line-height:1.08!important;text-align:left!important;margin:0 0 18px!important}
+ html body main #home[data-view] .home-title-bottom{font-size:.62em!important;line-height:1.3!important;margin-top:10px!important}
+ html body main #home[data-view] .home-action-stack{position:static!important;inset:auto!important;transform:none!important;gap:8px!important;margin:0!important}
+ html body main #home[data-view] .hero .home-speech-links{width:176px!important;gap:10px!important}
+ html body main #home[data-view] .hero .home-speech-links .home-speech-bubble{width:83px!important;height:83px!important;min-height:0!important;flex-basis:83px!important}
+ html body main #home[data-view] .home-seasonal-flourish{width:120px!important;height:24px!important;margin-top:-3px!important}
+ html body main #home[data-view] .hero>.home-cover-benefits{left:4%!important;right:4%!important;bottom:12px!important;padding-top:8px!important;font-size:9px!important;line-height:1.4!important}
+}
+@media(pointer:fine) and (max-width:680px){
+ html body main #home[data-view] .hero-copy{padding-inline:18px!important;width:64%!important}
+ html body main #home[data-view] .home-picture-and-reviews .coaching-photo img{object-position:85% 50%!important}
 }
