@@ -38,13 +38,15 @@ export function motivationIndexForDate(now = new Date()) {
  if(day>=start&&day<end)return dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
  if(day>=end){
   // One shared weekly shuffle; new messages join at the next scheduled boundary.
-  const expanded=day>=ADDITIONAL_MOTIVATIONS_START;
+  // Bring the next scheduled message forward on 22 November, keeping the weekly schedule.
+  const earlyRelease=!motivationIsFrozen(now,cairoDayNumber)&&cairoDayNumber(now)>=Math.floor(Date.UTC(2026,10,22)/86400000);
+  const expanded=day>=ADDITIONAL_MOTIVATIONS_START||earlyRelease;
   const order=Array.from({length:expanded?dailyQuotes.length:LEGACY_MOTIVATION_COUNT},(_,index)=>index).filter(index=>!['./images/daily-motivation-small-steps-teacher.webp','./images/daily-motivation-math-teacher-board.webp'].includes(dailyQuotes[index].image));let seed=expanded?20261123:20261019;
   for(let i=order.length-1;i>0;i--){seed=(Math.imul(1664525,seed)+1013904223)>>>0;const j=seed%(i+1);[order[i],order[j]]=[order[j],order[i]];}
   const held=dailyQuotes.findIndex(entry=>entry.image==='./images/daily-motivation-2.png');
   if(order[0]===held)[order[0],order[1]]=[order[1],order[0]];
   if(expanded&&order[0]<LEGACY_MOTIVATION_COUNT){const firstNew=order.findIndex(index=>index>=LEGACY_MOTIVATION_COUNT);[order[0],order[firstNew]]=[order[firstNew],order[0]];}
-  const week=expanded?Math.floor((day-ADDITIONAL_MOTIVATIONS_START)/7):Math.floor((day-end)/7)+(day>=Math.floor(Date.UTC(2026,10,16)/86400000)?3:0);
+  const week=expanded?Math.max(0,Math.floor((day-ADDITIONAL_MOTIVATIONS_START)/7)):Math.floor((day-end)/7)+(day>=Math.floor(Date.UTC(2026,10,16)/86400000)?3:0);
   return order[((week%order.length)+order.length)%order.length];
  }
  return day%LEGACY_MOTIVATION_COUNT;

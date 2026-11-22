@@ -23,7 +23,7 @@ html body:has(#home[data-view]:not([hidden])) #page-down-arrow{display:none!impo
  html body main #home[data-view]:not([hidden])>.hero{aspect-ratio:9/16!important}
 }
 /* Keep enlarged desktop text in the cover, with enough room for its controls. */
-@media(pointer:fine) and (max-height:700px){
+@media(pointer:fine) and (max-height:700px),(pointer:coarse) and (min-width:681px) and (max-height:700px){
  html body main #home[data-view] .hero-copy{position:absolute!important;inset:0 auto 48px 0!important;display:flex!important;flex-direction:column;align-items:flex-start!important;justify-content:center!important;width:62%!important;height:auto!important;min-height:0!important;max-height:none!important;padding:18px 28px!important;box-sizing:border-box!important}
  html body main #home[data-view] .hero-copy .home-kicker{position:static!important;inset:auto!important;transform:none!important;width:auto!important;max-width:none!important;font-size:9px!important;line-height:1.5!important;text-align:left!important;margin:0 0 10px!important}
  html body main #home[data-view] .hero-copy .home-slogan{position:static!important;inset:auto!important;transform:none!important;width:100%!important;max-width:100%!important;font-size:clamp(26px,4.2vw,48px)!important;line-height:1.08!important;text-align:left!important;margin:0 0 18px!important}
@@ -37,4 +37,21 @@ html body:has(#home[data-view]:not([hidden])) #page-down-arrow{display:none!impo
 @media(pointer:fine) and (max-width:680px){
  html body main #home[data-view] .hero-copy{padding-inline:18px!important;width:64%!important}
  html body main #home[data-view] .home-picture-and-reviews .coaching-photo img{object-position:85% 50%!important}
+}
+/* Phone browsers requesting a wide desktop site must keep the desktop proportions. */
+html[data-phone-desktop=portrait] body main #home[data-view]:not([hidden]){display:block!important;height:auto!important;max-height:none!important}
+html[data-phone-desktop=portrait] body main #home[data-view]:not([hidden])>.hero{height:auto!important;max-height:none!important;aspect-ratio:16/9!important}
+html[data-phone-desktop] body main #home[data-view] .home-picture-and-reviews .coaching-photo img{object-position:70% 50%!important}
+html[data-phone-desktop] body>header .mobile-menu-toggle{display:none!important}
+html[data-phone-desktop] body>header #main-navigation{display:flex!important;flex:1;width:auto!important;flex-wrap:wrap!important;justify-content:flex-end!important;gap:6px!important}
+html[data-phone-desktop] body>header #main-navigation .nav-tab{min-height:36px!important;font-size:11px!important;padding:8px 12px!important}
+html[data-phone-desktop] body>header .speak-logo .brand-words{font-size:22px!important}
+html[data-phone-desktop] body>header .header-sb-logo{width:42px!important;height:42px!important}
+@media(max-height:500px){
+ html[data-phone-desktop=landscape] body main #home[data-view] .hero-copy{padding:14px 28px!important}
+ html[data-phone-desktop=landscape] body main #home[data-view] .hero-copy .home-slogan{font-size:32px!important;margin-bottom:12px!important}
+ html[data-phone-desktop=landscape] body main #home[data-view] .home-action-stack{gap:6px!important}
+ html[data-phone-desktop=landscape] body main #home[data-view] .hero .home-speech-links{width:150px!important}
+ html[data-phone-desktop=landscape] body main #home[data-view] .hero .home-speech-links .home-speech-bubble{width:70px!important;height:70px!important;flex-basis:70px!important}
+ html[data-phone-desktop=landscape] body main #home[data-view] .home-seasonal-flourish{height:18px!important}
 }
