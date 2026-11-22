@@ -18,6 +18,7 @@ export function initializeHomepageFit(doc,win=doc.defaultView){
   frame=win.requestAnimationFrame(()=>{
    const phoneDesktop=updateDeviceMode();
    if(home.hidden)return;
+   doc.documentElement.style.setProperty('--home-top-space',Math.max(0,main.getBoundingClientRect().top+win.scrollY)+'px');
    if(phoneDesktop==='portrait'||win.matchMedia('(max-width:680px) and (pointer:coarse)').matches){
     doc.documentElement.style.removeProperty('--home-viewport-space');
     return;

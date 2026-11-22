@@ -1,4 +1,4 @@
-const CACHE = 'speak-boldly-offline-v1';
+const CACHE = 'speak-boldly-offline-v2';
 const offline = new URL('./offline.html', self.location.href).href;
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.add(offline)).then(() => self.skipWaiting()));

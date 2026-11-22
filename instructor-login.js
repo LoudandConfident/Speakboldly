@@ -10,9 +10,9 @@ export async function connectInstructor(doc,connection,password){
   let result;try{result=await response.json();}catch{throw Error('The login service could not be reached. Please try again.');}
   if(!response.ok||!result.ok){
    if(/Incorrect connection key|Invalid action|Unknown action|setupInstructorLoginRepair|setInstructorPasswordNow/i.test(result.error||''))throw Error('Google is still running the old login version. Deploy a New version of your existing Apps Script web app, then reload. Your instructor password has not been checked yet.');
-   throw Error(result.error||'Your instructor password could not be checked.');
+   throw Error(result.error||'We couldn’t sign you in just now. Please try again.');
   }
   if(!/^SBI_[A-Za-z0-9-]{60,100}$/.test(result.credential||''))throw Error('The instructor login did not return a valid session.');
   return await connection.connect(result.credential);
- }catch(error){if(error.name==='AbortError')throw Error('Google took too long to check your password. Please try again.');if(error instanceof TypeError)throw Error('Could not reach the login service. Check your connection and try again.');throw error;}finally{doc.defaultView.clearTimeout(timeout);}
+ }catch(error){if(error.name==='AbortError')throw Error('Your sign-in is taking longer than usual. Check your connection and try again.');if(error instanceof TypeError)throw Error('We couldn’t connect just now. Check your internet connection and try again.');throw error;}finally{doc.defaultView.clearTimeout(timeout);}
 }

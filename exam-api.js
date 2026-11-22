@@ -8,7 +8,8 @@ export async function request(path,{role,method='GET',data}={}){
  const base=backendBase();if(!base)throw new Error('Private exam storage is not connected yet. Your teacher needs to finish connecting it before online exams can be submitted.');
  const token=role==='admin'?ownerToken:role==='student'?studentToken:null;
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
- try{const response=await fetch(base+'/api/'+path,{method,headers:{...(data?{'Content-Type':'application/json'}:{}),...(token?{Authorization:'Bearer '+token}:{})},body:data?JSON.stringify(data):undefined,signal:controller.signal});let result;try{result=await response.json();}catch{throw new Error('Private exam storage is unavailable.');}if(!response.ok)throw new Error(result.error||'Request failed.');return result;}
+ try{const response=await fetch(base+'/api/'+path,{method,headers:{...(data?{'Content-Type':'application/json'}:{}),...(token?{Authorization:'Bearer '+token}:{})},body:data?JSON.stringify(data):undefined,signal:controller.signal});let result;try{result=await response.json();}catch{throw new Error('We couldn’t load your information just now. Please try again in a moment.');}if(!response.ok)throw new Error(result.error||'We couldn’t finish that request just now. Please try again.');return result;}
+ catch(error){if(error.name==='AbortError')throw new Error("This is taking longer than usual. Please try again in a moment.");if(error instanceof TypeError)throw new Error("We couldn’t connect just now. Check your internet connection and try again.");throw error;}
  finally{clearTimeout(timer);}
 }
 export async function loginOwner(password){const result=await request('admin/login',{method:'POST',data:{password}});ownerToken=result.token;return(await request('admin/clients',{role:'admin'})).clients;}

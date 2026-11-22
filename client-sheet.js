@@ -19,13 +19,13 @@ async function performSheetRequest(url,secret,payload,fetcher = globalThis.fetch
  try {
   const response = await fetcher(url,{method:'POST',credentials:'omit',redirect:'follow',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({...payload,key:secret}),signal:controller.signal});
   let result;
-  try {result = await response.json();} catch {throw new Error('The client sheet could not be reached. Check its deployment.');}
+  try {result = await response.json();} catch {throw new Error('We couldn’t load your information just now. Please try again in a moment.');}
   if(result.error==='Invalid action.'&&payload.action==='sendClientEmail')throw new Error('Your connected Clients Apps Script deployment does not support email sending yet. Update the script and deploy a New version, then retry. No email was sent.');
-  if (!response.ok || !result.ok) throw new Error(result.error || 'The client sheet request failed.');
+  if (!response.ok || !result.ok) throw new Error(result.error || 'We couldn’t finish that request just now. Please try again.');
   return result;
  } catch(error) {
-  if(error.name === 'AbortError') throw new Error('Google Sheets took too long to respond. Retry syncing; existing rows will not be duplicated.');
-  if(error instanceof TypeError) throw new Error('Could not reach Apps Script. Check that the deployed Web app has access set to Anyone and that this is the Clients deployment URL.');
+  if(error.name === 'AbortError') throw new Error('This is taking longer than usual. Please try again in a moment. Keep your details unchanged when retrying.');
+  if(error instanceof TypeError) throw new Error('We couldn’t connect just now. Check your internet connection and try again.');
   throw error;
  } finally {clearTimeout(timer);}
 }

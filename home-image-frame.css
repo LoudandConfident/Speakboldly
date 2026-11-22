@@ -20,7 +20,10 @@ html body:has(#home[data-view]:not([hidden])) #page-down-arrow{display:none!impo
  html body main #home[data-view]:not([hidden])>.hero{height:100%!important;max-height:100%!important;aspect-ratio:auto!important}
 }
 @media(max-width:680px) and (pointer:coarse){
- html body main #home[data-view]:not([hidden])>.hero{aspect-ratio:9/16!important}
+ html body main #home[data-view]:not([hidden]){display:grid!important;grid-template-rows:minmax(0,1fr) auto!important;height:calc(100svh - var(--home-top-space,72px))!important}
+ html body main #home[data-view]:not([hidden])>.hero{height:100%!important;max-height:100%!important;aspect-ratio:auto!important}
+ html body main #home[data-view] .hero-copy .home-slogan{top:clamp(48px,calc(37% - 30px),calc(100% - 284px))!important}
+ html body main #home[data-view] .home-picture-and-reviews .coaching-photo img{right:auto!important;width:clamp(100%,calc(300% - 90svh),150%)!important;max-width:none!important}
 }
 /* Keep enlarged desktop text in the cover, with enough room for its controls. */
 @media(pointer:fine) and (max-height:700px),(pointer:coarse) and (min-width:681px) and (max-height:700px){
@@ -47,8 +50,11 @@ html[data-phone-desktop] body>header #main-navigation{display:flex!important;fle
 html[data-phone-desktop] body>header #main-navigation .nav-tab{min-height:36px!important;font-size:11px!important;padding:8px 12px!important}
 html[data-phone-desktop] body>header .speak-logo .brand-words{font-size:22px!important}
 html[data-phone-desktop] body>header .header-sb-logo{width:42px!important;height:42px!important}
+/* Keep the tagline anchored to the top-left corner in every homepage layout. */
+html body main #home[data-view] .hero-copy .home-kicker{position:absolute!important;inset:24px auto auto clamp(18px,3vw,42px)!important;max-width:calc(100% - 36px)!important;width:auto!important;margin:0!important;transform:none!important;text-align:left!important}
+@media(max-width:680px) and (pointer:coarse){html body main #home[data-view] .hero-copy .home-kicker{top:18px!important;left:18px!important}}
 @media(max-height:500px){
- html[data-phone-desktop=landscape] body main #home[data-view] .hero-copy{padding:14px 28px!important}
+ html[data-phone-desktop=landscape] body main #home[data-view] .hero-copy{inset:0 auto 32px 0!important;padding:50px 28px 8px!important;justify-content:flex-start!important}
  html[data-phone-desktop=landscape] body main #home[data-view] .hero-copy .home-slogan{font-size:32px!important;margin-bottom:12px!important}
  html[data-phone-desktop=landscape] body main #home[data-view] .home-action-stack{gap:6px!important}
  html[data-phone-desktop=landscape] body main #home[data-view] .hero .home-speech-links{width:150px!important}
