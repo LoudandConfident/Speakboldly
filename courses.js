@@ -43,7 +43,8 @@ export const courses = [
       "Building supportive routines and breaks",
       "Reviewing and adjusting your approach"
     ],
-    "sessionDuration": "60–90 minutes",
+    "sessionDuration": "60 minutes",
+    "sessionMinutes": 60,
     "programKind": "Workshop",
     "noWatermark": true,
     "audienceBadge": "Learners & educators"
@@ -68,7 +69,8 @@ export const courses = [
       "Tone and vocabulary choices",
       "Editing your own writing"
     ],
-    "sessionDuration": "60–90 minutes",
+    "sessionDuration": "60 minutes",
+    "sessionMinutes": 60,
     "programKind": "Workshop",
     "quoteOnly": true,
     "programPlan": "A focused four-session workshop. Work towards a clear writing goal, practise with feedback and leave with an editing routine you can keep using independently."
@@ -233,7 +235,8 @@ export const courses = [
     "detailDescription": "Practise describing your experience, strengths and achievements in your own words. Work on focused answers, follow-up questions and the questions you want to ask an employer, using mock interviews and feedback to prepare. Bring your current CV if you’d like help making it clearer, more focused and better suited to the role. This optional support is included at no extra cost.",
     "viewDescription": "Prepare for English-language interviews through two focused sessions of practice and personal feedback. Rehearse your introduction, common questions, and examples that show your experience. Upgrade your CV with optional review and improvements, included at no extra cost.",
     "outcomes": "You’ll develop more focused answers and clearer ways to explain your strengths and achievements. You’ll also learn how to rehearse independently and handle follow-up questions with greater confidence. You can also leave with a clearer, more focused CV that presents your experience and achievements effectively.",
-    "sessionDuration": "60–90 minutes",
+    "sessionDuration": "60 minutes",
+    "sessionMinutes": 60,
     "programKind": "Workshop",
     "programPlan": "A focused 2 sessions workshop with a defined communication goal. It is a short programme of practice and feedback, rather than an ongoing monthly General English course."
   },
@@ -257,7 +260,8 @@ export const courses = [
     "detailDescription": "Bring examples of the kinds of messages you need to write, such as requests, updates or follow-ups. Practise adapting your tone to the reader, arranging key information clearly and revising drafts with instructor feedback.",
     "viewDescription": "Practise professional emails and business messages across five sessions using situations relevant to your work. Explore tone, structure, requests, and follow-ups while revising drafts with instructor feedback.",
     "outcomes": "You’ll develop clearer messages that suit your reader and make the next action easy to understand. You’ll also build an editing checklist to review your writing before sending it.",
-    "sessionDuration": "60–90 minutes",
+    "sessionDuration": "60 minutes",
+    "sessionMinutes": 60,
     "comingSoon": false,
     "programKind": "Workshop",
     "programPlan": "A focused 5 sessions workshop with a defined communication goal. It is a short programme of practice and feedback, rather than an ongoing monthly General English course."
@@ -282,7 +286,8 @@ export const courses = [
     "detailDescription": "Practise introducing a topic, linking ideas and making your point without losing your audience. Work through meeting contributions, presentation openings and question-and-answer situations, with feedback on clarity, delivery and pronunciation.",
     "viewDescription": "Develop your English for meetings, presentations, and public speaking through five practical sessions. Rehearse contributions, organise your message, and handle questions with feedback on clarity and delivery.",
     "outcomes": "You’ll practise making your point clearly and supporting it with useful examples. You’ll also develop a repeatable preparation routine for presenting ideas and responding to an audience.",
-    "sessionDuration": "60–90 minutes",
+    "sessionDuration": "60 minutes",
+    "sessionMinutes": 60,
     "programKind": "Workshop"
   },
   {
@@ -358,7 +363,8 @@ export const courses = [
     "detailDescription": "Practise stressed syllables and stress shifts, sentence emphasis, rising and falling intonation, and connected speech. Use your voice to express confidence, uncertainty, excitement, politeness and sarcasm through real-life conversations.",
     "viewDescription": "Six practical sessions with speaking drills, dialogues, listening discrimination, role-play and recording challenges. Learn to stress important words and develop a more natural English rhythm.",
     "outcomes": "You’ll learn to notice stress and intonation patterns, use your voice to change meaning and review your own recordings with a practical self-assessment routine.",
-    "sessionDuration": "60–90 minutes",
+    "sessionDuration": "60 minutes",
+    "sessionMinutes": 60,
     "programKind": "Workshop"
   },
   {
@@ -457,7 +463,7 @@ export const courses = [
     "title": "In-person sessions",
     "level": "All levels · tailored to your needs",
     "duration": "Flexible sessions",
-    "sessionDuration": "60–120 minutes",
+    "sessionDuration": "60–90 minutes",
     "category": "Pro Services",
     "formatOnly": true,
     "quoteOnly": true,
@@ -482,7 +488,7 @@ export const courses = [
     "title": "Group sessions",
     "level": "Friends, colleagues or learners with shared goals",
     "duration": "Flexible group sessions",
-    "sessionDuration": "60–120 minutes",
+    "sessionDuration": "60–90 minutes",
     "category": "Pro Services",
     "formatOnly": true,
     "quoteOnly": true,
