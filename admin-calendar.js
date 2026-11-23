@@ -8,7 +8,7 @@ import {confirmClientEmail} from './client-email-confirmation.js?v=calendar-popu
 import {SESSION_PROGRAMS,INSTRUCTOR_APPOINTMENT_TYPES,appointmentDurationForType,appointmentDurationChoices,isWorkshopProgram,calendarProgramForType,nextSessionNumber,suggestedSessionProgram} from './session-programs.js?v=appointment-lengths-105';
 import {clientSheetConnected,loadSheetSessions,saveSheetSession,cancelSheetSession,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {ownerConnected,request} from './exam-api.js';
-import {openPopup} from './popups.js?v=mobile-assessment-page';
+import {openPopup} from './popups.js?v=same-tab-112';
 export const SESSION_DURATIONS=[30,60,90,120,150,180];
 export const defaultSessionDuration=program=>program==='Assessment'?30:['Trial session','English Momentum'].includes(program)||isWorkshopProgram(program)?60:90;
 const STORAGE_KEY='speak-boldly-admin-sessions-v1';

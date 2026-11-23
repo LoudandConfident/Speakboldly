@@ -1,4 +1,4 @@
-import {openSection} from './section-navigation.js';
+import {openSection} from './section-navigation.js?v=same-tab-112';
 import {accentSelect,voiceForAccent,readyAccentVoice} from './english-accents.js?v=natural-priority-21';
 import {helpIcon} from './ui-help.js?v=popup-help-20';
 import {createDailyEncouragement} from './daily-encouragement.js?v=1';

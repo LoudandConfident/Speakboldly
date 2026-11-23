@@ -1,4 +1,4 @@
-import {openSection} from './section-navigation.js';
+import {openSection} from './section-navigation.js?v=same-tab-112';
 import {filmArtwork,filmPosterFallback} from './film-posters.js?v=all-posters-2';
 import {cultureFilms,novelDetails,filmFortnight,MODERN_ADAPTATION} from './culture-corner-data.js?v=compact-nov6-1';
 import {createClearEnglishReading} from './clear-english-reading.js?v=natural-priority-21';

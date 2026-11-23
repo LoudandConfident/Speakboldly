@@ -1,4 +1,4 @@
-import {openSection} from './section-navigation.js';
+import {openSection} from './section-navigation.js?v=same-tab-112';
 import {offerIsActive} from './assessment-time.js';
 import {courseIllustration as art} from './course-illustrations.js?v=outings-22';
 import {coursePaths} from './public-seo-routes.js?v=outings-22';

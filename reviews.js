@@ -2,7 +2,7 @@ import {learnerReviewPrograms} from './review-programs.js?v=learner-feedback-1';
 import {initializeReviewLevels,displayedReviewLevel} from './review-levels.js?v=course-levels-1';
 import {showSubmissionSuccess,SUBMISSION_SUCCESS_MESSAGE} from './submission-success.js';
 import {reviewSubmission} from './review-validation.js?v=course-levels-1';
-import {openPopup} from './popups.js?v=mobile-assessment-page';
+import {openPopup} from './popups.js?v=same-tab-112';
 import {courses} from './courses.js?v=compact-nov6-1';
 import {reviewsConnected,reviewRequest} from './reviews-api.js?v=separate-review-sheet';
 export function initializeReviews(doc, api = reviewRequest, connected = reviewsConnected) {

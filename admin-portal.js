@@ -1,6 +1,6 @@
 import {initializeSeasonalThemeEditor} from './seasonal-theme-editor.js?v=seasonal-pages-86';
 import {monthlyTeachingHours} from './teaching-metrics.js?v=41';
-import './teaching-refinements.js?v=43';
+import './teaching-refinements.js?v=same-tab-112';
 import {connectInstructor} from './instructor-login.js?v=deployment-help-3';
 import {initializePersonalCalendar} from './personal-calendar.js?v=calendar-options-3';
 import {createTaskReminder} from './task-reminder.js?v=top-illustration-2';
@@ -27,7 +27,7 @@ import {initializePortalSwitches} from './portal-switches.js?v=files-only-2';
 import {initializeTeacherDocuments} from './teacher-documents.js?v=success-return-1';
 import {initializeClientSheet,clientSheetConnected,syncClientToSheet,loadClientsFromSheet,mergeSheetClients,sendSheetClientEmail,loadSheetSessions,sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
 import {ownerConnected,savePrivateClient,uploadPrivateFile,request} from './exam-api.js';
-import {initializeAdminCalendar} from './admin-calendar.js?v=four-sessions-22';
+import {initializeAdminCalendar} from './admin-calendar.js?v=same-tab-112';
 import {CLIENT_LEVELS,PAYMENT_STATUSES,validateClient,clientTotals,removeBrowserClient} from './admin-clients.js?v=tasks-calendar-cash-1';
 import {PORTAL_SECTIONS,filePermission} from './portal-access.js?v=custom-domain-1';
 import {loadPortalMaterials} from './portal-materials.js?v=custom-domain-1';

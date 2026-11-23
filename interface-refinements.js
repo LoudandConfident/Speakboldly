@@ -4,7 +4,7 @@ import './seasonal-pages.js?v=home-no-sign-100';
 import './program-offer.js?v=enquiry-96';
 import './beyond-brand.js?v=transparent-99';
 import './learning-card-groups.js?v=balanced-60';
-import './teaching-refinements.js?v=64';
+import './teaching-refinements.js?v=same-tab-112';
 import {initializeFixedPageHelp} from './fixed-page-help.js?v=70';
 import {helpIcon} from './ui-help.js';
 const doc=document;

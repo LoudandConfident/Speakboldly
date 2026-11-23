@@ -505,3 +505,9 @@ html body #boldly-notes .blog-word-tip{color:#fff!important}
 html body dialog.blog-word-dialog{background:#193c32;color:#fff}
 html body dialog.blog-word-dialog :is(h2,small,p,blockquote){color:#fff!important;opacity:1}
 html body dialog.blog-word-dialog blockquote{background:#284d41;border-color:#d5ed98}
+/* Keep the original expanding phone menu above the cover, without a floating card. */
+@media(max-width:1100px){
+ html body>header:has(>.mobile-menu-toggle){position:relative!important;z-index:110!important;overflow:visible!important}
+ html body>header:has(>.mobile-menu-toggle[aria-expanded=true]~#main-navigation.mobile-open){height:auto!important;overflow:visible!important}
+ html:not([data-phone-desktop]) body:has(>header>.mobile-menu-toggle[aria-expanded=true]) #sb-fixed-page-help{visibility:hidden!important;pointer-events:none!important}
+}
