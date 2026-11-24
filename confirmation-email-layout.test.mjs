@@ -14,6 +14,8 @@ test('confirmation emails separate appointment details and state the standard se
   assert.match(email.htmlBody,/padding:20px/);
   assert.match(email.htmlBody,/margin:4px 0 14px/);
   assert.doesNotMatch(email.htmlBody,/<\/td><td/);
+  for(const text of [email.body,email.htmlBody])assert.doesNotMatch(text,/reply to this e-?mail|Founded by Mira Nasser Louis/i);
+  assert.match(email.htmlBody,/Speak Boldly\. All rights reserved/);
  }
 });
 

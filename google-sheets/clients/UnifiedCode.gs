@@ -482,12 +482,13 @@ function retryPermissions(){
 }
 
 const SB_DOCUMENT_CREDENTIALS="English Language Coaching\nFounded by Mira Nasser Louis\n© 2026 Mira Nasser Louis. All rights reserved.";
+const SB_EMAIL_CREDENTIALS="English Language Coaching\n© 2026 Speak Boldly. All rights reserved.";
 const SB_EMAIL_LOGO='https://speakboldly.space/document-templates/sb-policy-logo.png';
 const SB_ZOOM_URL=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_URL')||'';
 const SB_ZOOM_PASSCODE=PropertiesService.getScriptProperties().getProperty('SB_ZOOM_PASSCODE')||'';
 function sbEmailEscape(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function sbBrandedEmail(title,content){
- return '<!doctype html><html><body style="margin:0;background:#faf9f4;font-family:Arial,sans-serif;color:#193c32"><table role="presentation" style="width:100%;max-width:600px;margin:auto;background:#fffef9;border-collapse:collapse"><tr><td style="padding:28px 28px 12px"><img src="'+SB_EMAIL_LOGO+'" width="58" height="58" alt="Speak Boldly logo" style="display:block;border-radius:10px"><h1 style="font-size:24px;margin:18px 0">'+sbEmailEscape(title)+'</h1></td></tr><tr><td style="padding:0 28px 28px;font-size:15px;line-height:1.7">'+content+'<p style="margin-top:28px;font-size:11px;line-height:1.45">'+sbEmailEscape(SB_DOCUMENT_CREDENTIALS).replace(/\n/g,'<br>')+'</p></td></tr></table></body></html>';
+ return '<!doctype html><html><body style="margin:0;background:#faf9f4;font-family:Arial,sans-serif;color:#193c32"><table role="presentation" style="width:100%;max-width:600px;margin:auto;background:#fffef9;border-collapse:collapse"><tr><td style="padding:28px 28px 12px"><img src="'+SB_EMAIL_LOGO+'" width="58" height="58" alt="Speak Boldly logo" style="display:block;border-radius:10px"><h1 style="font-size:24px;margin:18px 0">'+sbEmailEscape(title)+'</h1></td></tr><tr><td style="padding:0 28px 28px;font-size:15px;line-height:1.7">'+content+'<p style="margin-top:28px;font-size:11px;line-height:1.45">'+sbEmailEscape(SB_EMAIL_CREDENTIALS).replace(/\n/g,'<br>')+'</p></td></tr></table></body></html>';
 }
 function sbUpcomingClientMeetings(book,clientId){
  const sheet=book.getSheetByName('Sessions');if(!sheet||sheet.getLastRow()<2)return [];
@@ -501,9 +502,9 @@ function sbCalendarEmail(client,meetings,reminder=false){
  const heading=reminder?'Your upcoming class reminder':'Your class confirmation',name=String(client[1]),first=meetings[0]||[],course=first[14]||(!['Assessment','Trial session'].includes(String(first[10]))?first[10]:'')||client[11]||'',program=sbEmailProgramName(course);
  const lines=meetings.map(r=>sbSessionEmailLabel(r)+(sbSessionEmailDetails(r)?' ('+sbSessionEmailDetails(r)+')':'')+' — '+Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy — h:mm a')+' (Cairo time)');
  const intro=reminder?'This is a reminder for your upcoming English class.':'Your next upcoming English session is confirmed below.';
- const body='Hello '+name+',\n\n'+intro+(program?'\n\nProgram: '+program:'')+'\n\n'+lines.join('\n')+'\n\nJoin on Zoom:\n'+SB_ZOOM_URL+'\nPasscode: '+SB_ZOOM_PASSCODE+'\n\nPlease note: No same-day cancellations are allowed.\n\nIf you have any questions, reply to this email.\n\nSee you in class!\nSpeak Boldly';
+ const body='Hello '+name+',\n\n'+intro+(program?'\n\nProgram: '+program:'')+'\n\n'+lines.join('\n')+'\n\nJoin on Zoom:\n'+SB_ZOOM_URL+'\nPasscode: '+SB_ZOOM_PASSCODE+'\n\nPlease note: No same-day cancellations are allowed.\n\nSee you in class!\nSpeak Boldly';
  const rows=meetings.map(r=>'<tr><td style="padding:20px;border-bottom:1px solid #d9e0cf;vertical-align:top;line-height:24px"><p style="margin:0 0 10px;font-size:16px;line-height:24px"><strong>'+sbEmailEscape(sbSessionEmailLabel(r))+'</strong></p><p style="margin:0 0 14px;line-height:24px">'+sbEmailEscape(sbSessionEmailDetails(r))+'</p><p style="margin:0;line-height:26px"><strong>Date:</strong> '+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','EEEE, d MMMM yyyy'))+'<br><strong>Time:</strong> '+sbEmailEscape(Utilities.formatDate(new Date(r[5]),'Africa/Cairo','h:mm a'))+' · Cairo time</p></td></tr>').join('');
- const content='<p>Hello '+sbEmailEscape(name)+',</p><p>'+intro+'</p>'+(program?'<p><strong>Program:</strong> '+sbEmailEscape(program)+'</p>':'')+'<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;background:#edf0e6;font-size:14px;line-height:24px;margin:8px 0 24px">'+rows+'</table>'+'<p><a href="'+SB_ZOOM_URL+'" style="display:inline-block;padding:10px 16px;background:#193c32;color:#fffef9;text-decoration:none;border-radius:6px">Join on Zoom</a><br><strong>Zoom passcode:</strong> '+SB_ZOOM_PASSCODE+'</p><p><strong>No same-day cancellations are allowed.</strong></p><p>If you have any questions, reply to this email.</p><p>See you in class!</p>';
+ const content='<p>Hello '+sbEmailEscape(name)+',</p><p>'+intro+'</p>'+(program?'<p><strong>Program:</strong> '+sbEmailEscape(program)+'</p>':'')+'<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;background:#edf0e6;font-size:14px;line-height:24px;margin:8px 0 24px">'+rows+'</table>'+'<p><a href="'+SB_ZOOM_URL+'" style="display:inline-block;padding:10px 16px;background:#193c32;color:#fffef9;text-decoration:none;border-radius:6px">Join on Zoom</a><br><strong>Zoom passcode:</strong> '+SB_ZOOM_PASSCODE+'</p><p><strong>No same-day cancellations are allowed.</strong></p><p>See you in class!</p>';
  return {body,htmlBody:sbBrandedEmail(heading,content.replace(/<p>/g,'<p style="margin:0 0 18px;line-height:26px">').replace('display:inline-block;padding:10px 16px;','display:inline-block;margin:4px 0 14px;padding:12px 20px;'))};
 }
 
@@ -541,7 +542,7 @@ function handleClientEmail(p){
   let message;
   if(kind==='paymentReminder'){
    const text='Kindly complete the payment for your course before your new round begins. Thank you for your continued trust in Speak Boldly—we look forward to supporting your progress. Please email your payment screenshot, name and program to billing@speakboldly.space.';
-   message={body:'Hello '+client[1]+',\n\n'+text+'\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly',htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p><p>'+sbEmailEscape(text)+'</p><p>If you have any questions, reply to this email.</p>')};
+   message={body:'Hello '+client[1]+',\n\n'+text+'\n\nSpeak Boldly',htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p><p>'+sbEmailEscape(text)+'</p>')};
   }else if(kind==='confirmation'){
    let meetings;
    if(p.calendarSession===true){
@@ -563,8 +564,8 @@ function handleClientEmail(p){
   }else{
    const course=sbEmailProgramName(client[11]||''),level=String(client[4]||'');
    const details=kind==='registration'?[course,level?'Level / Program: '+level:''].filter(Boolean).join('\n'):'';
-   const body='Hello '+client[1]+',\n\n'+(details?details+'\n\n':'')+'Please find your '+labels[kind].toLowerCase()+' attached.\n\nIf you have any questions, reply to this email.\n\nSpeak Boldly';
-   message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p>'+(details?'<p>'+sbEmailEscape(details).replace(/\n/g,'<br>')+'</p>':'')+'<p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p><p>If you have any questions, reply to this email.</p>')};
+   const body='Hello '+client[1]+',\n\n'+(details?details+'\n\n':'')+'Please find your '+labels[kind].toLowerCase()+' attached.\n\nSpeak Boldly';
+   message={body,htmlBody:sbBrandedEmail(labels[kind],'<p>Hello '+sbEmailEscape(client[1])+',</p>'+(details?'<p>'+sbEmailEscape(details).replace(/\n/g,'<br>')+'</p>':'')+'<p>Please find your '+sbEmailEscape(labels[kind].toLowerCase())+' attached.</p>')};
   }
   const sender=sbDomainEmailRoute(kind),verifiedFrom=sbVerifiedFrom(sender.from);
   const row=log.getLastRow()+1;log.getRange(row,1,1,7).setValues([[requestId,id,kind,String(client[2]),'sending','','']]);SpreadsheetApp.flush();

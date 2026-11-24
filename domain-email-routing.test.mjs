@@ -4,6 +4,13 @@ const pdfBase64=Buffer.from('%PDF-1.4\n%%EOF').toString('base64');
 test('each report uses Noreply; financial documents and reminders use Billing',()=>{
  const f=fixture();for(const kind of ['progress','final','actionplan','notes','registration','paymentReminder']){const r=f.request({action:'sendClientEmail',key:'private-test-key',clientId:'student-1',kind,requestId:'domain-'+kind,pdfBase64});assert.equal(r.ok,true,r.error);const email=f.emails.at(-1),financial=['registration','paymentReminder'].includes(kind);assert.equal(email.from,financial?'billing@speakboldly.space':'noreply@speakboldly.space');assert.equal(email.replyTo,financial?'billing@speakboldly.space':'askcoach@speakboldly.space');assert.equal(email.to,'private@example.com');if(kind==='paymentReminder')assert.match(email.body,/billing@speakboldly.space/);else assert.equal(email.attachments[0].bytes.slice(0,4).map(n=>String.fromCharCode(n)).join(''),'%PDF');}
 });
+test('report emails omit reply instructions and founder credits while preserving their branding',()=>{
+ const f=fixture();for(const kind of ['progress','final','actionplan','notes','registration','paymentReminder']){
+  const result=f.request({action:'sendClientEmail',key:'private-test-key',clientId:'student-1',kind,requestId:'copy-'+kind,pdfBase64});assert.equal(result.ok,true,result.error);
+  const email=f.emails.at(-1);for(const text of [email.body,email.htmlBody])assert.doesNotMatch(text,/reply to this e-?mail|Founded by Mira Nasser Louis/i);
+  assert.match(email.htmlBody,/Speak Boldly logo/);assert.match(email.htmlBody,/© 2026 Speak Boldly/);
+ }
+});
 test('missing sender alias fails before delivery logging and never falls back to Gmail',()=>{
  const aliases=['billing@speakboldly.space'],f=fixture(aliases),payload={action:'sendClientEmail',key:'private-test-key',clientId:'student-1',kind:'progress',requestId:'missing-alias',pdfBase64};let result=f.request(payload);assert.equal(result.ok,false);assert.match(result.error,/Verify noreply@speakboldly.space/);assert.equal(f.emails.length,0);assert.equal(f.sheets.get('EmailLog').getLastRow(),1);aliases.push('noreply@speakboldly.space');assert.equal(f.request(payload).ok,true);assert.equal(f.emails.length,1);assert.equal(f.request(payload).ok,true);assert.equal(f.emails.length,1);
 });
