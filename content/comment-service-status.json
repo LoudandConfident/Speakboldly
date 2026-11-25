@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-25T08:31:13.613Z",
+  "checkedAt": "2026-11-25T13:33:37.186Z",
   "comments": {
     "reachable": true,
     "ok": true,
@@ -12,7 +12,7 @@
   },
   "practiceDrive": {
     "reachable": true,
-    "elapsedMs": 31391,
+    "elapsedMs": 15919,
     "httpStatus": 200,
     "ready": true,
     "files": 30
