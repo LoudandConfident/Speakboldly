@@ -1,4 +1,5 @@
 import {renderBeyondHeader,BEYOND_FOOTER_LINES} from './beyond-shell.js?v=2';
+import {applySpeakBoldlyBrand} from './seasonal-brand.js?v=christmas-119';
 // The blog lives inside Beyond; teaching navigation remains in the teaching space.
 export function initializeBeyondBrand(doc){
  const root=doc.querySelector('#boldly-notes');if(!root||doc.querySelector('#beyond-blog-header'))return;const win=doc.defaultView;
@@ -9,7 +10,7 @@ export function initializeBeyondBrand(doc){
  const icons=[...doc.head.querySelectorAll('link[rel~="icon"]')];
  if(!icons.length){const icon=doc.createElement('link');icon.rel='icon';doc.head.append(icon);icons.push(icon);}
  let activeBrand=null;
- function update(){const active=!root.hidden;header.hidden=!active;doc.body.classList.toggle('beyond-blog-active',active);if(activeBrand===active)return;activeBrand=active;for(const icon of icons){icon.href=active?'/literatespace/beyond-mark.svg?v=1':'/favicon.svg?v=transparent-99';icon.type='image/svg+xml';icon.sizes='any';}}
+ function update(){const active=!root.hidden;header.hidden=!active;doc.body.classList.toggle('beyond-blog-active',active);if(activeBrand===active)return;activeBrand=active;if(!active){applySpeakBoldlyBrand(doc);return;}for(const icon of icons){icon.href='/literatespace/beyond-mark.svg?v=1';icon.type='image/svg+xml';icon.sizes='any';}}
  new win.MutationObserver(update).observe(root,{attributes:true,attributeFilter:['hidden']});win.addEventListener('hashchange',update);update();
 }
 if(typeof document!=='undefined')initializeBeyondBrand(document);

@@ -1,4 +1,4 @@
-import {initializeSeasonalThemeEditor} from './seasonal-theme-editor.js?v=seasonal-pages-86';
+import {initializeSeasonalThemeEditor} from './seasonal-theme-editor.js?v=christmas-119';
 import {monthlyTeachingHours} from './teaching-metrics.js?v=41';
 import './teaching-refinements.js?v=same-tab-112';
 import {connectInstructor} from './instructor-login.js?v=deployment-help-3';

@@ -1,7 +1,7 @@
-import {createSeasonalSign} from './monthly-home-theme.js?v=home-no-sign-100';
-import {renderSeasonalFlourish} from './seasonal-flourish.js?v=1';
-import {themeForDate} from './seasonal-theme-data.js';
-import {seasonalThemeSettings,refreshSeasonalThemes} from './seasonal-theme-settings.js';
+import {createSeasonalSign} from './monthly-home-theme.js?v=christmas-119';
+import {renderSeasonalFlourish} from './seasonal-flourish.js?v=christmas-119';
+import {themeForDate} from './seasonal-theme-data.js?v=christmas-119';
+import {seasonalThemeSettings,refreshSeasonalThemes} from './seasonal-theme-settings.js?v=christmas-119';
 
 const headings=['#courses .courses-heading','#placement .assessment-preview-heading','#portal-content .learning-space-heading'];
 export function initializeSeasonalPages(doc,now=new Date()){

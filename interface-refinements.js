@@ -1,8 +1,9 @@
-import './home-header-doodles.js?v=4';
-import './monthly-home-theme.js?v=home-no-sign-100';
-import './seasonal-pages.js?v=home-no-sign-100';
-import './program-offer.js?v=enquiry-96';
-import './beyond-brand.js?v=transparent-99';
+import './seasonal-brand.js?v=christmas-119';
+import './home-header-doodles.js?v=christmas-119';
+import './monthly-home-theme.js?v=christmas-119';
+import './seasonal-pages.js?v=christmas-119';
+import './program-offer.js?v=christmas-119';
+import './beyond-brand.js?v=christmas-119';
 import './learning-card-groups.js?v=balanced-60';
 import './teaching-refinements.js?v=same-tab-112';
 import {initializeFixedPageHelp} from './fixed-page-help.js?v=70';

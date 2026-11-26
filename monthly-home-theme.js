@@ -1,13 +1,14 @@
-import {renderSeasonalFlourish} from './seasonal-flourish.js?v=1';
-import {themeForDate} from './seasonal-theme-data.js';
-import {seasonalThemeSettings,refreshSeasonalThemes} from './seasonal-theme-settings.js';
+import {renderSeasonalFlourish} from './seasonal-flourish.js?v=christmas-119';
+import {themeForDate} from './seasonal-theme-data.js?v=christmas-119';
+import {seasonalThemeSettings,refreshSeasonalThemes} from './seasonal-theme-settings.js?v=christmas-119';
 export function createSeasonalSign(doc,theme){
  const decoration=doc.createElement('aside');decoration.className='monthly-home-theme';decoration.dataset.theme=theme.art;decoration.dataset.copyLength=theme.message.length>60?'long':theme.message.length>28?'medium':'short';decoration.setAttribute('aria-label',theme.label);
  decoration.innerHTML='<svg class="monthly-theme-art" viewBox="0 0 270 200" fill="none" aria-hidden="true"><path d="M58 0q-2 22 0 48M212 0q2 22 0 48" stroke="#a59470" stroke-width="1.4"/><path d="M24 40q111-9 222 0v135q-111 24-222 0Z" fill="#f8f4e7" stroke="#c0b18f" stroke-width=".8"/><path d="M33 48q103-7 204 0v121q-102 20-204 0Z" stroke="#d6c9ab" stroke-width=".65"/><circle cx="58" cy="48" r="3.7" fill="#b39a64"/><circle cx="212" cy="48" r="3.7" fill="#b39a64"/><circle cx="58" cy="48" r="1.8" fill="#6c7054"/><circle cx="212" cy="48" r="1.8" fill="#6c7054"/></svg><div class="monthly-theme-copy"><span class="monthly-theme-note"></span><span class="monthly-theme-message"></span></div>';
  const label=decoration.querySelector('.monthly-theme-note');label.textContent=theme.label;
  const thanksgiving=theme.art==='thanksgiving'&&/^happy thanksgiving$/i.test(theme.label.trim());
  if(thanksgiving)decoration.classList.add('seasonal-thanksgiving');
- const message=decoration.querySelector('.monthly-theme-message');message.textContent=thanksgiving?'':theme.message;message.hidden=thanksgiving;
+ const greeting=thanksgiving||(theme.art==='christmas'&&/^merry christmas$/i.test(theme.label.trim()));if(greeting)decoration.classList.add('seasonal-greeting');
+ const message=decoration.querySelector('.monthly-theme-message');message.textContent=greeting?'':theme.message;message.hidden=greeting;
  if(theme.art!=='thanksgiving'){
  const art=decoration.querySelector('svg');
  const icons={

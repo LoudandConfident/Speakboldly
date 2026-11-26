@@ -375,6 +375,8 @@ html body main .monthly-home-theme.seasonal-thanksgiving .monthly-theme-note::af
 .section-seasonal-decoration .monthly-theme-message{font:italic 500 12px/1.2 Georgia,serif;margin:0;color:#41543e}
 .section-seasonal-decoration .seasonal-thanksgiving .monthly-theme-copy{top:31%}
 .section-seasonal-decoration .seasonal-thanksgiving .monthly-theme-note{font:italic 500 14px/1.2 Georgia,serif;margin:0;letter-spacing:0;color:#41543e}
+.section-seasonal-decoration .seasonal-greeting[data-theme=christmas] .monthly-theme-copy{inset:29% 12% 21%;display:flex;align-items:center;justify-content:center}
+.section-seasonal-decoration .seasonal-greeting[data-theme=christmas] .monthly-theme-note{font:600 13px/1.2 'DM Sans',Arial,sans-serif;margin:0;letter-spacing:0;color:#41543e}
 .section-seasonal-flourish{display:block;width:62px;height:36px;flex:none;align-self:flex-end;margin-bottom:10px;opacity:.9}
 .section-seasonal-flourish svg{display:block;width:100%;height:100%}
 #students-portal.learning-section-open .section-seasonal-decoration{display:none}

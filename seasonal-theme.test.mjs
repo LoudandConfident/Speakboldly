@@ -1,9 +1,21 @@
 import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';
-import {themeForDate,validateThemeSchedule,DEFAULT_THEME_SCHEDULE} from './seasonal-theme-data.js';
+import {themeForDate,validateThemeSchedule,DEFAULT_THEME_SCHEDULE,normalizeSeasonalSchedule} from './seasonal-theme-data.js';
 test('Cairo seasonal boundaries and dynamic new year',()=>{
- for(const [date,art,text]of [['2026-11-30T21:59:59Z','thanksgiving','grateful'],['2026-11-30T22:00:00Z','christmas','magic'],['2026-12-31T22:00:00Z','new-year','2027'],['2027-01-14T22:00:00Z','winter','blanket'],['2027-02-14T12:00:00Z','valentine','love'],['2027-02-15T12:00:00Z','winter','tea'],['2027-03-21T12:00:00Z','mothers','heroes'],['2027-04-01T12:00:00Z','april-fools','Hahaa'],['2027-05-01T12:00:00Z','summer','Sunshine']]){const theme=themeForDate(new Date(date));assert.equal(theme.art,art);assert(theme.message.includes(text));}
+ for(const [date,art,text]of [['2026-11-29T21:59:59Z','thanksgiving','grateful'],['2026-11-29T22:00:00Z','christmas','magic'],['2026-11-30T12:00:00Z','christmas','magic'],['2026-12-31T22:00:00Z','new-year','2027'],['2027-01-14T22:00:00Z','winter','blanket'],['2027-02-14T12:00:00Z','valentine','love'],['2027-02-15T12:00:00Z','winter','tea'],['2027-03-21T12:00:00Z','mothers','heroes'],['2027-04-01T12:00:00Z','april-fools','Hahaa'],['2027-05-01T12:00:00Z','summer','Sunshine']]){const theme=themeForDate(new Date(date));assert.equal(theme.art,art);assert(theme.message.includes(text));}
  assert.equal(themeForDate(new Date(),{mode:'off'}),null);assert.equal(validateThemeSchedule(DEFAULT_THEME_SCHEDULE).length,12);
+});
+test('old saved default dates upgrade without changing wording, off mode or custom dates',()=>{
+ const legacy=DEFAULT_THEME_SCHEDULE.map(x=>x.art==='thanksgiving'?{...x,end:'11-30',message:'Our own words'}:x.art==='christmas'?{...x,start:'12-01'}:x);
+ const updated=normalizeSeasonalSchedule(legacy);
+ assert.equal(updated.find(x=>x.art==='thanksgiving').message,'Our own words');
+ assert.equal(legacy.find(x=>x.art==='christmas').start,'12-01');
+ assert.equal(validateThemeSchedule(updated).length,12);
+ assert.equal(themeForDate(new Date('2026-11-30T12:00Z'),{mode:'automatic',schedule:legacy}).art,'christmas');
+ assert.equal(themeForDate(new Date('2026-11-30T12:00Z'),{mode:'off',schedule:legacy}),null);
+ const custom=[{start:'11-01',end:'12-05',art:'thanksgiving',label:'Custom',message:'Your schedule'},{start:'12-06',end:'12-31',art:'christmas',label:'Christmas',message:'Hello'}];
+ assert.strictEqual(normalizeSeasonalSchedule(custom),custom);
 });
 test('schedule rejects overlapping dates, invalid art, impossible dates and long content',()=>{const row={start:'01-01',end:'01-14',art:'winter',label:'Cold',message:'Hello'};assert.throws(()=>validateThemeSchedule([row,row]),/overlap/);for(const changed of [{start:'02-30'},{art:'unknown'},{message:'x'.repeat(101)}])assert.throws(()=>validateThemeSchedule([{...row,...changed}]));assert.equal(validateThemeSchedule([{...row,start:'12-20',end:'01-10'}]).length,1);});
 function backend(){const values=new Map();let writes=0;const ctx={ContentService:{MimeType:{JSON:'json'},createTextOutput:text=>({text,setMimeType(){return this;}})},PropertiesService:{getScriptProperties:()=>({getProperty:k=>values.get(k)||null,setProperty:(k,v)=>{writes++;values.set(k,v);}})},LockService:{getScriptLock:()=>({waitLock(){},releaseLock(){}})},Utilities:{getUuid:()=>String(writes+1)},sbRequireClientConnection:p=>{if(p.key!=='private')throw Error('Not authorized');}};vm.createContext(ctx);vm.runInContext(readFileSync('google-sheets/clients/HomepageThemes.gs','utf8'),ctx);return {call:data=>JSON.parse(ctx.sbHomepageThemesEvent({postData:{contents:JSON.stringify(data)}}).text),writes:()=>writes};}
 test('public theme read, authorized updates, stale revision protection and no write on invalid input',()=>{const b=backend();assert.equal(b.call({action:'homepageThemes'}).settings.mode,'automatic');assert.equal(b.call({action:'homepageThemesSave',schedule:DEFAULT_THEME_SCHEDULE}).ok,false);assert.equal(b.writes(),0);const saved=b.call({action:'homepageThemesSave',key:'private',revision:'0',mode:'automatic',schedule:DEFAULT_THEME_SCHEDULE});assert.equal(saved.ok,true);assert.equal(b.call({action:'homepageThemes'}).settings.schedule.length,12);assert.equal(b.call({action:'homepageThemesSave',key:'private',revision:'0',mode:'off',schedule:DEFAULT_THEME_SCHEDULE}).ok,false);assert.equal(b.writes(),1);assert.equal(b.call({action:'homepageThemesSave',key:'private',revision:saved.settings.revision,mode:'off',schedule:DEFAULT_THEME_SCHEDULE}).ok,true);assert.equal(b.call({action:'homepageThemes'}).settings.mode,'off');});
+

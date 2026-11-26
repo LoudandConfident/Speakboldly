@@ -1,8 +1,13 @@
+import {themeForDate} from './seasonal-theme-data.js?v=christmas-119';
+import {seasonalThemeSettings} from './seasonal-theme-settings.js?v=christmas-119';
+import {renderSeasonalFlourish} from './seasonal-flourish.js?v=christmas-119';
 // Echo the footer illustration in the genuinely unused header space.
 export function initializeHomeHeaderDoodles(doc){
  const logo=doc.querySelector('body>header .speak-logo'),source=doc.querySelector('#home .home-whitespace-doodles');
  if(!logo||!source)return;const header=logo.closest('header');if(header.querySelector('.home-header-doodles'))return;
- const win=doc.defaultView,mark=doc.createElement('span'),art=source.querySelector('.home-doodle-art').cloneNode(true);mark.className='home-header-doodles';mark.setAttribute('aria-hidden','true');mark.append(art);header.append(mark);
+ const win=doc.defaultView,mark=doc.createElement('span'),original=source.querySelector('.home-doodle-art'),normal=original.innerHTML,art=original.cloneNode(true);mark.className='home-header-doodles';mark.setAttribute('aria-hidden','true');mark.append(art);header.append(mark);
+ function seasonalArt(){const theme=themeForDate(new Date(),seasonalThemeSettings()),christmas=theme?.art==='christmas';const illustration=christmas?'<g transform="translate(27 0)">'+renderSeasonalFlourish('christmas').replace(/^<svg[^>]*>|<\/svg>$/g,'')+'</g>':normal;original.innerHTML=illustration;art.innerHTML=illustration;source.dataset.theme=mark.dataset.theme=theme?.art||'';}
+ doc.addEventListener('seasonal-themes-changed',seasonalArt);win.addEventListener('pageshow',seasonalArt);seasonalArt();
  if(win.getComputedStyle(header).position==='static')header.style.position='relative';
  let queued=false;
  function layout(){

@@ -1,6 +1,6 @@
 import {sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
-import {THEME_ARTS,DEFAULT_THEME_SETTINGS,DEFAULT_THEME_SCHEDULE,validateThemeSchedule,themeForDate} from './seasonal-theme-data.js';
-import {setSeasonalThemeSettings} from './seasonal-theme-settings.js';
+import {THEME_ARTS,DEFAULT_THEME_SETTINGS,DEFAULT_THEME_SCHEDULE,validateThemeSchedule,themeForDate,normalizeSeasonalSchedule} from './seasonal-theme-data.js?v=christmas-119';
+import {setSeasonalThemeSettings} from './seasonal-theme-settings.js?v=christmas-119';
 export function initializeSeasonalThemeEditor(doc,isUnlocked,request=sheetLibraryRequest){
  const host=doc.querySelector('#admin-dashboard');if(!host)return {lock(){}};
  const root=doc.createElement('details');root.className='admin-detail seasonal-theme-editor';root.id='homepage-seasonal-themes';
@@ -12,7 +12,7 @@ export function initializeSeasonalThemeEditor(doc,isUnlocked,request=sheetLibrar
  const update=()=>row.querySelector('summary').textContent=(row.querySelector('[name=label]').value||'New theme')+' · '+row.querySelector('[name=start]').value+' – '+row.querySelector('[name=end]').value;row.addEventListener('input',()=>{update();preview();});row.querySelector('[data-remove]').onclick=()=>{row.remove();preview();};update();list.append(row);}
  function values(){return [...list.children].map(row=>Object.fromEntries(['start','end','art','label','message'].map(key=>[key,row.querySelector('[name='+key+']').value])));}
  function preview(){try{const schedule=validateThemeSchedule(values()),date=new Date(form.elements.previewDate.value+'T12:00:00+02:00');const theme=themeForDate(date,{mode:form.elements.mode.value,schedule});output.textContent=theme?theme.label+' — '+theme.message:'No decoration on this date.';}catch(error){output.textContent=error.message;}}
- function fill(settings){revision=String(settings.revision||'0');form.elements.mode.value=settings.mode||'automatic';list.replaceChildren();for(const row of settings.schedule?.length?settings.schedule:DEFAULT_THEME_SCHEDULE)addRow(row);preview();}
+ function fill(settings){revision=String(settings.revision||'0');form.elements.mode.value=settings.mode||'automatic';list.replaceChildren();for(const row of settings.schedule?.length?normalizeSeasonalSchedule(settings.schedule):DEFAULT_THEME_SCHEDULE)addRow(row);preview();}
  async function load(){if(!isUnlocked()||busy)return;busy=true;const ticket=generation;fields.disabled=true;status.textContent='Loading homepage themes…';try{const result=await request('homepageThemesEdit');if(ticket!==generation||!isUnlocked())return;fill(result.settings||DEFAULT_THEME_SETTINGS);ready=true;status.textContent='Ready. Changes appear for everyone after you publish.';}catch(error){if(ticket===generation)status.textContent=/Invalid action|Unsupported|Unknown action/i.test(error.message)?'Deploy the prepared combined Apps Script update, then load saved themes. Your existing data and login are preserved.':error.message;}finally{if(ticket===generation){busy=false;fields.disabled=!ready;}}}
  root.addEventListener('toggle',()=>{if(root.open&&!ready)void load();});root.querySelector('[data-load]').onclick=load;
  root.querySelector('[data-add]').onclick=()=>{addRow({start:'',end:'',art:'spring',label:'',message:''});list.lastElementChild.open=true;};root.querySelector('[data-defaults]').onclick=()=>fill({...DEFAULT_THEME_SETTINGS,revision});form.addEventListener('input',preview);

@@ -10,10 +10,17 @@ export const DEFAULT_THEME_SCHEDULE=[
  {id:'spring-two',start:'04-02',end:'04-30',art:'spring',label:'Hello, spring',message:'New words. Fresh possibilities.'},
  {id:'summer',start:'05-01',end:'08-31',art:'summer',label:'Summer is here!',message:'Sunshine, good conversations and you.'},
  {id:'autumn',start:'09-01',end:'10-31',art:'autumn',label:'A new season',message:'Turn a new leaf. Try a new word.'},
- {id:'thanksgiving',start:'11-01',end:'11-30',art:'thanksgiving',label:'Happy Thanksgiving',message:'We’re so grateful for you!'},
- {id:'christmas',start:'12-01',end:'12-31',art:'christmas',label:'Merry Christmas',message:'A little joy. A little magic. A bold new word.'}
+ {id:'thanksgiving',start:'11-01',end:'11-29',art:'thanksgiving',label:'Happy Thanksgiving',message:'We’re so grateful for you!'},
+ {id:'christmas',start:'11-30',end:'12-31',art:'christmas',label:'Merry Christmas',message:'A little joy. A little magic. A bold new word.'}
 ];
 export const DEFAULT_THEME_SETTINGS={revision:'0',mode:'automatic',schedule:DEFAULT_THEME_SCHEDULE};
+// Upgrade the former default boundary without resetting saved wording or other dates.
+export function normalizeSeasonalSchedule(schedule){
+ if(!Array.isArray(schedule))return schedule;
+ const thanksgiving=schedule.find(x=>x.art==='thanksgiving'&&x.start==='11-01'&&x.end==='11-30'),christmas=schedule.find(x=>x.art==='christmas'&&x.start==='12-01'&&x.end==='12-31');
+ if(!thanksgiving||!christmas)return schedule;
+ return schedule.map(x=>x===thanksgiving?{...x,end:'11-29'}:x===christmas?{...x,start:'11-30'}:x);
+}
 export function validateThemeSchedule(input){
  if(!Array.isArray(input)||input.length<1||input.length>24)throw Error('Use 1–24 seasonal themes.');
  const used=new Set();return input.map((x,i)=>{if(!x||!THEME_ARTS.includes(x.art))throw Error('Choose an illustration for each theme.');
@@ -23,5 +30,5 @@ export function validateThemeSchedule(input){
 }
 export function themeForDate(now=new Date(),settings=DEFAULT_THEME_SETTINGS){
  if(settings?.mode==='off')return null;const parts=new Intl.DateTimeFormat('en',{timeZone:'Africa/Cairo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now),part=type=>parts.find(x=>x.type===type).value,md=part('month')+'-'+part('day');
- const row=(settings?.schedule||DEFAULT_THEME_SCHEDULE).find(x=>x.start<=x.end?md>=x.start&&md<=x.end:md>=x.start||md<=x.end);if(!row)return null;return {...row,label:row.label.replaceAll('{year}',part('year')),message:row.message.replaceAll('{year}',part('year'))};
+ const row=normalizeSeasonalSchedule(settings?.schedule||DEFAULT_THEME_SCHEDULE).find(x=>x.start<=x.end?md>=x.start&&md<=x.end:md>=x.start||md<=x.end);if(!row)return null;return {...row,label:row.label.replaceAll('{year}',part('year')),message:row.message.replaceAll('{year}',part('year'))};
 }
