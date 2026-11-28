@@ -61,3 +61,26 @@ html body.beyond-blog-active #boldly-notes .boldly-note-link h3{line-height:1.2;
 html body.beyond-blog-active main section#boldly-notes.catalog[data-view]:not([hidden]) :is(.boldly-note-link h3,[data-notes-reader]>h2,.boldly-note-page h3,.bold-question>h3){font-family:var(--beyond-font-display)!important;font-weight:500!important}
 html body[data-beyond-space] :is(.editorial-action,.monthly-edit-open,.beyond-bookmark,.beyond-space-navigation){font-family:var(--beyond-font-text)!important;font-weight:500;letter-spacing:.01em}
 @media(max-width:680px){html body[data-beyond-space] .editorial-card h2{font-size:clamp(20px,5.2vw,24px)}}
+
+/* A slimmer shared header and a return mark that reveals the teaching space. */
+.beyond-space-header{height:76px;min-height:76px;padding-block:10px;gap:16px}
+.beyond-space-wordmark{font-size:26px}.beyond-space-wordmark img{width:34px;height:34px}
+.beyond-space-teaching{display:flex;align-items:center;gap:8px;overflow:hidden;width:40px;height:40px;box-sizing:border-box;text-decoration:none;transition:width .24s ease;flex:none}
+.teaching-return-mark{position:relative;display:block;width:34px;height:34px;flex:none}
+.teaching-return-mark>svg:first-child{display:block;width:32px;height:32px}
+.teaching-return-mark .teaching-return-arrow{position:absolute;right:-3px;top:-1px;width:12px;height:12px;background:#faf9f4;border-radius:50%;padding:1px;box-sizing:content-box}
+.teaching-return-line{flex:none;width:0;height:1px;background:#a8b39b;opacity:0;transition:width .24s,opacity .24s}
+.teaching-return-label{font-size:10px;letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;opacity:0;transition:opacity .24s}
+.beyond-space-header:is(:hover,:focus-within) .beyond-space-teaching{width:172px}
+.beyond-space-header:is(:hover,:focus-within) .teaching-return-line{width:20px;opacity:1}
+.beyond-space-header:is(:hover,:focus-within) .teaching-return-label{opacity:1}
+.beyond-seasonal-accent{display:none;flex:none;width:130px;height:34px;margin-left:auto;pointer-events:none}
+[data-beyond-season=christmas] .beyond-seasonal-accent{display:block}.beyond-seasonal-accent>svg{width:100%;height:100%}
+html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:76px!important;min-height:76px!important;padding-block:10px!important;gap:16px!important}
+html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark{font-size:26px!important}
+html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark img{width:34px!important;height:34px!important}
+@media(max-width:680px){.beyond-space-header{height:62px;min-height:62px;padding:8px 20px;gap:10px}.beyond-space-wordmark{font-size:23px}.beyond-space-wordmark img{width:29px;height:29px}.beyond-seasonal-accent{display:none!important}.beyond-space-navigation{gap:9px}.beyond-space-header .beyond-space-teaching,.beyond-space-header:is(:hover,:focus-within) .beyond-space-teaching{width:111px;height:36px;gap:6px}.teaching-return-mark{width:27px;height:28px}.teaching-return-mark>svg:first-child{width:27px;height:27px}.teaching-return-mark .teaching-return-arrow{width:10px;height:10px;right:-3px}.teaching-return-label{opacity:1;font-size:8px;letter-spacing:.35px}.teaching-return-line,.beyond-space-header:is(:hover,:focus-within) .teaching-return-line{width:7px;opacity:1}html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{height:62px!important;min-height:62px!important;padding:8px 20px!important;gap:10px!important}html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark{font-size:23px!important}html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark img{width:29px!important;height:29px!important}}
+@media(max-width:360px){.beyond-space-header{padding-inline:14px}.beyond-space-wordmark{font-size:21px;gap:7px}.beyond-space-navigation{gap:7px}.beyond-space-wordmark img{width:26px;height:26px}html body.beyond-blog-active>#beyond-blog-header.beyond-space-header{padding-inline:14px!important}html body.beyond-blog-active>#beyond-blog-header .beyond-space-wordmark{font-size:21px!important}}
+@media(prefers-reduced-motion:reduce){.beyond-space-teaching,.teaching-return-label,.teaching-return-line{transition:none}}
+
+.teaching-return-mark>.teaching-return-logo{display:block;width:32px;height:32px;object-fit:contain}@media(max-width:680px){.teaching-return-mark>.teaching-return-logo{width:27px;height:27px}}

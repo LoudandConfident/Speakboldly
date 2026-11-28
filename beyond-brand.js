@@ -1,5 +1,6 @@
-import {renderBeyondHeader,BEYOND_FOOTER_LINES} from './beyond-shell.js?v=2';
-import {applySpeakBoldlyBrand} from './seasonal-brand.js?v=christmas-119';
+import './literatespace/beyond-season.js?v=christmas-122';
+import {renderBeyondHeader,BEYOND_FOOTER_LINES} from './beyond-shell.js?v=monthly-edit-122';
+import {applySpeakBoldlyBrand} from './seasonal-brand.js?v=christmas-122';
 // The blog lives inside Beyond; teaching navigation remains in the teaching space.
 export function initializeBeyondBrand(doc){
  const root=doc.querySelector('#boldly-notes');if(!root||doc.querySelector('#beyond-blog-header'))return;const win=doc.defaultView;

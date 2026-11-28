@@ -1,5 +1,5 @@
-import {themeForDate} from './seasonal-theme-data.js?v=christmas-119';
-import {seasonalThemeSettings} from './seasonal-theme-settings.js?v=christmas-119';
+import {themeForDate} from './seasonal-theme-data.js?v=christmas-122';
+import {seasonalThemeSettings} from './seasonal-theme-settings.js?v=christmas-122';
 import {renderSeasonalFlourish} from './seasonal-flourish.js?v=christmas-119';
 // Echo the footer illustration in the genuinely unused header space.
 export function initializeHomeHeaderDoodles(doc){

@@ -1,4 +1,4 @@
-import {speakBoldlyBrandForDate} from './seasonal-brand.js?v=christmas-119';
+import {speakBoldlyBrandForDate} from './seasonal-brand.js?v=christmas-122';
 export const PROGRAM_OFFER_DELAY_MS=2000;
 export function programOfferSeason(now=new Date()){
  if(speakBoldlyBrandForDate(now).season==='christmas')return {name:'Christmas',title:'A little Christmas cheer!',intro:'A little festive joy, from us to you!'};

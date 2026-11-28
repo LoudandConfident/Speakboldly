@@ -10,16 +10,16 @@ export const DEFAULT_THEME_SCHEDULE=[
  {id:'spring-two',start:'04-02',end:'04-30',art:'spring',label:'Hello, spring',message:'New words. Fresh possibilities.'},
  {id:'summer',start:'05-01',end:'08-31',art:'summer',label:'Summer is here!',message:'Sunshine, good conversations and you.'},
  {id:'autumn',start:'09-01',end:'10-31',art:'autumn',label:'A new season',message:'Turn a new leaf. Try a new word.'},
- {id:'thanksgiving',start:'11-01',end:'11-29',art:'thanksgiving',label:'Happy Thanksgiving',message:'We’re so grateful for you!'},
- {id:'christmas',start:'11-30',end:'12-31',art:'christmas',label:'Merry Christmas',message:'A little joy. A little magic. A bold new word.'}
+ {id:'thanksgiving',start:'11-01',end:'11-27',art:'thanksgiving',label:'Happy Thanksgiving',message:'We’re so grateful for you!'},
+ {id:'christmas',start:'11-28',end:'12-31',art:'christmas',label:'Merry Christmas',message:'A little joy. A little magic. A bold new word.'}
 ];
 export const DEFAULT_THEME_SETTINGS={revision:'0',mode:'automatic',schedule:DEFAULT_THEME_SCHEDULE};
 // Upgrade the former default boundary without resetting saved wording or other dates.
 export function normalizeSeasonalSchedule(schedule){
  if(!Array.isArray(schedule))return schedule;
- const thanksgiving=schedule.find(x=>x.art==='thanksgiving'&&x.start==='11-01'&&x.end==='11-30'),christmas=schedule.find(x=>x.art==='christmas'&&x.start==='12-01'&&x.end==='12-31');
+ const thanksgiving=schedule.find(x=>x.art==='thanksgiving'&&x.start==='11-01'&&['11-29','11-30'].includes(x.end)),christmas=schedule.find(x=>x.art==='christmas'&&['11-30','12-01'].includes(x.start)&&x.end==='12-31');
  if(!thanksgiving||!christmas)return schedule;
- return schedule.map(x=>x===thanksgiving?{...x,end:'11-29'}:x===christmas?{...x,start:'11-30'}:x);
+ return schedule.map(x=>x===thanksgiving?{...x,end:'11-27'}:x===christmas?{...x,start:'11-28'}:x);
 }
 export function validateThemeSchedule(input){
  if(!Array.isArray(input)||input.length<1||input.length>24)throw Error('Use 1–24 seasonal themes.');

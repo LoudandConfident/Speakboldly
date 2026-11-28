@@ -1,7 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';
 import {themeForDate,validateThemeSchedule,DEFAULT_THEME_SCHEDULE,normalizeSeasonalSchedule} from './seasonal-theme-data.js';
 test('Cairo seasonal boundaries and dynamic new year',()=>{
- for(const [date,art,text]of [['2026-11-29T21:59:59Z','thanksgiving','grateful'],['2026-11-29T22:00:00Z','christmas','magic'],['2026-11-30T12:00:00Z','christmas','magic'],['2026-12-31T22:00:00Z','new-year','2027'],['2027-01-14T22:00:00Z','winter','blanket'],['2027-02-14T12:00:00Z','valentine','love'],['2027-02-15T12:00:00Z','winter','tea'],['2027-03-21T12:00:00Z','mothers','heroes'],['2027-04-01T12:00:00Z','april-fools','Hahaa'],['2027-05-01T12:00:00Z','summer','Sunshine']]){const theme=themeForDate(new Date(date));assert.equal(theme.art,art);assert(theme.message.includes(text));}
+ for(const [date,art,text]of [['2026-11-27T21:59:59Z','thanksgiving','grateful'],['2026-11-27T22:00:00Z','christmas','magic'],['2026-11-30T12:00:00Z','christmas','magic'],['2026-12-31T22:00:00Z','new-year','2027'],['2027-01-14T22:00:00Z','winter','blanket'],['2027-02-14T12:00:00Z','valentine','love'],['2027-02-15T12:00:00Z','winter','tea'],['2027-03-21T12:00:00Z','mothers','heroes'],['2027-04-01T12:00:00Z','april-fools','Hahaa'],['2027-05-01T12:00:00Z','summer','Sunshine']]){const theme=themeForDate(new Date(date));assert.equal(theme.art,art);assert(theme.message.includes(text));}
  assert.equal(themeForDate(new Date(),{mode:'off'}),null);assert.equal(validateThemeSchedule(DEFAULT_THEME_SCHEDULE).length,12);
 });
 test('old saved default dates upgrade without changing wording, off mode or custom dates',()=>{

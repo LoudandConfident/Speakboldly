@@ -3,7 +3,7 @@ const standard={season:'standard',logo:'/sb-logo-green.svg?v=dark-green',icon:'/
 const christmas={season:'christmas',logo:'/images/sb-christmas-logo-119.png',icon:'/images/sb-christmas-favicon-119.png',type:'image/png',sizes:'64x64'};
 export function speakBoldlyBrandForDate(now=new Date()){
  const parts=new Intl.DateTimeFormat('en',{timeZone:'Africa/Cairo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now),part=type=>parts.find(x=>x.type===type).value;
- return Number(part('year'))>=2026&&part('month')+'-'+part('day')>='11-30'?christmas:standard;
+ return Number(part('year'))>=2026&&part('month')+'-'+part('day')>='11-28'?christmas:standard;
 }
 export function applySpeakBoldlyBrand(doc,now=new Date()){
  const brand=speakBoldlyBrandForDate(now);

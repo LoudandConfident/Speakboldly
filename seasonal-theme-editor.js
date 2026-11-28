@@ -1,6 +1,6 @@
 import {sheetLibraryRequest} from './client-sheet.js?v=domain-email-routing';
-import {THEME_ARTS,DEFAULT_THEME_SETTINGS,DEFAULT_THEME_SCHEDULE,validateThemeSchedule,themeForDate,normalizeSeasonalSchedule} from './seasonal-theme-data.js?v=christmas-119';
-import {setSeasonalThemeSettings} from './seasonal-theme-settings.js?v=christmas-119';
+import {THEME_ARTS,DEFAULT_THEME_SETTINGS,DEFAULT_THEME_SCHEDULE,validateThemeSchedule,themeForDate,normalizeSeasonalSchedule} from './seasonal-theme-data.js?v=christmas-122';
+import {setSeasonalThemeSettings} from './seasonal-theme-settings.js?v=christmas-122';
 export function initializeSeasonalThemeEditor(doc,isUnlocked,request=sheetLibraryRequest){
  const host=doc.querySelector('#admin-dashboard');if(!host)return {lock(){}};
  const root=doc.createElement('details');root.className='admin-detail seasonal-theme-editor';root.id='homepage-seasonal-themes';

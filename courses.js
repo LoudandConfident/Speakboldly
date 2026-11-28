@@ -78,17 +78,10 @@ export const courses = [
   {
     "id": "general-8",
     "title": "General English — 8 sessions",
-    "level": "Beginner, Intermediate, Advanced",
-    "duration": "8 sessions per month",
-    "priceOptions": [
-      {
-        "previous": 4000,
-        "amount": 3500,
-        "schedule": "8 sessions per month · twice a week"
-      }
-    ],
+    "level": "12-level curriculum · beginner to advanced",
+    "duration": "13 sessions per level",
     "category": "General English",
-    "description": "Build confidence in everyday conversations through private coaching tailored to your level. Develop speaking, listening, vocabulary and grammar with practical activities and personalized feedback.",
+    "description": "A 12-level General English curriculum covering speaking, listening, reading and writing. Each level includes 12 chapter sessions and one end-of-level exam, with private coaching tailored to your starting point and goals.",
     "topics": [
       "Everyday conversations and useful vocabulary",
       "Grammar in real communication",
@@ -96,13 +89,36 @@ export const courses = [
       "Personalized speaking practice"
     ],
     "art": "general",
-    "summary": "Build a steady English routine with guided practice and regular feedback.",
-    "detailDescription": "Sessions centre on real situations you want to handle more comfortably, such as introducing yourself, asking questions and explaining your ideas. Your instructor adjusts the practice to your English level and goals, helping you notice useful language and build habits between sessions. This is an ongoing program; how long you continue depends on your English level.",
-    "viewDescription": "Build everyday English through two private sessions a week, with practice tailored to your level and goals. Work on speaking, listening, vocabulary, and sentence structure using real situations and personal feedback.",
+    "summary": "Build practical English, one level at a time.",
+    "detailDescription": "The fee is 4,000 EGP for one complete level, including the 12 chapter sessions and end-of-level exam. Your placement helps identify the right starting level. Session dates are agreed with your instructor.",
+    "viewDescription": "Build everyday English through a 12-level curriculum. Each level has 12 chapters, taught across 12 sessions, plus one end-of-level exam. Choose one or two sessions a week to suit your routine.",
     "outcomes": "You’ll develop clearer ways to express your ideas and take part in everyday conversations. You’ll also build a practical routine for recognising mistakes and continuing your progress between sessions.",
     "sessionDuration": "60–90 minutes",
     "programKind": "Ongoing coaching",
-    "programPlan": "Ongoing General English coaching, with a monthly schedule and a learning plan shaped by your progress. We review your goals, practise all four skills and agree when you are ready for the next level."
+    "programPlan": "Build practical English with a learning plan shaped around your level and goals. Choose the weekly schedule that suits your routine.",
+    "displayTitle": "General English",
+    "price": 4000,
+    "priceLabel": "per level",
+    "levelCount": 12,
+    "chaptersPerLevel": 12,
+    "examSessionsPerLevel": 1,
+    "sessionsPerLevel": 13,
+    "audienceBadge": "12-level curriculum",
+    "studyOptions": [
+      {
+        "id": "twice-weekly",
+        "label": "Twice a week",
+        "sessionsPerWeek": 2,
+        "bookingCourseId": "general-8"
+      },
+      {
+        "id": "once-weekly",
+        "label": "Once a week",
+        "sessionsPerWeek": 1,
+        "bookingCourseId": "general-4",
+        "durationNote": "about 3 months"
+      }
+    ]
   },
   {
     "id": "general-4",
@@ -131,7 +147,9 @@ export const courses = [
     "outcomes": "You’ll strengthen the language you need to explain yourself and respond more comfortably. You’ll leave with practical activities that help you keep improving independently between sessions.",
     "sessionDuration": "60–90 minutes",
     "programKind": "Ongoing coaching",
-    "programPlan": "Ongoing General English coaching, with a monthly schedule and a learning plan shaped by your progress. We review your goals, practise all four skills and agree when you are ready for the next level."
+    "programPlan": "Ongoing General English coaching, with a monthly schedule and a learning plan shaped by your progress. We review your goals, practise all four skills and agree when you are ready for the next level.",
+    "catalogHidden": true,
+    "catalogAliasOf": "general-8"
   },
   {
     "id": "english-momentum",
@@ -511,7 +529,7 @@ export const courses = [
  {id:'corporate-deals',formatOnly:true,title:'Corporate deals',level:'Teams & organisations',duration:'Tailored to your team',sessionDuration:'60–90 minutes',category:'Pro Services',programKind:'Pro Service',audienceBadge:'Pro Service',quoteOnly:true,dimmed:true,noWatermark:true,art:'group',summary:'Practical English shaped around your team’s work.',description:'Build a coaching plan around your team’s communication needs, current levels and working schedule.',viewDescription:'Discuss your team’s goals and the situations where English matters most. We’ll shape the format, schedule and learning priorities around your organisation.',outcomes:'Help your team communicate more confidently and clearly at work.',topics:['A needs analysis for your team','Practical workplace communication','An agreed schedule and coaching format','A quote tailored to your organisation']}
 
 ];
-export function matches(c,category,query){return !c.catalogHidden&&(category==='All courses'||c.category===category)&&`${c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
+export function matches(c,category,query){return !c.catalogHidden&&(category==='All courses'||c.category===category)&&`${c.displayTitle||c.title} ${c.level} ${c.description}`.toLowerCase().includes(query.toLowerCase().trim());}
 
 
 
@@ -526,3 +544,11 @@ export function compareCatalogCourses(a,b){
 
 // Pro Services remain available to explore while booking is being prepared.
 for(const course of courses){if(course.category==='Pro Services'){course.dimmed=true;course.noWatermark=true;}}
+
+// Booking identities stay stable for existing student records; public schedules share one card.
+export function courseStudyOptions(course){
+ return (course.studyOptions||[]).map(option=>{
+  const weeks=Math.ceil(course.sessionsPerLevel/option.sessionsPerWeek),approximate=course.sessionsPerLevel%option.sessionsPerWeek!==0;
+  return {...option,weeks,durationLabel:(approximate?'About ':'')+weeks+' weeks'+(option.durationNote?' · '+option.durationNote:'')};
+ });
+}

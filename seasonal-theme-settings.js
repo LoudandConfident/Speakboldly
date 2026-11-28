@@ -1,4 +1,4 @@
-import {DEFAULT_THEME_SETTINGS,validateThemeSchedule,normalizeSeasonalSchedule} from './seasonal-theme-data.js?v=christmas-119';
+import {DEFAULT_THEME_SETTINGS,validateThemeSchedule,normalizeSeasonalSchedule} from './seasonal-theme-data.js?v=christmas-122';
 let current=DEFAULT_THEME_SETTINGS,pending;
 export const seasonalThemeSettings=()=>current;
 export function setSeasonalThemeSettings(settings,doc){if(!settings||!['automatic','off'].includes(settings.mode))throw Error('Invalid theme settings.');const schedule=settings.schedule?.length?validateThemeSchedule(normalizeSeasonalSchedule(settings.schedule)):DEFAULT_THEME_SETTINGS.schedule;current={revision:String(settings.revision||'0'),mode:settings.mode,schedule};doc?.dispatchEvent(new doc.defaultView.Event('seasonal-themes-changed'));return current;}

@@ -34,8 +34,7 @@ export function initializeBeyondBookmarks(doc) {
 
   for (const [key, label, selector] of [
     ['monthly', 'Monthly edit', '.monthly-edit-card'],
-    ['interpret', 'Interpret Boldly', '.interpret-preview-card'],
-    ['sign', 'Sign language', '.sign-language-preview-card']
+    ['interpret', 'Interpret Boldly', '.interpret-preview-card']
   ]) {
     const source = sidebar.querySelector(selector);
     if (!source) continue;

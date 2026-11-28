@@ -1,0 +1,50 @@
+import {PDFDocument,rgb} from 'pdf-lib';
+import fontkit from '@pdf-lib/fontkit';
+import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+const pdf=await PDFDocument.create();pdf.setTitle('Speak Boldly — Your English Practice Pack');pdf.setAuthor('Speak Boldly');pdf.setSubject('Original independent speaking, reading and language practice');
+pdf.registerFontkit(fontkit);
+const regular=await pdf.embedFont(readFileSync(new URL('../document-templates/DejaVuSans.ttf',import.meta.url)),{subset:true}),bold=await pdf.embedFont(readFileSync(new URL('../document-templates/DejaVuSans-Bold.ttf',import.meta.url)),{subset:true}),logo=await pdf.embedPng(readFileSync(new URL('../document-templates/sb-policy-logo.png',import.meta.url)));
+const ink=rgb(.098,.235,.196),muted=rgb(.38,.43,.37),line=rgb(.79,.84,.73),accent=rgb(.83,.92,.6);let page,y;
+function text(value,{size=10.5,font=regular,color=ink,indent=0,after=7}={}){const words=value.split(/\s+/),width=511-indent;let row='';for(const word of words){const next=row?row+' '+word:word;if(font.widthOfTextAtSize(next,size)>width&&row){page.drawText(row,{x:42+indent,y,font,size,color});y-=15;row=word;}else row=next;}if(row){if(y<65)throw Error('Practice text runs into the footer.');page.drawText(row,{x:42+indent,y,font,size,color});y-=15;}y-=after;}
+function heading(value){y-=7;text(value,{size:13,font:bold,after:5});}
+function start(title,subtitle){page=pdf.addPage([595.28,841.89]);page.drawImage(logo,{x:42,y:768,width:43,height:43});page.drawText('Speak Boldly',{x:96,y:791,font:bold,size:17,color:ink});page.drawText('YOUR ENGLISH PRACTICE PACK',{x:96,y:776,font:regular,size:8,color:muted});page.drawRectangle({x:42,y:751,width:511,height:3,color:accent});y=727;text(title,{size:20,font:bold,after:5});text(subtitle,{size:10,color:muted,after:12});}
+start('Make a little room for your voice.','Speaking practice · start simple, then add a little more.');
+text('Use this pack on your own. Say your answers aloud, notice what you want to express more clearly, and try again. You can adapt every activity to your current level.');
+heading('1. A one-minute check-in');
+text('Talk about your day using these prompts. Begin with one sentence for each question. Then connect your ideas into a short story.');
+for(const q of ['What has been the best part of your day so far?','What are you working on or learning at the moment?','What would you like to make time for this week?'])text('• '+q,{indent:9,after:3});
+heading('2. A small everyday conversation');
+text('You are ordering a drink at a café. Ask about two options, explain what you prefer, and politely check the price. Play both people in the conversation.');
+text('Try: “What would you recommend?”  “I’d prefer something…”  “Does it come with…?”  “Could I have… instead?”',{color:muted});
+heading('3. Say a little more');
+text('Choose an ordinary topic: a meal you enjoyed, a place you like, or a habit you want to build. Speak for 30 seconds, then repeat for one minute with an example and a reason.');
+text('A useful pattern: Your idea, a reason, a real example, and a question for the other person.',{font:bold,size:10.5});
+heading('4. Stretch your thinking');
+text('“A useful conversation matters more than perfect grammar.” Do you agree? Explain why, consider another point of view, and finish with your own balanced opinion.');
+heading('Notice, adjust, repeat');
+text('What was easy to say? Which expression did you need? Write down three useful phrases, check them in a reliable dictionary, and use them in a fresh answer tomorrow.');
+start('An unexpected conversation','Reading practice · read for the idea first, then explore the language.');
+text('On Tuesday, Salma left her usual café because it was too crowded to read. She walked into the small library across the street and asked whether there was a quiet place to sit. The librarian pointed to a table near the window, where two people were discussing a travel book.');
+text('Salma hesitated. She had been learning English for several months, but she still worried about choosing the wrong words. Then one of the readers smiled and asked, “Is this your first visit?” She answered with a short sentence and sat down.');
+text('The conversation moved from favourite places to journeys they hoped to take. Salma did not understand every word. Sometimes she asked someone to explain an expression, and once she described an idea in a different way because she could not remember a word. Nobody seemed impatient.');
+text('An hour later, she left with a book recommendation and an invitation to return the following week. Her English had not suddenly become perfect. Something else had changed: she had discovered that a conversation could begin before she felt completely ready.');
+heading('Check your understanding');
+for(const q of ['1. Why did Salma leave the café?','2. What made her hesitate at the library?','3. What did she do when she did not understand an expression?','4. What did she leave the library with?','5. What could you learn from her experience?'])text(q,{after:2});
+heading('Useful expressions');
+for(const q of ['too crowded — full of more people than feels comfortable','hesitated — paused because she was unsure','in a different way — using another approach or explanation','the following week — the next week'])text('• '+q,{indent:8,after:2});
+heading('Bring it into your world');
+text('Describe a time you tried something before you felt completely ready. What helped? Use at least two expressions from the reading.');
+start('A little practice, then a little feedback.','Language practice · choose, explain, and check your answers.');
+heading('Choose the natural sentence');
+for(const q of ['1. I have studied English (for / since) six months.','2. She (go / goes) to the library every Tuesday.','3. Yesterday we (discuss / discussed) a useful idea.','4. Could you explain that (again / more again), please?','5. I’m interested (in / on) learning about other places.','6. If I don’t know a word, I (try / tried) another way to explain it.'])text(q,{after:4});
+heading('Make the conversation your own');
+text('Complete these ideas aloud in two different ways:');
+for(const q of ['“I used to find it difficult to…, but now…”','“The next small step I can take is…”','“One thing I would like to understand better is…”'])text('• '+q,{indent:8,after:4});
+heading('Check and notice');
+text('1. for — use “for” with a length of time.  2. goes — “she” takes “goes” in the present simple.  3. discussed — “yesterday” refers to a finished past event.  4. again — ask for repetition with “again”.  5. in — the expression is “interested in”.  6. try — this describes a usual response, so use the present simple.',{size:10});
+heading('Reading answers');
+text('1. The café was too crowded to read.  2. She worried about choosing the wrong English words.  3. She asked someone to explain it.  4. A book recommendation and an invitation to return.  5. Your own answer: the reading suggests you can begin communicating before your English feels perfect.',{size:10});
+heading('Keep a useful thought');
+text('Choose one sentence or expression from the pack that you could use this week. Write a personal example, say it aloud, and return to it in a different conversation.');
+for(const [i,p]of pdf.getPages().entries()){p.drawLine({start:{x:42,y:43},end:{x:553,y:43},thickness:.5,color:line});p.drawText('Speak Boldly · English Language Coaching · speakboldly.space',{x:42,y:28,size:8,font:regular,color:muted});p.drawText((i+1)+' / '+pdf.getPageCount(),{x:525,y:28,size:8,font:regular,color:muted});}
+const output=new URL('../resources/Speak-Boldly-Practice-Pack.pdf',import.meta.url);mkdirSync(new URL('../resources/',import.meta.url),{recursive:true});writeFileSync(output,await pdf.save());console.log('Built an original '+pdf.getPageCount()+'-page English practice pack.');
